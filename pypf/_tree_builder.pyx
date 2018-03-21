@@ -1,7 +1,6 @@
 from __future__ import print_function
 
 import numpy as np
-from sklearn.utils import check_random_state
 
 cimport numpy as np
 cimport cython
@@ -13,8 +12,50 @@ from libc.stdlib cimport malloc, free
 from numpy.random import RandomState
 
 from pypf._distribution cimport get_class_distribution
-from pypf._sliding_distance cimport sliding_distance
+from pypf._sliding_distance cimport sliding_distance, SlidingDistance
 from pypf._impurity cimport safe_info
+
+from pypf._utils cimport label_distribution, intp_ndarray_to_size_t_ptr
+
+
+import numpy as np
+cimport numpy as np
+cimport cython
+
+
+def test(np.ndarray[np.intp_t] i, np.ndarray[np.intp_t] y, size_t n_classes):
+    cdef np.ndarray[np.float64_t, ndim=2, mode="c"] X = np.random.randn(10, 10)
+    X[0, :] = np.arange(10)
+    print(X)
+    
+    cdef SlidingDistance d = SlidingDistance(X)
+
+    
+    cdef size_t* indicies = <size_t*> malloc(sizeof(size_t) * i.shape[0])
+    cdef size_t* labels = <size_t*> malloc(sizeof(size_t) * y.shape[0])
+    intp_ndarray_to_size_t_ptr(i, indicies)
+    intp_ndarray_to_size_t_ptr(y, labels)
+
+    cdef np.ndarray[np.float64_t] result = np.zeros(10)
+    d.distance_list(0, 2, 7, indicies, 10, <double*>result.data)
+    print(result)
+    cdef np.ndarray[double] arr = np.empty(n_classes)
+    cdef size_t p
+
+    cdef double* dist = <double*> malloc(sizeof(double) * n_classes)
+    for p in range(n_classes):
+        dist[p] = 0
+        
+    cdef size_t n_samples = i.shape[0]
+    cdef size_t n_pos = label_distribution(indicies, n_samples, labels, n_classes, dist)
+
+    for p in range(n_classes):
+        arr[p] = dist[p]
+    print(arr, n_pos)
+    free(dist)
+    free(indicies)
+    free(labels)
+    
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -74,7 +115,7 @@ cdef int partition(long[:] idx,
         right_d[label] -= 1
     return 0
 
-cdef double[:] draw_shapelet(long[:] idx, double[:, :] x, random_state):
+cdef double[:] draw_shapelet(long[:] idx, double[:, :] x, object random_state):
     cdef Py_ssize_t length = random_state.randint(3, x.shape[1])
     cdef Py_ssize_t start = random_state.randint(0, x.shape[1] - length)
     cdef Py_ssize_t i = random_state.randint(len(idx))
@@ -169,9 +210,9 @@ class Leaf(Node):
 cdef class TreeBuilder:
     cdef int _n_shapelets
     cdef _random_state
-    def __init__(self, int n_shapelets, random_state):
+    def __init__(self, int n_shapelets, object random_state):
         self._n_shapelets = n_shapelets
-        self._random_state = check_random_state(random_state)
+        self._random_state = random_state
 
     def build_tree(self,
                    long[:] idx,

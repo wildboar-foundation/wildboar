@@ -1,7 +1,9 @@
 import numpy as np
 
-#from pypf._distribution import get_class_distribution
-#from pypf._impurity import safe_info
+from pypf.tree import PfTree
+
+# from pypf._distribution import get_class_distribution
+# from pypf._impurity import safe_info
 
 x = np.array([0, 1], dtype=np.float64)
 y = np.array([0.5, 0.5], dtype=np.float64)
@@ -30,8 +32,6 @@ y = y[order]
 
 print(x)
 print(y)
-
-from pypf.tree import PfTree
 
 tree = PfTree(random_state=random_state)
 tree.fit(x, y)
@@ -64,7 +64,7 @@ tree = PfTree(n_shapelets=100)
 from sklearn.ensemble import BaggingClassifier
 
 bag = BaggingClassifier(
-    base_estimator=tree, bootstrap=True, n_jobs=8, n_estimators=100)
+    base_estimator=tree, bootstrap=True, n_jobs=16, n_estimators=100)
 
 from sklearn.model_selection import cross_val_score
 
