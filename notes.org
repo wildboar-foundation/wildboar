@@ -8,3 +8,7 @@
   d = np.unique(labels)
   print(d[labels])]]
 #+END_SRC
+** TODO Ensure that Sliding Distance clean up memory
+   [2018-03-22 tor]
+   [[file:~/Projects/pypf/pypf/_sliding_distance.pyx::ensure%20that%20this%20is%20true][file:~/Projects/pypf/pypf/_sliding_distance.pyx::ensure that this is true]]
+

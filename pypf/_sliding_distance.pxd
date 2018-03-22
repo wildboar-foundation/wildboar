@@ -1,41 +1,73 @@
-cdef struct Shapelet:
+cimport numpy as np
+
+cdef class Shapelet:
+   cdef size_t length
+   cdef double* data
+
+   cdef double distance(self, const SlidingDistance t, size_t t_index) nogil
+
+
+cdef double shapelet_subsequence_distance(size_t length,
+                                          double* shapelet,
+                                          size_t j,
+                                          double mean,
+                                          double std,
+                                          double* X,
+                                          size_t timestep_stride,
+                                          double* X_buffer,
+                                          double min_dist) nogil
+
+
+cdef struct ShapeletInfo:
    size_t index
    size_t start
    size_t length
    double mean
    double std
 
+cdef double shapelet_info_subsequence_distance(size_t offset,
+                                               size_t length,
+                                               double s_mean,
+                                               double s_std,
+                                               size_t j,
+                                               double mean,
+                                               double std,
+                                               double* X,
+                                               size_t timestep_stride,
+                                               double* X_buffer,
+                                               double min_dist) nogil
 
-cdef class SlidingDistance:
-   cdef size_t n_samples
-   cdef size_t n_timestep
 
-   cdef double* X
-   cdef size_t sample_stride
-   cdef size_t timestep_stride
 
-   cdef double* X_buffer # buffer for normalization
+cdef int shapelet_info_update_statistics(ShapeletInfo* s,
+                                         const SlidingDistance t) nogil
 
-   cdef int shapelet_statistics(self, Shapelet* shapelet) nogil
-   
-   cdef int distance_list(self,
-                          Shapelet shapelet,
-                          const size_t* indicies,
-                          size_t n_indicies,
-                          double* result) nogil
+cdef int shapelet_info_distances(ShapeletInfo s,
+                                 const size_t* samples,
+                                 size_t n_samples,
+                                 const SlidingDistance t,
+                                 double* result) nogil
 
-   cdef double distance(self, Shapelet shapelet, size_t t_index) nogil
+cdef double shapelet_info_distance(ShapeletInfo s, const SlidingDistance t, size_t t_index) nogil
 
-   cdef double subsequence_distance(self,
-                                    size_t offset,
-                                    size_t length,
-                                    double s_mean,
-                                    double s_std,
-                                    size_t j,
-                                    double mean,
-                                    double std,
-                                    double min_dist) nogil
-                        
+cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s, const SlidingDistance t)
+
+
+cdef SlidingDistance new_sliding_distance(np.ndarray[np.float64_t, ndim=2, mode="c"] X)
+
+cdef int free_sliding_distance(SlidingDistance sd) nogil
+
+
+cdef struct SlidingDistance:
+   size_t n_samples
+   size_t n_timestep
+
+   double* X
+   size_t sample_stride
+   size_t timestep_stride
+
+   double* X_buffer # buffer for normalization
+
 
 cpdef int sliding_distance(double[:] s,
                            double[:, :] X,
