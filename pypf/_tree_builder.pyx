@@ -8,11 +8,10 @@ cimport cython
 from libc.math cimport fabs, log2, INFINITY
 from libc.stdlib cimport malloc, free
 
-
 from numpy.random import RandomState
 
 from pypf._distribution cimport get_class_distribution
-from pypf._sliding_distance cimport sliding_distance, SlidingDistance
+from pypf._sliding_distance cimport sliding_distance, SlidingDistance, Shapelet
 from pypf._impurity cimport safe_info
 
 from pypf._utils cimport label_distribution, intp_ndarray_to_size_t_ptr
@@ -21,40 +20,22 @@ from pypf._utils cimport label_distribution, intp_ndarray_to_size_t_ptr
 import numpy as np
 cimport numpy as np
 cimport cython
+import time
 
-
-def test(np.ndarray[np.intp_t] i, np.ndarray[np.intp_t] y, size_t n_classes):
-    cdef np.ndarray[np.float64_t, ndim=2, mode="c"] X = np.random.randn(10, 10)
-    X[0, :] = np.arange(10)
-    print(X)
-    
+def test(X, i):
     cdef SlidingDistance d = SlidingDistance(X)
-
-    
+    cdef Shapelet s
+    s.index = 0
+    s.start = 0
+    s.length = 100
+    d.shapelet_statistics(&s)
     cdef size_t* indicies = <size_t*> malloc(sizeof(size_t) * i.shape[0])
-    cdef size_t* labels = <size_t*> malloc(sizeof(size_t) * y.shape[0])
     intp_ndarray_to_size_t_ptr(i, indicies)
-    intp_ndarray_to_size_t_ptr(y, labels)
-
-    cdef np.ndarray[np.float64_t] result = np.zeros(10)
-    d.distance_list(0, 2, 7, indicies, 10, <double*>result.data)
-    print(result)
-    cdef np.ndarray[double] arr = np.empty(n_classes)
-    cdef size_t p
-
-    cdef double* dist = <double*> malloc(sizeof(double) * n_classes)
-    for p in range(n_classes):
-        dist[p] = 0
-        
-    cdef size_t n_samples = i.shape[0]
-    cdef size_t n_pos = label_distribution(indicies, n_samples, labels, n_classes, dist)
-
-    for p in range(n_classes):
-        arr[p] = dist[p]
-    print(arr, n_pos)
-    free(dist)
+    cdef np.ndarray[np.float64_t] result = np.empty(X.shape[0])
+    c = time.time()
+    d.distance_list(s, indicies, i.shape[0], <double*>result.data)
+    print((time.time() - c) * 1000)
     free(indicies)
-    free(labels)
     
 
 @cython.boundscheck(False)

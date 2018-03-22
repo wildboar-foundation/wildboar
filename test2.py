@@ -1,7 +1,10 @@
 import numpy as np
+import timeit
 
 from pypf import _tree_builder
 
-y = np.array([0, 0, 1, 1, 0], dtype=np.intp)
-i = np.array([0, 1, 4], dtype=np.intp)
-_tree_builder.test(i, y, 2)
+m = 10000
+X = np.random.randn(100, 100000)
+i = np.arange(X.shape[0])
+
+_tree_builder.test(X, i)

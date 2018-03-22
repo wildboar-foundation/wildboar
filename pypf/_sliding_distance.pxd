@@ -1,3 +1,11 @@
+cdef struct Shapelet:
+   size_t index
+   size_t start
+   size_t length
+   double mean
+   double std
+
+
 cdef class SlidingDistance:
    cdef size_t n_samples
    cdef size_t n_timestep
@@ -8,26 +16,15 @@ cdef class SlidingDistance:
 
    cdef double* X_buffer # buffer for normalization
 
-   cdef int shapelet_statistics(self,
-                                size_t s_index,
-                                size_t s_start,
-                                size_t s_len,
-                                double* mean,
-                                double* std) nogil
+   cdef int shapelet_statistics(self, Shapelet* shapelet) nogil
    
    cdef int distance_list(self,
-                          size_t s_index,
-                          size_t s_start,
-                          size_t s_len,
+                          Shapelet shapelet,
                           const size_t* indicies,
                           size_t n_indicies,
-                          double* result)
+                          double* result) nogil
 
-   cdef double distance(self,
-                        size_t s_index,
-                        size_t s_start,
-                        size_t s_len,
-                        size_t t_index)
+   cdef double distance(self, Shapelet shapelet, size_t t_index) nogil
 
    cdef double subsequence_distance(self,
                                     size_t offset,
