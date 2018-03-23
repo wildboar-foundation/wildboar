@@ -10,14 +10,14 @@ from libc.stdlib cimport malloc, free
 from libc.math cimport sqrt, INFINITY, isnan
 
 cdef inline double shapelet_subsequence_distance(size_t length,
-                                          double* shapelet,
-                                          size_t j,
-                                          double mean,
-                                          double std,
-                                          double* X,
-                                          size_t timestep_stride,
-                                          double* X_buffer,
-                                          double min_dist) nogil:
+                                                 double* shapelet,
+                                                 size_t j,
+                                                 double mean,
+                                                 double std,
+                                                 double* X,
+                                                 size_t timestep_stride,
+                                                 double* X_buffer,
+                                                 double min_dist) nogil:
     return 0.0 # TODO: fix me
 
 cdef class Shapelet:
@@ -86,6 +86,10 @@ cdef inline double shapelet_info_subsequence_distance(size_t offset,
                                                size_t timestep_stride,
                                                double* X_buffer,
                                                double min_dist) nogil:
+    # Compute the distance between the shapelet (starting at `offset`
+    # and ending at `offset + length` normalized with `s_mean` and
+    # `s_std` with the shapelet in `X_buffer` starting at `0` and
+    # ending at `length` normalized with `mean` and `std`
     cdef double dist = 0
     cdef double x
     cdef size_t i
@@ -109,6 +113,14 @@ cdef inline double shapelet_info_subsequence_distance(size_t offset,
 
 
 cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s, const SlidingDistance t):
+    """Extract (i.e., allocate) a shapelet to be stored outside the
+    store. The `ShapeletInfo` is extpected to have `mean` and `std`
+    computed.
+
+    :param s: information about a shapelet
+    :param t: the time series storage
+    :return: a normalized shapelet
+    """
     cdef Shapelet shapelet = Shapelet(s.length)
     cdef double* data = shapelet.data
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
