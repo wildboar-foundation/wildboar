@@ -29,6 +29,14 @@ cdef class Shapelet:
     def __dealloc__(self):
         free(self.data)
 
+    cpdef np.ndarray[np.float64_t] get_data(self):
+        cdef np.ndarray[np.float64_t] arr = np.empty(self.length,
+                                                     dtype=np.float64)
+        cdef size_t i
+        for i in range(self.length):
+            arr[i] = self.data[i]
+        return arr
+
     cdef double distance(self, const SlidingDistance t, size_t t_index) nogil:
         cdef size_t sample_offset = t_index * t.sample_stride
         cdef double current_value = 0
@@ -157,7 +165,7 @@ cdef int shapelet_info_distances(ShapeletInfo s,
                                  double* result) nogil:
     cdef size_t p
     for p in range(n_indicies):
-        result[p] = shapelet_info_distance(s, t, p)
+        result[p] = shapelet_info_distance(s, t, indicies[p])
     return 0
 
 cdef double shapelet_info_distance(ShapeletInfo s, const SlidingDistance t, size_t t_index) nogil:

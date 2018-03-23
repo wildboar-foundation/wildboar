@@ -70,8 +70,8 @@ from sklearn.model_selection import cross_val_score
 
 import time
 c = time.time()
-bag.fit(x, y)
-print(bag.score(x_test, y_test))
+#bag.fit(x, y)
+#print(bag.score(x_test, y_test))
 #score = cross_val_score(bag, x, y, cv=3)
 #print(score)
 print(round(time.time() - c) * 1000)

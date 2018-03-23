@@ -41,6 +41,29 @@ cimport numpy as np
 cimport cython
 import time
 
+def test_2(X, y, n_labels, random_state, n_shapelets=10):
+    cdef ShapeletTreeBuilder stb = ShapeletTreeBuilder(n_shapelets, random_state)
+    stb.init(X, y, n_labels)
+    c = time.time()
+    o = stb.build_tree(np.arange(200))
+    print("TOOK:", (time.time() - c) * 1000)
+#    print_tree(o)
+
+def print_tree(o, indent=1):
+    if o.is_leaf():
+        print("-" * indent, "leaf: ")
+        print("-" * indent, " proba: ", o.get_proba())
+    else:
+        print("-" * indent, "branch:")
+        print("-" * indent, " shapelet: ", o.shapelet.get_data())
+        print("-" * indent, " threshold: ", o.threshold)
+        print("-" * indent, " left:", end="\n")
+        print_tree(o.left, indent + 1)
+        print("-" * indent, " right:", end="\n")
+        print_tree(o.right, indent + 1)
+
+    
+
 def test(X, i):
     cdef np.ndarray[np.intp_t] np_sample = np.arange(10)
     cdef np.ndarray[np.float64_t] np_values = np.random.randn(10)
@@ -97,6 +120,63 @@ def test(X, i):
     free(indicies)
     free_sliding_distance(sd)
 
+
+cdef SplitPoint new_split_point(size_t split_point,
+                                double threshold,
+                                ShapeletInfo shapelet_info) nogil:
+    cdef SplitPoint s
+    s.split_point = split_point
+    s.threshold = threshold
+    s.shapelet_info = shapelet_info
+    return s
+
+
+cdef class Node:
+    def __cinit__(self, NodeType node_type):
+        self.node_type = node_type
+        self.distribution = NULL
+
+    def __dealloc__(self):
+        if self.node_type == NodeType.LEAF and self.distribution != NULL:
+            free(self.distribution)
+            self.distribution = NULL
+
+    cpdef bint is_leaf(self):
+        return self.node_type == NodeType.LEAF
+
+    cpdef np.ndarray[np.float64_t] get_proba(self):
+        cdef np.ndarray[np.float64_t] arr = np.empty(self.n_labels,
+                                                     dtype=np.float64)
+        cdef size_t i
+        for i in range(self.n_labels):
+            arr[i] = self.distribution[i]
+        return arr
+
+cdef Node new_leaf_node(double* distribution, size_t n_labels):
+    cdef Node node = Node(NodeType.LEAF)
+    node.distribution = distribution
+    node.n_labels = n_labels
+    return node
+
+cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
+    cdef Node node = Node(NodeType.BRANCH)
+    node.threshold = sp.threshold
+    node.shapelet = shapelet
+    return node
+
+cdef void print_c_array_d(object name, double* arr, size_t length):
+    print(name, end=": ")
+    for i in range(length):
+        print(arr[i], end=" ")
+    print()
+
+cdef void print_c_array_i(object name, size_t* arr, size_t length):
+    print(name, end=": ")
+    for i in range(length):
+        print(arr[i], end=" ")
+    print()
+
+
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
     cdef size_t n_shapelets
@@ -121,12 +201,9 @@ cdef class ShapeletTreeBuilder:
         self._free_if_needed()
 
     cdef void _free_if_needed(self):
+        # self.labels are automatically unallocated    
         if self.sd.X_buffer != NULL:
             free_sliding_distance(self.sd)
-            
-        if self.labels != NULL:
-            free(self.labels)
-            self.labels = NULL
 
         if self.sample_buffer != NULL:
             free(self.sample_buffer)
@@ -152,8 +229,11 @@ cdef class ShapeletTreeBuilder:
         self._free_if_needed()
 
         self.sd = new_sliding_distance(X)
+
+        # labels are unallocated automatically
         self.labels = <size_t*> y.data
         self.label_stride = <size_t> y.strides[0] / <size_t> y.itemsize
+        
         self.n_labels = n_labels
         self.left_label_buffer = <double*> malloc(sizeof(double) * n_labels)
         self.right_label_buffer= <double*> malloc(sizeof(double) * n_labels)
@@ -168,73 +248,96 @@ cdef class ShapeletTreeBuilder:
 
         self.sample_buffer = <size_t*> malloc(sizeof(size_t) * n_samples)
         self.distance_buffer = <double*> malloc(sizeof(double) * n_samples)
-        
-        self._build_tree(samples, n_samples)
-        # samples are free
 
-    cdef int _build_tree(self, const size_t* samples, size_t n_samples):
+        # samples are deallocated by `indicies`
+        return self._build_tree(samples, n_samples)
+
+    cdef Node _build_tree(self, const size_t* samples, size_t n_samples):
         cdef double* dist = <double*> malloc(sizeof(double) * self.n_labels)
+        memset(dist, 0, sizeof(double) * self.n_labels)
         cdef int n_positive = label_distribution(samples, n_samples,
                                                  self.labels,
-                                                 self.n_labels, dist)
+                                                 self.n_labels, dist)        
         if n_samples < 2 or n_positive < 2:
-            return -1 # TODO: return leaf
+            return new_leaf_node(dist, self.n_labels) # node will free dist
 
         cdef size_t* new_samples = <size_t*> malloc(sizeof(size_t) * n_samples)
         cdef SplitPoint split = self._split(samples, n_samples, new_samples)
-
-        # samples are now ordered
-        
+            
         cdef size_t left_size = split.split_point
         cdef size_t right_size = n_samples - split.split_point
         cdef size_t* left_samples
         cdef size_t* right_samples
+        cdef Shapelet shapelet
+        cdef Node branch
         if left_size > 0 and right_size > 0:
+            # freeing distribution. it will not be used
+            free(dist)
+
+            branch = new_branch_node(
+                split, shapelet_info_extract_shapelet(
+                    split.shapelet_info, self.sd))
+            
             left_samples = <size_t*> malloc(sizeof(size_t) * left_size)
-            memcpy(left_samples, samples, sizeof(size_t) * left_size)
+            memcpy(left_samples, new_samples, sizeof(size_t) * left_size)
 
             right_samples = <size_t*> malloc(sizeof(size_t) * (n_samples - left_size))
-            memcpy(right_samples, samples + left_size, sizeof(size_t) * right_size)
+            memcpy(right_samples, new_samples + left_size, sizeof(size_t) * right_size)
 
+            # save memory by cleaning up new_samples here
+            # left_samples and right_samples contain the data now
             free(new_samples)
             
-            self._build_tree(left_samples, left_size)
+            branch.left = self._build_tree(left_samples, left_size)
+
+            # clean up the left samples to save memory while building
+            # the right branch
             free(left_samples)
 
-            self._build_tree(right_samples, right_size)
-            free(right_samples)
+            branch.right = self._build_tree(right_samples, right_size)
 
-            return 2 # return a branch
+            # clean up the right samples
+            free(right_samples)
+            return branch
         else:
-            return -1 # TODO: return leaf
+            free(new_samples) # free new_samples
+            return new_leaf_node(dist, self.n_labels)
 
     cdef SplitPoint _split(self, const size_t* samples, size_t n_samples, size_t* new_samples):
-        cdef double best_impurity = INFINITY
-        cdef SplitPoint best_split_point
-
-        cdef size_t split_point
-        cdef double threshold
-        cdef double impurity
-        cdef ShapeletInfo current_shapelet
+        cdef size_t split_point, best_split_point
+        cdef double threshold, best_threshold
+        cdef double impurity, best_impurity = INFINITY
+        cdef ShapeletInfo shapelet, best_shapelet
         
         cdef size_t i
         for i in range(self.n_shapelets):
             memcpy(self.sample_buffer, samples, sizeof(size_t) * n_samples)
 
-            current_shapelet = self._sample_shapelet(samples, n_samples)
-            shapelet_info_distances(current_shapelet, samples,
-                                    n_samples, self.sd, self.distance_buffer)
-            
-            argsort(self.distance_buffer, self.sample_buffer, n_samples)
-            self._partition_distance_buffer(n_samples, &split_point, &threshold, &impurity)
+            shapelet = self._sample_shapelet(samples, n_samples)
+            shapelet_info_distances(shapelet, self.sample_buffer, n_samples,
+                                    self.sd, self.distance_buffer)
 
+
+            # sort the distances and the samples in increasing order
+            # of distance
+            argsort(self.distance_buffer, self.sample_buffer, n_samples)
+            
+            # partitions the 
+            self._partition_distance_buffer(n_samples, &split_point, &threshold, &impurity)
+            # print("=====")
+            # print("shapelet:", shapelet.index, shapelet.start, shapelet.length)
+            # print("split_point:", split_point, threshold, impurity) 
+            # print_c_array_d("distance_buffer:", self.distance_buffer, n_samples)
+            # print_c_array_i("sample_buffer:", self.sample_buffer, n_samples)
+            # print_c_array_i("samples:", samples, n_samples)
+            # print("=====")
             if impurity < best_impurity:
-                best_split_point.split_point = split_point
-                best_split_point.threshold = threshold
-                best_split_point.shapelet_info = current_shapelet
+                best_split_point = split_point
+                best_threshold = threshold
+                best_shapelet = shapelet
                 memcpy(new_samples, self.sample_buffer, sizeof(size_t) * n_samples)
 
-        return best_split_point
+        return new_split_point(best_split_point, best_threshold, best_shapelet)
 
     cdef ShapeletInfo _sample_shapelet(self, const size_t* samples, size_t n_samples) nogil:
         cdef ShapeletInfo shapelet_info
@@ -254,11 +357,11 @@ cdef class ShapeletTreeBuilder:
         memset(self.left_label_buffer, 0, sizeof(double) * self.n_labels)
         
         cdef size_t i
-        for i in range(self.n_samples):
-            self.right_label_buffer[self.labels[self.sample_buffer[i] * self.label_stride]] = 1.0
+        for i in range(n_samples):
+            self.right_label_buffer[self.labels[self.sample_buffer[i] * self.label_stride]] += 1.0
 
-        cdef double prev_dist = self.distance_buffer[0]
-        cdef size_t prev_label = self.label[self.sample_buffer[0] * self.label_stride]
+        cdef double prev_distance = self.distance_buffer[0]
+        cdef size_t prev_label = self.labels[self.sample_buffer[0] * self.label_stride]
 
         cdef double left_sum = 1
         cdef double right_sum = n_samples - 1
@@ -272,37 +375,40 @@ cdef class ShapeletTreeBuilder:
                            self.right_label_buffer,
                            n_samples,
                            self.n_labels)
-        threshold[0] = prev_dist
+        threshold[0] = prev_distance
         split_point[0] = 1
 
         cdef size_t j # order index
         
-        cdef double dist
-        cdef double tmp_impurity
+        cdef double current_distance
+        cdef double current_impurity
         cdef size_t current_label
         
         for i in range(1, n_samples):
             j = self.sample_buffer[i]
-            dist = self.distance_buffer[i]
-            label = self.labels[j * self.sample_stride]
+            current_distance = self.distance_buffer[i]
+            current_label = self.labels[j * self.label_stride]
 
             left_sum += 1
             right_sum -= 1
-            self.left_label_buffer[label] += 1
-            self.right_label_buffer[label] -= 1
+            self.left_label_buffer[current_label] += 1
+            self.right_label_buffer[current_label] -= 1
             
-            if not label == prev_label:
-                tmp_impurity = info(left_sum,
-                                    self.left_label_buffer,
-                                    right_sum,
-                                    self.right_label_buffer,
-                                    n_samples,
-                                    self.n_labels)
+            if not current_label == prev_label:
+                current_impurity = info(left_sum,
+                                        self.left_label_buffer,
+                                        right_sum,
+                                        self.right_label_buffer,
+                                        n_samples,
+                                        self.n_labels)
                 
-                if tmp_impurity < impurity[0]:
-                    impurity[0] = tmp_impurity
-                    threshold[0] = (dist + prev_dist) / 2
+                if current_impurity < impurity[0]:
+                    impurity[0] = current_impurity
+                    threshold[0] = (current_distance + prev_distance) / 2
                     split_point[0] = i
+
+            prev_label = current_label
+            prev_distance = current_distance
         
                        
 
@@ -428,11 +534,7 @@ cdef Split find_threshold(long[:] idx,
     
     return split
 
-class Node:
-    def prnt(self, indent):
-        pass
-
-class Branch(Node):
+class Branch:
     def __init__(self, left, right, shapelet, threshold):
         self.left = left
         self.right = right
@@ -448,7 +550,7 @@ class Branch(Node):
         print("-" * indent, " right:", end="\n")
         self.right.prnt(indent + 1)
 
-class Leaf(Node):
+class Leaf:
     def __init__(self, proba):
         self.proba = np.asarray(proba)
 

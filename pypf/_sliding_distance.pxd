@@ -1,10 +1,12 @@
 cimport numpy as np
 
 cdef class Shapelet:
-   cdef size_t length
+   cdef readonly size_t length
    cdef double* data
 
    cdef double distance(self, const SlidingDistance t, size_t t_index) nogil
+
+   cpdef np.ndarray[np.float64_t] get_data(self)
 
 
 cdef double shapelet_subsequence_distance(size_t length,
