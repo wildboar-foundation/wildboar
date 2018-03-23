@@ -285,7 +285,6 @@ cdef class ShapeletTreeBuilder:
     
     cdef SlidingDistance sd
     
-   
     def __cinit__(self, size_t n_shapelets, object random_state):
         self.random_seed = random_state.randint(0, RAND_R_MAX)
         self.n_shapelets = n_shapelets
@@ -367,6 +366,7 @@ cdef class ShapeletTreeBuilder:
         cdef size_t* right_samples
         cdef Shapelet shapelet
         cdef Node branch
+
         if left_size > 0 and right_size > 0:
             # freeing distribution. it will not be used
             free(dist)
@@ -403,7 +403,8 @@ cdef class ShapeletTreeBuilder:
     cdef SplitPoint _split(self, const size_t* samples, size_t n_samples, size_t* new_samples) nogil:
         cdef size_t split_point, best_split_point
         cdef double threshold, best_threshold
-        cdef double impurity, best_impurity = INFINITY
+        cdef double impurity
+        cdef double best_impurity = INFINITY
         cdef ShapeletInfo shapelet, best_shapelet
         
         cdef size_t i
@@ -418,20 +419,14 @@ cdef class ShapeletTreeBuilder:
             # sort the distances and the samples in increasing order
             # of distance
             argsort(self.distance_buffer, self.sample_buffer, n_samples)
-
             self._partition_distance_buffer(n_samples, &split_point, &threshold, &impurity)
             if impurity < best_impurity:
+                best_impurity = impurity
                 best_split_point = split_point
                 best_threshold = threshold
                 best_shapelet = shapelet
                 memcpy(new_samples, self.sample_buffer, sizeof(size_t) * n_samples)
-                
-        # with gil:
-        #     print("shapelet", shapelet.index, shapelet.start, shapelet.length)
-        #     print("impurity, threshold, split:", impurity, threshold, split_point)
-        #     print_c_array_d("distance_buffer", self.distance_buffer, n_samples)
-        #     print_c_array_i("sample_buffer", self.sample_buffer, n_samples)
-                            
+           
         return new_split_point(best_split_point, best_threshold, best_shapelet)
 
     cdef ShapeletInfo _sample_shapelet(self, const size_t* samples, size_t n_samples) nogil:
