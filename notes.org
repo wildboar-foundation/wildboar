@@ -1,14 +1,4 @@
 * Tasks
-** TODO Integrat this in the tree
-   [2018-03-21 ons]
-   [[file:~/Projects/pypf/test_y_handling.py::else:%0A%20_,%20labels%20%3D%20np.nonzero(y)]]
 
-#+BEGIN_SRC python
-  _, labels = np.nonzero(y)
-  d = np.unique(labels)
-  print(d[labels])]]
-#+END_SRC
-** TODO Ensure that Sliding Distance clean up memory
-   [2018-03-22 tor]
-   [[file:~/Projects/pypf/pypf/_sliding_distance.pyx::ensure%20that%20this%20is%20true][file:~/Projects/pypf/pypf/_sliding_distance.pyx::ensure that this is true]]
+** TODO: add __reduce__ to the Node-type
 
