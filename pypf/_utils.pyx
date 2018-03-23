@@ -1,3 +1,7 @@
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
+
 # This file is part of pypf
 #
 # pypf is free software: you can redistribute it and/or modify it

@@ -6,8 +6,8 @@ from pypf._tree_builder import print_tree
 # from pypf._distribution import get_class_distribution
 # from pypf._impurity import safe_info
 
-x = np.array([0, 1], dtype=np.float64)
-y = np.array([0.5, 0.5], dtype=np.float64)
+# x = np.array([0, 1], dtype=np.float64)
+# y = np.array([0.5, 0.5], dtype=np.float64)
 
 x = [
     [0, 0, 1, 10, 1],
@@ -24,7 +24,7 @@ x = [
 x = np.array(x, dtype=np.float64)
 y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-random_state = np.random.RandomState(123)
+random_state = np.random.RandomState(1234)
 order = np.arange(10)
 random_state.shuffle(order)
 
@@ -36,8 +36,6 @@ print(y)
 
 tree = PfTree(random_state=random_state)
 tree.fit(x, y)
-
-print(np.vstack([y, tree.predict(x)]))
 
 print_tree(tree.tree)
 # print(tree.score(x, y))
@@ -59,14 +57,14 @@ x_test = test[:, 1:].astype(np.float64)
 y_test = test[:, 0].astype(np.intp)
 y_test -= 1
 
-tree = PfTree(n_shapelets=1000)
+tree = PfTree(n_shapelets=100)
 #tree.fit(x, y)
 #print(tree.score(x_test, y_test))
 
 from sklearn.ensemble import BaggingClassifier
 
 bag = BaggingClassifier(
-    base_estimator=tree, bootstrap=True, n_jobs=16, n_estimators=100)
+    base_estimator=tree, bootstrap=True, n_jobs=4, n_estimators=100)
 
 from sklearn.model_selection import cross_val_score
 

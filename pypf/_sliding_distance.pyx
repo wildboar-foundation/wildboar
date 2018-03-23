@@ -9,6 +9,15 @@ cimport cython
 from libc.stdlib cimport malloc, free
 from libc.math cimport sqrt, INFINITY
 
+cpdef Shapelet make_shapelet(size_t length,
+                             object array):
+    cdef Shapelet shapelet = Shapelet(length)
+    cdef size_t i
+    for i in range(array.shape[0]):
+        shapelet.data[i] = array[i]
+
+    return shapelet
+
 cdef class Shapelet:
     """ Representing a shapelet carrying its own data.
 
@@ -24,6 +33,9 @@ cdef class Shapelet:
     def __dealloc__(self):
         free(self.data)
 
+    def __reduce__(self):
+        return (make_shapelet, (self.length, self.get_data()))
+
     cpdef np.ndarray[np.float64_t] get_data(self):
         cdef np.ndarray[np.float64_t] arr = np.empty(self.length,
                                                      dtype=np.float64)
@@ -32,7 +44,7 @@ cdef class Shapelet:
             arr[i] = self.data[i]
         return arr
 
-    cdef double distance(self, const SlidingDistance t, size_t t_index) nogil:
+    cdef double distance(self, const SlidingDistance t, size_t t_index):
         cdef size_t sample_offset = t_index * t.sample_stride
         cdef double current_value = 0
         cdef double mean = 0

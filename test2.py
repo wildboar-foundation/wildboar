@@ -45,4 +45,4 @@ x_test = test[:, 1:].astype(np.float64)
 y_test = test[:, 0].astype(np.intp)
 y_test -= 1
 
-_tree_builder.test_2(x, y, 6, random_state, n_shapelets=1000)
+_tree_builder.test_2(x, y, 6, random_state, n_shapelets=100)

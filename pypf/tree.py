@@ -25,9 +25,6 @@ class PfTree(BaseEstimator, ClassifierMixin):
             y = check_array(y, ensure_2d=False, dtype=np.intp)
 
         n_samples, n_timesteps = X.shape
-        X = np.ascontiguousarray(X)
-        y = np.ascontiguousarray(y)
-
         if y.ndim == 1:
             self.classes_, y = np.unique(y, return_inverse=True)
         else:
@@ -41,7 +38,8 @@ class PfTree(BaseEstimator, ClassifierMixin):
                              "number of samples=%d" % (len(y), n_samples))
 
         indicies = np.arange(y.shape[0])
-
+        X = np.ascontiguousarray(X)
+        y = np.ascontiguousarray(y)
         # TODO: this is to crude, the TreeBuilder should be enhanced
         # with the capabilities of sample_weight, i.e., here we only
         # consider if an instance is included, not how many times
@@ -62,4 +60,5 @@ class PfTree(BaseEstimator, ClassifierMixin):
         X = check_array(X, dtype=np.float64)
         X = np.ascontiguousarray(X)
         predictor = ShapeletTreePredictor(X, len(self.classes_))
-        return predictor.predict_proba(self.tree)
+        proba = predictor.predict_proba(self.tree)
+        return proba

@@ -1,10 +1,11 @@
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
+
 cimport cython
 
 from libc.math cimport fabs, log2
 
-@cython.boundscheck(False)
-@cython.wraparound(False)
-@cython.cdivision(True)
 cpdef double safe_info(double xw,
                        double[:] x,
                        double yw,
