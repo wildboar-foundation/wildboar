@@ -177,6 +177,41 @@ cdef void print_c_array_i(object name, size_t* arr, size_t length):
     print()
 
 
+cdef class ShapeletTreePredictor:
+    cdef size_t n_labels
+    cdef SlidingDistance sd
+
+    def __cinit__(self,
+                  np.ndarray[np.float64_t, ndim=2, mode="c"] X,
+                  size_t n_labels):
+        self.n_labels = n_labels
+        self.sd = new_sliding_distance(X)
+
+    def __dealloc__(self):
+        free_sliding_distance(self.sd)
+
+    cpdef np.ndarray[np.float64_t, ndim=2] predict_proba(self, Node root):
+        cdef size_t i
+        cdef size_t n_samples = self.sd.n_samples
+        cdef np.ndarray[np.float64_t, ndim=2] output = np.empty(
+            [n_samples, self.n_labels], dtype=np.float64)
+        cdef Node node
+        cdef Shapelet shapelet
+        cdef double threshold
+        
+        for i in range(n_samples):
+            node = root
+            while not node.is_leaf():
+                shapelet = node.shapelet
+                threshold = node.threshold
+                if shapelet.distance(self.sd, i) <= threshold:
+                    node = node.left
+                else:
+                    node = node.right
+            output[i, :] = node.get_proba()
+        return output    
+
+
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
     cdef size_t n_shapelets
@@ -222,7 +257,7 @@ cdef class ShapeletTreeBuilder:
             self.right_label_buffer = NULL
         
 
-    cdef void init(self,
+    cpdef void init(self,
                    np.ndarray[np.float64_t, ndim=2, mode="c"] X,
                    np.ndarray[np.intp_t, ndim=1, mode="c"] y,
                    size_t n_labels):
@@ -238,7 +273,7 @@ cdef class ShapeletTreeBuilder:
         self.left_label_buffer = <double*> malloc(sizeof(double) * n_labels)
         self.right_label_buffer= <double*> malloc(sizeof(double) * n_labels)
 
-    cdef object build_tree(self, np.ndarray[np.intp_t, ndim=1, mode="c"] indicies):
+    cpdef Node build_tree(self, np.ndarray[np.intp_t, ndim=1, mode="c"] indicies):
         # indicies must have stride = 1
         cdef const size_t* samples = <size_t*>indicies.data
         cdef size_t n_samples = indicies.shape[0]
@@ -321,16 +356,8 @@ cdef class ShapeletTreeBuilder:
             # sort the distances and the samples in increasing order
             # of distance
             argsort(self.distance_buffer, self.sample_buffer, n_samples)
-            
-            # partitions the 
+
             self._partition_distance_buffer(n_samples, &split_point, &threshold, &impurity)
-            # print("=====")
-            # print("shapelet:", shapelet.index, shapelet.start, shapelet.length)
-            # print("split_point:", split_point, threshold, impurity) 
-            # print_c_array_d("distance_buffer:", self.distance_buffer, n_samples)
-            # print_c_array_i("sample_buffer:", self.sample_buffer, n_samples)
-            # print_c_array_i("samples:", samples, n_samples)
-            # print("=====")
             if impurity < best_impurity:
                 best_split_point = split_point
                 best_threshold = threshold

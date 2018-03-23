@@ -1,9 +1,7 @@
 import numpy as np
 
-from pypf._sliding_distance import sliding_distance_one
-
 # from pypf.tree_builder2 import TreeBuilder, Leaf, Branch
-from pypf._tree_builder import TreeBuilder, Leaf
+from pypf._tree_builder import ShapeletTreeBuilder, ShapeletTreePredictor
 from sklearn.base import ClassifierMixin, BaseEstimator
 from sklearn.utils import check_random_state, check_array
 
@@ -27,6 +25,8 @@ class PfTree(BaseEstimator, ClassifierMixin):
             y = check_array(y, ensure_2d=False, dtype=np.intp)
 
         n_samples, n_timesteps = X.shape
+        X = np.ascontiguousarray(X)
+        y = np.ascontiguousarray(y)
 
         if y.ndim == 1:
             self.classes_, y = np.unique(y, return_inverse=True)
@@ -48,28 +48,18 @@ class PfTree(BaseEstimator, ClassifierMixin):
         if sample_weight is not None:
             indicies = indicies[sample_weight > 0]
 
-        tree_builder = TreeBuilder(self.n_shapelets, random_state)
+        tree_builder = ShapeletTreeBuilder(self.n_shapelets, random_state)
         self.classes_ = np.unique(y)
+        tree_builder.init(X, y, len(self.classes_))
+        self.tree = tree_builder.build_tree(indicies)
 
-        self.tree = tree_builder.build_tree(indicies, X, y, len(self.classes_))
+        # self.tree = tree_builder.build_tree(indicies, X, y, len(self.classes_))
 
     def predict(self, X):
         return np.argmax(self.predict_proba(X), axis=1)
 
     def predict_proba(self, X):
         X = check_array(X, dtype=np.float64)
-
-        # TODO: the prediction function should be implemented on top
-        # of the TreeBuilder
-        output = np.empty([X.shape[0], len(self.classes_)])
-        for i in range(X.shape[0]):
-            node = self.tree
-            while not isinstance(node, Leaf):
-                shapelet = node.shapelet
-                threshold = node.threshold
-                if sliding_distance_one(shapelet, X, i) <= threshold:
-                    node = node.left
-                else:
-                    node = node.right
-            output[i, :] = node.proba
-        return output
+        X = np.ascontiguousarray(X)
+        predictor = ShapeletTreePredictor(X, len(self.classes_))
+        return predictor.predict_proba(self.tree)

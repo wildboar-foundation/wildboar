@@ -1,6 +1,7 @@
 import numpy as np
 
 from pypf.tree import PfTree
+from pypf._tree_builder import print_tree
 
 # from pypf._distribution import get_class_distribution
 # from pypf._impurity import safe_info
@@ -38,7 +39,7 @@ tree.fit(x, y)
 
 print(np.vstack([y, tree.predict(x)]))
 
-tree.tree.prnt(1)
+print_tree(tree.tree)
 # print(tree.score(x, y))
 # s = np.array([1, 9, 1])
 # print((s - np.mean(s)) / np.std(s))
@@ -58,8 +59,9 @@ x_test = test[:, 1:].astype(np.float64)
 y_test = test[:, 0].astype(np.intp)
 y_test -= 1
 
-tree = PfTree(n_shapelets=100)
+tree = PfTree(n_shapelets=1000)
 #tree.fit(x, y)
+#print(tree.score(x_test, y_test))
 
 from sklearn.ensemble import BaggingClassifier
 
@@ -70,8 +72,8 @@ from sklearn.model_selection import cross_val_score
 
 import time
 c = time.time()
-#bag.fit(x, y)
-#print(bag.score(x_test, y_test))
+bag.fit(x, y)
+print(bag.score(x_test, y_test))
 #score = cross_val_score(bag, x, y, cv=3)
 #print(score)
 print(round(time.time() - c) * 1000)
