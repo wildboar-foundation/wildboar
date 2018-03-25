@@ -278,7 +278,8 @@ cdef class ShapeletTreeBuilder:
     cdef size_t label_stride
     cdef size_t n_labels
 
-    cdef size_t* sample_buffer
+    cdef size_t* samples
+    cdef size_t* samples_buffer
     cdef double* distance_buffer
     cdef double* left_label_buffer
     cdef double* right_label_buffer
@@ -297,9 +298,13 @@ cdef class ShapeletTreeBuilder:
         if self.sd.X_buffer != NULL:
             free_sliding_distance(self.sd)
 
-        if self.sample_buffer != NULL:
-            free(self.sample_buffer)
-            self.sample_buffer = NULL
+        if self.samples != NULL:
+            free(self.samples)
+            self.samples = NULL
+
+        if self.samples_buffer != NULL:
+            free(self.samples_buffer)
+            self.samples_buffer = NULL
 
         if self.distance_buffer != NULL:
             free(self.distance_buffer)
@@ -334,73 +339,48 @@ cdef class ShapeletTreeBuilder:
         cdef const size_t* samples = <size_t*>indicies.data
         cdef size_t n_samples = indicies.shape[0]
 
-        if self.sample_buffer != NULL:
-            free(self.sample_buffer)
+        if self.samples != NULL:
+            free(self.samples)
 
-        self.sample_buffer = <size_t*> malloc(sizeof(size_t) * n_samples)
+        self.samples = <size_t*> malloc(sizeof(size_t) * n_samples)
         self.distance_buffer = <double*> malloc(sizeof(double) * n_samples)
+        self.samples_buffer = <size_t*> malloc(sizeof(size_t) * n_samples)
 
+        memcpy(self.samples, samples, sizeof(size_t) * n_samples)
+        
         # samples are deallocated by `indicies`
-        return self._build_tree(samples, n_samples)
+        return self._build_tree(0, n_samples)
 
-    cdef Node _build_tree(self, const size_t* samples, size_t n_samples):
+    cdef Node _build_tree(self, size_t start, size_t end):
         cdef double* dist = <double*> calloc(self.n_labels, sizeof(double))
-        # memset(dist, 0, sizeof(double) * self.n_labels)
-        cdef int n_positive = label_distribution(samples, n_samples,
+        memset(dist, 0, sizeof(double) * self.n_labels)
+        cdef int n_positive = label_distribution(self.samples + start,
+                                                 end - start,
                                                  self.labels,
                                                  self.n_labels, dist)
-        # print_c_array_d("distribution", dist, self.n_labels)
-        # print("n_positive:", n_positive)
-        if n_samples < 2 or n_positive < 2:
+        if end - start < 2 or n_positive < 2:
             return new_leaf_node(dist, self.n_labels) # node will free dist
         
-
-
-        cdef size_t* new_samples = <size_t*> malloc(sizeof(size_t) *
-                                                    n_samples)
-        cdef SplitPoint split = self._split(samples, n_samples, new_samples)
-            
-        cdef size_t left_size = split.split_point
-        cdef size_t right_size = n_samples - split.split_point
-        cdef size_t* left_samples
-        cdef size_t* right_samples
+        cdef SplitPoint split = self._split(start, end)
         cdef Shapelet shapelet
         cdef Node branch
 
-        if left_size > 0 and right_size > 0:
+        if split.split_point > 0 and end - split.split_point > 0:
             # freeing distribution. it will not be used
+            # TODO: this can be a global buffer
             free(dist)
 
             branch = new_branch_node(
                 split, shapelet_info_extract_shapelet(
                     split.shapelet_info, self.sd))
             
-            left_samples = <size_t*> malloc(sizeof(size_t) * left_size)
-            memcpy(left_samples, new_samples, sizeof(size_t) * left_size)
-
-            right_samples = <size_t*> malloc(sizeof(size_t) * (n_samples - left_size))
-            memcpy(right_samples, new_samples + left_size, sizeof(size_t) * right_size)
-
-            # save memory by cleaning up new_samples here
-            # left_samples and right_samples contain the data now
-            free(new_samples)
-            
-            branch.left = self._build_tree(left_samples, left_size)
-
-            # clean up the left samples to save memory while building
-            # the right branch
-            free(left_samples)
-
-            branch.right = self._build_tree(right_samples, right_size)
-
-            # clean up the right samples
-            free(right_samples)
+            branch.left = self._build_tree(start, split.split_point)
+            branch.right = self._build_tree(split.split_point, end)
             return branch
         else:
-            free(new_samples) # free new_samples
             return new_leaf_node(dist, self.n_labels)
 
-    cdef SplitPoint _split(self, const size_t* samples, size_t n_samples, size_t* new_samples) nogil:
+    cdef SplitPoint _split(self, size_t start, size_t end) nogil:
         cdef size_t split_point, best_split_point
         cdef double threshold, best_threshold
         cdef double impurity
@@ -409,52 +389,55 @@ cdef class ShapeletTreeBuilder:
         
         cdef size_t i
         for i in range(self.n_shapelets):
-            memcpy(self.sample_buffer, samples, sizeof(size_t) * n_samples)
-
-            shapelet = self._sample_shapelet(samples, n_samples)
-            shapelet_info_distances(shapelet, self.sample_buffer, n_samples,
-                                    self.sd, self.distance_buffer)
+            shapelet = self._sample_shapelet(start, end)
+            shapelet_info_distances(shapelet,
+                                    self.samples + start,
+                                    end - start,
+                                    self.sd,
+                                    self.distance_buffer + start)
 
 
             # sort the distances and the samples in increasing order
             # of distance
-            argsort(self.distance_buffer, self.sample_buffer, n_samples)
-            self._partition_distance_buffer(n_samples, &split_point, &threshold, &impurity)
+            argsort(self.distance_buffer + start, self.samples + start, end - start)
+            self._partition_distance_buffer(start, end, &split_point, &threshold, &impurity)
             if impurity < best_impurity:
+                memcpy(self.samples_buffer, self.samples + start, sizeof(size_t) * (end - start))
                 best_impurity = impurity
                 best_split_point = split_point
                 best_threshold = threshold
                 best_shapelet = shapelet
-                memcpy(new_samples, self.sample_buffer, sizeof(size_t) * n_samples)
-           
+
+        memcpy(self.samples + start, self.samples_buffer, sizeof(size_t) * (end - start))
         return new_split_point(best_split_point, best_threshold, best_shapelet)
 
-    cdef ShapeletInfo _sample_shapelet(self, const size_t* samples, size_t n_samples) nogil:
+    cdef ShapeletInfo _sample_shapelet(self, size_t start, size_t end) nogil:
         cdef ShapeletInfo shapelet_info
         
-        shapelet_info.length = rand_int(3, self.sd.n_timestep, &self.random_seed)
+        shapelet_info.length = rand_int(2, self.sd.n_timestep, &self.random_seed)
         shapelet_info.start = rand_int(0, self.sd.n_timestep - shapelet_info.length, &self.random_seed)
-        shapelet_info.index = samples[rand_int(0, n_samples, &self.random_seed)]
+        shapelet_info.index = self.samples[rand_int(start, end, &self.random_seed)]
         
         shapelet_info_update_statistics(&shapelet_info, self.sd)
         return shapelet_info
 
     cdef void _partition_distance_buffer(self,
-                                         size_t n_samples,
+                                         size_t start,
+                                         size_t end,
                                          size_t* split_point,
                                          double* threshold,
                                          double* impurity) nogil:
         memset(self.left_label_buffer, 0, sizeof(double) * self.n_labels)
         
         cdef size_t i
-        for i in range(n_samples):
-            self.right_label_buffer[self.labels[self.sample_buffer[i] * self.label_stride]] += 1.0
+        for i in range(start, end):
+            self.right_label_buffer[self.labels[self.samples[i] * self.label_stride]] += 1.0
 
-        cdef double prev_distance = self.distance_buffer[0]
-        cdef size_t prev_label = self.labels[self.sample_buffer[0] * self.label_stride]
+        cdef double prev_distance = self.distance_buffer[start]
+        cdef size_t prev_label = self.labels[self.samples[start] * self.label_stride]
 
         cdef double left_sum = 1
-        cdef double right_sum = n_samples - 1
+        cdef double right_sum = end - start - 1
 
         self.left_label_buffer[prev_label] += 1
         self.right_label_buffer[prev_label] -= 1
@@ -463,10 +446,10 @@ cdef class ShapeletTreeBuilder:
                            self.left_label_buffer,
                            right_sum,
                            self.right_label_buffer,
-                           n_samples,
+                           end - start,
                            self.n_labels)
         threshold[0] = prev_distance
-        split_point[0] = 1
+        split_point[0] = start + 1
 
         cdef size_t j # order index
         
@@ -474,8 +457,8 @@ cdef class ShapeletTreeBuilder:
         cdef double current_impurity
         cdef size_t current_label
         
-        for i in range(1, n_samples):
-            j = self.sample_buffer[i]
+        for i in range(start + 1, end):
+            j = self.samples[i]
             current_distance = self.distance_buffer[i]
             current_label = self.labels[j * self.label_stride]
             
@@ -484,7 +467,7 @@ cdef class ShapeletTreeBuilder:
                                         self.left_label_buffer,
                                         right_sum,
                                         self.right_label_buffer,
-                                        n_samples,
+                                        end - start,
                                         self.n_labels)
                 
                 if current_impurity < impurity[0]:

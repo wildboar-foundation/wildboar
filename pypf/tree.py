@@ -46,6 +46,7 @@ class PfTree(BaseEstimator, ClassifierMixin):
         if sample_weight is not None:
             indicies = indicies[sample_weight > 0]
 
+        indicies = np.ascontiguousarray(indicies)
         tree_builder = ShapeletTreeBuilder(self.n_shapelets, random_state)
         self.classes_ = np.unique(y)
         tree_builder.init(X, y, len(self.classes_))
