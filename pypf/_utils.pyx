@@ -17,25 +17,44 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
-
-# cython: cdivision=True
-# cython: boundscheck=False
-# cython: wraparound=False
+from __future__ import print_function
 
 cimport numpy as np
 cimport cython
 
 from libc.math cimport log2
 
-cdef void intp_ndarray_to_size_t_ptr(np.ndarray[np.intp_t] i, size_t* o):
-    cdef size_t size = i.shape[0]
-    cdef size_t p
-    for p in range(size):
-        o[p] = i[p]
-        
+def print_tree(o, indent=1):
+    if o.is_leaf:
+        print("-" * indent, "leaf: ")
+        print("-" * indent, " proba: ", o.get_proba())
+    else:
+        print("-" * indent, "branch:")
+        print("-" * indent, " shapelet: ", o.shapelet.get_data())
+        print("-" * indent, " threshold: ", o.threshold)
+        print("-" * indent, " left:", end="\n")
+        print_tree(o.left, indent + 1)
+        print("-" * indent, " right:", end="\n")
+        print_tree(o.right, indent + 1)
 
-cdef size_t label_distribution(const size_t* e,
-                               size_t n_samples,
+
+cdef void print_c_array_d(object name, double* arr, size_t length):
+    print(name, end=": ")
+    for i in range(length):
+        print(arr[i], end=" ")
+    print()
+
+
+cdef void print_c_array_i(object name, size_t* arr, size_t length):
+    print(name, end=": ")
+    for i in range(length):
+        print(arr[i], end=" ")
+    print()
+
+
+cdef size_t label_distribution(const size_t* samples,
+                               size_t start,
+                               size_t end,
                                const size_t* y,
                                size_t n_classes,
                                double* dist) nogil:
@@ -43,10 +62,10 @@ cdef size_t label_distribution(const size_t* e,
 
     :return: number of classes included in the sample
     """
-    cdef double weight = 1.0 / n_samples
+    cdef double weight = 1.0 / (end - start)
     cdef size_t i, j, n_pos = 0
-    for i in range(n_samples):
-        j = e[i]
+    for i in range(start, end):
+        j = samples[i]
         dist[y[j]] += weight
 
     for i in range(n_classes):
@@ -62,8 +81,9 @@ cdef inline size_t rand_r(size_t* seed) nogil:
 cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t* seed) nogil:
     return min_val + rand_r(seed) % (max_val - min_val)
 
-# Implementation of introsort. Inspired by sklearn implementation.
-# This code is licensed under BSD3 (and not GPLv3)
+# Implementation of introsort. Inspired by sklearn.tree
+# implementation.  This code is licensed under BSD3 (and not GPLv3)
+#
 # Including:
 #  - argsort
 #  - swap
@@ -80,7 +100,6 @@ cdef inline void argsort(double* values, size_t* samples, size_t n) nogil:
 
 cdef inline void swap(double* values, size_t* samples,
         size_t i, size_t j) nogil:
-    # Helper for sort
     values[i], values[j] = values[j], values[i]
     samples[i], samples[j] = samples[j], samples[i]
 

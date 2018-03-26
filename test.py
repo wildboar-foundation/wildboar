@@ -1,7 +1,7 @@
 import numpy as np
 
 from pypf.tree import PfTree
-from pypf._tree_builder import print_tree
+from pypf._utils import print_tree
 
 # from pypf._distribution import get_class_distribution
 # from pypf._impurity import safe_info

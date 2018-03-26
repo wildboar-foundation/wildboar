@@ -27,8 +27,10 @@ cdef class Shapelet:
     """
 
     def __cinit__(self, size_t length):
-        self.data = <double*> malloc(sizeof(double) * length)
         self.length = length
+        self.data = <double*> malloc(sizeof(double) * length)
+        if self.data == NULL:
+            raise MemoryError()
 
     def __dealloc__(self):
         free(self.data)
@@ -44,7 +46,7 @@ cdef class Shapelet:
             arr[i] = self.data[i]
         return arr
 
-    cdef double distance(self, const SlidingDistance t, size_t t_index):
+    cdef double distance(self, const SlidingDistance t, size_t t_index) nogil:
         cdef size_t sample_offset = t_index * t.sample_stride
         cdef double current_value = 0
         cdef double mean = 0
@@ -160,13 +162,15 @@ cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s, const SlidingDistan
     cdef double* data = shapelet.data
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
                                    s.start * t.timestep_stride)
+
     cdef size_t i
-    if s.std == 0:
-        for i in range(s.length):
-            data[i] = 0.0
-    else:
-        for i in range(s.length):
-            data[i] = (t.X[shapelet_offset + t.timestep_stride * i] - s.mean) / s.std
+    with nogil:
+        if s.std == 0:
+            for i in range(s.length):
+                data[i] = 0.0
+        else:
+            for i in range(s.length):
+                data[i] = (t.X[shapelet_offset + t.timestep_stride * i] - s.mean) / s.std
 
     return shapelet
 
@@ -195,7 +199,9 @@ cdef int shapelet_info_distances(ShapeletInfo s,
         result[p] = shapelet_info_distance(s, t, indicies[p])
     return 0
 
-cdef double shapelet_info_distance(ShapeletInfo s, const SlidingDistance t, size_t t_index) nogil:
+cdef double shapelet_info_distance(ShapeletInfo s,
+                                   const SlidingDistance t,
+                                   size_t t_index) nogil:
     cdef size_t sample_offset = t_index * t.sample_stride
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
                                    s.start * t.timestep_stride)
@@ -256,6 +262,8 @@ cdef SlidingDistance new_sliding_distance(np.ndarray[np.float64_t, ndim=2, mode=
     sd.sample_stride = <size_t> X.strides[0] / <size_t> X.itemsize
     sd.timestep_stride = <size_t> X.strides[1] / <size_t> X.itemsize
     sd.X_buffer = <double*> malloc(sizeof(double) * 2 * sd.n_timestep)
+    if sd.X_buffer == NULL:
+        raise MemoryError()
     return sd
 
 cdef int free_sliding_distance(SlidingDistance sd) nogil:

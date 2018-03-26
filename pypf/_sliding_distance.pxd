@@ -4,7 +4,7 @@ cdef class Shapelet:
    cdef readonly size_t length
    cdef double* data
 
-   cdef double distance(self, const SlidingDistance t, size_t t_index)
+   cdef double distance(self, const SlidingDistance t, size_t t_index) nogil
 
    cpdef np.ndarray[np.float64_t] get_data(self)
 
@@ -48,10 +48,3 @@ cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s, const SlidingDistan
 cdef SlidingDistance new_sliding_distance(np.ndarray[np.float64_t, ndim=2, mode="c"] X)
 
 cdef int free_sliding_distance(SlidingDistance sd) nogil
-
-
-# TODO: remove
-cpdef int sliding_distance(double[:] s,
-                           double[:, :] X,
-                           long[:] idx,
-                           double[:] out) nogil except -1
