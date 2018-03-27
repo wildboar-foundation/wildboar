@@ -24,7 +24,7 @@ x = [
 x = np.array(x, dtype=np.float64)
 y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-random_state = np.random.RandomState(1234)
+random_state = np.random.RandomState(123)
 order = np.arange(10)
 random_state.shuffle(order)
 
@@ -34,7 +34,7 @@ y = y[order]
 print(x)
 print(y)
 
-tree = PfTree(random_state=random_state)
+tree = PfTree(random_state=10)
 tree.fit(x, y)
 
 print_tree(tree.tree)
@@ -57,14 +57,30 @@ x_test = test[:, 1:].astype(np.float64)
 y_test = test[:, 0].astype(np.intp)
 y_test -= 1
 
-tree = PfTree(n_shapelets=100)
-#tree.fit(x, y)
+tree = PfTree(n_shapelets=100, random_state=11)
+
+#node = tree.tree
+
+
+def max_depth(node, depth, max_d):
+    if node.is_leaf:
+        return max(depth, max_d)
+    l_d = max_depth(node.left, depth + 1, max_d)
+    r_d = max_depth(node.right, depth + 1, max_d)
+    return max(l_d, max(r_d, max_d))
+
+
+#print(max_depth(node, 0, 0))
 #print(tree.score(x_test, y_test))
 
 from sklearn.ensemble import BaggingClassifier
 
 bag = BaggingClassifier(
-    base_estimator=tree, bootstrap=True, n_jobs=4, n_estimators=100)
+    base_estimator=tree,
+    bootstrap=True,
+    n_jobs=16,
+    n_estimators=100,
+    random_state=100)
 
 from sklearn.model_selection import cross_val_score
 

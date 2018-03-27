@@ -40,6 +40,7 @@ class PfTree(BaseEstimator, ClassifierMixin):
         indicies = np.arange(y.shape[0])
         X = np.ascontiguousarray(X)
         y = np.ascontiguousarray(y)
+
         # TODO: this is to crude, the TreeBuilder should be enhanced
         # with the capabilities of sample_weight, i.e., here we only
         # consider if an instance is included, not how many times
@@ -51,8 +52,6 @@ class PfTree(BaseEstimator, ClassifierMixin):
         self.classes_ = np.unique(y)
         tree_builder.init(X, y, len(self.classes_))
         self.tree = tree_builder.build_tree(indicies)
-
-        # self.tree = tree_builder.build_tree(indicies, X, y, len(self.classes_))
 
     def predict(self, X):
         return np.argmax(self.predict_proba(X), axis=1)
