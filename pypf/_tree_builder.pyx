@@ -2,11 +2,27 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 
+# This file is part of pypf
+#
+# pypf is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# pypf is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+# License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see
+# <http://www.gnu.org/licenses/>.
+
+# Authors: Isak Karlsson
+
 """
 Construct a shapelet based decision tree.
 """
-
-# Authors: Isak Karlsson
 
 import numpy as np
 cimport numpy as np
@@ -57,7 +73,8 @@ cpdef Node remake_leaf_node(size_t n_labels, object proba):
     return node
 
 
-cpdef Node remake_branch_node(double threshold, Shapelet shapelet, Node left, Node right):
+cpdef Node remake_branch_node(double threshold, Shapelet shapelet,
+                              Node left, Node right):
     cpdef Node node = Node(False)
     node.shapelet = shapelet
     node.threshold = threshold
@@ -79,12 +96,13 @@ cdef class Node:
     def __reduce__(self):
         if self.is_leaf:
             return (remake_leaf_node,
-                    (self.n_labels, self.get_proba()))
+                    (self.n_labels, self.proba))
         else:
             return (remake_branch_node, (self.threshold,
                                          self.shapelet, self.left, self.right))
 
-    cpdef np.ndarray[np.float64_t] get_proba(self):
+    @property
+    def proba(self):
         if not self.is_leaf:
             raise AttributeError("not a leaf node")
 
@@ -111,6 +129,7 @@ cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
     node.shapelet = shapelet
     return node
 
+
 cdef class ShapeletTreePredictor:
     cdef size_t n_labels
     cdef SlidingDistance sd
@@ -118,13 +137,24 @@ cdef class ShapeletTreePredictor:
     def __cinit__(self,
                   np.ndarray[np.float64_t, ndim=2, mode="c"] X,
                   size_t n_labels):
+        """Construct a shapelet tree predictor
+
+        :param X: the data to predict over
+        :param size_t n_labels: the number of labels
+        """
         self.n_labels = n_labels
         self.sd = new_sliding_distance(X)
 
     def __dealloc__(self):
         free_sliding_distance(self.sd)
 
-    cpdef np.ndarray[np.float64_t, ndim=2] predict_proba(self, Node root):
+    def predict_proba(self, Node root):
+        """Predict the probability of each label using the tree described by
+        `root`
+
+        :param root: the root node
+        :returns: the probabilities of shape `[n_samples, n_labels]`
+        """
         cdef size_t i
         cdef size_t n_samples = self.sd.n_samples
         cdef np.ndarray[np.float64_t, ndim=2] output = np.empty(
@@ -141,7 +171,7 @@ cdef class ShapeletTreePredictor:
                     node = node.left
                 else:
                     node = node.right
-            output[i, :] = node.get_proba()
+            output[i, :] = node.proba
         return output
 
 
@@ -163,6 +193,12 @@ cdef class ShapeletTreeBuilder:
 
     cdef SlidingDistance sd
 
+    # TODO: Add more parameters
+    #  * min_size
+    #  * max_size
+    #  * max_depth
+    #  * min_samples_leaf
+    #  * ...
     def __cinit__(self, size_t n_shapelets, object random_state):
         self.random_seed = random_state.randint(0, RAND_R_MAX)
         self.n_shapelets = n_shapelets
@@ -171,7 +207,9 @@ cdef class ShapeletTreeBuilder:
         self._free_if_needed()
 
     cdef void _free_if_needed(self) nogil:
-        # self.labels are automatically unallocated
+        # self.labels are automatically unallocated by its owning
+        # numpy array
+
         if self.sd.X_buffer != NULL:
             free_sliding_distance(self.sd)
 
@@ -224,7 +262,7 @@ cdef class ShapeletTreeBuilder:
     cpdef Node build_tree(
         self, np.ndarray[np.intp_t, ndim=1, mode="c"] indicies):
         if indicies.strides[0] != indicies.itemsize:
-            raise ValueError("illegal indicies")
+            raise ValueError("indices must be 1-strided")
 
         cdef const size_t* samples = <size_t*>indicies.data
         cdef size_t n_samples = indicies.shape[0]
@@ -252,6 +290,7 @@ cdef class ShapeletTreeBuilder:
                                                  start,
                                                  end,
                                                  self.labels,
+                                                 self.label_stride,
                                                  self.n_labels,
                                                  self.label_buffer)
         if end - start < 2 or n_positive < 2:
