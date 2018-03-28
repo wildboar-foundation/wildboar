@@ -85,9 +85,18 @@ cdef double shapelet_info_distance(ShapeletInfo s,
                                    const SlidingDistance t,
                                    size_t t_index) nogil
 
+cdef double shapelet_info_unscaled_distance(ShapeletInfo s,
+                                            const SlidingDistance t,
+                                            size_t t_index) nogil
+
+cdef int shapelet_info_unscaled_distances(ShapeletInfo s,
+                                          const size_t* samples,
+                                          size_t n_samples,
+                                          const SlidingDistance t,
+                                          double* result) nogil
+
 cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s,
                                              const SlidingDistance t)
-
 
 # construct a new sliding distance storage
 cdef SlidingDistance new_sliding_distance(

@@ -177,3 +177,19 @@ def matches(s, x, threshold, sample=None, normalize=True,
         free(matches)
         free(distances)
         free_sliding_distance(sd)
+
+from pypf._sliding_distance cimport shapelet_info_unscaled_distance
+from pypf._sliding_distance cimport shapelet_info_unscaled_distances
+from pypf._sliding_distance cimport ShapeletInfo, SlidingDistance
+def test(x):
+    print(x)
+    cdef SlidingDistance sd = new_sliding_distance(x)
+    cdef ShapeletInfo s
+    s.index = 2
+    s.start = 2
+    s.length = 3
+    cdef np.ndarray[np.intp_t] i = np.arange(10)
+    cdef np.ndarray[np.float64_t] d = np.zeros(10, dtype=np.float64)
+    shapelet_info_unscaled_distances(
+        s, <size_t*> i.data, i.shape[0], sd, <double*> d.data)
+    print(d)

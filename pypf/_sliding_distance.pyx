@@ -396,6 +396,45 @@ cdef int shapelet_info_distances(ShapeletInfo s,
     return 0
 
 
+cdef int shapelet_info_unscaled_distances(ShapeletInfo s,
+                                          const size_t* samples,
+                                          size_t n_samples,
+                                          const SlidingDistance t,
+                                          double* result) nogil:
+    cdef size_t p
+    for p in range(n_samples):
+        result[p] = shapelet_info_unscaled_distance(s, t, samples[p])
+
+
+cdef double shapelet_info_unscaled_distance(ShapeletInfo s,
+                                            const SlidingDistance t,
+                                            size_t t_index) nogil:
+    cdef size_t sample_offset = t_index * t.sample_stride
+    cdef size_t shapelet_offset = (s.index * t.sample_stride +
+                                   s.start * t.timestep_stride)
+    cdef size_t ts_offset = sample_offset + t.timestep_stride * i
+
+    cdef double dist = 0
+    cdef double min_dist = INFINITY
+
+    cdef size_t i
+    cdef size_t j
+    cdef double x
+    for i in range(t.n_timestep - s.length + 1):
+        dist = 0
+        for j in range(s.length):
+            if dist >= min_dist:
+                 break
+            x = t.X[ts_offset + t.timestep_stride * j + i]
+            x -= t.X[shapelet_offset + t.timestep_stride * j]
+            dist += x * x
+
+        if dist < min_dist:
+            min_dist = dist
+
+    return sqrt(min_dist)
+
+
 cdef double shapelet_info_distance(ShapeletInfo s,
                                    const SlidingDistance t,
                                    size_t t_index) nogil:
