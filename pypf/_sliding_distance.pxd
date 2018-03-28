@@ -24,6 +24,31 @@ cdef class Shapelet:
 
    cdef double distance(self, const SlidingDistance t, size_t t_index) nogil
 
+   cdef void distances(self,
+                       const SlidingDistance t,
+                       size_t* samples,
+                       size_t n_samples,
+                       double* distances) nogil
+
+   cdef size_t closer_than(self,
+                           const SlidingDistance t,
+                           size_t t_index,
+                           double threshold,
+                           size_t* matches,
+                           double* distances,
+                           size_t initial_capacity) nogil
+
+   cdef size_t index_distance(self,
+                              const SlidingDistance t,
+                              size_t t_index,
+                              double* min_dist) nogil
+
+   cdef void index_distances(self,
+                             const SlidingDistance t,
+                             size_t* samples,
+                             size_t n_samples,
+                             size_t* min_index,
+                             double* min_distance) nogil
 
 # TODO: consider adding `new_shapelet_info(i, s, l, ts)`
 cdef struct ShapeletInfo:

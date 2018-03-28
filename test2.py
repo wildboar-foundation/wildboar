@@ -3,13 +3,12 @@ import timeit
 
 from pypf import _tree_builder
 
-m = 10000
-X = np.random.randn(100, 100000)
-i = np.arange(X.shape[0])
+#x = np.random.randn(100, 100000)
+#i = np.arange(x.shape[0])
 # print(((X[0, 0:100] - np.mean(X[0, 0:100])) / np.std(X[0, 0:100]))[:10])
 # _tree_builder.test(X, i)
 
-x = [
+data = [
     [0, 0, 1, 10, 1],
     [0, 0, 1, 10, 1],
     [0, 1, 9, 1, 0],
@@ -21,28 +20,22 @@ x = [
     [0, 0, -1, 0, 1],
     [1, 2, 3, 0, 1],
 ]
-x = np.array(x, dtype=np.float64)
+x = np.array(data, dtype=np.float64)
 y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-random_state = np.random.RandomState(1233)
-order = np.arange(10)
-random_state.shuffle(order)
+from pypf.sliding_distance import min_distance
+from pypf.sliding_distance import matches
 
-x = x[order, :]
-y = y[order]
+d = min_distance(
+    np.array([0, 10, 1]),
+    x,
+    sample=None,
+    return_index=False,
+)
+print(d)
+#print(i)
 
-# print(x)
-# print(y)
+mask = matches([0, 10, 1], x, 2, sample=None, return_distances=False)
+print(mask)
 
-train = np.loadtxt("synthetic_control_TRAIN")
-test = np.loadtxt("synthetic_control_TEST")
-
-y = train[:, 0].astype(np.intp)
-y -= 1
-x = train[:, 1:].astype(np.float64)
-
-x_test = test[:, 1:].astype(np.float64)
-y_test = test[:, 0].astype(np.intp)
-y_test -= 1
-
-_tree_builder.test_2(x, y, 6, random_state, n_shapelets=100)
+print(matches([0, 10, 1], x, 2, sample=None, return_distances=True))

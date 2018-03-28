@@ -25,6 +25,8 @@ from __future__ import print_function
 cimport numpy as np
 
 from libc.math cimport log2
+from libc.stdlib cimport malloc
+from libc.stdlib cimport realloc
 
 # For debugging
 def print_tree(o, indent=1):
@@ -54,6 +56,15 @@ cdef void print_c_array_i(object name, size_t* arr, size_t length):
     for i in range(length):
         print(arr[i], end=" ")
     print()
+
+
+cdef void* safe_realloc(void** ptr, size_t size) nogil:
+    cdef void* tmp = realloc(ptr[0], sizeof(ptr[0][0]) * size)
+    if tmp == NULL:
+        with gil:
+            raise MemoryError("allocation failed")
+    ptr[0] = tmp
+    return tmp
 
 
 cdef size_t label_distribution(const size_t* samples,

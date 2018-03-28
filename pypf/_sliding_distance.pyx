@@ -31,6 +31,9 @@ from libc.stdlib cimport free
 from libc.math cimport sqrt
 from libc.math cimport INFINITY
 
+from sklearn.utils import check_array
+
+from pypf._utils cimport safe_realloc
 
 cpdef Shapelet _make_shapelet(size_t length, object array):
     """Reconstruct a `Shapelet`-object from Pickle
@@ -123,6 +126,148 @@ cdef class Shapelet:
                 ex2 -= current_value * current_value
 
         return sqrt(min_dist)
+
+    cdef size_t index_distance(self,
+                               const SlidingDistance t,
+                               size_t t_index,
+                               double* min_dist) nogil:
+        cdef size_t sample_offset = t_index * t.sample_stride
+        cdef double current_value = 0
+        cdef double mean = 0
+        cdef double std = 0
+        cdef double dist = 0
+
+        cdef size_t min_index = 0
+        min_dist[0] = INFINITY
+
+        cdef double ex = 0
+        cdef double ex2 = 0
+
+        cdef size_t i
+        cdef size_t j
+        cdef size_t buffer_pos
+
+        for i in range(t.n_timestep):
+            current_value = t.X[sample_offset + t.timestep_stride * i]
+            ex += current_value
+            ex2 += current_value * current_value
+
+            buffer_pos = i % self.length
+            t.X_buffer[buffer_pos] = current_value
+            t.X_buffer[buffer_pos + self.length] = current_value
+            if i >= self.length - 1:
+                j = (i + 1) % self.length
+                mean = ex / self.length
+                std = sqrt(ex2 / self.length - mean * mean)
+                dist = shapelet_subsequence_distance(
+                    self.length, # length of shapelet
+                    self.data,   # normalized shapelet
+                    j,           # buffer offset
+                    mean,        # buffer mean
+                    std,         # buffer std
+                    t.X_buffer,
+                    min_dist[0])
+
+                if dist < min_dist[0]:
+                    min_dist[0] = dist
+                    min_index = (i + 1) - self.length
+
+                current_value = t.X_buffer[j]
+                ex -= current_value
+                ex2 -= current_value * current_value
+
+        min_dist[0] = sqrt(min_dist[0])
+        return min_index
+
+    cdef void distances(self,
+                        const SlidingDistance t,
+                        size_t* samples,
+                        size_t n_samples,
+                        double* distances) nogil:
+        cdef size_t i
+        for i in range(n_samples):
+            distances[i] = self.distance(t, samples[i])
+
+    cdef void index_distances(self,
+                              const SlidingDistance t,
+                              size_t* samples,
+                              size_t n_samples,
+                              size_t* min_indicies,
+                              double* min_distances) nogil:
+        cdef size_t i
+        cdef size_t min_index
+        cdef double min_dist
+        for i in range(n_samples):
+            # index_distance set min_dist to INFINITY
+            min_index = self.index_distance(t, samples[i], &min_dist)
+            min_indicies[i] = min_index
+            min_distances[i] = min_dist
+
+    cdef size_t closer_than(self,
+                            const SlidingDistance t,
+                            size_t t_index,
+                            double threshold,
+                            size_t* matches,
+                            double* distances,
+                            size_t initial_capacity) nogil:
+        cdef size_t sample_offset = t_index * t.sample_stride
+        cdef double current_value = 0
+        cdef double mean = 0
+        cdef double std = 0
+        cdef double dist = 0
+
+        cdef size_t min_index = 0
+        cdef double ex = 0
+        cdef double ex2 = 0
+
+        cdef size_t i
+        cdef size_t j
+        cdef size_t buffer_pos
+
+        cdef size_t m = 0
+        cdef size_t capacity = initial_capacity
+
+        # increase the threshold to avoid having to repeatedly call
+        # `sqrt` before comparision to the threshold
+        threshold = threshold ** 2
+
+        for i in range(t.n_timestep):
+            current_value = t.X[sample_offset + t.timestep_stride * i]
+            ex += current_value
+            ex2 += current_value * current_value
+
+            buffer_pos = i % self.length
+            t.X_buffer[buffer_pos] = current_value
+            t.X_buffer[buffer_pos + self.length] = current_value
+            if i >= self.length - 1:
+                j = (i + 1) % self.length
+                mean = ex / self.length
+                std = sqrt(ex2 / self.length - mean * mean)
+                dist = shapelet_subsequence_distance(
+                    self.length, # length of shapelet
+                    self.data,   # normalized shapelet
+                    j,           # buffer offset
+                    mean,        # buffer mean
+                    std,         # buffer std
+                    t.X_buffer,
+                    threshold)
+
+                # <= to support threshold 0
+                if dist < threshold:
+                    if m >= capacity:
+                        capacity *= 2
+                        safe_realloc(<void**> &matches, capacity)
+                        safe_realloc(<void**> &distances, capacity)
+
+                    matches[m] = (i + 1) - self.length
+                    distances[m] = sqrt(dist)
+                    m += 1
+
+                current_value = t.X_buffer[j]
+                ex -= current_value
+                ex2 -= current_value * current_value
+
+        return m
 
 
 cdef inline double shapelet_subsequence_distance(size_t length,

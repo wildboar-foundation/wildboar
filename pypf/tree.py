@@ -1,9 +1,12 @@
 import numpy as np
 
-# from pypf.tree_builder2 import TreeBuilder, Leaf, Branch
-from pypf._tree_builder import ShapeletTreeBuilder, ShapeletTreePredictor
-from sklearn.base import ClassifierMixin, BaseEstimator
-from sklearn.utils import check_random_state, check_array
+from pypf._tree_builder import ShapeletTreeBuilder
+from pypf._tree_builder import ShapeletTreePredictor
+
+from sklearn.base import ClassifierMixin
+from sklearn.base import BaseEstimator
+from sklearn.utils import check_random_state
+from sklearn.utils import check_array
 
 
 class PfTree(BaseEstimator, ClassifierMixin):
@@ -52,6 +55,8 @@ class PfTree(BaseEstimator, ClassifierMixin):
         self.classes_ = np.unique(y)
         tree_builder.init(X, y, len(self.classes_))
         self.tree = tree_builder.build_tree(indicies)
+
+        return self
 
     def predict(self, X):
         return np.argmax(self.predict_proba(X), axis=1)
