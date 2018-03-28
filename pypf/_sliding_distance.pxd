@@ -20,6 +20,8 @@ cimport numpy as np
 
 cdef class Shapelet:
    cdef readonly size_t length
+   cdef readonly double mean
+   cdef readonly double std
    cdef double* data
 
    cdef double distance(self, const SlidingDistance t, size_t t_index) nogil

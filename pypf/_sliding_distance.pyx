@@ -35,14 +35,14 @@ from sklearn.utils import check_array
 
 from pypf._utils cimport safe_realloc
 
-cpdef Shapelet _make_shapelet(size_t length, object array):
+cpdef Shapelet _make_shapelet(size_t length, double mean, double std, object array):
     """Reconstruct a `Shapelet`-object from Pickle
 
     :param length: the size of the shapelet
     :param array: the Numpy array
     :return: a shapelet
     """
-    cdef Shapelet shapelet = Shapelet(length)
+    cdef Shapelet shapelet = Shapelet(length, mean, std)
     cdef size_t i
     for i in range(<size_t> array.shape[0]):
         shapelet.data[i] = array[i]
@@ -57,12 +57,14 @@ cdef class Shapelet:
     `shapelet_info_extract_shapelet` is used.
     """
 
-    def __cinit__(self, size_t length):
+    def __cinit__(self, size_t length, double mean, double std):
         """Initializes a shapelet with an empty c-array `data`.
 
         :param size_t length: the size of the shapelet
         """
         self.length = length
+        self.mean = mean
+        self.std = std
         self.data = <double*> malloc(sizeof(double) * length)
         if self.data == NULL:
             raise MemoryError()
@@ -71,7 +73,8 @@ cdef class Shapelet:
         free(self.data)
 
     def __reduce__(self):
-        return (_make_shapelet, (self.length, self.array))
+        return (_make_shapelet, (self.length, self.mean, self.std,
+                                 self.array))
 
     @property
     def array(self):
@@ -81,6 +84,10 @@ cdef class Shapelet:
         for i in range(self.length):
             arr[i] = self.data[i]
         return arr
+
+    @property
+    def unscaled_array(self):
+        return self.array * self.std + self.mean
 
     cdef double distance(self, const SlidingDistance t, size_t t_index) nogil:
         cdef size_t sample_offset = t_index * t.sample_stride
@@ -340,7 +347,7 @@ cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s,
     :param t: the time series storage
     :return: a normalized shapelet
     """
-    cdef Shapelet shapelet = Shapelet(s.length)
+    cdef Shapelet shapelet = Shapelet(s.length, s.mean, s.std)
     cdef double* data = shapelet.data
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
                                    s.start * t.timestep_stride)

@@ -12,20 +12,19 @@ from pypf._sliding_distance cimport free_sliding_distance
 from sklearn.utils import check_array
 
 cdef _make_shapelet(s, normalize):
-    if not isinstance(s, Shapelet) and normalize:
-        std = np.std(s)
-        if std > 0:
-            s = (s - np.mean(s)) / std
-        else:
-            s = np.zeros(s.shape)
-
     cdef size_t i
     cdef Shapelet shapelet
     if isinstance(s, Shapelet):
         shapelet = <Shapelet> s
     else:
+        std = np.std(s)
+        mean = np.mean(s) # refactor
+        if std > 0:
+            s = (s - mean) / std
+        else:
+            s = np.zeros(s.shape)
         s = check_array(s, ensure_2d=False, dtype=np.float64)
-        shapelet = Shapelet(s.shape[0])
+        shapelet = Shapelet(s.shape[0], mean, std)
         for i in range(<size_t> s.shape[0]):
             shapelet.data[i] = s[i]
 
