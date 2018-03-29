@@ -20,8 +20,6 @@ cimport numpy as np
 
 cdef class Shapelet:
    cdef readonly size_t length
-   cdef readonly double mean
-   cdef readonly double std
    cdef double* data
 
    cdef double distance(self, const SlidingDistance t, size_t t_index) nogil
@@ -52,7 +50,12 @@ cdef class Shapelet:
                              size_t* min_index,
                              double* min_distance) nogil
 
+cdef class ScaledShapelet(Shapelet):
+   cdef readonly double mean
+   cdef readonly double std
+   
 # TODO: consider adding `new_shapelet_info(i, s, l, ts)`
+# for computing the mean and std
 cdef struct ShapeletInfo:
    size_t index  # the index of the shapelt sample
    size_t start  # the start position
@@ -97,6 +100,9 @@ cdef int shapelet_info_unscaled_distances(ShapeletInfo s,
 
 cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s,
                                              const SlidingDistance t)
+
+cdef Shapelet shapelet_info_extract_unscaled_shapelet(ShapeletInfo s,
+                                                      const SlidingDistance t)
 
 # construct a new sliding distance storage
 cdef SlidingDistance new_sliding_distance(

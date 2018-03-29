@@ -19,12 +19,11 @@
 cdef enum:
     RAND_R_MAX = 2147483647
 
-
 cdef void print_c_array_d(object name, double* arr, size_t length)
 
 cdef void print_c_array_i(object name, size_t* arr, size_t length)
 
-cdef void* safe_realloc(void** ptr, size_t size) nogil
+cdef void* checked_realloc(void** ptr, size_t size) nogil
 
 cdef size_t label_distribution(const size_t* samples, size_t start,
                                size_t end, const size_t* labels,

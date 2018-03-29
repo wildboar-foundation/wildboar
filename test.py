@@ -38,10 +38,10 @@ y = y[order]
 print(x)
 print(y)
 
-tree = PfTree(random_state=10)
+tree = PfTree(random_state=10, scale=False)
 tree.fit(x, y)
-
 print_tree(tree.tree)
+
 train = np.loadtxt("synthetic_control_TRAIN")
 test = np.loadtxt("synthetic_control_TEST")
 
@@ -51,7 +51,7 @@ x = train[:, 1:].astype(np.float64)
 x_test = test[:, 1:].astype(np.float64)
 y_test = test[:, 0].astype(np.intp)
 
-tree = PfTree(n_shapelets=100)
+tree = PfTree(n_shapelets=100, scale=False)
 
 
 def max_depth(node, depth, max_d):
@@ -65,12 +65,12 @@ def max_depth(node, depth, max_d):
 bag = BaggingClassifier(
     base_estimator=tree,
     bootstrap=True,
-    n_jobs=16,
+    n_jobs=8,
     n_estimators=100,
     random_state=100)
-# print(np.vstack([x, x_test]).shape)
-# print(np.hstack([y, y_test]).shape)
-
+print(np.vstack([x, x_test]).shape)
+print(np.hstack([y, y_test]).shape)
+print(x.dtype)
 c = time.time()
 bag.fit(x, y)
 print(bag.score(x_test, y_test))

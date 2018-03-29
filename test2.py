@@ -25,17 +25,19 @@ y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
 from pypf.sliding_distance import min_distance
 from pypf.sliding_distance import matches
-
-d = min_distance(
+print(x)
+d, i = min_distance(
     np.array([0, 10, 1]),
     x,
+    normalize=False,
     sample=None,
-    return_index=False,
+    return_index=True,
 )
 print(d)
+print(i)
 #print(i)
 
-mask = matches([0, 10, 1], x, 2, sample=None, return_distances=False)
-print(mask)
+#mask = matches([0, 10, 1], x, 2, sample=None, return_distances=True)
+#print(mask)
 
-print(matches([0, 10, 1], x, 2, sample=None, return_distances=True))
+#print(matches([0, 10, 1], x, 2, sample=None, return_distances=True))

@@ -14,8 +14,12 @@ class PfTree(BaseEstimator, ClassifierMixin):
                  max_depth=None,
                  min_samples_leaf=2,
                  n_shapelets=10,
+                 scale=True,
+                 unscale_threshold=False,
                  random_state=None):
         self.max_depth = max_depth
+        self.scale = scale
+        self.unscale_threshold = unscale_threshold
         self.min_samples_leaf = min_samples_leaf
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets
@@ -51,8 +55,12 @@ class PfTree(BaseEstimator, ClassifierMixin):
             indicies = indicies[sample_weight > 0]
 
         indicies = np.ascontiguousarray(indicies)
-        tree_builder = ShapeletTreeBuilder(self.n_shapelets, True,
-                                           random_state)
+        tree_builder = ShapeletTreeBuilder(
+            self.n_shapelets,
+            self.scale,
+            self.unscale_threshold,
+            random_state,
+        )
         self.classes_ = np.unique(y)
         tree_builder.init(X, y, len(self.classes_))
         self.tree = tree_builder.build_tree(indicies)

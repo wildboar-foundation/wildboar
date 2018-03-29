@@ -22,6 +22,8 @@
 
 from __future__ import print_function
 
+import math
+
 cimport numpy as np
 
 from libc.math cimport log2
@@ -37,7 +39,8 @@ def print_tree(o, indent=1):
         print("-" * indent, "branch:")
         print("-" * indent, " shapelet: ", o.shapelet.array)
         print("-" * indent, " threshold: ", o.threshold, "(",
-              o.unscaled_threshold, ")")
+              o.unscaled_threshold if not
+              math.isnan(o.unscaled_threshold) else "?", ")")
         print("-" * indent, " left:", end="\n")
         print_tree(o.left, indent + 1)
         print("-" * indent, " right:", end="\n")
@@ -59,8 +62,8 @@ cdef void print_c_array_i(object name, size_t* arr, size_t length):
     print()
 
 
-cdef void* safe_realloc(void** ptr, size_t size) nogil:
-    cdef void* tmp = realloc(ptr[0], sizeof(ptr[0][0]) * size)
+cdef void* checked_realloc(void** ptr, size_t size) nogil:
+    cdef void* tmp = realloc(ptr[0], sizeof(size))
     if tmp == NULL:
         with gil:
             raise MemoryError("allocation failed")
