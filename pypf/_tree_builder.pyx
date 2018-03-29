@@ -29,6 +29,7 @@ cimport numpy as np
 
 from libc.math cimport log2
 from libc.math cimport INFINITY
+from libc.math cimport NAN
 
 from libc.stdlib cimport malloc
 from libc.stdlib cimport free
@@ -41,6 +42,8 @@ from pypf._sliding_distance cimport ShapeletInfo
 from pypf._sliding_distance cimport Shapelet
 from pypf._sliding_distance cimport shapelet_info_update_statistics
 from pypf._sliding_distance cimport shapelet_info_distances
+from pypf._sliding_distance cimport shapelet_info_distance
+from pypf._sliding_distance cimport shapelet_info_unscaled_distance
 from pypf._sliding_distance cimport shapelet_info_extract_shapelet
 from pypf._sliding_distance cimport new_sliding_distance
 from pypf._sliding_distance cimport free_sliding_distance
@@ -123,10 +126,13 @@ cdef Node new_leaf_node(double* label_buffer, size_t n_labels):
     return node
 
 
-cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
+cdef Node new_branch_node(SplitPoint sp,
+                          Shapelet shapelet,
+                          double unscaled_threshold):
     cdef Node node = Node(False)
     node.threshold = sp.threshold
     node.shapelet = shapelet
+    node.unscaled_threshold = unscaled_threshold
     return node
 
 
@@ -178,6 +184,7 @@ cdef class ShapeletTreePredictor:
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
     cdef size_t n_shapelets
+    cdef bint unscaled_threshold
 
     cdef size_t* labels
     cdef size_t label_stride
@@ -199,7 +206,11 @@ cdef class ShapeletTreeBuilder:
     #  * max_depth
     #  * min_samples_leaf
     #  * ...
-    def __cinit__(self, size_t n_shapelets, object random_state):
+    def __cinit__(self,
+                  size_t n_shapelets,
+                  bint unscaled_threshold,
+                  object random_state):
+        self.unscaled_threshold = unscaled_threshold
         self.random_seed = random_state.randint(0, RAND_R_MAX)
         self.n_shapelets = n_shapelets
 
@@ -299,11 +310,24 @@ cdef class ShapeletTreeBuilder:
         cdef SplitPoint split = self._split(start, end)
         cdef Shapelet shapelet
         cdef Node branch
-
+        cdef double prev_dist
+        cdef double curr_dist
+        cdef double unscaled_threshold = NAN
         if split.split_point > start and end - split.split_point > 0:
+            if self.unscaled_threshold:
+                curr_dist = shapelet_info_unscaled_distance(
+                    split.shapelet_info, self.sd,
+                    self.samples[split.split_point])
+                prev_dist = shapelet_info_unscaled_distance(
+                    split.shapelet_info, self.sd,
+                    self.samples[split.split_point - 1])
+
+                unscaled_threshold = (curr_dist + prev_dist) / 2
+
             branch = new_branch_node(
-                split, shapelet_info_extract_shapelet(
-                    split.shapelet_info, self.sd))
+                split,
+                shapelet_info_extract_shapelet(
+                    split.shapelet_info, self.sd), unscaled_threshold)
 
             branch.left = self._build_tree(start, split.split_point)
             branch.right = self._build_tree(split.split_point, end)
@@ -391,7 +415,7 @@ cdef class ShapeletTreeBuilder:
                            right_sum,
                            self.right_label_buffer,
                            self.n_labels)
-        threshold[0] = prev_distance
+        threshold[0] = prev_distance / 2
 
         # The split point indicates a <=-relation
         split_point[0] = start + 1
