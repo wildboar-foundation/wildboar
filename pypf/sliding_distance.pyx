@@ -200,20 +200,32 @@ def matches(s, x, threshold, sample=None, scale=True,
         free(distances)
         free_sliding_distance(sd)
 
-from pypf._sliding_distance cimport shapelet_info_unscaled_distance
-from pypf._sliding_distance cimport shapelet_info_unscaled_distances
+from pypf._sliding_distance cimport shapelet_info_distance
+from pypf._sliding_distance cimport shapelet_info_distances
+from pypf._sliding_distance cimport shapelet_info_scaled_distance
+from pypf._sliding_distance cimport shapelet_info_scaled_distances
+from pypf._sliding_distance cimport shapelet_info_update_statistics
+from pypf._sliding_distance cimport shapelet_info_extract_shapelet
 from pypf._sliding_distance cimport ShapeletInfo, SlidingDistance
 
 def test(x):
     print(x)
     cdef SlidingDistance sd = new_sliding_distance(x)
     cdef ShapeletInfo s
-    s.index = 0
+    s.index = 1
     s.start = 0
     s.length = 3
-    print(x[0, 0:3])
+    print(x[1, 0:3])
+
+    shapelet_info_update_statistics(&s, sd)
+    
     cdef np.ndarray[np.intp_t] i = np.arange(10)
     cdef np.ndarray[np.float64_t] d = np.zeros(10, dtype=np.float64)
-    shapelet_info_unscaled_distances(
+    shapelet_info_distances(
         s, <size_t*> i.data, i.shape[0], sd, <double*> d.data)
+    print(shapelet_info_distance(s, sd, 0))
+    print(d)
+
+    cdef Shapelet sh = shapelet_info_extract_shapelet(s, sd)
+    sh.distances(sd, <size_t*> i.data, i.shape[0], <double*> d.data)
     print(d)

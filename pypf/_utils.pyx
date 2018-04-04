@@ -72,6 +72,7 @@ cdef void* checked_realloc(void** ptr, size_t size) nogil:
 
 
 cdef size_t label_distribution(const size_t* samples,
+                               const double* sample_weights,
                                size_t start,
                                size_t end,
                                const size_t* labels,
@@ -88,19 +89,26 @@ cdef size_t label_distribution(const size_t* samples,
     :param n_labels: the number labeles
     :return: number of classes included in the sample
     """
-
-    # TODO: sample_weihts
-    # TODO: fix n_pos when sample_weights are introduced
-    cdef double weight = 1.0 / (end - start)
-    cdef size_t i, j, n_pos = 0
+    cdef double n_weighted_samples = 0
+    cdef double sample_weight
+    cdef size_t i, j, p, n_pos = 0
     for i in range(start, end):
-        j = samples[i] * label_stride
-        dist[labels[j]] += weight
+        j = samples[i]
+        p = j * label_stride
+
+        if sample_weights != NULL:
+            sample_weight = sample_weights[j]
+        else:
+            sample_weight = 1.0
+            
+        dist[labels[p]] += sample_weight
+        n_weighted_samples += sample_weight
 
     for i in range(n_labels):
+        dist[i] /= n_weighted_samples
         if dist[i] > 0:
             n_pos += 1
-
+        
     return n_pos
 
 

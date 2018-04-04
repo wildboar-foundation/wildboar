@@ -26,10 +26,6 @@ cdef struct SplitPoint:
    ShapeletInfo shapelet_info
 
 
-cdef SplitPoint new_split_point(size_t split_point,
-                                double threshold,
-                                ShapeletInfo shapelet_info) nogil
-
 cdef class Node:
     cdef readonly bint is_leaf
 
@@ -45,8 +41,3 @@ cdef class Node:
     cdef double* distribution
     cdef size_t n_labels
 
-cdef Node new_leaf_node(double* distribution, size_t n_labels)
-
-cdef Node new_branch_node(SplitPoint sp,
-                          Shapelet shapelet,
-                          double unscaled_threshold)

@@ -38,9 +38,10 @@ y = y[order]
 print(x)
 print(y)
 
-tree = PfTree(random_state=10, scale=False)
+tree = PfTree(random_state=10, scale=True)
 tree.fit(x, y)
 print_tree(tree.tree)
+print(tree.score(x, y))
 
 train = np.loadtxt("synthetic_control_TRAIN")
 test = np.loadtxt("synthetic_control_TEST")
@@ -51,7 +52,7 @@ x = train[:, 1:].astype(np.float64)
 x_test = test[:, 1:].astype(np.float64)
 y_test = test[:, 0].astype(np.intp)
 
-tree = PfTree(n_shapelets=100, scale=False)
+tree = PfTree(n_shapelets=100, scale=True, max_depth=1)
 
 
 def max_depth(node, depth, max_d):

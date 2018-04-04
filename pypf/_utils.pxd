@@ -25,9 +25,10 @@ cdef void print_c_array_i(object name, size_t* arr, size_t length)
 
 cdef void* checked_realloc(void** ptr, size_t size) nogil
 
-cdef size_t label_distribution(const size_t* samples, size_t start,
-                               size_t end, const size_t* labels,
-                               size_t labels_stride, size_t n_classes,
+cdef size_t label_distribution(const size_t* samples, double*
+                               sample_weights, size_t start, size_t
+                               end, const size_t* labels, size_t
+                               labels_stride, size_t n_classes,
                                double* dist) nogil
 
 
