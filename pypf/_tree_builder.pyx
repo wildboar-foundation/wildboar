@@ -188,7 +188,6 @@ cdef class ShapeletTreeBuilder:
     cdef size_t n_shapelets
     cdef size_t max_depth
     cdef bint scale
-    
 
     cdef size_t* labels
     cdef size_t label_stride
@@ -199,7 +198,7 @@ cdef class ShapeletTreeBuilder:
     cdef size_t n_samples
     cdef size_t* samples
     cdef size_t* samples_buffer
-    
+
     cdef double* distance_buffer
 
     cdef double* label_buffer
@@ -263,10 +262,10 @@ cdef class ShapeletTreeBuilder:
                     np.ndarray[np.float64_t, ndim=1, mode="c"] sample_weights):
 
         self._free_if_needed()
-        
+
         self.labels = <size_t*> y.data # labels are unallocated automatically
         self.label_stride = <size_t> y.strides[0] / <size_t> y.itemsize
-        
+
         self.n_samples = X.shape[0]
         self.samples = <size_t*> malloc(sizeof(size_t) * self.n_samples)
         self.samples_buffer = <size_t*> malloc(sizeof(size_t) * self.n_samples)
@@ -293,13 +292,14 @@ cdef class ShapeletTreeBuilder:
                 j += 1
 
         self.n_samples = j
+
         self.sd = new_sliding_distance(X)
 
         if sample_weights is None:
             self.sample_weights = NULL
         else:
             self.sample_weights = <double*> sample_weights.data  # unallocated
-        
+
     cpdef Node build_tree(self):
         return self._build_tree(0, self.n_samples, 0)
 
@@ -320,7 +320,7 @@ cdef class ShapeletTreeBuilder:
 
         cdef Shapelet shapelet
         cdef Node branch
-        
+
         cdef double prev_dist
         cdef double curr_dist
         if split.split_point > start and end - split.split_point > 0:
@@ -330,7 +330,7 @@ cdef class ShapeletTreeBuilder:
             else:
                 shapelet = shapelet_info_extract_shapelet(
                     split.shapelet_info, self.sd)
-                
+
             branch = new_branch_node(split, shapelet)
 
             branch.left = self._build_tree(start, split.split_point, depth + 1)
@@ -365,24 +365,31 @@ cdef class ShapeletTreeBuilder:
 
             # sort the distances and the samples in increasing order
             # of distance
-            argsort(self.distance_buffer + start, self.samples + start, end - start)
-            self._partition_distance_buffer(start, end, &split_point, &threshold, &impurity)
+            argsort(self.distance_buffer + start,
+                    self.samples + start, end - start)
+            self._partition_distance_buffer(
+                start, end, &split_point, &threshold, &impurity)
             if impurity < best_impurity:
-                memcpy(self.samples_buffer, self.samples + start, sizeof(size_t) * (end - start))
+                memcpy(self.samples_buffer,
+                       self.samples + start, sizeof(size_t) * (end - start))
                 best_impurity = impurity
                 best_split_point = split_point
                 best_threshold = threshold
                 best_shapelet = shapelet
 
-        memcpy(self.samples + start, self.samples_buffer, sizeof(size_t) * (end - start))
+        memcpy(self.samples + start,
+               self.samples_buffer, sizeof(size_t) * (end - start))
         return new_split_point(best_split_point, best_threshold, best_shapelet)
 
     cdef ShapeletInfo _sample_shapelet(self, size_t start, size_t end) nogil:
         cdef ShapeletInfo shapelet_info
 
-        shapelet_info.length = rand_int(2, self.sd.n_timestep, &self.random_seed)
-        shapelet_info.start = rand_int(0, self.sd.n_timestep - shapelet_info.length, &self.random_seed)
-        shapelet_info.index = self.samples[rand_int(start, end, &self.random_seed)]
+        shapelet_info.length = rand_int(
+            2, self.sd.n_timestep, &self.random_seed)
+        shapelet_info.start = rand_int(
+            0, self.sd.n_timestep - shapelet_info.length, &self.random_seed)
+        shapelet_info.index = self.samples[rand_int(
+            start, end, &self.random_seed)]
 
         if self.scale:
             shapelet_info_update_statistics(&shapelet_info, self.sd)
@@ -404,17 +411,18 @@ cdef class ShapeletTreeBuilder:
         cdef size_t j # sample index
         cdef size_t p # label index
         cdef double current_sample_weight
-        
+        cdef double right_sum = 0
         for i in range(start, end):
             j = self.samples[i]
             p = j * self.label_stride
-            
+
             if self.sample_weights != NULL:
                 current_sample_weight = self.sample_weights[j]
             else:
                 current_sample_weight = 1.0
 
             self.right_label_buffer[self.labels[p]] += current_sample_weight
+            right_sum += current_sample_weight
 
         cdef double prev_distance = self.distance_buffer[start]
 
@@ -426,9 +434,9 @@ cdef class ShapeletTreeBuilder:
             current_sample_weight = self.sample_weights[j]
         else:
             current_sample_weight = 1.0
-        
+
         cdef double left_sum = current_sample_weight
-        cdef double right_sum = end - start - left_sum
+        right_sum -= left_sum
 
         self.left_label_buffer[prev_label] += current_sample_weight
         self.right_label_buffer[prev_label] -= current_sample_weight

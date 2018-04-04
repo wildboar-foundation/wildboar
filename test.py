@@ -2,7 +2,9 @@ import numpy as np
 import time
 
 from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble.weight_boosting import AdaBoostClassifier
 from sklearn.model_selection import cross_val_score
+from sklearn.tree import DecisionTreeClassifier
 
 from pypf.tree import PfTree
 from pypf._utils import print_tree
@@ -39,7 +41,7 @@ print(x)
 print(y)
 
 tree = PfTree(random_state=10, scale=True)
-tree.fit(x, y)
+tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
 print_tree(tree.tree)
 print(tree.score(x, y))
 
@@ -52,7 +54,7 @@ x = train[:, 1:].astype(np.float64)
 x_test = test[:, 1:].astype(np.float64)
 y_test = test[:, 0].astype(np.intp)
 
-tree = PfTree(n_shapelets=100, scale=True, max_depth=1)
+tree = PfTree(n_shapelets=100, scale=True, max_depth=None)
 
 
 def max_depth(node, depth, max_d):
@@ -68,13 +70,22 @@ bag = BaggingClassifier(
     bootstrap=True,
     n_jobs=8,
     n_estimators=100,
-    random_state=100)
+    random_state=100,
+)
+
+boo = AdaBoostClassifier(
+    base_estimator=tree,
+    n_estimators=50,
+    learning_rate=1,
+    random_state=100,
+    algorithm="SAMME.R")
+
 print(np.vstack([x, x_test]).shape)
 print(np.hstack([y, y_test]).shape)
 print(x.dtype)
 c = time.time()
 bag.fit(x, y)
-print(bag.score(x_test, y_test))
+print("acc", bag.score(x_test, y_test))
 # score = cross_val_score(
 #    bag, np.vstack([x, x_test]), np.hstack([y, y_test]), cv=10)
 # print(score)

@@ -27,7 +27,7 @@ class PfTree(BaseEstimator, ClassifierMixin):
         random_state = check_random_state(self.random_state)
 
         if check_input:
-            X = check_array(X, dtype=np.float64)
+            X = check_array(X, dtype=np.float64, order="C")
             y = check_array(y, ensure_2d=False, dtype=np.intp)
 
         n_samples, n_timesteps = X.shape
@@ -48,6 +48,7 @@ class PfTree(BaseEstimator, ClassifierMixin):
 
         if not y.flags.contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
+
         tree_builder = ShapeletTreeBuilder(
             self.n_shapelets,
             self.max_depth,
@@ -55,18 +56,19 @@ class PfTree(BaseEstimator, ClassifierMixin):
             random_state,
         )
 
-        self.classes_ = np.unique(y)
+        self.n_classes_ = len(self.classes_)
         tree_builder.init(X, y, len(self.classes_), sample_weight)
         self.tree = tree_builder.build_tree()
 
         return self
 
     def predict(self, X):
-        return np.argmax(self.predict_proba(X), axis=1)
+        return self.classes_[np.argmax(self.predict_proba(X), axis=1)]
 
     def predict_proba(self, X):
-        X = check_array(X, dtype=np.float64)
-        X = np.ascontiguousarray(X)
+        X = check_array(X, dtype=np.float64, order="C")
+        if X.dtype != np.float64 or not X.flags.contiguous:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+
         predictor = ShapeletTreePredictor(X, len(self.classes_))
-        proba = predictor.predict_proba(self.tree)
-        return proba
+        return predictor.predict_proba(self.tree)
