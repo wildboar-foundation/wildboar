@@ -9,84 +9,75 @@ from sklearn.tree import DecisionTreeClassifier
 from pypf.tree import PfTree
 from pypf._utils import print_tree
 
-# from pypf._distribution import get_class_distribution
-# from pypf._impurity import safe_info
 
-# x = np.array([0, 1], dtype=np.float64)
-# y = np.array([0.5, 0.5], dtype=np.float64)
+def testit():
+    train = np.loadtxt("synthetic_control_TRAIN")
+    test = np.loadtxt("synthetic_control_TEST")
 
-x = [
-    [0, 0, 1, 10, 1],
-    [0, 0, 1, 10, 1],
-    [0, 1, 9, 1, 0],
-    [1, 9, 1, 0, 0],
-    [0, 1, 9, 1, 0],
-    [0, 1, 2, 3, 4],
-    [1, 2, 3, 0, 0],
-    [0, 0, 0, 1, 2],
-    [0, 0, -1, 0, 1],
-    [1, 2, 3, 0, 1],
-]
-x = np.array(x, dtype=np.float64)
-y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
-
-random_state = np.random.RandomState(123)
-order = np.arange(10)
-random_state.shuffle(order)
-
-x = x[order, :]
-y = y[order]
-
-print(x)
-print(y)
-
-tree = PfTree(random_state=10, scale=True)
-tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
-print_tree(tree.tree)
-print(tree.score(x, y))
-
-train = np.loadtxt("synthetic_control_TRAIN")
-test = np.loadtxt("synthetic_control_TEST")
-
-y = train[:, 0].astype(np.intp)
-x = train[:, 1:].astype(np.float64)
-
-x_test = test[:, 1:].astype(np.float64)
-y_test = test[:, 0].astype(np.intp)
-
-tree = PfTree(n_shapelets=100, scale=True, max_depth=None)
+    y = train[:, 0].astype(np.intp)
+    x = train[:, 1:].astype(np.float64)
+    tree = PfTree(n_shapelets=100, scale=True, max_depth=None)
+    tree.fit(x, y)
 
 
-def max_depth(node, depth, max_d):
-    if node.is_leaf:
-        return max(depth, max_d)
-    l_d = max_depth(node.left, depth + 1, max_d)
-    r_d = max_depth(node.right, depth + 1, max_d)
-    return max(l_d, max(r_d, max_d))
+if __name__ == "__main__":
 
+    x = [
+        [0, 0, 1, 10, 1],
+        [0, 0, 1, 10, 1],
+        [0, 1, 9, 1, 0],
+        [1, 9, 1, 0, 0],
+        [0, 1, 9, 1, 0],
+        [0, 1, 2, 3, 4],
+        [1, 2, 3, 0, 0],
+        [0, 0, 0, 1, 2],
+        [0, 0, -1, 0, 1],
+        [1, 2, 3, 0, 1],
+    ]
+    x = np.array(x, dtype=np.float64)
+    y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-bag = BaggingClassifier(
-    base_estimator=tree,
-    bootstrap=True,
-    n_jobs=8,
-    n_estimators=100,
-    random_state=100,
-)
+    random_state = np.random.RandomState(123)
+    order = np.arange(10)
+    random_state.shuffle(order)
 
-boo = AdaBoostClassifier(
-    base_estimator=tree,
-    n_estimators=50,
-    learning_rate=1,
-    random_state=100,
-    algorithm="SAMME.R")
+    x = x[order, :]
+    y = y[order]
 
-print(np.vstack([x, x_test]).shape)
-print(np.hstack([y, y_test]).shape)
-print(x.dtype)
-c = time.time()
-bag.fit(x, y)
-print("acc", bag.score(x_test, y_test))
-# score = cross_val_score(
-#    bag, np.vstack([x, x_test]), np.hstack([y, y_test]), cv=10)
-# print(score)
-print(round(time.time() - c) * 1000)
+    print(x)
+    print(y)
+
+    tree = PfTree(random_state=10, scale=True)
+    tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
+    print_tree(tree.tree)
+    print(tree.score(x, y))
+
+    train = np.loadtxt("synthetic_control_TRAIN")
+    test = np.loadtxt("synthetic_control_TEST")
+
+    y = train[:, 0].astype(np.intp)
+    x = train[:, 1:].astype(np.float64)
+    i = np.arange(x.shape[0])
+
+    np.random.shuffle(i)
+
+    x_test = test[:, 1:].astype(np.float64)
+    y_test = test[:, 0].astype(np.intp)
+
+    tree = PfTree(n_shapelets=100, scale=False, max_depth=None)
+
+    bag = BaggingClassifier(
+        base_estimator=tree,
+        bootstrap=True,
+        n_jobs=8,
+        n_estimators=100,
+        random_state=100,
+    )
+
+    c = time.time()
+    bag.fit(x, y)
+    print("acc:", bag.score(x_test, y_test))
+    score = cross_val_score(
+        bag, np.vstack([x, x_test]), np.hstack([y, y_test]), cv=10)
+    print(np.mean(score), np.std(score))
+    print(round(time.time() - c) * 1000)

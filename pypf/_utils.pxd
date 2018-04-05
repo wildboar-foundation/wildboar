@@ -27,7 +27,7 @@ cdef size_t label_distribution(const size_t* samples, double*
                                sample_weights, size_t start, size_t
                                end, const size_t* labels, size_t
                                labels_stride, size_t n_classes,
-                               double* dist) nogil
+                               double* n_weighted_samples, double* dist) nogil
 
 
 cdef void argsort(double* values, size_t* order, size_t length) nogil

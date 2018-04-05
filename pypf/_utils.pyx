@@ -69,6 +69,7 @@ cdef size_t label_distribution(const size_t* samples,
                                const size_t* labels,
                                size_t label_stride,
                                size_t n_labels,
+                               double* n_weighted_samples,
                                double* dist) nogil:
     """Computes the label distribution
 
@@ -80,9 +81,11 @@ cdef size_t label_distribution(const size_t* samples,
     :param n_labels: the number labeles
     :return: number of classes included in the sample
     """
-    cdef double n_weighted_samples = 0
     cdef double sample_weight
-    cdef size_t i, j, p, n_pos = 0
+    cdef size_t i, j, p, n_pos
+
+    n_pos = 0
+    n_weighted_samples[0] = 0
     for i in range(start, end):
         j = samples[i]
         p = j * label_stride
@@ -91,15 +94,14 @@ cdef size_t label_distribution(const size_t* samples,
             sample_weight = sample_weights[j]
         else:
             sample_weight = 1.0
-            
+
         dist[labels[p]] += sample_weight
-        n_weighted_samples += sample_weight
+        n_weighted_samples[0] += sample_weight
 
     for i in range(n_labels):
-        dist[i] /= n_weighted_samples
         if dist[i] > 0:
             n_pos += 1
-        
+
     return n_pos
 
 
