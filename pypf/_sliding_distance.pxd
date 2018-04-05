@@ -30,26 +30,6 @@ cdef class Shapelet:
                        size_t n_samples,
                        double* distances) nogil
 
-   cdef size_t closer_than(self,
-                           const SlidingDistance t,
-                           size_t t_index,
-                           double threshold,
-                           size_t* matches,
-                           double* distances,
-                           size_t initial_capacity) nogil
-
-   cdef size_t index_distance(self,
-                              const SlidingDistance t,
-                              size_t t_index,
-                              double* min_dist) nogil
-
-   cdef void index_distances(self,
-                             const SlidingDistance t,
-                             size_t* samples,
-                             size_t n_samples,
-                             size_t* min_index,
-                             double* min_distance) nogil
-
 
 cdef class ScaledShapelet(Shapelet):
    cdef readonly double mean
@@ -124,7 +104,8 @@ cdef double scaled_sliding_distance(size_t s_offset,
                                     size_t t_stride,
                                     size_t t_length,
                                     double* T,
-                                    double* X_buffer) nogil
+                                    double* X_buffer,
+                                    size_t* index) nogil
 
 cdef double sliding_distance(size_t s_offset,
                              size_t s_stride,
@@ -133,4 +114,32 @@ cdef double sliding_distance(size_t s_offset,
                              size_t t_offset,
                              size_t t_stride,
                              size_t t_length,
-                             double* T) nogil
+                             double* T,
+                             size_t* index) nogil
+
+cdef int sliding_distance_matches(size_t s_offset,
+                                  size_t s_stride,
+                                  size_t s_length,
+                                  double* S,
+                                  size_t t_offset,
+                                  size_t t_stride,
+                                  size_t t_length,
+                                  double* T,
+                                  double threshold,
+                                  size_t** matches,
+                                  size_t* n_matches) nogil except -1
+
+cdef double scaled_sliding_distance_matches(size_t s_offset,
+                                            size_t s_stride,
+                                            size_t s_length,
+                                            double s_mean,
+                                            double s_std,
+                                            double* S,
+                                            size_t t_offset,
+                                            size_t t_stride,
+                                            size_t t_length,
+                                            double* T,
+                                            double* X_buffer,
+                                            double threshold,
+                                            size_t** matches,
+                                            size_t* n_matches) nogil except -1

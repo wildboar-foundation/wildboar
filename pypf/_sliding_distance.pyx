@@ -25,6 +25,7 @@ cimport numpy as np
 
 cimport cython
 
+from libc.stdlib cimport realloc
 from libc.stdlib cimport malloc
 from libc.stdlib cimport free
 
@@ -33,7 +34,6 @@ from libc.math cimport INFINITY
 
 from sklearn.utils import check_array
 
-from pypf._utils cimport checked_realloc
 
 cpdef Shapelet make_scaled_shapelet_(size_t length, double mean,
                                      double std, object array):
@@ -99,7 +99,8 @@ cdef class Shapelet:
             sample_offset,
             t.timestep_stride,
             t.n_timestep,
-            t.X)
+            t.X,
+            NULL)
 
     cdef void distances(self,
                        const SlidingDistance t,
@@ -109,95 +110,6 @@ cdef class Shapelet:
         cdef size_t i
         for i in range(n_samples):
             distances[i] = self.distance(t, samples[i])
-
-    cdef size_t closer_than(self,
-                           const SlidingDistance t,
-                           size_t t_index,
-                           double threshold,
-                           size_t* matches,
-                           double* distances,
-                           size_t initial_capacity) nogil:
-        cdef size_t sample_offset = t_index * t.sample_stride
-
-        cdef double dist = 0
-        cdef size_t min_index = 0
-
-        cdef size_t i
-        cdef size_t j
-
-        cdef size_t m = 0
-        cdef size_t capacity = initial_capacity
-
-        # increase the threshold to avoid having to repeatedly call
-        # `sqrt` before comparision to the threshold
-        threshold = threshold ** 2
-
-        for i in range(t.n_timestep):
-            dist = 0
-            for j in range(self.length):
-                if dist >= threshold:
-                    break
-
-                x = t.X[sample_offset + t.timestep_stride * i + j]
-                x -= self.data[j]
-                dist += x * x
-                
-                if dist < threshold:
-                    if m >= capacity:
-                        # TODO: fixme
-                        capacity *= 2
-                        checked_realloc(
-                            <void**> &matches, capacity * sizeof(size_t))
-                        checked_realloc(
-                            <void**> &distances, capacity * sizeof(double))
-
-                    matches[m] = i
-                    distances[m] = sqrt(dist)
-                    m += 1
-        return m
-
-    cdef size_t index_distance(self,
-                              const SlidingDistance t,
-                              size_t t_index,
-                              double* min_dist) nogil:
-        cdef size_t sample_offset = t_index * t.sample_stride
-
-        cdef double dist = 0
-        
-        cdef size_t min_index = 0
-        min_dist[0] = INFINITY
-
-        cdef size_t i
-        cdef size_t j
-        for i in range(t.n_timestep - self.length + 1):
-            dist = 0
-            for j in range(self.length):
-                if dist >= min_dist[0]:
-                    break
-
-                x = t.X[sample_offset + t.timestep_stride * i + j]
-                x -= self.data[j]
-                dist += x * x
-            if dist < min_dist[0]:
-                min_dist[0] = dist
-                min_index = i
-
-        min_dist[0] = sqrt(min_dist[0])
-        return min_index
-
-    cdef void index_distances(self,
-                             const SlidingDistance t,
-                             size_t* samples,
-                             size_t n_samples,
-                             size_t* min_indicies,
-                              double* min_distances) nogil:
-        cdef size_t i
-        cdef size_t min_index
-        cdef double min_dist
-        for i in range(n_samples):
-            min_index = self.index_distance(t, samples[i], &min_dist)
-            min_indicies[i] = min_index
-            min_distances[i] = min_dist
 
 
 cdef class ScaledShapelet(Shapelet):
@@ -232,149 +144,9 @@ cdef class ScaledShapelet(Shapelet):
             t.timestep_stride,
             t.n_timestep,
             t.X,
-            t.X_buffer)
+            t.X_buffer,
+            NULL)
 
-    cdef size_t index_distance(self,
-                               const SlidingDistance t,
-                               size_t t_index,
-                               double* min_dist) nogil:
-        cdef size_t sample_offset = t_index * t.sample_stride
-        cdef double current_value = 0
-        cdef double mean = 0
-        cdef double std = 0
-        cdef double dist = 0
-
-        cdef size_t min_index = 0
-        min_dist[0] = INFINITY
-
-        cdef double ex = 0
-        cdef double ex2 = 0
-
-        cdef size_t i
-        cdef size_t j
-        cdef size_t buffer_pos
-
-        for i in range(t.n_timestep):
-            current_value = t.X[sample_offset + t.timestep_stride * i]
-            ex += current_value
-            ex2 += current_value * current_value
-
-            buffer_pos = i % self.length
-            t.X_buffer[buffer_pos] = current_value
-            t.X_buffer[buffer_pos + self.length] = current_value
-            if i >= self.length - 1:
-                j = (i + 1) % self.length
-                mean = ex / self.length
-                std = sqrt(ex2 / self.length - mean * mean)
-                dist = shapelet_subsequence_distance(
-                    self.length, # length of shapelet
-                    self.data,   # normalized shapelet
-                    j,           # buffer offset
-                    mean,        # buffer mean
-                    std,         # buffer std
-                    t.X_buffer,
-                    min_dist[0])
-
-                if dist < min_dist[0]:
-                    min_dist[0] = dist
-                    min_index = (i + 1) - self.length
-
-                current_value = t.X_buffer[j]
-                ex -= current_value
-                ex2 -= current_value * current_value
-
-        min_dist[0] = sqrt(min_dist[0])
-        return min_index
-
-    cdef size_t closer_than(self,
-                            const SlidingDistance t,
-                            size_t t_index,
-                            double threshold,
-                            size_t* matches,
-                            double* distances,
-                            size_t initial_capacity) nogil:
-        cdef size_t sample_offset = t_index * t.sample_stride
-        cdef double current_value = 0
-        cdef double mean = 0
-        cdef double std = 0
-        cdef double dist = 0
-
-        cdef size_t min_index = 0
-        cdef double ex = 0
-        cdef double ex2 = 0
-
-        cdef size_t i
-        cdef size_t j
-        cdef size_t buffer_pos
-
-        cdef size_t m = 0
-        cdef size_t capacity = initial_capacity
-
-        # increase the threshold to avoid having to repeatedly call
-        # `sqrt` before comparision to the threshold
-        threshold = threshold ** 2
-
-        for i in range(t.n_timestep):
-            current_value = t.X[sample_offset + t.timestep_stride * i]
-            ex += current_value
-            ex2 += current_value * current_value
-
-            buffer_pos = i % self.length
-            t.X_buffer[buffer_pos] = current_value
-            t.X_buffer[buffer_pos + self.length] = current_value
-            if i >= self.length - 1:
-                j = (i + 1) % self.length
-                mean = ex / self.length
-                std = sqrt(ex2 / self.length - mean * mean)
-                dist = shapelet_subsequence_distance(
-                    self.length, # length of shapelet
-                    self.data,   # normalized shapelet
-                    j,           # buffer offset
-                    mean,        # buffer mean
-                    std,         # buffer std
-                    t.X_buffer,
-                    threshold)
-
-                # <= to support threshold 0
-                if dist < threshold:
-                    if m >= capacity:
-                        capacity *= 2
-                        checked_realloc(
-                            <void**> &matches, capacity * sizeof(size_t))
-                        checked_realloc(
-                            <void **> &distances, capacity * sizeof(double))
-
-                    matches[m] = (i + 1) - self.length
-                    distances[m] = sqrt(dist)
-                    m += 1
-
-                current_value = t.X_buffer[j]
-                ex -= current_value
-                ex2 -= current_value * current_value
-
-        return m
-
-cdef inline double shapelet_subsequence_distance(size_t length,
-                                                 double* shapelet,
-                                                 size_t j,
-                                                 double mean,
-                                                 double std,
-                                                 double* X_buffer,
-                                                 double min_dist) nogil:
-    cdef double dist = 0
-    cdef double x
-    cdef size_t i
-    cdef bint std_zero = std == 0
-    for i in range(length):
-        if dist >= min_dist:
-            break
-
-        x = shapelet[i]
-        if not std_zero:
-            x -= (X_buffer[i + j] - mean) / std
-        dist += x * x
-
-    return dist
 
 cdef Shapelet shapelet_info_extract_shapelet(
     ShapeletInfo s, const SlidingDistance t):
@@ -391,6 +163,7 @@ cdef Shapelet shapelet_info_extract_shapelet(
 
     return shapelet
 
+# TODO: unify
 cdef Shapelet shapelet_info_extract_scaled_shapelet(ShapeletInfo s,
                                                     const SlidingDistance t):
     """Extract (i.e., allocate) a shapelet to be stored outside the
@@ -468,7 +241,8 @@ cdef double shapelet_info_distance(ShapeletInfo s,
         sample_offset,
         t.timestep_stride,
         t.n_timestep,
-        t.X)
+        t.X,
+        NULL)
 
 
 cdef double shapelet_info_scaled_distance(ShapeletInfo s,
@@ -488,8 +262,9 @@ cdef double shapelet_info_scaled_distance(ShapeletInfo s,
         t.timestep_stride,
         t.n_timestep,
         t.X,
-        t.X_buffer)
-        
+        t.X_buffer,
+        NULL)
+
 
 cdef SlidingDistance new_sliding_distance( np.ndarray[np.float64_t,
                                                       ndim=2, mode="c"] X):
@@ -512,6 +287,7 @@ cdef int free_sliding_distance(SlidingDistance sd) nogil:
     # sd.X is freed by its owner
     return 0
 
+
 cdef double scaled_sliding_distance(size_t s_offset,
                                     size_t s_stride,
                                     size_t s_length,
@@ -522,7 +298,8 @@ cdef double scaled_sliding_distance(size_t s_offset,
                                     size_t t_stride,
                                     size_t t_length,
                                     double* T,
-                                    double* X_buffer) nogil:
+                                    double* X_buffer,
+                                    size_t* index) nogil:
     cdef double current_value = 0
     cdef double mean = 0
     cdef double std = 0
@@ -548,7 +325,7 @@ cdef double scaled_sliding_distance(size_t s_offset,
             j = (i + 1) % s_length
             mean = ex / s_length
             std = sqrt(ex2 / s_length - mean * mean)
-            dist = shapelet_info_subsequence_distance(
+            dist = scaled_distance(
                 s_offset,
                 s_length,
                 s_mean,
@@ -563,6 +340,8 @@ cdef double scaled_sliding_distance(size_t s_offset,
 
             if dist < min_dist:
                 min_dist = dist
+                if index != NULL:
+                    index[0] = (i + 1) - s_length
 
             current_value = X_buffer[j]
             ex -= current_value
@@ -570,17 +349,19 @@ cdef double scaled_sliding_distance(size_t s_offset,
 
     return sqrt(min_dist)
 
-cdef inline double shapelet_info_subsequence_distance(size_t offset,
-                                                      size_t length,
-                                                      double s_mean,
-                                                      double s_std,
-                                                      size_t j,
-                                                      double mean,
-                                                      double std,
-                                                      double* X,
-                                                      size_t timestep_stride,
-                                                      double* X_buffer,
-                                                      double min_dist) nogil:
+
+cdef inline double scaled_distance(size_t offset,
+                                   size_t length,
+                                   double s_mean,
+                                   double s_std,
+                                   size_t j,
+                                   double mean,
+                                   double std,
+                                   double* X,
+                                   size_t timestep_stride,
+                                   double* X_buffer,
+                                   double min_dist,
+                                   bint only_gt=False) nogil:
     # Compute the distance between the shapelet (starting at `offset`
     # and ending at `offset + length` normalized with `s_mean` and
     # `s_std` with the shapelet in `X_buffer` starting at `0` and
@@ -596,8 +377,12 @@ cdef inline double shapelet_info_subsequence_distance(size_t offset,
         return 0
 
     for i in range(length):
-        if dist >= min_dist:
-            break
+        if only_gt:
+            if dist > min_dist:
+                break
+        else:
+            if dist >= min_dist:
+                break
 
         x = (X[offset + timestep_stride * i] - s_mean) / s_std
         if not std_zero:
@@ -614,7 +399,8 @@ cdef double sliding_distance(size_t s_offset,
                              size_t t_offset,
                              size_t t_stride,
                              size_t t_length,
-                             double* T) nogil:
+                             double* T,
+                             size_t* index) nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -633,5 +419,128 @@ cdef double sliding_distance(size_t s_offset,
 
         if dist < min_dist:
             min_dist = dist
+            if index != NULL:
+                index[0] = i
 
     return sqrt(min_dist)
+
+
+cdef int sliding_distance_matches(size_t s_offset,
+                                  size_t s_stride,
+                                  size_t s_length,
+                                  double* S,
+                                  size_t t_offset,
+                                  size_t t_stride,
+                                  size_t t_length,
+                                  double* T,
+                                  double threshold,
+                                  size_t** matches,
+                                  size_t* n_matches) nogil except -1:
+    cdef double dist = 0
+    cdef size_t capacity = 1
+    cdef size_t i
+    cdef size_t j
+    cdef double x
+
+    matches[0] = <size_t*> malloc(sizeof(size_t) * capacity)
+    n_matches[0] = 0
+    for i in range(t_length - s_length + 1):
+        dist = 0
+        for j in range(s_length):
+            if dist > threshold:
+                 break
+
+            x = T[t_offset + t_stride * i + j]
+            x -= S[s_offset + s_stride * j]
+            dist += x * x
+        if dist <= threshold:
+            safe_add_to_array(matches, n_matches[0], i, &capacity)
+            n_matches[0] += 1
+
+    return 0
+
+
+cdef double scaled_sliding_distance_matches(size_t s_offset,
+                                            size_t s_stride,
+                                            size_t s_length,
+                                            double s_mean,
+                                            double s_std,
+                                            double* S,
+                                            size_t t_offset,
+                                            size_t t_stride,
+                                            size_t t_length,
+                                            double* T,
+                                            double* X_buffer,
+                                            double threshold,
+                                            size_t** matches,
+                                            size_t* n_matches) nogil except -1:
+    cdef double current_value = 0
+    cdef double mean = 0
+    cdef double std = 0
+    cdef double dist = 0
+
+    cdef double ex = 0
+    cdef double ex2 = 0
+
+    cdef size_t i
+    cdef size_t j
+    cdef size_t buffer_pos
+    cdef size_t capacity = 4
+
+    matches[0] = <size_t*>malloc(sizeof(size_t) * capacity)
+    n_matches[0] = 0
+
+    for i in range(t_length):
+        current_value = T[t_offset + t_stride * i]
+        ex += current_value
+        ex2 += current_value * current_value
+
+        buffer_pos = i % s_length
+        X_buffer[buffer_pos] = current_value
+        X_buffer[buffer_pos + s_length] = current_value
+        if i >= s_length - 1:
+            j = (i + 1) % s_length
+            mean = ex / s_length
+            std = sqrt(ex2 / s_length - mean * mean)
+            dist = scaled_distance(
+                s_offset,
+                s_length,
+                s_mean,
+                s_std,
+                j,
+                mean,
+                std,
+                S,
+                t_stride,
+                X_buffer,
+                threshold,
+                only_gt=True)
+
+            if dist - threshold <= 1e-7: # TODO: improve
+                safe_add_to_array(
+                    matches,
+                    n_matches[0],
+                    (i + 1) - s_length,
+                    &capacity)
+                n_matches[0] += 1
+
+            current_value = X_buffer[j]
+            ex -= current_value
+            ex2 -= current_value * current_value
+
+    return 0
+
+
+
+cdef int safe_add_to_array(size_t** a, size_t p,
+                           size_t v, size_t* cap)  nogil except -1:
+    cdef size_t* tmp = a[0]
+    if p >= cap[0]:
+        cap[0] *= 2
+        tmp = <size_t*> realloc(a[0], sizeof(size_t) * cap[0])
+        if tmp == NULL:
+            with gil:
+                raise MemoryError()
+
+    a[0] = tmp
+    a[0][p] = v

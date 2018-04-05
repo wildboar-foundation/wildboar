@@ -62,15 +62,6 @@ cdef void print_c_array_i(object name, size_t* arr, size_t length):
     print()
 
 
-cdef void* checked_realloc(void** ptr, size_t size) nogil:
-    cdef void* tmp = realloc(ptr[0], sizeof(size))
-    if tmp == NULL:
-        with gil:
-            raise MemoryError("allocation failed")
-    ptr[0] = tmp
-    return tmp
-
-
 cdef size_t label_distribution(const size_t* samples,
                                const double* sample_weights,
                                size_t start,

@@ -25,179 +25,277 @@ from libc.stdlib cimport free
 from pypf._sliding_distance cimport SlidingDistance
 from pypf._sliding_distance cimport Shapelet
 from pypf._sliding_distance cimport ScaledShapelet
+
 from pypf._sliding_distance cimport new_sliding_distance
 from pypf._sliding_distance cimport free_sliding_distance
+from pypf._sliding_distance cimport sliding_distance
+from pypf._sliding_distance cimport scaled_sliding_distance
 
 from sklearn.utils import check_array
 
-cdef _make_shapelet(s, normalize):
-    cdef size_t i
-    cdef Shapelet shapelet
-    if isinstance(s, Shapelet):
-        shapelet = <Shapelet> s
-    else:
-        s = check_array(s, ensure_2d=False, dtype=np.float64)
-        if normalize:
-            std = np.std(s)
-            mean = np.mean(s) # refactor
-            if std > 0:
-                s = (s - mean) / std
-            else:
-                s = np.zeros(s.shape)
-            shapelet = ScaledShapelet(s.shape[0], mean, std)
-        else:
-            shapelet = Shapelet(s.shape[0])
-        
-        for i in range(<size_t> s.shape[0]):
-            shapelet.data[i] = s[i]
-    return shapelet
+def _validate_shapelet(shapelet):
+    cdef np.ndarray s = check_array(
+        shapelet, ensure_2d=False, dtype=np.float64, order="c")
+    if s.ndim > 1:
+        raise ValueError("only 1d shapelets allowed")
 
-def min_distance(s, x, sample=None, scale=True, return_index=False):
+    if not s.flags.contiguous:
+        s = np.ascontiguousarray(s, dtype=np.float64)
+    return s
+
+def _validate_data(data):
+    cdef np.ndarray x = check_array(
+        data, ensure_2d=False, dtype=np.float64, order="c")
+    if x.ndim == 1:
+        x = x.reshape(-1, x.shape[0])
+
+    if not x.flags.contiguous:
+        x = np.ascontiguousarray(x, dtype=np.float64)
+
+    return x
+
+def min_distance(
+        shapelet,
+        data,
+        sample=None,
+        scale=False,
+        return_index=False):
     """Computes the minimum distance between `s` and the samples in `x`
 
     :param s: the subsequence `array_like` or `Shapelet`
     :param x: the samples [n_samples, n_timesteps]
     :param sample: the samples to compare to `int` or `array_like` or `None`.
                    If `None` compare to all. (default: None)
-    :param scale: scale the shapelet
-    :param return_index: if `true` return the first index of the best match
+    :param scale: search in a scaled space
+    :param return_index: if `true` return the index of the best
+                         match. If there are many equally good
+                         best matches, the first is returned.
     :returns: `float`,
               `(float, int)`,
               `float [n_samples]` or
               `(float [n_samples], int [n_samples]` depending on input
-    """
-    x = check_array(x, ensure_2d=False, dtype=np.float64)
-    if x.ndim == 1:
-        x = x.reshape(-1, x.shape[0])
-    x = np.ascontiguousarray(x)
 
+    """
+    cdef np.ndarray s = _validate_shapelet(shapelet)
+    cdef np.ndarray x = _validate_data(data)
     if sample == None:
         if x.shape[0] == 1:
             sample = 0
         else:
             sample = np.arange(x.shape[0])
 
-    cdef Shapelet shapelet = _make_shapelet(s, scale)
+
     cdef SlidingDistance sd = new_sliding_distance(x)
     cdef double min_dist
     cdef size_t min_index
 
-    cdef np.ndarray[np.intp_t] samples
-    cdef np.ndarray[np.float64_t] min_distances
-    cdef np.ndarray[np.intp_t] min_indicies
+    cdef size_t s_offset = 0
+    cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
+    cdef size_t s_length = s.shape[0]
+    cdef double* s_data = <double*> s.data
+
+    cdef size_t t_offset
+
+    cdef double mean = 0
+    cdef double std = 0
+
+    if scale:
+        mean = np.mean(s)
+        std = np.std(s)
 
     try:
         if isinstance(sample, int):
             if sample > x.shape[0] or sample < 0:
                 raise ValueError("illegal sample {}".format(sample))
 
+            t_offset = sample * sd.sample_stride
+            if scale:
+                min_dist = scaled_sliding_distance(
+                    s_offset,
+                    s_stride,
+                    s_length,
+                    mean,
+                    std,
+                    s_data,
+                    t_offset,
+                    sd.timestep_stride,
+                    sd.n_timestep,
+                    sd.X,
+                    sd.X_buffer,
+                    &min_index)
+            else:
+                min_dist = sliding_distance(
+                    s_offset,
+                    s_stride,
+                    s_length,
+                    s_data,
+                    t_offset,
+                    sd.timestep_stride,
+                    sd.n_timestep,
+                    sd.X,
+                    &min_index)
+
             if return_index:
-                min_index = shapelet.index_distance(sd, sample, &min_dist)
                 return min_dist, min_index
             else:
-                return shapelet.distance(sd, sample)
+                return min_dist
         else:  # assume an `array_like` object
-            samples = np.asarray(sample)
-            check_array(samples, ensure_2d=False, dtype=np.int)
-            if samples.ndim != 1 or samples.strides[0] != samples.itemsize:
-                raise ValueError("1d-array array expected with stride 1")
+            samples = check_array(sample, ensure_2d=False, dtype=np.int)
+            dist = []
+            ind = []
+            for i in samples:
+                t_offset = i * sd.sample_stride
+                if scale:
+                    min_dist = scaled_sliding_distance(
+                        s_offset,
+                        s_stride,
+                        s_length,
+                        mean,
+                        std,
+                        s_data,
+                        t_offset,
+                        sd.timestep_stride,
+                        sd.n_timestep,
+                        sd.X,
+                        sd.X_buffer,
+                        &min_index)
+                else:
+                    min_dist = sliding_distance(
+                        s_offset,
+                        s_stride,
+                        s_length,
+                        s_data,
+                        t_offset,
+                        sd.timestep_stride,
+                        sd.n_timestep,
+                        sd.X,
+                        &min_index)
+                dist.append(min_dist)
+                ind.append(min_index)
 
-            # TODO: consider cython.parallel.prange for speed
-            min_distances = np.empty(samples.shape[0], dtype=np.float64)
             if return_index:
-                min_indicies= np.empty(samples.shape[0], dtype=np.intp)
-                shapelet.index_distances(
-                    sd, <size_t*> samples.data, <size_t> samples.shape[0],
-                    <size_t*> min_indicies.data, <double*> min_distances.data)
-                return min_distances, min_indicies
+                return np.array(dist), np.array(ind)
             else:
-                shapelet.distances(
-                    sd, <size_t*> samples.data, <size_t> samples.shape[0],
-                    <double*> min_distances.data)
-                return min_distances
-
+                return np.array(dist)
     finally:
         free_sliding_distance(sd)
 
 
-cdef object _make_numpy_arrays(size_t* matches,
-                               double* distances,
-                               size_t n_matches):
+cdef np.ndarray _make_numpy_array(size_t* matches,
+                                   size_t n_matches):
     if n_matches > 0:
         match_array = np.empty(n_matches, dtype=np.intp)
-        distance_array = np.empty(n_matches)
         for i in range(n_matches):
             match_array[i] = matches[i]
-            distance_array[i] = distances[i]
-        return distance_array, match_array
+        return match_array
     else:
-        return None, None
+        return np.empty([0], dtype=np.intp)
 
 
-def matches(s, x, threshold, sample=None, scale=True,
-            initial_capacity=5, return_distances=True):
-    if initial_capacity < 1:
-        raise ValueError("initial capacity {} < 1".format(initial_capacity))
-
-    x = check_array(x, ensure_2d=False, dtype=np.float64)
-    if x.ndim == 1:
-        x = x.reshape(-1, x.shape[0])
-    x = np.ascontiguousarray(x)
-
+def matches(shapelet, data, threshold, sample=None, scale=False):
+    cdef np.ndarray s = _validate_shapelet(shapelet)
+    cdef np.ndarray x = _validate_data(data)
     if sample == None:
         if x.shape[0] == 1:
             sample = 0
         else:
             sample = np.arange(x.shape[0])
 
-    cdef Shapelet shapelet = _make_shapelet(s, scale)
     cdef SlidingDistance sd = new_sliding_distance(x)
 
-    cdef size_t* matches = <size_t*> malloc(
-        sizeof(size_t) * initial_capacity)
-    cdef double* distances = <double*> malloc(
-        sizeof(double) * initial_capacity)
-
+    cdef size_t* matches
     cdef size_t n_matches
+
+    cdef size_t s_offset = 0
+    cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
+    cdef size_t s_length = s.shape[0]
+    cdef double* s_data = <double*> s.data
+
+    cdef size_t t_offset
+
+    cdef double mean = 0
+    cdef double std = 0
+
+    if scale:
+        mean = np.mean(s)
+        std = np.std(s)
+
     cdef size_t i
     try:
         if isinstance(sample, int):
-            n_matches = shapelet.closer_than(
-                sd, sample, threshold, matches, distances, initial_capacity)
-            distance_array, match_array = _make_numpy_arrays(
-                matches, distances, n_matches)
-            if return_distances:
-                return distance_array, match_array
+            t_offset = sample * sd.sample_stride
+            if scale:
+                scaled_sliding_distance_matches(
+                    s_offset,
+                    s_stride,
+                    s_length,
+                    mean,
+                    std,
+                    s_data,
+                    t_offset,
+                    sd.timestep_stride,
+                    sd.n_timestep,
+                    sd.X,
+                    sd.X_buffer,
+                    threshold,
+                    &matches,
+                    &n_matches)
             else:
-                return match_array
+                sliding_distance_matches(
+                    s_offset,
+                    s_stride,
+                    s_length,
+                    s_data,
+                    t_offset,
+                    sd.timestep_stride,
+                    sd.n_timestep,
+                    sd.X,
+                    threshold,
+                    &matches,
+                    &n_matches)
+            arr =  _make_numpy_array(matches, n_matches)
+            free(matches)
+            return arr
         else:
-            samples = check_array(
-                np.asarray(sample), ensure_2d=False, dtype=np.int)
-            index_matches = []
-            distance_matches = []
-            for i in range(<size_t>samples.shape[0]):
-                n_matches = shapelet.closer_than(
-                    sd, samples[i], threshold, matches,
-                    distances, initial_capacity)
-                distance_array, match_array = _make_numpy_arrays(
-                    matches, distances, n_matches)
-                index_matches.append(match_array)
-                distance_matches.append(distance_array)
+            samples = check_array(sample, ensure_2d=False, dtype=np.int)
+            indicies = []
+            for i in samples:
+                t_offset = i * sd.sample_stride
+                if scale:
+                    scaled_sliding_distance_matches(
+                        s_offset,
+                        s_stride,
+                        s_length,
+                        mean,
+                        std,
+                        s_data,
+                        t_offset,
+                        sd.timestep_stride,
+                        sd.n_timestep,
+                        sd.X,
+                        sd.X_buffer,
+                        threshold,
+                        &matches,
+                        &n_matches)
+                else:
+                    sliding_distance_matches(
+                        s_offset,
+                        s_stride,
+                        s_length,
+                        s_data,
+                        t_offset,
+                        sd.timestep_stride,
+                        sd.n_timestep,
+                        sd.X,
+                        threshold,
+                        &matches,
+                        &n_matches)
+                arr =  _make_numpy_array(matches, n_matches)
+                free(matches)
+                indicies.append(arr)
+            return indicies
 
-            if return_distances:
-                return distance_matches, index_matches
-            else:
-                mask = np.zeros(
-                    [samples.shape[0], sd.n_timestep], dtype=np.bool)
-                for i in range(<size_t>samples.shape[0]):
-                    j = samples[i]
-                    if index_matches[i] is not None:
-                        for index in index_matches[i]:
-                            mask[j, index:(index + shapelet.length)] = True
-                return mask
     finally:
-        free(matches)
-        free(distances)
         free_sliding_distance(sd)
 
 from pypf._sliding_distance cimport shapelet_info_distance
@@ -207,25 +305,60 @@ from pypf._sliding_distance cimport shapelet_info_scaled_distances
 from pypf._sliding_distance cimport shapelet_info_update_statistics
 from pypf._sliding_distance cimport shapelet_info_extract_shapelet
 from pypf._sliding_distance cimport ShapeletInfo, SlidingDistance
+from pypf._sliding_distance cimport sliding_distance_matches
+from pypf._sliding_distance cimport scaled_sliding_distance_matches
+
+
+def test_matches():
+    cdef np.ndarray x = np.array([1,2,3,1,2,3,10,11,12], dtype=np.float64)
+    cdef np.ndarray y = np.array([1,2,3], dtype=np.float64)
+    cdef double mean = np.mean(y)
+    cdef double std = np.std(y)
+
+    cdef double* S = <double*> y.data
+    cdef double* T = <double*> x.data
+    cdef double* X_buffer = <double*> malloc(sizeof(size_t) * 3 * 2),
+    cdef size_t* matches
+    cdef size_t n_matches
+
+    scaled_sliding_distance_matches(
+        0,
+        1,
+        3,
+        mean,
+        std,
+        S,
+        0,
+        1,
+        9,
+        T,
+        X_buffer,
+        0.0,
+        &matches,
+        &n_matches)
+
+    for i in range(n_matches):
+        print(matches[i])
 
 def test(x):
-    print(x)
-    cdef SlidingDistance sd = new_sliding_distance(x)
-    cdef ShapeletInfo s
-    s.index = 1
-    s.start = 0
-    s.length = 3
-    print(x[1, 0:3])
+    test_matches()
+    # print(x)
+    # cdef SlidingDistance sd = new_sliding_distance(x)
+    # cdef ShapeletInfo s
+    # s.index = 1
+    # s.start = 0
+    # s.length = 3
+    # print(x[1, 0:3])
 
-    shapelet_info_update_statistics(&s, sd)
-    
-    cdef np.ndarray[np.intp_t] i = np.arange(10)
-    cdef np.ndarray[np.float64_t] d = np.zeros(10, dtype=np.float64)
-    shapelet_info_distances(
-        s, <size_t*> i.data, i.shape[0], sd, <double*> d.data)
-    print(shapelet_info_distance(s, sd, 0))
-    print(d)
+    # shapelet_info_update_statistics(&s, sd)
 
-    cdef Shapelet sh = shapelet_info_extract_shapelet(s, sd)
-    sh.distances(sd, <size_t*> i.data, i.shape[0], <double*> d.data)
-    print(d)
+    # cdef np.ndarray[np.intp_t] i = np.arange(10)
+    # cdef np.ndarray[np.float64_t] d = np.zeros(10, dtype=np.float64)
+    # shapelet_info_distances(
+    #     s, <size_t*> i.data, i.shape[0], sd, <double*> d.data)
+    # print(shapelet_info_distance(s, sd, 0))
+    # print(d)
+
+    # cdef Shapelet sh = shapelet_info_extract_shapelet(s, sd)
+    # sh.distances(sd, <size_t*> i.data, i.shape[0], <double*> d.data)
+    # print(d)
