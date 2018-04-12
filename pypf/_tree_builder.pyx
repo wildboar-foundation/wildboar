@@ -399,7 +399,7 @@ cdef class ShapeletTreeBuilder:
         cdef ShapeletInfo shapelet_info
 
         shapelet_info.length = rand_int(
-            3, self.sd.n_timestep, &self.random_seed)
+            2, self.sd.n_timestep, &self.random_seed)
         shapelet_info.start = rand_int(
             0, self.sd.n_timestep - shapelet_info.length, &self.random_seed)
         shapelet_info.index = self.samples[rand_int(

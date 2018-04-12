@@ -64,7 +64,7 @@ if __name__ == "__main__":
     x_test = test[:, 1:].astype(np.float64)
     y_test = test[:, 0].astype(np.intp)
 
-    tree = PfTree(n_shapelets=100, scale=False, max_depth=None)
+    tree = PfTree(n_shapelets=100, scale=True, max_depth=None)
 
     bag = BaggingClassifier(
         base_estimator=tree,
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     c = time.time()
     bag.fit(x, y)
     print("acc:", bag.score(x_test, y_test))
-    score = cross_val_score(
-        bag, np.vstack([x, x_test]), np.hstack([y, y_test]), cv=10)
-    print(np.mean(score), np.std(score))
+    # score = cross_val_score(
+    #     bag, np.vstack([x, x_test]), np.hstack([y, y_test]), cv=10)
+    # print(np.mean(score), np.std(score))
     print(round(time.time() - c) * 1000)

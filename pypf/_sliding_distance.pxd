@@ -56,7 +56,9 @@ cdef struct SlidingDistance:
 
    double* X_buffer       # buffer for normalization
 
-
+cdef ShapeletInfo new_shapelet_info(size_t index, size_t start,
+                                    size_t length) nogil
+   
 cdef int shapelet_info_update_statistics(ShapeletInfo* s,
                                          const SlidingDistance t) nogil
 

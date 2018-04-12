@@ -58,7 +58,7 @@ class PfTree(BaseEstimator, ClassifierMixin):
 
         self.n_classes_ = len(self.classes_)
         tree_builder.init(X, y, len(self.classes_), sample_weight)
-        self.tree = tree_builder.build_tree()
+        self.root_node_ = tree_builder.build_tree()
 
         return self
 
@@ -70,5 +70,6 @@ class PfTree(BaseEstimator, ClassifierMixin):
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
 
+        # The shapelets are aware of their scaling
         predictor = ShapeletTreePredictor(X, len(self.classes_))
-        return predictor.predict_proba(self.tree)
+        return predictor.predict_proba(self.root_node_)

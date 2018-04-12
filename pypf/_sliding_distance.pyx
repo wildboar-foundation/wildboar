@@ -148,8 +148,8 @@ cdef class ScaledShapelet(Shapelet):
             NULL)
 
 
-cdef Shapelet shapelet_info_extract_shapelet(
-    ShapeletInfo s, const SlidingDistance t):
+cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s, const
+                                             SlidingDistance t):
     cdef Shapelet shapelet = Shapelet(s.length)
     cdef double* data = shapelet.data
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
@@ -163,7 +163,7 @@ cdef Shapelet shapelet_info_extract_shapelet(
 
     return shapelet
 
-# TODO: unify
+
 cdef Shapelet shapelet_info_extract_scaled_shapelet(ShapeletInfo s,
                                                     const SlidingDistance t):
     """Extract (i.e., allocate) a shapelet to be stored outside the
@@ -186,6 +186,17 @@ cdef Shapelet shapelet_info_extract_scaled_shapelet(ShapeletInfo s,
             p = shapelet_offset + t.timestep_stride * i
             data[i] = t.X[p]
     return shapelet
+
+
+cdef ShapeletInfo new_shapelet_info(size_t index, size_t start,
+                                    size_t length) nogil:
+    cdef ShapeletInfo s
+    s.index = index
+    s.start = start
+    s.length = length
+    s.mean = 0
+    s.std = 0
+    return s
 
 
 cdef int shapelet_info_update_statistics(ShapeletInfo* s,
@@ -325,18 +336,9 @@ cdef double scaled_sliding_distance(size_t s_offset,
             j = (i + 1) % s_length
             mean = ex / s_length
             std = sqrt(ex2 / s_length - mean * mean)
-            dist = scaled_distance(
-                s_offset,
-                s_length,
-                s_mean,
-                s_std,
-                j,
-                mean,
-                std,
-                S,
-                t_stride,
-                X_buffer,
-                min_dist)
+            dist = scaled_distance(s_offset, s_length, s_mean, s_std,
+                                   j, mean, std, S, s_stride,
+                                   X_buffer, min_dist)
 
             if dist < min_dist:
                 min_dist = dist
@@ -444,6 +446,8 @@ cdef int sliding_distance_matches(size_t s_offset,
 
     matches[0] = <size_t*> malloc(sizeof(size_t) * capacity)
     n_matches[0] = 0
+
+    threshold = threshold * threshold
     for i in range(t_length - s_length + 1):
         dist = 0
         for j in range(s_length):
@@ -490,6 +494,8 @@ cdef double scaled_sliding_distance_matches(size_t s_offset,
     matches[0] = <size_t*>malloc(sizeof(size_t) * capacity)
     n_matches[0] = 0
 
+    threshold = threshold * threshold
+
     for i in range(t_length):
         current_value = T[t_offset + t_stride * i]
         ex += current_value
@@ -502,20 +508,10 @@ cdef double scaled_sliding_distance_matches(size_t s_offset,
             j = (i + 1) % s_length
             mean = ex / s_length
             std = sqrt(ex2 / s_length - mean * mean)
-            dist = scaled_distance(
-                s_offset,
-                s_length,
-                s_mean,
-                s_std,
-                j,
-                mean,
-                std,
-                S,
-                t_stride,
-                X_buffer,
-                threshold,
-                only_gt=True)
-
+            dist = scaled_distance(s_offset, s_length, s_mean, s_std,
+                                   j, mean, std, S, s_stride,
+                                   X_buffer, threshold,
+                                   only_gt=False)
             if dist - threshold <= 1e-7: # TODO: improve
                 safe_add_to_array(
                     matches,
