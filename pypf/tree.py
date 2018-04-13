@@ -14,14 +14,26 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                  max_depth=None,
                  min_samples_leaf=2,
                  n_shapelets=10,
+                 min_shapelet_size=0.025,
+                 max_shapelet_size=1,
                  scale=True,
                  random_state=None):
+        if min_shapelet_size < 0 or min_shapelet_size > max_shapelet_size:
+            raise ValueError(
+                "`min_shapelet_size` {0} <= 0 or {0} > {1}".format(
+                    min_shapelet_size, max_shapelet_size))
+        if max_shapelet_size > 1:
+            raise ValueError(
+                "`max_shapelet_size` {0} > 1".format(max_shapelet_size))
+
         self.max_depth = max_depth
         self.scale = scale
         self.max_depth = max_depth or 2**31
         self.min_samples_leaf = min_samples_leaf
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
 
     def fit(self, X, y, sample_weight=None, check_input=True):
         random_state = check_random_state(self.random_state)
@@ -49,8 +61,15 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if not y.flags.contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
+        max_shapelet_size = int(n_timesteps * self.max_shapelet_size)
+        min_shapelet_size = int(n_timesteps * self.min_shapelet_size)
+        if min_shapelet_size < 2:
+            min_shapelet_size = 2
+
         tree_builder = ShapeletTreeBuilder(
             self.n_shapelets,
+            min_shapelet_size,
+            max_shapelet_size,
             self.max_depth,
             self.scale,
             random_state,

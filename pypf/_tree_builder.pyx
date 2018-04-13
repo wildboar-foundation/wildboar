@@ -191,6 +191,8 @@ cdef class ShapeletTreePredictor:
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
     cdef size_t n_shapelets
+    cdef size_t min_shapelet_size
+    cdef size_t max_shapelet_size
     cdef size_t max_depth
     cdef bint scale
 
@@ -221,12 +223,16 @@ cdef class ShapeletTreeBuilder:
     #  * ...
     def __cinit__(self,
                   size_t n_shapelets,
+                  size_t min_shapelet_size,
+                  size_t max_shapelet_size,
                   size_t max_depth,
                   bint scale,
                   object random_state):
         self.scale = scale
         self.random_seed = random_state.randint(0, RAND_R_MAX)
         self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
         self.max_depth = max_depth
 
     def __dealloc__(self):
@@ -399,7 +405,7 @@ cdef class ShapeletTreeBuilder:
         cdef ShapeletInfo shapelet_info
 
         shapelet_info.length = rand_int(
-            2, self.sd.n_timestep, &self.random_seed)
+            self.min_shapelet_size, self.max_shapelet_size, &self.random_seed)
         shapelet_info.start = rand_int(
             0, self.sd.n_timestep - shapelet_info.length, &self.random_seed)
         shapelet_info.index = self.samples[rand_int(
@@ -407,6 +413,7 @@ cdef class ShapeletTreeBuilder:
 
         if self.scale:
             shapelet_info_update_statistics(&shapelet_info, self.sd)
+
         return shapelet_info
 
     cdef void _partition_distance_buffer(self,
