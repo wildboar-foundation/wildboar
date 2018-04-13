@@ -6,7 +6,7 @@ from sklearn.ensemble.weight_boosting import AdaBoostClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 
-from pypf.tree import PfTree
+from pypf.tree import ShapeletTreeClassifier
 from pypf._utils import print_tree
 
 
@@ -16,7 +16,7 @@ def testit():
 
     y = train[:, 0].astype(np.intp)
     x = train[:, 1:].astype(np.float64)
-    tree = PfTree(n_shapelets=100, scale=True, max_depth=None)
+    tree = ShapeletTreeClassifier(n_shapelets=100, scale=True, max_depth=None)
     tree.fit(x, y)
 
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     print(x)
     print(y)
 
-    tree = PfTree(random_state=10, scale=True)
+    tree = ShapeletTreeClassifier(random_state=10, scale=True)
     tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
     print_tree(tree.tree)
     print(tree.score(x, y))
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     x_test = test[:, 1:].astype(np.float64)
     y_test = test[:, 0].astype(np.intp)
 
-    tree = PfTree(n_shapelets=100, scale=True, max_depth=None)
+    tree = ShapeletTreeClassifier(n_shapelets=100, scale=True, max_depth=None)
 
     bag = BaggingClassifier(
         base_estimator=tree,

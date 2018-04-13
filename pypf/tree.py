@@ -9,7 +9,7 @@ from sklearn.utils import check_random_state
 from sklearn.utils import check_array
 
 
-class PfTree(BaseEstimator, ClassifierMixin):
+class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
     def __init__(self,
                  max_depth=None,
                  min_samples_leaf=2,
@@ -57,6 +57,8 @@ class PfTree(BaseEstimator, ClassifierMixin):
         )
 
         self.n_classes_ = len(self.classes_)
+        self.n_timestep_ = X.shape[1]
+
         tree_builder.init(X, y, len(self.classes_), sample_weight)
         self.root_node_ = tree_builder.build_tree()
 
@@ -66,6 +68,10 @@ class PfTree(BaseEstimator, ClassifierMixin):
         return self.classes_[np.argmax(self.predict_proba(X), axis=1)]
 
     def predict_proba(self, X):
+        if X.shape[1] != self.n_timestep_:
+            raise ValueError("illegal input shape ({} != {})".format(
+                X.shape[1], self.n_timestep_))
+
         X = check_array(X, dtype=np.float64, order="C")
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
