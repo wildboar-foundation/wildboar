@@ -122,7 +122,10 @@ cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t* seed) nogil:
     :param max_val: the maximum value
     :param seed: the seed (updated)
     """
-    return min_val + rand_r(seed) % (max_val - min_val)
+    if min_val == max_val:
+        return min_val
+    else:
+        return min_val + rand_r(seed) % (max_val - min_val)
 
 # Implementation of introsort. Inspired by sklearn.tree
 # implementation. This code is licensed under BSD3 (and not GPLv3)
