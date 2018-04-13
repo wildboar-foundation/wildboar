@@ -49,11 +49,11 @@ if __name__ == "__main__":
 
     tree = ShapeletTreeClassifier(random_state=10, scale=True)
     tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
-    print_tree(tree.tree)
+    print_tree(tree.root_node_)
     print(tree.score(x, y))
 
-    train = np.loadtxt("synthetic_control_TRAIN")
-    test = np.loadtxt("synthetic_control_TEST")
+    train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
+    test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
 
     y = train[:, 0].astype(np.intp)
     x = train[:, 1:].astype(np.float64)
@@ -64,7 +64,12 @@ if __name__ == "__main__":
     x_test = test[:, 1:].astype(np.float64)
     y_test = test[:, 0].astype(np.intp)
 
-    tree = ShapeletTreeClassifier(n_shapelets=100, scale=True, max_depth=None)
+    tree = ShapeletTreeClassifier(
+        n_shapelets=100,
+        scale=True,
+        max_depth=None,
+        min_shapelet_size=0.02,
+        max_shapelet_size=1)
 
     bag = BaggingClassifier(
         base_estimator=tree,
