@@ -91,6 +91,7 @@ cdef class Shapelet:
 
     cdef double distance(self, const SlidingDistance t, size_t t_index) nogil:
         cdef size_t sample_offset = t_index * t.sample_stride
+        # TODO: include `dim` and `dim_stride`
         return sliding_distance(
             0,
             1,
@@ -133,6 +134,7 @@ cdef class ScaledShapelet(Shapelet):
 
     cdef double distance(self, const SlidingDistance t, size_t t_index) nogil:
         cdef size_t sample_offset = t_index * t.sample_stride
+        # TODO: include `dim_stride`
         return scaled_sliding_distance(
             0,
             1,
@@ -262,6 +264,9 @@ cdef double shapelet_info_scaled_distance(ShapeletInfo s,
     cdef size_t sample_offset = t_index * t.sample_stride
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
                                    s.start * t.timestep_stride)
+
+    # TODO: sample_offset inclued `dim`
+    # TODO: shapelet_offset include `dim`
     return scaled_sliding_distance(
         shapelet_offset,
         t.timestep_stride,
@@ -277,6 +282,7 @@ cdef double shapelet_info_scaled_distance(ShapeletInfo s,
         NULL)
 
 
+# TODO: remove ndim=2 (no limit)
 cdef SlidingDistance new_sliding_distance( np.ndarray[np.float64_t,
                                                       ndim=2, mode="c"] X):
     cdef SlidingDistance sd
@@ -285,6 +291,9 @@ cdef SlidingDistance new_sliding_distance( np.ndarray[np.float64_t,
     sd.X = <double*> X.data
     sd.sample_stride = <size_t> X.strides[0] / <size_t> X.itemsize
     sd.timestep_stride = <size_t> X.strides[1] / <size_t> X.itemsize
+    # TODO: compute `dim_stride`
+    # TODO: set `n_dims`
+    
     sd.X_buffer = <double*> malloc(sizeof(double) * 2 * sd.n_timestep)
 
     if sd.X_buffer == NULL:
@@ -295,7 +304,6 @@ cdef SlidingDistance new_sliding_distance( np.ndarray[np.float64_t,
 cdef int free_sliding_distance(SlidingDistance sd) nogil:
     free(sd.X_buffer)
     sd.X_buffer = NULL
-    # sd.X is freed by its owner
     return 0
 
 

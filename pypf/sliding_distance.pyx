@@ -33,6 +33,8 @@ from pypf._sliding_distance cimport scaled_sliding_distance
 
 from sklearn.utils import check_array
 
+
+# validate and convert shapelet to sutable format
 def _validate_shapelet(shapelet):
     cdef np.ndarray s = check_array(
         shapelet, ensure_2d=False, dtype=np.float64, order="c")
@@ -43,6 +45,8 @@ def _validate_shapelet(shapelet):
         s = np.ascontiguousarray(s, dtype=np.float64)
     return s
 
+
+# validate and convert time series data to suitable 
 def _validate_data(data):
     cdef np.ndarray x = check_array(
         data, ensure_2d=False, dtype=np.float64, order="c")
@@ -54,18 +58,32 @@ def _validate_data(data):
 
     return x
 
+
+cdef np.ndarray make_numpy_array_(size_t* matches,
+                                   size_t n_matches):
+    if n_matches > 0:
+        match_array = np.empty(n_matches, dtype=np.intp)
+        for i in range(n_matches):
+            match_array[i] = matches[i]
+        return match_array
+    else:
+        return np.empty([0], dtype=np.intp)
+
+
 def min_distance(
         shapelet,
         data,
+        dim=0,
         sample=None,
         scale=False,
         return_index=False):
     """Computes the minimum distance between `s` and the samples in `x`
 
-    :param s: the subsequence `array_like` or `Shapelet`
+    :param s: the subsequence `array_like`
     :param x: the samples [n_samples, n_timesteps]
+    :param dim: the time series dimension to search (default: 0)
     :param sample: the samples to compare to `int` or `array_like` or `None`.
-                   If `None` compare to all. (default: None)
+                   If `None` compare to all. (default: `None`)
     :param scale: search in a scaled space
     :param return_index: if `true` return the index of the best
                          match. If there are many equally good
@@ -93,6 +111,7 @@ def min_distance(
     cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
     cdef size_t s_length = s.shape[0]
     cdef double* s_data = <double*> s.data
+    # TODO: shapelet `dim`
 
     cdef size_t t_offset
 
@@ -108,6 +127,7 @@ def min_distance(
             if sample > x.shape[0] or sample < 0:
                 raise ValueError("illegal sample {}".format(sample))
 
+            # TODO: `dimension` and `dim_stride`
             t_offset = sample * sd.sample_stride
             if scale:
                 min_dist = scaled_sliding_distance(
@@ -139,7 +159,7 @@ def min_distance(
                 return min_dist, min_index
             else:
                 return min_dist
-        else:  # assume an `array_like` object
+        else:  # assume an `array_like` object for `samples`
             samples = check_array(sample, ensure_2d=False, dtype=np.int)
             dist = []
             ind = []
@@ -181,18 +201,19 @@ def min_distance(
         free_sliding_distance(sd)
 
 
-cdef np.ndarray _make_numpy_array(size_t* matches,
-                                   size_t n_matches):
-    if n_matches > 0:
-        match_array = np.empty(n_matches, dtype=np.intp)
-        for i in range(n_matches):
-            match_array[i] = matches[i]
-        return match_array
-    else:
-        return np.empty([0], dtype=np.intp)
+def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
+    """Return the positions in data (one array per `sample`) where
+    `shapelet` is closer than `threshold`.
 
-
-def matches(shapelet, data, threshold, sample=None, scale=False):
+    :param s: the subsequence `array_like`
+    :param x: the samples [n_samples, n_timesteps]
+    :param threshold: the maximum threshold for match
+    :param dim: the time series dimension to search (default: 0)
+    :param sample: the samples to compare to `int` or `array_like` or `None`.
+                   If `None` compare to all. (default: `None`)
+    :param scale: search in scaled space (default: `False`)
+    :returns: `[n_matches]`, or `[[n_matches], ... n_samples]`
+    """
     cdef np.ndarray s = _validate_shapelet(shapelet)
     cdef np.ndarray x = _validate_data(data)
     if sample == None:
@@ -224,6 +245,7 @@ def matches(shapelet, data, threshold, sample=None, scale=False):
     try:
         if isinstance(sample, int):
             t_offset = sample * sd.sample_stride
+            # TODO: add `dim_stride`
             if scale:
                 scaled_sliding_distance_matches(
                     s_offset,
@@ -253,7 +275,7 @@ def matches(shapelet, data, threshold, sample=None, scale=False):
                     threshold,
                     &matches,
                     &n_matches)
-            arr =  _make_numpy_array(matches, n_matches)
+            arr =  make_numpy_array_(matches, n_matches)
             free(matches)
             return arr
         else:
@@ -290,75 +312,10 @@ def matches(shapelet, data, threshold, sample=None, scale=False):
                         threshold,
                         &matches,
                         &n_matches)
-                arr =  _make_numpy_array(matches, n_matches)
+                arr = make_numpy_array_(matches, n_matches)
                 free(matches)
                 indicies.append(arr)
             return indicies
 
     finally:
         free_sliding_distance(sd)
-
-from pypf._sliding_distance cimport shapelet_info_distance
-from pypf._sliding_distance cimport shapelet_info_distances
-from pypf._sliding_distance cimport shapelet_info_scaled_distance
-from pypf._sliding_distance cimport shapelet_info_scaled_distances
-from pypf._sliding_distance cimport shapelet_info_update_statistics
-from pypf._sliding_distance cimport shapelet_info_extract_shapelet
-from pypf._sliding_distance cimport ShapeletInfo, SlidingDistance
-from pypf._sliding_distance cimport sliding_distance_matches
-from pypf._sliding_distance cimport scaled_sliding_distance_matches
-
-
-def test_matches():
-    cdef np.ndarray x = np.array([1,2,3,1,2,3,10,11,12], dtype=np.float64)
-    cdef np.ndarray y = np.array([1,2,3], dtype=np.float64)
-    cdef double mean = np.mean(y)
-    cdef double std = np.std(y)
-
-    cdef double* S = <double*> y.data
-    cdef double* T = <double*> x.data
-    cdef double* X_buffer = <double*> malloc(sizeof(size_t) * 3 * 2),
-    cdef size_t* matches
-    cdef size_t n_matches
-
-    scaled_sliding_distance_matches(
-        0,
-        1,
-        3,
-        mean,
-        std,
-        S,
-        0,
-        1,
-        9,
-        T,
-        X_buffer,
-        0.0,
-        &matches,
-        &n_matches)
-
-    for i in range(n_matches):
-        print(matches[i])
-
-def test(x):
-    test_matches()
-    # print(x)
-    # cdef SlidingDistance sd = new_sliding_distance(x)
-    # cdef ShapeletInfo s
-    # s.index = 1
-    # s.start = 0
-    # s.length = 3
-    # print(x[1, 0:3])
-
-    # shapelet_info_update_statistics(&s, sd)
-
-    # cdef np.ndarray[np.intp_t] i = np.arange(10)
-    # cdef np.ndarray[np.float64_t] d = np.zeros(10, dtype=np.float64)
-    # shapelet_info_distances(
-    #     s, <size_t*> i.data, i.shape[0], sd, <double*> d.data)
-    # print(shapelet_info_distance(s, sd, 0))
-    # print(d)
-
-    # cdef Shapelet sh = shapelet_info_extract_shapelet(s, sd)
-    # sh.distances(sd, <size_t*> i.data, i.shape[0], <double*> d.data)
-    # print(d)
