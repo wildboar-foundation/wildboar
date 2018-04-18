@@ -29,13 +29,16 @@ from pypf._sliding_distance cimport ScaledShapelet
 from pypf._sliding_distance cimport new_sliding_distance
 from pypf._sliding_distance cimport free_sliding_distance
 from pypf._sliding_distance cimport sliding_distance
+from pypf._sliding_distance cimport sliding_distance_matches
+
 from pypf._sliding_distance cimport scaled_sliding_distance
+from pypf._sliding_distance cimport scaled_sliding_distance_matches
 
 from sklearn.utils import check_array
 
 
 # validate and convert shapelet to sutable format
-def _validate_shapelet(shapelet):
+def validate_shapelet_(shapelet):
     cdef np.ndarray s = check_array(
         shapelet, ensure_2d=False, dtype=np.float64, order="c")
     if s.ndim > 1:
@@ -47,20 +50,26 @@ def _validate_shapelet(shapelet):
 
 
 # validate and convert time series data to suitable 
-def _validate_data(data):
+def validate_data_(data):
     cdef np.ndarray x = check_array(
-        data, ensure_2d=False, dtype=np.float64, order="c")
+        data, ensure_2d=False, allow_nd=True, dtype=np.float64, order="c")
     if x.ndim == 1:
         x = x.reshape(-1, x.shape[0])
 
     if not x.flags.contiguous:
         x = np.ascontiguousarray(x, dtype=np.float64)
-
     return x
 
+def check_sample_(sample, n_samples):
+    if sample < 0 or sample >= n_samples:
+        raise ValueError("illegal sample {}".format(sample))
+
+def check_dim(dim, ndims):
+    if dim < 0 or dim >= ndims:
+        raise ValueError("illegal dimension {}".format(dim))
 
 cdef np.ndarray make_numpy_array_(size_t* matches,
-                                   size_t n_matches):
+                                  size_t n_matches):
     if n_matches > 0:
         match_array = np.empty(n_matches, dtype=np.intp)
         for i in range(n_matches):
@@ -94,8 +103,8 @@ def min_distance(
               `(float [n_samples], int [n_samples]` depending on input
 
     """
-    cdef np.ndarray s = _validate_shapelet(shapelet)
-    cdef np.ndarray x = _validate_data(data)
+    cdef np.ndarray s = validate_shapelet_(shapelet)
+    cdef np.ndarray x = validate_data_(data)
     if sample == None:
         if x.shape[0] == 1:
             sample = 0
@@ -104,6 +113,8 @@ def min_distance(
 
 
     cdef SlidingDistance sd = new_sliding_distance(x)
+
+    check_dim(dim, sd.n_dims)
     cdef double min_dist
     cdef size_t min_index
 
@@ -111,7 +122,6 @@ def min_distance(
     cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
     cdef size_t s_length = s.shape[0]
     cdef double* s_data = <double*> s.data
-    # TODO: shapelet `dim`
 
     cdef size_t t_offset
 
@@ -124,11 +134,10 @@ def min_distance(
 
     try:
         if isinstance(sample, int):
-            if sample > x.shape[0] or sample < 0:
-                raise ValueError("illegal sample {}".format(sample))
-
-            # TODO: `dimension` and `dim_stride`
-            t_offset = sample * sd.sample_stride
+            check_sample_(sample, sd.n_samples)
+            
+            t_offset = sample * sd.sample_stride + \
+                       dim * sd.dim_stride
             if scale:
                 min_dist = scaled_sliding_distance(
                     s_offset,
@@ -164,7 +173,9 @@ def min_distance(
             dist = []
             ind = []
             for i in samples:
-                t_offset = i * sd.sample_stride
+                check_sample_(i, sd.n_samples)
+                t_offset = i * sd.sample_stride + \
+                           dim * sd.dim_stride
                 if scale:
                     min_dist = scaled_sliding_distance(
                         s_offset,
@@ -214,8 +225,9 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
     :param scale: search in scaled space (default: `False`)
     :returns: `[n_matches]`, or `[[n_matches], ... n_samples]`
     """
-    cdef np.ndarray s = _validate_shapelet(shapelet)
-    cdef np.ndarray x = _validate_data(data)
+    cdef np.ndarray s = validate_shapelet_(shapelet)
+    cdef np.ndarray x = validate_data_(data)
+    check_dim(dim, x.ndim)
     if sample == None:
         if x.shape[0] == 1:
             sample = 0
@@ -244,8 +256,9 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
     cdef size_t i
     try:
         if isinstance(sample, int):
-            t_offset = sample * sd.sample_stride
-            # TODO: add `dim_stride`
+            check_sample_(sample, sd.n_samples)
+            t_offset = sample * sd.sample_stride + \
+                       dim * sd.dim_stride
             if scale:
                 scaled_sliding_distance_matches(
                     s_offset,
@@ -282,7 +295,9 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
             samples = check_array(sample, ensure_2d=False, dtype=np.int)
             indicies = []
             for i in samples:
-                t_offset = i * sd.sample_stride
+                check_sample_(i, sd.n_samples)
+                t_offset = i * sd.sample_stride + \
+                           dim * sd.dim_stride
                 if scale:
                     scaled_sliding_distance_matches(
                         s_offset,

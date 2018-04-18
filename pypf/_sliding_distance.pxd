@@ -22,7 +22,7 @@ cimport numpy as np
 cdef class Shapelet:
    cdef readonly size_t length
    cdef double* data
-   # TODO: cdef size_t dim
+   cdef size_t dim
 
    cdef double distance(self, const SlidingDistance t, size_t t_index) nogil
 
@@ -46,18 +46,18 @@ cdef struct ShapeletInfo:
    size_t length # the length of the shapelet
    double mean   # the mean of the shapelet
    double std    # the stanard devision
-   # TODO: size_t dim # the dimension of the shapelet
+   size_t dim    # the dimension of the shapelet
 
 
 cdef struct SlidingDistance:
    size_t n_samples       # the number of samples
    size_t n_timestep      # the number of timesteps
-   # TODO: size_t n_dims
+   size_t n_dims
 
    double* X              # the data
    size_t sample_stride   # the stride for samples
    size_t timestep_stride # the `feature` stride
-   # TODO: size_t dim_stride
+   size_t dim_stride      # the dimension stride
 
    double* X_buffer       # buffer for normalization
 
@@ -70,27 +70,28 @@ cdef int shapelet_info_update_statistics(ShapeletInfo* s,
 
 
 cdef int shapelet_info_scaled_distances(ShapeletInfo s,
-                                 const size_t* samples,
-                                 size_t n_samples,
-                                 const SlidingDistance t,
-                                 double* result) nogil
+                                        const size_t* samples,
+                                        size_t n_samples,
+                                        const SlidingDistance t,
+                                        double* result) nogil
 
 
 cdef double shapelet_info_scaled_distance(ShapeletInfo s,
+                                          const SlidingDistance t,
+                                          size_t t_index,
+                                          size_t t_dim) nogil
+
+
+cdef double shapelet_info_distance(ShapeletInfo s,
                                    const SlidingDistance t,
                                    size_t t_index) nogil
 
 
-cdef double shapelet_info_distance(ShapeletInfo s,
-                                            const SlidingDistance t,
-                                            size_t t_index) nogil
-
-
 cdef int shapelet_info_distances(ShapeletInfo s,
-                                          const size_t* samples,
-                                          size_t n_samples,
-                                          const SlidingDistance t,
-                                          double* result) nogil
+                                 const size_t* samples,
+                                 size_t n_samples,
+                                 const SlidingDistance t,
+                                 double* result) nogil
 
 
 cdef Shapelet shapelet_info_extract_scaled_shapelet(ShapeletInfo s,
@@ -101,8 +102,7 @@ cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s,
                                              const SlidingDistance t)
 
 # construct a new sliding distance storage
-cdef SlidingDistance new_sliding_distance(
-    np.ndarray[np.float64_t, ndim=2, mode="c"] X)
+cdef SlidingDistance new_sliding_distance(np.ndarray X)
 
 
 cdef int free_sliding_distance(SlidingDistance sd) nogil

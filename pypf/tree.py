@@ -39,10 +39,11 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         random_state = check_random_state(self.random_state)
 
         if check_input:
-            X = check_array(X, dtype=np.float64, order="C")
+            X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
             y = check_array(y, ensure_2d=False, dtype=np.intp)
 
-        n_samples, n_timesteps = X.shape
+        n_samples = X.shape[0]
+        n_timesteps = X.shape[-1]
         if y.ndim == 1:
             self.classes_, y = np.unique(y, return_inverse=True)
         else:
@@ -91,7 +92,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             raise ValueError("illegal input shape ({} != {})".format(
                 X.shape[1], self.n_timestep_))
 
-        X = check_array(X, dtype=np.float64, order="C")
+        X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
 

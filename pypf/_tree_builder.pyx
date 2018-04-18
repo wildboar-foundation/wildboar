@@ -147,9 +147,7 @@ cdef class ShapeletTreePredictor:
     cdef size_t n_labels
     cdef SlidingDistance sd
 
-    def __cinit__(self,
-                  np.ndarray[np.float64_t, ndim=2, mode="c"] X,
-                  size_t n_labels):
+    def __cinit__(self, np.ndarray X, size_t n_labels):
         """Construct a shapelet tree predictor
 
         :param X: the data to predict over
@@ -268,7 +266,7 @@ cdef class ShapeletTreeBuilder:
 
     # this is unchecked
     cpdef void init(self,
-                    np.ndarray[np.float64_t, ndim=2, mode="c"] X,
+                    np.ndarray X,
                     np.ndarray[np.intp_t, ndim=1, mode="c"] y,
                     size_t n_labels,
                     np.ndarray[np.float64_t, ndim=1, mode="c"] sample_weights):
@@ -410,6 +408,9 @@ cdef class ShapeletTreeBuilder:
             0, self.sd.n_timestep - shapelet_info.length, &self.random_seed)
         shapelet_info.index = self.samples[rand_int(
             start, end, &self.random_seed)]
+
+        if self.sd.n_dims > 1:
+            shapelet_info.dim = rand_int(0, self.sd.n_dims, &self.random_seed)
 
         if self.scale:
             shapelet_info_update_statistics(&shapelet_info, self.sd)
