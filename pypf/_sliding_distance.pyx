@@ -154,7 +154,7 @@ cdef class ScaledShapelet(Shapelet):
 
 cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s, const
                                              SlidingDistance t):
-    cdef Shapelet shapelet = Shapelet(s.length)
+    cdef Shapelet shapelet = Shapelet(s.dim, s.length)
     cdef double* data = shapelet.data
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
                                    s.start * t.timestep_stride +
