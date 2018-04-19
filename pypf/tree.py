@@ -10,7 +10,7 @@ from sklearn.utils import check_array
 
 
 class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
-    """A decision tree classifier."""
+    """A shapelet tree classifier."""
 
     def __init__(self,
                  max_depth=None,
