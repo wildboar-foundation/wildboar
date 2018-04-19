@@ -10,6 +10,8 @@ from sklearn.utils import check_array
 
 
 class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
+    """A decision tree classifier."""
+
     def __init__(self,
                  max_depth=None,
                  min_samples_leaf=2,
@@ -18,6 +20,41 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                  max_shapelet_size=1,
                  scale=True,
                  random_state=None):
+        """A shapelet decision tree
+
+        :param max_depth: The maximum depth of the tree. If `None` the
+           tree is expanded until all leafs are pure or until all
+           leafs contain less than `min_samples_leaf` samples
+           (default: None).
+
+        :param min_samples_leaf: The minimum number of samples to
+           split an internal node (default: 2).
+
+        :param n_shapelets: The number of shapelets to sample at each
+           node (default: 10).
+
+        :param min_shapelet_size: The minimum length of a sampled
+           shapelet expressed as a fraction, computed as
+           `min(ceil(X.shape[-1] * min_shapelet_size), 2)` (default:
+           0).
+
+        :param max_shapelet_size: The maximum length of a sampled
+           shapelet, expressed as a fraction and computed as
+           `ceil(X.shape[-1] * max_shapelet_size)`.
+
+        :param scale: If `True` the best matching position is found in
+           a local standardized space. The advantage of this is the
+           possibiltiy of identifying scale invariante
+           shapes. (default: `True`)
+
+        :param random_state: If `int`, `random_state` is the seed used
+           by the random number generator; If `RandomState` instance,
+           `random_state` is the random number generator; If `None`,
+           the random number generator is the `RandomState` instance
+           used by `np.random`.
+
+        """
+
         if min_shapelet_size < 0 or min_shapelet_size > max_shapelet_size:
             raise ValueError(
                 "`min_shapelet_size` {0} <= 0 or {0} > {1}".format(
@@ -36,14 +73,46 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         self.max_shapelet_size = max_shapelet_size
 
     def fit(self, X, y, sample_weight=None, check_input=True):
+        """Fit a shapelet tree classifier from the training set (X, y)
+
+        :param X: array-like, shape `[n_samples, n_timesteps]` or
+           `[n_samples, n_dimensions, n_timesteps]`. The training time
+           series.
+
+        :param y: array-like, shape `[n_samples, n_classes]` or
+           `[n_classes]`. Target values (class labels) as integers or
+           strings.
+
+        :param sample_weight: If `None`, then samples are equally
+            weighted. Splits that would create child nodes with net
+            zero or negative weight are ignored while searching for a
+            split in each node. Splits are also ignored if they would
+            result in any single class carrying a negative weight in
+            either child node.
+
+        :param check_input: Allow to bypass several input checking.
+            Don't use this parameter unless you know what you do.
+
+        :returns: `self`
+
+        """
         random_state = check_random_state(self.random_state)
 
         if check_input:
             X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
-            y = check_array(y, ensure_2d=False, dtype=np.intp)
+            y = check_array(y, ensure_2d=False)
+
+        if X.ndim < 2 or X.ndim > 3:
+            raise ValueError("illegal input dimensions")
 
         n_samples = X.shape[0]
         n_timesteps = X.shape[-1]
+
+        if X.ndim > 2:
+            n_dims = X.shape[1]
+        else:
+            n_dims = 1
+
         if y.ndim == 1:
             self.classes_, y = np.unique(y, return_inverse=True)
         else:
@@ -53,8 +122,8 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             self.classes_ = np.unique(y)
 
         if len(y) != n_samples:
-            raise ValueError("Number of labels=%d does not match "
-                             "number of samples=%d" % (len(y), n_samples))
+            raise ValueError("Number of labels={} does not match "
+                             "number of samples={}".format(len(y), n_samples))
 
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
@@ -77,25 +146,65 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         )
 
         self.n_classes_ = len(self.classes_)
-        self.n_timestep_ = X.shape[1]
+        self.n_timestep_ = n_timesteps
+        self.n_dims_ = n_dims
 
         tree_builder.init(X, y, len(self.classes_), sample_weight)
         self.root_node_ = tree_builder.build_tree()
 
         return self
 
-    def predict(self, X):
-        return self.classes_[np.argmax(self.predict_proba(X), axis=1)]
+    def predict(self, X, check_input):
+        """Predict the class for X
 
-    def predict_proba(self, X):
-        if X.shape[1] != self.n_timestep_:
+        :param X: array-like, shape `[n_samples, n_timesteps]` or
+            `[n_samples, n_dimensions, n_timesteps]`. The input time
+            series.
+
+        :param check_input: Allow to bypass several input checking.
+            Don't use this parameter unless you know what you do.
+
+        :returns: array of `shape = [n_samples]`. The predicted
+            classes
+
+        """
+
+        return self.classes_[np.argmax(
+            self.predict_proba(X, check_input=check_input), axis=1)]
+
+    def predict_proba(self, X, check_input=True):
+        """Predict class probabilities of the input samples X.  The predicted
+        class probability is the fraction of samples of the same class
+        in a leaf.
+
+        :param X: array-like, shape `[n_samples, n_timesteps]` or
+           `[n_samples, n_dimensions, n_timesteps]`. The input time
+           series.
+
+        :param check_input: Allow to bypass several input checking.
+            Don't use this parameter unless you know what you do.
+
+        :returns: array of `shape = [n_samples, n_classes]`. The
+            class probabilities of the input samples. The order of the
+            classes corresponds to that in the attribute `classes_`.
+        """
+        if X.ndim < 2 or X.ndim > 3:
+            raise ValueError("illegal input dimensions X.ndim ({})".format(
+                X.ndim))
+
+        if X.shape[-1] != self.n_timestep_:
             raise ValueError("illegal input shape ({} != {})".format(
-                X.shape[1], self.n_timestep_))
+                X.shape[-1], self.n_timestep_))
 
-        X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
+        if X.ndim > 2 and X.shape[1] != self.n_dims_:
+            raise ValueError("illegal input shape ({} != {}".format(
+                X.shape[1], self.n_dims))
+
+        if check_input:
+            X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
+
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
 
-        # The shapelets are aware of their scaling
         predictor = ShapeletTreePredictor(X, len(self.classes_))
         return predictor.predict_proba(self.root_node_)
