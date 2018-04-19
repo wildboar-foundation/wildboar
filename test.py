@@ -35,6 +35,7 @@ if __name__ == "__main__":
         [1, 2, 3, 0, 1],
     ]
     x = np.array(x, dtype=np.float64)
+    x = np.hstack([x, x]).reshape(-1, 2, x.shape[-1])
     y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
     random_state = np.random.RandomState(123)
@@ -68,7 +69,7 @@ if __name__ == "__main__":
         n_shapelets=100,
         scale=True,
         max_depth=None,
-        min_shapelet_size=0.02,
+        min_shapelet_size=0,
         max_shapelet_size=1)
 
     bag = BaggingClassifier(

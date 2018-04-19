@@ -10,8 +10,8 @@ from pypf import _tree_builder
 
 data = [
     [0, 0, 1, 10, 1],
-    [0, 0, 1, 10, 1],
     [0, 1, 9, 1, 0],
+    [0, 0, 1, 10, 1],
     [1, 9, 1, 0, 0],
     [0, 1, 9, 1, 0],
     [0, 1, 2, 3, 4],
@@ -20,16 +20,18 @@ data = [
     [0, 0, -1, 0, 1],
     [1, 2, 3, 0, 1],
 ]
-x = np.array(data, dtype=np.float64)
+x = np.array(data, dtype=np.float64).reshape(-1, 2, 5)
 y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
 from pypf.sliding_distance import min_distance
 from pypf.sliding_distance import matches
+
 print(x)
 d, i = min_distance(
-    np.array([0, 10, 1]),
+    np.array([1, 2, 3]),
     x,
-    normalize=False,
+    dim=1,
+    scale=False,
     sample=None,
     return_index=True,
 )
