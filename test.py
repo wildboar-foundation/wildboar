@@ -56,20 +56,20 @@ if __name__ == "__main__":
     train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
     test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
 
-    y = train[:, 0].astype(np.intp)
+    y = train[:, 0].astype(str)
     x = train[:, 1:].astype(np.float64)
     i = np.arange(x.shape[0])
 
     np.random.shuffle(i)
 
     x_test = test[:, 1:].astype(np.float64)
-    y_test = test[:, 0].astype(np.intp)
+    y_test = test[:, 0].astype(str)
 
     tree = ShapeletTreeClassifier(
-        n_shapelets=100,
-        scale=True,
+        n_shapelets=1,
+        scale=False,
         max_depth=None,
-        min_shapelet_size=0,
+        min_shapelet_size=1,
         max_shapelet_size=1)
 
     bag = BaggingClassifier(
@@ -82,6 +82,7 @@ if __name__ == "__main__":
 
     c = time.time()
     bag.fit(x, y)
+    print(bag.classes_)
     print("acc:", bag.score(x_test, y_test))
     # score = cross_val_score(
     #     bag, np.vstack([x, x_test]), np.hstack([y, y_test]), cv=10)
