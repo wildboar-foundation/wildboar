@@ -19,13 +19,9 @@
 import numpy as np
 cimport numpy as np
 
-from libc.stdlib cimport malloc
 from libc.stdlib cimport free
 
 from pypf._sliding_distance cimport SlidingDistance
-from pypf._sliding_distance cimport Shapelet
-from pypf._sliding_distance cimport ScaledShapelet
-
 from pypf._sliding_distance cimport new_sliding_distance
 from pypf._sliding_distance cimport free_sliding_distance
 from pypf._sliding_distance cimport sliding_distance
@@ -49,7 +45,7 @@ def validate_shapelet_(shapelet):
     return s
 
 
-# validate and convert time series data to suitable 
+# validate and convert time series data to suitable
 def validate_data_(data):
     cdef np.ndarray x = check_array(
         data, ensure_2d=False, allow_nd=True, dtype=np.float64, order="c")
@@ -88,8 +84,8 @@ def min_distance(
         return_index=False):
     """Computes the minimum distance between `s` and the samples in `x`
 
-    :param s: the subsequence `array_like`
-    :param x: the samples [n_samples, n_timesteps]
+    :param shapelet: the subsequence `array_like`
+    :param data: the samples [n_samples, n_timesteps]
     :param dim: the time series dimension to search (default: 0)
     :param sample: the samples to compare to `int` or `array_like` or `None`.
                    If `None` compare to all. (default: `None`)
@@ -105,7 +101,7 @@ def min_distance(
     """
     cdef np.ndarray s = validate_shapelet_(shapelet)
     cdef np.ndarray x = validate_data_(data)
-    if sample == None:
+    if sample is None:
         if x.shape[0] == 1:
             sample = 0
         else:
@@ -135,7 +131,7 @@ def min_distance(
     try:
         if isinstance(sample, int):
             check_sample_(sample, sd.n_samples)
-            
+
             t_offset = sample * sd.sample_stride + \
                        dim * sd.dim_stride
             if scale:
@@ -228,7 +224,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
     cdef np.ndarray s = validate_shapelet_(shapelet)
     cdef np.ndarray x = validate_data_(data)
     check_dim(dim, x.ndim)
-    if sample == None:
+    if sample is None:
         if x.shape[0] == 1:
             sample = 0
         else:
@@ -288,7 +284,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                     threshold,
                     &matches,
                     &n_matches)
-            arr =  make_numpy_array_(matches, n_matches)
+            arr = make_numpy_array_(matches, n_matches)
             free(matches)
             return arr
         else:
