@@ -18,98 +18,80 @@
 
 cimport numpy as np
 
-
-cdef class Shapelet:
-   cdef readonly size_t length
-   cdef double* data
-   cdef size_t dim
-
-   cdef double distance(self, const SlidingDistance t, size_t t_index) nogil
-
-   cdef void distances(self,
-                       const SlidingDistance t,
-                       size_t* samples,
-                       size_t n_samples,
-                       double* distances) nogil
-
-
-cdef class ScaledShapelet(Shapelet):
-   cdef readonly double mean
-   cdef readonly double std
-
-
-# TODO: consider adding `new_shapelet_info(i, s, l, ts)`
 # for computing the mean and std
 cdef struct ShapeletInfo:
-   size_t index  # the index of the shapelt sample
-   size_t start  # the start position
-   size_t length # the length of the shapelet
-   double mean   # the mean of the shapelet
-   double std    # the stanard devision
-   size_t dim    # the dimension of the shapelet
+    size_t index  # the index of the shapelet sample
+    size_t start  # the start position
+    size_t length # the length of the shapelet
+    double mean   # the mean of the shapelet
+    double std    # the stanard devision
+    size_t dim    # the dimension of the shapelet
 
 
-cdef struct SlidingDistance:
-   size_t n_samples       # the number of samples
-   size_t n_timestep      # the number of timesteps
-   size_t n_dims
+cdef struct TSDatabase:
+    size_t n_samples       # the number of samples
+    size_t n_timestep      # the number of timesteps
+    size_t n_dims
 
-   double* X              # the data
-   size_t sample_stride   # the stride for samples
-   size_t timestep_stride # the `feature` stride
-   size_t dim_stride      # the dimension stride
+    double* data         # the data
+    size_t sample_stride   # the stride for samples
+    size_t timestep_stride # the `feature` stride
+    size_t dim_stride      # the dimension stride
 
-   double* X_buffer       # buffer for normalization
+    double* X_buffer       # buffer for normalization
 
-cdef ShapeletInfo new_shapelet_info(size_t index, size_t start,
-                                    size_t length) nogil
+cdef class Shapelet:
+    cdef readonly size_t length
+    cdef double* data
+    cdef size_t dim
+
+    cdef double distance(self, const TSDatabase t, size_t t_index) nogil
+
+    cdef void distances(self,
+                        const TSDatabase t,
+                        size_t* samples,
+                        size_t n_samples,
+                        double* distances) nogil
+
+cdef class ScaledShapelet(Shapelet):
+    cdef readonly double mean
+    cdef readonly double std
+
+
+cdef class DistanceMeasure:
+    cdef TSDatabase td
+
+    cdef void init(self, TSDatabase td) nogil
+
+    cdef ShapeletInfo new_shapelet_info(self,
+                                        size_t index,
+                                        size_t dim,
+                                        size_t start,
+                                        size_t length) nogil
+
+    cdef Shapelet new_shapelet(self, ShapeletInfo s)
+        
+    cdef double distance(self, ShapeletInfo s, size_t t_index) nogil
+
+    cdef void distances(self,
+                        ShapeletInfo s,
+                        size_t* samples,
+                        double* distances,
+                        size_t n_samples) nogil
 
 
 cdef int shapelet_info_update_statistics(ShapeletInfo* s,
-                                         const SlidingDistance t) nogil
-
-
-cdef int shapelet_info_scaled_distances(ShapeletInfo s,
-                                        const size_t* samples,
-                                        size_t n_samples,
-                                        const SlidingDistance t,
-                                        double* result) nogil
-
-
-cdef double shapelet_info_scaled_distance(ShapeletInfo s,
-                                          const SlidingDistance t,
-                                          size_t t_index,
-                                          size_t t_dim) nogil
-
-
-cdef double shapelet_info_distance(ShapeletInfo s,
-                                   const SlidingDistance t,
-                                   size_t t_index) nogil
-
-
-cdef int shapelet_info_distances(ShapeletInfo s,
-                                 const size_t* samples,
-                                 size_t n_samples,
-                                 const SlidingDistance t,
-                                 double* result) nogil
-
-
-cdef Shapelet shapelet_info_extract_scaled_shapelet(ShapeletInfo s,
-                                                    const SlidingDistance t)
-
-
-cdef Shapelet shapelet_info_extract_shapelet(ShapeletInfo s,
-                                             const SlidingDistance t)
+                                         const TSDatabase t) nogil
 
 # construct a new sliding distance storage
-cdef SlidingDistance new_sliding_distance(np.ndarray X)
+cdef TSDatabase new_ts_database(np.ndarray X)
 
 
-cdef int free_sliding_distance(SlidingDistance sd) nogil
+cdef int free_ts_database(TSDatabase sd) nogil
 
 
-cdef double scaled_sliding_distance(size_t s_offset,
-                                    size_t s_stride,
+cdef double scaled_euclidean_distance(size_t s_offset,
+                                      size_t s_stride,
                                     size_t s_length,
                                     double s_mean,
                                     double s_std,
@@ -122,7 +104,7 @@ cdef double scaled_sliding_distance(size_t s_offset,
                                     size_t* index) nogil
 
 
-cdef double sliding_distance(size_t s_offset,
+cdef double euclidean_distance(size_t s_offset,
                              size_t s_stride,
                              size_t s_length,
                              double* S,
@@ -133,7 +115,7 @@ cdef double sliding_distance(size_t s_offset,
                              size_t* index) nogil
 
 
-cdef int sliding_distance_matches(size_t s_offset,
+cdef int euclidean_distance_matches(size_t s_offset,
                                   size_t s_stride,
                                   size_t s_length,
                                   double* S,
@@ -146,7 +128,7 @@ cdef int sliding_distance_matches(size_t s_offset,
                                   size_t* n_matches) nogil except -1
 
 
-cdef double scaled_sliding_distance_matches(size_t s_offset,
+cdef double scaled_euclidean_distance_matches(size_t s_offset,
                                             size_t s_stride,
                                             size_t s_length,
                                             double s_mean,

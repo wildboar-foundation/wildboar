@@ -8,6 +8,15 @@ from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 from sklearn.utils import check_array
 
+import pypf._sliding_distance
+
+__all__ = ["ShapeletTreeClassifier"]
+
+DISTANCE_MEASURE = {
+    'euclidean': pypf._sliding_distance.EuclideanDistance(),
+    'scaled_euclidean': pypf._sliding_distance.ScaledEuclideanDistance(),
+}
+
 
 class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
     """A shapelet tree classifier."""
@@ -18,7 +27,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                  n_shapelets=10,
                  min_shapelet_size=0.025,
                  max_shapelet_size=1,
-                 scale=True,
+                 distance='euclidean',
                  random_state=None):
         """A shapelet decision tree
 
@@ -42,10 +51,8 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
            shapelet, expressed as a fraction and computed as
            `ceil(X.shape[-1] * max_shapelet_size)`.
 
-        :param scale: If `True` the best matching position is found in
-           a local standardized space. The advantage of this is the
-           possibiltiy of identifying scale invariante
-           shapes. (default: `True`)
+        :param distance: Distance measure used to identify the best
+           match. (default: `'euclidean'`)
 
         :param random_state: If `int`, `random_state` is the seed used
            by the random number generator; If `RandomState` instance,
@@ -64,13 +71,13 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                 "`max_shapelet_size` {0} > 1".format(max_shapelet_size))
 
         self.max_depth = max_depth
-        self.scale = scale
         self.max_depth = max_depth or 2**31
         self.min_samples_leaf = min_samples_leaf
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
+        self.distance = distance
 
     def fit(self, X, y, sample_weight=None, check_input=True):
         """Fit a shapelet tree classifier from the training set (X, y)
@@ -131,6 +138,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if not y.flags.contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
+        distance_measure = DISTANCE_MEASURE[self.distance]
         max_shapelet_size = int(n_timesteps * self.max_shapelet_size)
         min_shapelet_size = int(n_timesteps * self.min_shapelet_size)
         if min_shapelet_size < 2:
@@ -141,7 +149,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             min_shapelet_size,
             max_shapelet_size,
             self.max_depth,
-            self.scale,
+            distance_measure,
             random_state,
         )
 
@@ -154,7 +162,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
         return self
 
-    def predict(self, X, check_input):
+    def predict(self, X, check_input=True):
         """Predict the class for X
 
         :param X: array-like, shape `[n_samples, n_timesteps]` or

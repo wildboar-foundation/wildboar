@@ -21,14 +21,14 @@ cimport numpy as np
 
 from libc.stdlib cimport free
 
-from pypf._sliding_distance cimport SlidingDistance
-from pypf._sliding_distance cimport new_sliding_distance
-from pypf._sliding_distance cimport free_sliding_distance
-from pypf._sliding_distance cimport sliding_distance
-from pypf._sliding_distance cimport sliding_distance_matches
+from pypf._sliding_distance cimport TSDatabase
+from pypf._sliding_distance cimport new_ts_database
+from pypf._sliding_distance cimport free_ts_database
+from pypf._sliding_distance cimport euclidean_distance
+from pypf._sliding_distance cimport euclidean_distance_matches
 
-from pypf._sliding_distance cimport scaled_sliding_distance
-from pypf._sliding_distance cimport scaled_sliding_distance_matches
+from pypf._sliding_distance cimport scaled_euclidean_distance
+from pypf._sliding_distance cimport scaled_euclidean_distance_matches
 
 from sklearn.utils import check_array
 
@@ -108,7 +108,7 @@ def min_distance(
             sample = np.arange(x.shape[0])
 
 
-    cdef SlidingDistance sd = new_sliding_distance(x)
+    cdef TSDatabase sd = new_ts_database(x)
 
     check_dim(dim, sd.n_dims)
     cdef double min_dist
@@ -135,7 +135,7 @@ def min_distance(
             t_offset = sample * sd.sample_stride + \
                        dim * sd.dim_stride
             if scale:
-                min_dist = scaled_sliding_distance(
+                min_dist = scaled_euclidean_distance(
                     s_offset,
                     s_stride,
                     s_length,
@@ -145,11 +145,11 @@ def min_distance(
                     t_offset,
                     sd.timestep_stride,
                     sd.n_timestep,
-                    sd.X,
+                    sd.data,
                     sd.X_buffer,
                     &min_index)
             else:
-                min_dist = sliding_distance(
+                min_dist = euclidean_distance(
                     s_offset,
                     s_stride,
                     s_length,
@@ -157,7 +157,7 @@ def min_distance(
                     t_offset,
                     sd.timestep_stride,
                     sd.n_timestep,
-                    sd.X,
+                    sd.data,
                     &min_index)
 
             if return_index:
@@ -173,7 +173,7 @@ def min_distance(
                 t_offset = i * sd.sample_stride + \
                            dim * sd.dim_stride
                 if scale:
-                    min_dist = scaled_sliding_distance(
+                    min_dist = scaled_euclidean_distance(
                         s_offset,
                         s_stride,
                         s_length,
@@ -183,11 +183,11 @@ def min_distance(
                         t_offset,
                         sd.timestep_stride,
                         sd.n_timestep,
-                        sd.X,
+                        sd.data,
                         sd.X_buffer,
                         &min_index)
                 else:
-                    min_dist = sliding_distance(
+                    min_dist = euclidean_distance(
                         s_offset,
                         s_stride,
                         s_length,
@@ -195,7 +195,7 @@ def min_distance(
                         t_offset,
                         sd.timestep_stride,
                         sd.n_timestep,
-                        sd.X,
+                        sd.data,
                         &min_index)
                 dist.append(min_dist)
                 ind.append(min_index)
@@ -205,7 +205,7 @@ def min_distance(
             else:
                 return np.array(dist)
     finally:
-        free_sliding_distance(sd)
+        free_ts_database(sd)
 
 
 def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
@@ -230,7 +230,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
         else:
             sample = np.arange(x.shape[0])
 
-    cdef SlidingDistance sd = new_sliding_distance(x)
+    cdef TSDatabase sd = new_ts_database(x)
 
     cdef size_t* matches
     cdef size_t n_matches
@@ -256,7 +256,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
             t_offset = sample * sd.sample_stride + \
                        dim * sd.dim_stride
             if scale:
-                scaled_sliding_distance_matches(
+                scaled_euclidean_distance_matches(
                     s_offset,
                     s_stride,
                     s_length,
@@ -266,13 +266,13 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                     t_offset,
                     sd.timestep_stride,
                     sd.n_timestep,
-                    sd.X,
+                    sd.data,
                     sd.X_buffer,
                     threshold,
                     &matches,
                     &n_matches)
             else:
-                sliding_distance_matches(
+                euclidean_distance_matches(
                     s_offset,
                     s_stride,
                     s_length,
@@ -280,7 +280,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                     t_offset,
                     sd.timestep_stride,
                     sd.n_timestep,
-                    sd.X,
+                    sd.data,
                     threshold,
                     &matches,
                     &n_matches)
@@ -295,7 +295,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                 t_offset = i * sd.sample_stride + \
                            dim * sd.dim_stride
                 if scale:
-                    scaled_sliding_distance_matches(
+                    scaled_euclidean_distance_matches(
                         s_offset,
                         s_stride,
                         s_length,
@@ -305,13 +305,13 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                         t_offset,
                         sd.timestep_stride,
                         sd.n_timestep,
-                        sd.X,
+                        sd.data,
                         sd.X_buffer,
                         threshold,
                         &matches,
                         &n_matches)
                 else:
-                    sliding_distance_matches(
+                    euclidean_distance_matches(
                         s_offset,
                         s_stride,
                         s_length,
@@ -319,7 +319,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                         t_offset,
                         sd.timestep_stride,
                         sd.n_timestep,
-                        sd.X,
+                        sd.data,
                         threshold,
                         &matches,
                         &n_matches)
@@ -329,4 +329,4 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
             return indicies
 
     finally:
-        free_sliding_distance(sd)
+        free_ts_database(sd)

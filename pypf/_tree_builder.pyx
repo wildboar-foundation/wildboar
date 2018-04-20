@@ -37,24 +37,18 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
-from pypf._sliding_distance cimport SlidingDistance
+from pypf._sliding_distance cimport TSDatabase
+from pypf._sliding_distance cimport DistanceMeasure
+
 from pypf._sliding_distance cimport ShapeletInfo
 from pypf._sliding_distance cimport Shapelet
-from pypf._sliding_distance cimport shapelet_info_update_statistics
-from pypf._sliding_distance cimport shapelet_info_scaled_distances
-from pypf._sliding_distance cimport shapelet_info_scaled_distance
-from pypf._sliding_distance cimport shapelet_info_distance
-from pypf._sliding_distance cimport shapelet_info_distances
-from pypf._sliding_distance cimport shapelet_info_extract_scaled_shapelet
-from pypf._sliding_distance cimport shapelet_info_extract_shapelet
 
-from pypf._sliding_distance cimport new_sliding_distance
-from pypf._sliding_distance cimport free_sliding_distance
+from pypf._sliding_distance cimport new_ts_database
+from pypf._sliding_distance cimport free_ts_database
 
 from pypf._impurity cimport info
 
 from pypf._utils cimport label_distribution
-from pypf._utils cimport print_c_array_d
 from pypf._utils cimport argsort
 from pypf._utils cimport rand_int
 from pypf._utils cimport RAND_R_MAX
@@ -145,7 +139,7 @@ cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
 
 cdef class ShapeletTreePredictor:
     cdef size_t n_labels
-    cdef SlidingDistance sd
+    cdef TSDatabase sd
 
     def __cinit__(self, np.ndarray X, size_t n_labels):
         """Construct a shapelet tree predictor
@@ -154,10 +148,10 @@ cdef class ShapeletTreePredictor:
         :param size_t n_labels: the number of labels
         """
         self.n_labels = n_labels
-        self.sd = new_sliding_distance(X)
+        self.sd = new_ts_database(X)
 
     def __dealloc__(self):
-        free_sliding_distance(self.sd)
+        free_ts_database(self.sd)
 
     def predict_proba(self, Node root):
         """Predict the probability of each label using the tree described by
@@ -192,7 +186,6 @@ cdef class ShapeletTreeBuilder:
     cdef size_t min_shapelet_size
     cdef size_t max_shapelet_size
     cdef size_t max_depth
-    cdef bint scale
 
     cdef size_t* labels
     cdef size_t label_stride
@@ -211,34 +204,29 @@ cdef class ShapeletTreeBuilder:
     cdef double* left_label_buffer
     cdef double* right_label_buffer
 
-    cdef SlidingDistance sd
+    cdef DistanceMeasure distance_measure
+    cdef TSDatabase sd
 
-    # TODO: Add more parameters
-    #  * min_size
-    #  * max_size
-    #  * max_depth
-    #  * min_samples_leaf
-    #  * ...
     def __cinit__(self,
                   size_t n_shapelets,
                   size_t min_shapelet_size,
                   size_t max_shapelet_size,
                   size_t max_depth,
-                  bint scale,
+                  DistanceMeasure distance_measure,
                   object random_state):
-        self.scale = scale
         self.random_seed = random_state.randint(0, RAND_R_MAX)
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.max_depth = max_depth
+        self.distance_measure = distance_measure
 
     def __dealloc__(self):
         self._free_if_needed()
 
     cdef void _free_if_needed(self) nogil:
         if self.sd.X_buffer != NULL:
-            free_sliding_distance(self.sd)
+            free_ts_database(self.sd)
 
         if self.samples != NULL:
             free(self.samples)
@@ -265,11 +253,8 @@ cdef class ShapeletTreeBuilder:
             self.right_label_buffer = NULL
 
     # this is unchecked
-    cpdef void init(self,
-                    np.ndarray X,
-                    np.ndarray[np.intp_t, ndim=1, mode="c"] y,
-                    size_t n_labels,
-                    np.ndarray[np.float64_t, ndim=1, mode="c"] sample_weights):
+    cpdef void init(self, np.ndarray X, np.ndarray y,
+                    size_t n_labels, np.ndarray sample_weights):
 
         self._free_if_needed()
 
@@ -305,7 +290,8 @@ cdef class ShapeletTreeBuilder:
         self.n_samples = j
         self.n_weighted_samples = 0
 
-        self.sd = new_sliding_distance(X)
+        self.sd = new_ts_database(X)
+        self.distance_measure.init(self.sd)
 
         if sample_weights is None:
             self.sample_weights = NULL
@@ -338,13 +324,7 @@ cdef class ShapeletTreeBuilder:
         cdef double prev_dist
         cdef double curr_dist
         if split.split_point > start and end - split.split_point > 0:
-            if self.scale:
-                shapelet = shapelet_info_extract_scaled_shapelet(
-                    split.shapelet_info, self.sd)
-            else:
-                shapelet = shapelet_info_extract_shapelet(
-                    split.shapelet_info, self.sd)
-
+            shapelet = self.distance_measure.new_shapelet(split.shapelet_info)
             branch = new_branch_node(split, shapelet)
             branch.left = self._build_tree(start, split.split_point, depth + 1)
             branch.right = self._build_tree(split.split_point, end, depth + 1)
@@ -365,19 +345,9 @@ cdef class ShapeletTreeBuilder:
         best_impurity = INFINITY
         for i in range(self.n_shapelets):
             shapelet = self._sample_shapelet(start, end)
-            if self.scale:
-                shapelet_info_scaled_distances(shapelet,
-                                               self.samples + start,
-                                               end - start,
-                                               self.sd,
-                                               self.distance_buffer + start)
-            else:
-                shapelet_info_distances(shapelet,
-                                        self.samples + start,
-                                        end - start,
-                                        self.sd,
-                                        self.distance_buffer + start)
-
+            self.distance_measure.distances(
+                shapelet, self.samples + start,
+                self.distance_buffer + start, end - start,)
 
             # sort the distances and the samples in increasing order
             # of distance
@@ -400,22 +370,18 @@ cdef class ShapeletTreeBuilder:
         return new_split_point(best_split_point, best_threshold, best_shapelet)
 
     cdef ShapeletInfo _sample_shapelet(self, size_t start, size_t end) nogil:
-        cdef ShapeletInfo shapelet_info
+        cdef size_t length, s_pos, index, dim
 
-        shapelet_info.length = rand_int(
+        length = rand_int(
             self.min_shapelet_size, self.max_shapelet_size, &self.random_seed)
-        shapelet_info.start = rand_int(
-            0, self.sd.n_timestep - shapelet_info.length, &self.random_seed)
-        shapelet_info.index = self.samples[rand_int(
-            start, end, &self.random_seed)]
+        s_pos = rand_int(
+            0, self.sd.n_timestep - length, &self.random_seed)
+        index = self.samples[rand_int(start, end, &self.random_seed)]
 
         if self.sd.n_dims > 1:
-            shapelet_info.dim = rand_int(0, self.sd.n_dims, &self.random_seed)
+            dim = rand_int(0, self.sd.n_dims, &self.random_seed)
 
-        if self.scale:
-            shapelet_info_update_statistics(&shapelet_info, self.sd)
-
-        return shapelet_info
+        return self.distance_measure.new_shapelet_info(index, dim, s_pos, length)
 
     cdef void _partition_distance_buffer(self,
                                          size_t start,

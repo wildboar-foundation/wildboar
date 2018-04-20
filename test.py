@@ -16,7 +16,7 @@ def testit():
 
     y = train[:, 0].astype(np.intp)
     x = train[:, 1:].astype(np.float64)
-    tree = ShapeletTreeClassifier(n_shapelets=100, scale=True, max_depth=None)
+    tree = ShapeletTreeClassifier(n_shapelets=100, max_depth=None)
     tree.fit(x, y)
 
 
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     print(x)
     print(y)
 
-    tree = ShapeletTreeClassifier(random_state=10, scale=True)
+    tree = ShapeletTreeClassifier(random_state=10, distance="scaled_euclidean")
     tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
     print_tree(tree.root_node_)
     print(tree.score(x, y))
@@ -56,26 +56,26 @@ if __name__ == "__main__":
     train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
     test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
 
-    y = train[:, 0].astype(str)
+    y = train[:, 0].astype(np.intp)
     x = train[:, 1:].astype(np.float64)
     i = np.arange(x.shape[0])
 
     np.random.shuffle(i)
 
     x_test = test[:, 1:].astype(np.float64)
-    y_test = test[:, 0].astype(str)
+    y_test = test[:, 0].astype(np.intp)
 
     tree = ShapeletTreeClassifier(
         n_shapelets=1,
-        scale=False,
         max_depth=None,
+        distance='scaled_euclidean',
         min_shapelet_size=1,
         max_shapelet_size=1)
 
     bag = BaggingClassifier(
         base_estimator=tree,
         bootstrap=True,
-        n_jobs=8,
+        n_jobs=16,
         n_estimators=100,
         random_state=100,
     )
