@@ -8,13 +8,13 @@ from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 from sklearn.utils import check_array
 
-import pypf._sliding_distance
+import pypf._euclidean_distance
 
 __all__ = ["ShapeletTreeClassifier"]
 
 DISTANCE_MEASURE = {
-    'euclidean': pypf._sliding_distance.EuclideanDistance(),
-    'scaled_euclidean': pypf._sliding_distance.ScaledEuclideanDistance(),
+    'euclidean': pypf._euclidean_distance.EuclideanDistance(),
+    'scaled_euclidean': pypf._euclidean_distance.ScaledEuclideanDistance(),
 }
 
 
@@ -25,7 +25,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                  max_depth=None,
                  min_samples_leaf=2,
                  n_shapelets=10,
-                 min_shapelet_size=0.025,
+                 min_shapelet_size=0,
                  max_shapelet_size=1,
                  distance='euclidean',
                  random_state=None):

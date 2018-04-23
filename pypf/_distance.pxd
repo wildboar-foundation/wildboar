@@ -40,6 +40,7 @@ cdef struct TSDatabase:
 
     double* X_buffer       # buffer for normalization
 
+
 cdef class Shapelet:
     cdef readonly size_t length
     cdef double* data
@@ -52,6 +53,7 @@ cdef class Shapelet:
                         size_t* samples,
                         size_t n_samples,
                         double* distances) nogil
+
 
 cdef class ScaledShapelet(Shapelet):
     cdef readonly double mean
@@ -79,66 +81,15 @@ cdef class DistanceMeasure:
                         double* distances,
                         size_t n_samples) nogil
 
+cdef class ScaledDistanceMeasure(DistanceMeasure):
+    pass
+
 
 cdef int shapelet_info_update_statistics(ShapeletInfo* s,
                                          const TSDatabase t) nogil
 
-# construct a new sliding distance storage
+
 cdef TSDatabase new_ts_database(np.ndarray X)
 
 
 cdef int free_ts_database(TSDatabase sd) nogil
-
-
-cdef double scaled_euclidean_distance(size_t s_offset,
-                                      size_t s_stride,
-                                    size_t s_length,
-                                    double s_mean,
-                                    double s_std,
-                                    double* S,
-                                    size_t t_offset,
-                                    size_t t_stride,
-                                    size_t t_length,
-                                    double* T,
-                                    double* X_buffer,
-                                    size_t* index) nogil
-
-
-cdef double euclidean_distance(size_t s_offset,
-                             size_t s_stride,
-                             size_t s_length,
-                             double* S,
-                             size_t t_offset,
-                             size_t t_stride,
-                             size_t t_length,
-                             double* T,
-                             size_t* index) nogil
-
-
-cdef int euclidean_distance_matches(size_t s_offset,
-                                  size_t s_stride,
-                                  size_t s_length,
-                                  double* S,
-                                  size_t t_offset,
-                                  size_t t_stride,
-                                  size_t t_length,
-                                  double* T,
-                                  double threshold,
-                                  size_t** matches,
-                                  size_t* n_matches) nogil except -1
-
-
-cdef double scaled_euclidean_distance_matches(size_t s_offset,
-                                            size_t s_stride,
-                                            size_t s_length,
-                                            double s_mean,
-                                            double s_std,
-                                            double* S,
-                                            size_t t_offset,
-                                            size_t t_stride,
-                                            size_t t_length,
-                                            double* T,
-                                            double* X_buffer,
-                                            double threshold,
-                                            size_t** matches,
-                                            size_t* n_matches) nogil except -1

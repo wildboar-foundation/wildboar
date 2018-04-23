@@ -24,11 +24,7 @@ from __future__ import print_function
 
 import math
 
-cimport numpy as np
-
 from libc.math cimport log2
-from libc.stdlib cimport malloc
-from libc.stdlib cimport realloc
 
 # For debugging
 def print_tree(o, indent=1):

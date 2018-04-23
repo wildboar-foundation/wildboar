@@ -37,16 +37,16 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
-from pypf._sliding_distance cimport TSDatabase
-from pypf._sliding_distance cimport DistanceMeasure
+from pypf._distance cimport TSDatabase
+from pypf._distance cimport DistanceMeasure
 
-from pypf._sliding_distance cimport ShapeletInfo
-from pypf._sliding_distance cimport Shapelet
+from pypf._distance cimport ShapeletInfo
+from pypf._distance cimport Shapelet
 
-from pypf._sliding_distance cimport new_ts_database
-from pypf._sliding_distance cimport free_ts_database
+from pypf._distance cimport new_ts_database
+from pypf._distance cimport free_ts_database
 
-from pypf._impurity cimport info
+from pypf._impurity cimport entropy
 
 from pypf._utils cimport label_distribution
 from pypf._utils cimport argsort
@@ -54,9 +54,9 @@ from pypf._utils cimport rand_int
 from pypf._utils cimport RAND_R_MAX
 
 
-cdef SplitPoint new_split_point(size_t split_point,
-                                double threshold,
-                                ShapeletInfo shapelet_info) nogil:
+cdef inline SplitPoint new_split_point(size_t split_point,
+                                       double threshold,
+                                       ShapeletInfo shapelet_info) nogil:
     cdef SplitPoint s
     s.split_point = split_point
     s.threshold = threshold
@@ -380,6 +380,8 @@ cdef class ShapeletTreeBuilder:
 
         if self.sd.n_dims > 1:
             dim = rand_int(0, self.sd.n_dims, &self.random_seed)
+        else:
+            dim = 1
 
         return self.distance_measure.new_shapelet_info(index, dim, s_pos, length)
 
@@ -427,11 +429,11 @@ cdef class ShapeletTreeBuilder:
         self.left_label_buffer[prev_label] += current_sample_weight
         self.right_label_buffer[prev_label] -= current_sample_weight
 
-        impurity[0] = info(left_sum,
-                           self.left_label_buffer,
-                           right_sum,
-                           self.right_label_buffer,
-                           self.n_labels)
+        impurity[0] = entropy(left_sum,
+                              self.left_label_buffer,
+                              right_sum,
+                              self.right_label_buffer,
+                              self.n_labels)
 
         threshold[0] = prev_distance / 2
         split_point[0] = start + 1 # The split point indicates a <=-relation
@@ -444,11 +446,11 @@ cdef class ShapeletTreeBuilder:
             current_label = self.labels[p]
 
             if not current_label == prev_label:
-                current_impurity = info(left_sum,
-                                        self.left_label_buffer,
-                                        right_sum,
-                                        self.right_label_buffer,
-                                        self.n_labels)
+                current_impurity = entropy(left_sum,
+                                           self.left_label_buffer,
+                                           right_sum,
+                                           self.right_label_buffer,
+                                           self.n_labels)
 
                 if current_impurity <= impurity[0]:
                     impurity[0] = current_impurity

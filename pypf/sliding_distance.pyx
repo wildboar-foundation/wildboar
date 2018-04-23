@@ -21,14 +21,15 @@ cimport numpy as np
 
 from libc.stdlib cimport free
 
-from pypf._sliding_distance cimport TSDatabase
-from pypf._sliding_distance cimport new_ts_database
-from pypf._sliding_distance cimport free_ts_database
-from pypf._sliding_distance cimport euclidean_distance
-from pypf._sliding_distance cimport euclidean_distance_matches
+from pypf._distance cimport TSDatabase
+from pypf._distance cimport new_ts_database
+from pypf._distance cimport free_ts_database
 
-from pypf._sliding_distance cimport scaled_euclidean_distance
-from pypf._sliding_distance cimport scaled_euclidean_distance_matches
+from pypf._euclidean_distance cimport euclidean_distance
+from pypf._euclidean_distance cimport euclidean_distance_matches
+
+from pypf._euclidean_distance cimport scaled_euclidean_distance
+from pypf._euclidean_distance cimport scaled_euclidean_distance_matches
 
 from sklearn.utils import check_array
 

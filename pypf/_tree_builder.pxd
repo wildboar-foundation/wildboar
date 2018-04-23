@@ -16,9 +16,7 @@
 
 # Authors: Isak Karlsson
 
-cimport numpy as np
-from libc.math import NaN
-from pypf._sliding_distance cimport ShapeletInfo, Shapelet
+from pypf._distance cimport ShapeletInfo, Shapelet
 
 cdef struct SplitPoint:
    size_t split_point
