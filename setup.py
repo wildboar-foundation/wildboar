@@ -165,6 +165,12 @@ ext_module_euclidean_distance = declare_cython_extension(
     use_openmp=False,
     include_dirs=my_include_dirs)
 
+ext_module_dtw_distance = declare_cython_extension(
+    "pypf._dtw_distance",
+    use_math=True,
+    use_openmp=False,
+    include_dirs=my_include_dirs)
+
 ext_module_impurity = declare_cython_extension(
     "pypf._impurity",
     use_math=True,
@@ -189,6 +195,7 @@ cython_ext_modules = [
     ext_module_utils,
     ext_module_distance,
     ext_module_euclidean_distance,
+    ext_module_dtw_distance,
     ext_module_sliding_distance_api,
     ext_module_impurity,
     ext_module_tree_builder,
