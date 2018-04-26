@@ -19,28 +19,30 @@
 from pypf._distance cimport DistanceMeasure
 from pypf._distance cimport ScaledDistanceMeasure
 
-cdef struct CircularArray:
+cdef struct Deque:
     size_t* queue
-    size_t size
-    size_t capacity
-    size_t front
-    size_t back
+    int size
+    int capacity
+    int front
+    int back
 
-cdef void init_circular(CircularArray* c, size_t capacity) nogil
+cdef void deque_init(Deque* c, size_t capacity) nogil
 
-cdef void destroy_cicular(CircularArray* c) nogil
+cdef void deque_destroy(Deque* c) nogil
 
-cdef void cirular_push_back(CircularArray* c, size_t v) nogil
+cdef void deque_push_back(Deque* c, size_t v) nogil
 
-cdef void circular_pop_front(CircularArray* c) nogil
+cdef void deque_pop_front(Deque* c) nogil
 
-cdef void cicular_pop_back(CircularArray* c) nogil
+cdef void deque_pop_back(Deque* c) nogil
 
-cdef size_t circular_front(CircularArray* c) nogil
+cdef size_t deque_front(Deque* c) nogil
 
-cdef size_t circular_back(CircularArray* c) nogil
+cdef size_t deque_back(Deque* c) nogil
 
-cdef size_t circular_size(CircularArray* c) nogil
+cdef size_t deque_size(Deque* c) nogil
+
+cdef bint deque_empty(Deque* c) nogil
 
 
 # cdef double scaled_dtw_distance(size_t s_offset,

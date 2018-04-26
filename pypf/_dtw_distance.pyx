@@ -1,3 +1,7 @@
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
+
 # This file is part of pypf
 #
 # pypf is free software: you can redistribute it and/or modify it
@@ -13,102 +17,482 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
-
+#
 # Authors: Isak Karlsson
+#
+# This implementation is heaviliy inspired by the UCRSuite.
+#
+# References
+#
+#  - Rakthanmanon, et al., Searching and Mining Trillions of Time
+#    Series Subsequences under Dynamic Time Warping (2012)
+#  - http://www.cs.ucr.edu/~eamonn/UCRsuite.html
 
 from libc.stdlib cimport malloc
 from libc.stdlib cimport free
+from libc.string cimport memset
 
-cdef void init_circular(CircularArray* c, size_t capacity) nogil:
+from libc.math cimport INFINITY
+from libc.math cimport sqrt
+from libc.math cimport fabs
+
+cdef void deque_init(Deque* c, size_t capacity) nogil:
     c[0].capacity = capacity
     c[0].size = 0
     c[0].queue = <size_t*>malloc(sizeof(size_t) * capacity)
     c[0].front = 0
     c[0].back = capacity - 1
 
-cdef void circular_reset(CircularArray* c) nogil:
+
+cdef void deque_reset(Deque* c) nogil:
     c[0].size = 0
     c[0].front = 0
     c[0].back = c[0].capacity - 1
-    # TODO: is memset(...) required?
 
 
-cdef void destroy_cicular(CircularArray* c) nogil:
+cdef void deque_destroy(Deque* c) nogil:
     free(c[0].queue)
 
 
-cdef void cirular_push_back(CircularArray* c, size_t v) nogil:
+cdef void deque_push_back(Deque* c, size_t v) nogil:
     c[0].queue[c[0].back] = v
-    c[0].back =- 1
+    c[0].back -= 1
     if c[0].back < 0:
         c[0].back = c[0].capacity - 1
 
     c[0].size += 1
 
 
-cdef void circular_pop_front(CircularArray* c) nogil:
+cdef void deque_pop_front(Deque* c) nogil:
     c[0].front -= 1
     if c[0].front < 0:
         c[0].front = c[0].capacity - 1
     c[0].size -= 1
 
-cdef void cicular_pop_back(CircularArray* c) nogil:
+
+cdef void deque_pop_back(Deque* c) nogil:
     c[0].back = (c[0].back + 1) % c[0].capacity
     c[0].size -= 1
 
-cdef size_t circular_front(CircularArray* c) nogil:
-    cdef size_t tmp = c[0].front - 1
+
+cdef size_t deque_front(Deque* c) nogil:
+    cdef int tmp = c[0].front - 1
     if tmp < 0:
         tmp = c[0].capacity - 1
     return c[0].queue[tmp]
 
-cdef size_t circular_back(CircularArray* c) nogil:
-    cdef size_t tmp = (c[0].back + 1) % c[0].capacity
+
+cdef size_t deque_back(Deque* c) nogil:
+    cdef int tmp = (c[0].back + 1) % c[0].capacity
     return c[0].queue[tmp]
 
-cdef size_t circular_size(CircularArray* c) nogil:
+
+cdef bint deque_empty(Deque* c) nogil:
+    return c[0].size == 0
+
+
+cdef size_t deque_size(Deque* c) nogil:
     return c[0].size
 
 
 cdef void find_min_max(size_t offset, size_t stride, size_t length,
                        double* T, size_t r, double* lower, double* upper,
-                       CircularArray* du, CircularArray* dl) nogil:
+                       Deque* dl, Deque* du) nogil:
     cdef size_t i
     cdef size_t k
 
-    circular_reset(du)
+    cdef double current, prev
+
+    deque_reset(du)
+    deque_reset(dl)
+
+    deque_push_back(du, 0)
+    deque_push_back(dl, 0)
 
     for i in range(1, length):
         if i > r:
             k = i - r - 1
-            lower[k] = T[offset + stride * circular_front(dl)]
-            upper[k] = T[offset + stride * circular_front(du)]
+            upper[k] = T[offset + stride * deque_front(du)]
+            lower[k] = T[offset + stride * deque_front(dl)]
 
-
-        if T[offset + stride * i] > T[offset + stride * (i - 1)]:
-            circular_pop_back(du)
-
-            while (cirular_size(du) > 0 and
-                   T[i] > T[offset + stride * circular_back(du)]):
-                circular_pop_back(du)
+        current = T[offset + stride * i]
+        prev = T[offset + stride * (i - 1)]
+        if current > prev:
+            deque_pop_back(du)
+            while (not deque_empty(du) and
+                   current > T[offset + stride * deque_back(du)]):
+                deque_pop_back(du)
         else:
-            circular_pop_back(dl)
+            deque_pop_back(dl)
+            while (not deque_empty(dl) and
+                   current < T[offset + stride * deque_back(dl)]):
+                deque_pop_back(dl)
 
-            while (circular_size(dl) > 0 and
-                   T[i] > T[offset + stride * circular_back(dl)]):
-                circular_pop_back(dl)
+        deque_push_back(du, i)
+        deque_push_back(dl, i)
 
-        circular_push_back(du, i)
-        circular_push_back(dl, i)
-
-        if i == 2 * r + 1 + circular_front(du):
-            circular_pop_front(du)
-
-        elif i == 2 * r + 1 + circular_back(dl):
-            circular_pop_front(dl)
+        if i == 2 * r + 1 + deque_front(du):
+            deque_pop_front(du)
+        elif i == 2 * r + 1 + deque_front(dl):
+            deque_pop_front(dl)
 
     for i in range(length, length + r + 1):
-        pass # WIP
-        
-                
-    
+        upper[i - r - 1] = T[offset + stride * deque_front(du)]
+        lower[i - r - 1] = T[offset + stride * deque_front(dl)]
+
+        if i - deque_front(du) >= 2 * r + 1:
+            deque_pop_front(du)
+        if i - deque_front(dl) >= 2 * r + 1:
+            deque_pop_front(dl)
+
+
+cdef inline double dist(double x, double y) nogil:
+    cdef double s = x - y
+    return s * s
+
+
+cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
+                                 double s_mean, double s_std, size_t t_offset,
+                                 size_t t_stride, double* T, double t_mean,
+                                 double t_std, size_t length,
+                                 double best_dist) nogil:
+    cdef double t_x0, t_y0, s_x0, s_y0
+    cdef double t_x1, ty1, s_x1, s_y1
+    cdef double t_x2, t_y2, s_x2, s_y2
+    cdef double distance, min_dist
+
+    # first and last in T
+    t_x0 = (T[t_offset] - t_mean) / t_std
+    t_y0 = (T[t_offset + t_stride * (length - 1)] - t_mean) / t_std
+
+    # first and last in S
+    s_x0 = (S[s_offset] - s_mean) / s_std
+    s_y0 = (S[t_offset + s_stride * (length - 1)] - s_mean) / s_std
+
+    min_dist = dist(t_x0, s_x0) + dist(t_y0, s_y0)
+    if min_dist < best_dist:
+        return min_dist
+
+    t_x1 = (T[t_offset + t_stride * 1] - t_mean) / t_std
+    s_x1 = (S[s_offset + s_stride * 1] - s_mean) / s_std
+    min_dist += min(
+        min(dist(t_x1, s_x0), dist(t_x0, s_x1)),
+        dist(t_x1, s_x1))
+    if min_dist >= best_dist:
+        return min_dist
+
+    t_y1 = (T[t_offset + t_stride * (length - 2)] - t_mean) / t_std
+    s_y1 = (S[s_offset + s_stride * (length - 2)] - s_mean) / s_std
+    min_dist += min(
+        min(dist(t_y1, s_y1), dist(t_y0, s_y1)),
+        dist(t_y1, s_y1))
+
+    if min_dist >= best_dist:
+        return min_dist
+
+    t_x2 = (T[t_offset + t_stride * 2] - t_mean) / t_std
+    s_x2 = (S[s_offset + s_stride * 2] - s_mean) / s_std
+    min_dist += min(min(dist(t_x0, s_x2),
+                        min(dist(t_x1, s_x2),
+                            dist(t_x2, s_x2)),
+                        dist(t_x2, s_x1)),
+                    dist(t_x2, s_x0))
+
+    if min_dist >= best_dist:
+        return min_dist
+
+    t_y2 = (T[t_offset + t_stride * (length - 3)] - t_mean) / t_std
+    s_y2 = (S[s_offset + s_stride * (length - 3)] - s_mean) / s_std
+
+    min_dist += min(min(dist(t_y0, s_y2),
+                        min(dist(t_y1, s_y2),
+                            dist(t_y2, s_y2)),
+                        dist(t_y2, s_y1)),
+                    dist(t_y2, s_y0))
+    if min_dist >= best_dist:
+        return min_dist
+
+    return best_dist
+
+cdef double cumulative_bound(size_t offset, size_t stride, size_t length,
+                             double mean, double std, double* T,
+                             double lu_mean, double lu_std, double* lower,
+                             double* upper, double* cb, double best_so_far) nogil:
+    cdef double min_dist = 0
+    cdef double x, d, us, ls
+    cdef size_t i
+
+    for i in range(0, length):
+        if min_dist >= best_so_far:
+            break
+
+        x = (T[offset + stride * i] - mean) / std
+        us = (upper[i] - lu_mean) / lu_std
+        ls = (lower[i] - lu_mean) / lu_std
+        if x > us:
+            d = dist(x, us)
+        elif x < ls:
+            d = dist(x, ls)
+        else:
+            d = 0
+
+        min_dist += d
+        cb[i] = d
+    return min_dist
+
+
+cdef inline double inner_dtw(size_t s_offset, size_t s_stride, int s_length,
+                             double s_mean, double s_std, double* S,
+                             double mean, double std, size_t x_offset,
+                             double* X_buffer, int r, double* cb,
+                             double* cost, double* cost_prev,
+                             double min_dist) nogil:
+    cdef int i = 0
+    cdef int j = 0
+    cdef int k = 0
+
+    cdef double x
+    cdef double y
+    cdef double z
+    cdef double min_cost, distance
+
+    cdef double* cost_tmp
+    for i in range(0, 2 * r + 1):
+        cost[i] = INFINITY
+        cost_prev[i] = INFINITY
+
+    for i in range(0, s_length):
+        k = max(0, r - i)
+        min_cost = INFINITY
+        for j in range(max(0, i - r), min(s_length, i + r + 1)):
+            if i == 0 and j == 0:
+                min_cost = dist((S[s_offset] - s_mean) / s_std,
+                                (X_buffer[x_offset] - mean)  / std)
+                cost[k] = min_cost
+            else:
+                if j - 1 < 0 or k - 1 < 0:
+                    y = INFINITY
+                else:
+                    y = cost[k - 1]
+
+                if i - 1 < 0 or k + 1 > 2 * r:
+                    x = INFINITY
+                else:
+                    x = cost_prev[k + 1]
+
+                if i - 1 < 0 or j - 1 < 0:
+                    z = INFINITY
+                else:
+                    z = cost_prev[k]
+
+                distance = dist((S[s_offset + s_stride * i] - s_mean) / s_std,
+                                (X_buffer[x_offset + j]- mean) / std)
+                cost[k] = min(min(x, y), z) + distance
+                if cost[k] < min_cost:
+                    min_cost = cost[k]
+
+            k += 1
+
+        if i + r < s_length - 1 and min_cost + cb[i + r + 1] >= min_dist:
+            return min_cost + cb[i + r + 1]
+
+        cost_tmp = cost
+        cost = cost_prev
+        cost_prev = cost_tmp
+    return cost_prev[k - 1]
+
+
+cdef double scaled_dtw_distance(size_t s_offset,
+                                size_t s_stride,
+                                size_t s_length,
+                                double s_mean,
+                                double s_std,
+                                double* S,
+                                size_t t_offset,
+                                size_t t_stride,
+                                size_t t_length,
+                                double* T,
+                                size_t r,
+                                double* X_buffer,
+                                double* cost,
+                                double* cost_prev,
+                                double* s_lower,
+                                double* s_upper,
+                                double* t_lower,
+                                double* t_upper,
+                                double* cb,
+                                double* cb_1,
+                                double* cb_2,
+                                size_t* index) nogil:
+    cdef double current_value = 0
+    cdef double mean = 0
+    cdef double std = 0
+    cdef double dist = 0
+    cdef double min_dist = INFINITY
+
+    cdef double lb_kim
+    cdef double lb_k
+    cdef double lb_k2
+
+    cdef double ex = 0
+    cdef double ex2 = 0
+
+    cdef size_t i
+    cdef size_t j
+    cdef size_t k
+    cdef size_t I
+    cdef size_t buffer_pos
+
+    for i in range(t_length):
+        current_value = T[t_offset + t_stride * i]
+        ex += current_value
+        ex2 += current_value * current_value
+
+        buffer_pos = i % s_length
+        X_buffer[buffer_pos] = current_value
+        X_buffer[buffer_pos + s_length] = current_value
+
+        if i >= s_length - 1:
+            j = (i + 1) % s_length
+            I = i - (s_length - 1)
+            mean = ex / s_length
+            std = sqrt(ex2 / s_length - mean * mean)
+            lb_kim = constant_lower_bound(s_offset, s_stride, S, s_mean, s_std,
+                                          j, 1, X_buffer, mean, std, s_length,
+                                          min_dist)
+
+            if lb_kim < min_dist:
+                lb_k = cumulative_bound(j, 1, s_length, mean, std, X_buffer,
+                                        s_mean, s_std, s_lower, s_upper,
+                                        cb_1, min_dist)
+                if lb_k < min_dist:
+                    lb_k2 = cumulative_bound(
+                        s_offset, s_stride, s_length, s_mean, s_std, S,
+                        mean, std, t_lower + I, t_upper + I, cb_2, min_dist)
+
+                    if lb_k2 < min_dist:
+                        if lb_k > lb_k2:
+                            cb[s_length - 1] = cb_1[s_length - 1]
+                            for k in range(s_length - 2, -1, -1):
+                                cb[k] = cb[k + 1] + cb_1[k]
+                        else:
+                            cb[s_length - 1] = cb_2[s_length - 1]
+                            for k in range(s_length - 2, -1, -1):
+                                cb[k] = cb[k + 1] + cb_2[k]
+
+                        dist = inner_dtw(
+                            s_offset, s_stride, s_length, s_mean,
+                            s_std, S, mean, std, j, X_buffer, r, cb,
+                            cost, cost_prev, min_dist)
+
+                        if dist < min_dist:
+                            if index != NULL:
+                                index[0] = (i + 1) - s_length
+                            min_dist = dist
+
+            current_value = X_buffer[j]
+            ex -= current_value
+            ex2 -= current_value * current_value
+
+    return sqrt(min_dist)
+
+
+cimport numpy as np
+import numpy as np
+
+from pypf._utils cimport print_c_array_d
+
+def test(np.ndarray S, np.ndarray T, size_t r):
+    cdef size_t s_offset, t_offset
+    cdef double* s_values,
+    cdef double* t_values
+    cdef size_t s_stride, t_stride
+    cdef size_t s_length, t_length
+    cdef double s_mean, s_std, t_mean, t_std
+
+    s_offset = 0
+    s_values = <double*> S.data
+    s_stride = S.strides[0] / <size_t> S.itemsize
+    s_length = S.shape[0]
+    s_mean = np.mean(S)
+    s_std = np.std(S)
+
+    t_offset = 0
+    t_values = <double*> T.data
+    t_stride = T.strides[0] / <size_t> T.itemsize
+    t_length = T.shape[0]
+    t_mean = np.mean(T)
+    t_std = np.std(T)
+
+    cdef double* s_lower = <double*> malloc(sizeof(double) * s_length)
+    cdef double* s_upper = <double*> malloc(sizeof(double) * s_length)
+    cdef double* t_lower = <double*> malloc(sizeof(double) * t_length)
+    cdef double* t_upper = <double*> malloc(sizeof(double) * t_length)
+    cdef double* X_buffer = <double*> malloc(sizeof(double) * t_length * 2)
+
+    cdef double* cost = <double*> malloc(sizeof(double) * 2 * r + 1)
+    cdef double* cost_prev = <double*> malloc(sizeof(double) * 2 * r + 1)
+
+    cdef double* cb = <double*> malloc(sizeof(double) * s_length)
+    cdef double* cb_1 = <double*> malloc(sizeof(double) * s_length)
+    cdef double* cb_2 = <double*> malloc(sizeof(double) * s_length)
+
+    cdef Deque du, dl
+
+    deque_init(&du, 2 * r + 2)
+    deque_init(&dl, 2 * r + 2)
+
+    find_min_max(s_offset, s_stride, s_length, s_values,
+                 r, s_lower, s_upper, &dl, &du)
+    print("find_for_data")
+    find_min_max(t_offset, t_stride, t_length, t_values,
+                 r, t_lower, t_upper, &dl, &du)
+
+    cdef size_t index = -1
+    cdef dist = scaled_dtw_distance(
+        s_offset,
+        s_stride,
+        s_length,
+        s_mean,
+        s_std,
+        s_values,
+        t_offset,
+        t_stride,
+        t_length,
+        t_values,
+        r,
+        X_buffer,
+        cost,
+        cost_prev,
+        s_lower,
+        s_upper,
+        t_lower,
+        t_upper,
+        cb,
+        cb_1,
+        cb_2,
+        &index)
+    print("dist_end", dist, index)
+#     # print_c_array_d("cost", cost, 2*r+1)
+#     # print_c_array_d("prev", cost_prev, 2*r+1)
+#     # print_c_array_d("cb", cb, s_length)
+#     # print_c_array_d("cb1", cb_1, s_length)
+#     # print_c_array_d("cb2", cb_2, s_length)
+#     print_c_array_d("s_lower", s_lower, s_length)
+#     print_c_array_d("s_upper", s_upper, s_length)
+#     print_c_array_d("t_lower", t_lower, t_length)
+#     print_c_array_d("t_upper", t_upper, t_length)
+# #    print((S - s_mean) / s_std)
+# #    print((T - t_mean) / t_std)
+#     free(cb)
+#     free(cb_1)
+#     free(cb_2)
+#     free(cost)
+#     free(cost_prev)
+#     free(s_lower)
+#     free(s_upper)
+#     free(t_lower)
+#     free(t_upper)
+#     free(X_buffer)
+#     deque_destroy(&du)
+#     deque_destroy(&dl)

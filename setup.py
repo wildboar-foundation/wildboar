@@ -19,7 +19,7 @@ except ImportError:
 
 libname = "pypf"
 build_type = "optimized"
-# build_type="debug"
+# build_type = "debug"
 
 SHORTDESC = "Shapelet tree implementation"
 
