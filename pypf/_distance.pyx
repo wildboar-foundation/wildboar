@@ -30,23 +30,25 @@ from libc.stdlib cimport free
 from libc.math cimport sqrt
 from libc.math cimport INFINITY, NAN
 
+from pypf._utils cimport rand_int
 
 cdef class DistanceMeasure:
 
-    cdef void init(self, TSDatabase td) nogil:
-        self.td = td
+    def __cinit__(self, size_t n_timesteps, *args, **kvargs):
+        pass
 
-    cdef void distances(self, ShapeletInfo s, size_t* samples,
-                        double* distances, size_t n_samples) nogil:
+    cdef void shapelet_info_distances(
+        self, ShapeletInfo s, TSDatabase td, size_t* samples,
+        double* distances, size_t n_samples) nogil:
+
         cdef size_t p
         for p in range(n_samples):
-            distances[p] = self.distance(s, samples[p])
+            distances[p] = self.shapelet_info_distance(s, td, samples[p])
 
-    cdef ShapeletInfo new_shapelet_info(self,
-                                        size_t index,
-                                        size_t dim,
-                                        size_t start,
-                                        size_t length) nogil:
+    cdef ShapeletInfo new_shapelet_info(
+        self, TSDatabase _td, size_t index, size_t start,
+        size_t length, size_t dim) nogil:
+
         cdef ShapeletInfo shapelet_info
         shapelet_info.index = index
         shapelet_info.dim = dim
@@ -54,31 +56,77 @@ cdef class DistanceMeasure:
         shapelet_info.length = length
         shapelet_info.mean = NAN
         shapelet_info.std = NAN
+        shapelet_info.extra = NULL
         return shapelet_info
 
-    cdef Shapelet new_shapelet(self, ShapeletInfo s):
-        raise NotImplemented()
+    cdef Shapelet new_shapelet(self, ShapeletInfo s, TSDatabase td):
+        cdef Shapelet shapelet = Shapelet(s.dim, s.length, NAN, NAN)
+        cdef double*data = shapelet.data
+        cdef size_t shapelet_offset = (s.index * td.sample_stride +
+                                       s.start * td.timestep_stride +
+                                       s.dim * td.dim_stride)
+        cdef size_t i
+        cdef size_t p
+        with nogil:
+            for i in range(s.length):
+                p = shapelet_offset + td.timestep_stride * i
+                data[i] = td.data[p]
 
-    cdef double distance(self, ShapeletInfo s, size_t t_index) nogil:
+        return shapelet
+
+    cdef double shapelet_info_distance(
+        self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
+        with gil:
+            raise NotImplemented()
+
+    cdef double shapelet_distance(
+        self, Shapelet s, TSDatabase td, size_t t_index) nogil:
         with gil:
             raise NotImplemented()
 
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
 
-    cdef ShapeletInfo new_shapelet_info(self, size_t index, size_t dim,
-                                        size_t start, size_t length) nogil:
+    cdef Shapelet new_shapelet(self, ShapeletInfo s, TSDatabase td):
+        cdef Shapelet shapelet = Shapelet(s.dim, s.length, s.mean, s.std)
+        cdef double*data = shapelet.data
+        cdef size_t shapelet_offset = (s.index * td.sample_stride +
+                                       s.start * td.timestep_stride +
+                                       s.dim * td.dim_stride)
+
+        cdef size_t i
+        cdef size_t p
+        with nogil:
+            for i in range(s.length):
+                p = shapelet_offset + td.timestep_stride * i
+                data[i] = td.data[p]
+
+        return shapelet
+
+    cdef ShapeletInfo new_shapelet_info(self,
+                                        TSDatabase td,
+                                        size_t index,
+                                        size_t start,
+                                        size_t length,
+                                        size_t dim) nogil:
+    
         cdef ShapeletInfo shapelet_info
         shapelet_info.index = index
         shapelet_info.dim = dim
         shapelet_info.start = start
         shapelet_info.length = length
-        shapelet_info_update_statistics(&shapelet_info, self.td)
+        shapelet_info.extra = NULL
+
+        shapelet_info_update_statistics(&shapelet_info, td)
         return shapelet_info
 
 
-cpdef Shapelet make_scaled_shapelet_(object me, size_t dim, size_t length, double mean,
-                                     double std, object array):
+cpdef Shapelet make_shapelet_(object me,
+                              size_t dim,
+                              size_t length,
+                              double mean,
+                              double std,
+                              object array):
     """Reconstruct a `Shapelet`-object from Pickle
 
     :param length: the size of the shapelet
@@ -93,25 +141,12 @@ cpdef Shapelet make_scaled_shapelet_(object me, size_t dim, size_t length, doubl
     return shapelet
 
 
-cpdef Shapelet make_shapelet_(object me, size_t dim, size_t length, object array):
-    """Reconstruct a `Shapelet`-object from Pickle
-
-    :param length: the size of the shapelet
-    :param array: the Numpy array
-    :return: a shapelet
-    """
-    cdef Shapelet shapelet = me(dim, length)
-    cdef size_t i
-    for i in range(<size_t> array.shape[0]):
-        shapelet.data[i] = array[i]
-
-    return shapelet
-
-
 cdef class Shapelet:
 
-    def __cinit__(self, size_t dim, size_t length, *args, **kvargs):
+    def __cinit__(self, size_t dim, size_t length, double mean, double std):
         self.length = length
+        self.mean = mean
+        self.std = std
         self.dim = dim
         self.data = <double*> malloc(sizeof(double) * length)
         if self.data == NULL:
@@ -122,7 +157,7 @@ cdef class Shapelet:
 
     def __reduce__(self):
         return make_shapelet_, (self.__class__, self.dim, self.length,
-                                self.array)
+                                self.mean, self.std, self.array)
 
     @property
     def array(self):
@@ -132,39 +167,6 @@ cdef class Shapelet:
         for i in range(self.length):
             arr[i] = self.data[i]
         return arr
-
-    cdef double distance(self, const TSDatabase t, size_t t_index) nogil:
-        pass
-
-    cdef void distances(self,
-                        const TSDatabase t,
-                        size_t* samples,
-                        size_t n_samples,
-                        double* distances) nogil:
-        cdef size_t i
-        for i in range(n_samples):
-            distances[i] = self.distance(t, samples[i])
-
-
-cdef class ScaledShapelet(Shapelet):
-    """Representing a shapelet carrying its own data.
-
-    Note that the data is normalized during extraction if
-    `shapelet_info_extract_shapelet` is used.
-    """
-
-    def __init__(self, size_t dim, size_t length, double mean, double std):
-        """Initializes a shapelet with an empty c-array `data`.
-
-        :param size_t length: the size of the shapelet
-        """
-        self.mean = mean
-        self.std = std
-
-    def __reduce__(self):
-        return make_scaled_shapelet_, (self.__class__, self.dim,
-                                       self.length, self.mean,
-                                       self.std, self.array)
 
 
 cdef int shapelet_info_update_statistics(ShapeletInfo* s,
@@ -184,7 +186,7 @@ cdef int shapelet_info_update_statistics(ShapeletInfo* s,
     return 0
 
 
-cdef TSDatabase new_ts_database(np.ndarray data):
+cdef TSDatabase ts_database_new(np.ndarray data):
     if data.ndim < 2 or data.ndim > 3:
         raise ValueError("ndim {0} < 2 or {0} > 3".format(data.ndim))
 
@@ -193,24 +195,20 @@ cdef TSDatabase new_ts_database(np.ndarray data):
     sd.n_timestep = <size_t> data.shape[data.ndim - 1]
     sd.data = <double*> data.data
     sd.sample_stride = <size_t> data.strides[0] / <size_t> data.itemsize
-    sd.timestep_stride = <size_t> data.strides[data.ndim - 1] / <size_t> data.itemsize
+    sd.timestep_stride = (<size_t> data.strides[data.ndim - 1] /
+                          <size_t> data.itemsize)
 
     if data.ndim == 3:
         sd.n_dims = <size_t> data.shape[data.ndim - 2]
-        sd.dim_stride = <size_t> data.strides[data.ndim - 2] / <size_t> data.itemsize
+        sd.dim_stride = (<size_t> data.strides[data.ndim - 2] /
+                         <size_t> data.itemsize)
     else:
         sd.n_dims = 1
         sd.dim_stride = 0
 
-    sd.X_buffer = <double*> malloc(sizeof(double) * 2 * sd.n_timestep)
-
-    if sd.X_buffer == NULL:
-        raise MemoryError("error allocating buffer")
-
     return sd
 
-
-cdef int free_ts_database(TSDatabase sd) nogil:
-    free(sd.X_buffer)
-    sd.X_buffer = NULL
-    return 0
+cdef void shapelet_info_free(ShapeletInfo shapelet_info) nogil:
+    if shapelet_info.extra != NULL:
+        free(shapelet_info.extra)
+        shapelet_info.extra = NULL

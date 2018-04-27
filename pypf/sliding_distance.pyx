@@ -20,10 +20,10 @@ import numpy as np
 cimport numpy as np
 
 from libc.stdlib cimport free
+from libc.stdlib cimport malloc
 
 from pypf._distance cimport TSDatabase
-from pypf._distance cimport new_ts_database
-from pypf._distance cimport free_ts_database
+from pypf._distance cimport ts_database_new
 
 from pypf._euclidean_distance cimport euclidean_distance
 from pypf._euclidean_distance cimport euclidean_distance_matches
@@ -109,7 +109,7 @@ def min_distance(
             sample = np.arange(x.shape[0])
 
 
-    cdef TSDatabase sd = new_ts_database(x)
+    cdef TSDatabase sd = ts_database_new(x)
 
     check_dim(dim, sd.n_dims)
     cdef double min_dist
@@ -119,6 +119,8 @@ def min_distance(
     cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
     cdef size_t s_length = s.shape[0]
     cdef double* s_data = <double*> s.data
+    cdef double* X_buffer = <double*> malloc(
+        sizeof(double) * s_length * 2)
 
     cdef size_t t_offset
 
@@ -147,7 +149,7 @@ def min_distance(
                     sd.timestep_stride,
                     sd.n_timestep,
                     sd.data,
-                    sd.X_buffer,
+                    X_buffer,
                     &min_index)
             else:
                 min_dist = euclidean_distance(
@@ -185,7 +187,7 @@ def min_distance(
                         sd.timestep_stride,
                         sd.n_timestep,
                         sd.data,
-                        sd.X_buffer,
+                        X_buffer,
                         &min_index)
                 else:
                     min_dist = euclidean_distance(
@@ -205,9 +207,9 @@ def min_distance(
                 return np.array(dist), np.array(ind)
             else:
                 return np.array(dist)
-    finally:
-        free_ts_database(sd)
-
+    except:
+        free(X_buffer)
+            
 
 def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
     """Return the positions in data (one array per `sample`) where
@@ -231,7 +233,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
         else:
             sample = np.arange(x.shape[0])
 
-    cdef TSDatabase sd = new_ts_database(x)
+    cdef TSDatabase sd = ts_database_new(x)
 
     cdef size_t* matches
     cdef size_t n_matches
@@ -240,6 +242,8 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
     cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
     cdef size_t s_length = s.shape[0]
     cdef double* s_data = <double*> s.data
+    cdef double* X_buffer = <double*> malloc(
+        sizeof(double) * s_length * 2)
 
     cdef size_t t_offset
 
@@ -268,7 +272,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                     sd.timestep_stride,
                     sd.n_timestep,
                     sd.data,
-                    sd.X_buffer,
+                    X_buffer,
                     threshold,
                     &matches,
                     &n_matches)
@@ -285,9 +289,9 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                     threshold,
                     &matches,
                     &n_matches)
-            arr = make_numpy_array_(matches, n_matches)
-            free(matches)
-            return arr
+                arr = make_numpy_array_(matches, n_matches)
+                free(matches)
+                return arr
         else:
             samples = check_array(sample, ensure_2d=False, dtype=np.int)
             indicies = []
@@ -307,7 +311,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                         sd.timestep_stride,
                         sd.n_timestep,
                         sd.data,
-                        sd.X_buffer,
+                        X_buffer,
                         threshold,
                         &matches,
                         &n_matches)
@@ -324,10 +328,10 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
                         threshold,
                         &matches,
                         &n_matches)
-                arr = make_numpy_array_(matches, n_matches)
-                free(matches)
-                indicies.append(arr)
+                    arr = make_numpy_array_(matches, n_matches)
+                    free(matches)
+                    indicies.append(arr)
             return indicies
-
-    finally:
-        free_ts_database(sd)
+    except:
+        free(X_buffer)
+        

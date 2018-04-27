@@ -36,6 +36,12 @@ from libc.math cimport INFINITY
 from libc.math cimport sqrt
 from libc.math cimport fabs
 
+from pypf._distance cimport TSDatabase
+
+from pypf._distance cimport ShapeletInfo
+from pypf._distance cimport ScaledDistanceMeasure
+from pypf._distance cimport Shapelet
+
 cdef void deque_init(Deque* c, size_t capacity) nogil:
     c[0].capacity = capacity
     c[0].size = 0
@@ -357,9 +363,9 @@ cdef double scaled_dtw_distance(size_t s_offset,
             I = i - (s_length - 1)
             mean = ex / s_length
             std = sqrt(ex2 / s_length - mean * mean)
-            lb_kim = constant_lower_bound(s_offset, s_stride, S, s_mean, s_std,
-                                          j, 1, X_buffer, mean, std, s_length,
-                                          min_dist)
+            lb_kim = constant_lower_bound(s_offset, s_stride, S,
+                                          s_mean, s_std, j, 1, X_buffer,
+                                          mean, std, s_length, min_dist)
 
             if lb_kim < min_dist:
                 lb_k = cumulative_bound(j, 1, s_length, mean, std, X_buffer,
@@ -379,12 +385,12 @@ cdef double scaled_dtw_distance(size_t s_offset,
                             cb[s_length - 1] = cb_2[s_length - 1]
                             for k in range(s_length - 2, -1, -1):
                                 cb[k] = cb[k + 1] + cb_2[k]
-
                         dist = inner_dtw(
                             s_offset, s_stride, s_length, s_mean,
                             s_std, S, mean, std, j, X_buffer, r, cb,
                             cost, cost_prev, min_dist)
-
+                        with gil:
+                            print("inner_dtw", dist)
                         if dist < min_dist:
                             if index != NULL:
                                 index[0] = (i + 1) - s_length
@@ -401,6 +407,167 @@ cimport numpy as np
 import numpy as np
 
 from pypf._utils cimport print_c_array_d
+
+cdef class ScaledDtwDistance(ScaledDistanceMeasure):
+    cdef double* X_buffer
+    cdef double* lower
+    cdef double* upper
+    cdef double* cost
+    cdef double* cost_prev
+    cdef double* cb
+    cdef double* cb_1
+    cdef double* cb_2
+
+    cdef Deque du
+    cdef Deque dl
+
+    cdef size_t r
+
+    def __cinit__(self, size_t n_timestep, size_t r = 3):
+        self.X_buffer = <double*> malloc(sizeof(double) * n_timestep * 2)
+        self.lower = <double*> malloc(sizeof(double) * n_timestep)
+        self.upper = <double*> malloc(sizeof(double) * n_timestep)
+        self.cost = <double*> malloc(sizeof(double) * 2 * r + 1)
+        self.cost_prev = <double*> malloc(sizeof(double) * 2 * r + 1)
+        self.cb = <double*> malloc(sizeof(double) * n_timestep)
+        self.cb_1 = <double*> malloc(sizeof(double) * n_timestep)
+        self.cb_2 = <double*> malloc(sizeof(double) * n_timestep)
+
+        deque_init(&self.dl, 2 * r + 2)
+        deque_init(&self.du, 2 * r + 2)
+        self.r = r
+
+    def __dealloc__(self):
+        free(self.X_buffer)
+        free(self.lower)
+        free(self.upper)
+        free(self.cost)
+        free(self.cost_prev)
+        free(self.cb)
+        free(self.cb_1)
+        free(self.cb_2)
+        print("dealloc")
+
+    cdef ShapeletInfo new_shapelet_info(self,
+                                        TSDatabase td,
+                                        size_t index,
+                                        size_t start,
+                                        size_t length,
+                                        size_t dim) nogil:
+        cdef ShapeletInfo shapelet_info
+        cdef DtwExtra* dtw_extra
+        cdef size_t shapelet_offset
+        
+        shapelet_info = ScaledDistanceMeasure.new_shapelet_info(self,
+                                                                td, index,
+                                                                start,
+                                                                length, dim)
+        
+        dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
+        dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
+        dtw_extra[0].upper = <double*> malloc(sizeof(double) * length)
+
+        shapelet_offset = (index * td.sample_stride +
+                           start * td.timestep_stride +
+                           dim * td.dim_stride)
+        
+        find_min_max(shapelet_offset, td.timestep_stride, length, td.data,
+                     self.r, dtw_extra[0].lower, dtw_extra[0].upper,
+                     &self.dl, &self.du)
+        
+        shapelet_info.extra = dtw_extra
+        return shapelet_info
+
+    cdef double shapelet_distance(self,
+                                  Shapelet s,
+                                  TSDatabase td,
+                                  size_t t_index) nogil:
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     s.dim * td.dim_stride)
+        
+        cdef double* s_lower = <double*> malloc(sizeof(double) * s.length)
+        cdef double* s_upper = <double*> malloc(sizeof(double) * s.length)
+
+        find_min_max(0, 1, s.length, s.data, self.r, s_lower, s_upper,
+                     &self.dl, &self.du)
+        find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
+                     td.data, self.r, self.lower, self.upper,
+                     &self.dl, &self.du)
+        with gil:
+            print("shapelet", self.r)
+        cdef double distance = scaled_dtw_distance(
+            0,
+            1,
+            s.length,
+            s.mean,
+            s.std,
+            s.data,
+            sample_offset,
+            td.timestep_stride,
+            td.n_timestep,
+            td.data,
+            self.r,
+            self.X_buffer,
+            self.cost,
+            self.cost_prev,
+            s_lower,
+            s_upper,
+            self.lower,
+            self.upper,
+            self.cb,
+            self.cb_1,
+            self.cb_2,
+            NULL)
+        with gil:
+            print_c_array_d("s_lower", s_lower, s.length)
+            print_c_array_d("s_upper", s_upper, s.length)            
+            print("after dist", distance)
+#        free(s_lower)
+#        free(s_upper)
+
+        return distance
+
+    cdef double shapelet_info_distance(self,
+                                       ShapeletInfo s,
+                                       TSDatabase td,
+                                       size_t t_index) nogil:
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     s.dim * td.dim_stride)
+        cdef size_t shapelet_offset = (s.index * td.sample_stride +
+                                       s.dim * td.dim_stride +
+                                       s.start * td.timestep_stride)
+        cdef DtwExtra* dtw_extra = <DtwExtra*> s.extra
+
+        find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
+                     td.data, self.r, self.lower, self.upper, &self.dl,
+                     &self.du)
+        return scaled_dtw_distance(
+            shapelet_offset,
+            td.timestep_stride,
+            s.length,
+            s.mean,
+            s.std,
+            td.data,
+            sample_offset,
+            td.timestep_stride,
+            td.n_timestep,
+            td.data,
+            self.r,
+            self.X_buffer,
+            self.cost,
+            self.cost_prev,
+            dtw_extra[0].lower,
+            dtw_extra[0].upper,
+            self.lower,
+            self.upper,
+            self.cb,
+            self.cb_1,
+            self.cb_2,
+            NULL)
+            
+        
+        
+    
 
 def test(np.ndarray S, np.ndarray T, size_t r):
     cdef size_t s_offset, t_offset

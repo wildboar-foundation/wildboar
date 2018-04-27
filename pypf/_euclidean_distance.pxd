@@ -23,7 +23,7 @@ cdef class EuclideanDistance(DistanceMeasure):
     pass
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
-    pass
+    cdef double* X_buffer
 
 cdef double scaled_euclidean_distance(size_t s_offset,
                                       size_t s_stride,

@@ -19,6 +19,10 @@
 from pypf._distance cimport DistanceMeasure
 from pypf._distance cimport ScaledDistanceMeasure
 
+cdef struct DtwExtra:
+    double* lower
+    double* upper
+
 cdef struct Deque:
     size_t* queue
     int size

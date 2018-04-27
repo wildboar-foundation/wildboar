@@ -48,10 +48,13 @@ if __name__ == "__main__":
     print(x)
     print(y)
 
-    tree = ShapeletTreeClassifier(random_state=10, distance="scaled_euclidean")
+    tree = ShapeletTreeClassifier(random_state=10, distance="scaled_dtw")
     tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
     print_tree(tree.root_node_)
+
+    print("Score")
     print(tree.score(x, y))
+    print("score_done")
 
     train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
     test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
@@ -68,7 +71,7 @@ if __name__ == "__main__":
     tree = ShapeletTreeClassifier(
         n_shapelets=1,
         max_depth=None,
-        distance='scaled_euclidean',
+        distance='scaled_dtw',
         min_shapelet_size=1,
         max_shapelet_size=1)
 

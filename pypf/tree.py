@@ -9,12 +9,14 @@ from sklearn.utils import check_random_state
 from sklearn.utils import check_array
 
 import pypf._euclidean_distance
+import pypf._dtw_distance
 
 __all__ = ["ShapeletTreeClassifier"]
 
 DISTANCE_MEASURE = {
-    'euclidean': pypf._euclidean_distance.EuclideanDistance(),
-    'scaled_euclidean': pypf._euclidean_distance.ScaledEuclideanDistance(),
+    'euclidean': pypf._euclidean_distance.EuclideanDistance,
+    'scaled_euclidean': pypf._euclidean_distance.ScaledEuclideanDistance,
+    'scaled_dtw': pypf._dtw_distance.ScaledDtwDistance,
 }
 
 
@@ -138,26 +140,27 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if not y.flags.contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
-        distance_measure = DISTANCE_MEASURE[self.distance]
+        distance_measure = DISTANCE_MEASURE[self.distance](n_timesteps)
         max_shapelet_size = int(n_timesteps * self.max_shapelet_size)
         min_shapelet_size = int(n_timesteps * self.min_shapelet_size)
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
+        self.n_classes_ = len(self.classes_)
+        self.n_timestep_ = n_timesteps
+        self.n_dims_ = n_dims
         tree_builder = ShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
             self.max_depth,
             distance_measure,
+            X,
+            y,
+            self.n_classes_,
+            sample_weight,
             random_state,
         )
-
-        self.n_classes_ = len(self.classes_)
-        self.n_timestep_ = n_timesteps
-        self.n_dims_ = n_dims
-
-        tree_builder.init(X, y, len(self.classes_), sample_weight)
         self.root_node_ = tree_builder.build_tree()
 
         return self
@@ -214,5 +217,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
 
-        predictor = ShapeletTreePredictor(X, len(self.classes_))
+        distance_measure = DISTANCE_MEASURE[self.distance](self.n_timestep_)
+        predictor = ShapeletTreePredictor(X, distance_measure,
+                                          len(self.classes_))
         return predictor.predict_proba(self.root_node_)

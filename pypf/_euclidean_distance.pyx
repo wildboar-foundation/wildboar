@@ -25,6 +25,7 @@ cimport numpy as np
 
 from libc.stdlib cimport realloc
 from libc.stdlib cimport malloc
+from libc.stdlib cimport free
 
 from libc.math cimport sqrt
 from libc.math cimport INFINITY, NAN
@@ -35,113 +36,99 @@ from pypf._distance cimport DistanceMeasure
 from pypf._distance cimport TSDatabase
 
 from pypf._distance cimport Shapelet
-from pypf._distance cimport ScaledShapelet
 from pypf._distance cimport ShapeletInfo
-
-cdef class EuclideanDistanceShapelet(Shapelet):
-    cdef double distance(self, const TSDatabase t, size_t t_index) nogil:
-        cdef size_t sample_offset = (t_index * t.sample_stride +
-                                     self.dim * t.dim_stride)
-        return euclidean_distance(
-            0,
-            1,
-            self.length,
-            self.data,
-            sample_offset,
-            t.timestep_stride,
-            t.n_timestep,
-            t.data,
-            NULL)
-
-
-cdef class ScaledEuclideanDistanceShapelet(ScaledShapelet):
-    cdef double distance(self, const TSDatabase t, size_t t_index) nogil:
-        cdef size_t sample_offset = (t_index * t.sample_stride +
-                                     self.dim * t.dim_stride)
-        return scaled_euclidean_distance(
-            0,
-            1,
-            self.length,
-            self.mean,
-            self.std,
-            self.data,
-            sample_offset,
-            t.timestep_stride,
-            t.n_timestep,
-            t.data,
-            t.X_buffer,
-            NULL)
 
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
-    cdef Shapelet new_shapelet(self, ShapeletInfo s):
-        cdef Shapelet shapelet = ScaledEuclideanDistanceShapelet(
-            s.dim, s.length, s.mean, s.std)
-        cdef double*data = shapelet.data
-        cdef size_t shapelet_offset = (s.index * self.td.sample_stride +
-                                       s.start * self.td.timestep_stride +
-                                       s.dim * self.td.dim_stride)
+    
+    def __cinit__(self, size_t n_timestep):
+        self.X_buffer = <double*> malloc(
+            sizeof(double) * n_timestep * 2)
 
-        cdef size_t i
-        cdef size_t p
-        with nogil:
-            for i in range(s.length):
-                p = shapelet_offset + self.td.timestep_stride * i
-                data[i] = self.td.data[p]
-        return shapelet
+    def __dealloc__(self):
+        free(self.X_buffer)
 
-    cdef double distance(self, ShapeletInfo s, size_t t_index) nogil:
-        cdef size_t sample_offset = (t_index * self.td.sample_stride +
-                                     s.dim * self.td.dim_stride)
-        cdef size_t shapelet_offset = (s.index * self.td.sample_stride +
-                                       s.dim * self.td.dim_stride +
-                                       s.start * self.td.timestep_stride)
+    cdef double shapelet_distance(self,
+                                  Shapelet s,
+                                  TSDatabase td,
+                                  size_t t_index) nogil:
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     s.dim * td.dim_stride)
+
         return scaled_euclidean_distance(
-            shapelet_offset,
-            self.td.timestep_stride,
+            0,
+            1,
             s.length,
             s.mean,
             s.std,
-            self.td.data,
+            s.data,
             sample_offset,
-            self.td.timestep_stride,
-            self.td.n_timestep,
-            self.td.data,
-            self.td.X_buffer,
+            td.timestep_stride,
+            td.n_timestep,
+            td.data,
+            self.X_buffer,
+            NULL)
+        
+    cdef double shapelet_info_distance(self,
+                                       ShapeletInfo s,
+                                       TSDatabase td,
+                                       size_t t_index) nogil:
+
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     s.dim * td.dim_stride)
+        cdef size_t shapelet_offset = (s.index * td.sample_stride +
+                                       s.dim * td.dim_stride +
+                                       s.start * td.timestep_stride)
+        return scaled_euclidean_distance(
+            shapelet_offset,
+            td.timestep_stride,
+            s.length,
+            s.mean,
+            s.std,
+            td.data,
+            sample_offset,
+            td.timestep_stride,
+            td.n_timestep,
+            td.data,
+            self.X_buffer,
             NULL)
 
 
 cdef class EuclideanDistance(DistanceMeasure):
-    cdef Shapelet new_shapelet(self, ShapeletInfo s):
-        cdef Shapelet shapelet = EuclideanDistanceShapelet(s.dim, s.length)
-        cdef double*data = shapelet.data
-        cdef size_t shapelet_offset = (s.index * self.td.sample_stride +
-                                       s.start * self.td.timestep_stride +
-                                       s.dim * self.td.dim_stride)
-        cdef size_t i
-        cdef size_t p
-        with nogil:
-            for i in range(s.length):
-                p = shapelet_offset + self.td.timestep_stride * i
-                data[i] = self.td.data[p]
 
-        return shapelet
+    cdef double shapelet_distance(
+            self, Shapelet s, TSDatabase td, size_t t_index) nogil:
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     s.dim * td.dim_stride)
 
-    cdef double distance(self, ShapeletInfo s, size_t t_index) nogil:
-        cdef size_t sample_offset = (t_index * self.td.sample_stride +
-                                     s.dim * self.td.dim_stride)
-        cdef size_t shapelet_offset = (s.index * self.td.sample_stride +
-                                       s.dim * self.td.dim_stride +
-                                       s.start * self.td.timestep_stride)
+        return euclidean_distance(
+            0,
+            1,
+            s.length,
+            s.data,
+            sample_offset,
+            td.timestep_stride,
+            td.n_timestep,
+            td.data,
+            NULL)
+    
+    cdef double shapelet_info_distance(
+        self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
+
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     s.dim * td.dim_stride)
+        cdef size_t shapelet_offset = (s.index * td.sample_stride +
+                                       s.dim * td.dim_stride +
+                                       s.start * td.timestep_stride)
         return euclidean_distance(
             shapelet_offset,
-            self.td.timestep_stride,
+            td.timestep_stride,
             s.length,
-            self.td.data,
+            td.data,
             sample_offset,
-            self.td.timestep_stride,
-            self.td.n_timestep,
-            self.td.data,
+            td.timestep_stride,
+            td.n_timestep,
+            td.data,
             NULL)
 
 
