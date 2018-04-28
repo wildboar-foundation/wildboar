@@ -30,7 +30,8 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                  min_shapelet_size=0,
                  max_shapelet_size=1,
                  distance='euclidean',
-                 random_state=None):
+                 random_state=None,
+                 dtw_band=1):
         """A shapelet decision tree
 
         :param max_depth: The maximum depth of the tree. If `None` the
@@ -63,7 +64,6 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
            used by `np.random`.
 
         """
-
         if min_shapelet_size < 0 or min_shapelet_size > max_shapelet_size:
             raise ValueError(
                 "`min_shapelet_size` {0} <= 0 or {0} > {1}".format(
@@ -80,6 +80,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.distance = distance
+        self.dtw_band = dtw_band
 
     def fit(self, X, y, sample_weight=None, check_input=True):
         """Fit a shapelet tree classifier from the training set (X, y)
@@ -140,9 +141,11 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if not y.flags.contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
-        distance_measure = DISTANCE_MEASURE[self.distance](n_timesteps)
+        distance_measure = DISTANCE_MEASURE[self.distance](n_timesteps,
+                                                           self.dtw_band)
         max_shapelet_size = int(n_timesteps * self.max_shapelet_size)
         min_shapelet_size = int(n_timesteps * self.min_shapelet_size)
+
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
@@ -217,7 +220,8 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
 
-        distance_measure = DISTANCE_MEASURE[self.distance](self.n_timestep_)
+        distance_measure = DISTANCE_MEASURE[self.distance](self.n_timestep_,
+                                                           self.dtw_band)
         predictor = ShapeletTreePredictor(X, distance_measure,
                                           len(self.classes_))
         return predictor.predict_proba(self.root_node_)

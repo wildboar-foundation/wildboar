@@ -389,8 +389,7 @@ cdef double scaled_dtw_distance(size_t s_offset,
                             s_offset, s_stride, s_length, s_mean,
                             s_std, S, mean, std, j, X_buffer, r, cb,
                             cost, cost_prev, min_dist)
-                        with gil:
-                            print("inner_dtw", dist)
+
                         if dist < min_dist:
                             if index != NULL:
                                 index[0] = (i + 1) - s_length
@@ -423,7 +422,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
     cdef size_t r
 
-    def __cinit__(self, size_t n_timestep, size_t r = 3):
+    def __cinit__(self, size_t n_timestep, size_t r = 1):
         self.X_buffer = <double*> malloc(sizeof(double) * n_timestep * 2)
         self.lower = <double*> malloc(sizeof(double) * n_timestep)
         self.upper = <double*> malloc(sizeof(double) * n_timestep)
@@ -446,7 +445,6 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         free(self.cb)
         free(self.cb_1)
         free(self.cb_2)
-        print("dealloc")
 
     cdef ShapeletInfo new_shapelet_info(self,
                                         TSDatabase td,
@@ -493,8 +491,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
                      td.data, self.r, self.lower, self.upper,
                      &self.dl, &self.du)
-        with gil:
-            print("shapelet", self.r)
+
         cdef double distance = scaled_dtw_distance(
             0,
             1,
@@ -518,12 +515,8 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             self.cb_1,
             self.cb_2,
             NULL)
-        with gil:
-            print_c_array_d("s_lower", s_lower, s.length)
-            print_c_array_d("s_upper", s_upper, s.length)            
-            print("after dist", distance)
-#        free(s_lower)
-#        free(s_upper)
+        free(s_lower)
+        free(s_upper)
 
         return distance
 

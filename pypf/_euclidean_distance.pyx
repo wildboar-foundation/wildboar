@@ -41,7 +41,7 @@ from pypf._distance cimport ShapeletInfo
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     
-    def __cinit__(self, size_t n_timestep):
+    def __cinit__(self, size_t n_timestep, *args, **kwargs):
         self.X_buffer = <double*> malloc(
             sizeof(double) * n_timestep * 2)
 

@@ -78,7 +78,7 @@ if __name__ == "__main__":
     bag = BaggingClassifier(
         base_estimator=tree,
         bootstrap=True,
-        n_jobs=16,
+        n_jobs=8,
         n_estimators=100,
         random_state=100,
     )
