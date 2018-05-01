@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
-#
+
 # Authors: Isak Karlsson
-#
+
 # This implementation is heaviliy inspired by the UCRSuite.
 #
 # References
@@ -492,29 +492,28 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                      td.data, self.r, self.lower, self.upper,
                      &self.dl, &self.du)
 
-        cdef double distance = scaled_dtw_distance(
-            0,
-            1,
-            s.length,
-            s.mean,
-            s.std,
-            s.data,
-            sample_offset,
-            td.timestep_stride,
-            td.n_timestep,
-            td.data,
-            self.r,
-            self.X_buffer,
-            self.cost,
-            self.cost_prev,
-            s_lower,
-            s_upper,
-            self.lower,
-            self.upper,
-            self.cb,
-            self.cb_1,
-            self.cb_2,
-            NULL)
+        cdef double distance = scaled_dtw_distance(0,
+                                                   1,
+                                                   s.length,
+                                                   s.mean,
+                                                   s.std,
+                                                   s.data,
+                                                   sample_offset,
+                                                   td.timestep_stride,
+                                                   td.n_timestep,
+                                                   td.data,
+                                                   self.r,
+                                                   self.X_buffer,
+                                                   self.cost,
+                                                   self.cost_prev,
+                                                   s_lower,
+                                                   s_upper,
+                                                   self.lower,
+                                                   self.upper,
+                                                   self.cb,
+                                                   self.cb_1,
+                                                   self.cb_2,
+                                                   NULL)
         free(s_lower)
         free(s_upper)
 
@@ -529,130 +528,31 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         cdef size_t shapelet_offset = (s.index * td.sample_stride +
                                        s.dim * td.dim_stride +
                                        s.start * td.timestep_stride)
-        cdef DtwExtra* dtw_extra = <DtwExtra*> s.extra
 
+        cdef DtwExtra* dtw_extra = <DtwExtra*> s.extra
         find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
                      td.data, self.r, self.lower, self.upper, &self.dl,
                      &self.du)
-        return scaled_dtw_distance(
-            shapelet_offset,
-            td.timestep_stride,
-            s.length,
-            s.mean,
-            s.std,
-            td.data,
-            sample_offset,
-            td.timestep_stride,
-            td.n_timestep,
-            td.data,
-            self.r,
-            self.X_buffer,
-            self.cost,
-            self.cost_prev,
-            dtw_extra[0].lower,
-            dtw_extra[0].upper,
-            self.lower,
-            self.upper,
-            self.cb,
-            self.cb_1,
-            self.cb_2,
-            NULL)
-            
-        
-        
-    
+        return scaled_dtw_distance(shapelet_offset,
+                                   td.timestep_stride,
+                                   s.length,
+                                   s.mean,
+                                   s.std,
+                                   td.data,
+                                   sample_offset,
+                                   td.timestep_stride,
+                                   td.n_timestep,
+                                   td.data,
+                                   self.r,
+                                   self.X_buffer,
+                                   self.cost,
+                                   self.cost_prev,
+                                   dtw_extra[0].lower,
+                                   dtw_extra[0].upper,
+                                   self.lower,
+                                   self.upper,
+                                   self.cb,
+                                   self.cb_1,
+                                   self.cb_2,
+                                   NULL)
 
-def test(np.ndarray S, np.ndarray T, size_t r):
-    cdef size_t s_offset, t_offset
-    cdef double* s_values,
-    cdef double* t_values
-    cdef size_t s_stride, t_stride
-    cdef size_t s_length, t_length
-    cdef double s_mean, s_std, t_mean, t_std
-
-    s_offset = 0
-    s_values = <double*> S.data
-    s_stride = S.strides[0] / <size_t> S.itemsize
-    s_length = S.shape[0]
-    s_mean = np.mean(S)
-    s_std = np.std(S)
-
-    t_offset = 0
-    t_values = <double*> T.data
-    t_stride = T.strides[0] / <size_t> T.itemsize
-    t_length = T.shape[0]
-    t_mean = np.mean(T)
-    t_std = np.std(T)
-
-    cdef double* s_lower = <double*> malloc(sizeof(double) * s_length)
-    cdef double* s_upper = <double*> malloc(sizeof(double) * s_length)
-    cdef double* t_lower = <double*> malloc(sizeof(double) * t_length)
-    cdef double* t_upper = <double*> malloc(sizeof(double) * t_length)
-    cdef double* X_buffer = <double*> malloc(sizeof(double) * t_length * 2)
-
-    cdef double* cost = <double*> malloc(sizeof(double) * 2 * r + 1)
-    cdef double* cost_prev = <double*> malloc(sizeof(double) * 2 * r + 1)
-
-    cdef double* cb = <double*> malloc(sizeof(double) * s_length)
-    cdef double* cb_1 = <double*> malloc(sizeof(double) * s_length)
-    cdef double* cb_2 = <double*> malloc(sizeof(double) * s_length)
-
-    cdef Deque du, dl
-
-    deque_init(&du, 2 * r + 2)
-    deque_init(&dl, 2 * r + 2)
-
-    find_min_max(s_offset, s_stride, s_length, s_values,
-                 r, s_lower, s_upper, &dl, &du)
-    print("find_for_data")
-    find_min_max(t_offset, t_stride, t_length, t_values,
-                 r, t_lower, t_upper, &dl, &du)
-
-    cdef size_t index = -1
-    cdef dist = scaled_dtw_distance(
-        s_offset,
-        s_stride,
-        s_length,
-        s_mean,
-        s_std,
-        s_values,
-        t_offset,
-        t_stride,
-        t_length,
-        t_values,
-        r,
-        X_buffer,
-        cost,
-        cost_prev,
-        s_lower,
-        s_upper,
-        t_lower,
-        t_upper,
-        cb,
-        cb_1,
-        cb_2,
-        &index)
-    print("dist_end", dist, index)
-#     # print_c_array_d("cost", cost, 2*r+1)
-#     # print_c_array_d("prev", cost_prev, 2*r+1)
-#     # print_c_array_d("cb", cb, s_length)
-#     # print_c_array_d("cb1", cb_1, s_length)
-#     # print_c_array_d("cb2", cb_2, s_length)
-#     print_c_array_d("s_lower", s_lower, s_length)
-#     print_c_array_d("s_upper", s_upper, s_length)
-#     print_c_array_d("t_lower", t_lower, t_length)
-#     print_c_array_d("t_upper", t_upper, t_length)
-# #    print((S - s_mean) / s_std)
-# #    print((T - t_mean) / t_std)
-#     free(cb)
-#     free(cb_1)
-#     free(cb_2)
-#     free(cost)
-#     free(cost_prev)
-#     free(s_lower)
-#     free(s_upper)
-#     free(t_lower)
-#     free(t_upper)
-#     free(X_buffer)
-#     deque_destroy(&du)
-#     deque_destroy(&dl)

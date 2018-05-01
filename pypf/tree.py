@@ -164,8 +164,8 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             sample_weight,
             random_state,
         )
-        self.root_node_ = tree_builder.build_tree()
 
+        self.root_node_ = tree_builder.build_tree()
         return self
 
     def predict(self, X, check_input=True):

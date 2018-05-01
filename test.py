@@ -56,8 +56,8 @@ if __name__ == "__main__":
     print(tree.score(x, y))
     print("score_done")
 
-    train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
-    test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
+    train = np.loadtxt("data/ArrowHead_TRAIN", delimiter=",")
+    test = np.loadtxt("data/ArrowHead_TEST", delimiter=",")
 
     y = train[:, 0].astype(np.intp)
     x = train[:, 1:].astype(np.float64)
@@ -72,8 +72,9 @@ if __name__ == "__main__":
         n_shapelets=1,
         max_depth=None,
         distance='scaled_dtw',
-        min_shapelet_size=1,
-        max_shapelet_size=1)
+        min_shapelet_size=0.1,
+        max_shapelet_size=1,
+        dtw_band=3)
 
     bag = BaggingClassifier(
         base_estimator=tree,
