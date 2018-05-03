@@ -74,13 +74,31 @@ cdef class DistanceMeasure:
 
         return shapelet
 
+    cdef void _validate_input(self, np.ndarray t, TSDatabase td, size_t t_index, size_t dim):
+        if t.ndim != 1 and t.shape[0] != 1:
+            raise ValueError("invalid input array")
+
+        if td.n_dims >= dim:
+            raise ValueError("illegal dim")
+
+        if td.n_timestep != len(t):
+            raise ValueError("illegal input array size")
+
+        if t_index >= td.n_samples:
+            raise ValueError("illegal sample")
+
+    cdef double distance(
+            self, np.ndarray t, TSDatabase td, size_t t_index,
+            size_t dim, size_t* return_index):
+        raise NotImplemented()
+    
     cdef double shapelet_info_distance(
-        self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
+            self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
         with gil:
             raise NotImplemented()
 
     cdef double shapelet_distance(
-        self, Shapelet s, TSDatabase td, size_t t_index) nogil:
+            self, Shapelet s, TSDatabase td, size_t t_index) nogil:
         with gil:
             raise NotImplemented()
 

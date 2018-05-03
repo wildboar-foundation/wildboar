@@ -48,6 +48,30 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     def __dealloc__(self):
         free(self.X_buffer)
 
+    cdef double distance(
+            self, np.ndarray t, TSDatabase td, size_t t_index,
+            size_t dim, size_t* return_index):
+        self._validate_input(t, td, t_index, dim)
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     dim * td.dim_stride)
+        cdef size_t stride = t.strides[0] // t.itemsize
+        cdef size_t length = t.shape[0]
+        cdef double mean = np.mean(t)
+        cdef double std = np.std(t)
+        return scaled_euclidean_distance(0,
+                                         stride,
+                                         length,
+                                         mean,
+                                         std,
+                                         <double*> t.data,
+                                         sample_offset,
+                                         td.timestep_stride,
+                                         td.n_timestep,
+                                         td.data,
+                                         self.X_buffer,
+                                         return_index)
+        
+
     cdef double shapelet_distance(self,
                                   Shapelet s,
                                   TSDatabase td,
@@ -95,6 +119,24 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
 
 
 cdef class EuclideanDistance(DistanceMeasure):
+
+    cdef double distance(
+            self, np.ndarray t, TSDatabase td, size_t t_index,
+            size_t dim, size_t* return_index):
+        self._validate_input(t, td, t_index, dim)
+        cdef size_t sample_offset = (t_index * td.sample_stride +
+                                     dim * td.dim_stride)
+        cdef size_t stride = t.strides[0] // t.itemsize
+        cdef size_t length = t.shape[0]
+        return euclidean_distance(0,
+                                  stride,
+                                  length,
+                                  <double*> t.data,
+                                  sample_offset,
+                                  td.timestep_stride,
+                                  td.n_timestep,
+                                  td.data,
+                                  return_index)
 
     cdef double shapelet_distance(
             self, Shapelet s, TSDatabase td, size_t t_index) nogil:

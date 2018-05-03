@@ -56,6 +56,10 @@ cdef class DistanceMeasure:
 
     cdef Shapelet new_shapelet(self, ShapeletInfo s, TSDatabase td)
 
+    cdef void _validate_input(self, np.ndarray t, TSDatabase td, size_t t_index, size_t dim)
+
+    cdef double distance(self, np.ndarray t, TSDatabase td, size_t t_index, size_t dim, size_t* return_index)
+
     cdef double shapelet_distance(
             self, Shapelet s, TSDatabase td, size_t t_index) nogil
         
@@ -68,11 +72,6 @@ cdef class DistanceMeasure:
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
     pass
-
-
-cdef int shapelet_info_update_statistics(
-        ShapeletInfo* s, const TSDatabase t) nogil
-
 
 cdef TSDatabase ts_database_new(np.ndarray X)
 

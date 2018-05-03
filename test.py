@@ -69,17 +69,17 @@ if __name__ == "__main__":
     y_test = test[:, 0].astype(np.intp)
 
     tree = ShapeletTreeClassifier(
-        n_shapelets=1,
-        max_depth=None,
-        distance='scaled_dtw',
-        min_shapelet_size=0.1,
+        n_shapelets=10000,
+        max_depth=2,
+        distance='scaled_euclidean',
+        min_shapelet_size=0,
         max_shapelet_size=1,
         dtw_band=3)
 
     bag = BaggingClassifier(
         base_estimator=tree,
         bootstrap=True,
-        n_jobs=8,
+        n_jobs=16,
         n_estimators=100,
         random_state=100,
     )

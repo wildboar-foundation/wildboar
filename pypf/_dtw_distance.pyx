@@ -555,4 +555,3 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                    self.cb_1,
                                    self.cb_2,
                                    NULL)
-
