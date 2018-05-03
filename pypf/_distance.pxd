@@ -46,8 +46,8 @@ cdef class Shapelet:
     cdef readonly double mean
     cdef readonly double std
     cdef double* data
-
-
+    cdef void* extra
+    
 cdef class DistanceMeasure:
 
     cdef ShapeletInfo new_shapelet_info(
@@ -56,12 +56,10 @@ cdef class DistanceMeasure:
 
     cdef Shapelet new_shapelet(self, ShapeletInfo s, TSDatabase td)
 
-    cdef void _validate_input(self, np.ndarray t, TSDatabase td, size_t t_index, size_t dim)
-
-    cdef double distance(self, np.ndarray t, TSDatabase td, size_t t_index, size_t dim, size_t* return_index)
+    cdef Shapelet new_shapelet_full(self, np.ndarray t, size_t dim)
 
     cdef double shapelet_distance(
-            self, Shapelet s, TSDatabase td, size_t t_index) nogil
+            self, Shapelet s, TSDatabase td, size_t t_index, size_t* return_index=*) nogil
         
     cdef double shapelet_info_distance(
             self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil

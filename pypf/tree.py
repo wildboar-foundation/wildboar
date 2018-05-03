@@ -8,16 +8,9 @@ from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 from sklearn.utils import check_array
 
-import pypf._euclidean_distance
-import pypf._dtw_distance
+from pypf.distance import DISTANCE_MEASURE
 
 __all__ = ["ShapeletTreeClassifier"]
-
-DISTANCE_MEASURE = {
-    'euclidean': pypf._euclidean_distance.EuclideanDistance,
-    'scaled_euclidean': pypf._euclidean_distance.ScaledEuclideanDistance,
-    'scaled_dtw': pypf._dtw_distance.ScaledDtwDistance,
-}
 
 
 class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):

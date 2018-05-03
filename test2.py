@@ -23,15 +23,15 @@ data = [
 x = np.array(data, dtype=np.float64).reshape(-1, 2, 5)
 y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-from pypf.sliding_distance import min_distance
-from pypf.sliding_distance import matches
+from pypf.distance import distance
+from pypf.distance import matches
 
 print(x)
-d, i = min_distance(
+d, i = distance(
     np.array([1, 2, 3]),
     x,
     dim=1,
-    scale=False,
+    metric="scaled_dtw",
     sample=None,
     return_index=True,
 )

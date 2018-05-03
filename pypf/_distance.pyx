@@ -61,7 +61,7 @@ cdef class DistanceMeasure:
 
     cdef Shapelet new_shapelet(self, ShapeletInfo s, TSDatabase td):
         cdef Shapelet shapelet = Shapelet(s.dim, s.length, NAN, NAN)
-        cdef double*data = shapelet.data
+        cdef double* data = shapelet.data
         cdef size_t shapelet_offset = (s.index * td.sample_stride +
                                        s.start * td.timestep_stride +
                                        s.dim * td.dim_stride)
@@ -74,23 +74,13 @@ cdef class DistanceMeasure:
 
         return shapelet
 
-    cdef void _validate_input(self, np.ndarray t, TSDatabase td, size_t t_index, size_t dim):
-        if t.ndim != 1 and t.shape[0] != 1:
-            raise ValueError("invalid input array")
-
-        if td.n_dims >= dim:
-            raise ValueError("illegal dim")
-
-        if td.n_timestep != len(t):
-            raise ValueError("illegal input array size")
-
-        if t_index >= td.n_samples:
-            raise ValueError("illegal sample")
-
-    cdef double distance(
-            self, np.ndarray t, TSDatabase td, size_t t_index,
-            size_t dim, size_t* return_index):
-        raise NotImplemented()
+    cdef Shapelet new_shapelet_full(self, np.ndarray t, size_t dim):
+        cdef Shapelet shapelet = Shapelet(dim, len(t), NAN, NAN)
+        cdef double* data = shapelet.data
+        cdef size_t i
+        for i in range(len(t)):
+            data[i] = t[i]
+        return shapelet
     
     cdef double shapelet_info_distance(
             self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
@@ -98,13 +88,22 @@ cdef class DistanceMeasure:
             raise NotImplemented()
 
     cdef double shapelet_distance(
-            self, Shapelet s, TSDatabase td, size_t t_index) nogil:
+            self, Shapelet s, TSDatabase td, size_t t_index, size_t* return_index=NULL) nogil:
         with gil:
             raise NotImplemented()
 
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
+    
+    cdef Shapelet new_shapelet_full(self, np.ndarray t, size_t dim):
+        cdef Shapelet shapelet = Shapelet(dim, len(t), np.mean(t), np.std(t))
+        cdef double* data = shapelet.data
+        cdef size_t i
+        for i in range(len(t)):
+            data[i] = t[i]
 
+        return shapelet
+    
     cdef Shapelet new_shapelet(self, ShapeletInfo s, TSDatabase td):
         cdef Shapelet shapelet = Shapelet(s.dim, s.length, s.mean, s.std)
         cdef double*data = shapelet.data
@@ -169,9 +168,12 @@ cdef class Shapelet:
         self.data = <double*> malloc(sizeof(double) * length)
         if self.data == NULL:
             raise MemoryError()
+        self.extra = NULL
 
     def __dealloc__(self):
         free(self.data)
+        if self.extra != NULL:
+            free(self.extra)
 
     def __reduce__(self):
         return make_shapelet_, (self.__class__, self.dim, self.length,

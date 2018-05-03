@@ -479,18 +479,27 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef double shapelet_distance(self,
                                   Shapelet s,
                                   TSDatabase td,
-                                  size_t t_index) nogil:
+                                  size_t t_index,
+                                  size_t* return_index=NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
         
-        cdef double* s_lower = <double*> malloc(sizeof(double) * s.length)
-        cdef double* s_upper = <double*> malloc(sizeof(double) * s.length)
+        cdef double* s_lower
+        cdef double* s_upper
+        cdef DtwExtra* extra
 
-        find_min_max(0, 1, s.length, s.data, self.r, s_lower, s_upper,
-                     &self.dl, &self.du)
-        find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
-                     td.data, self.r, self.lower, self.upper,
-                     &self.dl, &self.du)
+        if s.extra != NULL:
+            extra = <DtwExtra*> s.extra
+            s_lower = extra[0].lower
+            s_upper = extra[0].upper
+        else:
+            s_lower = <double*> malloc(sizeof(double) * s.length)
+            s_upper = <double*> malloc(sizeof(double) * s.length)
+            find_min_max(0, 1, s.length, s.data, self.r, s_lower, s_upper,
+                         &self.dl, &self.du)
+            find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
+                         td.data, self.r, self.lower, self.upper,
+                         &self.dl, &self.du)
 
         cdef double distance = scaled_dtw_distance(0,
                                                    1,
@@ -513,9 +522,10 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                                    self.cb,
                                                    self.cb_1,
                                                    self.cb_2,
-                                                   NULL)
-        free(s_lower)
-        free(s_upper)
+                                                   return_index)
+        if s.extra == NULL:
+            free(s_lower)
+            free(s_upper)
 
         return distance
 

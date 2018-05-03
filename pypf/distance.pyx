@@ -24,6 +24,9 @@ from libc.stdlib cimport malloc
 
 from pypf._distance cimport TSDatabase
 from pypf._distance cimport ts_database_new
+from pypf._distance cimport DistanceMeasure
+from pypf._distance cimport Shapelet
+from pypf._distance cimport ScaledDistanceMeasure
 
 from pypf._euclidean_distance cimport euclidean_distance
 from pypf._euclidean_distance cimport euclidean_distance_matches
@@ -33,6 +36,14 @@ from pypf._euclidean_distance cimport scaled_euclidean_distance_matches
 
 from sklearn.utils import check_array
 
+import pypf._euclidean_distance
+import pypf._dtw_distance
+
+DISTANCE_MEASURE = {
+    'euclidean': pypf._euclidean_distance.EuclideanDistance,
+    'scaled_euclidean': pypf._euclidean_distance.ScaledEuclideanDistance,
+    'scaled_dtw': pypf._dtw_distance.ScaledDtwDistance,
+}
 
 # validate and convert shapelet to sutable format
 def validate_shapelet_(shapelet):
@@ -61,7 +72,7 @@ def check_sample_(sample, n_samples):
     if sample < 0 or sample >= n_samples:
         raise ValueError("illegal sample {}".format(sample))
 
-def check_dim(dim, ndims):
+def check_dim_(dim, ndims):
     if dim < 0 or dim >= ndims:
         raise ValueError("illegal dimension {}".format(dim))
 
@@ -76,12 +87,12 @@ cdef np.ndarray make_numpy_array_(size_t* matches,
         return np.empty([0], dtype=np.intp)
 
 
-def min_distance(
+def distance(
         shapelet,
         data,
         dim=0,
         sample=None,
-        scale=False,
+        metric="euclidean",
         return_index=False):
     """Computes the minimum distance between `s` and the samples in `x`
 
@@ -90,7 +101,7 @@ def min_distance(
     :param dim: the time series dimension to search (default: 0)
     :param sample: the samples to compare to `int` or `array_like` or `None`.
                    If `None` compare to all. (default: `None`)
-    :param scale: search in a scaled space
+    :param metric: the distance measure
     :param return_index: if `true` return the index of the best
                          match. If there are many equally good
                          best matches, the first is returned.
@@ -111,104 +122,39 @@ def min_distance(
 
     cdef TSDatabase sd = ts_database_new(x)
 
-    check_dim(dim, sd.n_dims)
+    check_dim_(dim, sd.n_dims)
     cdef double min_dist
     cdef size_t min_index
-
-    cdef size_t s_offset = 0
-    cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
-    cdef size_t s_length = s.shape[0]
-    cdef double* s_data = <double*> s.data
-    cdef double* X_buffer = <double*> malloc(
-        sizeof(double) * s_length * 2)
-
-    cdef size_t t_offset
 
     cdef double mean = 0
     cdef double std = 0
 
-    if scale:
-        mean = np.mean(s)
-        std = np.std(s)
+    cdef DistanceMeasure distance_measure = DISTANCE_MEASURE[metric](
+        sd.n_timestep)
+    cdef Shapelet shape = distance_measure.new_shapelet_full(s, dim)
+    if isinstance(sample, int):
+        min_dist = distance_measure.shapelet_distance(
+            shape, sd, sample, &min_index)
 
-    try:
-        if isinstance(sample, int):
-            check_sample_(sample, sd.n_samples)
+        if return_index:
+            return min_dist, min_index
+        else:
+            return min_dist
+    else:  # assume an `array_like` object for `samples`
+        samples = check_array(sample, ensure_2d=False, dtype=np.int)
+        dist = []
+        ind = []
+        for i in samples:
+            min_dist = distance_measure.shapelet_distance(
+                shape, sd, i, &min_index)
 
-            t_offset = sample * sd.sample_stride + \
-                       dim * sd.dim_stride
-            if scale:
-                min_dist = scaled_euclidean_distance(
-                    s_offset,
-                    s_stride,
-                    s_length,
-                    mean,
-                    std,
-                    s_data,
-                    t_offset,
-                    sd.timestep_stride,
-                    sd.n_timestep,
-                    sd.data,
-                    X_buffer,
-                    &min_index)
-            else:
-                min_dist = euclidean_distance(
-                    s_offset,
-                    s_stride,
-                    s_length,
-                    s_data,
-                    t_offset,
-                    sd.timestep_stride,
-                    sd.n_timestep,
-                    sd.data,
-                    &min_index)
+            dist.append(min_dist)
+            ind.append(min_index)
 
-            if return_index:
-                return min_dist, min_index
-            else:
-                return min_dist
-        else:  # assume an `array_like` object for `samples`
-            samples = check_array(sample, ensure_2d=False, dtype=np.int)
-            dist = []
-            ind = []
-            for i in samples:
-                check_sample_(i, sd.n_samples)
-                t_offset = i * sd.sample_stride + \
-                           dim * sd.dim_stride
-                if scale:
-                    min_dist = scaled_euclidean_distance(
-                        s_offset,
-                        s_stride,
-                        s_length,
-                        mean,
-                        std,
-                        s_data,
-                        t_offset,
-                        sd.timestep_stride,
-                        sd.n_timestep,
-                        sd.data,
-                        X_buffer,
-                        &min_index)
-                else:
-                    min_dist = euclidean_distance(
-                        s_offset,
-                        s_stride,
-                        s_length,
-                        s_data,
-                        t_offset,
-                        sd.timestep_stride,
-                        sd.n_timestep,
-                        sd.data,
-                        &min_index)
-                dist.append(min_dist)
-                ind.append(min_index)
-
-            if return_index:
-                return np.array(dist), np.array(ind)
-            else:
-                return np.array(dist)
-    except:
-        free(X_buffer)
+        if return_index:
+            return np.array(dist), np.array(ind)
+        else:
+            return np.array(dist)
             
 
 def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
@@ -226,7 +172,7 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
     """
     cdef np.ndarray s = validate_shapelet_(shapelet)
     cdef np.ndarray x = validate_data_(data)
-    check_dim(dim, x.ndim)
+    check_dim_(dim, x.ndim)
     if sample is None:
         if x.shape[0] == 1:
             sample = 0
