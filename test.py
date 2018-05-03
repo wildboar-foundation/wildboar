@@ -56,8 +56,8 @@ if __name__ == "__main__":
     print(tree.score(x, y))
     print("score_done")
 
-    train = np.loadtxt("data/ArrowHead_TRAIN", delimiter=",")
-    test = np.loadtxt("data/ArrowHead_TEST", delimiter=",")
+    train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
+    test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
 
     y = train[:, 0].astype(np.intp)
     x = train[:, 1:].astype(np.float64)
@@ -69,10 +69,10 @@ if __name__ == "__main__":
     y_test = test[:, 0].astype(np.intp)
 
     tree = ShapeletTreeClassifier(
-        n_shapelets=10000,
-        max_depth=2,
-        distance='scaled_euclidean',
-        min_shapelet_size=0,
+        n_shapelets=10,
+        max_depth=None,
+        distance='scaled_dtw',
+        min_shapelet_size=0.1,
         max_shapelet_size=1,
         dtw_band=3)
 
