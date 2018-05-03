@@ -1,10 +1,9 @@
 import numpy as np
-import timeit
 
-from pypf import _tree_builder
+from pypf.distance import distance
 
-#x = np.random.randn(100, 100000)
-#i = np.arange(x.shape[0])
+# x = np.random.randn(100, 100000)
+# i = np.arange(x.shape[0])
 # print(((X[0, 0:100] - np.mean(X[0, 0:100])) / np.std(X[0, 0:100]))[:10])
 # _tree_builder.test(X, i)
 
@@ -23,23 +22,52 @@ data = [
 x = np.array(data, dtype=np.float64).reshape(-1, 2, 5)
 y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 
-from pypf.sliding_distance import min_distance
-from pypf.sliding_distance import matches
+from scipy.stats import norm
 
-print(x)
-d, i = min_distance(
-    np.array([1, 2, 3]),
-    x,
-    dim=1,
-    scale=False,
-    sample=None,
+n_samples = 1000
+n_features = 1000
+n_classes = 2
+
+rng = np.random.RandomState(41)
+
+delta = 0.5
+dt = 1
+
+X = (norm.rvs(
+    scale=delta**2 * dt,
+    size=n_samples * n_features,
+    random_state=rng,
+).reshape((n_samples, n_features)))
+
+x = X[0, :]
+data = X[1:, :]
+
+d, i = distance(
+    x[0:10],
+    data,
+    dim=0,
+    metric="scaled_euclidean",
+    sample=[10, 100, 22],
     return_index=True,
 )
+
 print(d)
 print(i)
-#print(i)
 
-#mask = matches([0, 10, 1], x, 2, sample=None, return_distances=True)
-#print(mask)
+d, i = distance(
+    x[0:10],
+    data,
+    dim=0,
+    metric="scaled_dtw",
+    sample=[10, 100, 22],
+    return_index=True,
+)
 
-#print(matches([0, 10, 1], x, 2, sample=None, return_distances=True))
+print(d)
+print(i)
+# print(i)
+
+# mask = matches([0, 10, 1], x, 2, sample=None, return_distances=True)
+# print(mask)
+
+# print(matches([0, 10, 1], x, 2, sample=None, return_distances=True))

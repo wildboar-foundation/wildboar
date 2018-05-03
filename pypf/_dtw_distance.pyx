@@ -157,6 +157,7 @@ cdef inline double dist(double x, double y) nogil:
     return s * s
 
 
+# TODO: WIP: This does not WORK
 cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
                                  double s_mean, double s_std, size_t t_offset,
                                  size_t t_stride, double* T, double t_mean,
@@ -176,7 +177,7 @@ cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
     s_y0 = (S[t_offset + s_stride * (length - 1)] - s_mean) / s_std
 
     min_dist = dist(t_x0, s_x0) + dist(t_y0, s_y0)
-    if min_dist < best_dist:
+    if min_dist >= best_dist:
         return min_dist
 
     t_x1 = (T[t_offset + t_stride * 1] - t_mean) / t_std
@@ -367,7 +368,7 @@ cdef double scaled_dtw_distance(size_t s_offset,
                                           s_mean, s_std, j, 1, X_buffer,
                                           mean, std, s_length, min_dist)
 
-            if lb_kim < min_dist:
+            if lb_kim < min_dist or True:
                 lb_k = cumulative_bound(j, 1, s_length, mean, std, X_buffer,
                                         s_mean, s_std, s_lower, s_upper,
                                         cb_1, min_dist)
@@ -422,7 +423,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
     cdef size_t r
 
-    def __cinit__(self, size_t n_timestep, size_t r = 1):
+    def __cinit__(self, size_t n_timestep, size_t r = 0):
         self.X_buffer = <double*> malloc(sizeof(double) * n_timestep * 2)
         self.lower = <double*> malloc(sizeof(double) * n_timestep)
         self.upper = <double*> malloc(sizeof(double) * n_timestep)
@@ -479,18 +480,27 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef double shapelet_distance(self,
                                   Shapelet s,
                                   TSDatabase td,
-                                  size_t t_index) nogil:
+                                  size_t t_index,
+                                  size_t* return_index=NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
         
-        cdef double* s_lower = <double*> malloc(sizeof(double) * s.length)
-        cdef double* s_upper = <double*> malloc(sizeof(double) * s.length)
+        cdef double* s_lower
+        cdef double* s_upper
+        cdef DtwExtra* extra
 
-        find_min_max(0, 1, s.length, s.data, self.r, s_lower, s_upper,
-                     &self.dl, &self.du)
-        find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
-                     td.data, self.r, self.lower, self.upper,
-                     &self.dl, &self.du)
+        if s.extra != NULL:
+            extra = <DtwExtra*> s.extra
+            s_lower = extra[0].lower
+            s_upper = extra[0].upper
+        else:
+            s_lower = <double*> malloc(sizeof(double) * s.length)
+            s_upper = <double*> malloc(sizeof(double) * s.length)
+            find_min_max(0, 1, s.length, s.data, self.r, s_lower, s_upper,
+                         &self.dl, &self.du)
+            find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
+                         td.data, self.r, self.lower, self.upper,
+                         &self.dl, &self.du)
 
         cdef double distance = scaled_dtw_distance(0,
                                                    1,
@@ -513,9 +523,10 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                                    self.cb,
                                                    self.cb_1,
                                                    self.cb_2,
-                                                   NULL)
-        free(s_lower)
-        free(s_upper)
+                                                   return_index)
+        if s.extra == NULL:
+            free(s_lower)
+            free(s_upper)
 
         return distance
 
@@ -555,4 +566,3 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                    self.cb_1,
                                    self.cb_2,
                                    NULL)
-

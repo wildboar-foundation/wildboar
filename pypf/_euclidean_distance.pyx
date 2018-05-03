@@ -51,7 +51,8 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     cdef double shapelet_distance(self,
                                   Shapelet s,
                                   TSDatabase td,
-                                  size_t t_index) nogil:
+                                  size_t t_index,
+                                  size_t* return_index = NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
 
@@ -67,7 +68,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
             td.n_timestep,
             td.data,
             self.X_buffer,
-            NULL)
+            return_index)
         
     cdef double shapelet_info_distance(self,
                                        ShapeletInfo s,
@@ -97,7 +98,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
 cdef class EuclideanDistance(DistanceMeasure):
 
     cdef double shapelet_distance(
-            self, Shapelet s, TSDatabase td, size_t t_index) nogil:
+            self, Shapelet s, TSDatabase td, size_t t_index, size_t* return_index = NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
 
@@ -110,7 +111,7 @@ cdef class EuclideanDistance(DistanceMeasure):
             td.timestep_stride,
             td.n_timestep,
             td.data,
-            NULL)
+            return_index)
     
     cdef double shapelet_info_distance(
         self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
