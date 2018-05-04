@@ -17,7 +17,7 @@ except ImportError:
     sys.exit(
         "Cython not found. Cython is needed to build the extension modules.")
 
-libname = "pypf"
+libname = "wildboar"
 build_type = "optimized"
 # build_type = "debug"
 
@@ -148,43 +148,43 @@ except FileNotFoundError:
         file=sys.stderr)
 
 ext_module_utils = declare_cython_extension(
-    "pypf._utils",
+    "wildboar._utils",
     use_math=True,
     use_openmp=False,
     include_dirs=my_include_dirs)
 
 ext_module_distance = declare_cython_extension(
-    "pypf._distance",
+    "wildboar._distance",
     use_math=True,
     use_openmp=False,
     include_dirs=my_include_dirs)
 
 ext_module_euclidean_distance = declare_cython_extension(
-    "pypf._euclidean_distance",
+    "wildboar._euclidean_distance",
     use_math=True,
     use_openmp=False,
     include_dirs=my_include_dirs)
 
 ext_module_dtw_distance = declare_cython_extension(
-    "pypf._dtw_distance",
+    "wildboar._dtw_distance",
     use_math=True,
     use_openmp=False,
     include_dirs=my_include_dirs)
 
 ext_module_impurity = declare_cython_extension(
-    "pypf._impurity",
+    "wildboar._impurity",
     use_math=True,
     use_openmp=False,
     include_dirs=my_include_dirs)
 
 ext_module_tree_builder = declare_cython_extension(
-    "pypf._tree_builder",
+    "wildboar._tree_builder",
     use_math=True,
     use_openmp=False,
     include_dirs=my_include_dirs)
 
 ext_module_distance_api = declare_cython_extension(
-    "pypf.distance",
+    "wildboar.distance",
     use_math=False,
     use_openmp=False,
     include_dirs=my_include_dirs)
@@ -208,11 +208,11 @@ my_ext_modules = cythonize(
 )
 
 setup(
-    name="pypf",
+    name="wildboar",
     version=version,
     author="Isak Karlsson",
     author_email="isak.karlsson@gmail.com",
-    url="https://gitlab.com/isakkarlsson/pypf",
+    url="https://github.com/isakkarlsson/wildboar",
     description=SHORTDESC,
     long_description=DESC,
     license="GPLv3",
@@ -239,9 +239,9 @@ setup(
     provides=["setup_template_cython"],
     keywords=["setuptools template example cython"],
     ext_modules=my_ext_modules,
-    packages=["pypf"],
+    packages=["wildboar"],
     package_data={
-        'pypf': ['*.pxd', '*.pyx'],
+        'wildboar': ['*.pxd', '*.pyx'],
     },
     zip_safe=False,
 

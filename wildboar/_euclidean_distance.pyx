@@ -2,14 +2,14 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 
-# This file is part of pypf
+# This file is part of wildboar
 #
-# pypf is free software: you can redistribute it and/or modify it
+# wildboar is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# pypf is distributed in the hope that it will be useful, but WITHOUT
+# wildboar is distributed in the hope that it will be useful, but WITHOUT
 # ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 # or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 # License for more details.
@@ -30,13 +30,13 @@ from libc.stdlib cimport free
 from libc.math cimport sqrt
 from libc.math cimport INFINITY, NAN
 
-from pypf._distance cimport ScaledDistanceMeasure
-from pypf._distance cimport DistanceMeasure
+from wildboar._distance cimport ScaledDistanceMeasure
+from wildboar._distance cimport DistanceMeasure
 
-from pypf._distance cimport TSDatabase
+from wildboar._distance cimport TSDatabase
 
-from pypf._distance cimport Shapelet
-from pypf._distance cimport ShapeletInfo
+from wildboar._distance cimport Shapelet
+from wildboar._distance cimport ShapeletInfo
 
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):

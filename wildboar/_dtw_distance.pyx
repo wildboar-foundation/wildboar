@@ -2,21 +2,20 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 
-# This file is part of pypf
+# This file is part of wildboar
 #
-# pypf is free software: you can redistribute it and/or modify it
+# wildboar is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# pypf is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
-# License for more details.
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see
-# <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Karlsson
 
@@ -37,11 +36,11 @@ from libc.math cimport sqrt
 from libc.math cimport fabs
 from libc.math cimport floor
 
-from pypf._distance cimport TSDatabase
+from wildboar._distance cimport TSDatabase
 
-from pypf._distance cimport ShapeletInfo
-from pypf._distance cimport ScaledDistanceMeasure
-from pypf._distance cimport Shapelet
+from wildboar._distance cimport ShapeletInfo
+from wildboar._distance cimport ScaledDistanceMeasure
+from wildboar._distance cimport Shapelet
 
 cdef void deque_init(Deque* c, size_t capacity) nogil:
     c[0].capacity = capacity
@@ -403,11 +402,6 @@ cdef double scaled_dtw_distance(size_t s_offset,
 
     return sqrt(min_dist)
 
-
-cimport numpy as np
-import numpy as np
-
-from pypf._utils cimport print_c_array_d
 
 cdef inline size_t warp_width_(size_t length, double r) nogil:
     if r <= 1:

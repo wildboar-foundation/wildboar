@@ -2,21 +2,20 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 
-# This file is part of pypf
+# This file is part of wildboar
 #
-# pypf is free software: you can redistribute it and/or modify it
+# wildboar is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# pypf is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
-# License for more details.
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see
-# <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Karlsson
 
@@ -37,21 +36,21 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
-from pypf._distance cimport TSDatabase
-from pypf._distance cimport DistanceMeasure
+from wildboar._distance cimport TSDatabase
+from wildboar._distance cimport DistanceMeasure
 
-from pypf._distance cimport ShapeletInfo
-from pypf._distance cimport Shapelet
+from wildboar._distance cimport ShapeletInfo
+from wildboar._distance cimport Shapelet
 
-from pypf._distance cimport ts_database_new
-from pypf._distance cimport shapelet_info_free
+from wildboar._distance cimport ts_database_new
+from wildboar._distance cimport shapelet_info_free
 
-from pypf._impurity cimport entropy
+from wildboar._impurity cimport entropy
 
-from pypf._utils cimport label_distribution
-from pypf._utils cimport argsort
-from pypf._utils cimport rand_int
-from pypf._utils cimport RAND_R_MAX
+from wildboar._utils cimport label_distribution
+from wildboar._utils cimport argsort
+from wildboar._utils cimport rand_int
+from wildboar._utils cimport RAND_R_MAX
 
 
 cdef inline SplitPoint new_split_point(size_t split_point,

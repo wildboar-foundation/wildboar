@@ -1,18 +1,17 @@
-# This file is part of pypf
+# This file is part of wildboar
 #
-# pypf is free software: you can redistribute it and/or modify it
+# wildboar is free software: you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# pypf is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
-# License for more details.
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see
-# <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Karlsson
 
@@ -22,21 +21,21 @@ cimport numpy as np
 from libc.stdlib cimport free
 from libc.stdlib cimport malloc
 
-from pypf._distance cimport TSDatabase
-from pypf._distance cimport ts_database_new
-from pypf._distance cimport DistanceMeasure
-from pypf._distance cimport Shapelet
-from pypf._distance cimport ScaledDistanceMeasure
+from wildboar._distance cimport TSDatabase
+from wildboar._distance cimport ts_database_new
+from wildboar._distance cimport DistanceMeasure
+from wildboar._distance cimport Shapelet
+from wildboar._distance cimport ScaledDistanceMeasure
 
 from sklearn.utils import check_array
 
-import pypf._euclidean_distance
-import pypf._dtw_distance
+import wildboar._euclidean_distance
+import wildboar._dtw_distance
 
 DISTANCE_MEASURE = {
-    'euclidean': pypf._euclidean_distance.EuclideanDistance,
-    'scaled_euclidean': pypf._euclidean_distance.ScaledEuclideanDistance,
-    'scaled_dtw': pypf._dtw_distance.ScaledDtwDistance,
+    'euclidean': wildboar._euclidean_distance.EuclideanDistance,
+    'scaled_euclidean': wildboar._euclidean_distance.ScaledEuclideanDistance,
+    'scaled_dtw': wildboar._dtw_distance.ScaledDtwDistance,
 }
 
 # validate and convert shapelet to sutable format
