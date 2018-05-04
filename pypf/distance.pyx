@@ -28,12 +28,6 @@ from pypf._distance cimport DistanceMeasure
 from pypf._distance cimport Shapelet
 from pypf._distance cimport ScaledDistanceMeasure
 
-from pypf._euclidean_distance cimport euclidean_distance
-from pypf._euclidean_distance cimport euclidean_distance_matches
-
-from pypf._euclidean_distance cimport scaled_euclidean_distance
-from pypf._euclidean_distance cimport scaled_euclidean_distance_matches
-
 from sklearn.utils import check_array
 
 import pypf._euclidean_distance
@@ -76,15 +70,25 @@ def check_dim_(dim, ndims):
     if dim < 0 or dim >= ndims:
         raise ValueError("illegal dimension {}".format(dim))
 
-cdef np.ndarray make_numpy_array_(size_t* matches,
-                                  size_t n_matches):
+cdef np.ndarray make_match_array_(
+        size_t* matches,  size_t n_matches):
     if n_matches > 0:
         match_array = np.empty(n_matches, dtype=np.intp)
         for i in range(n_matches):
             match_array[i] = matches[i]
         return match_array
     else:
-        return np.empty([0], dtype=np.intp)
+        return None
+
+cdef np.ndarray make_distance_array_(
+        double* distances,  size_t n_matches):
+    if n_matches > 0:
+        dist_array = np.empty(n_matches, dtype=np.float64)
+        for i in range(n_matches):
+            dist_array[i] = distances[i]
+        return dist_array
+    else:
+        return None
 
 
 def distance(
@@ -93,6 +97,7 @@ def distance(
         dim=0,
         sample=None,
         metric="euclidean",
+        metric_params=None,
         return_index=False):
     """Computes the minimum distance between `s` and the samples in `x`
 
@@ -129,9 +134,13 @@ def distance(
     cdef double mean = 0
     cdef double std = 0
 
+    if metric_params is None:
+        metric_params = {}
+    print(metric_params)
     cdef DistanceMeasure distance_measure = DISTANCE_MEASURE[metric](
-        sd.n_timestep)
-    cdef Shapelet shape = distance_measure.new_shapelet_full(s, dim)
+        sd.n_timestep, **metric_params)
+
+    cdef Shapelet shape = distance_measure.new_shapelet(s, dim)
     if isinstance(sample, int):
         min_dist = distance_measure.shapelet_distance(
             shape, sd, sample, &min_index)
@@ -155,20 +164,40 @@ def distance(
             return np.array(dist), np.array(ind)
         else:
             return np.array(dist)
-            
 
-def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
+
+def matches(
+        shapelet,
+        data,
+        threshold,
+        dim=0,
+        sample=None,
+        metric="euclidean",
+        metric_params=None,
+        return_distance=False):
     """Return the positions in data (one array per `sample`) where
     `shapelet` is closer than `threshold`.
 
     :param s: the subsequence `array_like`
-    :param x: the samples [n_samples, n_timesteps]
+
+    :param x: the samples `[n_samples, n_timestep]` or `[n_sample,
+              n_dim, n_timestep]`
+
     :param threshold: the maximum threshold for match
+
     :param dim: the time series dimension to search (default: 0)
-    :param sample: the samples to compare to `int` or `array_like` or `None`.
-                   If `None` compare to all. (default: `None`)
-    :param scale: search in scaled space (default: `False`)
+
+    :param sample: the samples to compare to `int` or `array_like` or
+                   `None`.  If `None` compare to all. (default:
+                   `None`)
+
+    :param metric: the distance measure
+
+    :param metric_params: additional parameters to the metric function
+                          (optional, dict, default: None)
+
     :returns: `[n_matches]`, or `[[n_matches], ... n_samples]`
+
     """
     cdef np.ndarray s = validate_shapelet_(shapelet)
     cdef np.ndarray x = validate_data_(data)
@@ -182,102 +211,47 @@ def matches(shapelet, data, threshold, dim=0, sample=None, scale=False):
     cdef TSDatabase sd = ts_database_new(x)
 
     cdef size_t* matches
+    cdef double* distances
     cdef size_t n_matches
 
-    cdef size_t s_offset = 0
-    cdef size_t s_stride = <size_t> s.strides[0] // s.itemsize
-    cdef size_t s_length = s.shape[0]
-    cdef double* s_data = <double*> s.data
-    cdef double* X_buffer = <double*> malloc(
-        sizeof(double) * s_length * 2)
+    if metric_params is None:
+        metric_params = {}
 
-    cdef size_t t_offset
-
-    cdef double mean = 0
-    cdef double std = 0
-
-    if scale:
-        mean = np.mean(s)
-        std = np.std(s)
+    cdef DistanceMeasure distance_measure = DISTANCE_MEASURE[metric](
+        sd.n_timestep, **metric_params)
+    cdef Shapelet shape = distance_measure.new_shapelet(s, dim)
 
     cdef size_t i
-    try:
-        if isinstance(sample, int):
-            check_sample_(sample, sd.n_samples)
-            t_offset = sample * sd.sample_stride + \
-                       dim * sd.dim_stride
-            if scale:
-                scaled_euclidean_distance_matches(
-                    s_offset,
-                    s_stride,
-                    s_length,
-                    mean,
-                    std,
-                    s_data,
-                    t_offset,
-                    sd.timestep_stride,
-                    sd.n_timestep,
-                    sd.data,
-                    X_buffer,
-                    threshold,
-                    &matches,
-                    &n_matches)
-            else:
-                euclidean_distance_matches(
-                    s_offset,
-                    s_stride,
-                    s_length,
-                    s_data,
-                    t_offset,
-                    sd.timestep_stride,
-                    sd.n_timestep,
-                    sd.data,
-                    threshold,
-                    &matches,
-                    &n_matches)
-                arr = make_numpy_array_(matches, n_matches)
-                free(matches)
-                return arr
+    if isinstance(sample, int):
+        check_sample_(sample, sd.n_samples)
+        distance_measure.shapelet_matches(
+            shape, sd, sample, threshold, &matches, &distances, &n_matches)
+
+        match_array = make_match_array_(matches, n_matches)
+        distance_array =  make_distance_array_(distances, n_matches)
+        free(distances)
+        free(matches)
+
+        if return_distance:
+            return distance_array, match_array
         else:
-            samples = check_array(sample, ensure_2d=False, dtype=np.int)
-            indicies = []
-            for i in samples:
-                check_sample_(i, sd.n_samples)
-                t_offset = i * sd.sample_stride + \
-                           dim * sd.dim_stride
-                if scale:
-                    scaled_euclidean_distance_matches(
-                        s_offset,
-                        s_stride,
-                        s_length,
-                        mean,
-                        std,
-                        s_data,
-                        t_offset,
-                        sd.timestep_stride,
-                        sd.n_timestep,
-                        sd.data,
-                        X_buffer,
-                        threshold,
-                        &matches,
-                        &n_matches)
-                else:
-                    euclidean_distance_matches(
-                        s_offset,
-                        s_stride,
-                        s_length,
-                        s_data,
-                        t_offset,
-                        sd.timestep_stride,
-                        sd.n_timestep,
-                        sd.data,
-                        threshold,
-                        &matches,
-                        &n_matches)
-                    arr = make_numpy_array_(matches, n_matches)
-                    free(matches)
-                    indicies.append(arr)
-            return indicies
-    except:
-        free(X_buffer)
-        
+            return match_array
+    else:
+        samples = check_array(sample, ensure_2d=False, dtype=np.int)
+        match_list = []
+        distance_list = []
+        for i in samples:
+            check_sample_(i, sd.n_samples)
+            distance_measure.shapelet_matches(
+                shape, sd, i, threshold, &matches, &distances, &n_matches)
+            match_array = make_match_array_(matches, n_matches)
+            distance_array = make_distance_array_(distances, n_matches)
+            match_list.append(match_array)
+            distance_list.append(distance_array)
+            free(matches)
+            free(distances)
+                
+        if return_distance:
+            return distance_list, match_list
+        else:
+            return match_list

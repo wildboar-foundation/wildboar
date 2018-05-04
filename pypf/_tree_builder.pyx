@@ -302,7 +302,7 @@ cdef class ShapeletTreeBuilder:
         cdef double prev_dist
         cdef double curr_dist
         if split.split_point > start and end - split.split_point > 0:
-            shapelet = self.distance_measure.new_shapelet(
+            shapelet = self.distance_measure.get_shapelet(
                 split.shapelet_info, self.td)
             branch = new_branch_node(split, shapelet)
             branch.left = self._build_tree(start, split.split_point,

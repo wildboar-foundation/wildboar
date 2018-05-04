@@ -1,6 +1,7 @@
 import numpy as np
 
 from pypf.distance import distance
+from pypf.distance import matches
 
 # x = np.random.randn(100, 100000)
 # i = np.arange(x.shape[0])
@@ -25,7 +26,7 @@ y = np.array([0, 0, 0, 0, 0, 1, 1, 1, 1, 1])
 from scipy.stats import norm
 
 n_samples = 1000
-n_features = 1000
+n_features = 10000
 n_classes = 2
 
 rng = np.random.RandomState(41)
@@ -42,30 +43,47 @@ X = (norm.rvs(
 x = X[0, :]
 data = X[1:, :]
 
-d, i = distance(
-    x[0:10],
-    data,
-    dim=0,
-    metric="scaled_euclidean",
-    sample=[10, 100, 22],
-    return_index=True,
-)
+print(data.strides)
 
-print(d)
-print(i)
+# d, i = distance(
+#     x[0:10],
+#     data,
+#     dim=0,
+#     metric="scaled_euclidean",
+#     sample=[10, 100, 22],
+#     return_index=True,
+# )
+
+# print(d)
+# print(i)
 
 d, i = distance(
     x[0:10],
     data,
     dim=0,
     metric="scaled_dtw",
-    sample=[10, 100, 22],
+    metric_params={"r": 3},
+    sample=None,
     return_index=True,
 )
 
-print(d)
-print(i)
+# print(d)
 # print(i)
+
+# d, i = matches(
+#     x[0:10],
+#     data,
+#     0.37,
+#     dim=0,
+#     metric="euclidean",
+#     sample=10,
+#     return_distance=True,
+# )
+
+# print(d)
+# print(i)
+#print(len(d))
+#print(len(i))
 
 # mask = matches([0, 10, 1], x, 2, sample=None, return_distances=True)
 # print(mask)

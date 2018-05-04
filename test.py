@@ -50,14 +50,14 @@ if __name__ == "__main__":
 
     tree = ShapeletTreeClassifier(random_state=10, distance="scaled_dtw")
     tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
-    print_tree(tree.root_node_)
+    # print_tree(tree.root_node_)
 
     print("Score")
     print(tree.score(x, y))
     print("score_done")
 
-    train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
-    test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
+    train = np.loadtxt("data/TwoLeadECG_TRAIN", delimiter=",")
+    test = np.loadtxt("data/TwoLeadECG_TEST", delimiter=",")
 
     y = train[:, 0].astype(np.intp)
     x = train[:, 1:].astype(np.float64)
@@ -69,17 +69,17 @@ if __name__ == "__main__":
     y_test = test[:, 0].astype(np.intp)
 
     tree = ShapeletTreeClassifier(
-        n_shapelets=10,
+        n_shapelets=1000,
         max_depth=None,
-        distance='scaled_dtw',
-        min_shapelet_size=0.1,
+        distance='scaled_euclidean',
+        min_shapelet_size=0,
         max_shapelet_size=1,
-        dtw_band=3)
+        metric_params={"r": 0.5})
 
     bag = BaggingClassifier(
         base_estimator=tree,
         bootstrap=True,
-        n_jobs=16,
+        n_jobs=8,
         n_estimators=100,
         random_state=100,
     )

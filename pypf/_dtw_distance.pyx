@@ -35,6 +35,7 @@ from libc.string cimport memset
 from libc.math cimport INFINITY
 from libc.math cimport sqrt
 from libc.math cimport fabs
+from libc.math cimport floor
 
 from pypf._distance cimport TSDatabase
 
@@ -408,6 +409,13 @@ import numpy as np
 
 from pypf._utils cimport print_c_array_d
 
+cdef inline size_t warp_width_(size_t length, double r) nogil:
+    if r <= 1:
+        return <size_t> floor(length * r)
+    else:
+        return <size_t> floor(r)
+        
+
 cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef double* X_buffer
     cdef double* lower
@@ -421,21 +429,25 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef Deque du
     cdef Deque dl
 
-    cdef size_t r
+    cdef size_t max_warp_width
+    cdef double r
 
-    def __cinit__(self, size_t n_timestep, size_t r = 0):
+    def __cinit__(self, size_t n_timestep, double r = 0):
+        if r < 0:
+            raise ValueError("illegal warp width")
+        self.r = r
+        self.max_warp_width = warp_width_(n_timestep, self.r)
         self.X_buffer = <double*> malloc(sizeof(double) * n_timestep * 2)
         self.lower = <double*> malloc(sizeof(double) * n_timestep)
         self.upper = <double*> malloc(sizeof(double) * n_timestep)
-        self.cost = <double*> malloc(sizeof(double) * 2 * r + 1)
-        self.cost_prev = <double*> malloc(sizeof(double) * 2 * r + 1)
+        self.cost = <double*> malloc(sizeof(double) * 2 * self.max_warp_width + 1)
+        self.cost_prev = <double*> malloc(sizeof(double) * 2 * self.max_warp_width + 1)
         self.cb = <double*> malloc(sizeof(double) * n_timestep)
         self.cb_1 = <double*> malloc(sizeof(double) * n_timestep)
         self.cb_2 = <double*> malloc(sizeof(double) * n_timestep)
 
-        deque_init(&self.dl, 2 * r + 2)
-        deque_init(&self.du, 2 * r + 2)
-        self.r = r
+        deque_init(&self.dl, 2 * self.max_warp_width + 2)
+        deque_init(&self.du, 2 * self.max_warp_width + 2)
 
     def __dealloc__(self):
         free(self.X_buffer)
@@ -469,9 +481,9 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         shapelet_offset = (index * td.sample_stride +
                            start * td.timestep_stride +
                            dim * td.dim_stride)
-        
+        cdef size_t warp_width = warp_width_(length, self.r)
         find_min_max(shapelet_offset, td.timestep_stride, length, td.data,
-                     self.r, dtw_extra[0].lower, dtw_extra[0].upper,
+                     warp_width, dtw_extra[0].lower, dtw_extra[0].upper,
                      &self.dl, &self.du)
         
         shapelet_info.extra = dtw_extra
@@ -488,6 +500,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         cdef double* s_lower
         cdef double* s_upper
         cdef DtwExtra* extra
+        cdef size_t warp_width = warp_width_(s.length, self.r)
 
         if s.extra != NULL:
             extra = <DtwExtra*> s.extra
@@ -496,10 +509,11 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         else:
             s_lower = <double*> malloc(sizeof(double) * s.length)
             s_upper = <double*> malloc(sizeof(double) * s.length)
-            find_min_max(0, 1, s.length, s.data, self.r, s_lower, s_upper,
+            
+            find_min_max(0, 1, s.length, s.data, warp_width, s_lower, s_upper,
                          &self.dl, &self.du)
             find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
-                         td.data, self.r, self.lower, self.upper,
+                         td.data, warp_width, self.lower, self.upper,
                          &self.dl, &self.du)
 
         cdef double distance = scaled_dtw_distance(0,
@@ -512,7 +526,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                                    td.timestep_stride,
                                                    td.n_timestep,
                                                    td.data,
-                                                   self.r,
+                                                   warp_width,
                                                    self.X_buffer,
                                                    self.cost,
                                                    self.cost_prev,
@@ -540,9 +554,11 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                        s.dim * td.dim_stride +
                                        s.start * td.timestep_stride)
 
+        cdef size_t warp_width = warp_width_(s.length, self.r)
+        
         cdef DtwExtra* dtw_extra = <DtwExtra*> s.extra
         find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
-                     td.data, self.r, self.lower, self.upper, &self.dl,
+                     td.data, warp_width, self.lower, self.upper, &self.dl,
                      &self.du)
         return scaled_dtw_distance(shapelet_offset,
                                    td.timestep_stride,
@@ -554,7 +570,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                    td.timestep_stride,
                                    td.n_timestep,
                                    td.data,
-                                   self.r,
+                                   warp_width,
                                    self.X_buffer,
                                    self.cost,
                                    self.cost_prev,

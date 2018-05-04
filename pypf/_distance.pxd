@@ -18,7 +18,6 @@
 
 cimport numpy as np
 
-
 cdef struct ShapeletInfo:
     size_t index  # the index of the shapelet sample
     size_t start  # the start position
@@ -47,19 +46,26 @@ cdef class Shapelet:
     cdef readonly double std
     cdef double* data
     cdef void* extra
-    
+
+
 cdef class DistanceMeasure:
 
     cdef ShapeletInfo new_shapelet_info(
             self, TSDatabase td, size_t index, size_t start,
             size_t length, size_t dim) nogil
 
-    cdef Shapelet new_shapelet(self, ShapeletInfo s, TSDatabase td)
+    cdef Shapelet get_shapelet(self, ShapeletInfo s, TSDatabase td)
 
-    cdef Shapelet new_shapelet_full(self, np.ndarray t, size_t dim)
+    cdef Shapelet new_shapelet(self, np.ndarray t, size_t dim)
+
+    cdef int shapelet_matches(
+        self, Shapelet s, TSDatabase td, size_t t_index,
+        double threhold, size_t** matches,  double** distances,
+        size_t* n_matches) nogil except -1
 
     cdef double shapelet_distance(
-            self, Shapelet s, TSDatabase td, size_t t_index, size_t* return_index=*) nogil
+            self, Shapelet s, TSDatabase td, size_t t_index,
+            size_t* return_index=*) nogil
         
     cdef double shapelet_info_distance(
             self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil

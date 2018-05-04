@@ -48,32 +48,3 @@ cdef double euclidean_distance(size_t s_offset,
                                size_t t_length,
                                double* T,
                                size_t* index) nogil
-
-
-cdef int euclidean_distance_matches(size_t s_offset,
-                                    size_t s_stride,
-                                    size_t s_length,
-                                    double* S,
-                                    size_t t_offset,
-                                    size_t t_stride,
-                                    size_t t_length,
-                                    double* T,
-                                    double threshold,
-                                    size_t** matches,
-                                    size_t* n_matches) nogil except -1
-
-
-cdef double scaled_euclidean_distance_matches(size_t s_offset,
-                                              size_t s_stride,
-                                              size_t s_length,
-                                              double s_mean,
-                                              double s_std,
-                                              double* S,
-                                              size_t t_offset,
-                                              size_t t_stride,
-                                              size_t t_length,
-                                              double* T,
-                                              double* X_buffer,
-                                              double threshold,
-                                              size_t** matches,
-                                              size_t* n_matches) nogil except -1
