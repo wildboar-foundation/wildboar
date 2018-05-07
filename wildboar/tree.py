@@ -17,15 +17,15 @@
 
 import numpy as np
 
-from pypf._tree_builder import ShapeletTreeBuilder
-from pypf._tree_builder import ShapeletTreePredictor
+from wildboar._tree_builder import ShapeletTreeBuilder
+from wildboar._tree_builder import ShapeletTreePredictor
 
 from sklearn.base import ClassifierMixin
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 from sklearn.utils import check_array
 
-from pypf.distance import DISTANCE_MEASURE
+from wildboar.distance import DISTANCE_MEASURE
 
 __all__ = ["ShapeletTreeClassifier"]
 
