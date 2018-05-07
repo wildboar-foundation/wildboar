@@ -242,8 +242,7 @@ cdef inline double inner_scaled_euclidean_distance(size_t offset,
                                                    double*X,
                                                    size_t timestep_stride,
                                                    double*X_buffer,
-                                                   double min_dist,
-                                                   bint only_gt=False) nogil:
+                                                   double min_dist) nogil:
     # Compute the distance between the shapelet (starting at `offset`
     # and ending at `offset + length` normalized with `s_mean` and
     # `s_std` with the shapelet in `X_buffer` starting at `0` and
@@ -259,12 +258,8 @@ cdef inline double inner_scaled_euclidean_distance(size_t offset,
         return 0
 
     for i in range(length):
-        if only_gt:
-            if dist > min_dist:
-                break
-        else:
-            if dist >= min_dist:
-                break
+        if dist >= min_dist:
+            break
 
         x = (X[offset + timestep_stride * i] - s_mean) / s_std
         if not std_zero:
@@ -398,14 +393,17 @@ cdef int scaled_euclidean_distance_matches(size_t s_offset,
             j = (i + 1) % s_length
             mean = ex / s_length
             std = sqrt(ex2 / s_length - mean * mean)
-            dist = inner_scaled_euclidean_distance(s_offset, s_length, s_mean, s_std,
-                                                   j, mean, std, S, s_stride,
-                                                   X_buffer, threshold,
-                                                   only_gt=False)
+            dist = inner_scaled_euclidean_distance(
+                s_offset, s_length, s_mean, s_std, j, mean, std, S, s_stride,
+                X_buffer, threshold)
+            
             if dist <= threshold:
                 tmp_capacity = capacity
-                realloc_array(<void**> matches, n_matches[0], sizeof(size_t), &tmp_capacity)
-                realloc_array(<void**> distances, n_matches[0], sizeof(double),  &capacity)
+                realloc_array(
+                    <void**> matches, n_matches[0], sizeof(size_t), &tmp_capacity)
+                realloc_array(
+                    <void**> distances, n_matches[0], sizeof(double),  &capacity)
+
                 matches[0][n_matches[0]] = (i + 1) - s_length
                 distances[0][n_matches[0]] = sqrt(dist)
 
