@@ -49,7 +49,7 @@ if __name__ == "__main__":
     print(x)
     print(y)
 
-    tree = ShapeletTreeClassifier(random_state=10, distance="scaled_dtw")
+    tree = ShapeletTreeClassifier(random_state=10, metric="scaled_dtw")
     tree.fit(x, y, sample_weight=np.ones(x.shape[0]) / x.shape[0])
     print_tree(tree.root_node_)
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     tree = ShapeletTreeClassifier(
         n_shapelets=10,
         max_depth=None,
-        distance='scaled_dtw',
+        metric='scaled_dtw',
         min_shapelet_size=0.1,
         max_shapelet_size=1,
         metric_params={"r": 3})

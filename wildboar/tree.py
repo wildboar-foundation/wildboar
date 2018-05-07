@@ -39,7 +39,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                  n_shapelets=10,
                  min_shapelet_size=0,
                  max_shapelet_size=1,
-                 distance='euclidean',
+                 metric='euclidean',
                  metric_params=None,
                  random_state=None):
         """A shapelet decision tree
@@ -64,7 +64,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
            shapelet, expressed as a fraction and computed as
            `ceil(X.shape[-1] * max_shapelet_size)`.
 
-        :param distance: Distance measure used to identify the best
+        :param metric: Distance metric used to identify the best
            match. (default: `'euclidean'`)
 
         :param metric_params: Paramters to the distace measure
@@ -91,7 +91,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
-        self.distance = distance
+        self.metric = metric
         self.metric_params = metric_params
 
     def fit(self, X, y, sample_weight=None, check_input=True):
@@ -153,12 +153,13 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if not y.flags.contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
+        metric_params = self.metric_params
         if self.metric_params is None:
-            distance_measure = DISTANCE_MEASURE[self.distance](n_timesteps)
-        else:
-            distance_measure = DISTANCE_MEASURE[self.distance](
-                n_timesteps, **self.metric_params)
+            metric_params = {}
 
+        distance_measure = DISTANCE_MEASURE[self.metric](n_timesteps,
+                                                         **metric_params)
+        print(distance_measure, metric_params)
         max_shapelet_size = int(n_timesteps * self.max_shapelet_size)
         min_shapelet_size = int(n_timesteps * self.min_shapelet_size)
 
@@ -198,7 +199,6 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             classes
 
         """
-
         return self.classes_[np.argmax(
             self.predict_proba(X, check_input=check_input), axis=1)]
 
@@ -236,12 +236,13 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         if X.dtype != np.float64 or not X.flags.contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
 
+        metric_params = self.metric_params
         if self.metric_params is None:
-            distance_measure = DISTANCE_MEASURE[self.distance](
-                self.n_timestep_)
-        else:
-            distance_measure = DISTANCE_MEASURE[self.distance](
-                self.n_timestep_, **self.metric_params)
+            metric_params = {}
+
+        distance_measure = DISTANCE_MEASURE[self.metric](self.n_timestep_,
+                                                         **metric_params)
+        print(distance_measure, metric_params)
 
         predictor = ShapeletTreePredictor(X, distance_measure,
                                           len(self.classes_))
