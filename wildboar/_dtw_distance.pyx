@@ -174,7 +174,7 @@ cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
 
     # first and last in S
     s_x0 = (S[s_offset] - s_mean) / s_std
-    s_y0 = (S[t_offset + s_stride * (length - 1)] - s_mean) / s_std
+    s_y0 = (S[s_offset + s_stride * (length - 1)] - s_mean) / s_std
 
     min_dist = dist(t_x0, s_x0) + dist(t_y0, s_y0)
     if min_dist >= best_dist:
@@ -185,6 +185,7 @@ cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
     min_dist += min(
         min(dist(t_x1, s_x0), dist(t_x0, s_x1)),
         dist(t_x1, s_x1))
+
     if min_dist >= best_dist:
         return min_dist
 
@@ -216,10 +217,8 @@ cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
                             dist(t_y2, s_y2)),
                         dist(t_y2, s_y1)),
                     dist(t_y2, s_y0))
-    if min_dist >= best_dist:
-        return min_dist
 
-    return best_dist
+    return min_dist
 
 cdef double cumulative_bound(size_t offset, size_t stride, size_t length,
                              double mean, double std, double* T,
@@ -368,7 +367,7 @@ cdef double scaled_dtw_distance(size_t s_offset,
                                           s_mean, s_std, j, 1, X_buffer,
                                           mean, std, s_length, min_dist)
 
-            if lb_kim < min_dist or True:
+            if lb_kim < min_dist:
                 lb_k = cumulative_bound(j, 1, s_length, mean, std, X_buffer,
                                         s_mean, s_std, s_lower, s_upper,
                                         cb_1, min_dist)
@@ -403,8 +402,10 @@ cdef double scaled_dtw_distance(size_t s_offset,
     return sqrt(min_dist)
 
 
-cdef inline size_t warp_width_(size_t length, double r) nogil:
-    if r <= 1:
+cdef inline size_t compute_warp_width_(size_t length, double r) nogil:
+    if r == 1:
+        return length - 1
+    if r < 1:
         return <size_t> floor(length * r)
     else:
         return <size_t> floor(r)
@@ -430,7 +431,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         if r < 0:
             raise ValueError("illegal warp width")
         self.r = r
-        self.max_warp_width = warp_width_(n_timestep, self.r)
+        self.max_warp_width = compute_warp_width_(n_timestep, self.r)
         self.X_buffer = <double*> malloc(sizeof(double) * n_timestep * 2)
         self.lower = <double*> malloc(sizeof(double) * n_timestep)
         self.upper = <double*> malloc(sizeof(double) * n_timestep)
@@ -475,7 +476,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         shapelet_offset = (index * td.sample_stride +
                            start * td.timestep_stride +
                            dim * td.dim_stride)
-        cdef size_t warp_width = warp_width_(length, self.r)
+        cdef size_t warp_width = compute_warp_width_(length, self.r)
         find_min_max(shapelet_offset, td.timestep_stride, length, td.data,
                      warp_width, dtw_extra[0].lower, dtw_extra[0].upper,
                      &self.dl, &self.du)
@@ -494,7 +495,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         cdef double* s_lower
         cdef double* s_upper
         cdef DtwExtra* extra
-        cdef size_t warp_width = warp_width_(s.length, self.r)
+        cdef size_t warp_width = compute_warp_width_(s.length, self.r)
 
         if s.extra != NULL:
             extra = <DtwExtra*> s.extra
@@ -548,7 +549,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                        s.dim * td.dim_stride +
                                        s.start * td.timestep_stride)
 
-        cdef size_t warp_width = warp_width_(s.length, self.r)
+        cdef size_t warp_width = compute_warp_width_(s.length, self.r)
         
         cdef DtwExtra* dtw_extra = <DtwExtra*> s.extra
         find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
