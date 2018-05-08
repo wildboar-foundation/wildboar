@@ -51,6 +51,5 @@ You can check the latest sources with the command:
 
 If you use wildboar in a scientific publication, I would appreciate
 citations to the paper: Karlsson, I., Papapetrou, P. Boström, H.,
-*Generalized Random Shapelet Forests*. In the Data Mining and Knowledge
-Discovery Journal (DAMI), 201
-6
+*Generalized Random Shapelet Forests*. In the Data Mining and
+Knowledge Discovery Journal (DAMI), 2016
