@@ -41,6 +41,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                  max_shapelet_size=1,
                  metric='euclidean',
                  metric_params=None,
+                 force_dim=None,
                  random_state=None):
         """A shapelet decision tree
 
@@ -69,6 +70,11 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
         :param metric_params: Paramters to the distace measure
 
+        :param force_dim: Force the number of dimensions (default:
+           None). If `int`, `force_dim` reshapes the input to the
+           shape `[n_samples, force_dim, -1]` to support the
+           `BaggingClassifier` interface.
+
         :param random_state: If `int`, `random_state` is the seed used
            by the random number generator; If `RandomState` instance,
            `random_state` is the random number generator; If `None`,
@@ -93,6 +99,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
+        self.force_dim = force_dim
 
     def fit(self, X, y, sample_weight=None, check_input=True):
         """Fit a shapelet tree classifier from the training set (X, y)
@@ -128,6 +135,9 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             raise ValueError("illegal input dimensions")
 
         n_samples = X.shape[0]
+        if isinstance(self.force_dim, int):
+            X = np.reshape(X, [n_samples, self.force_dim, -1])
+
         n_timesteps = X.shape[-1]
 
         if X.ndim > 2:
@@ -159,7 +169,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
         distance_measure = DISTANCE_MEASURE[self.metric](n_timesteps,
                                                          **metric_params)
-        print(distance_measure, metric_params)
+
         max_shapelet_size = int(n_timesteps * self.max_shapelet_size)
         min_shapelet_size = int(n_timesteps * self.min_shapelet_size)
 
@@ -222,6 +232,9 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             raise ValueError("illegal input dimensions X.ndim ({})".format(
                 X.ndim))
 
+        if isinstance(self.force_dim, int):
+            X = np.reshape(X, [X.shape[0], self.force_dim, -1])
+
         if X.shape[-1] != self.n_timestep_:
             raise ValueError("illegal input shape ({} != {})".format(
                 X.shape[-1], self.n_timestep_))
@@ -242,7 +255,6 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
         distance_measure = DISTANCE_MEASURE[self.metric](self.n_timestep_,
                                                          **metric_params)
-        print(distance_measure, metric_params)
 
         predictor = ShapeletTreePredictor(X, distance_measure,
                                           len(self.classes_))
