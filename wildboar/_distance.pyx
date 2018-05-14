@@ -78,6 +78,14 @@ cpdef Shapelet make_shapelet_(object me,
     return shapelet
 
 
+cdef void shapelet_info_init(ShapeletInfo* s) nogil:
+    s[0].start = 0
+    s[0].length = 0
+    s[0].dim = 0
+    s[0].mean = NAN
+    s[0].std = NAN
+    s[0].index = 0
+    
 
 cdef int shapelet_info_update_statistics_(ShapeletInfo* s,
                                          const TSDatabase t) nogil:

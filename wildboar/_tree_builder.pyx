@@ -43,6 +43,8 @@ from wildboar._distance cimport ShapeletInfo
 from wildboar._distance cimport Shapelet
 
 from wildboar._distance cimport ts_database_new
+
+from wildboad._distance cimport shapelet_info_init
 from wildboar._distance cimport shapelet_info_free
 
 from wildboar._impurity cimport entropy
@@ -281,14 +283,10 @@ cdef class ShapeletTreeBuilder:
 
     cdef Node _build_tree(self, size_t start, size_t end, size_t depth):
         memset(self.label_buffer, 0, sizeof(double) * self.n_labels)
-        cdef int n_positive = label_distribution(self.samples,
-                                                 self.sample_weights,
-                                                 start, end,
-                                                 self.labels,
-                                                 self.label_stride,
-                                                 self.n_labels,
-                                                 &self.n_weighted_samples,
-                                                 self.label_buffer)
+        cdef int n_positive = label_distribution(
+            self.samples, self.sample_weights, start, end, self.labels, self.label_stride,
+            self.n_labels, &self.n_weighted_samples, self.label_buffer)
+
         if end - start < 2 or n_positive < 2 or depth >= self.max_depth:
             return new_leaf_node(
                 self.label_buffer, self.n_labels, self.n_weighted_samples)
@@ -312,8 +310,8 @@ cdef class ShapeletTreeBuilder:
             shapelet_info_free(split.shapelet_info)
             return branch
         else:
-            return new_leaf_node(self.label_buffer,
-                                 self.n_labels, self.n_weighted_samples)
+            return new_leaf_node(
+                self.label_buffer, self.n_labels, self.n_weighted_samples)
 
     cdef SplitPoint _split(self, size_t start, size_t end) nogil:
         cdef size_t split_point, best_split_point
@@ -324,17 +322,17 @@ cdef class ShapeletTreeBuilder:
         cdef ShapeletInfo best_shapelet
         cdef size_t i
 
+        shapelet_info_init(&best_shapelet)
         best_impurity = INFINITY
+
         for i in range(self.n_shapelets):
             shapelet = self._sample_shapelet(start, end)
             self.distance_measure.shapelet_info_distances(
                 shapelet, self.td, self.samples + start,
-                self.distance_buffer + start, end - start,)
+                self.distance_buffer + start, end - start)
 
-            # sort the distances and the samples in increasing order
-            # of distance
-            argsort(self.distance_buffer + start,
-                    self.samples + start, end - start)
+            argsort(self.distance_buffer + start, self.samples + start,
+                    end - start)
             self._partition_distance_buffer(
                 start, end, &split_point, &threshold, &impurity)
             if impurity < best_impurity:
