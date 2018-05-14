@@ -135,7 +135,7 @@ def distance(
 
     if metric_params is None:
         metric_params = {}
-    print(metric_params)
+
     cdef DistanceMeasure distance_measure = DISTANCE_MEASURE[metric](
         sd.n_timestep, **metric_params)
 
