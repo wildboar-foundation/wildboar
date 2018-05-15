@@ -83,7 +83,13 @@ cdef void shapelet_info_init(ShapeletInfo* s) nogil:
     s[0].mean = NAN
     s[0].std = NAN
     s[0].index = 0
-    
+
+
+cdef void shapelet_info_free(ShapeletInfo shapelet_info) nogil:
+    """Free the `extra` payload of a shapelet info if needed """
+    if shapelet_info.extra != NULL:
+        free(shapelet_info.extra)
+        shapelet_info.extra = NULL
 
 cdef int shapelet_info_update_statistics_(ShapeletInfo* s,
                                          const TSDatabase t) nogil:
@@ -105,6 +111,7 @@ cdef int shapelet_info_update_statistics_(ShapeletInfo* s,
 
 
 cdef TSDatabase ts_database_new(np.ndarray data):
+    """Construct a new time series database from a ndarray """
     if data.ndim < 2 or data.ndim > 3:
         raise ValueError("ndim {0} < 2 or {0} > 3".format(data.ndim))
 
@@ -126,13 +133,10 @@ cdef TSDatabase ts_database_new(np.ndarray data):
 
     return sd
 
-cdef void shapelet_info_free(ShapeletInfo shapelet_info) nogil:
-    if shapelet_info.extra != NULL:
-        free(shapelet_info.extra)
-        shapelet_info.extra = NULL
-
 
 cdef class DistanceMeasure:
+    """A distance measure can compute the distance between time series and
+    shapelets """
 
     def __cinit__(self, size_t n_timesteps, *args, **kvargs):
         pass
