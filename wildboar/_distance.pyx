@@ -89,6 +89,7 @@ cdef int shapelet_info_update_statistics_(ShapeletInfo* s,
                                          const TSDatabase t) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
+                                   s.dim * t.dim_stride +
                                    s.start * t.timestep_stride)
     cdef double ex = 0
     cdef double ex2 = 0
