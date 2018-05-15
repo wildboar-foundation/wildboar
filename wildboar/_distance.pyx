@@ -33,6 +33,7 @@ from libc.math cimport INFINITY, NAN
 from wildboar._utils cimport rand_int
 
 cdef Shapelet new_shapelet_(np.ndarray t, size_t dim, double mean, double std):
+    """Create a new shapelet """
     cdef Shapelet shapelet = Shapelet(dim, len(t), mean, std)
     cdef double* data = shapelet.data
     cdef int i
@@ -42,6 +43,7 @@ cdef Shapelet new_shapelet_(np.ndarray t, size_t dim, double mean, double std):
     return shapelet
 
 cdef get_shapelet_(ShapeletInfo s, TSDatabase td, double mean, double std):
+    """Extract a new shapelet from `td` """
     cdef Shapelet shapelet = Shapelet(s.dim, s.length, mean, std)
     cdef double*data = shapelet.data
     cdef size_t shapelet_offset = (s.index * td.sample_stride +
@@ -64,12 +66,7 @@ cpdef Shapelet make_shapelet_(object me,
                               double mean,
                               double std,
                               object array):
-    """Reconstruct a `Shapelet`-object from Pickle
-
-    :param length: the size of the shapelet
-    :param array: the Numpy array
-    :return: a shapelet
-    """
+    """Reconstruct a `Shapelet`-object from pickle """
     cdef Shapelet shapelet = me(dim, length, mean, std)
     cdef size_t i
     for i in range(<size_t> array.shape[0]):
@@ -79,6 +76,7 @@ cpdef Shapelet make_shapelet_(object me,
 
 
 cdef void shapelet_info_init(ShapeletInfo* s) nogil:
+    """Initialize  a shapelet info struct """
     s[0].start = 0
     s[0].length = 0
     s[0].dim = 0
@@ -89,6 +87,7 @@ cdef void shapelet_info_init(ShapeletInfo* s) nogil:
 
 cdef int shapelet_info_update_statistics_(ShapeletInfo* s,
                                          const TSDatabase t) nogil:
+    """Update the mean and standard deviation of a shapelet info struct """
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
                                    s.start * t.timestep_stride)
     cdef double ex = 0
