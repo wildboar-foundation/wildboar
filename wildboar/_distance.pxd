@@ -79,6 +79,6 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
 
 cdef TSDatabase ts_database_new(np.ndarray X)
 
-#cdef void shapelet_info_init(ShapeletInfo* s) nogil
+cdef void shapelet_info_init(ShapeletInfo* s) nogil
 
 cdef void shapelet_info_free(ShapeletInfo shapelet_info) nogil

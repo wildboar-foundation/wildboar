@@ -44,7 +44,7 @@ from wildboar._distance cimport Shapelet
 
 from wildboar._distance cimport ts_database_new
 
-from wildboad._distance cimport shapelet_info_init
+from wildboar._distance cimport shapelet_info_init
 from wildboar._distance cimport shapelet_info_free
 
 from wildboar._impurity cimport entropy
@@ -324,6 +324,9 @@ cdef class ShapeletTreeBuilder:
 
         shapelet_info_init(&best_shapelet)
         best_impurity = INFINITY
+        best_threshold = NAN
+        best_split_point = 0
+        split_point = 0
 
         for i in range(self.n_shapelets):
             shapelet = self._sample_shapelet(start, end)

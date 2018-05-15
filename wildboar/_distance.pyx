@@ -35,7 +35,7 @@ from wildboar._utils cimport rand_int
 cdef Shapelet new_shapelet_(np.ndarray t, size_t dim, double mean, double std):
     cdef Shapelet shapelet = Shapelet(dim, len(t), mean, std)
     cdef double* data = shapelet.data
-    cdef size_t i
+    cdef int i
     for i in range(len(t)):
         data[i] = t[i]
 
