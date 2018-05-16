@@ -22,6 +22,10 @@ requires:
 
  * Cython (>= 0.28)
 
+### Current version
+
+Current release: 0.1
+
 ### User installation
 
 If you already have a working installation of NumPy, SciPy and Cython,
@@ -33,6 +37,7 @@ To install the requirements, use:
 
     pip install -r requirements.txt
 	
+
 ## Development
 
 Contributions are welcome. Pull requests are encouraged to be
