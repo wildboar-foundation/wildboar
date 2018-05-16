@@ -101,18 +101,26 @@ def distance(
     """Computes the minimum distance between `s` and the samples in `x`
 
     :param shapelet: the subsequence `array_like`
-    :param data: the samples [n_samples, n_timesteps]
+
+    :param data: the samples `[n_samples, n_timesteps]` or
+                 `[n_samples, n_dims, n_timesteps]`
+
     :param dim: the time series dimension to search (default: 0)
-    :param sample: the samples to compare to `int` or `array_like` or `None`.
-                   If `None` compare to all. (default: `None`)
+
+    :param sample: the samples to compare to `int` or `array_like` or
+                   `None`; if `sample` is `None`, return the distance
+                   to all samples in data. Note that if, `n_samples`
+                   is 1 a scalar is returned; otherwise a array is
+                   returned.
+
     :param metric: the distance measure
+
     :param return_index: if `true` return the index of the best
                          match. If there are many equally good
                          best matches, the first is returned.
-    :returns: `float`,
-              `(float, int)`,
-              `float [n_samples]` or
-              `(float [n_samples], int [n_samples]` depending on input
+
+    :returns: `float`, `(float, int)`, `float [n_samples]` or `(float
+              [n_samples], int [n_samples]` depending on input
 
     """
     cdef np.ndarray s = validate_shapelet_(shapelet)

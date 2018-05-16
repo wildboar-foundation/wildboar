@@ -1,6 +1,5 @@
 # wildboar
 
-
 wildboar is a Python module for temporal machine learning and fast
 distance computations built on top of
 [SciKit-Learn](http://scikit-learn.org) and [Numpy](http://numpy.org)
