@@ -440,6 +440,16 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         self.cb_1 = <double*> malloc(sizeof(double) * n_timestep)
         self.cb_2 = <double*> malloc(sizeof(double) * n_timestep)
 
+        if(self.X_buffer == NULL or
+           self.lower == NULL or
+           self.upper == NULL or
+           self.cost == NULL or
+           self.cost_prev == NULL or
+           self.cb == NULL or
+           self.cb_1 == NULL or
+           self.cb_2 == NULL):
+            raise MemoryError()
+
         deque_init(&self.dl, 2 * self.max_warp_width + 2)
         deque_init(&self.du, 2 * self.max_warp_width + 2)
 
