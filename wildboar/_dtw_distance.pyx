@@ -157,7 +157,6 @@ cdef inline double dist(double x, double y) nogil:
     return s * s
 
 
-# TODO: WIP: This does not WORK
 cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
                                  double s_mean, double s_std, size_t t_offset,
                                  size_t t_stride, double* T, double t_mean,
