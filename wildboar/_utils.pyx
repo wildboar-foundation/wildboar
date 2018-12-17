@@ -33,9 +33,7 @@ def print_tree(o, indent=1):
     else:
         print("-" * indent, "branch:")
         print("-" * indent, " shapelet: ", o.shapelet.array)
-        print("-" * indent, " threshold: ", o.threshold, "(",
-              o.unscaled_threshold if not
-              math.isnan(o.unscaled_threshold) else "?", ")")
+        print("-" * indent, " threshold: ", o.threshold)
         print("-" * indent, " left:", end="\n")
         print_tree(o.left, indent + 1)
         print("-" * indent, " right:", end="\n")

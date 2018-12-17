@@ -28,7 +28,6 @@ cdef class Node:
 
     # if node_type == BRANCH
     cdef readonly double threshold
-    cdef readonly double unscaled_threshold
     cdef readonly Shapelet shapelet
 
     cdef readonly Node left
