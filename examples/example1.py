@@ -7,6 +7,7 @@ from sklearn.ensemble import BaggingClassifier
 # from sklearn.tree import DecisionTreeClassifier
 
 from wildboar.tree import ShapeletTreeClassifier
+from wildboar.ensemble import ShapeletForestClassifier
 from wildboar._utils import print_tree
 
 
@@ -69,24 +70,11 @@ if __name__ == "__main__":
     x_test = test[:, 1:].astype(np.float64)
     y_test = test[:, 0].astype(np.intp)
 
-    tree = ShapeletTreeClassifier(
-        n_shapelets=10,
-        max_depth=None,
-        metric='scaled_dtw',
-        min_shapelet_size=0.1,
-        max_shapelet_size=1,
-        metric_params={"r": 3})
-
-    bag = BaggingClassifier(
-        base_estimator=tree,
-        bootstrap=True,
-        n_jobs=16,
-        n_estimators=100,
-        random_state=100,
-    )
-
+    f = ShapeletForestClassifier(
+        n_shapelets=1, metric="scaled_dtw", metric_params={"r": 0.1})
+    f.fit(x, y)
     c = time.time()
-    bag.fit(x, y)
-    print(bag.classes_)
-    print("acc:", bag.score(x_test, y_test))
+    f.fit(x, y)
+    print(f.classes_)
+    print("acc:", f.score(x_test, y_test))
     print(round(time.time() - c) * 1000)
