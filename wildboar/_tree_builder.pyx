@@ -409,7 +409,7 @@ cdef class ShapeletTreeBuilder:
         p = j * self.label_stride
 
         prev_distance = self.distance_buffer[start]
-        prev_label = self.labels[j]
+        prev_label = self.labels[p]
 
         if self.sample_weights != NULL:
             current_sample_weight = self.sample_weights[j]
