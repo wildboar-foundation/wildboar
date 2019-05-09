@@ -18,13 +18,15 @@
 from wildboar._distance cimport ShapeletInfo, Shapelet
 
 cdef struct SplitPoint:
-   size_t split_point
-   double threshold
-   ShapeletInfo shapelet_info
+    size_t split_point
+    double threshold
+    ShapeletInfo shapelet_info
 
-
+cdef enum NodeType:
+    classification_leaf, regression_leaf, branch
+   
 cdef class Node:
-    cdef readonly bint is_leaf
+    cdef readonly NodeType node_type
 
     # if node_type == BRANCH
     cdef readonly double threshold
@@ -33,7 +35,10 @@ cdef class Node:
     cdef readonly Node left
     cdef readonly Node right
 
-    # if node_type == LEAF
+    # if node_type == classification_leaf
     cdef double* distribution
     cdef size_t n_labels
+
+    # if node_type == regression_leaf
+    cdef double mean_value
 

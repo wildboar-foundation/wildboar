@@ -66,19 +66,24 @@ cdef inline SplitPoint new_split_point(size_t split_point,
 
 
 # pickle a leaf node
-cpdef Node remake_leaf_node(size_t n_labels, object proba):
-    cdef Node node = Node(True)
+cpdef Node remake_classification_leaf_node(size_t n_labels, object proba):
+    cdef Node node = Node(NodeType.classification_leaf)
     cdef size_t i
     node.n_labels = n_labels
     node.distribution = <double*> malloc(sizeof(double) * n_labels)
     for i in range(<size_t> proba.shape[0]):
         node.distribution[i] = proba[i]
+
     return node
+
+cpdef Node remake_regression_leaf_node(double mean_value):
+    cdef Node node = Node(NodeType.regression_leaf)
+    node.mean_value = mean_value
 
 # pickle a branch node
 cpdef Node remake_branch_node(double threshold, Shapelet shapelet,
                               Node left, Node right):
-    cpdef Node node = Node(False)
+    cpdef Node node = Node(NodeType.branch)
     node.shapelet = shapelet
     node.threshold = threshold
     node.left = left
@@ -87,27 +92,38 @@ cpdef Node remake_branch_node(double threshold, Shapelet shapelet,
 
 
 cdef class Node:
-    def __cinit__(self, bint is_leaf):
-        self.is_leaf = is_leaf
+    def __cinit__(self, NodeType node_type):
+        self.node_type = node_type
         self.distribution = NULL
 
     def __dealloc__(self):
-        if self.is_leaf and self.distribution != NULL:
+        if self.is_classification_leaf and self.distribution != NULL:
             free(self.distribution)
             self.distribution = NULL
 
     def __reduce__(self):
-        if self.is_leaf:
-            return (remake_leaf_node,
+        if self.is_classification_leaf:
+            return (remake_classification_leaf_node,
                     (self.n_labels, self.proba))
+        if self.is_regression_leaf:
+            return (remake_regression_leaf_node,
+                    (self.mean_value,))
         else:
             return (remake_branch_node, (self.threshold,
                                          self.shapelet, self.left, self.right))
 
     @property
+    def is_classification_leaf(self):
+        return self.node_type == NodeType.classification_leaf
+
+    @property
+    def is_regression_leaf(self):
+        return self.node_type == NodeType.regression_leaf
+
+    @property
     def proba(self):
-        if not self.is_leaf:
-            raise AttributeError("not a leaf node")
+        if not self.is_classification_leaf:
+            raise AttributeError("not a classification leaf node")
 
         cdef np.ndarray[np.float64_t] arr = np.empty(
             self.n_labels, dtype=np.float64)
@@ -115,24 +131,32 @@ cdef class Node:
         cdef size_t i
         for i in range(self.n_labels):
             arr[i] = self.distribution[i]
+
         return arr
 
 
-cdef Node new_leaf_node(double* label_buffer, size_t n_labels,
-                        double n_weighted_samples):
+cdef Node new_classification_leaf_node(double* label_buffer,
+                                       size_t n_labels,
+                                       double n_weighted_samples):
     cdef double* distribution = <double*> malloc(sizeof(double) * n_labels)
     cdef size_t i
     for i in range(n_labels):
         distribution[i] = label_buffer[i] / n_weighted_samples
 
-    cdef Node node = Node(True)
+    cdef Node node = Node(NodeType.classification_leaf)
     node.distribution = distribution
     node.n_labels = n_labels
     return node
 
 
+cdef Node new_regression_leaf_node(double mean_value):
+    cdef Node node = Node(NodeType.regression_leaf)
+    node.mean_value = mean_value
+    return node
+
+
 cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
-    cdef Node node = Node(False)
+    cdef Node node = Node(NodeType.branch)
     node.threshold = sp.threshold
     node.shapelet = shapelet
     return node
@@ -173,7 +197,7 @@ cdef class ShapeletTreePredictor:
         cdef double threshold
         for i in range(n_samples):
             node = root
-            while not node.is_leaf:
+            while not node.is_classification_leaf:
                 shapelet = node.shapelet
                 threshold = node.threshold
                 if (self.distance_measure.shapelet_distance(
@@ -288,7 +312,7 @@ cdef class ShapeletTreeBuilder:
             self.n_labels, &self.n_weighted_samples, self.label_buffer)
 
         if end - start < 2 or n_positive < 2 or depth >= self.max_depth:
-            return new_leaf_node(
+            return new_classification_leaf_node(
                 self.label_buffer, self.n_labels, self.n_weighted_samples)
 
         cdef SplitPoint split = self._split(start, end)
@@ -310,7 +334,7 @@ cdef class ShapeletTreeBuilder:
             shapelet_info_free(split.shapelet_info)
             return branch
         else:
-            return new_leaf_node(
+            return new_classification_leaf_node(
                 self.label_buffer, self.n_labels, self.n_weighted_samples)
 
     cdef SplitPoint _split(self, size_t start, size_t end) nogil:
