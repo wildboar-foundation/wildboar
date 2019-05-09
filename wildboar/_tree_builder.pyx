@@ -305,15 +305,32 @@ cdef class ShapeletTreeBuilder:
     cpdef Node build_tree(self):
         return self._build_tree(0, self.n_samples, 0)
 
+    cdef Node _make_leaf_node(self, size_t start, size_t end):
+        raise ValueError("must be overriden")
+
+    cdef bint _is_pre_pruned(self, size_t start, size_t end):
+        cdef int n_positive = label_distribution(
+            self.samples,
+            self.sample_weights,
+            start,
+            end,
+            self.labels,
+            self.label_stride,
+            self.n_labels,
+            &self.n_weighted_samples,  # out param
+            self.label_buffer,  # out param
+        )
+        if end - start < 2 or n_positive < 2:
+            return True
+        return False
+        
+    
     cdef Node _build_tree(self, size_t start, size_t end, size_t depth):
         memset(self.label_buffer, 0, sizeof(double) * self.n_labels)
-        cdef int n_positive = label_distribution(
-            self.samples, self.sample_weights, start, end, self.labels, self.label_stride,
-            self.n_labels, &self.n_weighted_samples, self.label_buffer)
 
-        if end - start < 2 or n_positive < 2 or depth >= self.max_depth:
-            return new_classification_leaf_node(
-                self.label_buffer, self.n_labels, self.n_weighted_samples)
+
+        if self._is_pre_pruned(start, end) or depth >= self.max_depth:
+            return self._make_leaf_node(start, end)
 
         cdef SplitPoint split = self._split(start, end)
 
@@ -487,3 +504,13 @@ cdef class ShapeletTreeBuilder:
             prev_label = current_label
             prev_distance = current_distance
 
+cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
+    cdef Node _make_leaf_node(self, size_t start, size_t end):
+        return new_classification_leaf_node(
+            self.label_buffer, self.n_labels, self.n_weighted_samples)
+
+
+cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
+
+    cdef Node _make_leaf_node(self, size_t start, size_t end):
+        return new_regression_leaf_node(0.0)

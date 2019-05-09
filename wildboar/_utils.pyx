@@ -72,6 +72,8 @@ cdef size_t label_distribution(const size_t* samples,
     :param labels: the labels
     :param label_stride: the stride in labels
     :param n_labels: the number labeles
+    :param n_weighted_samples: (out) number of samples according to weight
+    :param dist: (out) label distribution
     :return: number of classes included in the sample
     """
     cdef double sample_weight

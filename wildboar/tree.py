@@ -17,7 +17,7 @@
 
 import numpy as np
 
-from wildboar._tree_builder import ShapeletTreeBuilder
+from wildboar._tree_builder import ClassificationShapeletTreeBuilder
 from wildboar._tree_builder import ShapeletTreePredictor
 
 from sklearn.base import ClassifierMixin
@@ -179,7 +179,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         self.n_classes_ = len(self.classes_)
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
-        tree_builder = ShapeletTreeBuilder(
+        tree_builder = ClassificationShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
