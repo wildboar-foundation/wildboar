@@ -210,7 +210,7 @@ cython_ext_modules = [
     ext_module_distance,
     ext_module_euclidean_distance,
     ext_module_dtw_distance,
-    ext_module_mass_distance,
+    #    ext_module_mass_distance,
     ext_module_distance_api,
     ext_module_impurity,
     ext_module_tree_builder,
