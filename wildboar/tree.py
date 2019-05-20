@@ -18,9 +18,11 @@
 import numpy as np
 
 from wildboar._tree_builder import ClassificationShapeletTreeBuilder
-from wildboar._tree_builder import ShapeletTreePredictor
+from wildboar._tree_builder import ClassificationShapeletTreePredictor
+from wildboar._tree_builder import RegressionShapeletTreeBuilder
+from wildboar._tree_builder import RegressionShapeletTreePredictor
 
-from sklearn.base import ClassifierMixin
+from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.base import BaseEstimator
 from sklearn.utils import check_random_state
 from sklearn.utils import check_array
@@ -28,6 +30,205 @@ from sklearn.utils import check_array
 from wildboar.distance import DISTANCE_MEASURE
 
 __all__ = ["ShapeletTreeClassifier"]
+
+
+class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
+    """A shapelet tree classifier."""
+
+    def __init__(self,
+                 max_depth=None,
+                 min_samples_leaf=2,
+                 n_shapelets=10,
+                 min_shapelet_size=0,
+                 max_shapelet_size=1,
+                 metric='euclidean',
+                 metric_params=None,
+                 force_dim=None,
+                 random_state=None):
+        """A shapelet decision tree regressor
+
+        :param max_depth: The maximum depth of the tree. If `None` the
+           tree is expanded until all leafs are pure or until all
+           leafs contain less than `min_samples_leaf` samples
+           (default: None).
+
+        :param min_samples_leaf: The minimum number of samples to
+           split an internal node (default: 2).
+
+        :param n_shapelets: The number of shapelets to sample at each
+           node (default: 10).
+
+        :param min_shapelet_size: The minimum length of a sampled
+           shapelet expressed as a fraction, computed as
+           `min(ceil(X.shape[-1] * min_shapelet_size), 2)` (default:
+           0).
+
+        :param max_shapelet_size: The maximum length of a sampled
+           shapelet, expressed as a fraction and computed as
+           `ceil(X.shape[-1] * max_shapelet_size)`.
+
+        :param metric: Distance metric used to identify the best
+           match. (default: `'euclidean'`)
+
+        :param metric_params: Paramters to the distace measure
+
+        :param force_dim: Force the number of dimensions (default:
+           None). If `int`, `force_dim` reshapes the input to the
+           shape `[n_samples, force_dim, -1]` to support the
+           `BaggingClassifier` interface.
+
+        :param random_state: If `int`, `random_state` is the seed used
+           by the random number generator; If `RandomState` instance,
+           `random_state` is the random number generator; If `None`,
+           the random number generator is the `RandomState` instance
+           used by `np.random`.
+
+        """
+        if min_shapelet_size < 0 or min_shapelet_size > max_shapelet_size:
+            raise ValueError(
+                "`min_shapelet_size` {0} <= 0 or {0} > {1}".format(
+                    min_shapelet_size, max_shapelet_size))
+        if max_shapelet_size > 1:
+            raise ValueError(
+                "`max_shapelet_size` {0} > 1".format(max_shapelet_size))
+
+        self.max_depth = max_depth
+        self.max_depth = max_depth or 2**31
+        self.min_samples_leaf = min_samples_leaf
+        self.random_state = check_random_state(random_state)
+        self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
+        self.metric = metric
+        self.metric_params = metric_params
+        self.force_dim = force_dim
+
+    def fit(self, X, y, sample_weight=None, check_input=True):
+        """Fit a shapelet tree regressor from the training set (X, y)
+
+        :param X: array-like, shape `[n_samples, n_timesteps]` or
+           `[n_samples, n_dimensions, n_timesteps]`. The training time
+           series.
+
+        :param y: array-like, `[n_samples]`. Target values are
+        floating point values.
+
+        :param sample_weight: If `None`, then samples are equally
+            weighted. Splits that would create child nodes with net
+            zero or negative weight are ignored while searching for a
+            split in each node. Splits are also ignored if they would
+            result in any single class carrying a negative weight in
+            either child node.
+
+        :param check_input: Allow to bypass several input checking.
+            Don't use this parameter unless you know what you do.
+
+        :returns: `self`
+
+        """
+        random_state = check_random_state(self.random_state)
+
+        if check_input:
+            X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
+            y = check_array(y, dtype=np.float64, ensure_2d=False)
+
+        if X.ndim < 2 or X.ndim > 3:
+            raise ValueError("illegal input dimensions")
+
+        n_samples = X.shape[0]
+        if isinstance(self.force_dim, int):
+            X = np.reshape(X, [n_samples, self.force_dim, -1])
+
+        n_timesteps = X.shape[-1]
+
+        if X.ndim > 2:
+            n_dims = X.shape[1]
+        else:
+            n_dims = 1
+
+        if len(y) != n_samples:
+            raise ValueError("Number of labels={} does not match "
+                             "number of samples={}".format(len(y), n_samples))
+
+        if X.dtype != np.float64 or not X.flags.contiguous:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+
+        if y.dtype != np.float64 or not y.flags.contiguous:
+            y = np.ascontiguousarray(y, dtype=np.float64)
+
+        metric_params = self.metric_params
+        if self.metric_params is None:
+            metric_params = {}
+
+        distance_measure = DISTANCE_MEASURE[self.metric](n_timesteps,
+                                                         **metric_params)
+
+        max_shapelet_size = int(n_timesteps * self.max_shapelet_size)
+        min_shapelet_size = int(n_timesteps * self.min_shapelet_size)
+
+        if min_shapelet_size < 2:
+            min_shapelet_size = 2
+
+        self.n_timestep_ = n_timesteps
+        self.n_dims_ = n_dims
+        tree_builder = RegressionShapeletTreeBuilder(
+            self.n_shapelets,
+            min_shapelet_size,
+            max_shapelet_size,
+            self.max_depth,
+            distance_measure,
+            X,
+            y,
+            sample_weight,
+            random_state,
+        )
+
+        self.root_node_ = tree_builder.build_tree()
+        return self
+
+    def predict(self, X, check_input=True):
+        """Predict the regression of the input samples X.
+
+        :param X: array-like, shape `[n_samples, n_timesteps]` or
+           `[n_samples, n_dimensions, n_timesteps]`. The input time
+           series.
+
+        :param check_input: Allow to bypass several input checking.
+            Don't use this parameter unless you know what you do.
+
+        :returns: array of `shape = [n_samples]`.
+
+        """
+        if X.ndim < 2 or X.ndim > 3:
+            raise ValueError("illegal input dimensions X.ndim ({})".format(
+                X.ndim))
+
+        if isinstance(self.force_dim, int):
+            X = np.reshape(X, [X.shape[0], self.force_dim, -1])
+
+        if X.shape[-1] != self.n_timestep_:
+            raise ValueError("illegal input shape ({} != {})".format(
+                X.shape[-1], self.n_timestep_))
+
+        if X.ndim > 2 and X.shape[1] != self.n_dims_:
+            raise ValueError("illegal input shape ({} != {}".format(
+                X.shape[1], self.n_dims))
+
+        if check_input:
+            X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
+
+        if X.dtype != np.float64 or not X.flags.contiguous:
+            X = np.ascontiguousarray(X, dtype=np.float64)
+
+        metric_params = self.metric_params
+        if self.metric_params is None:
+            metric_params = {}
+
+        distance_measure = DISTANCE_MEASURE[self.metric](self.n_timestep_,
+                                                         **metric_params)
+
+        predictor = RegressionShapeletTreePredictor(X, distance_measure)
+        return predictor.predict(self.root_node_)
 
 
 class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
@@ -187,9 +388,9 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             distance_measure,
             X,
             y,
-            self.n_classes_,
             sample_weight,
             random_state,
+            self.n_classes_,
         )
 
         self.root_node_ = tree_builder.build_tree()
@@ -256,6 +457,6 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         distance_measure = DISTANCE_MEASURE[self.metric](self.n_timestep_,
                                                          **metric_params)
 
-        predictor = ShapeletTreePredictor(X, distance_measure,
-                                          len(self.classes_))
-        return predictor.predict_proba(self.root_node_)
+        predictor = ClassificationShapeletTreePredictor(
+            X, distance_measure, len(self.classes_))
+        return predictor.predict(self.root_node_)

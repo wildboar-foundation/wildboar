@@ -27,9 +27,12 @@ from libc.math cimport log2
 
 # For debugging
 def print_tree(o, indent=1):
-    if o.is_leaf:
+    if o.is_classification_leaf:
         print("-" * indent, "leaf: ")
         print("-" * indent, " proba: ", o.proba)
+    elif o.is_regression_leaf:
+        print("-" * indent, "leaf: ")
+        print("-" * indent, " avg: ", o.regr_val)
     else:
         print("-" * indent, "branch:")
         print("-" * indent, " shapelet: ", o.shapelet.array)

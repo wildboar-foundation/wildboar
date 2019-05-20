@@ -84,7 +84,8 @@ else:
 def declare_cython_extension(extName,
                              use_math=False,
                              use_openmp=False,
-                             include_dirs=None):
+                             include_dirs=None,
+                             extra_lib=None):
     extPath = extName.replace(".", os.path.sep) + ".pyx"
     if use_math:
         compile_args = list(my_extra_compile_args_math)  # copy
@@ -98,6 +99,12 @@ def declare_cython_extension(extName,
     if use_openmp:
         compile_args.insert(0, openmp_compile_args)
         link_args.insert(0, openmp_link_args)
+
+    if extra_lib is not None:
+        if libraries is None:
+            libraries = []
+        for lib in extra_lib:
+            libraries.append(lib)
 
     return Extension(
         extName, [extPath],
@@ -171,6 +178,13 @@ ext_module_dtw_distance = declare_cython_extension(
     use_openmp=False,
     include_dirs=my_include_dirs)
 
+ext_module_mass_distance = declare_cython_extension(
+    "wildboar._mass_distance",
+    use_math=True,
+    use_openmp=False,
+    include_dirs=my_include_dirs,
+    extra_lib=["fftw3"])
+
 ext_module_impurity = declare_cython_extension(
     "wildboar._impurity",
     use_math=True,
@@ -196,6 +210,7 @@ cython_ext_modules = [
     ext_module_distance,
     ext_module_euclidean_distance,
     ext_module_dtw_distance,
+    ext_module_mass_distance,
     ext_module_distance_api,
     ext_module_impurity,
     ext_module_tree_builder,
@@ -236,8 +251,8 @@ setup(
     ],
     setup_requires=["cython", "numpy"],
     install_requires=["numpy"],
-    provides=["setup_template_cython"],
-    keywords=["setuptools template example cython"],
+    provides=["wildboar"],
+    keywords=["machine_learning time_series distance"],
     ext_modules=my_ext_modules,
     packages=["wildboar"],
     package_data={
