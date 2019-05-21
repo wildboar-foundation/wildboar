@@ -260,6 +260,7 @@ cdef class ShapeletTreeBuilder:
     cdef size_t min_shapelet_size
     cdef size_t max_shapelet_size
     cdef size_t max_depth
+    cdef size_t min_sample_split
 
     cdef size_t label_stride
     cdef size_t n_labels
@@ -281,6 +282,7 @@ cdef class ShapeletTreeBuilder:
                   size_t min_shapelet_size,
                   size_t max_shapelet_size,
                   size_t max_depth,
+                  size_t min_sample_split,
                   DistanceMeasure distance_measure,
                   np.ndarray X,
                   np.ndarray y,
@@ -293,6 +295,7 @@ cdef class ShapeletTreeBuilder:
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.max_depth = max_depth
+        self.min_sample_split = min_sample_split
         self.distance_measure = distance_measure
 
         self.td = ts_database_new(X)
@@ -344,9 +347,8 @@ cdef class ShapeletTreeBuilder:
     cdef Node _build_tree(self, size_t start, size_t end, size_t depth):
         if self._is_pre_pruned(start, end) or depth >= self.max_depth:
             return self._make_leaf_node(start, end)
-#        print(start, end)
+
         cdef SplitPoint split = self._split(start, end)
-#        print("could split")
         cdef Shapelet shapelet
         cdef Node branch
 
@@ -452,16 +454,17 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
     cdef size_t* labels
 
     def __cinit__(self,
-                   size_t n_shapelets,
-                   size_t min_shapelet_size,
-                   size_t max_shapelet_size,
-                   size_t max_depth,
-                   DistanceMeasure distance_measure,
-                   np.ndarray X,
-                   np.ndarray y,
-                   np.ndarray sample_weights,
-                   object random_state,
-                   size_t n_labels):
+                  size_t n_shapelets,
+                  size_t min_shapelet_size,
+                  size_t max_shapelet_size,
+                  size_t max_depth,
+                  size_t min_sample_split,
+                  DistanceMeasure distance_measure,
+                  np.ndarray X,
+                  np.ndarray y,
+                  np.ndarray sample_weights,
+                  object random_state,
+                  size_t n_labels):
         self.labels = <size_t*> y.data
         self.n_labels = n_labels
         self.label_buffer = <double*> malloc(sizeof(double) * n_labels)
@@ -496,7 +499,7 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             self.label_buffer,  # out param
         )
 
-        if end - start < 2 or n_positive < 2:
+        if end - start <= self.min_sample_split or n_positive < 2:
             return True
         return False
 
@@ -594,6 +597,7 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                   size_t min_shapelet_size,
                   size_t max_shapelet_size,
                   size_t max_depth,
+                  size_t min_sample_split,
                   DistanceMeasure distance_measure,
                   np.ndarray X,
                   np.ndarray y,
@@ -613,22 +617,24 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                 sample_weight = 1.0
                 
             self.n_weighted_samples += sample_weight
-        if end - start < 2:
+        if end - start < self.min_sample_split:
             return True
         return False
 
     cdef Node _make_leaf_node(self, size_t start, size_t end):
         cdef double leaf_sum = 0
+        cdef double current_sample_weight = 0
         cdef size_t j
         for i in range(start, end):
             j = self.samples[i]
             p = j * self.label_stride
-            leaf_sum += self.labels[p] # TODO: take weights into consideration
-        return new_regression_leaf_node(leaf_sum / self.n_weighted_samples)
+            if self.sample_weights != NULL:
+                current_sample_weight = self.sample_weights[j]
+            else:
+                current_sample_weight = 1.0
+            leaf_sum += self.labels[p] * current_sample_weight
 
-    cdef double _variance(self, double n, double val, double val_sqr) nogil:
-        cdef double mean = val / n
-        return (val_sqr / n) - (mean * mean)
+        return new_regression_leaf_node(leaf_sum / self.n_weighted_samples)
 
     cdef void _partition_distance_buffer(self,
                                          size_t start,
@@ -642,17 +648,14 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
 
         cdef double right_sum
         cdef double right_mean
-        cdef double right_delta
-        cdef double right_delta2
-        cdef double right_val_sqr
+        cdef double right_mean_old
+        cdef double right_var
         cdef double left_sum
         cdef double left_mean
-        cdef double left_delta
-        cdef double left_delta2
-        cdef double left_val_sqr
+        cdef double left_mean_old
+        cdef double left_var
 
         cdef double prev_distance
-        cdef double prev_val
 
         cdef double current_sample_weight
         cdef double current_distance
@@ -663,7 +666,7 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
         p = j * self.label_stride
 
         prev_distance = self.distance_buffer[start]
-        prev_val = self.labels[p]
+        current_val = self.labels[p]
 
         if self.sample_weights != NULL:
             current_sample_weight = self.sample_weights[j]
@@ -671,16 +674,14 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
             current_sample_weight = 1.0
 
         left_sum = current_sample_weight
-        left_delta = 0
-        left_mean = prev_val
-        left_delta2 = 0
-        left_val_sqr = 0
+        left_mean_old = 0
+        left_mean = current_val
+        left_var = 0 
         
         right_sum = 0
-        right_delta = 0
+        right_mean_old = 0
         right_mean = 0
-        right_delta2 = 0
-        right_val_sqr = 0
+        right_var = 0
         
         for i in range(start + 1, end):
             j = self.samples[i]
@@ -690,56 +691,56 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
             else:
                 current_sample_weight = 1.0
             
+            current_val = self.labels[p]
             right_sum += current_sample_weight
-            current_val = self.labels[p] * current_sample_weight
-            right_delta = current_val - right_mean
-            right_mean += right_delta / right_sum
-            right_delta2 = current_val - right_mean
-            right_val_sqr += right_delta * right_delta2
+            right_mean_old = right_mean
+            right_mean = (right_mean_old +
+                          (current_sample_weight / right_sum) *
+                          (current_val - right_mean_old))
+            right_var += (current_sample_weight *
+                          (current_val - right_mean_old) *
+                          (current_val - right_mean))
 
-        impurity[0] = right_val_sqr / right_sum
+        impurity[0] = (left_var / left_sum) + (right_var / right_sum)
         threshold[0] = prev_distance
         split_point[0] = start + 1 # The split point indicates a <=-relation
-        # with gil:
-        #     print("impurity", impurity[0], "left_val", left_sum, left_val, left_val_sqr, "right_val", right_sum, right_val, right_val_sqr)
-        # with gil:
-        #     print("dist", prev_distance, impurity[0], start)
+
         for i in range(start + 1, end - 1):
             j = self.samples[i]
-            current_distance = self.distance_buffer[i]
-
             p = j * self.label_stride
+            
+            current_distance = self.distance_buffer[i]
 
             if self.sample_weights != NULL:
                 current_sample_weight = self.sample_weights[j]
             else:
                 current_sample_weight = 1.0
 
-            # TODO: weighted computation of variance
-            current_val = self.labels[p] * current_sample_weight
+
+            current_val = self.labels[p]
             right_sum -= current_sample_weight
-            right_delta2 = current_val - right_mean
-            right_mean -= right_delta2 / right_sum
-            right_delta = current_val - right_mean
-            right_val_sqr -= right_delta * right_delta2
+            right_mean_old = right_mean
+            right_mean = (right_mean_old -
+                          (current_sample_weight / right_sum) *
+                          (current_val - right_mean_old))
+            right_var -= (current_sample_weight *
+                          (current_val - right_mean_old) *
+                          (current_val - right_mean))
 
             left_sum += current_sample_weight
-            left_delta = current_val - left_mean
-            left_mean += left_delta / left_sum
-            left_delta2 = current_val - left_mean
-            left_val_sqr += left_delta * left_delta2
+            left_mean_old = left_mean
+            left_mean = (left_mean_old +
+                         (current_sample_weight / left_sum) *
+                         (current_val - left_mean_old))
+            left_var += (current_sample_weight *
+                         (current_val - left_mean_old) *
+                         (current_val - left_mean))
 
             prev_distance = current_distance 
-            
+            current_impurity = (left_var / left_sum) + (right_var / right_sum)
 
-            current_impurity = (left_val_sqr / left_sum) + (right_val_sqr / right_sum)
-            # with gil:
-            #    print("dist", current_val, right_mean, left_mean, current_impurity, left_sum, right_sum)
             if current_impurity <= impurity[0]:
                 impurity[0] = current_impurity
                 threshold[0] = (current_distance + prev_distance) / 2
                 split_point[0] = i
-            # with gil:
-            #     print("impurity", current_impurity, "left_val", left_sum, left_val, left_val_sqr, "right_val", right_sum, right_val, right_val_sqr)
-        # with gil:
-        #     print("split:", split_point[0])
+

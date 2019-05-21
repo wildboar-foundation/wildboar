@@ -37,7 +37,7 @@ class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
 
     def __init__(self,
                  max_depth=None,
-                 min_samples_leaf=2,
+                 min_samples_split=2,
                  n_shapelets=10,
                  min_shapelet_size=0,
                  max_shapelet_size=1,
@@ -49,10 +49,10 @@ class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
 
         :param max_depth: The maximum depth of the tree. If `None` the
            tree is expanded until all leafs are pure or until all
-           leafs contain less than `min_samples_leaf` samples
+           leafs contain less than `min_samples_split` samples
            (default: None).
 
-        :param min_samples_leaf: The minimum number of samples to
+        :param min_samples_split: The minimum number of samples to
            split an internal node (default: 2).
 
         :param n_shapelets: The number of shapelets to sample at each
@@ -94,7 +94,7 @@ class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
 
         self.max_depth = max_depth
         self.max_depth = max_depth or 2**31
-        self.min_samples_leaf = min_samples_leaf
+        self.min_samples_split = min_samples_split
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
@@ -169,6 +169,8 @@ class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
+        min_sample_split = self.min_samples_split
+
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
         tree_builder = RegressionShapeletTreeBuilder(
@@ -176,6 +178,7 @@ class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
             min_shapelet_size,
             max_shapelet_size,
             self.max_depth,
+            min_sample_split,
             distance_measure,
             X,
             y,
@@ -236,7 +239,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
     def __init__(self,
                  max_depth=None,
-                 min_samples_leaf=2,
+                 min_samples_split=2,
                  n_shapelets=10,
                  min_shapelet_size=0,
                  max_shapelet_size=1,
@@ -248,10 +251,10 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
         :param max_depth: The maximum depth of the tree. If `None` the
            tree is expanded until all leafs are pure or until all
-           leafs contain less than `min_samples_leaf` samples
+           leafs contain less than `min_samples_split` samples
            (default: None).
 
-        :param min_samples_leaf: The minimum number of samples to
+        :param min_samples_split: The minimum number of samples to
            split an internal node (default: 2).
 
         :param n_shapelets: The number of shapelets to sample at each
@@ -293,7 +296,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
         self.max_depth = max_depth
         self.max_depth = max_depth or 2**31
-        self.min_samples_leaf = min_samples_leaf
+        self.min_samples_split = min_samples_split
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
@@ -376,7 +379,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
 
         if min_shapelet_size < 2:
             min_shapelet_size = 2
-
+        min_sample_split = self.min_samples_split
         self.n_classes_ = len(self.classes_)
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
@@ -385,6 +388,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
             min_shapelet_size,
             max_shapelet_size,
             self.max_depth,
+            min_sample_split,
             distance_measure,
             X,
             y,
