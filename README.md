@@ -47,11 +47,10 @@ formatted according to
 
 ## Usage
 
-   from wildboar import ShapeletForestClassifier
-   # from wildboar import ShapeletForestRegressor
-   
-   c = ShapeletForestClassifier()
-   c.fit(x, y)
+    from wildboar import ShapeletForestClassifier
+    # from wildboar import ShapeletForestRegressor
+    c = ShapeletForestClassifier()
+    c.fit(x, y)
 
 ### Source code
 
