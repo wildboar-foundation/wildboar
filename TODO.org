@@ -1,4 +1,2 @@
-* Tasks
 
-** TODO: add __reduce__ to the Node-type
 

@@ -24,7 +24,7 @@ requires:
 
 ### Current version
 
-Current release: 0.1
+Current release: 0.2
 
 ### User installation
 
@@ -44,6 +44,14 @@ Contributions are welcome. Pull requests are encouraged to be
 formatted according to
 [PEP8](https://www.python.org/dev/peps/pep-0008/), e.g., using
 [yapf](https://github.com/google/yapf).
+
+## Usage
+
+   from wildboar import ShapeletForestClassifier
+   # from wildboar import ShapeletForestRegressor
+   
+   c = ShapeletForestClassifier()
+   c.fit(x, y)
 
 ### Source code
 
