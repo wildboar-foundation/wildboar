@@ -21,9 +21,18 @@ libname = "wildboar"
 build_type = "optimized"
 # build_type = "debug"
 
-SHORTDESC = "Shapelet tree implementation"
+SHORTDESC = "wildboar is the fundamental package for time series classification with Python"
 
-DESC = """ Shapelet tree implemtation"""
+DESC = """
+It provides:
+
+ * Shapelet tree classification and regression
+ * Random shapelet forest classification and regression
+ * Fast dynamic time warning searching
+ * Fast euclidean distance searching
+
+The package is provided under the GPLv3 license.
+"""
 
 datadirs = ("test", )
 dataexts = (".py", ".pyx", ".pxd", ".c", ".cpp", ".h", ".sh", ".lyx", ".tex",
@@ -178,12 +187,12 @@ ext_module_dtw_distance = declare_cython_extension(
     use_openmp=False,
     include_dirs=my_include_dirs)
 
-ext_module_mass_distance = declare_cython_extension(
-    "wildboar._mass_distance",
-    use_math=True,
-    use_openmp=False,
-    include_dirs=my_include_dirs,
-    extra_lib=["fftw3"])
+# ext_module_mass_distance = declare_cython_extension(
+#     "wildboar._mass_distance",
+#     use_math=True,
+#     use_openmp=False,
+#     include_dirs=my_include_dirs,
+#     extra_lib=["fftw3"])
 
 ext_module_impurity = declare_cython_extension(
     "wildboar._impurity",
@@ -225,8 +234,8 @@ my_ext_modules = cythonize(
 setup(
     name="wildboar",
     version=version,
-    author="Isak Karlsson",
-    author_email="isak.karlsson@gmail.com",
+    author="Isak Samsten",
+    author_email="isak@samsten.se",
     url="https://github.com/isakkarlsson/wildboar",
     description=SHORTDESC,
     long_description=DESC,
@@ -237,20 +246,26 @@ setup(
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
-        "License :: GPLv3",
+        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
         "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: MacOS",
         "Programming Language :: Cython",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: Implementation :: CPython",
         "Topic :: Scientific/Engineering",
-        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Software Development :: Libraries",
-        "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     setup_requires=["cython", "numpy"],
     install_requires=["numpy"],
+    python_requires=">=3.4.0",
     provides=["wildboar"],
     keywords=["machine_learning time_series distance"],
     ext_modules=my_ext_modules,
