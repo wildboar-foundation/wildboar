@@ -24,9 +24,17 @@ requires:
 
 ### Current version
 
-Current release: 0.2
+Current release: 0.3
 
-### User installation
+### Binaries
+
+`wildboar` is available through `pip` and can be installed with:
+
+    pip install wildboar
+
+Universal binaries are compiled for GNU/Linux and Python 3.6 and 3.7.
+
+### Compilation
 
 If you already have a working installation of NumPy, SciPy and Cython,
 compiling and installing wildboar is as simple as:
@@ -48,11 +56,10 @@ formatted according to
 ## Usage
 
     from wildboar import ShapeletForestClassifier
-    # from wildboar import ShapeletForestRegressor
     c = ShapeletForestClassifier()
     c.fit(x, y)
 
-### Source code
+## Source code
 
 You can check the latest sources with the command:
 

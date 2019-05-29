@@ -1,25 +1,20 @@
 # -*- coding: utf-8 -*-
-#
-from __future__ import division, print_function, absolute_import
 
 import sys
 import os
 import ast
 
-import numpy as np
-
 from setuptools import setup
 from setuptools.extension import Extension
 
-try:
-    from Cython.Build import cythonize
-except ImportError:
-    sys.exit(
-        "Cython not found. Cython is needed to build the extension modules.")
+
+def build_ext(*args, **kwargs):
+    import Cython.Build
+    return Cython.Build.build_ext(*args, **kwargs)
+
 
 libname = "wildboar"
 build_type = "optimized"
-# build_type = "debug"
 
 SHORTDESC = "wildboar is the fundamental package for time series classification with Python"
 
@@ -68,7 +63,16 @@ extra_link_args_nonmath_debug = []
 
 openmp_compile_args = ['-fopenmp']
 openmp_link_args = ['-fopenmp']
-my_include_dirs = [np.get_include()]
+
+
+# Lazy loading
+class np_include_dirs(str):
+    def __str__(self):
+        import numpy as np
+        return np.get_include()
+
+
+my_include_dirs = [np_include_dirs()]
 
 if build_type == 'optimized':
     my_extra_compile_args_math = extra_compile_args_math_optimized
@@ -212,8 +216,6 @@ ext_module_distance_api = declare_cython_extension(
     use_openmp=False,
     include_dirs=my_include_dirs)
 
-# this is mainly to allow a manual logical ordering of the declared modules
-#
 cython_ext_modules = [
     ext_module_utils,
     ext_module_distance,
@@ -225,12 +227,6 @@ cython_ext_modules = [
     ext_module_tree_builder,
 ]
 
-my_ext_modules = cythonize(
-    cython_ext_modules,
-    include_path=my_include_dirs,
-    gdb_debug=my_debug,
-)
-
 setup(
     name="wildboar",
     version=version,
@@ -240,7 +236,7 @@ setup(
     description=SHORTDESC,
     long_description=DESC,
     license="GPLv3",
-    platforms=["Linux"],
+    #    platforms=["Linux"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
@@ -263,17 +259,22 @@ setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: Software Development :: Libraries",
     ],
-    setup_requires=["cython", "numpy"],
-    install_requires=["numpy"],
+    setup_requires=[
+        'cython>=0.28',
+        'numpy>=1.14.2',
+        'setuptools>=18.0',
+    ],
+    install_requires=["scikit-learn"],
     python_requires=">=3.4.0",
     provides=["wildboar"],
-    keywords=["machine_learning time_series distance"],
-    ext_modules=my_ext_modules,
+    keywords=["machine learning", "time series distance"],
+    ext_modules=cython_ext_modules,
     packages=["wildboar"],
     package_data={
-        'wildboar': ['*.pxd', '*.pyx'],
+        'wildboar': ['*.pxd', '*.pyx', '*.c'],
     },
     zip_safe=False,
+    cmdclass={'build_ext': build_ext},
 
     # Custom data files not inside a Python package
     data_files=datafiles,
