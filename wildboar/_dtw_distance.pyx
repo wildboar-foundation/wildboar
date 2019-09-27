@@ -27,6 +27,8 @@
 #    Series Subsequences under Dynamic Time Warping (2012)
 #  - http://www.cs.ucr.edu/~eamonn/UCRsuite.html
 
+cimport numpy as np
+
 from libc.stdlib cimport malloc
 from libc.stdlib cimport free
 from libc.string cimport memset
@@ -411,6 +413,8 @@ cdef inline size_t compute_warp_width_(size_t length, double r) nogil:
         
 
 cdef class ScaledDtwDistance(ScaledDistanceMeasure):
+    # TODO: override shapelet creation to avoid recomputing the
+    # lower-bound
     cdef double* X_buffer
     cdef double* lower
     cdef double* upper
@@ -426,7 +430,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef size_t max_warp_width
     cdef double r
 
-    def __cinit__(self, size_t n_timestep, double r = 0):
+    def __cinit__(self, size_t n_timestep, double r=0):
         if r < 0:
             raise ValueError("illegal warp width")
         self.r = r
@@ -493,6 +497,19 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         shapelet_info.extra = dtw_extra
         return shapelet_info
 
+    cdef Shapelet new_shapelet(self, np.ndarray t, size_t dim):
+        cdef Shapelet s = ScaledDistanceMeasure.new_shapelet(self, t, dim)
+        cdef DtwExtra* dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
+        dtw_extra[0].lower = <double*> malloc(sizeof(double) * s.length)
+        dtw_extra[0].upper = <double*> malloc(sizeof(double) * s.length)
+
+        cdef size_t warp_width = compute_warp_width_(s.length, self.r)
+        find_min_max(0, 1, s.length, s.data,
+                     warp_width, dtw_extra[0].lower, dtw_extra[0].upper,
+                     &self.dl, &self.du)
+        s.extra = dtw_extra
+        return s
+    
     cdef double shapelet_distance(self,
                                   Shapelet s,
                                   TSDatabase td,

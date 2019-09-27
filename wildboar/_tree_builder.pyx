@@ -256,23 +256,34 @@ cdef class RegressionShapeletTreePredictor(ShapeletTreePredictor):
 
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
+    
     cdef size_t n_shapelets
     cdef size_t min_shapelet_size
     cdef size_t max_shapelet_size
     cdef size_t max_depth
     cdef size_t min_sample_split
 
+    # the stride of the label array
     cdef size_t label_stride
-    cdef size_t n_labels
 
+    # the weight of the j:th sample
     cdef double* sample_weights
 
     cdef TSDatabase td
+
+    # the number of samples with non-zero weight
     cdef size_t n_samples
+
+    # buffer of samples from 0, ..., n_samples
     cdef size_t* samples
+
+    # temporary buffer of samples from 0, ..., n_samples
     cdef size_t* samples_buffer
+
+    # the sum of samples_weights
     cdef double n_weighted_samples
 
+    # temporary buffer for distance computations
     cdef double* distance_buffer
 
     cdef DistanceMeasure distance_measure
@@ -338,13 +349,44 @@ cdef class ShapeletTreeBuilder:
         return self._build_tree(0, self.n_samples, 0)
 
     cdef Node _make_leaf_node(self, size_t start, size_t end):
-        raise ValueError("must be overriden")
+        """ Create a new leaf node based on the samples in the region indicated
+        by `start` and `end`
+
+        :param start: the start index
+
+        :param end: the end index
+
+        :returns: a new leaf node
+        """
+        raise NotImplementedError()
 
     cdef bint _is_pre_pruned(self, size_t start, size_t end):
-        raise ValueError("overriden by subclasses")
-        
-    
+        """Check if the tree should be pruned based on the samples in the
+        region indicated by `start` and `end`
+
+        Implementaiton detail: For optimization, subclasses *must* set
+        the variable `n_weighted_samples` to the number of samples
+        reaching this node in this method.
+
+        :param start: the start index
+
+        :param end: the end index
+
+        :return: if the current node should be pruned
+        """
+
+        raise NotImplementedError()
+
     cdef Node _build_tree(self, size_t start, size_t end, size_t depth):
+        """Recursive function for building the tree
+
+        Each call to this function is allowed to access and transpose
+        samples (in `self.samples`) in the region indicated by `start`
+        and `end`.
+
+        :param start: start index of samples in `samples`
+        :param end: the end index of samples in `samples`
+        :param depth: the current depth of the recursion"""
         if self._is_pre_pruned(start, end) or depth >= self.max_depth:
             return self._make_leaf_node(start, end)
 
@@ -366,11 +408,21 @@ cdef class ShapeletTreeBuilder:
             shapelet_info_free(split.shapelet_info)
             return branch
         else:
-            # new_classification_leaf_node(
-            #     self.label_buffer, self.n_labels, self.n_weighted_samples)
             return self._make_leaf_node(start, end)
 
     cdef SplitPoint _split(self, size_t start, size_t end) nogil:
+        """Split the `sample` array indicated by the region specified by
+        `start` and `end` by minimzing an impurity measure
+
+        Requirements:
+
+         - `self._partition_distance_buffer`: implements the decision
+           to determine the split quality minimizing `impurity`
+
+        :params start: the start index of samples in `sample`
+        :params end: the end index of samples in `sample`
+        :returns: a split point minimzing the impurity
+        """
         cdef size_t split_point, best_split_point
         cdef double threshold, best_threshold
         cdef double impurity
@@ -441,16 +493,42 @@ cdef class ShapeletTreeBuilder:
                                          size_t* split_point,
                                          double* threshold,
                                          double* impurity) nogil:
+        """ Partition the distance buffer such that an impurity measure is
+        minimized
+
+        :param start: the start index in `samples`
+
+        :param end: the end index in `samples`
+
+        :param split_point: (out) the split point (an index in
+        `range(start, end)` minimizing `impurity`
+
+        :param threshold: (out) the threshold value
+
+        :param impurity: (in) the initial impurity, (out) the optimal
+        impurity (possibly unchanged)
+        """
         # Overriden by subclasses
-        return;
+        with gil:
+            raise NotImplementedError()
 
 
 
 cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
-    
+
+    # the number of labels
+    cdef size_t n_labels
+
+    # temporary buffer with sample distributions per label
     cdef double* label_buffer
+
+    # temporary buffer with the left split sample distributions
     cdef double* left_label_buffer
+
+    # temporary buffer with the right split sample distribution
     cdef double* right_label_buffer
+
+    # the (strided) array of labels
     cdef size_t* labels
 
     def __cinit__(self,
@@ -485,7 +563,8 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             self.label_buffer, self.n_labels, self.n_weighted_samples)
 
     cdef bint _is_pre_pruned(self, size_t start, size_t end):
-        # reset the `label_buffer`
+        # reinitialize the `label_buffer` to the sample distribution
+        # in the current sample region.
         memset(self.label_buffer, 0, sizeof(double) * self.n_labels)
         cdef int n_positive = label_distribution(
             self.samples,
@@ -495,8 +574,8 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             self.labels,
             self.label_stride,
             self.n_labels,
-            &self.n_weighted_samples,  # out param
-            self.label_buffer,  # out param
+            &self.n_weighted_samples,   # out param
+            self.label_buffer,          # out param
         )
 
         if end - start <= self.min_sample_split or n_positive < 2:
@@ -511,13 +590,14 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
                                          double* impurity) nogil:
         memset(self.left_label_buffer, 0, sizeof(double) * self.n_labels)
 
-        # store the label buffer temporarily in `right_label_buffer`
+        # store the label buffer temporarily in `right_label_buffer`,
+        # since all samples fall on the right hand side of the threshold
         memcpy(self.right_label_buffer, self.label_buffer,
                sizeof(double) * self.n_labels)
 
-        cdef size_t i # real index of samples
-        cdef size_t j # sample index
-        cdef size_t p # label index
+        cdef size_t i  # real index of samples (in `range(start, end)`)
+        cdef size_t j  # sample index (in `samples`)
+        cdef size_t p  # label index (in `label_buffer`)
 
         cdef double right_sum
         cdef double left_sum
@@ -553,8 +633,9 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
                               self.right_label_buffer,
                               self.n_labels)
 
-        threshold[0] = prev_distance # / 2 removed - this changes the trees
-        split_point[0] = start + 1 # The split point indicates a <=-relation
+        threshold[0] = prev_distance
+        # The split point indicates a <=-relation
+        split_point[0] = start + 1
 
         for i in range(start + 1, end - 1):
             j = self.samples[i]
@@ -590,6 +671,7 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
 
 cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
 
+    # the (strided) array of labels
     cdef double* labels
 
     def __cinit__(self,
@@ -615,7 +697,7 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                 sample_weight = self.sample_weights[j]
             else:
                 sample_weight = 1.0
-                
+
             self.n_weighted_samples += sample_weight
         if end - start < self.min_sample_split:
             return True
@@ -642,9 +724,22 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                                          size_t* split_point,
                                          double* threshold,
                                          double* impurity) nogil:
-        cdef size_t i # real index of samples
-        cdef size_t j # sample index
-        cdef size_t p # label index
+        # Partitions the distance buffer into two binary partitions
+        # such that the sum of label variance in the two partitions is
+        # minimized.
+        #
+        # The implementation uses an efficient one-pass algorithm [1]
+        # for computing the variance of the two partitions and finding
+        # the optimal split point
+        #
+        # References
+        #
+        # [1] West, D. H. D. (1979). "Updating Mean and Variance
+        # Estimates: An Improved Method"
+
+        cdef size_t i  # real index of samples (in `range(start, end)`)
+        cdef size_t j  # sample index (in `samples`)
+        cdef size_t p  # label index (in `labels`)
 
         cdef double right_sum
         cdef double right_mean
@@ -673,16 +768,18 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
         else:
             current_sample_weight = 1.0
 
+        # Initialize the left-hand side of the inequality's variance
         left_sum = current_sample_weight
         left_mean_old = 0
         left_mean = current_val
-        left_var = 0 
-        
+        left_var = 0
+
         right_sum = 0
         right_mean_old = 0
         right_mean = 0
         right_var = 0
-        
+
+        # Initialize the right-hand side of the inequality's variance
         for i in range(start + 1, end):
             j = self.samples[i]
             p = j * self.label_stride
@@ -690,7 +787,7 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                 current_sample_weight = self.sample_weights[j]
             else:
                 current_sample_weight = 1.0
-            
+
             current_val = self.labels[p]
             right_sum += current_sample_weight
             right_mean_old = right_mean
@@ -703,12 +800,12 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
 
         impurity[0] = (left_var / left_sum) + (right_var / right_sum)
         threshold[0] = prev_distance
-        split_point[0] = start + 1 # The split point indicates a <=-relation
+        split_point[0] = start + 1  # The split point indicates a <=-relation
 
         for i in range(start + 1, end - 1):
             j = self.samples[i]
             p = j * self.label_stride
-            
+
             current_distance = self.distance_buffer[i]
 
             if self.sample_weights != NULL:
@@ -716,7 +813,8 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
             else:
                 current_sample_weight = 1.0
 
-
+            # Move variance from the right-hand side to the left-hand
+            # and reevaluate the impurity
             current_val = self.labels[p]
             right_sum -= current_sample_weight
             right_mean_old = right_mean
@@ -736,11 +834,10 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                          (current_val - left_mean_old) *
                          (current_val - left_mean))
 
-            prev_distance = current_distance 
+            prev_distance = current_distance
             current_impurity = (left_var / left_sum) + (right_var / right_sum)
 
             if current_impurity <= impurity[0]:
                 impurity[0] = current_impurity
                 threshold[0] = (current_distance + prev_distance) / 2
                 split_point[0] = i
-

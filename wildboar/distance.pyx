@@ -218,8 +218,8 @@ def matches(
 
     cdef TSDatabase sd = ts_database_new(x)
 
-    cdef size_t * matches
-    cdef double * distances
+    cdef size_t* matches
+    cdef double* distances
     cdef size_t n_matches
 
     if metric_params is None:

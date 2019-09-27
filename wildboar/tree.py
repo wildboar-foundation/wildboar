@@ -383,6 +383,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
         self.n_classes_ = len(self.classes_)
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
+
         tree_builder = ClassificationShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,

@@ -139,11 +139,34 @@ cdef class DistanceMeasure:
     shapelets """
 
     def __cinit__(self, size_t n_timesteps, *args, **kvargs):
+        """ Initialize a new distance measure
+
+        :param n_timesteps: the (maximum) number of timepoints in a timeseries
+
+        :param *args: optimal arguments for subclasses
+
+        :param **kvargs: optional arguments for subclasses
+        """
         pass
 
     cdef void shapelet_info_distances(
         self, ShapeletInfo s, TSDatabase td, size_t* samples,
         double* distances, size_t n_samples) nogil:
+        """ Compute the distance between the shapelet `s` in `td` and all
+        samples in `samples`
+
+        :param s: information about the shapelet
+
+        :param td: the time series database
+
+        :param samples: array of length `n_samples` samples to compute
+        the distance to
+
+        :param distances: array to store the distances. The the length
+        of distances >= `n_samples`, the `i = 0,...,n_samples`
+        position stores the distance between the i:th sample (in
+        `samples`) and `s`
+        """
 
         cdef size_t p
         for p in range(n_samples):
@@ -152,6 +175,18 @@ cdef class DistanceMeasure:
     cdef ShapeletInfo new_shapelet_info(
         self, TSDatabase _td, size_t index, size_t start,
         size_t length, size_t dim) nogil:
+        """Return a information about a shapelet
+
+        :param td: shapelet database
+
+        :param index: the index of the sample in `td`
+
+        :param start: the start position of the subsequence
+
+        :param length: the length of the subsequence
+
+        :param dim: the dimension of the subsequence
+        """
 
         cdef ShapeletInfo shapelet_info
         shapelet_info.index = index
@@ -164,19 +199,53 @@ cdef class DistanceMeasure:
         return shapelet_info
 
     cdef Shapelet get_shapelet(self, ShapeletInfo s, TSDatabase td):
+        """Get a copy of the shapelet specified by `s` in `td`
+
+        :param s: the shapelet information
+
+        :param td: the shapelet database
+        """
         return get_shapelet_(s, td, NAN, NAN)
 
     cdef Shapelet new_shapelet(self, np.ndarray t, size_t dim):
+        """Construct a new shapelet based on the data in `t`, optinally
+        specifying the dimension
+
+        :param t: shapelet data
+
+        :param dim: the dimension
+        """
         return new_shapelet_(t, dim, NAN, NAN)
 
     cdef double shapelet_info_distance(
             self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
+        """Return the distance between `s` and the sample specified by the
+        index `t_index` in `td`. Implemented by subclasses.
+
+        :param s: shapelet information
+
+        :param td: the time series database
+
+        :param t_index: the index of the time series
+        """
         with gil:
             raise NotImplementedError()
 
     cdef double shapelet_distance(
             self, Shapelet s, TSDatabase td, size_t t_index,
             size_t* return_index=NULL) nogil:
+        """Return the distance between `s` and the sample specified by
+        `t_index` in `td` setting the index of the best matching
+        position to `return_index` unless `return_index == NULL`
+
+        :param s: the shapelet
+
+        :param td: the time series database
+
+        :param t_index: the sample index
+
+        :param return_index: (out) the index of the best matching position
+        """
         with gil:
             raise NotImplementedError()
 
@@ -184,15 +253,43 @@ cdef class DistanceMeasure:
             self, Shapelet s, TSDatabase td, size_t t_index,
             double threhold, size_t** matches,  double** distances,
             size_t* n_matches) nogil except -1:
+        """Compute the matches for `s` in the sample `t_index` in `td` where
+        the distance threshold is below `threshold`, storing the
+        matching starting positions in `matches` and distance (<
+        `threshold`) in `distances` with `n_matches` storing the
+        number of sucessful matches.
+
+        Note:
+
+        - `matches` will be allocated and must be freed by the caller
+        - `distances` will be allocated and must be freed by the caller
+
+        :param s: the shapelet
+
+        :param td: the time series database
+
+        :param t_index: the sample
+
+        :param threshold: the minimum distance to consider a match
+
+        :param matches: (out) array of matching locations
+
+        :param distance: (out) array of distance at the matching
+        location (< `threshold`)
+
+        :param n_matches: (out) the number of matches
+        """
         with gil:
             raise NotImplementedError()
 
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
-    
+    """Distance measure that uses computes the distance on mean and
+    variance standardized shapelets"""
+
     cdef Shapelet new_shapelet(self, np.ndarray t, size_t dim):
         return new_shapelet_(t, dim, np.mean(t), np.std(t))
-    
+
     cdef Shapelet get_shapelet(self, ShapeletInfo s, TSDatabase td):
         return get_shapelet_(s, td, s.mean, s.std)
 
@@ -202,7 +299,6 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
                                         size_t start,
                                         size_t length,
                                         size_t dim) nogil:
-    
         cdef ShapeletInfo shapelet_info
         shapelet_info.index = index
         shapelet_info.dim = dim
@@ -213,6 +309,34 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
         shapelet_info_update_statistics_(&shapelet_info, td)
         return shapelet_info
 
+# cdef class FuncDistanceMeasure(DistanceMeasure):
+#     """ Wrapper for python function """
+#     cdef object func
+#     cdef np.ndarray[ndim=1, dtype=np.float] sbuffer
+#     cdef np.ndarray[ndim=1, dtype=np.float] tbuffer
+
+#     def __cinit__(self, size_t n_timesteps, object func):
+#         self.func = func
+#         self.sbuffer = np.empty([n_timesteps], dtype=np.float32)
+#         self.tbuffer = np.empty([n_timesteps], dtype=np.float32)
+
+#     cdef double shapelet_info_distance(
+#             self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
+#         with gil:
+#             raise NotImplementedError()
+
+#     cdef double shapelet_distance(
+#             self, Shapelet s, TSDatabase td, size_t t_index,
+#             size_t* return_index=NULL) nogil:
+#         with gil:
+#             raise NotImplementedError()
+
+#     cdef int shapelet_matches(
+#             self, Shapelet s, TSDatabase td, size_t t_index,
+#             double threhold, size_t** matches,  double** distances,
+#             size_t* n_matches) nogil except -1:
+#         with gil:
+#             raise NotImplementedError()    
 
 cdef class Shapelet:
 
