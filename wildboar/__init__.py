@@ -15,4 +15,4 @@
 
 # Authors: Isak Karlsson
 
-__version__ = "0.3"
+__version__ = "0.3.1"

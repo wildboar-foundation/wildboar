@@ -517,7 +517,6 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                   size_t* return_index=NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
-        
         cdef double* s_lower
         cdef double* s_upper
         cdef DtwExtra* extra

@@ -44,7 +44,7 @@ cdef Shapelet new_shapelet_(np.ndarray t, size_t dim, double mean, double std):
 
 cdef get_shapelet_(ShapeletInfo s, TSDatabase td, double mean, double std):
     """Extract a new shapelet from `td` """
-    cdef Shapelet shapelet = Shapelet(s.dim, s.length, mean, std)
+    cdef Shapelet shapelet = Shapelet(s.dim, s.length, mean, std, s.index, s.start)
     cdef double*data = shapelet.data
     cdef size_t shapelet_offset = (s.index * td.sample_stride +
                                    s.start * td.timestep_stride +
@@ -65,9 +65,11 @@ cpdef Shapelet make_shapelet_(object me,
                               size_t length,
                               double mean,
                               double std,
-                              object array):
+                              object array,
+                              int ts_index,
+                              int ts_start):
     """Reconstruct a `Shapelet`-object from pickle """
-    cdef Shapelet shapelet = me(dim, length, mean, std)
+    cdef Shapelet shapelet = me(dim, length, mean, std, ts_index, ts_start)
     cdef size_t i
     for i in range(<size_t> array.shape[0]):
         shapelet.data[i] = array[i]
@@ -340,11 +342,19 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
 
 cdef class Shapelet:
 
-    def __cinit__(self, size_t dim, size_t length, double mean, double std):
+    def __cinit__(self,
+                  size_t dim,
+                  size_t length,
+                  double mean,
+                  double std,
+                  int ts_index,
+                  int ts_start):
         self.length = length
         self.mean = mean
         self.std = std
         self.dim = dim
+        self.ts_index = ts_index
+        self.ts_start = ts_start
         self.data = <double*> malloc(sizeof(double) * length)
         if self.data == NULL:
             raise MemoryError()
@@ -357,7 +367,15 @@ cdef class Shapelet:
 
     def __reduce__(self):
         return make_shapelet_, (self.__class__, self.dim, self.length,
-                                self.mean, self.std, self.array)
+                                self.mean, self.std, self.array,
+                                self.ts_index, self.ts_start)
+
+    @property
+    def ts_info(self):
+        if self.ts_index < 0 or self.ts_start < 0:
+            return None
+        else:
+            return (self.ts_index, self.ts_start, self.length)
 
     @property
     def array(self):

@@ -44,6 +44,8 @@ cdef class Shapelet:
     cdef readonly size_t dim
     cdef readonly double mean
     cdef readonly double std
+    cdef int ts_index
+    cdef int ts_start
     cdef double* data
     cdef void* extra
 
