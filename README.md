@@ -5,7 +5,7 @@ distance computations built on top of
 [SciKit-Learn](http://scikit-learn.org) and [Numpy](http://numpy.org)
 distributed under the GNU General Public License Version 3.
 
-It is currently maintained by Isak Karlsson
+It is currently maintained by Isak Samsten
 
 ## Installation
 
