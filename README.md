@@ -24,7 +24,7 @@ requires:
 
 ### Current version
 
-Current release: 0.3
+Current release: 0.3.1
 
 ### Binaries
 
