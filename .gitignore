@@ -180,4 +180,5 @@ venv.bak/
 *.so
 __pycache__/
 build/
-.idea/
+**/.idea/workspace.xml
+**/.idea/tasks.xml

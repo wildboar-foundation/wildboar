@@ -18,7 +18,7 @@
 # along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-# Authors: Isak Karlsson
+# Authors: Isak Samsten
 
 import numpy as np
 cimport numpy as np

@@ -11,10 +11,10 @@
 # License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see
+# along with this program. If not, see
 # <http://www.gnu.org/licenses/>.
 
-# Authors: Isak Karlsson
+# Authors: Isak Samsten
 
 cimport numpy as np
 
@@ -62,13 +62,13 @@ cdef class DistanceMeasure:
 
     cdef int shapelet_matches(
         self, Shapelet s, TSDatabase td, size_t t_index,
-        double threhold, size_t** matches,  double** distances,
+        double threshold, size_t** matches,  double** distances,
         size_t* n_matches) nogil except -1
 
     cdef double shapelet_distance(
             self, Shapelet s, TSDatabase td, size_t t_index,
             size_t* return_index=*) nogil
-        
+
     cdef double shapelet_info_distance(
             self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil
 

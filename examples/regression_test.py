@@ -1,7 +1,3 @@
-from wildboar._tree_builder import RegressionShapeletTreeBuilder
-from wildboar._tree_builder import RegressionShapeletTreePredictor
-from wildboar._utils import print_tree
-from wildboar.distance import DISTANCE_MEASURE
 from sklearn.utils import check_random_state
 
 from wildboar.tree import ShapeletTreeRegressor
@@ -57,9 +53,8 @@ b = ShapeletForestRegressor(
     random_state=check_random_state(123),
     n_jobs=8,
     bootstrap=False,
-    metric="scaled_dtw",
+    metric="euclidean",
     metric_params={"r": 0.2})
-#BaggingRegressor(r, bootstrap=False, n_jobs=4, n_estimators=100)
 
 b.fit(x_train, y_train)
 print(b.predict(x_test))

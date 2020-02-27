@@ -18,7 +18,7 @@
 # along with this program.  If not, see
 # <http://www.gnu.org/licenses/>.
 
-# Authors: Isak Karlsson
+# Authors: Isak Samsten
 
 import numpy as np
 cimport numpy as np
@@ -35,7 +35,7 @@ from wildboar._utils cimport rand_int
 cdef Shapelet new_shapelet_(np.ndarray t, size_t dim, double mean, double std):
     """Create a new shapelet """
     cdef Shapelet shapelet = Shapelet(dim, len(t), mean, std)
-    cdef double* data = shapelet.data
+    cdef double*data = shapelet.data
     cdef int i
     for i in range(len(t)):
         data[i] = t[i]
@@ -59,7 +59,6 @@ cdef get_shapelet_(ShapeletInfo s, TSDatabase td, double mean, double std):
 
     return shapelet
 
-
 cpdef Shapelet make_shapelet_(object me,
                               size_t dim,
                               size_t length,
@@ -76,8 +75,7 @@ cpdef Shapelet make_shapelet_(object me,
 
     return shapelet
 
-
-cdef void shapelet_info_init(ShapeletInfo* s) nogil:
+cdef void shapelet_info_init(ShapeletInfo*s) nogil:
     """Initialize  a shapelet info struct """
     s[0].start = 0
     s[0].length = 0
@@ -86,15 +84,14 @@ cdef void shapelet_info_init(ShapeletInfo* s) nogil:
     s[0].std = NAN
     s[0].index = 0
 
-
 cdef void shapelet_info_free(ShapeletInfo shapelet_info) nogil:
     """Free the `extra` payload of a shapelet info if needed """
     if shapelet_info.extra != NULL:
         free(shapelet_info.extra)
         shapelet_info.extra = NULL
 
-cdef int shapelet_info_update_statistics_(ShapeletInfo* s,
-                                         const TSDatabase t) nogil:
+cdef int shapelet_info_update_statistics_(ShapeletInfo*s,
+                                          const TSDatabase t) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
                                    s.dim * t.dim_stride +
@@ -105,12 +102,11 @@ cdef int shapelet_info_update_statistics_(ShapeletInfo* s,
     for i in range(s.length):
         current_value = t.data[shapelet_offset + i * t.timestep_stride]
         ex += current_value
-        ex2 += current_value**2
+        ex2 += current_value ** 2
 
     s[0].mean = ex / s.length
     s[0].std = sqrt(ex2 / s.length - s[0].mean * s[0].mean)
     return 0
-
 
 cdef TSDatabase ts_database_new(np.ndarray data):
     """Construct a new time series database from a ndarray """
@@ -135,7 +131,6 @@ cdef TSDatabase ts_database_new(np.ndarray data):
 
     return sd
 
-
 cdef class DistanceMeasure:
     """A distance measure can compute the distance between time series and
     shapelets """
@@ -152,8 +147,8 @@ cdef class DistanceMeasure:
         pass
 
     cdef void shapelet_info_distances(
-        self, ShapeletInfo s, TSDatabase td, size_t* samples,
-        double* distances, size_t n_samples) nogil:
+            self, ShapeletInfo s, TSDatabase td, size_t*samples,
+            double*distances, size_t n_samples) nogil:
         """ Compute the distance between the shapelet `s` in `td` and all
         samples in `samples`
 
@@ -168,6 +163,8 @@ cdef class DistanceMeasure:
         of distances >= `n_samples`, the `i = 0,...,n_samples`
         position stores the distance between the i:th sample (in
         `samples`) and `s`
+        
+        :param n_samples: the number of samples 
         """
 
         cdef size_t p
@@ -175,11 +172,11 @@ cdef class DistanceMeasure:
             distances[p] = self.shapelet_info_distance(s, td, samples[p])
 
     cdef ShapeletInfo new_shapelet_info(
-        self, TSDatabase _td, size_t index, size_t start,
-        size_t length, size_t dim) nogil:
+            self, TSDatabase _td, size_t index, size_t start,
+            size_t length, size_t dim) nogil:
         """Return a information about a shapelet
 
-        :param td: shapelet database
+        :param _td: shapelet database
 
         :param index: the index of the sample in `td`
 
@@ -235,7 +232,7 @@ cdef class DistanceMeasure:
 
     cdef double shapelet_distance(
             self, Shapelet s, TSDatabase td, size_t t_index,
-            size_t* return_index=NULL) nogil:
+            size_t*return_index=NULL) nogil:
         """Return the distance between `s` and the sample specified by
         `t_index` in `td` setting the index of the best matching
         position to `return_index` unless `return_index == NULL`
@@ -253,8 +250,8 @@ cdef class DistanceMeasure:
 
     cdef int shapelet_matches(
             self, Shapelet s, TSDatabase td, size_t t_index,
-            double threhold, size_t** matches,  double** distances,
-            size_t* n_matches) nogil except -1:
+            double threshold, size_t** matches, double** distances,
+            size_t*n_matches) nogil except -1:
         """Compute the matches for `s` in the sample `t_index` in `td` where
         the distance threshold is below `threshold`, storing the
         matching starting positions in `matches` and distance (<
@@ -276,14 +273,13 @@ cdef class DistanceMeasure:
 
         :param matches: (out) array of matching locations
 
-        :param distance: (out) array of distance at the matching
+        :param distances: (out) array of distance at the matching
         location (< `threshold`)
 
         :param n_matches: (out) the number of matches
         """
         with gil:
             raise NotImplementedError()
-
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
     """Distance measure that uses computes the distance on mean and
@@ -341,14 +337,13 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
 #             raise NotImplementedError()    
 
 cdef class Shapelet:
-
     def __cinit__(self,
                   size_t dim,
                   size_t length,
                   double mean,
                   double std,
-                  int ts_index,
-                  int ts_start):
+                  int ts_index=-1,
+                  int ts_start=-1):
         self.length = length
         self.mean = mean
         self.std = std
@@ -372,10 +367,13 @@ cdef class Shapelet:
 
     @property
     def ts_info(self):
+        """Returns information about the time series from which the shapelet was extracted
+        :returns `None` or `(ts_index, ts_start, shapelet_length)`
+        """
         if self.ts_index < 0 or self.ts_start < 0:
             return None
         else:
-            return (self.ts_index, self.ts_start, self.length)
+            return self.ts_index, self.ts_start, self.length
 
     @property
     def array(self):

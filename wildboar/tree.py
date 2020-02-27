@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Authors: Isak Karlsson
+# Authors: Isak Samsten
 
 import numpy as np
 
@@ -29,7 +29,8 @@ from sklearn.utils import check_array
 
 from wildboar.distance import DISTANCE_MEASURE
 
-__all__ = ["ShapeletTreeClassifier"]
+__all__ = ["ShapeletTreeClassifier",
+           "ShapeletTreeRegressor"]
 
 
 class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
@@ -93,7 +94,7 @@ class ShapeletTreeRegressor(BaseEstimator, RegressorMixin):
                 "`max_shapelet_size` {0} > 1".format(max_shapelet_size))
 
         self.max_depth = max_depth
-        self.max_depth = max_depth or 2**31
+        self.max_depth = max_depth or 2 ** 31
         self.min_samples_split = min_samples_split
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets
@@ -295,7 +296,7 @@ class ShapeletTreeClassifier(BaseEstimator, ClassifierMixin):
                 "`max_shapelet_size` {0} > 1".format(max_shapelet_size))
 
         self.max_depth = max_depth
-        self.max_depth = max_depth or 2**31
+        self.max_depth = max_depth or 2 ** 31
         self.min_samples_split = min_samples_split
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets

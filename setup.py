@@ -29,7 +29,7 @@ It provides:
 The package is provided under the GPLv3 license.
 """
 
-datadirs = ("test", )
+datadirs = ("test",)
 dataexts = (".py", ".pyx", ".pxd", ".c", ".cpp", ".h", ".sh", ".lyx", ".tex",
             ".txt", ".pdf")
 
@@ -274,7 +274,7 @@ setup(
         'wildboar': ['*.pxd', '*.pyx', '*.c'],
     },
     zip_safe=False,
-    cmdclass={'build_ext': build_ext},
+    #    cmdclass={'build_ext': build_ext},
 
     # Custom data files not inside a Python package
     data_files=datafiles,

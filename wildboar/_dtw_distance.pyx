@@ -17,9 +17,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Authors: Isak Karlsson
+# Authors: Isak Samsten
 
-# This implementation is heaviliy inspired by the UCRSuite.
+# This implementation is heavily inspired by the UCRSuite.
 #
 # References
 #
@@ -31,11 +31,9 @@ cimport numpy as np
 
 from libc.stdlib cimport malloc
 from libc.stdlib cimport free
-from libc.string cimport memset
 
 from libc.math cimport INFINITY
 from libc.math cimport sqrt
-from libc.math cimport fabs
 from libc.math cimport floor
 
 from wildboar._distance cimport TSDatabase
@@ -44,25 +42,22 @@ from wildboar._distance cimport ShapeletInfo
 from wildboar._distance cimport ScaledDistanceMeasure
 from wildboar._distance cimport Shapelet
 
-cdef void deque_init(Deque* c, size_t capacity) nogil:
+cdef void deque_init(Deque *c, size_t capacity) nogil:
     c[0].capacity = capacity
     c[0].size = 0
-    c[0].queue = <size_t*>malloc(sizeof(size_t) * capacity)
+    c[0].queue = <size_t*> malloc(sizeof(size_t) * capacity)
     c[0].front = 0
     c[0].back = capacity - 1
 
-
-cdef void deque_reset(Deque* c) nogil:
+cdef void deque_reset(Deque *c) nogil:
     c[0].size = 0
     c[0].front = 0
     c[0].back = c[0].capacity - 1
 
-
-cdef void deque_destroy(Deque* c) nogil:
+cdef void deque_destroy(Deque *c) nogil:
     free(c[0].queue)
 
-
-cdef void deque_push_back(Deque* c, size_t v) nogil:
+cdef void deque_push_back(Deque *c, size_t v) nogil:
     c[0].queue[c[0].back] = v
     c[0].back -= 1
     if c[0].back < 0:
@@ -70,42 +65,35 @@ cdef void deque_push_back(Deque* c, size_t v) nogil:
 
     c[0].size += 1
 
-
-cdef void deque_pop_front(Deque* c) nogil:
+cdef void deque_pop_front(Deque *c) nogil:
     c[0].front -= 1
     if c[0].front < 0:
         c[0].front = c[0].capacity - 1
     c[0].size -= 1
 
-
-cdef void deque_pop_back(Deque* c) nogil:
+cdef void deque_pop_back(Deque *c) nogil:
     c[0].back = (c[0].back + 1) % c[0].capacity
     c[0].size -= 1
 
-
-cdef size_t deque_front(Deque* c) nogil:
+cdef size_t deque_front(Deque *c) nogil:
     cdef int tmp = c[0].front - 1
     if tmp < 0:
         tmp = c[0].capacity - 1
     return c[0].queue[tmp]
 
-
-cdef size_t deque_back(Deque* c) nogil:
+cdef size_t deque_back(Deque *c) nogil:
     cdef int tmp = (c[0].back + 1) % c[0].capacity
     return c[0].queue[tmp]
 
-
-cdef bint deque_empty(Deque* c) nogil:
+cdef bint deque_empty(Deque *c) nogil:
     return c[0].size == 0
 
-
-cdef size_t deque_size(Deque* c) nogil:
+cdef size_t deque_size(Deque *c) nogil:
     return c[0].size
 
-
 cdef void find_min_max(size_t offset, size_t stride, size_t length,
-                       double* T, size_t r, double* lower, double* upper,
-                       Deque* dl, Deque* du) nogil:
+                       double*T, size_t r, double*lower, double*upper,
+                       Deque*dl, Deque*du) nogil:
     cdef size_t i
     cdef size_t k
 
@@ -153,15 +141,13 @@ cdef void find_min_max(size_t offset, size_t stride, size_t length,
         if i - deque_front(dl) >= 2 * r + 1:
             deque_pop_front(dl)
 
-
 cdef inline double dist(double x, double y) nogil:
     cdef double s = x - y
     return s * s
 
-
-cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
+cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double*S,
                                  double s_mean, double s_std, size_t t_offset,
-                                 size_t t_stride, double* T, double t_mean,
+                                 size_t t_stride, double *T, double t_mean,
                                  double t_std, size_t length,
                                  double best_dist) nogil:
     cdef double t_x0, t_y0, s_x0, s_y0
@@ -222,9 +208,9 @@ cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double* S,
     return min_dist
 
 cdef double cumulative_bound(size_t offset, size_t stride, size_t length,
-                             double mean, double std, double* T,
-                             double lu_mean, double lu_std, double* lower,
-                             double* upper, double* cb, double best_so_far) nogil:
+                             double mean, double std, double *T,
+                             double lu_mean, double lu_std, double*lower,
+                             double*upper, double*cb, double best_so_far) nogil:
     cdef double min_dist = 0
     cdef double x, d, us, ls
     cdef size_t i
@@ -247,12 +233,11 @@ cdef double cumulative_bound(size_t offset, size_t stride, size_t length,
         cb[i] = d
     return min_dist
 
-
 cdef inline double inner_dtw(size_t s_offset, size_t s_stride, int s_length,
-                             double s_mean, double s_std, double* S,
+                             double s_mean, double s_std, double *S,
                              double mean, double std, size_t x_offset,
-                             double* X_buffer, int r, double* cb,
-                             double* cost, double* cost_prev,
+                             double *X_buffer, int r, double*cb,
+                             double *cost, double *cost_prev,
                              double min_dist) nogil:
     cdef int i = 0
     cdef int j = 0
@@ -263,7 +248,7 @@ cdef inline double inner_dtw(size_t s_offset, size_t s_stride, int s_length,
     cdef double z
     cdef double min_cost, distance
 
-    cdef double* cost_tmp
+    cdef double *cost_tmp
     for i in range(0, 2 * r + 1):
         cost[i] = INFINITY
         cost_prev[i] = INFINITY
@@ -274,7 +259,7 @@ cdef inline double inner_dtw(size_t s_offset, size_t s_stride, int s_length,
         for j in range(max(0, i - r), min(s_length, i + r + 1)):
             if i == 0 and j == 0:
                 min_cost = dist((S[s_offset] - s_mean) / s_std,
-                                (X_buffer[x_offset] - mean)  / std)
+                                (X_buffer[x_offset] - mean) / std)
                 cost[k] = min_cost
             else:
                 if j - 1 < 0 or k - 1 < 0:
@@ -293,7 +278,7 @@ cdef inline double inner_dtw(size_t s_offset, size_t s_stride, int s_length,
                     z = cost_prev[k]
 
                 distance = dist((S[s_offset + s_stride * i] - s_mean) / s_std,
-                                (X_buffer[x_offset + j]- mean) / std)
+                                (X_buffer[x_offset + j] - mean) / std)
                 cost[k] = min(min(x, y), z) + distance
                 if cost[k] < min_cost:
                     min_cost = cost[k]
@@ -308,29 +293,28 @@ cdef inline double inner_dtw(size_t s_offset, size_t s_stride, int s_length,
         cost_prev = cost_tmp
     return cost_prev[k - 1]
 
-
 cdef double scaled_dtw_distance(size_t s_offset,
                                 size_t s_stride,
                                 size_t s_length,
                                 double s_mean,
                                 double s_std,
-                                double* S,
+                                double *S,
                                 size_t t_offset,
                                 size_t t_stride,
                                 size_t t_length,
-                                double* T,
+                                double *T,
                                 size_t r,
-                                double* X_buffer,
-                                double* cost,
-                                double* cost_prev,
-                                double* s_lower,
-                                double* s_upper,
-                                double* t_lower,
-                                double* t_upper,
-                                double* cb,
-                                double* cb_1,
-                                double* cb_2,
-                                size_t* index) nogil:
+                                double *X_buffer,
+                                double *cost,
+                                double *cost_prev,
+                                double *s_lower,
+                                double *s_upper,
+                                double *t_lower,
+                                double *t_upper,
+                                double *cb,
+                                double *cb_1,
+                                double *cb_2,
+                                size_t *index) nogil:
     cdef double current_value = 0
     cdef double mean = 0
     cdef double std = 0
@@ -402,7 +386,6 @@ cdef double scaled_dtw_distance(size_t s_offset,
 
     return sqrt(min_dist)
 
-
 cdef inline size_t compute_warp_width_(size_t length, double r) nogil:
     if r == 1:
         return length - 1
@@ -410,19 +393,16 @@ cdef inline size_t compute_warp_width_(size_t length, double r) nogil:
         return <size_t> floor(length * r)
     else:
         return <size_t> floor(r)
-        
 
 cdef class ScaledDtwDistance(ScaledDistanceMeasure):
-    # TODO: override shapelet creation to avoid recomputing the
-    # lower-bound
-    cdef double* X_buffer
-    cdef double* lower
-    cdef double* upper
-    cdef double* cost
-    cdef double* cost_prev
-    cdef double* cb
-    cdef double* cb_1
-    cdef double* cb_2
+    cdef double *X_buffer
+    cdef double *lower
+    cdef double *upper
+    cdef double *cost
+    cdef double *cost_prev
+    cdef double *cb
+    cdef double *cb_1
+    cdef double *cb_2
 
     cdef Deque du
     cdef Deque dl
@@ -444,14 +424,14 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         self.cb_1 = <double*> malloc(sizeof(double) * n_timestep)
         self.cb_2 = <double*> malloc(sizeof(double) * n_timestep)
 
-        if(self.X_buffer == NULL or
-           self.lower == NULL or
-           self.upper == NULL or
-           self.cost == NULL or
-           self.cost_prev == NULL or
-           self.cb == NULL or
-           self.cb_1 == NULL or
-           self.cb_2 == NULL):
+        if (self.X_buffer == NULL or
+                self.lower == NULL or
+                self.upper == NULL or
+                self.cost == NULL or
+                self.cost_prev == NULL or
+                self.cb == NULL or
+                self.cb_1 == NULL or
+                self.cb_2 == NULL):
             raise MemoryError()
 
         deque_init(&self.dl, 2 * self.max_warp_width + 2)
@@ -474,14 +454,14 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                         size_t length,
                                         size_t dim) nogil:
         cdef ShapeletInfo shapelet_info
-        cdef DtwExtra* dtw_extra
+        cdef DtwExtra *dtw_extra
         cdef size_t shapelet_offset
-        
+
         shapelet_info = ScaledDistanceMeasure.new_shapelet_info(self,
                                                                 td, index,
                                                                 start,
                                                                 length, dim)
-        
+
         dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
         dtw_extra[0].upper = <double*> malloc(sizeof(double) * length)
@@ -493,13 +473,13 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         find_min_max(shapelet_offset, td.timestep_stride, length, td.data,
                      warp_width, dtw_extra[0].lower, dtw_extra[0].upper,
                      &self.dl, &self.du)
-        
+
         shapelet_info.extra = dtw_extra
         return shapelet_info
 
     cdef Shapelet new_shapelet(self, np.ndarray t, size_t dim):
         cdef Shapelet s = ScaledDistanceMeasure.new_shapelet(self, t, dim)
-        cdef DtwExtra* dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
+        cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * s.length)
         dtw_extra[0].upper = <double*> malloc(sizeof(double) * s.length)
 
@@ -509,17 +489,17 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                      &self.dl, &self.du)
         s.extra = dtw_extra
         return s
-    
+
     cdef double shapelet_distance(self,
                                   Shapelet s,
                                   TSDatabase td,
                                   size_t t_index,
-                                  size_t* return_index=NULL) nogil:
+                                  size_t*return_index=NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
-        cdef double* s_lower
-        cdef double* s_upper
-        cdef DtwExtra* extra
+        cdef double *s_lower
+        cdef double *s_upper
+        cdef DtwExtra*extra
         cdef size_t warp_width = compute_warp_width_(s.length, self.r)
 
         if s.extra != NULL:
@@ -529,7 +509,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         else:
             s_lower = <double*> malloc(sizeof(double) * s.length)
             s_upper = <double*> malloc(sizeof(double) * s.length)
-            
+
             find_min_max(0, 1, s.length, s.data, warp_width, s_lower, s_upper,
                          &self.dl, &self.du)
             find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
@@ -575,8 +555,8 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                        s.start * td.timestep_stride)
 
         cdef size_t warp_width = compute_warp_width_(s.length, self.r)
-        
-        cdef DtwExtra* dtw_extra = <DtwExtra*> s.extra
+
+        cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
                      td.data, warp_width, self.lower, self.upper, &self.dl,
                      &self.du)

@@ -14,8 +14,6 @@ np.zeros([10, 10])
 
 delta = 0.5
 dt = 1
-def hello():
-    pass
 
 X = (norm.rvs(
     scale=delta**2 * dt,

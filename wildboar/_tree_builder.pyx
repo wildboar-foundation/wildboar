@@ -17,11 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-# Authors: Isak Karlsson
-
-"""
-Construct a shapelet based decision tree.
-"""
+# Authors: Isak Samsten
 
 import numpy as np
 cimport numpy as np
@@ -185,7 +181,7 @@ cdef class ShapeletTreePredictor:
         self.distance_measure = distance_measure
 
     def predict(self, Node root):
-        raise AttributeError("must be overriden")
+        raise AttributeError("must be overridden")
 
 cdef class ClassificationShapeletTreePredictor(ShapeletTreePredictor):
 
@@ -412,7 +408,7 @@ cdef class ShapeletTreeBuilder:
 
     cdef SplitPoint _split(self, size_t start, size_t end) nogil:
         """Split the `sample` array indicated by the region specified by
-        `start` and `end` by minimzing an impurity measure
+        `start` and `end` by minimizing an impurity measure
 
         Requirements:
 
@@ -508,7 +504,7 @@ cdef class ShapeletTreeBuilder:
         :param impurity: (in) the initial impurity, (out) the optimal
         impurity (possibly unchanged)
         """
-        # Overriden by subclasses
+        # Overridden by subclasses
         with gil:
             raise NotImplementedError()
 
