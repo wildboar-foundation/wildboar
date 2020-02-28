@@ -1,22 +1,27 @@
 notifications:
   email: false
-
-matrix:
+os: linux
+jobs:
   include:
-    - sudo: required
-      services:
-        - docker
-      env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64
-           PLAT=manylinux1_x86_64
-    - sudo: required
-      services:
-        - docker
-      env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64
-           PLAT=manylinux2010_x86_64
-
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 PLAT=manylinux1_x86_64
+  - sudo: required
+    services:
+    - docker
+    env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PLAT=manylinux2010_x86_64
 install:
-  - docker pull $DOCKER_IMAGE
-
+- docker pull $DOCKER_IMAGE
 script:
-  - docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
-  - ls wheelhouse/
+- docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
+- ls wheelhouse/
+
+deploy:
+  provider: releases
+  api_key:
+    secure: BaIj6BlJ1P/vETs9Owuu0DJI4/sDP4as9mNpOyJQ9bIIiRMFq1sCblwj49cR72DcoTCZwusiR3JADDGGxKm09acMjtvA3I7hNIcZIezC3q/ws0pKrErAsg7IdGj2VyRGnQJwUdyic4JTx80X3qpR267np/X8zLgyw8Emge3yAm7siW4hwTG2fZGabggsMI1vxJQ2re2R2CdnBbFxwJdImpDSbeyJ6grVH72C0K8YX3pSVncZ5FErnK1fXW4X4LkeuAZz2xj2wU0KHTYrlWk+kw4MadKl4AX4Jl/CvuBWZ/S+GNoiz37jtY8xjIOouK9JS4ugJtI8bJ5HRtTM0l/kOWDrwKyLv/ogALgsgBoEGoQ63IgKXu49wEuXbuae/C38/L1bUTUtU//Mk79/dSVY4IVeWhKoaHOzDSeEC1819cKxscmuCo1PNtgwjqjFXDYs9kkCEr3XLJKP5/1xX4Jnz4eAgn+xUtxleyaFQfx96I5RWWGNX+Zc4VtIx9ukpj9NaVEcx3qDPx9g82e1yAZeaoxPOu5e4QUlP4Jc8ga4bWjcyr2qTvJ5DL93Li1eUK2djBoi0wr+pc2q/r9zKTs7Z6lVGpp4JnXKDytp8uiPqVNQ00SMzowjjGdK44gXCu4MB2uznXdJw6Y+unYlW5xHgGR5d8sa4Ec2xnZc2VgYzqo=
+  file: wheelhouse/wildboar*.whl
+  on:
+    tags: true
+    repo: isaksamsten/wildboar
