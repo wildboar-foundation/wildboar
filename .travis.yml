@@ -1,29 +1,40 @@
-notifications:
-  email: false
-os: linux
+language: python
+
 jobs:
   include:
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux1_x86_64 PLAT=manylinux1_x86_64
-  - sudo: required
-    services:
-    - docker
-    env: DOCKER_IMAGE=quay.io/pypa/manylinux2010_x86_64 PLAT=manylinux2010_x86_64
+    - services: docker
+    - os: osx
+      language: shell
+    - os: windows
+      language: shell
+      before_install:
+        - choco install python --version 3.8.0
+        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
+
+env:
+  global:
+    - TWINE_USERNAME=__token__
+
 install:
-- docker pull $DOCKER_IMAGE
+  - python3 -m pip install cibuildwheel==1.1.0
+
 script:
-- docker run --rm -e PLAT=$PLAT -v `pwd`:/io $DOCKER_IMAGE $PRE_CMD /io/travis/build-wheels.sh
-- ls wheelhouse/
+  - python3 -m cibuildwheel --output-dir wheelhouse
+
+after_success:
+  - |
+    if [[ $TRAVIS_TAG ]]; then
+      python3 -m pip install twine
+      python3 -m twine upload wheelhouse/*.whl
+    fi
 
 deploy:
-  skip_cleanup: true
-  provider: releases
-  api_key:
-    secure: "AlKXCjU4H+zbh0AWIzBj6QEFOs+xEN3MEgIssCckDr2gFQtjnlAOC4XLx9Z+EWpKDTCWxkVGagRwsS5X4HcLQezT6NojHtztubLOJ8J53jf8WFZQf+ZmRtSBtyCJ4DNHpuWH3I/t2BGjkelc/aO635sCukqNclK3ViMMv8wlG27zcbit9shCezwiIJhS3T3QT+KiRlcm0NdkUhYsBr+74L/tFcBylB5WhyMCouaAOBWXErXvvj3z0eKfGONwWQn0kNuQcDWE8hO2XZqWGi84F5ruDBCPkGIHGmGaod2MiA0s6c5XsqrI267TmI/ejisxwFpJrG0t20x01apWf4JGHXuLiwoLrUX19nMsN5hxS9nWUdf0zMWExLNlYJloZ9rs4X74sQQ0Hgyp9ojCEzYvrSxsWnzJbQnnLicjXgwzx7frYge9PJknRLgmvoq4O0op3x8BbQy2FkjLy9jMgev6mhL6fIqgWuxIxjPSbrI1iwBaAbsX2IxzFDuJYUaTVhA0Mic+g6cvH6L14NIdHb1YP6rVg+flYd3IPJkRJLh25VB+VNJH+71GrwRV6JY0pU+qIjSlfpSCoFTP3B+uzV2mxpdISCR1w0XhmQW397uy6au7TrOUvjMsaWR3ZYJV6F8/F/rKb0/KZ3ovGoyyEPEL6noBSwPFmZ7xIQ4Q9WEko0U="
-  file: wheelhouse/wildboar*.whl
-  file_glob: true
-  on:
-    tags: true
-    repo: isaksamsten/wildboar
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: "AlKXCjU4H+zbh0AWIzBj6QEFOs+xEN3MEgIssCckDr2gFQtjnlAOC4XLx9Z+EWpKDTCWxkVGagRwsS5X4HcLQezT6NojHtztubLOJ8J53jf8WFZQf+ZmRtSBtyCJ4DNHpuWH3I/t2BGjkelc/aO635sCukqNclK3ViMMv8wlG27zcbit9shCezwiIJhS3T3QT+KiRlcm0NdkUhYsBr+74L/tFcBylB5WhyMCouaAOBWXErXvvj3z0eKfGONwWQn0kNuQcDWE8hO2XZqWGi84F5ruDBCPkGIHGmGaod2MiA0s6c5XsqrI267TmI/ejisxwFpJrG0t20x01apWf4JGHXuLiwoLrUX19nMsN5hxS9nWUdf0zMWExLNlYJloZ9rs4X74sQQ0Hgyp9ojCEzYvrSxsWnzJbQnnLicjXgwzx7frYge9PJknRLgmvoq4O0op3x8BbQy2FkjLy9jMgev6mhL6fIqgWuxIxjPSbrI1iwBaAbsX2IxzFDuJYUaTVhA0Mic+g6cvH6L14NIdHb1YP6rVg+flYd3IPJkRJLh25VB+VNJH+71GrwRV6JY0pU+qIjSlfpSCoFTP3B+uzV2mxpdISCR1w0XhmQW397uy6au7TrOUvjMsaWR3ZYJV6F8/F/rKb0/KZ3ovGoyyEPEL6noBSwPFmZ7xIQ4Q9WEko0U="
+    file: wheelhouse/wildboar*.whl
+    file_glob: true
+    on:
+      tags: true
+      repo: isaksamsten/wildboar
