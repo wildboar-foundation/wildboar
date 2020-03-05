@@ -5,11 +5,11 @@ jobs:
     - services: docker
     - os: osx
       language: shell
-    - os: windows
-      language: shell
-      before_install:
-        - choco install python --version 3.8.0
-        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
+#    - os: windows
+#      language: shell
+#      before_install:
+#        - choco install python --version 3.8.0
+#        - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
 
 env:
   global:
