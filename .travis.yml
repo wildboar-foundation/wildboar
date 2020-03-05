@@ -14,6 +14,8 @@ jobs:
 env:
   global:
     - TWINE_USERNAME=__token__
+    - CIBW_BUILD=cp3?-*
+    - CIBW_SKIP="*-win32 *-manylinux_i686"
 
 install:
   - python3 -m pip install cibuildwheel==1.1.0
