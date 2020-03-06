@@ -131,7 +131,7 @@ datafiles = []
 
 
 def getext(filename):
-    os.path.splitext(filename)[1]
+    return os.path.splitext(filename)[1]
 
 
 for datadir in datadirs:
