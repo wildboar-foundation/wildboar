@@ -1,6 +1,7 @@
 # cython: cdivision=True
 # cython: boundscheck=False
 # cython: wraparound=False
+# cython: language_level=3
 
 # This file is part of wildboar
 #
