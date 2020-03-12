@@ -2,44 +2,74 @@ language: python
 
 jobs:
   include:
+    - language: python
+      python:
+        - 3.6
+        - 3.7
+        - 3.8
+      script:
+        - python3 -m pip install -r requirements.txt
+        - python3 setup.py sdist
+      after_success:
+        - |
+          if [[ $TRAVIS_TAG ]]; then
+                python3 -m pip install twine
+                python3 -m twine upload dist/*.tar.gz
+          fi
     - services: docker
+      install:
+        - python3 -m pip install cibuildwheel==1.1.0
+        script:
+          - python3 -m cibuildwheel --output-dir wheelhouse
+        after_success:
+          - |
+            if [[ $TRAVIS_TAG ]]; then
+                  python3 -m pip install twine
+                  python3 -m twine upload wheelhouse/*.whl
+            fi
     - os: osx
       language: shell
+      install:
+        - python3 -m pip install cibuildwheel==1.1.0
+        script:
+          - python3 -m cibuildwheel --output-dir wheelhouse
+        after_success:
+          - |
+            if [[ $TRAVIS_TAG ]]; then
+                  python3 -m pip install twine
+                  python3 -m twine upload wheelhouse/*.whl
+            fi
     - os: windows
       language: shell
       before_install:
         - choco install python --version 3.8.0
         - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
         - ln -s /c/Python38/python.exe /c/Python38/python3.exe
-
+      install:
+        - python3 -m pip install cibuildwheel==1.1.0
+      script:
+        - python3 -m cibuildwheel --output-dir wheelhouse
+      after_success:
+        - |
+          if [[ $TRAVIS_TAG ]]; then
+                python3 -m pip install twine
+                python3 -m twine upload wheelhouse/*.whl
+          fi
 env:
   global:
     - TWINE_USERNAME=__token__
     - CIBW_BUILD=cp3?-*
     - CIBW_SKIP="*-win32 *-manylinux_i686"
 
-install:
-  - python3 -m pip install cibuildwheel==1.1.0
-
-script:
-  - python3 -m cibuildwheel --output-dir wheelhouse
-  - python3 setup.py sdist
-
-after_success:
-  - |
-    if [[ $TRAVIS_TAG ]]; then
-      python3 -m pip install twine
-      python3 -m twine upload wheelhouse/*.whl
-      python3 -m twine upload dist/*.tar.gz
-    fi
-
-deploy:
-  - provider: releases
-    skip_cleanup: true
-    api_key:
-      secure: "AlKXCjU4H+zbh0AWIzBj6QEFOs+xEN3MEgIssCckDr2gFQtjnlAOC4XLx9Z+EWpKDTCWxkVGagRwsS5X4HcLQezT6NojHtztubLOJ8J53jf8WFZQf+ZmRtSBtyCJ4DNHpuWH3I/t2BGjkelc/aO635sCukqNclK3ViMMv8wlG27zcbit9shCezwiIJhS3T3QT+KiRlcm0NdkUhYsBr+74L/tFcBylB5WhyMCouaAOBWXErXvvj3z0eKfGONwWQn0kNuQcDWE8hO2XZqWGi84F5ruDBCPkGIHGmGaod2MiA0s6c5XsqrI267TmI/ejisxwFpJrG0t20x01apWf4JGHXuLiwoLrUX19nMsN5hxS9nWUdf0zMWExLNlYJloZ9rs4X74sQQ0Hgyp9ojCEzYvrSxsWnzJbQnnLicjXgwzx7frYge9PJknRLgmvoq4O0op3x8BbQy2FkjLy9jMgev6mhL6fIqgWuxIxjPSbrI1iwBaAbsX2IxzFDuJYUaTVhA0Mic+g6cvH6L14NIdHb1YP6rVg+flYd3IPJkRJLh25VB+VNJH+71GrwRV6JY0pU+qIjSlfpSCoFTP3B+uzV2mxpdISCR1w0XhmQW397uy6au7TrOUvjMsaWR3ZYJV6F8/F/rKb0/KZ3ovGoyyEPEL6noBSwPFmZ7xIQ4Q9WEko0U="
-    file: wheelhouse/wildboar*.whl
-    file_glob: true
-    on:
-      tags: true
-      repo: isaksamsten/wildboar
+#
+#
+#deploy:
+#  - provider: releases
+#    skip_cleanup: true
+#    api_key:
+#      secure: "AlKXCjU4H+zbh0AWIzBj6QEFOs+xEN3MEgIssCckDr2gFQtjnlAOC4XLx9Z+EWpKDTCWxkVGagRwsS5X4HcLQezT6NojHtztubLOJ8J53jf8WFZQf+ZmRtSBtyCJ4DNHpuWH3I/t2BGjkelc/aO635sCukqNclK3ViMMv8wlG27zcbit9shCezwiIJhS3T3QT+KiRlcm0NdkUhYsBr+74L/tFcBylB5WhyMCouaAOBWXErXvvj3z0eKfGONwWQn0kNuQcDWE8hO2XZqWGi84F5ruDBCPkGIHGmGaod2MiA0s6c5XsqrI267TmI/ejisxwFpJrG0t20x01apWf4JGHXuLiwoLrUX19nMsN5hxS9nWUdf0zMWExLNlYJloZ9rs4X74sQQ0Hgyp9ojCEzYvrSxsWnzJbQnnLicjXgwzx7frYge9PJknRLgmvoq4O0op3x8BbQy2FkjLy9jMgev6mhL6fIqgWuxIxjPSbrI1iwBaAbsX2IxzFDuJYUaTVhA0Mic+g6cvH6L14NIdHb1YP6rVg+flYd3IPJkRJLh25VB+VNJH+71GrwRV6JY0pU+qIjSlfpSCoFTP3B+uzV2mxpdISCR1w0XhmQW397uy6au7TrOUvjMsaWR3ZYJV6F8/F/rKb0/KZ3ovGoyyEPEL6noBSwPFmZ7xIQ4Q9WEko0U="
+#    file: wheelhouse/wildboar*.whl
+#    file_glob: true
+#    on:
+#      tags: true
+#      repo: isaksamsten/wildboar
