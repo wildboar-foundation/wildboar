@@ -103,7 +103,11 @@ def declare_cython_extension(extName,
     if use_math:
         compile_args = list(my_extra_compile_args_math)  # copy
         link_args = list(my_extra_link_args_math)
-        libraries = ["m"]
+        import platform
+        if platform.system() == "Windows":
+            libraries = None
+        else:
+            libraries = ["m"]
     else:
         compile_args = list(my_extra_compile_args_nonmath)
         link_args = list(my_extra_link_args_nonmath)
