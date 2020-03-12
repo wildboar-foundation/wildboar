@@ -23,7 +23,7 @@ install:
 
 script:
   - python3 -m cibuildwheel --output-dir wheelhouse
-  - python3 setyp.py sdist
+  - python3 setup.py sdist
 
 after_success:
   - |
