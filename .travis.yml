@@ -19,26 +19,26 @@ jobs:
     - services: docker
       install:
         - python3 -m pip install cibuildwheel==1.1.0
-        script:
-          - python3 -m cibuildwheel --output-dir wheelhouse
-        after_success:
-          - |
-            if [[ $TRAVIS_TAG ]]; then
-                  python3 -m pip install twine
-                  python3 -m twine upload wheelhouse/*.whl
-            fi
+      script:
+        - python3 -m cibuildwheel --output-dir wheelhouse
+      after_success:
+        - |
+          if [[ $TRAVIS_TAG ]]; then
+                python3 -m pip install twine
+                python3 -m twine upload wheelhouse/*.whl
+          fi
     - os: osx
       language: shell
       install:
         - python3 -m pip install cibuildwheel==1.1.0
-        script:
-          - python3 -m cibuildwheel --output-dir wheelhouse
-        after_success:
-          - |
-            if [[ $TRAVIS_TAG ]]; then
-                  python3 -m pip install twine
-                  python3 -m twine upload wheelhouse/*.whl
-            fi
+      script:
+        - python3 -m cibuildwheel --output-dir wheelhouse
+      after_success:
+        - |
+          if [[ $TRAVIS_TAG ]]; then
+                python3 -m pip install twine
+                python3 -m twine upload wheelhouse/*.whl
+          fi
     - os: windows
       language: shell
       before_install:
