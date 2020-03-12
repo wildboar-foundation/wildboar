@@ -2,19 +2,18 @@ language: python
 
 jobs:
   include:
-    - language: python
-      python:
-        - 3.6
-        - 3.7
-        - 3.8
+    - python: 3.8
+      before_install:
+        - python --version
+      install:
+        - pip install -r requirements.txt
       script:
-        - python3 -m pip install -r requirements.txt
-        - python3 setup.py sdist
+        - python setup.py sdist
       after_success:
         - |
           if [[ $TRAVIS_TAG ]]; then
-                python3 -m pip install twine
-                python3 -m twine upload dist/*.tar.gz
+                pip install twine
+                python -m twine upload dist/*.tar.gz
           fi
     - services: docker
       install:
