@@ -253,7 +253,7 @@ cdef class RegressionShapeletTreePredictor(ShapeletTreePredictor):
 
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
-    
+
     cdef size_t n_shapelets
     cdef size_t min_shapelet_size
     cdef size_t max_shapelet_size
@@ -434,8 +434,17 @@ cdef class ShapeletTreeBuilder:
         best_split_point = 0
         split_point = 0
 
+        # TODO: dynamically adjust the number of shapelets depending on the current tree depth
+        #       with the intuition tha twe can select fewer shapelets early and more and more
+        #       shapelets as the tree depth increases.
         for i in range(self.n_shapelets):
             shapelet = self._sample_shapelet(start, end)
+
+            # TODO: compute distance for only a sample of the samples reaching the node
+            #       and replace missing values with:
+            #         a) a random value in the range [min_dist, max_dist]
+            #         b) Inf
+            #         c) -Inf
             self.distance_measure.shapelet_info_distances(
                 shapelet, self.td, self.samples + start,
                 self.distance_buffer + start, end - start)
