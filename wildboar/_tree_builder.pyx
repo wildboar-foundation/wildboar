@@ -52,7 +52,7 @@ from wildboar._utils cimport rand_int
 from wildboar._utils cimport RAND_R_MAX
 
 
-cdef inline SplitPoint new_split_point(size_t split_point,
+cdef SplitPoint new_split_point(size_t split_point,
                                        double threshold,
                                        ShapeletInfo shapelet_info) nogil:
     cdef SplitPoint s
