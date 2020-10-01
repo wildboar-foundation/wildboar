@@ -16,19 +16,16 @@
 # Authors: Isak Samsten
 
 import numpy as np
-
-from .tree import ShapeletTreeClassifier
-from .tree import ShapeletTreeRegressor
-
-from sklearn.ensemble import BaggingClassifier
-from sklearn.ensemble import BaggingRegressor
-
 from sklearn.base import BaseEstimator
 from sklearn.base import ClassifierMixin
 from sklearn.base import RegressorMixin
-
-from sklearn.utils import check_random_state
+from sklearn.ensemble import BaggingClassifier
+from sklearn.ensemble import BaggingRegressor
 from sklearn.utils import check_array
+from sklearn.utils import check_random_state
+
+from .tree import ShapeletTreeClassifier
+from .tree import ShapeletTreeRegressor
 
 
 class ShapeletForestClassifier(BaseEstimator, ClassifierMixin):
@@ -57,6 +54,10 @@ class ShapeletForestClassifier(BaseEstimator, ClassifierMixin):
         self.metric = metric
         self.metric_params = metric_params
         self.random_state = random_state
+        self.n_timestep_ = None
+        self.n_dims_ = None
+        self.n_classes_ = None
+        self.bagging_classifier_ = None
 
     def predict(self, X, check_input=True):
         return self.classes_[np.argmax(
@@ -76,7 +77,7 @@ class ShapeletForestClassifier(BaseEstimator, ClassifierMixin):
 
         if X.ndim > 2 and X.shape[1] != self.n_dims_:
             raise ValueError("illegal input shape ({} != {}".format(
-                X.shape[1], self.n_dims))
+                X.shape[1], self.n_dims_))
 
         if check_input:
             X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
@@ -177,6 +178,8 @@ class ShapeletForestRegressor(BaseEstimator, RegressorMixin):
         self.metric = metric
         self.metric_params = metric_params
         self.random_state = random_state
+        self.n_dims_ = None
+        self.n_timestep_ = None
 
     def predict(self, X, check_input=True):
         if X.ndim < 2 or X.ndim > 3:
@@ -192,7 +195,7 @@ class ShapeletForestRegressor(BaseEstimator, RegressorMixin):
 
         if X.ndim > 2 and X.shape[1] != self.n_dims_:
             raise ValueError("illegal input shape ({} != {}".format(
-                X.shape[1], self.n_dims))
+                X.shape[1], self.n_dims_))
 
         if check_input:
             X = check_array(X, dtype=np.float64, allow_nd=True, order="C")

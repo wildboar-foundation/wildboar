@@ -159,8 +159,45 @@ cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
     node.shapelet = shapelet
     return node
 
+cdef class ShapeletTreeReducer:
+    cdef DistanceMeasure distance_measure
+    cdef TSDatabase td
+
+    def __init__(self, np.ndarray X, DistanceMeasure distance_measure):
+        self.td = ts_database_new(X)
+        self.distance_measure = distance_measure
+
+    def reduce(self, Node root, object accumulator, size_t output_shape = 1):
+        cdef size_t i, j
+        cdef size_t n_samples = self.td.n_samples
+        cdef np.ndarray[np.float64_t, ndim=2] output = np.empty([n_samples, output_shape], dtype=np.float64)
+        for i in range(n_samples):
+            output[i, :] = self._reduce_single(root, accumulator, i)
+
+    def _reduce_single(self, Node root, object accumulator, size_t i):
+        cdef Node node
+        cdef Shapelet shapelet
+        cdef double threshold, current
+        cdef object previous
+        cdef size_t depth
+
+        depth = 0
+        previous = None
+        node = root
+        while node.node_type == NodeType.branch:
+            shapelet = node.shapelet
+            threshold = node.threshold
+            current = self.distance_measure.shapelet_distance(shapelet, self.td, i)
+            previous = accumulator((depth, current, node), previous)
+            if current <= threshold:
+                node = node.left
+            else:
+                node = node.right
+
+        return accumulator((depth, current, node), previous)
+
+
 cdef class ShapeletTreePredictor:
-    cdef size_t n_labels
     cdef DistanceMeasure distance_measure
     cdef TSDatabase td
 
@@ -178,6 +215,7 @@ cdef class ShapeletTreePredictor:
         raise AttributeError("must be overridden")
 
 cdef class ClassificationShapeletTreePredictor(ShapeletTreePredictor):
+    cdef size_t n_labels
     def __init__(self,
                  np.ndarray X,
                  DistanceMeasure distance_measure,

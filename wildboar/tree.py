@@ -16,18 +16,16 @@
 # Authors: Isak Samsten
 
 import numpy as np
-
-from wildboar._tree_builder import ClassificationShapeletTreeBuilder
-from wildboar._tree_builder import ClassificationShapeletTreePredictor
-from wildboar._tree_builder import RegressionShapeletTreeBuilder
-from wildboar._tree_builder import RegressionShapeletTreePredictor
-
-from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.base import BaseEstimator
-from sklearn.utils import check_random_state
+from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.utils import check_array
+from sklearn.utils import check_random_state
 
 from wildboar.distance import DISTANCE_MEASURE
+from ._tree_builder import ClassificationShapeletTreeBuilder
+from ._tree_builder import ClassificationShapeletTreePredictor
+from ._tree_builder import RegressionShapeletTreeBuilder
+from ._tree_builder import RegressionShapeletTreePredictor
 
 __all__ = ["ShapeletTreeClassifier",
            "ShapeletTreeRegressor"]
