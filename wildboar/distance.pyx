@@ -16,17 +16,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
-cimport numpy as np
 import numpy as np
 import wildboar._dtw_distance
 import wildboar._euclidean_distance
 
+cimport numpy as np
 from libc.stdlib cimport free
 from sklearn.utils import check_array
-from wildboar._distance cimport Shapelet
-from wildboar._distance cimport DistanceMeasure
-from wildboar._distance cimport ts_database_new
-from wildboar._distance cimport TSDatabase
+from ._distance cimport Shapelet
+from ._distance cimport DistanceMeasure
+from ._distance cimport ts_database_new
+from ._distance cimport TSDatabase
 
 DISTANCE_MEASURE = {
     'euclidean': wildboar._euclidean_distance.EuclideanDistance,
@@ -207,8 +207,8 @@ def matches(
 
     cdef TSDatabase sd = ts_database_new(x)
 
-    cdef size_t*matches
-    cdef double*distances
+    cdef size_t *matches
+    cdef double *distances
     cdef size_t n_matches
 
     if metric_params is None:

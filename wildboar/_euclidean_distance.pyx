@@ -29,19 +29,17 @@ from libc.stdlib cimport malloc
 from libc.stdlib cimport free
 
 from libc.math cimport sqrt
-from libc.math cimport INFINITY, NAN
+from libc.math cimport INFINITY
 
-from wildboar._distance cimport ScaledDistanceMeasure
-from wildboar._distance cimport DistanceMeasure
+from ._distance cimport ScaledDistanceMeasure
+from ._distance cimport DistanceMeasure
 
-from wildboar._distance cimport TSDatabase
+from ._distance cimport TSDatabase
 
-from wildboar._distance cimport Shapelet
-from wildboar._distance cimport ShapeletInfo
-
+from ._distance cimport Shapelet
+from ._distance cimport ShapeletInfo
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
-    
     def __cinit__(self, size_t n_timestep, *args, **kwargs):
         self.X_buffer = <double*> malloc(
             sizeof(double) * n_timestep * 2)
@@ -53,7 +51,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
                                   Shapelet s,
                                   TSDatabase td,
                                   size_t t_index,
-                                  size_t* return_index = NULL) nogil:
+                                  size_t *return_index = NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
 
@@ -70,12 +68,11 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
             td.data,
             self.X_buffer,
             return_index)
-        
+
     cdef double shapelet_info_distance(self,
                                        ShapeletInfo s,
                                        TSDatabase td,
                                        size_t t_index) nogil:
-
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
         cdef size_t shapelet_offset = (s.index * td.sample_stride +
@@ -97,8 +94,8 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
 
     cdef int shapelet_matches(
             self, Shapelet s, TSDatabase td, size_t t_index,
-            double threshold, size_t** matches,  double** distances,
-            size_t* n_matches) nogil except -1:
+            double threshold, size_t** matches, double** distances,
+            size_t*n_matches) nogil except -1:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
 
@@ -118,14 +115,11 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
             distances,
             matches,
             n_matches)
-            
-
 
 cdef class EuclideanDistance(DistanceMeasure):
-
     cdef double shapelet_distance(
             self, Shapelet s, TSDatabase td, size_t t_index,
-            size_t* return_index = NULL) nogil:
+            size_t *return_index = NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
 
@@ -139,10 +133,9 @@ cdef class EuclideanDistance(DistanceMeasure):
             td.n_timestep,
             td.data,
             return_index)
-    
-    cdef double shapelet_info_distance(
-        self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
 
+    cdef double shapelet_info_distance(
+            self, ShapeletInfo s, TSDatabase td, size_t t_index) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
         cdef size_t shapelet_offset = (s.index * td.sample_stride +
@@ -161,8 +154,8 @@ cdef class EuclideanDistance(DistanceMeasure):
 
     cdef int shapelet_matches(
             self, Shapelet s, TSDatabase td, size_t t_index,
-            double threshold, size_t** matches,  double** distances,
-            size_t* n_matches) nogil except -1:
+            double threshold, size_t** matches, double** distances,
+            size_t*n_matches) nogil except -1:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
 
@@ -185,13 +178,13 @@ cdef double scaled_euclidean_distance(size_t s_offset,
                                       size_t s_length,
                                       double s_mean,
                                       double s_std,
-                                      double* S,
+                                      double *S,
                                       size_t t_offset,
                                       size_t t_stride,
                                       size_t t_length,
-                                      double* T,
-                                      double* X_buffer,
-                                      size_t* index) nogil:
+                                      double *T,
+                                      double *X_buffer,
+                                      size_t *index) nogil:
     cdef double current_value = 0
     cdef double mean = 0
     cdef double std = 0
@@ -232,7 +225,6 @@ cdef double scaled_euclidean_distance(size_t s_offset,
 
     return sqrt(min_dist)
 
-
 cdef inline double inner_scaled_euclidean_distance(size_t offset,
                                                    size_t length,
                                                    double s_mean,
@@ -240,9 +232,9 @@ cdef inline double inner_scaled_euclidean_distance(size_t offset,
                                                    size_t j,
                                                    double mean,
                                                    double std,
-                                                   double*X,
+                                                   double *X,
                                                    size_t timestep_stride,
-                                                   double*X_buffer,
+                                                   double *X_buffer,
                                                    double min_dist) nogil:
     # Compute the distance between the shapelet (starting at `offset`
     # and ending at `offset + length` normalized with `s_mean` and
@@ -269,16 +261,15 @@ cdef inline double inner_scaled_euclidean_distance(size_t offset,
 
     return dist
 
-
 cdef double euclidean_distance(size_t s_offset,
                                size_t s_stride,
                                size_t s_length,
-                               double*S,
+                               double *S,
                                size_t t_offset,
                                size_t t_stride,
                                size_t t_length,
-                               double*T,
-                               size_t*index) nogil:
+                               double *T,
+                               size_t *index) nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -302,19 +293,18 @@ cdef double euclidean_distance(size_t s_offset,
 
     return sqrt(min_dist)
 
-
 cdef int euclidean_distance_matches(size_t s_offset,
                                     size_t s_stride,
                                     size_t s_length,
-                                    double* S,
+                                    double *S,
                                     size_t t_offset,
                                     size_t t_stride,
                                     size_t t_length,
-                                    double* T,
+                                    double *T,
                                     double threshold,
                                     double** distances,
                                     size_t** matches,
-                                    size_t* n_matches) nogil except -1:
+                                    size_t*n_matches) nogil except -1:
     cdef double dist = 0
     cdef size_t capacity = 1
     cdef size_t tmp_capacity
@@ -346,22 +336,21 @@ cdef int euclidean_distance_matches(size_t s_offset,
 
     return 0
 
-
 cdef int scaled_euclidean_distance_matches(size_t s_offset,
                                            size_t s_stride,
                                            size_t s_length,
                                            double s_mean,
                                            double s_std,
-                                           double* S,
+                                           double *S,
                                            size_t t_offset,
                                            size_t t_stride,
                                            size_t t_length,
-                                           double* T,
-                                           double* X_buffer,
+                                           double *T,
+                                           double *X_buffer,
                                            double threshold,
                                            double** distances,
-                                           size_t** matches,                                              
-                                           size_t* n_matches) nogil except -1:
+                                           size_t** matches,
+                                           size_t *n_matches) nogil except -1:
     cdef double current_value = 0
     cdef double mean = 0
     cdef double std = 0
@@ -397,13 +386,13 @@ cdef int scaled_euclidean_distance_matches(size_t s_offset,
             dist = inner_scaled_euclidean_distance(
                 s_offset, s_length, s_mean, s_std, j, mean, std, S, s_stride,
                 X_buffer, threshold)
-            
+
             if dist <= threshold:
                 tmp_capacity = capacity
                 realloc_array(
                     <void**> matches, n_matches[0], sizeof(size_t), &tmp_capacity)
                 realloc_array(
-                    <void**> distances, n_matches[0], sizeof(double),  &capacity)
+                    <void**> distances, n_matches[0], sizeof(double), &capacity)
 
                 matches[0][n_matches[0]] = (i + 1) - s_length
                 distances[0][n_matches[0]] = sqrt(dist)
@@ -416,12 +405,11 @@ cdef int scaled_euclidean_distance_matches(size_t s_offset,
 
     return 0
 
-
-cdef int realloc_array(void** a, size_t p, size_t size, size_t* cap)  nogil except -1:
-    cdef void* tmp = a[0]
+cdef int realloc_array(void** a, size_t p, size_t size, size_t*cap)  nogil except -1:
+    cdef void*tmp = a[0]
     if p >= cap[0]:
         cap[0] *= 2
-        tmp = realloc(a[0], size*32 * cap[0])
+        tmp = realloc(a[0], size * 32 * cap[0])
         if tmp == NULL:
             with gil:
                 raise MemoryError()

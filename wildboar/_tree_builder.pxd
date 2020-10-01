@@ -17,7 +17,7 @@
 
 # Authors: Isak Samsten
 
-from wildboar._distance cimport ShapeletInfo, Shapelet
+from ._distance cimport ShapeletInfo, Shapelet
 
 cdef struct SplitPoint:
     size_t split_point
@@ -26,7 +26,7 @@ cdef struct SplitPoint:
 
 cdef enum NodeType:
     classification_leaf, regression_leaf, branch
-   
+
 cdef class Node:
     cdef readonly NodeType node_type
 
@@ -38,9 +38,8 @@ cdef class Node:
     cdef readonly Node right
 
     # if node_type == classification_leaf
-    cdef double* distribution
+    cdef double *distribution
     cdef size_t n_labels
 
     # if node_type == regression_leaf
     cdef double mean_value
-

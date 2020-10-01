@@ -37,11 +37,11 @@ from libc.math cimport INFINITY
 from libc.math cimport sqrt
 from libc.math cimport floor
 
-from wildboar._distance cimport TSDatabase
+from ._distance cimport TSDatabase
 
-from wildboar._distance cimport ShapeletInfo
-from wildboar._distance cimport ScaledDistanceMeasure
-from wildboar._distance cimport Shapelet
+from ._distance cimport ShapeletInfo
+from ._distance cimport ScaledDistanceMeasure
+from ._distance cimport Shapelet
 
 cdef void deque_init(Deque *c, size_t capacity) nogil:
     c[0].capacity = capacity
@@ -93,8 +93,8 @@ cdef size_t deque_size(Deque *c) nogil:
     return c[0].size
 
 cdef void find_min_max(size_t offset, size_t stride, size_t length,
-                       double*T, size_t r, double*lower, double*upper,
-                       Deque*dl, Deque*du) nogil:
+                       double *T, size_t r, double *lower, double *upper,
+                       Deque *dl, Deque *du) nogil:
     cdef size_t i
     cdef size_t k
 
@@ -146,7 +146,7 @@ cdef inline double dist(double x, double y) nogil:
     cdef double s = x - y
     return s * s
 
-cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double*S,
+cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double *S,
                                  double s_mean, double s_std, size_t t_offset,
                                  size_t t_stride, double *T, double t_mean,
                                  double t_std, size_t length,
@@ -210,8 +210,8 @@ cdef double constant_lower_bound(size_t s_offset, size_t s_stride, double*S,
 
 cdef double cumulative_bound(size_t offset, size_t stride, size_t length,
                              double mean, double std, double *T,
-                             double lu_mean, double lu_std, double*lower,
-                             double*upper, double*cb, double best_so_far) nogil:
+                             double lu_mean, double lu_std, double *lower,
+                             double *upper, double *cb, double best_so_far) nogil:
     cdef double min_dist = 0
     cdef double x, d, us, ls
     cdef size_t i
@@ -237,7 +237,7 @@ cdef double cumulative_bound(size_t offset, size_t stride, size_t length,
 cdef inline double inner_dtw(size_t s_offset, size_t s_stride, int s_length,
                              double s_mean, double s_std, double *S,
                              double mean, double std, size_t x_offset,
-                             double *X_buffer, int r, double*cb,
+                             double *X_buffer, int r, double *cb,
                              double *cost, double *cost_prev,
                              double min_dist) nogil:
     cdef int i = 0
@@ -495,12 +495,12 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                                   Shapelet s,
                                   TSDatabase td,
                                   size_t t_index,
-                                  size_t*return_index=NULL) nogil:
+                                  size_t *return_index=NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
         cdef double *s_lower
         cdef double *s_upper
-        cdef DtwExtra*extra
+        cdef DtwExtra *extra
         cdef size_t warp_width = compute_warp_width_(s.length, self.r)
 
         if s.extra != NULL:

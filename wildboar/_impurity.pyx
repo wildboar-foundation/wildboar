@@ -24,9 +24,9 @@ from libc.math cimport fabs
 from libc.math cimport log2
 
 cdef inline double entropy(double  left_sum,
-                           double* left_count,
+                           double *left_count,
                            double  right_sum,
-                           double* right_count,
+                           double *right_count,
                            size_t  n_labels) nogil:
     """Compute the entropy impurity
 

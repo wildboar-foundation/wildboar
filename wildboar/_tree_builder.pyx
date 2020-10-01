@@ -33,34 +33,32 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
-from wildboar._distance cimport TSDatabase
-from wildboar._distance cimport DistanceMeasure
+from ._distance cimport TSDatabase
+from ._distance cimport DistanceMeasure
 
-from wildboar._distance cimport ShapeletInfo
-from wildboar._distance cimport Shapelet
+from ._distance cimport ShapeletInfo
+from ._distance cimport Shapelet
 
-from wildboar._distance cimport ts_database_new
+from ._distance cimport ts_database_new
 
-from wildboar._distance cimport shapelet_info_init
-from wildboar._distance cimport shapelet_info_free
+from ._distance cimport shapelet_info_init
+from ._distance cimport shapelet_info_free
 
-from wildboar._impurity cimport entropy
+from ._impurity cimport entropy
 
-from wildboar._utils cimport label_distribution
-from wildboar._utils cimport argsort
-from wildboar._utils cimport rand_int
-from wildboar._utils cimport RAND_R_MAX
-
+from ._utils cimport label_distribution
+from ._utils cimport argsort
+from ._utils cimport rand_int
+from ._utils cimport RAND_R_MAX
 
 cdef SplitPoint new_split_point(size_t split_point,
-                                       double threshold,
-                                       ShapeletInfo shapelet_info) nogil:
+                                double threshold,
+                                ShapeletInfo shapelet_info) nogil:
     cdef SplitPoint s
     s.split_point = split_point
     s.threshold = threshold
     s.shapelet_info = shapelet_info
     return s
-
 
 # pickle a leaf node
 cpdef Node remake_classification_leaf_node(size_t n_labels, object proba):
@@ -87,7 +85,6 @@ cpdef Node remake_branch_node(double threshold, Shapelet shapelet,
     node.left = left
     node.right = right
     return node
-
 
 cdef class Node:
     def __cinit__(self, NodeType node_type):
@@ -138,11 +135,10 @@ cdef class Node:
 
         return arr
 
-
-cdef Node new_classification_leaf_node(double* label_buffer,
+cdef Node new_classification_leaf_node(double *label_buffer,
                                        size_t n_labels,
                                        double n_weighted_samples):
-    cdef double* distribution = <double*> malloc(sizeof(double) * n_labels)
+    cdef double *distribution = <double*> malloc(sizeof(double) * n_labels)
     cdef size_t i
     for i in range(n_labels):
         distribution[i] = label_buffer[i] / n_weighted_samples
@@ -152,19 +148,16 @@ cdef Node new_classification_leaf_node(double* label_buffer,
     node.n_labels = n_labels
     return node
 
-
 cdef Node new_regression_leaf_node(double mean_value):
     cdef Node node = Node(NodeType.regression_leaf)
     node.mean_value = mean_value
     return node
-
 
 cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
     cdef Node node = Node(NodeType.branch)
     node.threshold = sp.threshold
     node.shapelet = shapelet
     return node
-
 
 cdef class ShapeletTreePredictor:
     cdef size_t n_labels
@@ -185,7 +178,6 @@ cdef class ShapeletTreePredictor:
         raise AttributeError("must be overridden")
 
 cdef class ClassificationShapeletTreePredictor(ShapeletTreePredictor):
-
     def __init__(self,
                  np.ndarray X,
                  DistanceMeasure distance_measure,
@@ -222,7 +214,6 @@ cdef class ClassificationShapeletTreePredictor(ShapeletTreePredictor):
         return output
 
 cdef class RegressionShapeletTreePredictor(ShapeletTreePredictor):
-
     def predict(self, Node root):
         """Predict the probability of each label using the tree described by
         `root`
@@ -253,7 +244,7 @@ cdef class RegressionShapeletTreePredictor(ShapeletTreePredictor):
 
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
-    
+
     cdef size_t n_shapelets
     cdef size_t min_shapelet_size
     cdef size_t max_shapelet_size
@@ -264,7 +255,7 @@ cdef class ShapeletTreeBuilder:
     cdef size_t label_stride
 
     # the weight of the j:th sample
-    cdef double* sample_weights
+    cdef double *sample_weights
 
     cdef TSDatabase td
 
@@ -272,16 +263,16 @@ cdef class ShapeletTreeBuilder:
     cdef size_t n_samples
 
     # buffer of samples from 0, ..., n_samples
-    cdef size_t* samples
+    cdef size_t *samples
 
     # temporary buffer of samples from 0, ..., n_samples
-    cdef size_t* samples_buffer
+    cdef size_t *samples_buffer
 
     # the sum of samples_weights
     cdef double n_weighted_samples
 
     # temporary buffer for distance computations
-    cdef double* distance_buffer
+    cdef double *distance_buffer
 
     cdef DistanceMeasure distance_measure
 
@@ -317,8 +308,8 @@ cdef class ShapeletTreeBuilder:
             sizeof(double) * self.n_samples)
 
         if (self.samples == NULL or
-            self.distance_buffer == NULL or
-            self.samples_buffer == NULL):
+                self.distance_buffer == NULL or
+                self.samples_buffer == NULL):
             raise MemoryError()
 
         cdef size_t i
@@ -361,8 +352,8 @@ cdef class ShapeletTreeBuilder:
         """Check if the tree should be pruned based on the samples in the
         region indicated by `start` and `end`
 
-        Implementaiton detail: For optimization, subclasses *must* set
-        the variable `n_weighted_samples` to the number of samples
+        Implementation detail: For optimization, subclasses *must* set
+        the variable `self.n_weighted_samples` to the number of samples
         reaching this node in this method.
 
         :param start: the start index
@@ -438,7 +429,7 @@ cdef class ShapeletTreeBuilder:
             shapelet = self._sample_shapelet(start, end)
             self.distance_measure.shapelet_info_distances(
                 shapelet, self.td, self.samples + start,
-                self.distance_buffer + start, end - start)
+                                   self.distance_buffer + start, end - start)
 
             argsort(self.distance_buffer + start, self.samples + start,
                     end - start)
@@ -487,9 +478,9 @@ cdef class ShapeletTreeBuilder:
     cdef void _partition_distance_buffer(self,
                                          size_t start,
                                          size_t end,
-                                         size_t* split_point,
-                                         double* threshold,
-                                         double* impurity) nogil:
+                                         size_t *split_point,
+                                         double *threshold,
+                                         double *impurity) nogil:
         """ Partition the distance buffer such that an impurity measure is
         minimized
 
@@ -509,24 +500,21 @@ cdef class ShapeletTreeBuilder:
         with gil:
             raise NotImplementedError()
 
-
-
 cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
-
     # the number of labels
     cdef size_t n_labels
 
     # temporary buffer with sample distributions per label
-    cdef double* label_buffer
+    cdef double *label_buffer
 
     # temporary buffer with the left split sample distributions
-    cdef double* left_label_buffer
+    cdef double *left_label_buffer
 
     # temporary buffer with the right split sample distribution
-    cdef double* right_label_buffer
+    cdef double *right_label_buffer
 
     # the (strided) array of labels
-    cdef size_t* labels
+    cdef size_t *labels
 
     def __cinit__(self,
                   size_t n_shapelets,
@@ -544,10 +532,10 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
         self.n_labels = n_labels
         self.label_buffer = <double*> malloc(sizeof(double) * n_labels)
         self.left_label_buffer = <double*> malloc(sizeof(double) * n_labels)
-        self.right_label_buffer= <double*> malloc(sizeof(double) * n_labels)
+        self.right_label_buffer = <double*> malloc(sizeof(double) * n_labels)
         if (self.left_label_buffer == NULL or
-            self.right_label_buffer == NULL or
-            self.label_buffer == NULL):
+                self.right_label_buffer == NULL or
+                self.label_buffer == NULL):
             raise MemoryError()
 
     def __dealloc__(self):
@@ -571,8 +559,8 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             self.labels,
             self.label_stride,
             self.n_labels,
-            &self.n_weighted_samples,   # out param
-            self.label_buffer,          # out param
+            &self.n_weighted_samples,  # out param
+            self.label_buffer,  # out param
         )
 
         if end - start <= self.min_sample_split or n_positive < 2:
@@ -582,9 +570,9 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
     cdef void _partition_distance_buffer(self,
                                          size_t start,
                                          size_t end,
-                                         size_t* split_point,
-                                         double* threshold,
-                                         double* impurity) nogil:
+                                         size_t *split_point,
+                                         double *threshold,
+                                         double *impurity) nogil:
         memset(self.left_label_buffer, 0, sizeof(double) * self.n_labels)
 
         # store the label buffer temporarily in `right_label_buffer`,
@@ -666,10 +654,19 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             prev_label = current_label
             prev_distance = current_distance
 
-cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
+cdef class ExtraShapeletTreeBuilder(ClassificationShapeletTreeBuilder):
+    cdef void _partition_distance_buffer(self,
+                                         size_t start,
+                                         size_t end,
+                                         size_t *split_point,
+                                         double *threshold,
+                                         double *impurity) nogil:
+        with gil:
+            raise NotImplementedError()
 
+cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
     # the (strided) array of labels
-    cdef double* labels
+    cdef double *labels
 
     def __cinit__(self,
                   size_t n_shapelets,
@@ -718,9 +715,9 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
     cdef void _partition_distance_buffer(self,
                                          size_t start,
                                          size_t end,
-                                         size_t* split_point,
-                                         double* threshold,
-                                         double* impurity) nogil:
+                                         size_t *split_point,
+                                         double *threshold,
+                                         double *impurity) nogil:
         # Partitions the distance buffer into two binary partitions
         # such that the sum of label variance in the two partitions is
         # minimized.

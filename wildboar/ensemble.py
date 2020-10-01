@@ -17,8 +17,8 @@
 
 import numpy as np
 
-from wildboar.tree import ShapeletTreeClassifier
-from wildboar.tree import ShapeletTreeRegressor
+from .tree import ShapeletTreeClassifier
+from .tree import ShapeletTreeRegressor
 
 from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import BaggingRegressor

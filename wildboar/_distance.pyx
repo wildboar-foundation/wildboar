@@ -24,19 +24,16 @@
 import numpy as np
 cimport numpy as np
 
-from libc.stdlib cimport realloc
 from libc.stdlib cimport malloc
 from libc.stdlib cimport free
 
 from libc.math cimport sqrt
-from libc.math cimport INFINITY, NAN
-
-from wildboar._utils cimport rand_int
+from libc.math cimport NAN
 
 cdef Shapelet new_shapelet_(np.ndarray t, size_t dim, double mean, double std):
     """Create a new shapelet """
     cdef Shapelet shapelet = Shapelet(dim, len(t), mean, std)
-    cdef double*data = shapelet.data
+    cdef double *data = shapelet.data
     cdef int i
     for i in range(len(t)):
         data[i] = t[i]
@@ -46,7 +43,7 @@ cdef Shapelet new_shapelet_(np.ndarray t, size_t dim, double mean, double std):
 cdef get_shapelet_(ShapeletInfo s, TSDatabase td, double mean, double std):
     """Extract a new shapelet from `td` """
     cdef Shapelet shapelet = Shapelet(s.dim, s.length, mean, std, s.index, s.start)
-    cdef double*data = shapelet.data
+    cdef double *data = shapelet.data
     cdef size_t shapelet_offset = (s.index * td.sample_stride +
                                    s.start * td.timestep_stride +
                                    s.dim * td.dim_stride)
@@ -76,7 +73,7 @@ cpdef Shapelet make_shapelet_(object me,
 
     return shapelet
 
-cdef void shapelet_info_init(ShapeletInfo*s) nogil:
+cdef void shapelet_info_init(ShapeletInfo *s) nogil:
     """Initialize  a shapelet info struct """
     s[0].start = 0
     s[0].length = 0
@@ -91,7 +88,7 @@ cdef void shapelet_info_free(ShapeletInfo shapelet_info) nogil:
         free(shapelet_info.extra)
         shapelet_info.extra = NULL
 
-cdef int shapelet_info_update_statistics_(ShapeletInfo*s,
+cdef int shapelet_info_update_statistics_(ShapeletInfo *s,
                                           const TSDatabase t) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
@@ -148,8 +145,8 @@ cdef class DistanceMeasure:
         pass
 
     cdef void shapelet_info_distances(
-            self, ShapeletInfo s, TSDatabase td, size_t*samples,
-            double*distances, size_t n_samples) nogil:
+            self, ShapeletInfo s, TSDatabase td, size_t *samples,
+            double *distances, size_t n_samples) nogil:
         """ Compute the distance between the shapelet `s` in `td` and all
         samples in `samples`
 
@@ -233,7 +230,7 @@ cdef class DistanceMeasure:
 
     cdef double shapelet_distance(
             self, Shapelet s, TSDatabase td, size_t t_index,
-            size_t*return_index=NULL) nogil:
+            size_t *return_index=NULL) nogil:
         """Return the distance between `s` and the sample specified by
         `t_index` in `td` setting the index of the best matching
         position to `return_index` unless `return_index == NULL`
@@ -252,7 +249,7 @@ cdef class DistanceMeasure:
     cdef int shapelet_matches(
             self, Shapelet s, TSDatabase td, size_t t_index,
             double threshold, size_t** matches, double** distances,
-            size_t*n_matches) nogil except -1:
+            size_t *n_matches) nogil except -1:
         """Compute the matches for `s` in the sample `t_index` in `td` where
         the distance threshold is below `threshold`, storing the
         matching starting positions in `matches` and distance (<

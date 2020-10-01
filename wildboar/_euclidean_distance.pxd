@@ -17,35 +17,34 @@
 
 # Authors: Isak Samsten
 
-from wildboar._distance cimport DistanceMeasure
-from wildboar._distance cimport ScaledDistanceMeasure
+from ._distance cimport DistanceMeasure
+from ._distance cimport ScaledDistanceMeasure
 
 cdef class EuclideanDistance(DistanceMeasure):
     pass
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
-    cdef double* X_buffer
+    cdef double *X_buffer
 
 cdef double scaled_euclidean_distance(size_t s_offset,
                                       size_t s_stride,
                                       size_t s_length,
                                       double s_mean,
                                       double s_std,
-                                      double* S,
+                                      double *S,
                                       size_t t_offset,
                                       size_t t_stride,
                                       size_t t_length,
-                                      double* T,
-                                      double* X_buffer,
-                                      size_t* index) nogil
-
+                                      double *T,
+                                      double *X_buffer,
+                                      size_t *index) nogil
 
 cdef double euclidean_distance(size_t s_offset,
                                size_t s_stride,
                                size_t s_length,
-                               double* S,
+                               double *S,
                                size_t t_offset,
                                size_t t_stride,
                                size_t t_length,
-                               double* T,
-                               size_t* index) nogil
+                               double *T,
+                               size_t *index) nogil
