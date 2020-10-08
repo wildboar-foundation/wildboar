@@ -38,8 +38,10 @@ cdef class Node:
     cdef readonly Node right
 
     # if node_type == classification_leaf
-    cdef double *distribution
-    cdef size_t n_labels
+    cdef double *distribution_
+    cdef double n_node_samples_
+    cdef size_t n_labels_
+    cdef size_t node_id_
 
     # if node_type == regression_leaf
-    cdef double mean_value
+    cdef double mean_value_

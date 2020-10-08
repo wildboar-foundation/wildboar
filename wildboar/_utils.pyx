@@ -123,6 +123,10 @@ cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
     else:
         return min_val + rand_r(seed) % (max_val - min_val)
 
+cdef inline double rand_uniform(double low, double high, size_t* random_state) nogil:
+    """Generate a random double in the range [`low` `high`[."""
+    return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
+
 # Implementation of introsort. Inspired by sklearn.tree
 # implementation. This code is licensed under BSD3 (and not GPLv3)
 #
