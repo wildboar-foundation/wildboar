@@ -412,7 +412,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
 
         if isinstance(self.max_samples, str):
             if self.max_samples == "auto":
-                max_samples = max(x.shape[0], 256)
+                max_samples = min(x.shape[0], 256)
             else:
                 raise ValueError("max_samples (%s) is not supported." % self.max_samples)
         elif isinstance(self.max_samples, numbers.Integral):
