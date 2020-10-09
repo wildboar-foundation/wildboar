@@ -25,7 +25,6 @@ from sklearn.ensemble import BaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging
 from sklearn.utils import check_array
 from sklearn.utils import check_random_state
-from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
 from .tree import ShapeletTreeClassifier, ExtraShapeletTreeClassifier, ExtraShapeletTreeRegressor
@@ -376,9 +375,6 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
             x = np.ascontiguousarray(x, dtype=np.float64)
         x = x.reshape(x.shape[0], self.n_dims * self.n_timestep)
         return x
-
-    def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
 
     def _set_oob_score(self, x, y):
         raise NotImplementedError("OOB score not supported")
