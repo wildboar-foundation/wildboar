@@ -410,7 +410,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
             x, y, max_samples=x.shape[0], max_depth=max_depth, sample_weight=sample_weight)
 
         if self.contamination == 'auto':
-            self.offset_ = 0.5
+            self.offset_ = -0.5
         else:
             self.offset_ = np.percentile(self.score_samples(x), 100.0 * self.contamination)
 
