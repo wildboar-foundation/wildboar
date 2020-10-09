@@ -330,10 +330,11 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
                  n_estimators=100,
                  bootstrap=False,
                  n_jobs=None,
-                 metric='euclidean',
                  min_shapelet_size=0,
                  max_shapelet_size=1,
                  min_samples_split=2,
+                 contamination='auto',
+                 metric='euclidean',
                  metric_params=None,
                  random_state=None):
         super(IsolationShapeletForest, self).__init__(
@@ -355,7 +356,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
         self.min_samples_split = min_samples_split
         self.n_dims = None
         self.n_timestep = None
-        self.offset_ = -0.5
+        self.contamination = contamination
 
     def _validate_x_predict(self, x, check_input):
         if x.ndim < 2 or x.ndim > 3:
@@ -407,6 +408,12 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
         max_depth = int(np.ceil(np.log2(max(x.shape[0], 2))))
         super(IsolationShapeletForest, self)._fit(
             x, y, max_samples=x.shape[0], max_depth=max_depth, sample_weight=sample_weight)
+
+        if self.contamination == 'auto':
+            self.offset_ = 0.5
+        else:
+            self.offset_ = np.percentile(self.score_samples(x), 100.0 * self.contamination)
+
         return self
 
     def predict(self, x):
