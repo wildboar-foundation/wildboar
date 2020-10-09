@@ -14,6 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+import numbers
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
@@ -333,6 +334,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
                  min_shapelet_size=0,
                  max_shapelet_size=1,
                  min_samples_split=2,
+                 max_samples='auto',
                  contamination='auto',
                  metric='euclidean',
                  metric_params=None,
@@ -357,6 +359,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
         self.n_dims = None
         self.n_timestep = None
         self.contamination = contamination
+        self.max_samples = max_samples
 
     def _validate_x_predict(self, x, check_input):
         if x.ndim < 2 or x.ndim > 3:
@@ -406,8 +409,21 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
         x = x.reshape(n_samples, n_dims * self.n_timestep)
         y = random_state.uniform(size=x.shape[0])
         max_depth = int(np.ceil(np.log2(max(x.shape[0], 2))))
+
+        if isinstance(self.max_samples, str):
+            if self.max_samples == "auto":
+                max_samples = max(x.shape[0], 256)
+            else:
+                raise ValueError("max_samples (%s) is not supported." % self.max_samples)
+        elif isinstance(self.max_samples, numbers.Integral):
+            max_samples = min(self.max_samples, x.shape[0])
+        else:
+            if not 0. < self.max_samples <= 1.0:
+                raise ValueError("max_samples must be in (0, 1], got %r" % self.max_samples)
+            max_samples = int(self.max_samples * x.shape[0])
+
         super(IsolationShapeletForest, self)._fit(
-            x, y, max_samples=x.shape[0], max_depth=max_depth, sample_weight=sample_weight)
+            x, y, max_samples=max_samples, max_depth=max_depth, sample_weight=sample_weight)
 
         if self.contamination == 'auto':
             self.offset_ = -0.5
