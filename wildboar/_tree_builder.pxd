@@ -16,32 +16,45 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+cimport numpy as np
 
+from ._distance cimport DistanceMeasure
 from ._distance cimport ShapeletInfo, Shapelet
 
+# TODO: include impurity score...
 cdef struct SplitPoint:
     size_t split_point
     double threshold
     ShapeletInfo shapelet_info
 
-cdef enum NodeType:
-    classification_leaf, regression_leaf, branch
+cdef class Tree:
+    cdef DistanceMeasure distance_measure
 
-cdef class Node:
-    cdef readonly NodeType node_type
+    cdef size_t _max_depth
+    cdef size_t _capacity
+    cdef size_t _n_labels  # 1 for regression
 
-    # if node_type == BRANCH
-    cdef readonly double threshold
-    cdef readonly Shapelet shapelet
+    cdef size_t _node_count
+    cdef int *_left
+    cdef int *_right
+    cdef Shapelet ** _shapelets
+    cdef double *_thresholds
+    cdef double *_impurity
+    cdef double *_values
+    cdef double *_n_weighted_node_samples
+    cdef size_t *_n_node_samples
 
-    cdef readonly Node left
-    cdef readonly Node right
+    cdef int _increase_capacity(self) nogil except -1
 
-    # if node_type == classification_leaf
-    cdef double *distribution_
-    cdef double n_node_samples_
-    cdef size_t n_labels_
-    cdef size_t node_id_
+    cdef int add_leaf_node(self, int parent, bint is_left, size_t n_node_samples, double n_weighted_node_samples) nogil
 
-    # if node_type == regression_leaf
-    cdef double mean_value_
+    cdef void set_leaf_value(self, size_t node_id, size_t out_label, double out_value) nogil
+
+    cdef int add_branch_node(self, int parent, bint is_left, size_t n_node_samples, double n_weighted_node_samples,
+                             Shapelet *shapelet, double threshold, double impurity) nogil
+
+    cpdef np.ndarray predict(self, object X)
+
+    cpdef np.ndarray apply(self, object X)
+
+    cpdef np.ndarray decision_path(self, object X)

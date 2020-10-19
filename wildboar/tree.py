@@ -21,12 +21,13 @@ from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state
 from sklearn.utils.validation import check_is_fitted, check_array
 
-from ._tree_builder import ClassificationShapeletTreeBuilder, ExtraClassificationShapeletTreeBuilder
-from ._tree_builder import ClassificationShapeletTreePredictor
+from ._tree_builder import ClassificationShapeletTreeBuilder
+from ._tree_builder import ExtraClassificationShapeletTreeBuilder
 from ._tree_builder import ExtraRegressionShapeletTreeBuilder
 from ._tree_builder import RegressionShapeletTreeBuilder
-from ._tree_builder import RegressionShapeletTreePredictor
-from ._tree_builder import ShapeletTreeTraverser
+# from ._tree_builder import ClassificationShapeletTreePredictor
+# from ._tree_builder import RegressionShapeletTreePredictor
+# from ._tree_builder import ShapeletTreeTraverser
 from .distance import DISTANCE_MEASURE
 
 __all__ = ["ShapeletTreeClassifier",
@@ -54,8 +55,6 @@ class BaseShapeletTree(BaseEstimator):
         if max_shapelet_size > 1:
             raise ValueError(
                 "`max_shapelet_size` {0} > 1".format(max_shapelet_size))
-
-        self.max_depth = max_depth
         self.max_depth = max_depth or 2 ** 31
         self.min_samples_split = min_samples_split
         self.random_state = check_random_state(random_state)
@@ -65,7 +64,6 @@ class BaseShapeletTree(BaseEstimator):
         self.metric = metric
         self.metric_params = metric_params
         self.force_dim = force_dim
-        self.__n_node_samples = None
         self.n_timestep_ = None
         self.n_dims_ = None
 
@@ -96,53 +94,13 @@ class BaseShapeletTree(BaseEstimator):
         return x
 
     def decision_path(self, x, check_input=True):
-        check_is_fitted(self, ["root_node_"])
-        x = self._validate_x_predict(x, check_input)
-        node_samples = self.n_node_samples
-        decision_path_ = np.zeros((x.shape[0], node_samples.shape[0]), dtype=bool)
-
-        def f(i, node):
-            decision_path_[i, node.node_id] = 1
-
-        distance_measure = self._make_distance_measure()
-        reducer = ShapeletTreeTraverser(distance_measure)
-        reducer.traverse(x, self.root_node_, f)
-        return decision_path_
+        check_is_fitted(self, ["tree_"])
+        return self.tree_.decision_path(x)
 
     def apply(self, x, check_input=True):
-        check_is_fitted(self, ["root_node_"])
+        check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)
-        leaves_indices = np.zeros(x.shape[0], dtype=np.int)
-
-        def f(i, node):
-            if not node.is_branch:
-                leaves_indices[i] = node.node_id
-
-        distance_measure = self._make_distance_measure()
-        reducer = ShapeletTreeTraverser(distance_measure)
-        reducer.traverse(x, self.root_node_, f)
-        return leaves_indices
-
-    @property
-    def n_node_samples(self):
-        check_is_fitted(self, ["root_node_"])
-        if self.__n_node_samples is not None:
-            return self.__n_node_samples
-
-        d = {}
-
-        def f(node):
-            d[node.node_id] = node.n_node_samples
-
-        distance_measure = self._make_distance_measure()
-        traverser = ShapeletTreeTraverser(distance_measure)
-        traverser.visit(self.root_node_, f)
-
-        max_node_id = max(d.keys())
-        self.__n_node_samples = np.empty(max_node_id + 1, dtype=np.float64)
-        for k, v in d.items():
-            self.__n_node_samples[k] = v
-        return self.__n_node_samples
+        return self.tree_.apply(x)
 
 
 class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
@@ -213,12 +171,13 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
+        max_depth = self.max_depth or 2 ** 31
         distance_measure = self._make_distance_measure()
         return RegressionShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
-            self.max_depth,
+            max_depth,
             self.min_samples_split,
             distance_measure,
             x,
@@ -282,7 +241,8 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
         self.n_dims_ = n_dims
 
         tree_builder = self._make_tree_builder(X, y, sample_weight)
-        self.root_node_ = tree_builder.build_tree()
+        tree_builder.build_tree()
+        self.tree_ = tree_builder.tree_
         return self
 
     def predict(self, x, check_input=True):
@@ -298,11 +258,9 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
         :returns: array of `shape = [n_samples]`.
 
         """
-        check_is_fitted(self, ["root_node_"])
+        check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)
-        distance_measure = self._make_distance_measure()
-        predictor = RegressionShapeletTreePredictor(distance_measure)
-        return predictor.predict(x, self.root_node_)
+        return self.tree_.predict(x)
 
 
 class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
@@ -369,12 +327,13 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
+        max_depth = self.max_depth or 2 ** 31
         distance_measure = self._make_distance_measure()
         return ExtraRegressionShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
-            self.max_depth,
+            max_depth,
             self.min_samples_split,
             distance_measure,
             x,
@@ -453,13 +412,13 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
         min_shapelet_size = int(self.n_timestep_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
             min_shapelet_size = 2
-
+        max_depth = self.max_depth or 2 ** 31
         distance_measure = self._make_distance_measure()
         return ClassificationShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
-            self.max_depth,
+            max_depth,
             self.min_samples_split,
             distance_measure,
             x,
@@ -535,7 +494,8 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
         self.n_dims_ = n_dims
 
         tree_builder = self._make_tree_builder(x, y, sample_weight)
-        self.root_node_ = tree_builder.build_tree()
+        tree_builder.build_tree()
+        self.tree_ = tree_builder.tree_
         return self
 
     def predict(self, X, check_input=True):
@@ -571,11 +531,9 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
             class probabilities of the input samples. The order of the
             classes corresponds to that in the attribute `classes_`.
         """
-        check_is_fitted(self, ["root_node_"])
+        check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)
-        distance_measure = self._make_distance_measure()
-        predictor = ClassificationShapeletTreePredictor(distance_measure, len(self.classes_))
-        return predictor.predict(x, self.root_node_)
+        return self.tree_.predict(x)
 
 
 class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
@@ -644,11 +602,12 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             min_shapelet_size = 2
 
         distance_measure = self._make_distance_measure()
+        max_depth = self.max_depth or 2 ** 31
         return ExtraClassificationShapeletTreeBuilder(
             1,
             min_shapelet_size,
             max_shapelet_size,
-            self.max_depth,
+            max_depth,
             self.min_samples_split,
             distance_measure,
             x,
