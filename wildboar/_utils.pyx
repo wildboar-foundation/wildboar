@@ -22,9 +22,8 @@
 
 from __future__ import print_function
 
-import math
-
 from libc.math cimport log2
+from libc.stdlib cimport realloc
 
 # For debugging
 def print_tree(o, indent=1):
@@ -123,7 +122,7 @@ cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
     else:
         return min_val + rand_r(seed) % (max_val - min_val)
 
-cdef inline double rand_uniform(double low, double high, size_t* random_state) nogil:
+cdef inline double rand_uniform(double low, double high, size_t*random_state) nogil:
     """Generate a random double in the range [`low` `high`[."""
     return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
 
@@ -235,3 +234,22 @@ cdef void heapsort(double *values, size_t *samples, size_t n) nogil:
         swap(values, samples, 0, end)
         sift_down(values, samples, 0, end)
         end = end - 1
+
+cdef int realloc_array(void** ptr, size_t old_size, size_t ptr_size, size_t *capacity)  nogil except -1:
+    cdef void *tmp = ptr[0]
+    if old_size >= capacity[0]:
+        capacity[0] = old_size * 2
+        tmp = realloc(ptr[0], ptr_size * capacity[0])
+        if tmp == NULL:
+            return -1
+    ptr[0] = tmp
+    return 0
+
+cdef int safe_realloc(void** ptr, size_t new_size) nogil except -1:
+    cdef void *tmp = ptr[0]
+    tmp = realloc(ptr[0], new_size)
+    if tmp == NULL:
+        return -1
+
+    ptr[0] = tmp
+    return 0

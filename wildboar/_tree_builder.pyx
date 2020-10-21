@@ -23,7 +23,6 @@
 import numpy as np
 cimport numpy as np
 
-from libc.math cimport log2
 from libc.math cimport INFINITY
 from libc.math cimport NAN
 
@@ -33,6 +32,7 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
+from ._utils cimport safe_realloc
 from ._utils cimport rand_uniform
 from ._distance cimport TSDatabase
 from ._distance cimport DistanceMeasure
@@ -44,6 +44,7 @@ from ._distance cimport ts_database_new
 
 from ._distance cimport shapelet_info_init
 from ._distance cimport shapelet_info_free
+from ._distance cimport shapelet_free
 
 from ._impurity cimport entropy
 
@@ -52,263 +53,315 @@ from ._utils cimport argsort
 from ._utils cimport rand_int
 from ._utils cimport RAND_R_MAX
 
-cdef SplitPoint new_split_point(size_t split_point,
-                                double threshold,
-                                ShapeletInfo shapelet_info) nogil:
+#(_make_tree, self._n_labels, self.shapelet, self.threshold, self.value, self.left, self.right,
+# self.impurity, self.n_node_samples, self.n_weighted_node_samples)
+cpdef Tree _make_tree(DistanceMeasure distance_measure, size_t n_labels, list shapelets, np.ndarray threshold,
+                      np.ndarray value, np.ndarray left, np.ndarray right, np.ndarray impurity,
+                      np.ndarray n_node_samples, np.ndarray n_weighted_node_samples):
+    cdef Tree tree = Tree(distance_measure, n_labels, capacity=len(shapelets) + 1)
+    cdef size_t node_count = len(shapelets)
+    cdef size_t i
+    cdef size_t dim
+    cdef np.ndarray arr
+    cdef Shapelet *shapelet
+    cdef np.ndarray value_reshape = value.reshape(-1)
+
+    tree._node_count = node_count
+    for i in range(node_count):
+        if shapelets[i] is not None:
+            dim, arr = shapelets[i]
+            shapelet = <Shapelet*> malloc(sizeof(Shapelet))
+            distance_measure.init_shapelet_ndarray(shapelet, arr, dim)
+            tree._shapelets[i] = shapelet
+        else:
+            tree._shapelets[i] = NULL
+        tree._thresholds[i] = threshold[i]
+        tree._left[i] = left[i]
+        tree._right[i] = right[i]
+        tree._impurity[i] = impurity[i]
+        tree._n_node_samples[i] = n_node_samples[i]
+        tree._n_weighted_node_samples[i] = n_weighted_node_samples[i]
+
+    for i in range(node_count * n_labels):
+        tree._values[i] = value_reshape[i]
+    return tree
+
+cdef class Tree:
+    def __cinit__(self, DistanceMeasure distance_measure, size_t n_labels, size_t capacity=10):
+        self.distance_measure = distance_measure
+        self._node_count = 0
+        self._capacity = capacity
+        self._n_labels = n_labels
+        self._shapelets = <Shapelet**> malloc(self._capacity * sizeof(Shapelet*))
+        self._thresholds = <double*> malloc(self._capacity * sizeof(double))
+        self._values = <double*> malloc(self._capacity * self._n_labels * sizeof(double))
+        self._left = <int*> malloc(self._capacity * sizeof(size_t))
+        self._right = <int*> malloc(self._capacity * sizeof(size_t))
+        self._impurity = <double*> malloc(self._capacity * sizeof(double))
+        self._n_node_samples = <size_t*> malloc(self._capacity * sizeof(size_t))
+        self._n_weighted_node_samples = <double*> malloc(self._capacity * sizeof(double))
+
+    def __dealloc__(self):
+        cdef size_t i
+        if self._shapelets != NULL:
+            for i in range(self._node_count):
+                if self._shapelets[i] != NULL:
+                    free(self._shapelets[i])
+                    shapelet_free(self._shapelets[i])
+            free(self._shapelets)
+
+        if self._thresholds != NULL:
+            free(self._thresholds)
+
+        if self._values != NULL:
+            free(self._values)
+
+        if self._left != NULL:
+            free(self._left)
+
+        if self._right != NULL:
+            free(self._right)
+
+        if self._impurity != NULL:
+            free(self._impurity)
+
+        if self._n_node_samples != NULL:
+            free(self._n_node_samples)
+
+        if self._n_weighted_node_samples != NULL:
+            free(self._n_weighted_node_samples)
+
+    def __reduce__(self):
+        return _make_tree, (self.distance_measure, self._n_labels, self.shapelet, self.threshold, self.value, self.left,
+                            self.right, self.impurity, self.n_node_samples, self.n_weighted_node_samples)
+
+    @property
+    def max_depth(self):
+        return self._max_depth
+
+    @property
+    def value(self):
+        cdef np.ndarray arr = np.empty(self._node_count * self._n_labels, dtype=np.float64)
+        cdef size_t i
+        for i in range(self._n_labels * self._node_count):
+            arr[i] = self._values[i]
+        return arr.reshape(self._node_count, self._n_labels)
+
+    @property
+    def shapelet(self):
+        cdef Shapelet *shapelet
+        cdef np.ndarray temp
+        cdef size_t i, j
+        cdef list ret = []
+        for i in range(self._node_count):
+            shapelet = self._shapelets[i]
+            if shapelet != NULL:
+                temp = np.empty(shapelet[0].length, dtype=np.float64)
+                for j in range(shapelet[0].length):
+                    temp[j] = shapelet[0].data[j]
+                ret.append((shapelet[0].dim, temp))
+            else:
+                ret.append(None)
+        return ret
+
+    @property
+    def n_node_samples(self):
+        cdef np.ndarray arr = np.zeros(self._node_count, dtype=np.int)
+        cdef size_t i
+        for i in range(self._node_count):
+            arr[i] = self._n_node_samples[i]
+        return arr
+
+    @property
+    def n_weighted_node_samples(self):
+        cdef np.ndarray arr = np.zeros(self._node_count, dtype=np.float64)
+        cdef size_t i
+        for i in range(self._node_count):
+            arr[i] = self._n_weighted_node_samples[i]
+        return arr
+
+    @property
+    def left(self):
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.int)
+        cdef size_t i
+        for i in range(self._node_count):
+            arr[i] = self._left[i]
+        return arr
+
+    @property
+    def right(self):
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.int)
+        cdef size_t i
+        for i in range(self._node_count):
+            arr[i] = self._right[i]
+        return arr
+
+    @property
+    def threshold(self):
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.float64)
+        cdef size_t i
+        for i in range(self._node_count):
+            arr[i] = self._thresholds[i]
+        return arr
+
+    @property
+    def impurity(self):
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.float64)
+        cdef size_t i
+        for i in range(self._node_count):
+            arr[i] = self._impurity[i]
+        return arr
+
+    cpdef np.ndarray predict(self, object X):
+        cdef np.ndarray apply = self.apply(X)
+        cdef np.ndarray predict = np.take(self.value, apply, axis=0, mode="clip")
+        if self._n_labels == 1:
+            predict = predict.reshape(X.shape[0])
+        return predict
+
+    cpdef np.ndarray apply(self, object X):
+        if not isinstance(X, np.ndarray):
+            raise ValueError(f"X should be np.ndarray, got {type(X)}")
+
+        cdef TSDatabase ts = ts_database_new(X)
+        cdef np.ndarray[np.npy_intp] out = np.zeros((ts.n_samples,), dtype=np.intp)
+        cdef long *out_data = <long*> out.data
+        cdef Shapelet *shapelet
+        cdef double threshold
+        cdef int node_index
+        cdef size_t i
+        with nogil:
+            for i in range(ts.n_samples):
+                node_index = 0
+                while self._left[node_index] != -1:
+                    threshold = self._thresholds[node_index]
+                    # TODO: avoid copying the shapelet
+                    shapelet = self._shapelets[node_index]
+                    if self.distance_measure.shapelet_distance(shapelet, &ts, i) <= threshold:
+                        node_index = self._left[node_index]
+                    else:
+                        node_index = self._right[node_index]
+                out_data[i] = <long> node_index
+        return out
+
+    cpdef np.ndarray decision_path(self, object X):
+        if not isinstance(X, np.ndarray):
+            raise ValueError(f"X should be np.ndarray, got {type(X)}")
+        cdef TSDatabase ts = ts_database_new(X)
+        cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
+        # cdef long[:, :] out_data = out
+        cdef long*out_data = <long*> out.data
+        cdef size_t i_stride = <size_t> out.strides[0] / <size_t> out.itemsize
+        cdef size_t n_stride = <size_t> out.strides[1] / <size_t> out.itemsize
+        cdef size_t node_index
+        cdef size_t i
+        cdef Shapelet *shapelet
+        cdef double threshold
+        with nogil:
+            for i in range(ts.n_samples):
+                node_index = 0
+                while self._left[node_index] != -1:
+                    out_data[i * i_stride + node_index * n_stride] = 1
+                    # out_data[i, node_index] = 1
+                    threshold = self._thresholds[node_index]
+                    shapelet = self._shapelets[node_index]
+                    if self.distance_measure.shapelet_distance(shapelet, &ts, i) <= threshold:
+                        node_index = self._left[node_index]
+                    else:
+                        node_index = self._right[node_index]
+        return out
+
+    @property
+    def node_count(self):
+        return self._node_count
+
+    cdef int add_leaf_node(self, int parent, bint is_left, size_t n_node_samples, double n_weighted_node_samples) nogil:
+        cdef size_t node_id = self._node_count
+        if node_id >= self._capacity:
+            if self._increase_capacity() == -1:
+                return -1
+
+        self._n_node_samples[node_id] = n_node_samples
+        self._n_weighted_node_samples[node_id] = n_weighted_node_samples
+        if parent != -1:
+            if is_left:
+                self._left[parent] = node_id
+            else:
+                self._right[parent] = node_id
+        self._left[node_id] = -1
+        self._right[node_id] = -1
+        self._impurity[node_id] = -1
+        self._shapelets[node_id] = NULL
+        self._node_count += 1
+        return node_id
+
+    cdef void set_leaf_value(self, size_t node_id, size_t out_label, double out_value) nogil:
+        self._values[out_label + node_id * self._n_labels] = out_value
+
+    cdef int add_branch_node(self, int parent, bint is_left, size_t n_node_samples, double n_weighted_node_samples,
+                             Shapelet *shapelet, double threshold, double impurity) nogil:
+        cdef size_t node_id = self._node_count
+        if node_id >= self._capacity:
+            if self._increase_capacity() == -1:
+                return -1
+
+        self._impurity[node_id] = impurity
+        self._n_node_samples[node_id] = n_node_samples
+        self._n_weighted_node_samples[node_id] = n_weighted_node_samples
+        self._thresholds[node_id] = threshold
+        self._shapelets[node_id] = shapelet
+        if parent != -1:
+            if is_left:
+                self._left[parent] = node_id
+            else:
+                self._right[parent] = node_id
+
+        self._node_count += 1
+        return node_id
+
+    cdef int _increase_capacity(self) nogil except -1:
+        cdef size_t new_capacity = self._node_count * 2
+        cdef int ret
+        ret = safe_realloc(<void**> &self._shapelets, sizeof(Shapelet) * new_capacity)
+        if ret == -1:
+            return -1
+
+        ret = safe_realloc(<void**> &self._thresholds, sizeof(double) * new_capacity)
+        if ret == -1:
+            return -1
+
+        ret = safe_realloc(<void**> &self._impurity, sizeof(double) * new_capacity)
+        if ret == -1:
+            return -1
+
+        ret = safe_realloc(<void**> &self._n_node_samples, sizeof(double) * new_capacity)
+        if ret == -1:
+            return -1
+
+        ret = safe_realloc(<void**> &self._n_weighted_node_samples, sizeof(size_t) * new_capacity)
+        if ret == -1:
+            return -1
+
+        ret = safe_realloc(<void**> &self._values, sizeof(double) * self._n_labels * new_capacity)
+        if ret == -1:
+            return -1
+
+        ret = safe_realloc(<void**> &self._left, sizeof(size_t) * new_capacity)
+        if ret == -1:
+            return -1
+
+        ret = safe_realloc(<void**> &self._right, sizeof(size_t) * new_capacity)
+        if ret == -1:
+            return -1
+
+        return 0
+
+cdef SplitPoint new_split_point(size_t split_point, double threshold, ShapeletInfo shapelet_info) nogil:
     cdef SplitPoint s
     s.split_point = split_point
     s.threshold = threshold
     s.shapelet_info = shapelet_info
     return s
-
-# pickle a leaf node
-cpdef Node remake_classification_leaf_node(size_t n_labels, object proba, double n_node_samples, size_t node_id):
-    cdef Node node = Node(NodeType.classification_leaf)
-    cdef size_t i
-    node.n_labels_ = n_labels
-    node.distribution_ = <double*> malloc(sizeof(double) * n_labels)
-    for i in range(<size_t> proba.shape[0]):
-        node.distribution_[i] = proba[i]
-    node.n_node_samples_ = n_node_samples
-    node.node_id_ = node_id
-    return node
-
-cpdef Node remake_regression_leaf_node(double mean_value, double n_node_samples, size_t node_id):
-    cdef Node node = Node(NodeType.regression_leaf)
-    node.mean_value_ = mean_value
-    node.n_node_samples_ = n_node_samples
-    node.node_id_ = node_id
-    return node
-
-# pickle a branch node
-cpdef Node remake_branch_node(double threshold, Shapelet shapelet,
-                              Node left, Node right, double n_node_samples, size_t node_id):
-    cpdef Node node = Node(NodeType.branch)
-    node.shapelet = shapelet
-    node.threshold = threshold
-    node.left = left
-    node.right = right
-    node.node_id_ = node_id
-    node.n_node_samples_ = n_node_samples
-    return node
-
-cdef class Node:
-    def __cinit__(self, NodeType node_type):
-        self.node_type = node_type
-        self.distribution_ = NULL
-
-    def __dealloc__(self):
-        if self.is_classification_leaf and self.distribution_ != NULL:
-            free(self.distribution_)
-            self.distribution_ = NULL
-
-    def __reduce__(self):
-        if self.is_classification_leaf:
-            return (remake_classification_leaf_node,
-                    (self.n_labels_, self.proba, self.n_node_samples_, self.node_id_))
-        if self.is_regression_leaf:
-            return (remake_regression_leaf_node,
-                    (self.mean_value_, self.n_node_samples_, self.node_id_))
-        else:
-            return (remake_branch_node, (self.threshold,
-                                         self.shapelet, self.left, self.right, self.n_node_samples_, self.node_id_))
-
-    @property
-    def node_id(self):
-        return self.node_id_
-
-    @property
-    def is_classification_leaf(self):
-        return self.node_type == NodeType.classification_leaf
-
-    @property
-    def is_regression_leaf(self):
-        return self.node_type == NodeType.regression_leaf
-
-    @property
-    def is_branch(self):
-        return self.node_type == NodeType.branch
-
-    @property
-    def node_id(self):
-        return self.node_id_
-
-    @property
-    def n_node_samples(self):
-        return self.n_node_samples_
-
-    @property
-    def regr_val(self):
-        if not self.is_regression_leaf:
-            raise AttributeError("not a regression leaf node")
-        return self.mean_value_
-
-    @property
-    def proba(self):
-        if not self.is_classification_leaf:
-            raise AttributeError("not a classification leaf node")
-
-        cdef np.ndarray[np.float64_t] arr = np.empty(
-            self.n_labels_, dtype=np.float64)
-
-        cdef size_t i
-        for i in range(self.n_labels_):
-            arr[i] = self.distribution_[i]
-
-        return arr
-
-cdef Node new_classification_leaf_node(double *label_buffer,
-                                       size_t n_labels,
-                                       double n_weighted_samples):
-    cdef double *distribution = <double*> malloc(sizeof(double) * n_labels)
-    cdef size_t i
-    for i in range(n_labels):
-        distribution[i] = label_buffer[i] / n_weighted_samples
-
-    cdef Node node = Node(NodeType.classification_leaf)
-    node.distribution_ = distribution
-    node.n_labels_ = n_labels
-    node.n_node_samples_ = n_weighted_samples
-    return node
-
-cdef Node new_regression_leaf_node(double mean_value):
-    cdef Node node = Node(NodeType.regression_leaf)
-    node.mean_value_ = mean_value
-    return node
-
-cdef Node new_branch_node(SplitPoint sp, Shapelet shapelet):
-    cdef Node node = Node(NodeType.branch)
-    node.threshold = sp.threshold
-    node.shapelet = shapelet
-    return node
-
-cdef class ShapeletTreeTraverser:
-    cdef DistanceMeasure distance_measure
-
-    def __init__(self, DistanceMeasure distance_measure):
-        self.distance_measure = distance_measure
-
-    def visit(self, Node root, object func):
-        from collections import deque
-        nodes = deque([root])
-        while nodes:
-            node = nodes.popleft()
-            func(node)
-            if node.left:
-                nodes.append(node.left)
-            if node.right:
-                nodes.append(node.right)
-
-    def traverse(self, np.ndarray X, Node root, object func):
-        """
-        Traverse and visit each node that apply for the i:th sample in `X`
-
-        :param X: input data
-        :param root: the root node of a shapelet tree
-        :param func: function called for each node `f(sample_index, current_node) -> None``
-        :return: None
-        """
-        cdef TSDatabase td = ts_database_new(X)
-        cdef size_t i, j
-        cdef size_t n_samples = td.n_samples
-        for i in range(n_samples):
-            self._traverse_sample(td, i, root, func)
-
-    cdef _traverse_sample(self, TSDatabase td, size_t i, Node root, object accumulator):
-        cdef Node node
-        cdef Shapelet shapelet
-        cdef double threshold, current
-        cdef object previous
-
-        node = root
-        while node.node_type == NodeType.branch:
-            shapelet = node.shapelet
-            threshold = node.threshold
-            current = self.distance_measure.shapelet_distance(shapelet, td, i)
-            accumulator(i, node)
-            if current <= threshold:
-                node = node.left
-            else:
-                node = node.right
-        accumulator(i, node)
-
-cdef class ShapeletTreePredictor:
-    cdef DistanceMeasure distance_measure
-
-    def __init__(self, DistanceMeasure distance_measure):
-        """Construct a shapelet tree predictor
-        :type distance_measure: DistanceMeasure
-        """
-        self.distance_measure = distance_measure
-
-    def predict(self, np.ndarray X, Node root):
-        raise AttributeError("must be overridden")
-
-cdef class ClassificationShapeletTreePredictor(ShapeletTreePredictor):
-    cdef size_t n_labels
-    def __init__(self, DistanceMeasure distance_measure, size_t n_labels):
-        super().__init__(distance_measure)
-        self.n_labels = n_labels
-
-    def predict(self, np.ndarray X, Node root):
-        """Predict the probability of each label using the tree described by
-        `root`
-
-        :param X:
-        :param root: the root node
-        :returns: the probabilities of shape `[n_samples, n_labels]`
-        """
-        cdef TSDatabase td = ts_database_new(X)
-        cdef size_t i
-        cdef size_t n_samples = td.n_samples
-        cdef np.ndarray[np.float64_t, ndim=2] output = np.empty(
-            [n_samples, self.n_labels], dtype=np.float64)
-
-        cdef Node node
-        cdef Shapelet shapelet
-        cdef double threshold
-        for i in range(n_samples):
-            node = root
-            while not node.is_classification_leaf:
-                shapelet = node.shapelet
-                threshold = node.threshold
-                if (self.distance_measure.shapelet_distance(
-                        shapelet, td, i) <= threshold):
-                    node = node.left
-                else:
-                    node = node.right
-            output[i, :] = node.proba
-        return output
-
-cdef class RegressionShapeletTreePredictor(ShapeletTreePredictor):
-    def predict(self, np.ndarray X, Node root):
-        """Predict the probability of each label using the tree described by
-        `root`
-
-        :param X:
-        :param root: the root node
-        :returns: the predictions `[n_samples]`
-        """
-        cdef TSDatabase td = ts_database_new(X)
-        cdef size_t i
-        cdef size_t n_samples = td.n_samples
-        cdef np.ndarray[np.float64_t, ndim=1] output = np.empty(
-            [n_samples], dtype=np.float64)
-
-        cdef Node node
-        cdef Shapelet shapelet
-        cdef double threshold
-        for i in range(n_samples):
-            node = root
-            while not node.is_regression_leaf:
-                shapelet = node.shapelet
-                threshold = node.threshold
-                if self.distance_measure.shapelet_distance(shapelet, td, i) <= threshold:
-                    node = node.left
-                else:
-                    node = node.right
-            output[i] = node.mean_value_
-        return output
 
 cdef class ShapeletTreeBuilder:
     cdef size_t random_seed
@@ -326,6 +379,7 @@ cdef class ShapeletTreeBuilder:
     # the weight of the j:th sample
     cdef double *sample_weights
 
+    # the dataset of time series
     cdef TSDatabase td
 
     # the number of samples with non-zero weight
@@ -343,7 +397,11 @@ cdef class ShapeletTreeBuilder:
     # temporary buffer for distance computations
     cdef double *distance_buffer
 
+    # the distance measure implementation
     cdef DistanceMeasure distance_measure
+
+    # the tree structure representation
+    cdef Tree tree
 
     def __cinit__(self,
                   size_t n_shapelets,
@@ -372,14 +430,10 @@ cdef class ShapeletTreeBuilder:
 
         self.n_samples = X.shape[0]
         self.samples = <size_t*> malloc(sizeof(size_t) * self.n_samples)
-        self.samples_buffer = <size_t*> malloc(
-            sizeof(size_t) * self.n_samples)
-        self.distance_buffer = <double*> malloc(
-            sizeof(double) * self.n_samples)
+        self.samples_buffer = <size_t*> malloc(sizeof(size_t) * self.n_samples)
+        self.distance_buffer = <double*> malloc(sizeof(double) * self.n_samples)
 
-        if (self.samples == NULL or
-                self.distance_buffer == NULL or
-                self.samples_buffer == NULL):
+        if self.samples == NULL or self.distance_buffer == NULL or self.samples_buffer == NULL:
             raise MemoryError()
 
         cdef size_t i
@@ -403,36 +457,30 @@ cdef class ShapeletTreeBuilder:
         free(self.samples_buffer)
         free(self.distance_buffer)
 
-    cpdef Node build_tree(self):
-        return self._build_tree(0, self.n_samples, 0)
+    @property
+    def tree_(self):
+        return self.tree
 
-    cdef Node new_leaf_node(self, size_t start, size_t end):
-        cdef Node node = self._make_leaf_node(start, end)
-        node.node_id_ = self.current_node_id
-        node.n_node_samples_ = self.n_weighted_samples
-        self.current_node_id += 1
-        return node
+    cpdef int build_tree(self):
+        cdef size_t root_node_id
+        cdef size_t max_depth = 0
+        with nogil:
+            root_node_id = self._build_tree(0, self.n_samples, 0, -1, False, &max_depth)
 
-    cdef Node _make_leaf_node(self, size_t start, size_t end):
-        """ Create a new leaf node based on the samples in the region indicated
-        by `start` and `end`
+        self.tree._max_depth = max_depth
+        return root_node_id
 
-        :param start: the start index
+    cdef size_t new_leaf_node(self, size_t start, size_t end, int parent, bint is_left) nogil:
+        pass
 
-        :param end: the end index
+    cdef size_t new_branch_node(self, size_t start, size_t end, SplitPoint sp,
+                                Shapelet *shapelet, int parent, bint is_left) nogil:
+        cdef size_t node_id
+        node_id = self.tree.add_branch_node(parent, is_left, end - start, self.n_weighted_samples, shapelet,
+                                            sp.threshold, -1)
+        return node_id
 
-        :returns: a new leaf node
-        """
-        raise NotImplementedError()
-
-    cdef Node new_branch_node(self, SplitPoint sp, Shapelet shapelet):
-        cdef Node node = new_branch_node(sp, shapelet)
-        node.node_id_ = self.current_node_id
-        node.n_node_samples_ = self.n_weighted_samples
-        self.current_node_id += 1
-        return node
-
-    cdef bint _is_pre_pruned(self, size_t start, size_t end):
+    cdef bint _is_pre_pruned(self, size_t start, size_t end) nogil:
         """Check if the tree should be pruned based on the samples in the
         region indicated by `start` and `end`
 
@@ -446,10 +494,10 @@ cdef class ShapeletTreeBuilder:
 
         :return: if the current node should be pruned
         """
+        pass
 
-        raise NotImplementedError()
-
-    cdef Node _build_tree(self, size_t start, size_t end, size_t depth):
+    cdef size_t _build_tree(self, size_t start, size_t end, size_t depth, int parent, bint is_left,
+                            size_t *max_depth) nogil:
         """Recursive function for building the tree
 
         Each call to this function is allowed to access and transpose
@@ -459,28 +507,31 @@ cdef class ShapeletTreeBuilder:
         :param start: start index of samples in `samples`
         :param end: the end index of samples in `samples`
         :param depth: the current depth of the recursion"""
+        if depth > max_depth[0]:
+            max_depth[0] = depth
+
         if self._is_pre_pruned(start, end) or depth >= self.max_depth:
-            return self.new_leaf_node(start, end)
+            return self.new_leaf_node(start, end, parent, is_left)
 
         cdef SplitPoint split = self._split(start, end)
-        cdef Shapelet shapelet
-        cdef Node branch
-
-        cdef double prev_dist
-        cdef double curr_dist
+        cdef Shapelet *shapelet
+        cdef size_t current_node_id, left_node_id, right_node_id
+        cdef int err
         if split.split_point > start and end - split.split_point > 0:
-            shapelet = self.distance_measure.get_shapelet(
-                split.shapelet_info, self.td)
-            branch = self.new_branch_node(split, shapelet)
-            branch.left = self._build_tree(start, split.split_point,
-                                           depth + 1)
-            branch.right = self._build_tree(split.split_point, end,
-                                            depth + 1)
+            shapelet = <Shapelet*> malloc(sizeof(Shapelet))
+            err = self.distance_measure.init_shapelet(shapelet, &split.shapelet_info, &self.td)
+            if err == -1:
+                return -1
 
-            shapelet_info_free(split.shapelet_info)
-            return branch
+            # `shapelet` will be stored and freed by `self.tree`
+            current_node_id = self.new_branch_node(start, end, split, shapelet, parent, is_left)
+            left_node_id = self._build_tree(start, split.split_point, depth + 1, current_node_id, True, max_depth)
+            right_node_id = self._build_tree(split.split_point, end, depth + 1, current_node_id, False, max_depth)
+
+            shapelet_info_free(&split.shapelet_info)  # RECLAIM THIS MEMORY
+            return current_node_id
         else:
-            return self.new_leaf_node(start, end)
+            return self.new_leaf_node(start, end, parent, is_left)
 
     cdef SplitPoint _split(self, size_t start, size_t end) nogil:
         """Split the `sample` array indicated by the region specified by
@@ -493,7 +544,7 @@ cdef class ShapeletTreeBuilder:
 
         :params start: the start index of samples in `sample`
         :params end: the end index of samples in `sample`
-        :returns: a split point minimzing the impurity
+        :returns: a split point minimizing the impurity
         """
         cdef size_t split_point, best_split_point
         cdef double threshold, best_threshold
@@ -510,33 +561,28 @@ cdef class ShapeletTreeBuilder:
         split_point = 0
 
         for i in range(self.n_shapelets):
-            shapelet = self._sample_shapelet(start, end)
+            self._sample_shapelet(&shapelet, start, end)
             self.distance_measure.shapelet_info_distances(
-                shapelet, self.td, self.samples + start,
-                                   self.distance_buffer + start, end - start)
+                &shapelet, &self.td, self.samples + start, self.distance_buffer + start, end - start)
+            argsort(self.distance_buffer + start, self.samples + start, end - start)
 
-            argsort(self.distance_buffer + start, self.samples + start,
-                    end - start)
-            self._partition_distance_buffer(
-                start, end, &split_point, &threshold, &impurity)
+            self._partition_distance_buffer(start, end, &split_point, &threshold, &impurity)
             if impurity < best_impurity:
                 # store the order of samples in `sample_buffer`
-                memcpy(self.samples_buffer,
-                       self.samples + start, sizeof(size_t) * (end - start))
+                memcpy(self.samples_buffer, self.samples + start, sizeof(size_t) * (end - start))
                 best_impurity = impurity
                 best_split_point = split_point
                 best_threshold = threshold
                 best_shapelet = shapelet
             else:
-                shapelet_info_free(shapelet)
+                shapelet_info_free(&shapelet)
 
         # restore the best order to `samples`
         memcpy(self.samples + start,
                self.samples_buffer, sizeof(size_t) * (end - start))
-        return new_split_point(best_split_point, best_threshold,
-                               best_shapelet)
+        return new_split_point(best_split_point, best_threshold, best_shapelet)
 
-    cdef ShapeletInfo _sample_shapelet(self, size_t start, size_t end) nogil:
+    cdef int _sample_shapelet(self, ShapeletInfo *shapelet_info, size_t start, size_t end) nogil:
         cdef size_t shapelet_length
         cdef size_t shapelet_start
         cdef size_t shapelet_index
@@ -552,12 +598,12 @@ cdef class ShapeletTreeBuilder:
             shapelet_dim = rand_int(0, self.td.n_dims, &self.random_seed)
         else:
             shapelet_dim = 1
-
-        return self.distance_measure.new_shapelet_info(self.td,
-                                                       shapelet_index,
-                                                       shapelet_start,
-                                                       shapelet_length,
-                                                       shapelet_dim)
+        return self.distance_measure.init_shapelet_info(&self.td,
+                                                        shapelet_info,
+                                                        shapelet_index,
+                                                        shapelet_start,
+                                                        shapelet_length,
+                                                        shapelet_dim)
 
     cdef void _partition_distance_buffer(self,
                                          size_t start,
@@ -614,6 +660,7 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
                   size_t n_labels):
         self.labels = <size_t*> y.data
         self.n_labels = n_labels
+        self.tree = Tree(distance_measure, n_labels)
         self.label_buffer = <double*> malloc(sizeof(double) * n_labels)
         self.left_label_buffer = <double*> malloc(sizeof(double) * n_labels)
         self.right_label_buffer = <double*> malloc(sizeof(double) * n_labels)
@@ -627,11 +674,18 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
         free(self.left_label_buffer)
         free(self.right_label_buffer)
 
-    cdef Node _make_leaf_node(self, size_t start, size_t end):
-        return new_classification_leaf_node(
-            self.label_buffer, self.n_labels, self.n_weighted_samples)
+    cdef size_t new_leaf_node(self, size_t start, size_t end, int parent, bint is_left) nogil:
+        cdef size_t node_id
+        cdef size_t i
+        cdef double prob
 
-    cdef bint _is_pre_pruned(self, size_t start, size_t end):
+        node_id = self.tree.add_leaf_node(parent, is_left, end - start, self.n_weighted_samples)
+        for i in range(self.n_labels):
+            prob = self.label_buffer[i] / self.n_weighted_samples
+            self.tree.set_leaf_value(node_id, i, prob)
+        return node_id
+
+    cdef bint _is_pre_pruned(self, size_t start, size_t end) nogil:
         # reinitialize the `label_buffer` to the sample distribution
         # in the current sample region.
         memset(self.label_buffer, 0, sizeof(double) * self.n_labels)
@@ -754,8 +808,9 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                   np.ndarray sample_weights,
                   object random_state):
         self.labels = <double*> y.data
+        self.tree = Tree(distance_measure, 1)
 
-    cdef bint _is_pre_pruned(self, size_t start, size_t end):
+    cdef bint _is_pre_pruned(self, size_t start, size_t end) nogil:
         cdef size_t j
         cdef double sample_weight
         self.n_weighted_samples = 0
@@ -772,10 +827,11 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
             return True
         return False
 
-    cdef Node _make_leaf_node(self, size_t start, size_t end):
+    cdef size_t new_leaf_node(self, size_t start, size_t end, int parent, bint is_left) nogil:
         cdef double leaf_sum = 0
         cdef double current_sample_weight = 0
         cdef size_t j
+        cdef size_t node_id
         for i in range(start, end):
             j = self.samples[i]
             p = j * self.label_stride
@@ -785,7 +841,9 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                 current_sample_weight = 1.0
             leaf_sum += self.labels[p] * current_sample_weight
 
-        return new_regression_leaf_node(leaf_sum / self.n_weighted_samples)
+        node_id = self.tree.add_leaf_node(parent, is_left, end - start, self.n_weighted_samples)
+        self.tree.set_leaf_value(node_id, 0, leaf_sum / self.n_weighted_samples)
+        return node_id
 
     cdef void _partition_distance_buffer(self,
                                          size_t start,

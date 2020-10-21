@@ -138,10 +138,11 @@ def distance(
     cdef DistanceMeasure distance_measure = DISTANCE_MEASURE[metric](
         sd.n_timestep, **metric_params)
 
-    cdef Shapelet shape = distance_measure.new_shapelet(s, dim)
+    cdef Shapelet shape
+    distance_measure.init_shapelet_ndarray(&shape, s, dim)
     if isinstance(sample, int):
         min_dist = distance_measure.shapelet_distance(
-            shape, sd, sample, &min_index)
+            &shape, &sd, sample, &min_index)
 
         if return_index:
             return min_dist, min_index
@@ -152,8 +153,7 @@ def distance(
         dist = []
         ind = []
         for i in samples:
-            min_dist = distance_measure.shapelet_distance(
-                shape, sd, i, &min_index)
+            min_dist = distance_measure.shapelet_distance(&shape, &sd, i, &min_index)
 
             dist.append(min_dist)
             ind.append(min_index)
@@ -216,13 +216,15 @@ def matches(
 
     cdef DistanceMeasure distance_measure = DISTANCE_MEASURE[metric](
         sd.n_timestep, **metric_params)
-    cdef Shapelet shape = distance_measure.new_shapelet(s, dim)
+    print(distance_measure)
+    cdef Shapelet shape
+    distance_measure.init_shapelet_ndarray(&shape, s, dim)
 
     cdef size_t i
     if isinstance(sample, int):
         check_sample_(sample, sd.n_samples)
         distance_measure.shapelet_matches(
-            shape, sd, sample, threshold, &matches, &distances, &n_matches)
+            &shape, &sd, sample, threshold, &matches, &distances, &n_matches)
 
         match_array = make_match_array_(matches, n_matches)
         distance_array = make_distance_array_(distances, n_matches)
@@ -239,8 +241,7 @@ def matches(
         distance_list = []
         for i in samples:
             check_sample_(i, sd.n_samples)
-            distance_measure.shapelet_matches(
-                shape, sd, i, threshold, &matches, &distances, &n_matches)
+            distance_measure.shapelet_matches(&shape, &sd, i, threshold, &matches, &distances, &n_matches)
             match_array = make_match_array_(matches, n_matches)
             distance_array = make_distance_array_(distances, n_matches)
             match_list.append(match_array)
