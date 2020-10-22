@@ -32,6 +32,7 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
+from ._utils cimport RollingVariance
 from ._utils cimport safe_realloc
 from ._utils cimport rand_uniform
 from ._distance cimport TSDatabase
@@ -531,6 +532,7 @@ cdef class ShapeletTreeBuilder:
             shapelet_info_free(&split.shapelet_info)  # RECLAIM THIS MEMORY
             return current_node_id
         else:
+            with gil: print("hmmmmmm", end - start)
             return self.new_leaf_node(start, end, parent, is_left)
 
     cdef SplitPoint _split(self, size_t start, size_t end) nogil:
@@ -777,7 +779,7 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
                 if current_impurity <= impurity[0]:
                     impurity[0] = current_impurity
                     threshold[0] = (current_distance + prev_distance) / 2
-                    split_point[0] = i + 1
+                    split_point[0] = i
 
             if self.sample_weights != NULL:
                 current_sample_weight = self.sample_weights[j]
@@ -795,6 +797,8 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
 cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
     # the (strided) array of labels
     cdef double *labels
+    cdef RollingVariance right
+    cdef RollingVariance left
 
     def __cinit__(self,
                   size_t n_shapelets,
@@ -809,6 +813,8 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                   object random_state):
         self.labels = <double*> y.data
         self.tree = Tree(distance_measure, 1)
+        self.left = RollingVariance()
+        self.right = RollingVariance()
 
     cdef bint _is_pre_pruned(self, size_t start, size_t end) nogil:
         cdef size_t j
@@ -823,7 +829,7 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
 
             self.n_weighted_samples += sample_weight
 
-        if self.n_weighted_samples < self.min_sample_split:
+        if end - start < self.min_sample_split:
             return True
         return False
 
@@ -868,15 +874,6 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
         cdef size_t j  # sample index (in `samples`)
         cdef size_t p  # label index (in `labels`)
 
-        cdef double right_sum
-        cdef double right_mean
-        cdef double right_mean_old
-        cdef double right_var
-        cdef double left_sum
-        cdef double left_mean
-        cdef double left_mean_old
-        cdef double left_var
-
         cdef double prev_distance
 
         cdef double current_sample_weight
@@ -895,16 +892,10 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
         else:
             current_sample_weight = 1.0
 
+        self.left._reset()
+        self.right._reset()
         # Initialize the left-hand side of the inequality's variance
-        left_sum = current_sample_weight
-        left_mean_old = 0
-        left_mean = current_val
-        left_var = 0
-
-        right_sum = 0
-        right_mean_old = 0
-        right_mean = 0
-        right_var = 0
+        self.left._add(current_sample_weight, current_val)
 
         # Initialize the right-hand side of the inequality's variance
         for i in range(start + 1, end):
@@ -916,16 +907,9 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                 current_sample_weight = 1.0
 
             current_val = self.labels[p]
-            right_sum += current_sample_weight
-            right_mean_old = right_mean
-            right_mean = (right_mean_old +
-                          (current_sample_weight / right_sum) *
-                          (current_val - right_mean_old))
-            right_var += (current_sample_weight *
-                          (current_val - right_mean_old) *
-                          (current_val - right_mean))
+            self.right._add(current_sample_weight, current_val)
 
-        impurity[0] = (left_var / left_sum) + (right_var / right_sum)
+        impurity[0] = self.left._variance() + self.right._variance()
         threshold[0] = prev_distance
         split_point[0] = start + 1  # The split point indicates a <=-relation
 
@@ -943,31 +927,16 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
             # Move variance from the right-hand side to the left-hand
             # and reevaluate the impurity
             current_val = self.labels[p]
-            right_sum -= current_sample_weight
-            right_mean_old = right_mean
-            right_mean = (right_mean_old -
-                          (current_sample_weight / right_sum) *
-                          (current_val - right_mean_old))
-            right_var -= (current_sample_weight *
-                          (current_val - right_mean_old) *
-                          (current_val - right_mean))
+            self.right._remove(current_sample_weight, current_val)
+            self.left._add(current_sample_weight, current_val)
 
-            left_sum += current_sample_weight
-            left_mean_old = left_mean
-            left_mean = (left_mean_old +
-                         (current_sample_weight / left_sum) *
-                         (current_val - left_mean_old))
-            left_var += (current_sample_weight *
-                         (current_val - left_mean_old) *
-                         (current_val - left_mean))
-
-            prev_distance = current_distance
-            current_impurity = (left_var / left_sum) + (right_var / right_sum)
-
+            current_impurity = self.left._variance() + self.right._variance()
             if current_impurity <= impurity[0]:
                 impurity[0] = current_impurity
                 threshold[0] = (current_distance + prev_distance) / 2
-                split_point[0] = i + 1
+                split_point[0] = i
+
+            prev_distance = current_distance
 
 cdef class ExtraRegressionShapeletTreeBuilder(RegressionShapeletTreeBuilder):
     cdef void _partition_distance_buffer(self,
@@ -976,14 +945,14 @@ cdef class ExtraRegressionShapeletTreeBuilder(RegressionShapeletTreeBuilder):
                                          size_t *split_point,
                                          double *threshold,
                                          double *impurity) nogil:
-        cdef double min_dist = self.distance_buffer[start]
+        cdef double min_dist = self.distance_buffer[start + 1]
         cdef double max_dist = self.distance_buffer[end - 1]
         cdef double rand_threshold = rand_uniform(min_dist, max_dist, &self.random_seed)
         cdef size_t i
-
-        for i in range(start, end - 1):
+        split_point[0] = start + 1
+        for i in range(start + 1, end - 1):
             if self.distance_buffer[i] <= rand_threshold:
-                split_point[0] = i + 1
+                split_point[0] = i
             else:
                 break
         threshold[0] = rand_threshold
@@ -997,14 +966,15 @@ cdef class ExtraClassificationShapeletTreeBuilder(ClassificationShapeletTreeBuil
                                          size_t *split_point,
                                          double *threshold,
                                          double *impurity) nogil:
-        cdef double min_dist = self.distance_buffer[start]
+        cdef double min_dist = self.distance_buffer[start + 1]
         cdef double max_dist = self.distance_buffer[end - 1]
         cdef double rand_threshold = rand_uniform(min_dist, max_dist, &self.random_seed)
         cdef size_t i
 
-        for i in range(start, end - 1):
+        split_point[0] = start + 1
+        for i in range(start + 1, end - 1):
             if self.distance_buffer[i] <= rand_threshold:
-                split_point[0] = i + 1
+                split_point[0] = i
             else:
                 break
         threshold[0] = rand_threshold

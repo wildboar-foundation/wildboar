@@ -17,6 +17,22 @@
 
 # Authors: Isak Samsten
 
+cdef class RollingVariance:
+    cdef double _n_samples
+    cdef double _m
+    cdef double _s
+    cdef double _sum
+
+    cdef void _reset(self) nogil
+
+    cdef void _add(self, double weight, double value) nogil
+
+    cdef void _remove(self, double weight, double value) nogil
+
+    cdef double _mean(self) nogil
+
+    cdef double _variance(self) nogil
+
 cdef enum:
     RAND_R_MAX = 2147483647
 

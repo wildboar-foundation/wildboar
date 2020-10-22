@@ -25,6 +25,70 @@ from __future__ import print_function
 from libc.math cimport log2
 from libc.stdlib cimport realloc
 
+cdef class RollingVariance:
+    def __cinit__(self):
+        self._m = 0.0
+        self._n_samples = 0.0
+        self._s = 0.0
+
+    cdef void _reset(self) nogil:
+        self._m = 0.0
+        self._n_samples = 0.0
+        self._s = 0.0
+        self._sum = 0.0
+
+    def reset(self):
+        self._reset()
+
+    cdef void _add(self, double weight, double value) nogil:
+        cdef double next_m
+        self._n_samples += weight
+        next_m = self._m + (value - self._m) / self._n_samples
+        self._s += (value - self._m) * (value - next_m)
+        self._m = next_m
+        self._sum += weight * value
+
+    def add(self, value, weight=1.0):
+        self._add(weight, value)
+
+    cdef void _remove(self, double weight, double value) nogil:
+        cdef double old_m
+        if self._n_samples == 1.0:
+            self._n_samples = 0.0
+            self._m = 0.0
+            self._s = 0.0
+        else:
+            old_m = (self._n_samples * self._m - value) / (self._n_samples - weight)
+            self._s -= (value - self._m) * (value - old_m)
+            self._m = old_m
+            self._n_samples -= weight
+        self._sum -= weight * value
+
+    def remove(self, value, weight=1.0):
+        self._remove(weight, value)
+
+    @property
+    def n_samples(self):
+        return self._n_samples
+
+    @property
+    def sum(self):
+        return self._sum
+
+    cdef double _mean(self) nogil:
+        return self._m
+
+    @property
+    def mean(self):
+        return self._mean()
+
+    cdef double _variance(self) nogil:
+        return 0.0 if self._n_samples <= 1 else self._s / self._n_samples
+
+    @property
+    def variance(self):
+        return self._variance()
+
 # For debugging
 def print_tree(o, indent=1):
     if o.is_classification_leaf:

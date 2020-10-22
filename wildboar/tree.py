@@ -95,6 +95,7 @@ class BaseShapeletTree(BaseEstimator):
 
     def decision_path(self, x, check_input=True):
         check_is_fitted(self, ["tree_"])
+        x = self._validate_x_predict(x, check_input)
         return self.tree_.decision_path(x)
 
     def apply(self, x, check_input=True):
