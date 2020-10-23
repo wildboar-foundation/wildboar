@@ -366,6 +366,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
             random_state=random_state
         )
 
+
 class IsolationShapeletForest(OutlierMixin, BaseBagging):
     def __init__(self, *,
                  n_estimators=100,
@@ -490,7 +491,6 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
     def score_samples(self, X):
         # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
         n_samples = X.shape[0]
-
         depths = np.zeros(n_samples, order="f")
 
         for tree in self.estimators_:
@@ -498,16 +498,8 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
             node_indicator = tree.decision_path(X)
             n_samples_leaf = tree.tree_.n_node_samples[leaves_index]
 
-            depths += (
-                    np.ravel(node_indicator.sum(axis=1))
-                    + _average_path_length(n_samples_leaf)
-                    - 1.0
-            )
-        scores = 2 ** (
-                -depths
-                / (len(self.estimators_)
-                   * _average_path_length(np.array([X.shape[0]])))
-        )
+            depths += np.ravel(node_indicator.sum(axis=1)) + _average_path_length(n_samples_leaf) - 1.0
+        scores = 2 ** (-depths / (len(self.estimators_) * _average_path_length(np.array([X.shape[0]]))))
         return -scores
 
 
