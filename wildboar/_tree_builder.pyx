@@ -32,6 +32,7 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
+from _utils cimport print_c_array_d
 from ._utils cimport RollingVariance
 from ._utils cimport safe_realloc
 from ._utils cimport rand_uniform
@@ -532,7 +533,8 @@ cdef class ShapeletTreeBuilder:
             shapelet_info_free(&split.shapelet_info)  # RECLAIM THIS MEMORY
             return current_node_id
         else:
-            with gil: print("hmmmmmm", end - start)
+            with gil:
+                print("warn: split point outside allowed range. This is a bug. Please report me.")
             return self.new_leaf_node(start, end, parent, is_left)
 
     cdef SplitPoint _split(self, size_t start, size_t end) nogil:
@@ -703,7 +705,7 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             self.label_buffer,  # out param
         )
 
-        if self.n_weighted_samples <= self.min_sample_split or n_positive < 2:
+        if end - start <= self.min_sample_split or n_positive < 2:
             return True
         return False
 
@@ -829,7 +831,7 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
 
             self.n_weighted_samples += sample_weight
 
-        if end - start < self.min_sample_split:
+        if end - start <= self.min_sample_split:
             return True
         return False
 
@@ -894,10 +896,8 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
 
         self.left._reset()
         self.right._reset()
-        # Initialize the left-hand side of the inequality's variance
         self.left._add(current_sample_weight, current_val)
 
-        # Initialize the right-hand side of the inequality's variance
         for i in range(start + 1, end):
             j = self.samples[i]
             p = j * self.label_stride
@@ -945,6 +945,7 @@ cdef class ExtraRegressionShapeletTreeBuilder(RegressionShapeletTreeBuilder):
                                          size_t *split_point,
                                          double *threshold,
                                          double *impurity) nogil:
+        # The smallest distance is always 0
         cdef double min_dist = self.distance_buffer[start + 1]
         cdef double max_dist = self.distance_buffer[end - 1]
         cdef double rand_threshold = rand_uniform(min_dist, max_dist, &self.random_seed)
@@ -966,6 +967,7 @@ cdef class ExtraClassificationShapeletTreeBuilder(ClassificationShapeletTreeBuil
                                          size_t *split_point,
                                          double *threshold,
                                          double *impurity) nogil:
+        # The smallest distance is always 0
         cdef double min_dist = self.distance_buffer[start + 1]
         cdef double max_dist = self.distance_buffer[end - 1]
         cdef double rand_threshold = rand_uniform(min_dist, max_dist, &self.random_seed)
