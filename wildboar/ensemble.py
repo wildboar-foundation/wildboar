@@ -471,35 +471,60 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
 
         if self.contamination == 'auto':
             self.offset_ = -0.5
-        else:
+        elif (isinstance(self.contamination, tuple) and len(self.contamination) == 2 and
+              self.contamination[0] == 'oob' and isinstance(self.contamination[1], numbers.Real)):
+            if not 0. < self.contamination[1] <= 1.0:
+                raise ValueError("contamination must be in (0, 1], got %r" % self.contamination[1])
+            self.offset_ = np.percentile(self._oob_score_samples(x), 100.0 * self.contamination[1])
+        elif isinstance(self.contamination, numbers.Real):
+            if not 0. < self.contamination <= 1.0:
+                raise ValueError("contamination must be in (0, 1], got %r" % self.contamination)
             self.offset_ = np.percentile(self.score_samples(x), 100.0 * self.contamination)
+        else:
+            raise ValueError("max_samples (%s) is not supported." % self.max_samples)
 
         return self
 
     def predict(self, x):
-        check_is_fitted(self)
-        x = self._validate_x_predict(x, check_input=True)
         is_inlier = np.ones(x.shape[0])
         is_inlier[self.decision_function(x) < 0] = -1
         return is_inlier
 
     def decision_function(self, x):
-        check_is_fitted(self)
-        x = self._validate_x_predict(x, check_input=True)
         return self.score_samples(x) - self.offset_
 
-    def score_samples(self, X):
-        # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
-        n_samples = X.shape[0]
-        depths = np.zeros(n_samples, order="f")
+    def score_samples(self, x):
+        check_is_fitted(self)
+        x = self._validate_x_predict(x, check_input=True)
+        return self._score_samples(x, self.estimators_)
 
-        for tree in self.estimators_:
-            leaves_index = tree.apply(X)
-            node_indicator = tree.decision_path(X)
+    def _oob_score_samples(self, x):
+        n_samples = x.shape[0]
+        n_bootstrap_samples = n_samples  # round(n_samples * 0.368)
+
+        score_samples = np.zeros((n_samples,))
+
+        for i in range(x.shape[0]):
+            estimators = []
+            for estimator, samples in zip(self.estimators_, self.estimators_samples_):
+                if i not in samples:
+                    estimators.append(estimator)
+            score_samples[i] = self._score_samples(x[i].reshape((1, self.n_dims, self.n_timestep)),
+                                                   estimators, n_bootstrap_samples)
+        return score_samples
+
+    def _score_samples(self, x, estimators, n_samples=None):
+        # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
+        n_samples = n_samples or x.shape[0]
+        depths = np.zeros(x.shape[0], order="f")
+
+        for tree in estimators:
+            leaves_index = tree.apply(x)
+            node_indicator = tree.decision_path(x)
             n_samples_leaf = tree.tree_.n_node_samples[leaves_index]
 
             depths += np.ravel(node_indicator.sum(axis=1)) + _average_path_length(n_samples_leaf) - 1.0
-        scores = 2 ** (-depths / (len(self.estimators_) * _average_path_length(np.array([X.shape[0]]))))
+        scores = 2 ** (-depths / (len(estimators) * _average_path_length(np.array([n_samples]))))
         return -scores
 
 
