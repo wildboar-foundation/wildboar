@@ -265,7 +265,6 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
     def fit(self, x, y, sample_weight=None, check_input=True):
         """Fit a random shapelet forest regressor
         """
-        random_state = check_random_state(self.random_state)
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
             y = check_array(y, dtype=np.float64, ensure_2d=False, order="C")
