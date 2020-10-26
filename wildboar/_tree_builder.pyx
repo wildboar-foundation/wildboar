@@ -32,7 +32,6 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
-from _utils cimport print_c_array_d
 from ._utils cimport RollingVariance
 from ._utils cimport safe_realloc
 from ._utils cimport rand_uniform
