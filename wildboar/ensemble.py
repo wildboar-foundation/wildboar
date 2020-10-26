@@ -15,12 +15,9 @@
 
 # Authors: Isak Samsten
 import numbers
-from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from sklearn.base import BaseEstimator, OutlierMixin
-from sklearn.base import ClassifierMixin
-from sklearn.base import RegressorMixin
+from sklearn.base import OutlierMixin
 from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import BaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging
@@ -202,7 +199,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
                 "max_depth", "min_samples_split", "min_shapelet_size",
                 "max_shapelet_size", "metric", "metric_params"
             ),
-            n_shapelets=None,
+            n_shapelets=1,
             n_estimators=n_estimators,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
@@ -352,7 +349,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
                 "max_depth", "min_samples_split", "min_shapelet_size",
                 "max_shapelet_size", "metric", "metric_params"
             ),
-            n_shapelets=None,
+            n_shapelets=1,
             n_estimators=n_estimators,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
@@ -377,6 +374,8 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
                  min_samples_split=2,
                  max_samples='auto',
                  contamination='auto',
+                 contamination_set="training",
+                 warm_start=False,
                  metric='euclidean',
                  metric_params=None,
                  random_state=None):
@@ -384,6 +383,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
             base_estimator=ExtraShapeletTreeRegressor(),
             bootstrap=bootstrap,
             bootstrap_features=False,
+            warm_start=warm_start,
             n_jobs=n_jobs,
             n_estimators=n_estimators,
             random_state=random_state
@@ -398,6 +398,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
         self.max_shapelet_size = max_shapelet_size
         self.min_samples_split = min_samples_split
         self.contamination = contamination
+        self.contamination_set = contamination_set
         self.max_samples = max_samples
         self.n_dims = None
         self.n_timestep = None
@@ -471,15 +472,17 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
 
         if self.contamination == 'auto':
             self.offset_ = -0.5
-        elif (isinstance(self.contamination, tuple) and len(self.contamination) == 2 and
-              self.contamination[0] == 'oob' and isinstance(self.contamination[1], numbers.Real)):
-            if not 0. < self.contamination[1] <= 1.0:
-                raise ValueError("contamination must be in (0, 1], got %r" % self.contamination[1])
-            self.offset_ = np.percentile(self._oob_score_samples(x), 100.0 * self.contamination[1])
         elif isinstance(self.contamination, numbers.Real):
             if not 0. < self.contamination <= 1.0:
                 raise ValueError("contamination must be in (0, 1], got %r" % self.contamination)
-            self.offset_ = np.percentile(self.score_samples(x), 100.0 * self.contamination)
+            if self.contamination_set == "training":
+                self.offset_ = np.percentile(self.score_samples(x), 100.0 * self.contamination)
+            elif self.contamination_set == "oob":
+                if not self.bootstrap:
+                    raise ValueError("contamination cannot be computed from oob-samples unless bootstrap=True")
+                self.offset_ = np.percentile(self._oob_score_samples(x), 100.0 * self.contamination)
+            else:
+                raise ValueError("contamination_set (%s) is not supported" % self.contamination_set)
         else:
             raise ValueError("max_samples (%s) is not supported." % self.max_samples)
 
@@ -500,7 +503,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
 
     def _oob_score_samples(self, x):
         n_samples = x.shape[0]
-        n_bootstrap_samples = n_samples  # round(n_samples * 0.368)
+        n_bootstrap_samples = n_samples
 
         score_samples = np.zeros((n_samples,))
 
