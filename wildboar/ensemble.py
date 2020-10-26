@@ -72,6 +72,7 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
                  metric='euclidean',
                  metric_params=None,
                  bootstrap=True,
+                 warm_start=False,
                  n_jobs=None,
                  random_state=None):
         super().__init__(
@@ -80,6 +81,7 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
             bootstrap=bootstrap,
             bootstrap_features=False,
             n_jobs=n_jobs,
+            warm_start=warm_start,
             random_state=random_state,
             oob_score=oob_score
         )
@@ -191,6 +193,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
                  metric_params=None,
                  oob_score=False,
                  bootstrap=True,
+                 warm_start=False,
                  n_jobs=None,
                  random_state=None):
         super().__init__(
@@ -209,6 +212,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
             metric_params=metric_params,
             oob_score=oob_score,
             bootstrap=bootstrap,
+            warm_start=warm_start,
             n_jobs=n_jobs,
             random_state=random_state
         )
@@ -229,6 +233,7 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
                  metric='euclidean',
                  metric_params=None,
                  bootstrap=True,
+                 warm_start=False,
                  n_jobs=None,
                  random_state=None):
         super().__init__(
@@ -237,6 +242,7 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
             bootstrap=bootstrap,
             bootstrap_features=False,
             n_jobs=n_jobs,
+            warm_start=warm_start,
             random_state=random_state,
             oob_score=oob_score
         )
@@ -306,6 +312,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
                  metric_params=None,
                  oob_score=False,
                  bootstrap=True,
+                 warm_start=False,
                  n_jobs=None,
                  random_state=None):
         super().__init__(
@@ -324,6 +331,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             metric_params=metric_params,
             oob_score=oob_score,
             bootstrap=bootstrap,
+            warm_start=warm_start,
             n_jobs=n_jobs,
             random_state=random_state
         )
@@ -341,6 +349,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
                  metric_params=None,
                  oob_score=False,
                  bootstrap=True,
+                 warm_start=False,
                  n_jobs=None,
                  random_state=None):
         super().__init__(
@@ -359,6 +368,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
             metric_params=metric_params,
             oob_score=oob_score,
             bootstrap=bootstrap,
+            warm_start=warm_start,
             n_jobs=n_jobs,
             random_state=random_state
         )
