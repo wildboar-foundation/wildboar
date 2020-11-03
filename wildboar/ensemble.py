@@ -21,6 +21,7 @@ from sklearn.base import OutlierMixin
 from sklearn.ensemble import BaggingClassifier
 from sklearn.ensemble import BaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging
+from sklearn.metrics import roc_curve, precision_recall_curve
 from sklearn.utils import check_array
 from sklearn.utils import check_random_state
 from sklearn.utils.fixes import _joblib_parallel_args
@@ -373,7 +374,44 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         )
 
 
-class IsolationShapeletForest(OutlierMixin, BaseBagging):
+class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
+    """A isolation shapelet forest.
+
+    .. versionadded:: 0.3.5
+
+    Attributes
+    ----------
+    offset_ : float
+        The offset for computing the final decision
+
+    Examples
+    --------
+
+    >>> from wildboar.ensemble import IsolationShapeletForest
+    >>> from wildboar.datasets import load_two_lead_ecg
+    >>> from model_selection.outlier import train_test_split
+    >>> from sklearn.metrics import balanced_accuracy_score
+    >>> x, y = load_two_lead_ecg("two_lead_ecg")
+    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+    >>> f = IsolationShapeletForest(n_estimators=100, contamination=balanced_accuracy_score)
+    >>> f.fit(x_train, y_train)
+    >>> y_pred = f.predict(x_test)
+    >>> balanced_accuracy_score(y_test, y_pred)
+
+    Or using default offset threshold
+
+    >>> from wildboar.ensemble import IsolationShapeletForest
+    >>> from wildboar.datasets import load_two_lead_ecg
+    >>> from model_selection.outlier import train_test_split
+    >>> from sklearn.metrics import balanced_accuracy_score
+    >>> f = IsolationShapeletForest()
+    >>> x, y = load_two_lead_ecg("two_lead_ecg")
+    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+    >>> f.fit(x_train)
+    >>> y_pred = f.predict(x_test)
+    >>> balanced_accuracy_score(y_test, y_pred)
+    """
+
     def __init__(self, *,
                  n_estimators=100,
                  bootstrap=False,
@@ -388,6 +426,66 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
                  metric='euclidean',
                  metric_params=None,
                  random_state=None):
+        """ Construct a shapelet isolation forest
+
+        Parameters
+        ----------
+        n_estimators : object, optional
+            The number of estimators
+
+        bootstrap : bool, optional
+            Use bootstrap sampling to fit the base estimators
+
+        n_jobs : int, optional
+            The number of processor cores used for fitting the ensemble
+
+        min_shapelet_size : float, optional
+            The minimum shapelet size to sample
+
+        max_shapelet_size : float, optional
+            The maximum shapelet size to sample
+
+        min_samples_split : int, optional
+            The minimum samples required to split the decision trees
+
+        max_samples : float or int
+            The number of samples to draw to train each base estimator
+
+        contamination : str, float or callable
+            The strategy for computing the offset (see `offset_`)
+
+            - if 'auto' ``offset_=-0.5``
+            - if 'auc' ``offset_`` is computed as the offset that maximizes the
+              area under ROC in the training or out-of-bag set (see `contamination_set`).
+            - if 'prc' ``offset_`` is computed as the offset that maximizes the
+              area under PRC in the training or out-of-bag set (see `contamination_set`)
+            - if callable ``offset_`` is computed as the offset that maximizes the score
+              computed by the callable in training or out-of-bag set (see `contamination_set`)
+            - if float ``offset_`` is computed as the c:th percentile of scores in the training
+              or out-of-bag set (see `contamination_set`)
+
+            Setting contamination to either 'auc' or 'prc' Require that `y` is passed to `fit`.
+
+        contamination_set : {'training', 'oob'}, optional
+            Compute the ``offset_`` from either the out-of-bag samples or the training samples.
+            'oob' require `bootstrap=True`.
+
+        warm_start : bool, optional
+            When set to True, reuse the solution of the previous call to fit
+            and add more estimators to the ensemble, otherwise, just fit
+            a whole new ensemble.
+
+        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+            Set the metric used to compute the distance between shapelet and time series
+
+        metric_params : dict, optional
+            Parameters passed to the metric construction
+
+        random_state : int or RandomState, optional
+            Controls the random resampling of the original dataset and the costruction of
+            the base estimators. Pass an int for reproducible output across multiple
+            function calls.
+        """
         super(IsolationShapeletForest, self).__init__(
             base_estimator=ExtraShapeletTreeRegressor(),
             bootstrap=bootstrap,
@@ -411,25 +509,6 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
         self.max_samples = max_samples
         self.n_dims = None
         self.n_timestep = None
-
-    def _validate_x_predict(self, x, check_input):
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions X.ndim ({})".format(
-                x.ndim))
-        if self.n_dims > 1 and x.ndim != 3:
-            raise ValueError("illegal input dimensions X.ndim != 3")
-        if x.shape[-1] != self.n_timestep:
-            raise ValueError("illegal input shape ({} != {})".format(
-                x.shape[-1], self.n_timestep))
-        if x.ndim > 2 and x.shape[1] != self.n_dims:
-            raise ValueError("illegal input shape ({} != {}".format(
-                x.shape[1], self.n_dims))
-        if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.dtype != np.float64 or not x.flags.contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
-        x = x.reshape(x.shape[0], self.n_dims * self.n_timestep)
-        return x
 
     def _set_oob_score(self, x, y):
         raise NotImplementedError("OOB score not supported")
@@ -461,7 +540,7 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
             self.base_estimator_.force_dim = n_dims
 
         x = x.reshape(n_samples, n_dims * self.n_timestep)
-        y = random_state.uniform(size=x.shape[0])
+        rnd_y = random_state.uniform(size=x.shape[0])
         max_depth = int(np.ceil(np.log2(max(x.shape[0], 2))))
 
         if isinstance(self.max_samples, str):
@@ -477,10 +556,33 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
             max_samples = int(self.max_samples * x.shape[0])
 
         super(IsolationShapeletForest, self)._fit(
-            x, y, max_samples=max_samples, max_depth=max_depth, sample_weight=sample_weight)
+            x, rnd_y, max_samples=max_samples, max_depth=max_depth, sample_weight=sample_weight)
 
         if self.contamination == 'auto':
             self.offset_ = -0.5
+        elif self.contamination in ["auc", "prc"] or hasattr(self.contamination, "__call__"):
+            if y is None:
+                raise ValueError("contamination cannot be computed without training labels")
+
+            if self.contamination_set == "oob":
+                if not self.bootstrap:
+                    raise ValueError("contamination cannot be computed from oob-samples unless bootstrap=True")
+                scores = self._oob_score_samples(x)
+            else:
+                scores = self.score_samples(x)
+
+            if self.contamination == "auc":
+                fpr, tpr, thresholds = roc_curve(y, scores)
+                best_threshold = np.argmax(tpr - fpr)
+            elif self.contamination == "prc":
+                precision, recall, thresholds = precision_recall_curve(y, scores)
+                fscore = (2 * precision * recall) / (precision + recall)
+                best_threshold = np.argmax(fscore)
+            else:
+                score = _threshold_score(y, scores, self.contamination)
+                best_threshold = np.argmax(score)
+                thresholds = scores
+            self.offset_ = thresholds[best_threshold]
         elif isinstance(self.contamination, numbers.Real):
             if not 0. < self.contamination <= 1.0:
                 raise ValueError("contamination must be in (0, 1], got %r" % self.contamination)
@@ -508,12 +610,10 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
     def score_samples(self, x):
         check_is_fitted(self)
         x = self._validate_x_predict(x, check_input=True)
-        return self._score_samples(x, self.estimators_)
+        return _score_samples(x, self.estimators_)
 
     def _oob_score_samples(self, x):
         n_samples = x.shape[0]
-        n_bootstrap_samples = n_samples
-
         score_samples = np.zeros((n_samples,))
 
         for i in range(x.shape[0]):
@@ -521,23 +621,24 @@ class IsolationShapeletForest(OutlierMixin, BaseBagging):
             for estimator, samples in zip(self.estimators_, self.estimators_samples_):
                 if i not in samples:
                     estimators.append(estimator)
-            score_samples[i] = self._score_samples(x[i].reshape((1, self.n_dims, self.n_timestep)),
-                                                   estimators, n_bootstrap_samples)
+            score_samples[i] = _score_samples(x[i].reshape((1, self.n_dims, self.n_timestep)),
+                                              estimators, n_samples)
         return score_samples
 
-    def _score_samples(self, x, estimators, n_samples=None):
-        # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
-        n_samples = n_samples or x.shape[0]
-        depths = np.zeros(x.shape[0], order="f")
 
-        for tree in estimators:
-            leaves_index = tree.apply(x)
-            node_indicator = tree.decision_path(x)
-            n_samples_leaf = tree.tree_.n_node_samples[leaves_index]
+def _score_samples(x, estimators, n_samples=None):
+    # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
+    n_samples = n_samples or x.shape[0]
+    depths = np.zeros(x.shape[0], order="f")
 
-            depths += np.ravel(node_indicator.sum(axis=1)) + _average_path_length(n_samples_leaf) - 1.0
-        scores = 2 ** (-depths / (len(estimators) * _average_path_length(np.array([n_samples]))))
-        return -scores
+    for tree in estimators:
+        leaves_index = tree.apply(x)
+        node_indicator = tree.decision_path(x)
+        n_samples_leaf = tree.tree_.n_node_samples[leaves_index]
+
+        depths += np.ravel(node_indicator.sum(axis=1)) + _average_path_length(n_samples_leaf) - 1.0
+    scores = 2 ** (-depths / (len(estimators) * _average_path_length(np.array([n_samples]))))
+    return -scores
 
 
 def _average_path_length(n_samples_leaf):
@@ -558,3 +659,33 @@ def _average_path_length(n_samples_leaf):
     )
 
     return average_path_length.reshape(n_samples_leaf_shape)
+
+
+def _threshold_score(y_true, score, score_f):
+    """
+
+    Parameters
+    ----------
+    y_true : array-like
+        The true labels
+
+    score : array-like
+        The scores
+
+    score_f : callable
+        Function for estimating the performance of the i:th scoring
+
+    Returns
+    -------
+    score :
+        performance for each score as threshold
+    """
+    ba_score = np.empty(score.shape[0], dtype=np.float)
+    score_copy = np.empty(score.shape[0], dtype=np.float)
+    is_inlier = np.ones(score.shape[0])
+    for i in range(score.shape[0]):
+        score_copy[:] = score
+        is_inlier[:] = 1
+        is_inlier[score_copy - score[i] < 0] = -1
+        ba_score[i] = score_f(y_true, is_inlier)
+    return ba_score
