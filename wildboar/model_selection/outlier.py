@@ -5,7 +5,7 @@ from sklearn import model_selection
 from sklearn.utils import check_random_state
 from sklearn.utils._random import sample_without_replacement
 
-__all__ = ["train_test_split"]
+__all__ = ["train_test_split", "threshold_score"]
 
 
 def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None):
@@ -76,3 +76,33 @@ def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.0
     x_test = np.vstack([x_normal_test, x_anomalous_test])
     y_test = np.hstack([y_normal_test, y_anomalous_test])
     return x_train, x_test, y_train, y_test
+
+
+def threshold_score(y_true, score, score_f):
+    """
+
+    Parameters
+    ----------
+    y_true : array-like
+        The true labels
+
+    score : array-like
+        The scores
+
+    score_f : callable
+        Function for estimating the performance of the i:th scoring
+
+    Returns
+    -------
+    score : ndarray
+        performance for each score as threshold
+    """
+    ba_score = np.empty(score.shape[0], dtype=np.float)
+    score_copy = np.empty(score.shape[0], dtype=np.float)
+    is_inlier = np.ones(score.shape[0])
+    for i in range(score.shape[0]):
+        score_copy[:] = score
+        is_inlier[:] = 1
+        is_inlier[score_copy - score[i] < 0] = -1
+        ba_score[i] = score_f(y_true, is_inlier)
+    return ba_score

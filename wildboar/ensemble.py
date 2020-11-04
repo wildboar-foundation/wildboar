@@ -15,6 +15,7 @@
 
 # Authors: Isak Samsten
 import numbers
+from abc import abstractmethod
 
 import numpy as np
 from sklearn.base import OutlierMixin
@@ -27,6 +28,7 @@ from sklearn.utils import check_random_state
 from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
+from .model_selection.outlier import threshold_score
 from .tree import ShapeletTreeClassifier, ExtraShapeletTreeClassifier, ExtraShapeletTreeRegressor
 from .tree import ShapeletTreeRegressor
 
@@ -59,6 +61,14 @@ class ShapeletForestMixin:
 
 
 class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
+    """Base class for shapelet forest classifiers.
+
+    Warnings
+    --------
+    This class should not be used directly. Use derived classes
+    instead.
+    """
+
     def __init__(self,
                  base_estimator,
                  *,
@@ -147,6 +157,19 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
 
 
 class ShapeletForestClassifier(BaseShapeletForestClassifier):
+    """An ensemble of random shapelet tree classifiers.
+
+    Examples
+    --------
+
+    >>> from wildboar.ensemble import ShapeletForestClassifier
+    >>> from wildboar.datasets import load_synthetic_control
+    >>> x, y = load_synthetic_control()
+    >>> f = ShapeletForestClassifier(n_estimators=100, metric='scaled_euclidean')
+    >>> f.fit(x, y)
+    >>> y_hat = f.predict(x)
+    """
+
     def __init__(self,
                  *,
                  n_estimators=100,
@@ -159,8 +182,53 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
                  metric_params=None,
                  oob_score=False,
                  bootstrap=True,
+                 warm_start=False,
                  n_jobs=None,
                  random_state=None):
+        """Shapelet forest classifier.
+
+        Parameters
+        ----------
+        n_estimators : int, optional
+            The number of estimators
+
+        n_shapelets : int, optional
+            The number of shapelets to sample at each node
+
+        bootstrap : bool, optional
+            Use bootstrap sampling to fit the base estimators
+
+        n_jobs : int, optional
+            The number of processor cores used for fitting the ensemble
+
+        min_shapelet_size : float, optional
+            The minimum shapelet size to sample
+
+        max_shapelet_size : float, optional
+            The maximum shapelet size to sample
+
+        min_samples_split : int, optional
+            The minimum samples required to split the decision trees
+
+        warm_start : bool, optional
+            When set to True, reuse the solution of the previous call to fit
+            and add more estimators to the ensemble, otherwise, just fit
+            a whole new ensemble.
+
+        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+            Set the metric used to compute the distance between shapelet and time series
+
+        metric_params : dict, optional
+            Parameters passed to the metric construction
+
+        oob_score : bool, optional
+            Compute out-of-bag estimates of the ensembles performance.
+
+        random_state : int or RandomState, optional
+            Controls the random resampling of the original dataset and the construction of
+            the base estimators. Pass an int for reproducible output across multiple
+            function calls.
+        """
         super().__init__(
             base_estimator=ShapeletTreeClassifier(),
             estimator_params=(
@@ -177,12 +245,26 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
             metric_params=metric_params,
             oob_score=oob_score,
             bootstrap=bootstrap,
+            warm_start=warm_start,
             n_jobs=n_jobs,
             random_state=random_state
         )
 
 
 class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
+    """An ensemble of extremely random shapelet trees for time series regression.
+
+    Examples
+    --------
+
+    >>> from wildboar.ensemble import ExtraShapeletTreesClassifier
+    >>> from wildboar.datasets import load_synthetic_control
+    >>> x, y = load_synthetic_control()
+    >>> f = ExtraShapeletTreesClassifier(n_estimators=100, metric='scaled_euclidean')
+    >>> f.fit(x, y)
+    >>> y_hat = f.predict(x)
+
+    """
     def __init__(self,
                  *,
                  n_estimators=100,
@@ -197,6 +279,44 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
                  warm_start=False,
                  n_jobs=None,
                  random_state=None):
+        """Construct a extra shapelet trees classifier.
+
+        Parameters
+        ----------
+        n_estimators : int, optional
+            The number of estimators
+
+        bootstrap : bool, optional
+            Use bootstrap sampling to fit the base estimators
+
+        n_jobs : int, optional
+            The number of processor cores used for fitting the ensemble
+
+        min_shapelet_size : float, optional
+            The minimum shapelet size to sample
+
+        max_shapelet_size : float, optional
+            The maximum shapelet size to sample
+
+        min_samples_split : int, optional
+            The minimum samples required to split the decision trees
+
+        warm_start : bool, optional
+            When set to True, reuse the solution of the previous call to fit
+            and add more estimators to the ensemble, otherwise, just fit
+            a whole new ensemble.
+
+        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+            Set the metric used to compute the distance between shapelet and time series
+
+        metric_params : dict, optional
+            Parameters passed to the metric construction
+
+        random_state : int or RandomState, optional
+            Controls the random resampling of the original dataset and the construction of
+            the base estimators. Pass an int for reproducible output across multiple
+            function calls.
+        """
         super().__init__(
             base_estimator=ExtraShapeletTreeClassifier(),
             estimator_params=(
@@ -220,6 +340,15 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 
 
 class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
+    """Base class for shapelet forest regressors.
+
+    Warnings
+    --------
+    This class should not be used directly. Use derived classes
+    instead.
+    """
+
+    @abstractmethod
     def __init__(self,
                  base_estimator,
                  *,
@@ -300,6 +429,19 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
 
 
 class ShapeletForestRegressor(BaseShapeletForestRegressor):
+    """An ensemble of random shapelet regression trees.
+
+    Examples
+    --------
+
+    >>> from wildboar.ensemble import ShapeletForestRegressor
+    >>> from wildboar.datasets import load_synthetic_control
+    >>> x, y = load_synthetic_control()
+    >>> f = ShapeletForestRegressor(n_estimators=100, metric='scaled_euclidean')
+    >>> f.fit(x, y)
+    >>> y_hat = f.predict(x)
+    """
+
     def __init__(self,
                  *,
                  n_estimators=100,
@@ -315,6 +457,50 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
                  warm_start=False,
                  n_jobs=None,
                  random_state=None):
+        """Shapelet forest regressor.
+
+        Parameters
+        ----------
+        n_estimators : int, optional
+            The number of estimators
+
+        n_shapelets : int, optional
+            The number of shapelets to sample at each node
+
+        bootstrap : bool, optional
+            Use bootstrap sampling to fit the base estimators
+
+        n_jobs : int, optional
+            The number of processor cores used for fitting the ensemble
+
+        min_shapelet_size : float, optional
+            The minimum shapelet size to sample
+
+        max_shapelet_size : float, optional
+            The maximum shapelet size to sample
+
+        min_samples_split : int, optional
+            The minimum samples required to split the decision trees
+
+        warm_start : bool, optional
+            When set to True, reuse the solution of the previous call to fit
+            and add more estimators to the ensemble, otherwise, just fit
+            a whole new ensemble.
+
+        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+            Set the metric used to compute the distance between shapelet and time series
+
+        metric_params : dict, optional
+            Parameters passed to the metric construction
+
+        oob_score : bool, optional
+            Compute out-of-bag estimates of the ensembles performance.
+
+        random_state : int or RandomState, optional
+            Controls the random resampling of the original dataset and the construction of
+            the base estimators. Pass an int for reproducible output across multiple
+            function calls.
+        """
         super().__init__(
             base_estimator=ShapeletTreeRegressor(),
             estimator_params=(
@@ -338,6 +524,20 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
 
 
 class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
+    """An ensemble of extremely random shapelet trees for time series regression.
+
+    Examples
+    --------
+
+    >>> from wildboar.ensemble import ExtraShapeletTreesRegressor
+    >>> from wildboar.datasets import load_synthetic_control
+    >>> x, y = load_synthetic_control()
+    >>> f = ExtraShapeletTreesRegressor(n_estimators=100, metric='scaled_euclidean')
+    >>> f.fit(x, y)
+    >>> y_hat = f.predict(x)
+
+    """
+
     def __init__(self,
                  *,
                  n_estimators=100,
@@ -352,6 +552,44 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
                  warm_start=False,
                  n_jobs=None,
                  random_state=None):
+        """Construct a extra shapelet trees regressor.
+
+        Parameters
+        ----------
+        n_estimators : int, optional
+            The number of estimators
+
+        bootstrap : bool, optional
+            Use bootstrap sampling to fit the base estimators
+
+        n_jobs : int, optional
+            The number of processor cores used for fitting the ensemble
+
+        min_shapelet_size : float, optional
+            The minimum shapelet size to sample
+
+        max_shapelet_size : float, optional
+            The maximum shapelet size to sample
+
+        min_samples_split : int, optional
+            The minimum samples required to split the decision trees
+
+        warm_start : bool, optional
+            When set to True, reuse the solution of the previous call to fit
+            and add more estimators to the ensemble, otherwise, just fit
+            a whole new ensemble.
+
+        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+            Set the metric used to compute the distance between shapelet and time series
+
+        metric_params : dict, optional
+            Parameters passed to the metric construction
+
+        random_state : int or RandomState, optional
+            Controls the random resampling of the original dataset and the construction of
+            the base estimators. Pass an int for reproducible output across multiple
+            function calls.
+        """
         super().__init__(
             base_estimator=ExtraShapeletTreeRegressor(),
             estimator_params=(
@@ -430,7 +668,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
         Parameters
         ----------
-        n_estimators : object, optional
+        n_estimators : int, optional
             The number of estimators
 
         bootstrap : bool, optional
@@ -482,7 +720,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             Parameters passed to the metric construction
 
         random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the costruction of
+            Controls the random resampling of the original dataset and the construction of
             the base estimators. Pass an int for reproducible output across multiple
             function calls.
         """
@@ -579,7 +817,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
                 fscore = (2 * precision * recall) / (precision + recall)
                 best_threshold = np.argmax(fscore)
             else:
-                score = _threshold_score(y, scores, self.contamination)
+                score = threshold_score(y, scores, self.contamination)
                 best_threshold = np.argmax(score)
                 thresholds = scores
             self.offset_ = thresholds[best_threshold]
@@ -661,31 +899,3 @@ def _average_path_length(n_samples_leaf):
     return average_path_length.reshape(n_samples_leaf_shape)
 
 
-def _threshold_score(y_true, score, score_f):
-    """
-
-    Parameters
-    ----------
-    y_true : array-like
-        The true labels
-
-    score : array-like
-        The scores
-
-    score_f : callable
-        Function for estimating the performance of the i:th scoring
-
-    Returns
-    -------
-    score :
-        performance for each score as threshold
-    """
-    ba_score = np.empty(score.shape[0], dtype=np.float)
-    score_copy = np.empty(score.shape[0], dtype=np.float)
-    is_inlier = np.ones(score.shape[0])
-    for i in range(score.shape[0]):
-        score_copy[:] = score
-        is_inlier[:] = 1
-        is_inlier[score_copy - score[i] < 0] = -1
-        ba_score[i] = score_f(y_true, is_inlier)
-    return ba_score
