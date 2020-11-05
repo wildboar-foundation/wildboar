@@ -45,6 +45,12 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+autodoc_mock_imports = ["wildboar._distance",
+                        "wildboar._dtw_distance",
+                        "wildboar._euclidean_distance",
+                        "wildboar._tree_builder",
+                        "wildboar._impurity",
+                        "wildboar._utils"]
 autoclass_content = 'both'
 autodoc_default_flags = [
     # Make sure that any autodoc declarations show the right members
