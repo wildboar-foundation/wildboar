@@ -27,7 +27,6 @@
 #  - Rakthanmanon, et al., Searching and Mining Trillions of Time
 #    Series Subsequences under Dynamic Time Warping (2012)
 #  - http://www.cs.ucr.edu/~eamonn/UCRsuite.html
-
 cimport numpy as np
 
 from libc.stdlib cimport malloc
@@ -526,9 +525,10 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
             find_min_max(0, 1, s.length, s.data, warp_width, s_lower, s_upper,
                          &self.dl, &self.du)
-            find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
-                         td.data, warp_width, self.lower, self.upper,
-                         &self.dl, &self.du)
+
+        find_min_max(sample_offset, td.timestep_stride, td.n_timestep,
+                     td.data, warp_width, self.lower, self.upper,
+                     &self.dl, &self.du)
 
         cdef double distance = scaled_dtw_distance(0,
                                                    1,
