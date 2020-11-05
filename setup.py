@@ -195,13 +195,6 @@ ext_module_dtw_distance = declare_cython_extension(
     use_openmp=False,
     include_dirs=my_include_dirs)
 
-# ext_module_mass_distance = declare_cython_extension(
-#     "wildboar._mass_distance",
-#     use_math=True,
-#     use_openmp=False,
-#     include_dirs=my_include_dirs,
-#     extra_lib=["fftw3"])
-
 ext_module_impurity = declare_cython_extension(
     "wildboar._impurity",
     use_math=True,
@@ -214,19 +207,11 @@ ext_module_tree_builder = declare_cython_extension(
     use_openmp=False,
     include_dirs=my_include_dirs)
 
-ext_module_distance_api = declare_cython_extension(
-    "wildboar.distance",
-    use_math=False,
-    use_openmp=False,
-    include_dirs=my_include_dirs)
-
 cython_ext_modules = [
     ext_module_utils,
     ext_module_distance,
     ext_module_euclidean_distance,
     ext_module_dtw_distance,
-    #    ext_module_mass_distance,
-    ext_module_distance_api,
     ext_module_impurity,
     ext_module_tree_builder,
 ]

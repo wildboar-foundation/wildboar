@@ -44,6 +44,13 @@ def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.0
 
     y_test : array-like
         Test labels (either 1 or -1, where 1 denotes normal and -1 anomalous)
+
+    Examples
+    --------
+
+    >>> from wildboar.datasets import load_two_lead_ecg
+    >>> x, y = load_two_lead_ecg()
+    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
     """
     random_state = check_random_state(random_state)
     normal = y == normal_class
@@ -79,7 +86,9 @@ def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.0
 
 
 def threshold_score(y_true, score, score_f):
-    """
+    """Compute the performance of using the i:th score
+
+    The scores are typically computed using an outlier detection algorithm
 
     Parameters
     ----------
@@ -96,6 +105,25 @@ def threshold_score(y_true, score, score_f):
     -------
     score : ndarray
         performance for each score as threshold
+
+    See Also
+    --------
+    wildboar.ensemble.IsolationShapeletForest : an isolation forest for time series
+
+    Examples
+    --------
+    Setting the offset that maximizes balanced accuracy of a shapelet isolation forest
+
+    >>> from wildboar.ensemble import IsolationShapeletForest
+    >>> from wildboar.datasets import load_two_lead_ecg
+    >>> from sklearn.metrics import balanced_accuracy_score
+    >>> x, y = load_two_lead_ecg()
+    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+    >>> f = IsolationShapeletForest()
+    >>> f.fit(x_train)
+    >>> scores = f.score_samples(x_train)
+    >>> perf = threshold_score(y_train, scores, balanced_accuracy_score)
+    >>> f.offset_ = score[np.argmax(perf)]
     """
     ba_score = np.empty(score.shape[0], dtype=np.float)
     score_copy = np.empty(score.shape[0], dtype=np.float)

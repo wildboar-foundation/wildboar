@@ -28,7 +28,7 @@ from ._tree_builder import RegressionShapeletTreeBuilder
 # from ._tree_builder import ClassificationShapeletTreePredictor
 # from ._tree_builder import RegressionShapeletTreePredictor
 # from ._tree_builder import ShapeletTreeTraverser
-from .distance import DISTANCE_MEASURE
+from ._distance import _DISTANCE_MEASURE
 
 __all__ = ["ShapeletTreeClassifier",
            "ExtraShapeletTreeClassifier",
@@ -71,7 +71,7 @@ class BaseShapeletTree(BaseEstimator):
         metric_params = self.metric_params
         if metric_params is None:
             metric_params = {}
-        distance_measure = DISTANCE_MEASURE[self.metric](self.n_timestep_, **metric_params)
+        distance_measure = _DISTANCE_MEASURE[self.metric](self.n_timestep_, **metric_params)
         return distance_measure
 
     def _validate_x_predict(self, x, check_input):
@@ -105,6 +105,14 @@ class BaseShapeletTree(BaseEstimator):
 
 
 class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
+    """A shapelet tree regressor.
+
+    Attributes
+    ----------
+
+    tree_ : Tree
+    """
+
     def __init__(self,
                  *,
                  max_depth=None,
@@ -116,43 +124,44 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
                  metric_params=None,
                  force_dim=None,
                  random_state=None):
-        """A shapelet decision tree regressor
+        """Construct a shapelet tree regressor
 
-        :param max_depth: The maximum depth of the tree. If `None` the
-           tree is expanded until all leafs are pure or until all
-           leafs contain less than `min_samples_split` samples
-           (default: None).
+        Parameters
+        ----------
+        max_depth : int, optional
+            The maximum depth of the tree. If `None` the tree is expanded until all leaves
+            are pure or until all leaves contain less than `min_samples_split` samples
 
-        :param min_samples_split: The minimum number of samples to
-           split an internal node (default: 2).
+        min_samples_split : int, optional
+            The minimum number of samples to split an internal node
 
-        :param n_shapelets: The number of shapelets to sample at each
-           node (default: 10).
+        n_shapelets : int, optional
+            The number of shapelets to sample at each node.
 
-        :param min_shapelet_size: The minimum length of a sampled
-           shapelet expressed as a fraction, computed as
-           `min(ceil(X.shape[-1] * min_shapelet_size), 2)` (default:
-           0).
+        min_shapelet_size : float, optional
+            The minimum length of a sampled shapelet expressed as a fraction, computed as
+            `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
-        :param max_shapelet_size: The maximum length of a sampled
-           shapelet, expressed as a fraction and computed as
-           `ceil(X.shape[-1] * max_shapelet_size)`.
+        max_shapelet_size : float, optional
+            The maximum length of a sampled shapelet, expressed as a fraction, computed as
+            `ceil(X.shape[-1] * max_shapelet_size)`.
 
-        :param metric: Distance metric used to identify the best
-           match. (default: `'euclidean'`)
+        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+            Distance metric used to identify the best shapelet.
 
-        :param metric_params: Paramters to the distace measure
+        metric_params : dict, optional
+            Parameters for the distance measure
 
-        :param force_dim: Force the number of dimensions (default:
-           None). If `int`, `force_dim` reshapes the input to the
-           shape `[n_samples, force_dim, -1]` to support the
-           `BaggingClassifier` interface.
+        force_dim : int, optional
+            Force the number of dimensions.
 
-        :param random_state: If `int`, `random_state` is the seed used
-           by the random number generator; If `RandomState` instance,
-           `random_state` is the random number generator; If `None`,
-           the random number generator is the `RandomState` instance
-           used by `np.random`.
+            - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+              for interoperability with `sklearn`.
+
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator;
+            - If `RandomState` instance, `random_state` is the random number generator;
+            - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
         """
         super(ShapeletTreeRegressor, self).__init__(
             max_depth=max_depth,
@@ -188,27 +197,29 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
         )
 
     def fit(self, X, y, sample_weight=None, check_input=True):
-        """Fit a shapelet tree regressor from the training set (X, y)
+        """Fit a shapelet tree regressor from the training set
 
-        :param X: array-like, shape `[n_samples, n_timesteps]` or
-           `[n_samples, n_dimensions, n_timesteps]`. The training time
-           series.
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
+            The training time series.
 
-        :param y: array-like, `[n_samples]`. Target values are
-        floating point values.
+        y : array-like of shape (n_samples,)
+            Target values as floating point values
 
-        :param sample_weight: If `None`, then samples are equally
-            weighted. Splits that would create child nodes with net
-            zero or negative weight are ignored while searching for a
-            split in each node. Splits are also ignored if they would
-            result in any single class carrying a negative weight in
-            either child node.
+        sample_weight : array-like of shape (n_samples,)
+            If `None`, then samples are equally weighted. Splits that would create child
+            nodes with net zero or negative weight are ignored while searching for a split
+            in each node. Splits are also ignored if they would result in any single class
+            carrying a negative weight in either child node.
 
-        :param check_input: Allow to bypass several input checking.
-            Don't use this parameter unless you know what you do.
+        check_input : bool, optional
+            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
 
-        :returns: `self`
+        Returns
+        -------
 
+        self: object
         """
         if check_input:
             X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
@@ -247,17 +258,21 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
         return self
 
     def predict(self, x, check_input=True):
-        """Predict the regression of the input samples X.
+        """Predict the regression of the input samples x.
 
-        :param x: array-like, shape `[n_samples, n_timesteps]` or
-           `[n_samples, n_dimensions, n_timesteps]`. The input time
-           series.
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
+            The input time series
 
-        :param check_input: Allow to bypass several input checking.
-            Don't use this parameter unless you know what you do.
+        check_input : bool, optional
+            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
 
-        :returns: array of `shape = [n_samples]`.
+        Returns
+        -------
 
+        y : ndarray of shape (n_samples,)
+            The predicted classes.
         """
         check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)
@@ -265,9 +280,21 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
 
 
 class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
+    """An extra shapelet tree regressor.
+
+    Extra shapelet trees are constructed by sampling a distance threshold
+    uniformly in the range [min(dist), max(dist)].
+
+    Attributes
+    ----------
+
+    tree_ : Tree
+    """
+
     def __init__(self,
                  *,
                  max_depth=None,
+                 n_shapelets=1,
                  min_samples_split=2,
                  min_shapelet_size=0,
                  max_shapelet_size=1,
@@ -275,45 +302,49 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
                  metric_params=None,
                  force_dim=None,
                  random_state=None):
-        """A shapelet decision tree regressor
+        """Construct a extra shapelet tree regressor
 
-        :param max_depth: The maximum depth of the tree. If `None` the
-           tree is expanded until all leaves are pure or until all
-           leaves contain less than `min_samples_split` samples
-           (default: None).
+         Parameters
+         ----------
+         max_depth : int, optional
+             The maximum depth of the tree. If `None` the tree is expanded until all leaves
+             are pure or until all leaves contain less than `min_samples_split` samples
 
-        :param min_samples_split: The minimum number of samples to
-           split an internal node (default: 2).
+         min_samples_split : int, optional
+             The minimum number of samples to split an internal node
 
-        :param min_shapelet_size: The minimum length of a sampled
-           shapelet expressed as a fraction, computed as
-           `min(ceil(X.shape[-1] * min_shapelet_size), 2)` (default:
-           0).
+         n_shapelets : int, optional
+             The number of shapelets to sample at each node.
 
-        :param max_shapelet_size: The maximum length of a sampled
-           shapelet, expressed as a fraction and computed as
-           `ceil(X.shape[-1] * max_shapelet_size)`.
+         min_shapelet_size : float, optional
+             The minimum length of a sampled shapelet expressed as a fraction, computed as
+             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
-        :param metric: Distance metric used to identify the best
-           match. (default: `'euclidean'`)
+         max_shapelet_size : float, optional
+             The maximum length of a sampled shapelet, expressed as a fraction, computed as
+             `ceil(X.shape[-1] * max_shapelet_size)`.
 
-        :param metric_params: Parameters to the distance measure
+         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+             Distance metric used to identify the best shapelet.
 
-        :param force_dim: Force the number of dimensions (default:
-           None). If `int`, `force_dim` reshapes the input to the
-           shape `[n_samples, force_dim, -1]` to support the
-           `BaggingClassifier` interface.
+         metric_params : dict, optional
+             Parameters for the distance measure
 
-        :param random_state: If `int`, `random_state` is the seed used
-           by the random number generator; If `RandomState` instance,
-           `random_state` is the random number generator; If `None`,
-           the random number generator is the `RandomState` instance
-           used by `np.random`.
-        """
+         force_dim : int, optional
+             Force the number of dimensions.
+
+             - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+               for interoperability with `sklearn`.
+
+         random_state : int or RandomState
+             - If `int`, `random_state` is the seed used by the random number generator;
+             - If `RandomState` instance, `random_state` is the random number generator;
+             - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+         """
         super(ExtraShapeletTreeRegressor, self).__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
-            n_shapelets=1,
+            n_shapelets=n_shapelets,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -344,7 +375,25 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
 
 
 class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
-    """A shapelet tree classifier."""
+    """A shapelet tree classifier.
+
+    Attributes
+    ----------
+
+    tree_ : Tree
+        The tree data structure used internally
+
+    classes_ : ndarray of shape (n_classes,)
+        The class labels
+
+    n_classes_ : int
+        The number of class labels
+
+    See Also
+    --------
+    ShapeletTreeRegressor : A shapelet tree regressor.
+    ExtraShapeletTreeClassifier : An extra random shapelet tree classifier.
+    """
 
     def __init__(self,
                  max_depth=None,
@@ -356,45 +405,45 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
                  metric_params=None,
                  force_dim=None,
                  random_state=None):
-        """A shapelet decision tree
+        """Construct a shapelet tree classifier
 
-        :param max_depth: The maximum depth of the tree. If `None` the
-           tree is expanded until all leafs are pure or until all
-           leafs contain less than `min_samples_split` samples
-           (default: None).
+         Parameters
+         ----------
+         max_depth : int, optional
+             The maximum depth of the tree. If `None` the tree is expanded until all leaves
+             are pure or until all leaves contain less than `min_samples_split` samples
 
-        :param min_samples_split: The minimum number of samples to
-           split an internal node (default: 2).
+         min_samples_split : int, optional
+             The minimum number of samples to split an internal node
 
-        :param n_shapelets: The number of shapelets to sample at each
-           node (default: 10).
+         n_shapelets : int, optional
+             The number of shapelets to sample at each node.
 
-        :param min_shapelet_size: The minimum length of a sampled
-           shapelet expressed as a fraction, computed as
-           `min(ceil(X.shape[-1] * min_shapelet_size), 2)` (default:
-           0).
+         min_shapelet_size : float, optional
+             The minimum length of a sampled shapelet expressed as a fraction, computed as
+             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
-        :param max_shapelet_size: The maximum length of a sampled
-           shapelet, expressed as a fraction and computed as
-           `ceil(X.shape[-1] * max_shapelet_size)`.
+         max_shapelet_size : float, optional
+             The maximum length of a sampled shapelet, expressed as a fraction, computed as
+             `ceil(X.shape[-1] * max_shapelet_size)`.
 
-        :param metric: Distance metric used to identify the best
-           match. (default: `'euclidean'`)
+         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+             Distance metric used to identify the best shapelet.
 
-        :param metric_params: Paramters to the distace measure
+         metric_params : dict, optional
+             Parameters for the distance measure
 
-        :param force_dim: Force the number of dimensions (default:
-           None). If `int`, `force_dim` reshapes the input to the
-           shape `[n_samples, force_dim, -1]` to support the
-           `BaggingClassifier` interface.
+         force_dim : int, optional
+             Force the number of dimensions.
 
-        :param random_state: If `int`, `random_state` is the seed used
-           by the random number generator; If `RandomState` instance,
-           `random_state` is the random number generator; If `None`,
-           the random number generator is the `RandomState` instance
-           used by `np.random`.
+             - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+               for interoperability with `sklearn`.
 
-        """
+         random_state : int or RandomState
+             - If `int`, `random_state` is the seed used by the random number generator;
+             - If `RandomState` instance, `random_state` is the random number generator;
+             - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+         """
         super(ShapeletTreeClassifier, self).__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
@@ -429,31 +478,30 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
             self.n_classes_)
 
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a shapelet tree classifier from the training set (X, y)
+        """Fit a shapelet tree regressor from the training set
 
-        :param x: array-like, shape `[n_samples, n_timesteps]` or
-           `[n_samples, n_dimensions, n_timesteps]`. The training time
-           series.
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
+            The training time series.
 
-        :param y: array-like, shape `[n_samples, n_classes]` or
-           `[n_classes]`. Target values (class labels) as integers or
-           strings.
+        y : array-like of shape (n_samples,) or (n_samples, n_classes)
+            The target values (class labels) as integers
 
-        :param sample_weight: If `None`, then samples are equally
-            weighted. Splits that would create child nodes with net
-            zero or negative weight are ignored while searching for a
-            split in each node. Splits are also ignored if they would
-            result in any single class carrying a negative weight in
-            either child node.
+        sample_weight : array-like of shape (n_samples,)
+            If `None`, then samples are equally weighted. Splits that would create child
+            nodes with net zero or negative weight are ignored while searching for a split
+            in each node. Splits are also ignored if they would result in any single class
+            carrying a negative weight in either child node.
 
-        :param check_input: Allow to bypass several input checking.
-            Don't use this parameter unless you know what you do.
+        check_input : bool, optional
+            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
 
-        :returns: `self`
+        Returns
+        -------
 
+        self: object
         """
-        random_state = check_random_state(self.random_state)
-
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
             y = check_array(y, ensure_2d=False)
@@ -499,38 +547,44 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
         self.tree_ = tree_builder.tree_
         return self
 
-    def predict(self, X, check_input=True):
-        """Predict the class for X
+    def predict(self, x, check_input=True):
+        """Predict the regression of the input samples x.
 
-        :param X: array-like, shape `[n_samples, n_timesteps]` or
-            `[n_samples, n_dimensions, n_timesteps]`. The input time
-            series.
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
+            The input time series
 
-        :param check_input: Allow to bypass several input checking.
-            Don't use this parameter unless you know what you do.
+        check_input : bool, optional
+            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
 
-        :returns: array of `shape = [n_samples]`. The predicted
-            classes
+        Returns
+        -------
 
+        y : ndarray of shape (n_samples,)
+            The predicted classes.
         """
         return self.classes_[np.argmax(
-            self.predict_proba(X, check_input=check_input), axis=1)]
+            self.predict_proba(x, check_input=check_input), axis=1)]
 
     def predict_proba(self, x, check_input=True):
         """Predict class probabilities of the input samples X.  The predicted
         class probability is the fraction of samples of the same class
         in a leaf.
 
-        :param x: array-like, shape `[n_samples, n_timesteps]` or
-           `[n_samples, n_dimensions, n_timesteps]`. The input time
-           series.
+        Parameters
+        ----------
+        x :  array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
+            The input time series
 
-        :param check_input: Allow to bypass several input checking.
-            Don't use this parameter unless you know what you do.
+        check_input : bool, optional
+            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
 
-        :returns: array of `shape = [n_samples, n_classes]`. The
-            class probabilities of the input samples. The order of the
-            classes corresponds to that in the attribute `classes_`.
+        Returns
+        -------
+        proba : ndarray of shape (n_samples, n_classes)
+            The class probabilities of the input samples. The order of the classes corresponds to
+            that in the attribute :term:`classes_`
         """
         check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)
@@ -538,8 +592,20 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
 
 
 class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
+    """An extra shapelet tree classifier.
+
+    Extra shapelet trees are constructed by sampling a distance threshold
+    uniformly in the range [min(dist), max(dist)].
+
+    Attributes
+    ----------
+
+    tree_ : Tree
+    """
+
     def __init__(self,
                  max_depth=None,
+                 n_shapelets=1,
                  min_samples_split=2,
                  min_shapelet_size=0,
                  max_shapelet_size=1,
@@ -547,46 +613,49 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
                  metric_params=None,
                  force_dim=None,
                  random_state=None):
-        """A shapelet decision tree
+        """Construct a extra shapelet tree regressor
 
-        :param max_depth: The maximum depth of the tree. If `None` the
-           tree is expanded until all leafs are pure or until all
-           leafs contain less than `min_samples_split` samples
-           (default: None).
+         Parameters
+         ----------
+         max_depth : int, optional
+             The maximum depth of the tree. If `None` the tree is expanded until all leaves
+             are pure or until all leaves contain less than `min_samples_split` samples
 
-        :param min_samples_split: The minimum number of samples to
-           split an internal node (default: 2).
+         min_samples_split : int, optional
+             The minimum number of samples to split an internal node
 
-        :param min_shapelet_size: The minimum length of a sampled
-           shapelet expressed as a fraction, computed as
-           `min(ceil(X.shape[-1] * min_shapelet_size), 2)` (default:
-           0).
+         n_shapelets : int, optional
+             The number of shapelets to sample at each node.
 
-        :param max_shapelet_size: The maximum length of a sampled
-           shapelet, expressed as a fraction and computed as
-           `ceil(X.shape[-1] * max_shapelet_size)`.
+         min_shapelet_size : float, optional
+             The minimum length of a sampled shapelet expressed as a fraction, computed as
+             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
-        :param metric: Distance metric used to identify the best
-           match. (default: `'euclidean'`)
+         max_shapelet_size : float, optional
+             The maximum length of a sampled shapelet, expressed as a fraction, computed as
+             `ceil(X.shape[-1] * max_shapelet_size)`.
 
-        :param metric_params: Paramters to the distace measure
+         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+             Distance metric used to identify the best shapelet.
 
-        :param force_dim: Force the number of dimensions (default:
-           None). If `int`, `force_dim` reshapes the input to the
-           shape `[n_samples, force_dim, -1]` to support the
-           `BaggingClassifier` interface.
+         metric_params : dict, optional
+             Parameters for the distance measure
 
-        :param random_state: If `int`, `random_state` is the seed used
-           by the random number generator; If `RandomState` instance,
-           `random_state` is the random number generator; If `None`,
-           the random number generator is the `RandomState` instance
-           used by `np.random`.
+         force_dim : int, optional
+             Force the number of dimensions.
 
-        """
+             - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+               or interoperability with `sklearn`.
+
+         random_state : int or RandomState
+             - If `int`, `random_state` is the seed used by the random number generator;
+             - If `RandomState` instance, `random_state` is the random number generator;
+             - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+         """
         super(ShapeletTreeClassifier, self).__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
-            n_shapelets=1,
+            n_shapelets=n_shapelets,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,

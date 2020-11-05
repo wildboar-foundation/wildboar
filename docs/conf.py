@@ -31,9 +31,9 @@ release = __version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'autoapi.sphinx',
     'sphinx.ext.autodoc',
-    'autoapi.extension',
-    # 'sphinx.ext.autosummary',
+    'sphinx.ext.inheritance_diagram',
     'sphinx.ext.napoleon'
 ]
 
@@ -45,7 +45,7 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-# autoclass_content = 'both'
+autoclass_content = 'both'
 autodoc_default_flags = [
     # Make sure that any autodoc declarations show the right members
     "members",
@@ -53,16 +53,8 @@ autodoc_default_flags = [
     #"private-members",
     "show-inheritance",
 ]
-# autosummary_generate = True  # Make _autosummary files and include them
-autoapi_dirs = ['../wildboar']
-autoapi_options = [
-    "members",
-    "inherited-members",
-    #"private-members",
-    "show-inheritance",
-]
-autoapi_python_class_content = 'both'
-autoapi_member_order = 'alphabetical'
+
+autoapi_modules = {'wildboar': {'prune': True}}
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for

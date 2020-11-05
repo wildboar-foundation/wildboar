@@ -25,10 +25,25 @@ import numpy as np
 cimport numpy as np
 
 from libc.stdlib cimport malloc
-from libc.stdlib cimport free
 
 from libc.math cimport sqrt
 from libc.math cimport NAN
+
+import wildboar._dtw_distance
+import wildboar._euclidean_distance
+
+from libc.stdlib cimport free
+from sklearn.utils import check_array
+from ._distance cimport Shapelet
+from ._distance cimport DistanceMeasure
+from ._distance cimport ts_database_new
+from ._distance cimport TSDatabase
+
+_DISTANCE_MEASURE = {
+    'euclidean': wildboar._euclidean_distance.EuclideanDistance,
+    'scaled_euclidean': wildboar._euclidean_distance.ScaledEuclideanDistance,
+    'scaled_dtw': wildboar._dtw_distance.ScaledDtwDistance,
+}
 
 cdef int shapelet_init(Shapelet *shapelet, size_t dim, size_t length, double mean, double std) nogil:
     shapelet[0].dim = dim
@@ -115,7 +130,7 @@ cdef class DistanceMeasure:
         self.n_timestep = n_timestep
 
     def __reduce__(self):
-        return self.__class__, (self.n_timestep, )
+        return self.__class__, (self.n_timestep,)
 
     cdef void shapelet_info_distances(
             self, ShapeletInfo *s, TSDatabase *td, size_t *samples,
@@ -305,50 +320,205 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
 #         with gil:
 #             raise NotImplementedError()    
 
-# cdef class Shapelet:
-#     def __cinit__(self,
-#                   size_t dim,
-#                   size_t length,
-#                   double mean,
-#                   double std,
-#                   int ts_index=-1,
-#                   int ts_start=-1):
-#         self.length = length
-#         self.mean = mean
-#         self.std = std
-#         self.dim = dim
-#         self.ts_index = ts_index
-#         self.ts_start = ts_start
-#         self.data = <double*> malloc(sizeof(double) * length)
-#         if self.data == NULL:
-#             raise MemoryError()
-#         self.extra = NULL
-#
-#     def __dealloc__(self):
-#         free(self.data)
-#         if self.extra != NULL:
-#             free(self.extra)
-#
-#     def __reduce__(self):
-#         return make_shapelet_, (self.__class__, self.dim, self.length,
-#                                 self.mean, self.std, self.array,
-#                                 self.ts_index, self.ts_start)
-#
-#     @property
-#     def ts_info(self):
-#         """Returns information about the time series from which the shapelet was extracted
-#         :returns `None` or `(ts_index, ts_start, shapelet_length)`
-#         """
-#         if self.ts_index < 0 or self.ts_start < 0:
-#             return None
-#         else:
-#             return self.ts_index, self.ts_start, self.length
-#
-#     @property
-#     def array(self):
-#         cdef np.ndarray[np.float64_t] arr = np.empty(
-#             self.length, dtype=np.float64)
-#         cdef size_t i
-#         for i in range(self.length):
-#             arr[i] = self.data[i]
-#         return arr
+def _validate_shapelet(shapelet):
+    cdef np.ndarray s = check_array(
+        shapelet, ensure_2d=False, dtype=np.float64, order="c")
+    if s.ndim > 1:
+        raise ValueError("only 1d shapelets allowed")
+
+    if not s.flags.contiguous:
+        s = np.ascontiguousarray(s, dtype=np.float64)
+    return s
+
+def _validate_data(data):
+    cdef np.ndarray x = check_array(
+        data, ensure_2d=False, allow_nd=True, dtype=np.float64, order="c")
+    if x.ndim == 1:
+        x = x.reshape(-1, x.shape[0])
+
+    if not x.flags.contiguous:
+        x = np.ascontiguousarray(x, dtype=np.float64)
+    return x
+
+def _check_sample(sample, n_samples):
+    if sample < 0 or sample >= n_samples:
+        raise ValueError("illegal sample {}".format(sample))
+
+def _check_dim(dim, ndims):
+    if dim < 0 or dim >= ndims:
+        raise ValueError("illegal dimension {}".format(dim))
+
+cdef np.ndarray _new_match_array(size_t *matches, size_t n_matches):
+    if n_matches > 0:
+        match_array = np.empty(n_matches, dtype=np.intp)
+        for i in range(n_matches):
+            match_array[i] = matches[i]
+        return match_array
+    else:
+        return None
+
+cdef np.ndarray _new_distance_array(
+        double *distances, size_t n_matches):
+    if n_matches > 0:
+        dist_array = np.empty(n_matches, dtype=np.float64)
+        for i in range(n_matches):
+            dist_array[i] = distances[i]
+        return dist_array
+    else:
+        return None
+
+def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_params=None, return_index=False):
+    """Computes the minimum distance between `s` and the samples in `x`
+
+    :param shapelet: the subsequence `array_like`
+
+    :param data: the samples `[n_samples, n_timesteps]` or
+                 `[n_samples, n_dims, n_timesteps]`
+
+    :param dim: the time series dimension to search (default: 0)
+
+    :param sample: the samples to compare to `int` or `array_like` or
+                   `None`; if `sample` is `None`, return the distance
+                   to all samples in data. Note that if, `n_samples`
+                   is 1 a scalar is returned; otherwise a array is
+                   returned.
+
+    :param metric: the distance measure
+
+    :param return_index: if `true` return the index of the best
+                         match. If there are many equally good
+                         best matches, the first is returned.
+
+    :returns: `float`, `(float, int)`, `float [n_samples]` or `(float
+              [n_samples], int [n_samples]` depending on input
+
+    """
+    cdef np.ndarray s = _validate_shapelet(shapelet)
+    cdef np.ndarray x = _validate_data(data)
+    if sample is None:
+        if x.shape[0] == 1:
+            sample = 0
+        else:
+            sample = np.arange(x.shape[0])
+
+    cdef TSDatabase sd = ts_database_new(x)
+
+    _check_dim(dim, sd.n_dims)
+    cdef double min_dist
+    cdef size_t min_index
+
+    cdef double mean = 0
+    cdef double std = 0
+
+    if metric_params is None:
+        metric_params = {}
+
+    cdef DistanceMeasure distance_measure = _DISTANCE_MEASURE[metric](
+        sd.n_timestep, **metric_params)
+
+    cdef Shapelet shape
+    distance_measure.init_shapelet_ndarray(&shape, s, dim)
+    if isinstance(sample, int):
+        min_dist = distance_measure.shapelet_distance(
+            &shape, &sd, sample, &min_index)
+
+        if return_index:
+            return min_dist, min_index
+        else:
+            return min_dist
+    else:  # assume an `array_like` object for `samples`
+        samples = check_array(sample, ensure_2d=False, dtype=np.int)
+        dist = []
+        ind = []
+        for i in samples:
+            min_dist = distance_measure.shapelet_distance(&shape, &sd, i, &min_index)
+
+            dist.append(min_dist)
+            ind.append(min_index)
+
+        if return_index:
+            return np.array(dist), np.array(ind)
+        else:
+            return np.array(dist)
+
+def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metric_params=None, return_distance=False):
+    """Return the positions in data (one array per `sample`) where
+    `shapelet` is closer than `threshold`.
+
+    :param shapelet: the subsequence `array_like`
+
+    :param X: the samples `[n_samples, n_timestep]` or `[n_sample,
+              n_dim, n_timestep]`
+
+    :param threshold: the maximum threshold for match
+
+    :param dim: the time series dimension to search (default: 0)
+
+    :param sample: the samples to compare to `int` or `array_like` or
+                   `None`.  If `None` compare to all. (default:
+                   `None`)
+
+    :param metric: the distance measure
+
+    :param metric_params: additional parameters to the metric function
+                          (optional, dict, default: None)
+
+    :returns: `[n_matches]`, or `[[n_matches], ... n_samples]`
+
+    """
+    cdef np.ndarray s = _validate_shapelet(shapelet)
+    cdef np.ndarray x = _validate_data(X)
+    _check_dim(dim, x.ndim)
+    if sample is None:
+        if x.shape[0] == 1:
+            sample = 0
+        else:
+            sample = np.arange(x.shape[0])
+
+    cdef TSDatabase sd = ts_database_new(x)
+
+    cdef size_t *matches
+    cdef double *distances
+    cdef size_t n_matches
+
+    if metric_params is None:
+        metric_params = {}
+
+    cdef DistanceMeasure distance_measure = _DISTANCE_MEASURE[metric](
+        sd.n_timestep, **metric_params)
+    cdef Shapelet shape
+    distance_measure.init_shapelet_ndarray(&shape, s, dim)
+
+    cdef size_t i
+    if isinstance(sample, int):
+        _check_sample(sample, sd.n_samples)
+        distance_measure.shapelet_matches(
+            &shape, &sd, sample, threshold, &matches, &distances, &n_matches)
+
+        match_array = _new_match_array(matches, n_matches)
+        distance_array = _new_distance_array(distances, n_matches)
+        free(distances)
+        free(matches)
+
+        if return_distance:
+            return distance_array, match_array
+        else:
+            return match_array
+    else:
+        samples = check_array(sample, ensure_2d=False, dtype=np.int)
+        match_list = []
+        distance_list = []
+        for i in samples:
+            _check_sample(i, sd.n_samples)
+            distance_measure.shapelet_matches(&shape, &sd, i, threshold, &matches, &distances, &n_matches)
+            match_array = _new_match_array(matches, n_matches)
+            distance_array = _new_distance_array(distances, n_matches)
+            match_list.append(match_array)
+            distance_list.append(distance_array)
+            free(matches)
+            free(distances)
+
+        if return_distance:
+            return distance_list, match_list
+        else:
+            return match_list

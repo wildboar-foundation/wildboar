@@ -694,15 +694,15 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
             - if 'auto' ``offset_=-0.5``
             - if 'auc' ``offset_`` is computed as the offset that maximizes the
-              area under ROC in the training or out-of-bag set (see `contamination_set`).
+              area under ROC in the training or out-of-bag set (see ``contamination_set``).
             - if 'prc' ``offset_`` is computed as the offset that maximizes the
-              area under PRC in the training or out-of-bag set (see `contamination_set`)
+              area under PRC in the training or out-of-bag set (see ``contamination_set``)
             - if callable ``offset_`` is computed as the offset that maximizes the score
-              computed by the callable in training or out-of-bag set (see `contamination_set`)
+              computed by the callable in training or out-of-bag set (see ``contamination_set``)
             - if float ``offset_`` is computed as the c:th percentile of scores in the training
-              or out-of-bag set (see `contamination_set`)
+              or out-of-bag set (see ``contamination_set``)
 
-            Setting contamination to either 'auc' or 'prc' Require that `y` is passed to `fit`.
+            Setting contamination to either 'auc' or 'prc' require that `y` is passed to `fit`.
 
         contamination_set : {'training', 'oob'}, optional
             Compute the ``offset_`` from either the out-of-bag samples or the training samples.

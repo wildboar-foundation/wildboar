@@ -10,6 +10,8 @@ Welcome to Wildboar's documentation!
    :maxdepth: 5
    :caption: Contents:
 
+   wildboar/wildboar
+
 
 
 Indices and tables
