@@ -1,2 +1,2 @@
-sphinx-autoapi>=1.5.1
+autoapi>=1.5.1
 sphinx-multiversion>=0.2.4
