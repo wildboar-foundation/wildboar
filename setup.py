@@ -29,7 +29,7 @@ It provides:
 The package is provided under the GPLv3 license.
 """
 
-datadirs = ["wildboar/datasets/_resources", ]
+datadirs = []
 dataexts = [".py", ".pyx", ".pxd", ".c", ".cpp", ".h", ".sh", ".lyx", ".tex",
             ".txt", ".pdf"]
 
@@ -40,17 +40,17 @@ if sys.version_info < (3, 4):
     sys.exit('Sorry, Python < 3.4 is not supported')
 
 extra_compile_args_math_optimized = [
-    '-march=native',
+    # '-march=native',
     '-O2',
-    '-msse',
-    '-msse2',
-    '-mfma',
-    '-mfpmath=sse',
+    # '-msse',
+    # '-msse2',
+    # '-mfma',
+    # '-mfpmath=sse',
 ]
 extra_compile_args_math_debug = [
-    '-march=native',
-    '-O0',
-    '-g',
+    # '-march=native',
+    # '-O0',
+    # '-g',
 ]
 
 extra_link_args_math_optimized = []
@@ -248,18 +248,23 @@ setup(
         "Topic :: Software Development :: Libraries",
     ],
     setup_requires=[
-        'cython>=0.28',
-        'numpy>=1.14.2',
+        'cython>=0.29.14',
+        'numpy>=1.17.4',
         'setuptools>=18.0',
     ],
-    install_requires=["scikit-learn"],
-    python_requires=">=3.4.0",
+    install_requires=[
+        'numpy>=1.17.4',
+        'scikit-learn>=0.21.3',
+        'scipy>=1.3.2',
+    ],
+    python_requires=">=3.7.0",
     provides=["wildboar"],
     keywords=["machine learning", "time series distance"],
     ext_modules=cython_ext_modules,
     packages=find_packages(),
     package_data={
         'wildboar': ['*.pxd', '*.pyx', '*.c'],
+        'wildboar.datasets._resources': ['*.txt'],
     },
     zip_safe=False,
     #    cmdclass={'build_ext': build_ext},
