@@ -24,12 +24,8 @@ requires:
 
 ### Current version
 
-- Current release: 0.3.4
-- Current development release: master
-  
-  The master branch contains breaking changes to the internal representation
-  of the shapelet trees. Decision trees fit using the master branch code
-  and earlier versions are equivalent, but the internal representation differ.
+- Current release: 1.0
+- Current development release: 1.0.0dev
 
 ### Binaries
 
@@ -61,6 +57,8 @@ formatted according to
 ## Usage
 
     from wildboar import ShapeletForestClassifier
+    from wildboar.dataset import load_two_lead_ecg
+    x, y = load_two_lead_ecg()
     c = ShapeletForestClassifier()
     c.fit(x, y)
 
