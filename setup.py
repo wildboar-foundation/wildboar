@@ -4,7 +4,7 @@ import sys
 import os
 import ast
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.extension import Extension
 
 
@@ -29,9 +29,9 @@ It provides:
 The package is provided under the GPLv3 license.
 """
 
-datadirs = ("test",)
-dataexts = (".py", ".pyx", ".pxd", ".c", ".cpp", ".h", ".sh", ".lyx", ".tex",
-            ".txt", ".pdf")
+datadirs = ["wildboar/datasets/_resources", ]
+dataexts = [".py", ".pyx", ".pxd", ".c", ".cpp", ".h", ".sh", ".lyx", ".tex",
+            ".txt", ".pdf"]
 
 standard_docs = ["README", "LICENSE", "TODO", "CHANGELOG", "AUTHORS"]
 standard_doc_exts = [".md", ".rst", ".txt", "", ".org"]
@@ -225,7 +225,6 @@ setup(
     description=SHORTDESC,
     long_description=DESC,
     license="GPLv3",
-    #    platforms=["Linux"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
@@ -258,7 +257,7 @@ setup(
     provides=["wildboar"],
     keywords=["machine learning", "time series distance"],
     ext_modules=cython_ext_modules,
-    packages=["wildboar"],
+    packages=find_packages(),
     package_data={
         'wildboar': ['*.pxd', '*.pyx', '*.c'],
     },

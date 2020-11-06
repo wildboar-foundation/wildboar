@@ -136,8 +136,8 @@ def load_dataset(name, dtype=None, contiguous=True, merge_train_test=True):
         raise ValueError("dataset (%s) does not exist" % name)
     dtype = dtype or np.float64
     name = _dataset_mapping[name]
-    train_file = pkg_resources.open_text(_resources, "%s_TRAIN" % name)
-    test_file = pkg_resources.open_text(_resources, "%s_TEST" % name)
+    train_file = pkg_resources.open_text(_resources, "%s_TRAIN.txt" % name)
+    test_file = pkg_resources.open_text(_resources, "%s_TEST.txt" % name)
     train = np.loadtxt(train_file, delimiter=",")
     test = np.loadtxt(test_file, delimiter=",")
     n_train_samples = train.shape[0]
