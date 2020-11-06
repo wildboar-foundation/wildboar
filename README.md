@@ -1,8 +1,8 @@
 # wildboar
 
-wildboar is a Python module for temporal machine learning and fast
+[wildboar](https://isaksamsten.github.io/wildboar/) is a Python module for temporal machine learning and fast
 distance computations built on top of
-[SciKit-Learn](http://scikit-learn.org) and [Numpy](http://numpy.org)
+[SciKit-Learn](https://scikit-learn.org) and [Numpy](https://numpy.org)
 distributed under the GNU General Public License Version 3.
 
 It is currently maintained by Isak Samsten
@@ -13,7 +13,7 @@ It is currently maintained by Isak Samsten
 
 wildboar requires:
 
- * Python (>= 3.4)
+ * Python (>= 3.6)
  * NumPy (>= 1.8.2)
  * SciPy (>= 0.13.3)
  
@@ -24,7 +24,12 @@ requires:
 
 ### Current version
 
-Current release: 0.3.1
+- Current release: 0.3.4
+- Current development release: master
+  
+  The master branch contains breaking changes to the internal representation
+  of the shapelet trees. Decision trees fit using the master branch code
+  and earlier versions are equivalent, but the internal representation differ.
 
 ### Binaries
 
