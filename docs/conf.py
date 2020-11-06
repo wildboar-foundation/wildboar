@@ -23,6 +23,7 @@ copyright = '2020, Isak Samsten'
 author = 'Isak Samsten'
 
 # The full version, including alpha/beta/rc tags
+version = __version__
 release = __version__
 
 # -- General configuration ---------------------------------------------------
