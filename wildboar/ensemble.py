@@ -834,7 +834,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             else:
                 raise ValueError("contamination_set (%s) is not supported" % self.contamination_set)
         else:
-            raise ValueError("max_samples (%s) is not supported." % self.max_samples)
+            raise ValueError("contamination (%s) is not supported." % self.contamination)
 
         return self
 
