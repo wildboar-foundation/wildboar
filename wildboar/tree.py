@@ -584,7 +584,7 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
         -------
         proba : ndarray of shape (n_samples, n_classes)
             The class probabilities of the input samples. The order of the classes corresponds to
-            that in the attribute :term:`classes_`
+            that in the attribute `classes_`
         """
         check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)

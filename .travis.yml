@@ -4,7 +4,7 @@ jobs:
   include:
     - python: 3.8
       name: "Build and deploy documentation"
-      if: type != pull_request AND (branch = master OR tag IS present)
+      if: type != pull_request AND branch = master
       install:
         - sudo apt-get install graphviz
         - pip install -r requirements.txt

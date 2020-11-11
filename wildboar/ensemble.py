@@ -796,6 +796,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
         super(IsolationShapeletForest, self)._fit(
             x, rnd_y, max_samples=max_samples, max_depth=max_depth, sample_weight=sample_weight)
 
+        self.max_samples_ = max_samples
         if self.contamination == 'auto':
             self.offset_ = -0.5
         elif self.contamination in ["auc", "prc"] or hasattr(self.contamination, "__call__"):
@@ -848,7 +849,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
     def score_samples(self, x):
         check_is_fitted(self)
         x = self._validate_x_predict(x, check_input=True)
-        return _score_samples(x, self.estimators_)
+        return _score_samples(x, self.estimators_, self.max_samples_)
 
     def _oob_score_samples(self, x):
         n_samples = x.shape[0]
@@ -860,13 +861,12 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
                 if i not in samples:
                     estimators.append(estimator)
             score_samples[i] = _score_samples(x[i].reshape((1, self.n_dims, self.n_timestep)),
-                                              estimators, n_samples)
+                                              estimators, self.max_samples_)
         return score_samples
 
 
-def _score_samples(x, estimators, n_samples=None):
+def _score_samples(x, estimators, max_samples):
     # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
-    n_samples = n_samples or x.shape[0]
     depths = np.zeros(x.shape[0], order="f")
 
     for tree in estimators:
@@ -875,7 +875,7 @@ def _score_samples(x, estimators, n_samples=None):
         n_samples_leaf = tree.tree_.n_node_samples[leaves_index]
 
         depths += np.ravel(node_indicator.sum(axis=1)) + _average_path_length(n_samples_leaf) - 1.0
-    scores = 2 ** (-depths / (len(estimators) * _average_path_length(np.array([n_samples]))))
+    scores = 2 ** (-depths / (len(estimators) * _average_path_length(np.array([max_samples]))))
     return -scores
 
 
@@ -897,5 +897,3 @@ def _average_path_length(n_samples_leaf):
     )
 
     return average_path_length.reshape(n_samples_leaf_shape)
-
-
