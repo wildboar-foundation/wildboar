@@ -1,4 +1,8 @@
 # wildboar
+![Python version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
+[![Build Status](https://travis-ci.com/isaksamsten/wildboar.svg?branch=master)](https://travis-ci.com/isaksamsten/wildboar)
+[![PyPI version](https://badge.fury.io/py/wildboar.svg)](https://badge.fury.io/py/wildboar)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4264063.svg)](https://doi.org/10.5281/zenodo.4264063)
 
 [wildboar](https://isaksamsten.github.io/wildboar/) is a Python module for temporal machine learning and fast
 distance computations built on top of
@@ -24,8 +28,8 @@ requires:
 
 ### Current version
 
-- Current release: 1.0.1
-- Current development release: 1.0.1dev
+- Current release: 1.0.3
+- Current development release: 1.0.3dev
 
 ### Binaries
 
@@ -58,19 +62,31 @@ formatted according to
 
     from wildboar import ShapeletForestClassifier
     from wildboar.dataset import load_two_lead_ecg
-    x, y = load_two_lead_ecg()
+    x_train, x_test, y_train, y_test = load_two_lead_ecg(merge_train_test=False)
     c = ShapeletForestClassifier()
-    c.fit(x, y)
+    c.fit(x_train, y_train)
+    f.score(x_test, y_test)
 
 ## Source code
 
 You can check the latest sources with the command:
 
     git clone https://github.com/isakkarlsson/wildboar
+    
+## Documentation
+
+* HTML documentation: [https://isaksamsten.github.io/wildboar](https://isaksamsten.github.io/wildboar)
 	
 ## Citation
+If you use `wildboar` in a scientific publication, I would appreciate
+citations to the paper:
+- Karlsson, I., Papapetrou, P. Boström, H., 2016.
+ *Generalized Random Shapelet Forests*. In the Data Mining and
+ Knowledge Discovery Journal
+  - `ShapeletForestClassifier`
 
-If you use wildboar in a scientific publication, I would appreciate
-citations to the paper: Karlsson, I., Papapetrou, P. Boström, H.,
-*Generalized Random Shapelet Forests*. In the Data Mining and
-Knowledge Discovery Journal (DAMI), 2016
+- Isak Samsten, 2020. isaksamsten/wildboar: wildboar (Version 1.0.3). doi:10.5281/zenodo.4264063
+  - `ShapeletForestRegressor`
+  - `ExtraShapeletForestClassifier`
+  - `ExtraShapeletForestRegressor`
+  - `IsolationShapeletForest`
