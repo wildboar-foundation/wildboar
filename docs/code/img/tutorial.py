@@ -12,13 +12,6 @@ def time_series_predict():
     return fig
 
 
-_plotters = {
+PLOT_DICT = {
     'time_series_predict': time_series_predict
 }
-
-
-def build_all(output_path, output_ext=".png"):
-    output_path = os.path.join(output_path, "tutorial")
-    for name, plotter in _plotters.items():
-        fig = plotter()
-        fig.savefig(os.path.join(output_path, name + output_ext))

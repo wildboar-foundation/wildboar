@@ -87,10 +87,14 @@ html_sidebars = {
 html_static_path = ['_static']
 img_path = os.path.abspath("_static/img")
 
+
 # Build figures before documents are read.
 def build_fig_handler(app, env, docnames):
-    import img.tutorial
-    img.tutorial.build_all(img_path)
+    if not os.path.exists(img_path):
+        os.mkdir(img_path)
+
+    import img
+    img.build_all(img_path, img.TUTORIAL)
 
 
 def setup(app):
