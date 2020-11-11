@@ -85,7 +85,7 @@ citations to the paper:
  Knowledge Discovery Journal
   - `ShapeletForestClassifier`
 
-- Isak Samsten, 2020. isaksamsten/wildboar: wildboar (Version 1.0.3). doi:10.5281/zenodo.4264063
+- Isak Samsten, 2020. isaksamsten/wildboar: wildboar (Version 1.0.3). Zenodo. doi:10.5281/zenodo.4264063
   - `ShapeletForestRegressor`
   - `ExtraShapeletForestClassifier`
   - `ExtraShapeletForestRegressor`

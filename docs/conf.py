@@ -14,11 +14,13 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(1, os.path.abspath('code/'))
 from wildboar import __version__
 
 # -- Project information -----------------------------------------------------
 
 project = 'Wildboar'
+description = "Time series learning with Python"
 copyright = '2020, Isak Samsten'
 author = 'Isak Samsten'
 
@@ -41,11 +43,6 @@ extensions = [
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
-html_sidebars = {
-    '**': [
-        'versions.html',
-    ],
-}
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -65,9 +62,36 @@ autoapi_modules = {'wildboar': {'prune': True}}
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'nature'
-
+html_theme = 'alabaster'
+html_theme_options = {
+    'github_user': 'isaksamsten',
+    'github_repo': 'wildboar',
+    'github_button': True,
+    'github_type': 'star',
+    'fixed_sidebar': True,
+    'sidebar_collapse': True,
+    'show_relbar_bottom': True,
+}
+html_sidebars = {
+    "**": [
+        "about.html",
+        "navigation.html",
+        "relations.html",
+        "searchbox.html",
+        "versions.html",
+    ],
+}
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+img_path = os.path.abspath("_static/img")
+
+# Build figures before documents are read.
+def build_fig_handler(app, env, docnames):
+    import img.tutorial
+    img.tutorial.build_all(img_path)
+
+
+def setup(app):
+    app.connect('env-before-read-docs', build_fig_handler)

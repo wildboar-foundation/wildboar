@@ -1,68 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import sys
 import os
-import ast
-
 from setuptools import setup, find_packages
 from setuptools.extension import Extension
-
-
-def build_ext(*args, **kwargs):
-    import Cython.Build
-    return Cython.Build.build_ext(*args, **kwargs)
-
-
-libname = "wildboar"
-build_type = "optimized"
-
-SHORTDESC = "wildboar is the fundamental package for time series classification with Python"
-
-DESC = """
-It provides:
-
- * Shapelet tree classification and regression
- * Random shapelet forest classification and regression
- * Fast dynamic time warning searching
- * Fast euclidean distance searching
-
-The package is provided under the GPLv3 license.
-"""
-
-datadirs = []
-dataexts = [".py", ".pyx", ".pxd", ".c", ".cpp", ".h", ".sh", ".lyx", ".tex",
-            ".txt", ".pdf"]
-
-standard_docs = ["README", "LICENSE", "TODO", "CHANGELOG", "AUTHORS"]
-standard_doc_exts = [".md", ".rst", ".txt", "", ".org"]
-
-if sys.version_info < (3, 4):
-    sys.exit('Sorry, Python < 3.4 is not supported')
-
-extra_compile_args_math_optimized = [
-    # '-march=native',
-    '-O2',
-    # '-msse',
-    # '-msse2',
-    # '-mfma',
-    # '-mfpmath=sse',
-]
-extra_compile_args_math_debug = [
-    # '-march=native',
-    # '-O0',
-    # '-g',
-]
-
-extra_link_args_math_optimized = []
-extra_link_args_math_debug = []
-
-extra_compile_args_nonmath_optimized = ['-O2']
-extra_compile_args_nonmath_debug = ['-O0', '-g']
-extra_link_args_nonmath_optimized = []
-extra_link_args_nonmath_debug = []
-
-openmp_compile_args = ['-fopenmp']
-openmp_link_args = ['-fopenmp']
 
 
 # Lazy loading
@@ -72,161 +12,105 @@ class np_include_dirs(str):
         return np.get_include()
 
 
-my_include_dirs = [np_include_dirs()]
-
-if build_type == 'optimized':
-    my_extra_compile_args_math = extra_compile_args_math_optimized
-    my_extra_compile_args_nonmath = extra_compile_args_nonmath_optimized
-    my_extra_link_args_math = extra_link_args_math_optimized
-    my_extra_link_args_nonmath = extra_link_args_nonmath_optimized
-    my_debug = False
-    print("build configuration selected: optimized")
-elif build_type == 'debug':
-    my_extra_compile_args_math = extra_compile_args_math_debug
-    my_extra_compile_args_nonmath = extra_compile_args_nonmath_debug
-    my_extra_link_args_math = extra_link_args_math_debug
-    my_extra_link_args_nonmath = extra_link_args_nonmath_debug
-    my_debug = True
-    print("build configuration selected: debug")
-else:
-    raise ValueError(
-        "Unknown build configuration '%s'; valid: 'optimized', 'debug'" %
-        (build_type))
+def read(rel_path):
+    import codecs
+    here = os.path.abspath(os.path.dirname(__file__))
+    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
+        return fp.read()
 
 
-def declare_cython_extension(extName,
-                             use_math=False,
-                             use_openmp=False,
-                             include_dirs=None,
-                             extra_lib=None):
-    extPath = extName.replace(".", os.path.sep) + ".pyx"
-    if use_math:
-        compile_args = list(my_extra_compile_args_math)  # copy
-        link_args = list(my_extra_link_args_math)
-        import platform
-        if platform.system() == "Windows":
-            libraries = None
-        else:
-            libraries = ["m"]
+def get_version(rel_path):
+    for line in read(rel_path).splitlines():
+        if line.startswith('__version__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
     else:
-        compile_args = list(my_extra_compile_args_nonmath)
-        link_args = list(my_extra_link_args_nonmath)
-        libraries = None
+        raise RuntimeError("Unable to find version string.")
 
+
+def declare_extension(root_module, ext_file, compile_args=None, link_args=None, use_openmp=False,
+                      include_dirs=None, libraries=None, extra_compile_args=None, extra_link_args=None):
+    if not isinstance(root_module, list):
+        root_module = [root_module]
+
+    ext_module = "%s.%s" % (".".join(root_module), ext_file)
+    ext_file = ["%s.pyx" % os.path.join(*root_module, ext_file)]
+
+    compile_args = compile_args or []
+    extra_compile_args = extra_compile_args or []
+    compile_args.extend(extra_compile_args)
+
+    link_args = link_args or []
+    extra_link_args = extra_link_args or []
+    link_args.extend(extra_link_args)
+    libraries = libraries or []
     if use_openmp:
-        compile_args.insert(0, openmp_compile_args)
-        link_args.insert(0, openmp_link_args)
+        compile_args.insert(0, '-fopenmp')
+        link_args.insert(0, '-fopenmp')
 
-    if extra_lib is not None:
-        if libraries is None:
-            libraries = []
-        for lib in extra_lib:
-            libraries.append(lib)
+    import platform
+    if platform.system() != "Windows":
+        libraries.insert(0, "m")
 
     return Extension(
-        extName, [extPath],
+        ext_module, ext_file,
         extra_compile_args=compile_args,
         extra_link_args=link_args,
         include_dirs=include_dirs,
         libraries=libraries)
 
 
-datafiles = []
+def declare_extensions(ext_module, ext_files, **kwargs):
+    return [declare_extension(ext_module, ext_file, **kwargs) for ext_file in ext_files]
 
 
-def getext(filename):
-    return os.path.splitext(filename)[1]
+PACKAGE_NAME = "wildboar"
 
+SHORT_DESCRIPTION = "Time series learning with Python"
 
-for datadir in datadirs:
-    datafiles.extend(
-        [(root,
-          [os.path.join(root, f) for f in files if getext(f) in dataexts])
-         for root, dirs, files in os.walk(datadir)])
+from os import path
 
-detected_docs = []
-for docname in standard_docs:
-    for ext in standard_doc_exts:
-        filename = "".join((docname, ext))
-        if os.path.isfile(filename):
-            detected_docs.append(filename)
-datafiles.append(('.', detected_docs))
+with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'), encoding='utf-8') as f:
+    DESCRIPTION = f.read()
 
-init_py_path = os.path.join(libname, '__init__.py')
-version = '0.0.unknown'
-try:
-    with open(init_py_path) as f:
-        for line in f:
-            if line.startswith('__version__'):
-                version = ast.parse(line).body[0].value.s
-                break
-        else:
-            print(
-                "WARNING: Version information not found"
-                " in '%s', using placeholder '%s'" % (init_py_path, version),
-                file=sys.stderr)
-except FileNotFoundError:
-    print(
-        "WARNING: Could not find file '%s',"
-        "using placeholder version information '%s'" % (init_py_path, version),
-        file=sys.stderr)
+BUILD_TYPE = os.getenv("WILDBOAR_BUILD") or "default"
 
-ext_module_utils = declare_cython_extension(
-    "wildboar._utils",
-    use_math=True,
-    use_openmp=False,
-    include_dirs=my_include_dirs)
+BUILD_ARGS = {
+    'default': {
+        'compile_args': ['-O2'],
+        'link_args': [],
+        'libraries': [],
+    },
+    'optimized': {
+        'compile_args': ['-O2', '-march=native', '-msse', '-msse2', '-mfma', '-mfpmath=sse'],
+        'link_args': [],
+        'libraries': []
+    },
+}
 
-ext_module_distance = declare_cython_extension(
-    "wildboar._distance",
-    use_math=True,
-    use_openmp=False,
-    include_dirs=my_include_dirs)
+include_dirs = [np_include_dirs()]
 
-ext_module_euclidean_distance = declare_cython_extension(
-    "wildboar._euclidean_distance",
-    use_math=True,
-    use_openmp=False,
-    include_dirs=my_include_dirs)
+build_args = BUILD_ARGS.get(BUILD_TYPE)
+if build_args is None:
+    raise RuntimeError("%s is not a valid build type" % BUILD_TYPE)
 
-ext_module_dtw_distance = declare_cython_extension(
-    "wildboar._dtw_distance",
-    use_math=True,
-    use_openmp=False,
-    include_dirs=my_include_dirs)
-
-ext_module_impurity = declare_cython_extension(
-    "wildboar._impurity",
-    use_math=True,
-    use_openmp=False,
-    include_dirs=my_include_dirs)
-
-ext_module_tree_builder = declare_cython_extension(
-    "wildboar._tree_builder",
-    use_math=True,
-    use_openmp=False,
-    include_dirs=my_include_dirs)
-
-cython_ext_modules = [
-    ext_module_utils,
-    ext_module_distance,
-    ext_module_euclidean_distance,
-    ext_module_dtw_distance,
-    ext_module_impurity,
-    ext_module_tree_builder,
-]
+cython_ext_modules = declare_extensions("wildboar", [
+    "_utils", "_distance", "_euclidean_distance",
+    "_dtw_distance", "_impurity", "_tree_builder",
+], use_openmp=False, include_dirs=include_dirs, **build_args)
 
 setup(
     name="wildboar",
-    version=version,
+    version=get_version("wildboar/__init__.py"),
     author="Isak Samsten",
     author_email="isak@samsten.se",
     url="https://github.com/isakkarlsson/wildboar",
-    description=SHORTDESC,
-    long_description=DESC,
+    description=SHORT_DESCRIPTION,
+    long_description=DESCRIPTION,
+    long_description_content_type='text/markdown',
     license="GPLv3",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
@@ -237,8 +121,6 @@ setup(
         "Programming Language :: Cython",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3 :: Only",
@@ -267,8 +149,4 @@ setup(
         'wildboar.datasets._resources': ['*.txt'],
     },
     zip_safe=False,
-    #    cmdclass={'build_ext': build_ext},
-
-    # Custom data files not inside a Python package
-    data_files=datafiles,
 )
