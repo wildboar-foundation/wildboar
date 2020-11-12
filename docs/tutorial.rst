@@ -44,7 +44,7 @@ The datasets are Numpy ``ndarray`` with ``x.ndim==2`` and ``y.ndim==1``. We can 
 
     By setting ``merge_train_test`` to `False`, the original training and testing splits from the UCR repository are preserved.
 
-    A more robust and reliable method for splitting the datasets into training and testing partitions are to use the model selection functions from scikit-learn.
+    A more robust and reliable method for splitting the datasets into training and testing partitions is to use the model selection functions from scikit-learn.
 
     .. code-block:: python
 

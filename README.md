@@ -17,14 +17,15 @@ It is currently maintained by Isak Samsten
 
 wildboar requires:
 
- * Python (>= 3.6)
- * NumPy (>= 1.8.2)
- * SciPy (>= 0.13.3)
+ * python>=3.7
+ * numpy>=1.17.4
+ * scikit-learn>=0.21.3
+ * scipy>=1.3.2
  
 Some parts of wildboar is implemented using Cython. Hence, compilation
 requires:
 
- * Cython (>= 0.28)
+ * cython (>= 0.29.14)
 
 ### Current version
 
@@ -41,7 +42,7 @@ Universal binaries are compiled for GNU/Linux and Python 3.6 and 3.7.
 
 ### Compilation
 
-If you already have a working installation of NumPy, SciPy and Cython,
+If you already have a working installation of numpy, scikit-learn, scipy and cython,
 compiling and installing wildboar is as simple as:
 
     python setup.py install
@@ -53,19 +54,21 @@ To install the requirements, use:
 
 ## Development
 
-Contributions are welcome. Pull requests are encouraged to be
-formatted according to
-[PEP8](https://www.python.org/dev/peps/pep-0008/), e.g., using
-[yapf](https://github.com/google/yapf).
+Contributions are welcome. Pull requests should be
+formatted according to [PEP8](https://www.python.org/dev/peps/pep-0008/).
 
 ## Usage
 
-    from wildboar import ShapeletForestClassifier
-    from wildboar.dataset import load_two_lead_ecg
-    x_train, x_test, y_train, y_test = load_two_lead_ecg(merge_train_test=False)
-    c = ShapeletForestClassifier()
-    c.fit(x_train, y_train)
-    f.score(x_test, y_test)
+```python
+from wildboar.ensemble import ShapeletForestClassifier
+from wildboar.datasets import load_two_lead_ecg
+x_train, x_test, y_train, y_test = load_two_lead_ecg(merge_train_test=False)
+c = ShapeletForestClassifier()
+c.fit(x_train, y_train)
+c.score(x_test, y_test)
+``` 
+    
+See the [tutorial](https://isaksamsten.github.io/wildboar/master/tutorial.html) for more examples.
 
 ## Source code
 

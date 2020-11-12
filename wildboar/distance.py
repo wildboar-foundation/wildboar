@@ -37,11 +37,13 @@ def distance(shapelet, x, dim=0, sample=None, metric="euclidean", metric_params=
         
     sample : int or array-like, optional
         The samples to compare to
+
         - if ``sample=None`` the distances to all samples in data is returned
         - if sample is an int the distance to that sample is returned
         - if sample is an array-like the distance to all samples in sample are returned
         - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
         - otherwise an array is returned
+
     metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
         The distance metric
 
@@ -96,11 +98,13 @@ def matches(shapelet, x, threshold, *, dim=0, sample=None, metric="euclidean", m
 
     sample : int or array-like, optional
         The samples to compare to
+
         - if ``sample=None`` the distances to all samples in data is returned
         - if sample is an int the distance to that sample is returned
         - if sample is an array-like the distance to all samples in sample are returned
         - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
         - otherwise an array is returned
+
     metric : {'euclidean', 'scaled_euclidean'}, optional
         The distance metric
 
