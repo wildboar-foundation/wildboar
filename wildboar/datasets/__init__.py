@@ -16,12 +16,12 @@ import numpy as np
 from scipy.io.arff import loadarff
 
 _DATASET_SOURCES = {
-    'ucr_univariate':
+    'timeseriesclassification/univariate':
         ("http://www.timeseriesclassification.com/Downloads/Archives/Univariate2018_arff.zip",
-         "db696c772f0a0c2679fc41fed7b2bbe6a67af251"),
-    'ucr_multivariate':
+         "db696c772f0a0c2679fc41fed7b2bbe6a67af251", '.arff'),
+    'timeseriesclassification/multivariate':
         ("http://www.timeseriesclassification.com/Downloads/Archives/Multivariate2018_arff.zip",
-         "04527f9c3ab66a862c24db43dc234cac9a679830")
+         "04527f9c3ab66a862c24db43dc234cac9a679830", '.arff'),
 }
 
 from . import _resources
@@ -68,22 +68,21 @@ def load_gun_point(**kwargs):
     return load_dataset('gun_point', **kwargs)
 
 
-def load_all_datasets(repository=None, **kwargs):
+def load_all_datasets(*, repository=None, sha1=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True,
+                      **kwargs):
     """Load all datasets as a generator
 
     Parameters
     ----------
-    repository : {'ucr'}, str
+    repository : {None, 'ucr'}, str
         A string with the repository
+    sha1
+    progress
+    create_cache_dir
+    cache_dir
 
-    dtype : dtype, optional, default=np.float64
-        The dtype of the returned data
 
-    contiguous : bool, optional
-        Ensure that the returned dataset is memory contiguous
 
-    merge_train_test : bool, optional
-        Merge the existing training and testing partitions
 
     Yields
     ------
@@ -101,11 +100,14 @@ def load_all_datasets(repository=None, **kwargs):
     >>>     pass # use x and y
 
     """
-    for dataset in list_datasets(repository=repository, **kwargs):
-        yield dataset, load_dataset(dataset, repository=repository, **kwargs)
+
+    for dataset in list_datasets(repository=repository, cache_dir=cache_dir, create_cache_dir=create_cache_dir,
+                                 progress=progress, sha1=sha1):
+        yield dataset, load_dataset(dataset, repository=repository, cache_dir=cache_dir,
+                                    create_cache_dir=create_cache_dir, progress=progress, sha1=sha1, **kwargs)
 
 
-def load_dataset(name, repository=None, dtype=None, contiguous=True, merge_train_test=True, **kwargs):
+def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_train_test=True, **kwargs):
     """
     Load a dataset
 
@@ -220,11 +222,16 @@ def load_dataset(name, repository=None, dtype=None, contiguous=True, merge_train
     if repository is None:
         x, y, n_train_samples = _load_bundled_dataset(name, dtype)
     else:
-        url, sha1 = _get_repository_url(repository)
+        url, sha1, extension = _get_repository_url(repository)
         if sha1 is None:
             sha1 = kwargs.pop('sha1', None)
+        if extension is None:
+            extension = kwargs.pop('extension', None)
 
-        x, y, n_train_samples = _load_univariate_repository(name, url, dtype, sha1, **kwargs)
+        kwargs.pop('sha1', None)
+        kwargs.pop('extension', None)
+
+        x, y, n_train_samples = _load_univariate_repository(name, url, dtype, sha1, extension=extension, **kwargs)
 
     if merge_train_test:
         ret_val.append(x)
@@ -244,32 +251,37 @@ def load_dataset(name, repository=None, dtype=None, contiguous=True, merge_train
         return ret_val
 
 
-def list_datasets(repository=None, **kwargs):
+def list_datasets(*, repository=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True, sha1=None,
+                  extension='.arff'):
     if repository is None:
         return _BUNDLED_DATASETS.keys()
     else:
-        url, sha1 = _get_repository_url(repository)
-        with _download_repository(url, sha1, **kwargs) as archive:
+        url, repo_sha1, repo_extension = _get_repository_url(repository)
+        repo_sha1 = repo_sha1 or sha1
+        repo_extension = repo_extension or extension
+        with _download_repository(url, repo_sha1, cache_dir=cache_dir, create_cache_dir=create_cache_dir,
+                                  progress=progress) as archive:
             names = []
             for f in archive.filelist:
                 path, ext = os.path.splitext(f.filename)
-                if ext == '.arff':
+                if ext == repo_extension:
                     filename = os.path.basename(path)
                     filename = re.sub("_(TRAIN|TEST)", "", filename)
                     names.append(filename)
 
-            return set(names)
+            return sorted(set(names))
 
 
 def _get_repository_url(repository):
-    if repository in ['ucr', 'ucr_univariate']:
-        url, sha1 = _DATASET_SOURCES['ucr_univariate']
+    if repository in _DATASET_SOURCES.keys():
+        url, sha1, extension = _DATASET_SOURCES[repository]
     elif re.match('(http|https|file)://', repository):
         url = repository
         sha1 = None
+        extension = None
     else:
         raise ValueError("repository (%s) is not supported" % repository)
-    return url, sha1
+    return url, sha1, extension
 
 
 def _load_bundled_dataset(name, dtype):
@@ -294,7 +306,8 @@ def _download_repository(url, sha1, cache_dir='wildboar_cache', create_cache_dir
         else:
             raise ValueError("output directory does not exist (set `create_out_dir=True` to create it)")
 
-    path = urlparse(url).path
+    url_parse = urlparse(url)
+    path = url_parse.path
     basename = os.path.basename(path)
     if basename == "":
         raise ValueError("expected .zip file got, %s" % basename)
@@ -309,23 +322,26 @@ def _download_repository(url, sha1, cache_dir='wildboar_cache', create_cache_dir
             return zipfile.ZipFile(open(filename, 'rb'))
         except zipfile.BadZipFile:
             os.remove(filename)
-
-    with open(filename, 'wb') as f:
-        response = requests.get(url, stream=True)
-        total_length = response.headers.get('content-length')
-        if total_length is None:  # no content length header
-            f.write(response.content)
-        else:
-            length = 0
-            total_length = int(total_length)
-            for data in response.iter_content(chunk_size=4096):
-                length += len(data)
-                f.write(data)
-                done = int(50 * length / total_length)
-                if length % 10 == 0 and progress:
-                    sys.stderr.write("\r[%s%s] %d/%d downloading %s" %
-                                     ('=' * done, ' ' * (50 - done), length, total_length, basename))
-                    sys.stderr.flush()
+    if url_parse.scheme == "file":
+        from shutil import copyfile
+        copyfile(url_parse.path, filename)
+    else:
+        with open(filename, 'wb') as f:
+            response = requests.get(url, stream=True)
+            total_length = response.headers.get('content-length')
+            if total_length is None:  # no content length header
+                f.write(response.content)
+            else:
+                length = 0
+                total_length = int(total_length)
+                for data in response.iter_content(chunk_size=4096):
+                    length += len(data)
+                    f.write(data)
+                    done = int(50 * length / total_length)
+                    if length % 10 == 0 and progress:
+                        sys.stderr.write("\r[%s%s] %d/%d downloading %s" %
+                                         ('=' * done, ' ' * (50 - done), length, total_length, basename))
+                        sys.stderr.flush()
 
     return zipfile.ZipFile(open(filename, 'rb'))
 
@@ -358,6 +374,8 @@ class _Dataset:
                 arff, _metadata = loadarff(io_wrapper)
                 arr = np.array(arff.tolist())
                 return arr.astype(dtype)
+        elif self.ext == '.npy':
+            return np.load(archive.open(self.file)).astype(dtype)
         else:
             raise ValueError("ext (%s) not supported" % self.ext)
 
