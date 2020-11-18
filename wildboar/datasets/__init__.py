@@ -1,32 +1,49 @@
-import hashlib
+import os
 import re
+from urllib.parse import urlparse
+
+import numpy as np
+
+from . import _resources
+from ._repository import ArffRepository, NpyRepository, Repository
 
 try:
     import importlib.resources as pkg_resources
 except ImportError:
     import importlib_resources as pkg_resources
 
-import zipfile
-import requests
-from urllib.parse import urlparse
-import os
-import io
-import sys
-import numpy as np
-from scipy.io.arff import loadarff
-
-_DATASET_SOURCES = {
-    'timeseriesclassification/univariate':
-        ("http://www.timeseriesclassification.com/Downloads/Archives/Univariate2018_arff.zip",
-         "db696c772f0a0c2679fc41fed7b2bbe6a67af251", '.arff'),
-    'timeseriesclassification/multivariate':
-        ("http://www.timeseriesclassification.com/Downloads/Archives/Multivariate2018_arff.zip",
-         "04527f9c3ab66a862c24db43dc234cac9a679830", '.arff'),
+_REPOSITORIES = {
+    'timeseriesclassification/univariate': ArffRepository(
+        name="UCR Time series repository, univariate",
+        description="A collection of 128 univariate time series. Downloaded from UCR Time series repository",
+        download_url="http://www.timeseriesclassification.com/Downloads/Archives/Univariate2018_arff.zip",
+        hash="db696c772f0a0c2679fc41fed7b2bbe6a67af251",
+        class_index=-1,
+        encoding='utf-8'
+    ),
+    'wildboar/ucr': NpyRepository(
+        name="UCR Time series repository, univariate (Numpy optimized)",
+        description="A collection of 128 univariate time series. Downloaded from UCR Time series repository",
+        download_url="https://github.com/isaksamsten/wildboar/releases/download/dataset-v1.0/ucr_2018_npy.zip",
+        hash="11bacbb31ccfe928be38740107dab38218ac50fa",
+        class_index=-1
+    )
 }
 
-from . import _resources
+_REPOSITORY_INFERENCE_TYPES = {'npy', 'arff'}
 
-__all__ = ["load_dataset", "load_all_datasets", "load_two_lead_ecg", "load_synthetic_control", "load_gun_point"]
+__all__ = [
+    "Repository",
+    "ArffRepository",
+    "NpyRepository",
+    "get_repository",
+    "install_repository",
+    "load_dataset",
+    "load_all_datasets",
+    "load_two_lead_ecg",
+    "load_synthetic_control",
+    "load_gun_point",
+]
 
 _BUNDLED_DATASETS = {
     'synthetic_control': 'synthetic_control',
@@ -68,21 +85,25 @@ def load_gun_point(**kwargs):
     return load_dataset('gun_point', **kwargs)
 
 
-def load_all_datasets(*, repository=None, sha1=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True,
-                      **kwargs):
+def load_all_datasets(*, repository=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True, **kwargs):
     """Load all datasets as a generator
 
     Parameters
     ----------
-    repository : {None, 'ucr'}, str
-        A string with the repository
-    sha1
-    progress
-    create_cache_dir
-    cache_dir
+    repository : str
+        A string with the repository.
 
+    progress : bool, optional
+        If progress indicator is shown while downloading the bundle.
 
+    cache_dir : str, optional
+        The cache directory for downloaded dataset bundles.
 
+    create_cache_dir : bool, optional
+        Create the cache directory if it does not exist.
+
+    kwargs : dict
+        Optional arguments to ``load_dataset``
 
     Yields
     ------
@@ -96,33 +117,30 @@ def load_all_datasets(*, repository=None, sha1=None, cache_dir='wildboar_cache',
     --------
 
     >>> from wildboar.datasets import load_all_datasets
-    >>> for dataset, (x, y) in load_all_datasets(dtype=np.float64):
-    >>>     pass # use x and y
+    >>> for dataset, (x, y) in load_all_datasets(repository='wildboar/ucr'):
+    >>>     print(dataset, x.shape, y.shape)
 
     """
 
     for dataset in list_datasets(repository=repository, cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                 progress=progress, sha1=sha1):
-        yield dataset, load_dataset(dataset, repository=repository, cache_dir=cache_dir,
-                                    create_cache_dir=create_cache_dir, progress=progress, sha1=sha1, **kwargs)
+                                 progress=progress):
+        yield dataset, load_dataset(dataset, repository=repository, **kwargs)
 
 
 def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_train_test=True, **kwargs):
-    """
-    Load a dataset
+    """Load a dataset from a repository
 
     Parameters
     ----------
     name : str
         The name of the dataset to load.
 
-    repository : {None, 'ucr'} or str
+    repository : str or Repository, optional
         The data repository
 
         - if `None` load one of the bundled data sets
-        - if 'ucr', 'ucr_univariate' load datasets from the UCR repository
-        - if str an url is expected to download a zip-file with '.arff'-files.
-          Valid protocols: http://, https:// and file://.
+        - if str load a named repository
+        - if str http(s) or file url, load it as a bundle
 
     dtype : dtype, optional, default=np.float64
         The data type of the returned data
@@ -139,12 +157,6 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     Other Parameters
     ----------------
-    url: str, optional
-        Url to download the dataset bundle from.
-
-    sha1: str, optional
-        The sha1 of the dataset bundle. If None, the integrity of the repository is not checked.
-
     progress: bool, optional
         Show a progress bar while downloading a bundle.
 
@@ -153,16 +165,6 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     create_cache_dir: bool, optional
         Create cache directory if missing (default=True)
-
-    encoding: str, optional
-        The text encoding of the dataset files (default='utf-8')
-
-    class_index: int, optiona
-        The column of the class (default=-1)
-
-    extension: str
-        The extension of data files (default='.arff)
-
 
     Returns
     -------
@@ -186,18 +188,20 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     Notes
     -----
-    A dataset bundle is defined as zip-file. Files matching ``extension`` will be considered as dataset parts.
+    A dataset bundle is defined as zip-file. Matching files will be considered as dataset parts.
     Parts sharing the same name will be merged (two files with the same name in different folders share
     name). Filenames (without extension) with the suffix '_TRAIN' or '_TEST' are considered as training
     and testing parts and are used togheter with the attribute ``merge_train_test=False``. Parts without any suffix
     are considered as training parts.
 
-    Warnings
-    --------
-    Currently only '.arff'-files are supported.
+    - `Currently only ".arff" and ".npy" files are supported.`
+    - To support other data formats create subclasses ``Repository``.
+    - If an url is given as repository, the type of bundle is inferred from the file name.
 
     Examples
     --------
+
+    Load one of the bundled datasets
 
     >>> x, y = load_dataset("synthetic_control")
 
@@ -207,31 +211,28 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     one can specify a different repository
 
-    >>> x, y = load_dataset('Adiac', repository='ucr')
+    >>> x, y = load_dataset('Adiac', repository='timeseriesclassification/univariate')
 
     and with training and testing parts
 
-    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='ucr', merge_train_test=False)
+    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr', merge_train_test=False)
+
+    or a selfhosted repository inferring the repository type from the bundle
+
+    >>> x, y = load_dataset('my_data', repository="https://example.org/my_repository_arff.zip")
 
     or a selfhosted repository
 
-    >>> x, y = load_dataset('my_data', repository="https://example.org/my_repository.zip")
+    >>> x, y = load_dataset("my_data", repository=NpyRepository("my_repo",download_url="https://example.org/my_repository.zip"))
+
     """
     dtype = dtype or np.float64
     ret_val = []
     if repository is None:
         x, y, n_train_samples = _load_bundled_dataset(name, dtype)
     else:
-        url, sha1, extension = _get_repository_url(repository)
-        if sha1 is None:
-            sha1 = kwargs.pop('sha1', None)
-        if extension is None:
-            extension = kwargs.pop('extension', None)
-
-        kwargs.pop('sha1', None)
-        kwargs.pop('extension', None)
-
-        x, y, n_train_samples = _load_univariate_repository(name, url, dtype, sha1, extension=extension, **kwargs)
+        repository = get_repository(repository)
+        x, y, n_train_samples = repository.load(name, dtype=dtype, **kwargs)
 
     if merge_train_test:
         ret_val.append(x)
@@ -251,37 +252,134 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
         return ret_val
 
 
-def list_datasets(*, repository=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True, sha1=None,
-                  extension='.arff'):
+def list_datasets(repository=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True):
+    """List the datasets in the repository
+
+    Parameters
+    ----------
+    repository : str or Repository, optional
+        The data repository
+
+        - if `None` load one of the bundled data sets
+        - if str load a named repository
+        - if str http(s) or file url, load it as a bundle
+
+    Other Parameters
+    ----------------
+    progress: bool, optional
+        Show a progress bar while downloading a bundle.
+
+    cache_dir: str, optional
+        The directory where downloaded files are cached (default='wildboar_cache')
+
+    create_cache_dir: bool, optional
+        Create cache directory if missing (default=True)
+
+    Returns
+    -------
+        dataset : set
+            A set of dataset names
+    """
     if repository is None:
         return _BUNDLED_DATASETS.keys()
     else:
-        url, repo_sha1, repo_extension = _get_repository_url(repository)
-        repo_sha1 = repo_sha1 or sha1
-        repo_extension = repo_extension or extension
-        with _download_repository(url, repo_sha1, cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                  progress=progress) as archive:
-            names = []
-            for f in archive.filelist:
-                path, ext = os.path.splitext(f.filename)
-                if ext == repo_extension:
-                    filename = os.path.basename(path)
-                    filename = re.sub("_(TRAIN|TEST)", "", filename)
-                    names.append(filename)
-
-            return sorted(set(names))
+        repository = get_repository(repository)
+        return repository.list(cache_dir=cache_dir, create_cache_dir=create_cache_dir, progress=progress)
 
 
-def _get_repository_url(repository):
-    if repository in _DATASET_SOURCES.keys():
-        url, sha1, extension = _DATASET_SOURCES[repository]
+def get_repository(repository):
+    """Get a repository from a str
+
+    Parameters
+    ----------
+    repository : str
+        Find a named repository or construct a new repository from the url
+
+    Returns
+    -------
+    repository : Repository
+        A repository
+
+    Examples
+    --------
+
+    Load a named repositoru
+
+    >>> repository = get_repository("wildboar/ucr")
+    >>> x, y, n_train_samples = repository.load("Wafer", dtype=np.float)
+
+    or from a url
+
+    >>> repository = get_repository("https://example.org/my_repository_arff.zip")
+    >>> x, y, n_train_samples = repository.load("my_data")
+    """
+    if repository in _REPOSITORIES.keys():
+        return _REPOSITORIES[repository]
+    elif isinstance(repository, Repository):
+        return repository
     elif re.match('(http|https|file)://', repository):
-        url = repository
-        sha1 = None
-        extension = None
+        url = urlparse(repository)
+        filename = os.path.basename(url.path)
+        name, ext = os.path.splitext(filename)
+        if ext != ".zip":
+            raise ValueError("only .zip repositories are supported")
+        repository_inference = re.match(r".*?_([a-zA-Z]+)", name)
+        if repository_inference:
+            repository_type = repository_inference.group(1)
+            if repository_type in _REPOSITORY_INFERENCE_TYPES:
+                return _new_repository(name, "Temporary repository", download_url=repository,
+                                       extension=".%s" % repository_type, class_index=-1, hash=None)
+            else:
+                raise ValueError("repository (%s) is not supported" % repository_type)
+        else:
+            raise ValueError("unable to infer the repository type")
+
     else:
         raise ValueError("repository (%s) is not supported" % repository)
-    return url, sha1, extension
+
+
+def install_repository(name, *, repository=None, download_url=None, description=None, hash=None, class_index=-1,
+                       extension=None):
+    """ Install a named repository
+
+    Parameters
+    ----------
+    name : str
+        The name of the repository.
+
+    repository : Repository, optional
+        Install repository if it exists
+
+    download_url : str, optional
+        If repository is None, create a new Repository from this bundle url.
+
+    description : str, optional
+        If repository is None, create a new Repository with this description
+
+    hash : str, optional
+        If repository is None, create a new Repository with this hash
+
+    class_index : int, optional
+        If repository is None, create a new Repository with this class index
+
+    extension : str, optional
+        If repository is None, create a new Repository with this type
+    """
+    if repository:
+        _REPOSITORIES[name] = repository
+    elif download_url is not None and extension is not None:
+        _REPOSITORIES[name] = _new_repository(name, description, download_url, hash, class_index, extension)
+    else:
+        raise ValueError("not a valid repository")
+
+
+def _new_repository(name, description, download_url, hash, class_index, extension):
+    if extension == '.arff':
+        return ArffRepository(name, download_url, description=description, hash=hash, class_index=class_index)
+    elif extension == '.npy':
+        return NpyRepository(name, download_url, description=description, hash=hash, class_index=class_index)
+    else:
+        raise ValueError("extension (%s) is not supported" % extension)
 
 
 def _load_bundled_dataset(name, dtype):
@@ -297,118 +395,3 @@ def _load_bundled_dataset(name, dtype):
     y = train[:, 0].astype(dtype)
     x = train[:, 1:].astype(dtype)
     return x, y, n_train_samples
-
-
-def _download_repository(url, sha1, cache_dir='wildboar_cache', create_cache_dir=True, progress=True):
-    if not os.path.exists(cache_dir):
-        if create_cache_dir:
-            os.mkdir(cache_dir)
-        else:
-            raise ValueError("output directory does not exist (set `create_out_dir=True` to create it)")
-
-    url_parse = urlparse(url)
-    path = url_parse.path
-    basename = os.path.basename(path)
-    if basename == "":
-        raise ValueError("expected .zip file got, %s" % basename)
-    _, ext = os.path.splitext(basename)
-    if ext != ".zip":
-        raise ValueError("expected .zip file got, %s" % ext)
-
-    filename = os.path.join(cache_dir, basename)
-    if os.path.exists(filename):
-        try:
-            _check_integrity(filename, sha1)
-            return zipfile.ZipFile(open(filename, 'rb'))
-        except zipfile.BadZipFile:
-            os.remove(filename)
-    if url_parse.scheme == "file":
-        from shutil import copyfile
-        copyfile(url_parse.path, filename)
-    else:
-        with open(filename, 'wb') as f:
-            response = requests.get(url, stream=True)
-            total_length = response.headers.get('content-length')
-            if total_length is None:  # no content length header
-                f.write(response.content)
-            else:
-                length = 0
-                total_length = int(total_length)
-                for data in response.iter_content(chunk_size=4096):
-                    length += len(data)
-                    f.write(data)
-                    done = int(50 * length / total_length)
-                    if length % 10 == 0 and progress:
-                        sys.stderr.write("\r[%s%s] %d/%d downloading %s" %
-                                         ('=' * done, ' ' * (50 - done), length, total_length, basename))
-                        sys.stderr.flush()
-
-    return zipfile.ZipFile(open(filename, 'rb'))
-
-
-def _check_integrity(filename, sha1):
-    if sha1 is not None:
-        actual_sha1 = _sha1(filename)
-        if sha1 != actual_sha1:
-            raise ValueError("integrity check failed, expected '%s', got '%s'" % (sha1, actual_sha1))
-
-
-class _Dataset:
-
-    def __init__(self, zip_info):
-        self.file = zip_info
-        self.path, self.ext = os.path.splitext(zip_info.filename)
-        self.filename = os.path.basename(self.path)
-        if "_TRAIN" in self.filename:
-            self.part = 'train'
-            self.filename = self.filename.replace("_TRAIN", "")
-        elif "_TEST" in self.filename:
-            self.part = 'test'
-            self.filename = self.filename.replace("_TEST", "")
-        else:
-            self.part = 'train'
-
-    def load_array(self, archive, dtype=np.float64, encoding=None):
-        if self.ext == '.arff':
-            with io.TextIOWrapper(archive.open(self.file), encoding=encoding) as io_wrapper:
-                arff, _metadata = loadarff(io_wrapper)
-                arr = np.array(arff.tolist())
-                return arr.astype(dtype)
-        elif self.ext == '.npy':
-            return np.load(archive.open(self.file)).astype(dtype)
-        else:
-            raise ValueError("ext (%s) not supported" % self.ext)
-
-
-def _load_univariate_repository(name, url, dtype, sha1, class_index=-1, extension='.arff', encoding='utf-8', **kwargs):
-    with _download_repository(url, sha1, **kwargs) as archive:
-        datasets = []
-        for dataset in map(_Dataset, archive.filelist):
-            if dataset.filename == name and dataset.ext in extension:
-                datasets.append(dataset)
-
-        if not datasets:
-            raise ValueError("no dataset found (%s)" % name)
-        train_parts = [dataset.load_array(archive, dtype, encoding) for dataset in datasets if dataset.part == 'train']
-        test_parts = [dataset.load_array(archive, dtype, encoding) for dataset in datasets if dataset.part == 'test']
-
-        data = np.vstack(train_parts)
-        n_train_samples = data.shape[0]
-        if test_parts:
-            test = np.vstack(test_parts)
-            data = np.vstack([data, test])
-
-        y = data[:, class_index].astype(dtype)
-        x = np.delete(data, class_index, axis=1).astype(dtype)
-        return x, y, n_train_samples
-
-
-def _sha1(file, buf_size=65536):
-    sha1 = hashlib.sha1()
-    with open(file, 'rb') as f:
-        while True:
-            data = f.read(buf_size)
-            if not data:
-                break
-            sha1.update(data)
-    return sha1.hexdigest()

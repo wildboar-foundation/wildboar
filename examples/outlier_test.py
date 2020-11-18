@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from datasets.outlier import kmeans_labeler
 from wildboar.ensemble import IsolationShapeletForest
 
-x, _y = load_dataset('Adiac', repository='ucr')
+x, _y = load_dataset('Adiac', repository='wildboar/ucr')
 y = kmeans_labeler(x, random_state=0)
 print(np.unique(y, return_counts=True))
 x_train, x_test, y_train, y_test = train_test_split(
