@@ -28,6 +28,7 @@ jobs:
             repo: isaksamsten/wildboar
 
     - python: 3.8
+      name: "Build, test and deploy source distribution"
       before_install:
         - python --version
       install:
@@ -41,6 +42,8 @@ jobs:
                 python -m twine upload dist/*.tar.gz
           fi
     - services: docker
+      name: "Build and deploy GNU/Linux binaries"
+      if: type != pull_request AND tag IS present
       install:
         - python3 -m pip install cibuildwheel==1.1.0
       script:
@@ -53,6 +56,8 @@ jobs:
           fi
     - os: osx
       language: shell
+      name: "Build and deploy MacOS binaries"
+      if: type != pull_request AND tag IS present
       install:
         - python3 -m pip install cibuildwheel==1.6.4
       script:
@@ -65,6 +70,8 @@ jobs:
           fi
     - os: windows
       language: shell
+      name: "Build and deploy Windows binaries"
+      if: type != pull_request AND tag IS present
       before_install:
         - choco install python --version 3.8.0
         - export PATH="/c/Python38:/c/Python38/Scripts:$PATH"
