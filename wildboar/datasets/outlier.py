@@ -4,12 +4,13 @@ import warnings
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
+from sklearn import clone
 from sklearn.cluster import KMeans, DBSCAN, OPTICS
 from sklearn.metrics import pairwise_distances, confusion_matrix
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from sklearn.utils import check_random_state, check_array
 
-from linear_model import KernelLogisticRegression
+from wildboar.linear_model import KernelLogisticRegression
 
 __all__ = ['OutlierLabeler', 'KMeansLabeler', 'DensityLabeler', 'MinorityLabeler', 'EmmottLabeler']
 
@@ -208,14 +209,71 @@ _EMMOTT_VARIATION = {'tight': _variation_tight, 'dispersed': _variation_disperse
 
 
 class EmmottLabeler(OutlierLabeler):
-    def __init__(self, n_outliers=None, *, confusion_estimator=None, confusion_estimator_params=None,
-                 difficulty_estimator=None, difficulty_estimator_params=None, difficulty=1, scale=None,
-                 variation='tight', random_state=None):
+    """Create a synthetic outlier detection dataset from a labeled classification dataset
+
+    Attributes
+    ----------
+
+    outlier_label_ : int, float
+        The class or collection of classes used as outliers
+
+    difficulty_estimator_ : object
+        The estimator used to assess the difficulty of outlier samples
+
+    confusion_estimator_ : object
+        The estimator used to asses the class confusion (only if n_classes > 2)
+
+    n_classes_ : int
+        The number of classes
+
+    References
+    ----------
+    Emmott, A. F., Das, S., Dietterich, T., Fern, A., & Wong, W. K. (2013).
+        Systematic construction of anomaly detection benchmarks from real data.
+        In Proceedings of the ACM SIGKDD workshop on outlier detection and description (pp. 16-21).
+
+    """
+
+    def __init__(self, n_outliers=None, *, confusion_estimator=None, difficulty_estimator=None, difficulty=1,
+                 scale=None, variation='tight', random_state=None):
+        """Construct a new emmott labeler for synthetic outlier datasets
+
+        Parameters
+        ----------
+        n_outliers : int, float, optional
+            Number of desired (but not guaranteed) outliers in the resulting transformation.
+
+        confusion_estimator : object, optional
+            Estimator of class confusion for datasets where n_classes > 2. Defaults to a KNearestNeighbors classifier
+            with 5 nearest neighbors.
+
+        difficulty_estimator : object, optional
+            Estimator for sample difficulty. The difficulty estimator must support ``predict_proba``. Defaults
+            to a kernel logistic regression model with a RBF-kernel.
+
+        difficulty : int or array-like, optional
+            The difficulty of the outlier points quantized according to scale. The value should be in the range
+            `[1, len(scale)]` with lower difficulty denoting simpler outliers. If an array is given, multiple
+            difficulties can be included, e.g., `[1, 4]` would mix easy and difficult outliers.
+
+        scale : array-like, optional
+            The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5]. Scores (which are probabilities
+            in the range [0, 1]) are fit into the ranges using ``np.digitize(difficulty, scale)``.
+
+        variation : {'tight', 'dispersed'}, optional
+            Selection procedure for sampling outlier samples
+
+            - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples are selected according to
+              their euclidean distance
+            - if 'dispersed' ``n_outlier`` points are selected according to a facility location algorithm such that
+              they are distributed among the outliers.
+
+        random_state : RandomState or int, optinal
+            A pseudo-random number generator to control the randomness of the algorithm.
+        """
         self.n_outliers = n_outliers
         self.confusion_estimator = confusion_estimator
-        self.confusion_estimator_params = confusion_estimator_params
         self.difficulty_estimator = difficulty_estimator
-        self.difficulty_estimator_params = difficulty_estimator_params
         self.difficulty = difficulty
         self.scale = scale or DEFAULT_EMMOTT_SCALE
         self.variation = variation
@@ -225,36 +283,20 @@ class EmmottLabeler(OutlierLabeler):
         y = check_array(y, ensure_2d=False)
         x = check_array(x)
         random_state = check_random_state(self.random_state)
-        if self.difficulty_estimator is None:
-            self.difficulty_estimator_ = KernelLogisticRegression(kernel='poly', max_iter=1000)
-            _set_random_states(self.difficulty_estimator_, random_state)
-        else:
-            self.difficulty_estimator_ = self.difficulty_estimator
-
-        if self.difficulty_estimator_params is not None:
-            self.difficulty_estimator_.set_params(**self.difficulty_estimator_params)
-
-        self.difficulty_estimator_.fit(x, y)
         self.n_classes_ = np.unique(y).shape[0]
+
         if self.n_classes_ > 2:
             if self.confusion_estimator is None:
                 self.confusion_estimator_ = KNeighborsClassifier()
-                _set_random_states(self.confusion_estimator_, random_state)
             else:
-                self.confusion_estimator_ = self.confusion_estimator
-
-            if self.confusion_estimator_params is not None:
-                self.confusion_estimator_.set_params(**self.confusion_estimator_params)
+                self.confusion_estimator_ = clone(self.confusion_estimator)
+            _set_random_states(self.confusion_estimator_, random_state)
 
             self.confusion_estimator_.fit(x, y)
-        elif self.n_classes_ < 2:
-            raise ValueError("require more than 1 labels, got %r" % self.n_classes_)
-
-        if self.n_classes_ > 2:
             try:
                 import networkx as nx
                 y_pred = self.confusion_estimator_.predict(x)
-                cm = confusion_matrix(y, y_pred)
+                cm = confusion_matrix(y, y_pred)  # TODO: use probabilities
                 graph = nx.Graph()
                 classes = self.confusion_estimator_.classes_
                 graph.add_nodes_from(classes)
@@ -275,13 +317,20 @@ class EmmottLabeler(OutlierLabeler):
                 self.outlier_label_ = np.array(outlier_labels)
             except ImportError:
                 raise ValueError("for n_classes>2, `networkx` is required.")
-        else:
+        elif self.n_classes_ == 2:
             labels = np.unique(y)
             self.outlier_label_ = labels[random_state.randint(2)]
+        else:
+            raise ValueError("require more than 1 labels, got %r" % self.n_classes_)
 
         y_new = np.ones(x.shape[0], dtype=np.int)
         y_new[np.isin(y, self.outlier_label_)] = -1
 
+        if self.difficulty_estimator is None:
+            self.difficulty_estimator_ = KernelLogisticRegression(kernel='poly', max_iter=1000)
+        else:
+            self.difficulty_estimator_ = clone(self.difficulty_estimator)
+        _set_random_states(self.difficulty_estimator_, random_state)
         self.difficulty_estimator_.fit(x, y_new)
 
         return self
