@@ -43,6 +43,7 @@ __all__ = [
     "load_two_lead_ecg",
     "load_synthetic_control",
     "load_gun_point",
+    "DEFAULT_CACHE_DIR",
 ]
 
 _BUNDLED_DATASETS = {
@@ -53,6 +54,8 @@ _BUNDLED_DATASETS = {
     'insect_wing_beat_sound': 'InsectWingbeatSound',
     'arrow_head': 'ArrowHead'
 }
+
+DEFAULT_CACHE_DIR = "wildboar_cache"
 
 
 def load_synthetic_control(**kvargs):
@@ -85,7 +88,7 @@ def load_gun_point(**kwargs):
     return load_dataset('gun_point', **kwargs)
 
 
-def load_all_datasets(repository=None, *, cache_dir='wildboar_cache', create_cache_dir=True, progress=True, **kwargs):
+def load_all_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True, **kwargs):
     """Load all datasets as a generator
 
     Parameters
@@ -127,7 +130,8 @@ def load_all_datasets(repository=None, *, cache_dir='wildboar_cache', create_cac
         yield dataset, load_dataset(dataset, repository=repository, **kwargs)
 
 
-def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_train_test=True, **kwargs):
+def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_train_test=True, cache_dir=None,
+                 create_cache_dir=True, progress=True):
     """Load a dataset from a repository
 
     Parameters
@@ -150,9 +154,6 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     merge_train_test : bool, optional
         Merge the existing training and testing partitions.
-
-    **kwargs : dict
-        Additional arguments
 
 
     Other Parameters
@@ -227,12 +228,14 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     """
     dtype = dtype or np.float64
+    cache_dir = cache_dir or DEFAULT_CACHE_DIR
     ret_val = []
     if repository is None:
         x, y, n_train_samples = _load_bundled_dataset(name, dtype)
     else:
         repository = get_repository(repository)
-        x, y, n_train_samples = repository.load(name, dtype=dtype, **kwargs)
+        x, y, n_train_samples = repository.load(name, dtype=dtype, cache_dir=cache_dir,
+                                                create_cache_dir=create_cache_dir, progress=progress)
 
     if merge_train_test:
         ret_val.append(x)
@@ -252,7 +255,7 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
         return ret_val
 
 
-def list_datasets(repository=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True):
+def list_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True):
     """List the datasets in the repository
 
     Parameters
@@ -280,6 +283,7 @@ def list_datasets(repository=None, cache_dir='wildboar_cache', create_cache_dir=
         dataset : set
             A set of dataset names
     """
+    cache_dir = cache_dir or DEFAULT_CACHE_DIR
     if repository is None:
         return _BUNDLED_DATASETS.keys()
     else:
@@ -338,7 +342,7 @@ def get_repository(repository):
         raise ValueError("repository (%s) is not supported" % repository)
 
 
-def install_repository(name, *, repository=None, download_url=None, description=None, hash=None, class_index=-1,
+def install_repository(name, repository=None, *, download_url=None, description=None, hash=None, class_index=-1,
                        extension=None):
     """ Install a named repository
 
@@ -365,7 +369,7 @@ def install_repository(name, *, repository=None, download_url=None, description=
     extension : str, optional
         If repository is None, create a new Repository with this type
     """
-    if repository:
+    if isinstance(repository, Repository):
         _REPOSITORIES[name] = repository
     elif download_url is not None and extension is not None:
         _REPOSITORIES[name] = _new_repository(name, description, download_url, hash, class_index, extension)
