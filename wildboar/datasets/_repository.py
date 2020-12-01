@@ -86,8 +86,9 @@ class Repository(metaclass=ABCMeta):
         filename = os.path.join(cache_dir, basename)
         if os.path.exists(filename):
             try:
+                z_file = zipfile.ZipFile(open(filename, 'rb'))
                 self._check_integrity(filename)
-                return zipfile.ZipFile(open(filename, 'rb'))
+                return z_file
             except zipfile.BadZipFile:
                 os.remove(filename)
         if url_parse.scheme == "file":

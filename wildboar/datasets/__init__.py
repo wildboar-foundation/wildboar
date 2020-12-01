@@ -85,7 +85,7 @@ def load_gun_point(**kwargs):
     return load_dataset('gun_point', **kwargs)
 
 
-def load_all_datasets(*, repository=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True, **kwargs):
+def load_all_datasets(repository=None, *, cache_dir='wildboar_cache', create_cache_dir=True, progress=True, **kwargs):
     """Load all datasets as a generator
 
     Parameters
