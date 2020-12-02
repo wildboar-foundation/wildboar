@@ -44,7 +44,8 @@ class KernelLogisticRegression(LogisticRegression):
     def fit(self, x, y, sample_weight=None):
         random_state = check_random_state(self.random_state)
         kernel = self.kernel or 'rbf'
-        self.nystroem_ = Nystroem(kernel=kernel, kernel_params=self.kernel_params, n_components=self.n_components,
+        n_components = min(x.shape[0], self.n_components)
+        self.nystroem_ = Nystroem(kernel=kernel, kernel_params=self.kernel_params, n_components=n_components,
                                   random_state=random_state.randint(np.iinfo(np.int32).max))
         self.nystroem_.fit(x)
         super().fit(self.nystroem_.transform(x), y, sample_weight=sample_weight)
