@@ -19,13 +19,13 @@
 cimport numpy as np
 
 from ._distance cimport DistanceMeasure
-from ._distance cimport ShapeletInfo, Shapelet
+from ._distance cimport TSView, TSCopy
 
 # TODO: include impurity score...
 cdef struct SplitPoint:
     size_t split_point
     double threshold
-    ShapeletInfo shapelet_info
+    TSView shapelet_info
 
 cdef class Tree:
     cdef DistanceMeasure distance_measure
@@ -37,7 +37,7 @@ cdef class Tree:
     cdef size_t _node_count
     cdef int *_left
     cdef int *_right
-    cdef Shapelet ** _shapelets
+    cdef TSCopy ** _shapelets
     cdef double *_thresholds
     cdef double *_impurity
     cdef double *_values
@@ -51,7 +51,7 @@ cdef class Tree:
     cdef void set_leaf_value(self, size_t node_id, size_t out_label, double out_value) nogil
 
     cdef int add_branch_node(self, int parent, bint is_left, size_t n_node_samples, double n_weighted_node_samples,
-                             Shapelet *shapelet, double threshold, double impurity) nogil
+                             TSCopy *shapelet, double threshold, double impurity) nogil
 
     cpdef np.ndarray predict(self, object X)
 

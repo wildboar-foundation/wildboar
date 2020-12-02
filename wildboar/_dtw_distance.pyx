@@ -38,9 +38,9 @@ from libc.math cimport floor
 
 from ._distance cimport TSDatabase
 
-from ._distance cimport ShapeletInfo
+from ._distance cimport TSView
 from ._distance cimport ScaledDistanceMeasure
-from ._distance cimport Shapelet
+from ._distance cimport TSCopy
 
 cdef void deque_init(Deque *c, size_t capacity) nogil:
     c[0].capacity = capacity
@@ -448,10 +448,10 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         free(self.cb_1)
         free(self.cb_2)
 
-    cdef int init_shapelet_info(self, TSDatabase *td_ptr, ShapeletInfo *shapelet_info, size_t index, size_t start,
-                                size_t length, size_t dim) nogil:
+    cdef int init_ts_view(self, TSDatabase *td_ptr, TSView *ts_view, size_t index, size_t start,
+                          size_t length, size_t dim) nogil:
         cdef TSDatabase td = td_ptr[0]
-        ScaledDistanceMeasure.init_shapelet_info(self, td_ptr, shapelet_info, index, start, length, dim)
+        ScaledDistanceMeasure.init_ts_view(self, td_ptr, ts_view, index, start, length, dim)
 
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
@@ -465,16 +465,16 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                      warp_width, dtw_extra[0].lower, dtw_extra[0].upper,
                      &self.dl, &self.du)
 
-        shapelet_info[0].extra = dtw_extra
+        ts_view[0].extra = dtw_extra
         return 0
 
-    cdef int init_shapelet(self, Shapelet *shapelet, ShapeletInfo *si_ptr, TSDatabase *td_ptr) nogil:
-        cdef int err = ScaledDistanceMeasure.init_shapelet(self, shapelet, si_ptr, td_ptr)
+    cdef int init_ts_copy(self, TSCopy *shapelet, TSView *tv_ptr, TSDatabase *td_ptr) nogil:
+        cdef int err = ScaledDistanceMeasure.init_ts_copy(self, shapelet, tv_ptr, td_ptr)
         if err == -1:
             return -1
 
         cdef TSDatabase td = td_ptr[0]
-        cdef ShapeletInfo shapelet_info = si_ptr[0]
+        cdef TSView shapelet_info = tv_ptr[0]
 
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         cdef size_t length = shapelet[0].length
@@ -488,26 +488,26 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         shapelet[0].extra = dtw_extra
         return 0
 
-    cdef int init_shapelet_ndarray(self, Shapelet *shapelet, np.ndarray arr, size_t dim):
-        cdef int err = ScaledDistanceMeasure.init_shapelet_ndarray(self, shapelet, arr, dim)
+    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, size_t dim):
+        cdef int err = ScaledDistanceMeasure.init_ts_copy_from_ndarray(self, tc, arr, dim)
         if err == -1:
             return -1
-        cdef size_t length = shapelet[0].length
+        cdef size_t length = tc[0].length
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
         dtw_extra[0].upper = <double*> malloc(sizeof(double) * length)
 
         cdef size_t warp_width = _compute_warp_width(length, self.r)
-        find_min_max(0, 1, length, shapelet[0].data,
+        find_min_max(0, 1, length, tc[0].data,
                      warp_width, dtw_extra[0].lower, dtw_extra[0].upper,
                      &self.dl, &self.du)
-        shapelet[0].extra = dtw_extra
+        tc[0].extra = dtw_extra
         return 0
 
-    cdef double shapelet_distance(self, Shapelet *s_ptr, TSDatabase *td_ptr, size_t t_index,
-                                  size_t *return_index=NULL) nogil:
+    cdef double ts_copy_distance(self, TSCopy *tc_ptr, TSDatabase *td_ptr, size_t t_index,
+                                 size_t *return_index=NULL) nogil:
         cdef TSDatabase td = td_ptr[0]
-        cdef Shapelet s = s_ptr[0]
+        cdef TSCopy s = tc_ptr[0]
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
         cdef double *s_lower
@@ -558,9 +558,9 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
         return distance
 
-    cdef double shapelet_info_distance(self, ShapeletInfo *s_ptr, TSDatabase *td_ptr, size_t t_index) nogil:
+    cdef double ts_view_distance(self, TSView *tv_ptr, TSDatabase *td_ptr, size_t t_index) nogil:
         cdef TSDatabase td = td_ptr[0]
-        cdef ShapeletInfo s = s_ptr[0]
+        cdef TSView s = tv_ptr[0]
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
         cdef size_t shapelet_offset = (s.index * td.sample_stride +

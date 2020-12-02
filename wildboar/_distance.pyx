@@ -34,7 +34,7 @@ import wildboar._euclidean_distance
 
 from libc.stdlib cimport free
 from sklearn.utils import check_array
-from ._distance cimport Shapelet
+from ._distance cimport TSCopy
 from ._distance cimport DistanceMeasure
 from ._distance cimport ts_database_new
 from ._distance cimport TSDatabase
@@ -45,7 +45,7 @@ _DISTANCE_MEASURE = {
     'scaled_dtw': wildboar._dtw_distance.ScaledDtwDistance,
 }
 
-cdef int shapelet_init(Shapelet *shapelet, size_t dim, size_t length, double mean, double std) nogil:
+cdef int ts_copy_init(TSCopy *shapelet, size_t dim, size_t length, double mean, double std) nogil:
     shapelet[0].dim = dim
     shapelet[0].length = length
     shapelet[0].mean = mean
@@ -54,11 +54,11 @@ cdef int shapelet_init(Shapelet *shapelet, size_t dim, size_t length, double mea
     if shapelet[0].data == NULL:
         return -1
 
-cdef void shapelet_free(Shapelet *shapelet) nogil:
+cdef void ts_copy_free(TSCopy *shapelet) nogil:
     if shapelet != NULL and shapelet[0].data != NULL:
         free(shapelet[0].data)
 
-cdef void shapelet_info_init(ShapeletInfo *s) nogil:
+cdef void ts_view_init(TSView *s) nogil:
     """Initialize  a shapelet info struct """
     s[0].start = 0
     s[0].length = 0
@@ -67,13 +67,13 @@ cdef void shapelet_info_init(ShapeletInfo *s) nogil:
     s[0].std = NAN
     s[0].index = 0
 
-cdef void shapelet_info_free(ShapeletInfo *shapelet_info) nogil:
+cdef void ts_view_free(TSView *shapelet_info) nogil:
     """Free the `extra` payload of a shapelet info if needed """
     if shapelet_info[0].extra != NULL:
         free(shapelet_info[0].extra)
         shapelet_info[0].extra = NULL
 
-cdef int _shapelet_info_update_statistics(ShapeletInfo *s, const TSDatabase *t_ptr) nogil:
+cdef int _ts_view_update_statistics(TSView *s, const TSDatabase *t_ptr) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef TSDatabase t = t_ptr[0]
     cdef size_t shapelet_offset = (s.index * t.sample_stride +
@@ -132,9 +132,8 @@ cdef class DistanceMeasure:
     def __reduce__(self):
         return self.__class__, (self.n_timestep,)
 
-    cdef void shapelet_info_distances(
-            self, ShapeletInfo *s, TSDatabase *td, size_t *samples,
-            double *distances, size_t n_samples) nogil:
+    cdef void ts_view_distances(self, TSView *s, TSDatabase *td, size_t *samples, double *distances,
+                                size_t n_samples) nogil:
         """ Compute the distance between the shapelet `s` in `td` and all
         samples in `samples`
 
@@ -150,10 +149,10 @@ cdef class DistanceMeasure:
         """
         cdef size_t p
         for p in range(n_samples):
-            distances[p] = self.shapelet_info_distance(s, td, samples[p])
+            distances[p] = self.ts_view_distance(s, td, samples[p])
 
-    cdef int init_shapelet_info(
-            self, TSDatabase *_td, ShapeletInfo *shapelet_info, size_t index, size_t start,
+    cdef int init_ts_view(
+            self, TSDatabase *_td, TSView *shapelet_info, size_t index, size_t start,
             size_t length, size_t dim) nogil:
         """Return a information about a shapelet
 
@@ -174,46 +173,45 @@ cdef class DistanceMeasure:
         shapelet_info[0].extra = NULL
         return 0
 
-    cdef int init_shapelet_ndarray(self, Shapelet *shapelet, np.ndarray arr, size_t dim):
-        shapelet[0].dim = dim
-        shapelet[0].length = arr.shape[0]
-        shapelet[0].mean = NAN
-        shapelet[0].std = NAN
-        shapelet[0].data = <double*> malloc(shapelet[0].length * sizeof(double))
-        if shapelet[0].data == NULL:
+    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, size_t dim):
+        tc[0].dim = dim
+        tc[0].length = arr.shape[0]
+        tc[0].mean = NAN
+        tc[0].std = NAN
+        tc[0].data = <double*> malloc(tc[0].length * sizeof(double))
+        if tc[0].data == NULL:
             return -1
 
         cdef size_t i
-        for i in range(shapelet[0].length):
-            shapelet[0].data[i] = arr[i]
+        for i in range(tc[0].length):
+            tc[0].data[i] = arr[i]
         return 0
 
-    cdef int init_shapelet(self, Shapelet *shapelet, ShapeletInfo *s_ptr, TSDatabase *td_ptr) nogil:
-        cdef ShapeletInfo s = s_ptr[0]
+    cdef int init_ts_copy(self, TSCopy *tc, TSView *tv_ptr, TSDatabase *td_ptr) nogil:
+        cdef TSView s = tv_ptr[0]
         cdef TSDatabase td = td_ptr[0]
-        shapelet_init(shapelet, s.dim, s.length, s.mean, s.std)
-        shapelet[0].ts_start = s.start
-        shapelet[0].ts_index = s.index
-        cdef double *data = shapelet[0].data
-        cdef size_t shapelet_offset = (s.index * td.sample_stride +
-                                       s.start * td.timestep_stride +
-                                       s.dim * td.dim_stride)
+        ts_copy_init(tc, s.dim, s.length, s.mean, s.std)
+        tc[0].ts_start = s.start
+        tc[0].ts_index = s.index
+        cdef double *data = tc[0].data
+        cdef size_t tc_offset = (s.index * td.sample_stride +
+                                 s.start * td.timestep_stride +
+                                 s.dim * td.dim_stride)
 
         cdef size_t i
         cdef size_t p
 
         for i in range(s.length):
-            p = shapelet_offset + td.timestep_stride * i
+            p = tc_offset + td.timestep_stride * i
             data[i] = td.data[p]
 
         return 0
 
-    cdef double shapelet_info_distance(
-            self, ShapeletInfo *si, TSDatabase *td_ptr, size_t t_index) nogil:
+    cdef double ts_view_distance(self, TSView *tv, TSDatabase *td_ptr, size_t t_index) nogil:
         """Return the distance between `s` and the sample specified by the
         index `t_index` in `td`. Implemented by subclasses.
 
-        :param si: shapelet information
+        :param tv: shapelet information
 
         :param td_ptr: the time series database
 
@@ -222,9 +220,8 @@ cdef class DistanceMeasure:
         with gil:
             raise NotImplementedError()
 
-    cdef double shapelet_distance(
-            self, Shapelet *s_ptr, TSDatabase *td_ptr, size_t t_index,
-            size_t *return_index=NULL) nogil:
+    cdef double ts_copy_distance(self, TSCopy *s_ptr, TSDatabase *td_ptr, size_t t_index,
+                                 size_t *return_index=NULL) nogil:
         """Return the distance between `s` and the sample specified by
         `t_index` in `td` setting the index of the best matching
         position to `return_index` unless `return_index == NULL`
@@ -240,10 +237,8 @@ cdef class DistanceMeasure:
         with gil:
             raise NotImplementedError()
 
-    cdef int shapelet_matches(
-            self, Shapelet *s_ptr, TSDatabase *td_ptr, size_t t_index,
-            double threshold, size_t** matches, double** distances,
-            size_t *n_matches) nogil except -1:
+    cdef int ts_copy_matches(self, TSCopy *s_ptr, TSDatabase *td_ptr, size_t t_index, double threshold,
+                             size_t** matches, double** distances, size_t *n_matches) nogil except -1:
         """Compute the matches for `s` in the sample `t_index` in `td` where
         the distance threshold is below `threshold`, storing the
         matching starting positions in `matches` and distance (<
@@ -277,18 +272,18 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
     """Distance measure that uses computes the distance on mean and
     variance standardized shapelets"""
 
-    cdef int init_shapelet_ndarray(self, Shapelet *shapelet, np.ndarray arr, size_t dim):
-        cdef int err = DistanceMeasure.init_shapelet_ndarray(self, shapelet, arr, dim)
+    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, size_t dim):
+        cdef int err = DistanceMeasure.init_ts_copy_from_ndarray(self, tc, arr, dim)
         if err == -1:
             return -1
-        shapelet[0].mean = np.mean(arr)
-        shapelet[0].std = np.std(arr)
+        tc[0].mean = np.mean(arr)
+        tc[0].std = np.std(arr)
         return 0
 
-    cdef int init_shapelet_info(self, TSDatabase *td, ShapeletInfo *shapelet_info, size_t index, size_t start,
-                                size_t length, size_t dim) nogil:
-        DistanceMeasure.init_shapelet_info(self, td, shapelet_info, index, start, length, dim)
-        _shapelet_info_update_statistics(shapelet_info, td)
+    cdef int init_ts_view(self, TSDatabase *td, TSView *tv, size_t index, size_t start,
+                          size_t length, size_t dim) nogil:
+        DistanceMeasure.init_ts_view(self, td, tv, index, start, length, dim)
+        _ts_view_update_statistics(tv, td)
         return -1
 
 # cdef class FuncDistanceMeasure(DistanceMeasure):
@@ -416,10 +411,10 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
     cdef DistanceMeasure distance_measure = _DISTANCE_MEASURE[metric](
         sd.n_timestep, **metric_params)
 
-    cdef Shapelet shape
-    distance_measure.init_shapelet_ndarray(&shape, s, dim)
+    cdef TSCopy shape
+    distance_measure.init_ts_copy_from_ndarray(&shape, s, dim)
     if isinstance(sample, int):
-        min_dist = distance_measure.shapelet_distance(
+        min_dist = distance_measure.ts_copy_distance(
             &shape, &sd, sample, &min_index)
 
         if return_index:
@@ -431,7 +426,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
         dist = []
         ind = []
         for i in samples:
-            min_dist = distance_measure.shapelet_distance(&shape, &sd, i, &min_index)
+            min_dist = distance_measure.ts_copy_distance(&shape, &sd, i, &min_index)
 
             dist.append(min_dist)
             ind.append(min_index)
@@ -486,13 +481,13 @@ def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metr
 
     cdef DistanceMeasure distance_measure = _DISTANCE_MEASURE[metric](
         sd.n_timestep, **metric_params)
-    cdef Shapelet shape
-    distance_measure.init_shapelet_ndarray(&shape, s, dim)
+    cdef TSCopy shape
+    distance_measure.init_ts_copy_from_ndarray(&shape, s, dim)
 
     cdef size_t i
     if isinstance(sample, int):
         _check_sample(sample, sd.n_samples)
-        distance_measure.shapelet_matches(
+        distance_measure.ts_copy_matches(
             &shape, &sd, sample, threshold, &matches, &distances, &n_matches)
 
         match_array = _new_match_array(matches, n_matches)
@@ -510,7 +505,7 @@ def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metr
         distance_list = []
         for i in samples:
             _check_sample(i, sd.n_samples)
-            distance_measure.shapelet_matches(&shape, &sd, i, threshold, &matches, &distances, &n_matches)
+            distance_measure.ts_copy_matches(&shape, &sd, i, threshold, &matches, &distances, &n_matches)
             match_array = _new_match_array(matches, n_matches)
             distance_array = _new_distance_array(distances, n_matches)
             match_list.append(match_array)

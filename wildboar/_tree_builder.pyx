@@ -38,14 +38,14 @@ from ._utils cimport rand_uniform
 from ._distance cimport TSDatabase
 from ._distance cimport DistanceMeasure
 
-from ._distance cimport ShapeletInfo
-from ._distance cimport Shapelet
+from ._distance cimport TSView
+from ._distance cimport TSCopy
 
 from ._distance cimport ts_database_new
 
-from ._distance cimport shapelet_info_init
-from ._distance cimport shapelet_info_free
-from ._distance cimport shapelet_free
+from ._distance cimport ts_view_init
+from ._distance cimport ts_view_free
+from ._distance cimport ts_copy_free
 
 from ._impurity cimport entropy
 
@@ -64,15 +64,15 @@ cpdef Tree _make_tree(DistanceMeasure distance_measure, size_t n_labels, list sh
     cdef size_t i
     cdef size_t dim
     cdef np.ndarray arr
-    cdef Shapelet *shapelet
+    cdef TSCopy *shapelet
     cdef np.ndarray value_reshape = value.reshape(-1)
 
     tree._node_count = node_count
     for i in range(node_count):
         if shapelets[i] is not None:
             dim, arr = shapelets[i]
-            shapelet = <Shapelet*> malloc(sizeof(Shapelet))
-            distance_measure.init_shapelet_ndarray(shapelet, arr, dim)
+            shapelet = <TSCopy*> malloc(sizeof(TSCopy))
+            distance_measure.init_ts_copy_from_ndarray(shapelet, arr, dim)
             tree._shapelets[i] = shapelet
         else:
             tree._shapelets[i] = NULL
@@ -93,7 +93,7 @@ cdef class Tree:
         self._node_count = 0
         self._capacity = capacity
         self._n_labels = n_labels
-        self._shapelets = <Shapelet**> malloc(self._capacity * sizeof(Shapelet*))
+        self._shapelets = <TSCopy**> malloc(self._capacity * sizeof(TSCopy*))
         self._thresholds = <double*> malloc(self._capacity * sizeof(double))
         self._values = <double*> malloc(self._capacity * self._n_labels * sizeof(double))
         self._left = <int*> malloc(self._capacity * sizeof(size_t))
@@ -108,7 +108,7 @@ cdef class Tree:
             for i in range(self._node_count):
                 if self._shapelets[i] != NULL:
                     free(self._shapelets[i])
-                    shapelet_free(self._shapelets[i])
+                    ts_copy_free(self._shapelets[i])
             free(self._shapelets)
 
         if self._thresholds != NULL:
@@ -150,7 +150,7 @@ cdef class Tree:
 
     @property
     def shapelet(self):
-        cdef Shapelet *shapelet
+        cdef TSCopy *shapelet
         cdef np.ndarray temp
         cdef size_t i, j
         cdef list ret = []
@@ -227,7 +227,7 @@ cdef class Tree:
         cdef TSDatabase ts = ts_database_new(X)
         cdef np.ndarray[np.npy_intp] out = np.zeros((ts.n_samples,), dtype=np.intp)
         cdef long *out_data = <long*> out.data
-        cdef Shapelet *shapelet
+        cdef TSCopy *shapelet
         cdef double threshold
         cdef int node_index
         cdef size_t i
@@ -238,7 +238,7 @@ cdef class Tree:
                     threshold = self._thresholds[node_index]
                     # TODO: avoid copying the shapelet
                     shapelet = self._shapelets[node_index]
-                    if self.distance_measure.shapelet_distance(shapelet, &ts, i) <= threshold:
+                    if self.distance_measure.ts_copy_distance(shapelet, &ts, i) <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
@@ -256,7 +256,7 @@ cdef class Tree:
         cdef size_t n_stride = <size_t> out.strides[1] / <size_t> out.itemsize
         cdef size_t node_index
         cdef size_t i
-        cdef Shapelet *shapelet
+        cdef TSCopy *shapelet
         cdef double threshold
         with nogil:
             for i in range(ts.n_samples):
@@ -266,7 +266,7 @@ cdef class Tree:
                     # out_data[i, node_index] = 1
                     threshold = self._thresholds[node_index]
                     shapelet = self._shapelets[node_index]
-                    if self.distance_measure.shapelet_distance(shapelet, &ts, i) <= threshold:
+                    if self.distance_measure.ts_copy_distance(shapelet, &ts, i) <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
@@ -300,7 +300,7 @@ cdef class Tree:
         self._values[out_label + node_id * self._n_labels] = out_value
 
     cdef int add_branch_node(self, int parent, bint is_left, size_t n_node_samples, double n_weighted_node_samples,
-                             Shapelet *shapelet, double threshold, double impurity) nogil:
+                             TSCopy *shapelet, double threshold, double impurity) nogil:
         cdef size_t node_id = self._node_count
         if node_id >= self._capacity:
             if self._increase_capacity() == -1:
@@ -323,7 +323,7 @@ cdef class Tree:
     cdef int _increase_capacity(self) nogil except -1:
         cdef size_t new_capacity = self._node_count * 2
         cdef int ret
-        ret = safe_realloc(<void**> &self._shapelets, sizeof(Shapelet) * new_capacity)
+        ret = safe_realloc(<void**> &self._shapelets, sizeof(TSCopy) * new_capacity)
         if ret == -1:
             return -1
 
@@ -357,7 +357,7 @@ cdef class Tree:
 
         return 0
 
-cdef SplitPoint new_split_point(size_t split_point, double threshold, ShapeletInfo shapelet_info) nogil:
+cdef SplitPoint new_split_point(size_t split_point, double threshold, TSView shapelet_info) nogil:
     cdef SplitPoint s
     s.split_point = split_point
     s.threshold = threshold
@@ -475,7 +475,7 @@ cdef class ShapeletTreeBuilder:
         pass
 
     cdef size_t new_branch_node(self, size_t start, size_t end, SplitPoint sp,
-                                Shapelet *shapelet, int parent, bint is_left) nogil:
+                                TSCopy *shapelet, int parent, bint is_left) nogil:
         cdef size_t node_id
         node_id = self.tree.add_branch_node(parent, is_left, end - start, self.n_weighted_samples, shapelet,
                                             sp.threshold, -1)
@@ -515,12 +515,12 @@ cdef class ShapeletTreeBuilder:
             return self.new_leaf_node(start, end, parent, is_left)
 
         cdef SplitPoint split = self._split(start, end)
-        cdef Shapelet *shapelet
+        cdef TSCopy *shapelet
         cdef size_t current_node_id, left_node_id, right_node_id
         cdef int err
         if split.split_point > start and end - split.split_point > 0:
-            shapelet = <Shapelet*> malloc(sizeof(Shapelet))
-            err = self.distance_measure.init_shapelet(shapelet, &split.shapelet_info, &self.td)
+            shapelet = <TSCopy*> malloc(sizeof(TSCopy))
+            err = self.distance_measure.init_ts_copy(shapelet, &split.shapelet_info, &self.td)
             if err == -1:
                 return -1
 
@@ -529,7 +529,7 @@ cdef class ShapeletTreeBuilder:
             left_node_id = self._build_tree(start, split.split_point, depth + 1, current_node_id, True, max_depth)
             right_node_id = self._build_tree(split.split_point, end, depth + 1, current_node_id, False, max_depth)
 
-            shapelet_info_free(&split.shapelet_info)  # RECLAIM THIS MEMORY
+            ts_view_free(&split.shapelet_info)  # RECLAIM THIS MEMORY
             return current_node_id
         else:
             with gil:
@@ -553,11 +553,11 @@ cdef class ShapeletTreeBuilder:
         cdef double threshold, best_threshold
         cdef double impurity
         cdef double best_impurity
-        cdef ShapeletInfo shapelet
-        cdef ShapeletInfo best_shapelet
+        cdef TSView shapelet
+        cdef TSView best_shapelet
         cdef size_t i
 
-        shapelet_info_init(&best_shapelet)
+        ts_view_init(&best_shapelet)
         best_impurity = INFINITY
         best_threshold = NAN
         best_split_point = 0
@@ -565,7 +565,7 @@ cdef class ShapeletTreeBuilder:
 
         for i in range(self.n_shapelets):
             self._sample_shapelet(&shapelet, start, end)
-            self.distance_measure.shapelet_info_distances(
+            self.distance_measure.ts_view_distances(
                 &shapelet, &self.td, self.samples + start, self.distance_buffer + start, end - start)
             argsort(self.distance_buffer + start, self.samples + start, end - start)
 
@@ -578,14 +578,14 @@ cdef class ShapeletTreeBuilder:
                 best_threshold = threshold
                 best_shapelet = shapelet
             else:
-                shapelet_info_free(&shapelet)
+                ts_view_free(&shapelet)
 
         # restore the best order to `samples`
         memcpy(self.samples + start,
                self.samples_buffer, sizeof(size_t) * (end - start))
         return new_split_point(best_split_point, best_threshold, best_shapelet)
 
-    cdef int _sample_shapelet(self, ShapeletInfo *shapelet_info, size_t start, size_t end) nogil:
+    cdef int _sample_shapelet(self, TSView *shapelet_info, size_t start, size_t end) nogil:
         cdef size_t shapelet_length
         cdef size_t shapelet_start
         cdef size_t shapelet_index
@@ -601,12 +601,12 @@ cdef class ShapeletTreeBuilder:
             shapelet_dim = rand_int(0, self.td.n_dims, &self.random_seed)
         else:
             shapelet_dim = 1
-        return self.distance_measure.init_shapelet_info(&self.td,
-                                                        shapelet_info,
-                                                        shapelet_index,
-                                                        shapelet_start,
-                                                        shapelet_length,
-                                                        shapelet_dim)
+        return self.distance_measure.init_ts_view(&self.td,
+                                                  shapelet_info,
+                                                  shapelet_index,
+                                                  shapelet_start,
+                                                  shapelet_length,
+                                                  shapelet_dim)
 
     cdef void _partition_distance_buffer(self,
                                          size_t start,

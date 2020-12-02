@@ -20,7 +20,7 @@
 
 cimport numpy as np
 
-cdef struct ShapeletInfo:
+cdef struct TSView:
     size_t index  # the index of the shapelet sample
     size_t start  # the start position
     size_t length  # the length of the shapelet
@@ -39,7 +39,7 @@ cdef struct TSDatabase:
     size_t timestep_stride  # the `feature` stride
     size_t dim_stride  # the dimension stride
 
-cdef struct Shapelet:
+cdef struct TSCopy:
     size_t length
     size_t dim
     double mean
@@ -52,32 +52,32 @@ cdef struct Shapelet:
 cdef class DistanceMeasure:
     cdef size_t n_timestep
 
-    cdef int init_shapelet_info(self, TSDatabase *td, ShapeletInfo *shapelet_info, size_t index, size_t start,
-                                size_t length, size_t dim) nogil
+    cdef int init_ts_view(self, TSDatabase *td, TSView *ts_view, size_t index, size_t start,
+                          size_t length, size_t dim) nogil
 
-    cdef int init_shapelet_ndarray(self, Shapelet *shapelet, np.ndarray arr, size_t dim)
+    cdef int init_ts_copy_from_ndarray(self, TSCopy *shapelet, np.ndarray arr, size_t dim)
 
-    cdef int init_shapelet(self, Shapelet *shapelet, ShapeletInfo *s, TSDatabase *td) nogil
+    cdef int init_ts_copy(self, TSCopy *shapelet, TSView *s, TSDatabase *td) nogil
 
-    cdef int shapelet_matches(self, Shapelet *s, TSDatabase *td, size_t t_index, double threshold, size_t** matches,
-                              double** distances, size_t *n_matches) nogil except -1
+    cdef int ts_copy_matches(self, TSCopy *s, TSDatabase *td, size_t t_index, double threshold, size_t** matches,
+                             double** distances, size_t *n_matches) nogil except -1
 
-    cdef double shapelet_distance(self, Shapelet *s, TSDatabase *td, size_t t_index, size_t *return_index= *) nogil
+    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, size_t t_index, size_t *return_index= *) nogil
 
-    cdef double shapelet_info_distance(self, ShapeletInfo *s, TSDatabase *td, size_t t_index) nogil
+    cdef double ts_view_distance(self, TSView *s, TSDatabase *td, size_t t_index) nogil
 
-    cdef void shapelet_info_distances(self, ShapeletInfo *s, TSDatabase *td, size_t *samples, double *distances,
-                                      size_t n_samples) nogil
+    cdef void ts_view_distances(self, TSView *s, TSDatabase *td, size_t *samples, double *distances,
+                                size_t n_samples) nogil
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
     pass
 
 cdef TSDatabase ts_database_new(np.ndarray X)
 
-cdef void shapelet_info_init(ShapeletInfo *s) nogil
+cdef void ts_view_init(TSView *s) nogil
 
-cdef void shapelet_info_free(ShapeletInfo *shapelet_info) nogil
+cdef void ts_view_free(TSView *shapelet_info) nogil
 
-cdef int shapelet_init(Shapelet *shapelet, size_t dim, size_t length, double mean, double std) nogil
+cdef int ts_copy_init(TSCopy *shapelet, size_t dim, size_t length, double mean, double std) nogil
 
-cdef void shapelet_free(Shapelet *shapelet) nogil
+cdef void ts_copy_free(TSCopy *shapelet) nogil
