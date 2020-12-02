@@ -416,6 +416,9 @@ class EmmottLabeler(OutlierLabeler):
 
         difficulty = np.digitize(difficulty_estimate, self.scale)
         x_outliers = x_outliers[np.where(np.isin(difficulty, self.difficulty))[0]]
+        if x_outliers.shape[0] == 0:
+            raise ValueError(
+                "no samples with the requested difficulty %s, available %s" % (self.difficulty, np.unique(difficulty)))
         outlier_sampled = variation(x_outliers, self.n_outliers_, random_state.randint(np.iinfo(np.int32).max))
 
         return (np.concatenate([x[inlier_indices], x_outliers[outlier_sampled]], axis=0),
