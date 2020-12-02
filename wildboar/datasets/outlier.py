@@ -16,6 +16,8 @@ __all__ = ['OutlierLabeler', 'KMeansLabeler', 'DensityLabeler', 'MinorityLabeler
 
 
 class OutlierLabeler(metaclass=ABCMeta):
+    """Base-class for outlier labelers"""
+
     @abstractmethod
     def fit(self, x, y=None):
         pass
@@ -28,8 +30,36 @@ class OutlierLabeler(metaclass=ABCMeta):
         return self.fit(x, y).transform(x, y)
 
 
-class KMeansLabeler:
+class KMeansLabeler(OutlierLabeler):
+    """KMeans labeler that assign an outlier label to the most deviating cluster
+
+    Attributes
+    ----------
+    k_means_ : object
+        The estimator for assigning points to the outlier class
+
+    outlier_cluster_ : int
+        The cluster index that is considered as outlier
+
+    Warnings
+    --------
+    The implementation does not yet work as expected.
+    """
+
     def __init__(self, *, n_clusters=None, n_outliers=None, random_state=None):
+        """Construct a new labeler
+
+        Parameters
+        ----------
+        n_clusters : int, optional
+            Number of clusters to fit
+
+        n_outliers : int or float, optional
+            The number of outliers in the resulting dataset. This is not guaranteed.
+
+        random_state : RandomState or int, optional
+            The pseudo random state to ensure consistent results.
+        """
         self.n_clusters = n_clusters
         self.n_outliers = n_outliers
         self.random_state = random_state
@@ -96,6 +126,10 @@ DENSITY_ESTIMATORS_PARAMS = {}
 
 
 class DensityLabeler(OutlierLabeler):
+    """Density based clustering labeler
+
+    Labels samples as outliers if a density cluster algorithm fail to assign them to a cluster
+    """
 
     def __init__(self, *, estimator=None, estimator_params=None):
         self.estimator = estimator
@@ -118,15 +152,13 @@ class DensityLabeler(OutlierLabeler):
             raise ValueError("only a single cluster was formed")
         elif not np.any(label == -1):
             raise ValueError("no outlier points")
-        else:
-            self.outlier_label_ = -1
 
         return self
 
     def fit_transform(self, x, y=None):
         self.fit(x, y)
         y = np.ones(x.shape[0])
-        y[self.estimator_.labels_ == self.outlier_label_] = -1
+        y[self.estimator_.labels_ == -1] = -1
         return x, y
 
     def transform(self, x, y):
@@ -138,6 +170,14 @@ class DensityLabeler(OutlierLabeler):
 
 
 class MinorityLabeler(OutlierLabeler):
+    """Labels the minority class as the outlier
+
+    Attributes
+    ----------
+
+    outlier_label_ : object
+        The label of the outlier class
+    """
 
     def __init__(self, n_outliers=None, random_state=None):
         self.n_outliers = n_outliers
@@ -210,11 +250,18 @@ _EMMOTT_VARIATION = {'tight': _variation_tight, 'dispersed': _variation_disperse
 
 class EmmottLabeler(OutlierLabeler):
     """Create a synthetic outlier detection dataset from a labeled classification dataset
+    using a method described by Emmott et.al. (2013).
+
+    The Emmott labeler can reliably label both binary and multiclass datasets. For binary datasets
+    a random label is selected as the outlier class. For multiclass datasets a set of classes with
+    maximal confusion (as measured by ``confusion_estimator`` is selected as outlier label. For each
+    outlier sample the ``difficulty_estimator`` assigns a difficulty score which is digitized into
+    ranges and selected according to the ``difficulty`` parameters. Finally a sample of approximately
+    ``n_outlier`` is selected either maximally dispersed or tight.
 
     Attributes
     ----------
-
-    outlier_label_ : int, float
+    outlier_label_ : object
         The class or collection of classes used as outliers
 
     difficulty_estimator_ : object
@@ -225,6 +272,11 @@ class EmmottLabeler(OutlierLabeler):
 
     n_classes_ : int
         The number of classes
+
+    Notes
+    -----
+    - For multiclass datasets the Emmott labeler require the package `networkx`
+    - For dispersed outlier selection the Emmott labeler require the package `scikit-learn-extra`
 
     References
     ----------

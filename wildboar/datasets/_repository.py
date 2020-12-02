@@ -14,15 +14,72 @@ from scipy.io.arff import loadarff
 
 
 class Repository(metaclass=ABCMeta):
+    """Base class for handling dataset repositories
+
+    Attributes
+    ----------
+
+    name : str
+        Human-readable name of the repository
+
+    description : str
+        Description of the repository
+
+    download_url : str
+        Local or remote path to the repository
+
+    hash : str
+        SHA1 hash of the file pointed to by download_url
+
+    class_index : int or array-like
+        Index of the class label(s)
+    """
 
     def __init__(self, name, download_url, *, description=None, hash=None, class_index=-1):
+        """Construct a repository
+
+        Parameters
+        ----------
+        name : str
+            Human-readable name of the repository
+
+        description : str
+            Description of the repository
+
+        download_url : str
+            Local or remote path to the repository. file:// or http(s):// paths are supported.
+
+        hash : str
+            SHA1 hash of the file pointed to by download_url
+
+        class_index : int or array-like
+            Index of the class label(s)
+        """
         self.name = name
         self.description = description
         self.download_url = download_url
         self.hash = hash
         self.class_index = class_index
 
-    def list(self, *, cache_dir='wildboar_cache', create_cache_dir=True, progress=True):
+    def list(self, cache_dir, *, create_cache_dir=True, progress=True):
+        """List all datasets in this repository
+
+        Parameters
+        ----------
+        cache_dir : str
+            Location of the cached download
+
+        create_cache_dir : bool, optional
+            Create cache directory if it does not exist.
+
+        progress : bool, optional
+            Write progress to standard error
+
+        Returns
+        -------
+        dataset_names : list
+            A sorted list of datasets in the repository
+        """
         with self._download_repository(cache_dir=cache_dir, create_cache_dir=create_cache_dir,
                                        progress=progress) as archive:
             names = []
@@ -35,7 +92,37 @@ class Repository(metaclass=ABCMeta):
 
             return sorted(set(names))
 
-    def load(self, name, *, dtype=None, cache_dir='wildboar_cache', create_cache_dir=True, progress=True):
+    def load(self, name, cache_dir, *, create_cache_dir=True, progress=True, dtype=None):
+        """Load a dataset from the repository
+
+        Parameters
+        ----------
+        name : str
+            Name of the dataset
+
+        cache_dir : str
+            Location of the cached download
+
+        create_cache_dir : bool, optional
+            Create cache directory if it does not exist.
+
+        progress : bool, optional
+            Write progress to standard error
+
+        dtype : object, optional
+             Cast the data and label matrix to a specific type
+
+        Returns
+        -------
+        x : ndarray
+            Data samples
+
+        y : ndarray
+            Data labels
+
+        n_training_samples : int
+            Number of samples that are for training. The value is <= x.shape[0]
+        """
         dtype = dtype or np.float64
         with self._download_repository(cache_dir=cache_dir, create_cache_dir=create_cache_dir,
                                        progress=progress) as archive:
@@ -60,14 +147,50 @@ class Repository(metaclass=ABCMeta):
             return x, y, n_train_samples
 
     @abstractmethod
-    def _is_dataset(self, path, ext):
+    def _is_dataset(self, file_name, ext):
+        """Overridden by subclasses
+
+        Check if a path and extension is to be considered a dataset. The check should be simple and only consider
+        the filename and or extension of the file. Validation of the file should be deferred to `_load_array`
+
+        Parameters
+        ----------
+        file_name : str
+            Name of the dataset file
+
+        ext : str
+            Extension of the dataset file
+
+        Returns
+        -------
+        bool
+            True if it is a dataset
+        """
         pass
 
     @abstractmethod
     def _load_array(self, archive, file):
+        """Overridden by subclasses
+
+        Load the file inside the archive and convert to a numpy array
+
+        Parameters
+        ----------
+        archive : ZipFile
+            The zip-archive in which the file reside
+
+        file : str
+            Path to the file inside the zip-archive
+
+        Returns
+        -------
+        ndarray
+            The dataset converted to a ndarray
+        """
         pass
 
-    def _download_repository(self, cache_dir='wildboar_cache', create_cache_dir=True, progress=True):
+    def _download_repository(self, cache_dir, *, create_cache_dir=True, progress=True):
+        """Download a repository to the cache directory"""
         if not os.path.exists(cache_dir):
             if create_cache_dir:
                 os.mkdir(cache_dir)
@@ -112,9 +235,11 @@ class Repository(metaclass=ABCMeta):
                                              ('=' * done, ' ' * (50 - done), length, total_length, basename))
                             sys.stderr.flush()
 
-        return zipfile.ZipFile(open(filename, 'rb'))
+            self._check_integrity(filename)
+            return zipfile.ZipFile(open(filename, 'rb'))
 
     def _check_integrity(self, filename):
+        """Check the integrity of the downloaded or cached file"""
         if self.hash is not None:
             actual_hash = _sha1(filename)
             if self.hash != actual_hash:
@@ -122,12 +247,13 @@ class Repository(metaclass=ABCMeta):
 
 
 class ArffRepository(Repository):
+    """Repository of .arff-files"""
 
     def __init__(self, name, download_url, *, description=None, hash=None, class_index=-1, encoding='utf-8'):
         super().__init__(name, download_url, hash=hash, description=description, class_index=class_index)
         self.encoding = encoding
 
-    def _is_dataset(self, path, ext):
+    def _is_dataset(self, file_name, ext):
         return ext == ".arff"
 
     def _load_array(self, archive, file):
@@ -138,8 +264,9 @@ class ArffRepository(Repository):
 
 
 class NpyRepository(Repository):
+    """Repository of numpy binary files"""
 
-    def _is_dataset(self, path, ext):
+    def _is_dataset(self, file_name, ext):
         return ext == '.npy'
 
     def _load_array(self, archive, file):
