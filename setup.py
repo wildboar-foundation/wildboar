@@ -68,9 +68,7 @@ PACKAGE_NAME = "wildboar"
 
 SHORT_DESCRIPTION = "Time series learning with Python"
 
-from os import path
-
-with open(path.join(path.abspath(path.dirname(__file__)), 'README.md'), encoding='utf-8') as f:
+with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'README.md'), encoding='utf-8') as f:
     DESCRIPTION = f.read()
 
 BUILD_TYPE = os.getenv("WILDBOAR_BUILD") or "default"
