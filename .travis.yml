@@ -33,8 +33,11 @@ jobs:
         - python --version
       install:
         - pip install -r requirements.txt
+        - pip install -r requirements-dev.txt
       script:
         - python setup.py sdist
+        - pip install .
+        - python -m pytest --pyargs wildboar
       after_success:
         - |
           if [[ $TRAVIS_TAG ]]; then

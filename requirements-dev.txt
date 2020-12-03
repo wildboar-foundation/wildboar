@@ -1,0 +1,5 @@
+pytest
+requests
+networkx
+scikit-learn-extra
+
