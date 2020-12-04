@@ -18,8 +18,8 @@
 # Authors: Isak Samsten
 cimport numpy as np
 
-from ._distance cimport DistanceMeasure
-from ._distance cimport TSView, TSCopy
+from ..distance._distance cimport DistanceMeasure
+from ..distance._distance cimport TSView, TSCopy
 
 # TODO: include impurity score...
 cdef struct SplitPoint:

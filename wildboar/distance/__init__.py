@@ -17,24 +17,24 @@
 
 # Authors: Isak Samsten
 
-import wildboar._distance as _distance
+import wildboar.distance._distance as _distance
 
 __all__ = ["distance", "matches"]
 
 
 def distance(shapelet, x, dim=0, sample=None, metric="euclidean", metric_params=None, return_index=False):
     """Computes the minimum distance between a subsequence and the samples in `x`
-    
+
     Parameters
     ----------
     shapelet : array-like
         A 1-dimensional float array
-        
+
     x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
-    
+
     dim : int, optional
         The time series dimension to search
-        
+
     sample : int or array-like, optional
         The samples to compare to
 

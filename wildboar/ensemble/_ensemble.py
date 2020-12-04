@@ -28,15 +28,11 @@ from sklearn.utils import check_random_state
 from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
-from .model_selection.outlier import threshold_score
-from .tree import ShapeletTreeClassifier, ExtraShapeletTreeClassifier, ExtraShapeletTreeRegressor
-from .tree import ShapeletTreeRegressor
-
-__all__ = ["ShapeletForestClassifier",
-           "ExtraShapeletTreesClassifier",
-           "ShapeletForestRegressor",
-           "ExtraShapeletTreesRegressor",
-           "IsolationShapeletForest"]
+from ..model_selection.outlier import threshold_score
+from ..tree import ExtraShapeletTreeClassifier
+from ..tree import ExtraShapeletTreeRegressor
+from ..tree import ShapeletTreeClassifier
+from ..tree import ShapeletTreeRegressor
 
 
 class ShapeletForestMixin:
@@ -265,6 +261,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
     >>> y_hat = f.predict(x)
 
     """
+
     def __init__(self,
                  *,
                  n_estimators=100,

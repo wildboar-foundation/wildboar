@@ -92,11 +92,19 @@ build_args = BUILD_ARGS.get(BUILD_TYPE)
 if build_args is None:
     raise RuntimeError("%s is not a valid build type" % BUILD_TYPE)
 
-cython_ext_modules = declare_extensions("wildboar", [
-    "_utils", "_distance", "_euclidean_distance",
-    "_dtw_distance", "_impurity", "_tree_builder",
+wildboar_ext = declare_extensions("wildboar", [
+    "_utils"
 ], use_openmp=False, include_dirs=include_dirs, **build_args)
 
+distance_ext = declare_extensions(["wildboar", "distance"], [
+    "_distance", "_euclidean_distance", "_dtw_distance",
+], use_openmp=False, include_dirs=include_dirs, **build_args)
+
+tree_ext = declare_extensions(["wildboar", "tree"], [
+    "_impurity", "_tree_builder",
+], use_openmp=False, include_dirs=include_dirs, **build_args)
+
+cython_ext_modules = wildboar_ext + distance_ext + tree_ext
 setup(
     name="wildboar",
     version=get_version("wildboar/__init__.py"),

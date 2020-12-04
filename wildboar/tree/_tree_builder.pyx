@@ -32,27 +32,27 @@ from libc.stdlib cimport free
 from libc.string cimport memcpy
 from libc.string cimport memset
 
-from ._utils cimport RollingVariance
-from ._utils cimport safe_realloc
-from ._utils cimport rand_uniform
-from ._distance cimport TSDatabase
-from ._distance cimport DistanceMeasure
+from ..distance._distance cimport TSDatabase
+from ..distance._distance cimport DistanceMeasure
 
-from ._distance cimport TSView
-from ._distance cimport TSCopy
+from ..distance._distance cimport TSView
+from ..distance._distance cimport TSCopy
 
-from ._distance cimport ts_database_new
+from ..distance._distance cimport ts_database_new
 
-from ._distance cimport ts_view_init
-from ._distance cimport ts_view_free
-from ._distance cimport ts_copy_free
+from ..distance._distance cimport ts_view_init
+from ..distance._distance cimport ts_view_free
+from ..distance._distance cimport ts_copy_free
 
 from ._impurity cimport entropy
 
-from ._utils cimport label_distribution
-from ._utils cimport argsort
-from ._utils cimport rand_int
-from ._utils cimport RAND_R_MAX
+from .._utils cimport label_distribution
+from .._utils cimport argsort
+from .._utils cimport rand_int
+from .._utils cimport RAND_R_MAX
+from .._utils cimport RollingVariance
+from .._utils cimport safe_realloc
+from .._utils cimport rand_uniform
 
 #(_make_tree, self._n_labels, self.shapelet, self.threshold, self.value, self.left, self.right,
 # self.impurity, self.n_node_samples, self.n_weighted_node_samples)

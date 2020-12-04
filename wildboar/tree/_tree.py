@@ -25,15 +25,7 @@ from ._tree_builder import ClassificationShapeletTreeBuilder
 from ._tree_builder import ExtraClassificationShapeletTreeBuilder
 from ._tree_builder import ExtraRegressionShapeletTreeBuilder
 from ._tree_builder import RegressionShapeletTreeBuilder
-# from ._tree_builder import ClassificationShapeletTreePredictor
-# from ._tree_builder import RegressionShapeletTreePredictor
-# from ._tree_builder import ShapeletTreeTraverser
-from ._distance import _DISTANCE_MEASURE
-
-__all__ = ["ShapeletTreeClassifier",
-           "ExtraShapeletTreeClassifier",
-           "ShapeletTreeRegressor",
-           "ExtraShapeletTreeRegressor"]
+from ..distance._distance import _DISTANCE_MEASURE
 
 
 class BaseShapeletTree(BaseEstimator):

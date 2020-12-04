@@ -38,7 +38,7 @@ from ._distance cimport TSDatabase
 from ._distance cimport TSCopy
 from ._distance cimport TSView
 
-from ._utils cimport realloc_array
+from .._utils cimport realloc_array
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     cdef double *X_buffer

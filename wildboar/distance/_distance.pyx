@@ -29,8 +29,8 @@ from libc.stdlib cimport malloc
 from libc.math cimport sqrt
 from libc.math cimport NAN
 
-import wildboar._dtw_distance
-import wildboar._euclidean_distance
+from ..distance import _dtw_distance
+from ..distance import _euclidean_distance
 
 from libc.stdlib cimport free
 from sklearn.utils import check_array
@@ -40,9 +40,9 @@ from ._distance cimport ts_database_new
 from ._distance cimport TSDatabase
 
 _DISTANCE_MEASURE = {
-    'euclidean': wildboar._euclidean_distance.EuclideanDistance,
-    'scaled_euclidean': wildboar._euclidean_distance.ScaledEuclideanDistance,
-    'scaled_dtw': wildboar._dtw_distance.ScaledDtwDistance,
+    'euclidean': _euclidean_distance.EuclideanDistance,
+    'scaled_euclidean': _euclidean_distance.ScaledEuclideanDistance,
+    'scaled_dtw': _dtw_distance.ScaledDtwDistance,
 }
 
 cdef int ts_copy_init(TSCopy *shapelet, size_t dim, size_t length, double mean, double std) nogil:
