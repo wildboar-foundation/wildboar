@@ -2,8 +2,8 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 
-from datasets import load_dataset
-from datasets.outlier import EmmottLabeler
+from wildboar.datasets import load_dataset
+from wildboar.datasets.outlier import EmmottLabeler
 from wildboar.ensemble import IsolationShapeletForest
 
 x, y = load_dataset('SwedishLeaf', repository='wildboar/ucr', merge_train_test=True)
@@ -29,7 +29,7 @@ print("AUC=%f" % roc_auc_score(y_test, y_pred))
 def plot_mds(x, y):
     import matplotlib.pylab as plt
     from sklearn.manifold import MDS
-    m = MDS(n_components=2).fit_transform(x)
+    m = MDS(n_components=2, random_state=1).fit_transform(x)
     m_normal = m[y == 1]
     m_outlier = m[y == -1]
     plt.scatter(m_normal[:, 0], m_normal[:, 1], c='blue')
