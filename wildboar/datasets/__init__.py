@@ -42,8 +42,7 @@ __all__ = [
     "load_all_datasets",
     "load_two_lead_ecg",
     "load_synthetic_control",
-    "load_gun_point",
-    "DEFAULT_CACHE_DIR",
+    "load_gun_point"
 ]
 
 _BUNDLED_DATASETS = {
@@ -55,7 +54,25 @@ _BUNDLED_DATASETS = {
     'arrow_head': 'ArrowHead'
 }
 
-DEFAULT_CACHE_DIR = "wildboar_cache"
+
+def _default_cache_dir():
+    return _os_cache_path("wildboar")
+
+
+def _os_cache_path(dir):
+    import platform
+    if platform.system() == "Windows":
+        cache_dir = os.path.expandvars(r'%LOCALAPPDATA%\Caches')
+        return os.path.join(cache_dir, dir)
+    elif platform.system() == "Linux":
+        cache_dir = os.environ.get("XDG_CACHE_HOME")
+        if not cache_dir:
+            cache_dir = ".cache"
+        return os.path.join(os.path.expanduser("~"), cache_dir, dir)
+    elif platform.system() == "Darwin":
+        return os.path.join(os.path.expanduser("~"), "Library", "Caches", dir)
+    else:
+        return os.path.join(os.path.expanduser("~"), ".cache", dir)
 
 
 def load_synthetic_control(**kvargs):
@@ -88,7 +105,7 @@ def load_gun_point(**kwargs):
     return load_dataset('gun_point', **kwargs)
 
 
-def load_all_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True, **kwargs):
+def load_all_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True, force=False, **kwargs):
     """Load all datasets as a generator
 
     Parameters
@@ -104,6 +121,9 @@ def load_all_datasets(repository=None, *, cache_dir=None, create_cache_dir=True,
 
     create_cache_dir : bool, optional
         Create the cache directory if it does not exist.
+
+    force : bool, optional
+            Force re-download of cached repository
 
     kwargs : dict
         Optional arguments to ``load_dataset``
@@ -126,12 +146,12 @@ def load_all_datasets(repository=None, *, cache_dir=None, create_cache_dir=True,
     """
 
     for dataset in list_datasets(repository=repository, cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                 progress=progress):
+                                 progress=progress, force=force):
         yield dataset, load_dataset(dataset, repository=repository, **kwargs)
 
 
 def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_train_test=True, cache_dir=None,
-                 create_cache_dir=True, progress=True):
+                 create_cache_dir=True, progress=True, force=False):
     """Load a dataset from a repository
 
     Parameters
@@ -155,9 +175,6 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
     merge_train_test : bool, optional
         Merge the existing training and testing partitions.
 
-
-    Other Parameters
-    ----------------
     progress: bool, optional
         Show a progress bar while downloading a bundle.
 
@@ -166,6 +183,11 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     create_cache_dir: bool, optional
         Create cache directory if missing (default=True)
+
+    force : bool, optional
+        Force re-download of already cached repository
+
+        ..versionadded :: 1.0.4
 
     Returns
     -------
@@ -228,13 +250,13 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
 
     """
     dtype = dtype or np.float64
-    cache_dir = cache_dir or DEFAULT_CACHE_DIR
+    cache_dir = cache_dir or _default_cache_dir()
     ret_val = []
     if repository is None:
         x, y, n_train_samples = _load_bundled_dataset(name, dtype)
     else:
         repository = get_repository(repository)
-        x, y, n_train_samples = repository.load(name, dtype=dtype, cache_dir=cache_dir,
+        x, y, n_train_samples = repository.load(name, dtype=dtype, cache_dir=cache_dir, force=force,
                                                 create_cache_dir=create_cache_dir, progress=progress)
 
     if merge_train_test:
@@ -255,7 +277,7 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
         return ret_val
 
 
-def list_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True):
+def list_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True, force=False):
     """List the datasets in the repository
 
     Parameters
@@ -278,17 +300,20 @@ def list_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, pro
     create_cache_dir: bool, optional
         Create cache directory if missing (default=True)
 
+    force : bool, optional
+        Force re-download of cached repository
+
     Returns
     -------
         dataset : set
             A set of dataset names
     """
-    cache_dir = cache_dir or DEFAULT_CACHE_DIR
+    cache_dir = cache_dir or _default_cache_dir()
     if repository is None:
         return _BUNDLED_DATASETS.keys()
     else:
         repository = get_repository(repository)
-        return repository.list(cache_dir=cache_dir, create_cache_dir=create_cache_dir, progress=progress)
+        return repository.list(cache_dir=cache_dir, create_cache_dir=create_cache_dir, progress=progress, force=force)
 
 
 def get_repository(repository):

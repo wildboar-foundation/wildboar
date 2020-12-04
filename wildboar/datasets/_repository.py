@@ -61,7 +61,7 @@ class Repository(metaclass=ABCMeta):
         self.hash = hash
         self.class_index = class_index
 
-    def list(self, cache_dir, *, create_cache_dir=True, progress=True):
+    def list(self, cache_dir, *, create_cache_dir=True, progress=True, force=False):
         """List all datasets in this repository
 
         Parameters
@@ -75,13 +75,16 @@ class Repository(metaclass=ABCMeta):
         progress : bool, optional
             Write progress to standard error
 
+        force : bool, optional
+            Force re-download of cached repository
+
         Returns
         -------
         dataset_names : list
             A sorted list of datasets in the repository
         """
         with self._download_repository(cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                       progress=progress) as archive:
+                                       progress=progress, force=force) as archive:
             names = []
             for f in archive.filelist:
                 path, ext = os.path.splitext(f.filename)
@@ -92,7 +95,7 @@ class Repository(metaclass=ABCMeta):
 
             return sorted(set(names))
 
-    def load(self, name, cache_dir, *, create_cache_dir=True, progress=True, dtype=None):
+    def load(self, name, cache_dir, *, create_cache_dir=True, progress=True, dtype=None, force=False):
         """Load a dataset from the repository
 
         Parameters
@@ -112,6 +115,9 @@ class Repository(metaclass=ABCMeta):
         dtype : object, optional
              Cast the data and label matrix to a specific type
 
+        force : bool, optional
+            Force re-download of cached repository
+
         Returns
         -------
         x : ndarray
@@ -125,7 +131,7 @@ class Repository(metaclass=ABCMeta):
         """
         dtype = dtype or np.float64
         with self._download_repository(cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                       progress=progress) as archive:
+                                       progress=progress, force=force) as archive:
             datasets = []
             for dataset in map(_Dataset, archive.filelist):
                 if dataset.filename == name and self._is_dataset(dataset.path, dataset.ext):
@@ -189,7 +195,7 @@ class Repository(metaclass=ABCMeta):
         """
         pass
 
-    def _download_repository(self, cache_dir, *, create_cache_dir=True, progress=True):
+    def _download_repository(self, cache_dir, *, create_cache_dir=True, progress=True, force=False):
         """Download a repository to the cache directory"""
         if not os.path.exists(cache_dir):
             if create_cache_dir:
@@ -208,12 +214,15 @@ class Repository(metaclass=ABCMeta):
 
         filename = os.path.join(cache_dir, basename)
         if os.path.exists(filename):
-            try:
-                z_file = zipfile.ZipFile(open(filename, 'rb'))
-                self._check_integrity(filename)
-                return z_file
-            except zipfile.BadZipFile:
+            if force:
                 os.remove(filename)
+            else:
+                try:
+                    z_file = zipfile.ZipFile(open(filename, 'rb'))
+                    self._check_integrity(filename)
+                    return z_file
+                except zipfile.BadZipFile:
+                    os.remove(filename)
         if url_parse.scheme == "file":
             from shutil import copyfile
             copyfile(url_parse.path, filename)

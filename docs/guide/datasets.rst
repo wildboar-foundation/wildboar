@@ -34,21 +34,18 @@ Repositories are either initialized directly or used together with the ``load_da
 .. note::
 
     Repositories are cached locally in a folder controlled by the parameter ``cache_dir``. The default directory
-    is a folder named 'wildboar_cache' relative to the current directory. To change the default cache-directory
-    use ``DEFAULT_CACHE_DIR`` variable.
-
-    .. code-block:: python
-
-     >>> from wildboar.datasets import DEFAULT_CACHE_DIR
-     >>> DEFAULT_CACHE_DIR = '/home/user/.cache/wildboar_dataset/'
-     >>> load_dataset('Wafer', repository='wildboar/ucr')
-
-    or
+    depends on platform. To change the default cache-directory:
 
     .. code-block:: python
 
      >>> load_dataset("Wafer", repository="wildboar/ucr", cache_dir="/data/my_cache_drive")
 
+    .. warning::
+
+        The default cache location changed in version 1.0.4. To use the old location set ``cache_dir``
+        to ``'wildboar_cache'``
+
+To force re-download of an already cached repository set the parameter ``force`` to ``True``.
 
 How to create a repository?
 ===========================
