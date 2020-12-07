@@ -4,13 +4,7 @@ from urllib.parse import urlparse
 
 import numpy as np
 
-from . import _resources
 from ._repository import ArffRepository, NpyRepository, Repository
-
-try:
-    import importlib.resources as pkg_resources
-except ImportError:
-    import importlib_resources as pkg_resources
 
 _REPOSITORIES = {
     'timeseriesclassification/univariate': ArffRepository(
@@ -45,15 +39,6 @@ __all__ = [
     "load_gun_point"
 ]
 
-_BUNDLED_DATASETS = {
-    'synthetic_control': 'synthetic_control',
-    'two_lead_ecg': 'TwoLeadECG',
-    'gun_point': "Gun_Point",
-    'shapelet_sim': 'ShapeletSim',
-    'insect_wing_beat_sound': 'InsectWingbeatSound',
-    'arrow_head': 'ArrowHead'
-}
-
 
 def _default_cache_dir():
     return _os_cache_path("wildboar")
@@ -75,37 +60,38 @@ def _os_cache_path(dir):
         return os.path.join(os.path.expanduser("~"), ".cache", dir)
 
 
-def load_synthetic_control(**kvargs):
+def load_synthetic_control(merge_train_test=True):
     """Load the Synthetic_Control dataset
 
     See Also
     --------
     load_dataset : load a named dataset
     """
-    return load_dataset("synthetic_control", **kvargs)
+    return load_dataset("SyntheticControl", repository='wildboar/ucr', merge_train_test=merge_train_test)
 
 
-def load_two_lead_ecg(**kwargs):
+def load_two_lead_ecg(merge_train_test=True):
     """Load the TwoLeadECG dataset
 
     See Also
     --------
     load_dataset : load a named dataset
     """
-    return load_dataset('two_lead_ecg', **kwargs)
+    return load_dataset('TwoLeadECG', repository='wildboar/ucr', merge_train_test=merge_train_test)
 
 
-def load_gun_point(**kwargs):
+def load_gun_point(merge_train_test=True):
     """Load the GunPoint dataset
 
     See Also
     --------
     load_dataset : load a named dataset
     """
-    return load_dataset('gun_point', **kwargs)
+    return load_dataset('GunPoint', repository='wildboar/ucr', merge_train_test=merge_train_test)
 
 
-def load_all_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True, force=False, **kwargs):
+def load_all_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False,
+                      **kwargs):
     """Load all datasets as a generator
 
     Parameters
@@ -142,15 +128,13 @@ def load_all_datasets(repository=None, *, cache_dir=None, create_cache_dir=True,
     >>> from wildboar.datasets import load_all_datasets
     >>> for dataset, (x, y) in load_all_datasets(repository='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
-
     """
-
     for dataset in list_datasets(repository=repository, cache_dir=cache_dir, create_cache_dir=create_cache_dir,
                                  progress=progress, force=force):
         yield dataset, load_dataset(dataset, repository=repository, **kwargs)
 
 
-def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_train_test=True, cache_dir=None,
+def load_dataset(name, *, repository='wildboar/ucr', dtype=None, contiguous=True, merge_train_test=True, cache_dir=None,
                  create_cache_dir=True, progress=True, force=False):
     """Load a dataset from a repository
 
@@ -162,9 +146,8 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
     repository : str or Repository, optional
         The data repository
 
-        - if `None` load one of the bundled data sets
         - if str load a named repository
-        - if str http(s) or file url, load it as a bundle
+        - if str http(s) or file url, load it as a an anonymous bundle
 
     dtype : dtype, optional, default=np.float64
         The data type of the returned data
@@ -179,7 +162,7 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
         Show a progress bar while downloading a bundle.
 
     cache_dir: str, optional
-        The directory where downloaded files are cached (default='wildboar_cache')
+        The directory where downloaded files are cached
 
     create_cache_dir: bool, optional
         Create cache directory if missing (default=True)
@@ -252,12 +235,9 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
     dtype = dtype or np.float64
     cache_dir = cache_dir or _default_cache_dir()
     ret_val = []
-    if repository is None:
-        x, y, n_train_samples = _load_bundled_dataset(name, dtype)
-    else:
-        repository = get_repository(repository)
-        x, y, n_train_samples = repository.load(name, dtype=dtype, cache_dir=cache_dir, force=force,
-                                                create_cache_dir=create_cache_dir, progress=progress)
+    repository = get_repository(repository)
+    x, y, n_train_samples = repository.load(name, dtype=dtype, cache_dir=cache_dir, force=force,
+                                            create_cache_dir=create_cache_dir, progress=progress)
 
     if merge_train_test:
         ret_val.append(x)
@@ -277,7 +257,7 @@ def load_dataset(name, *, repository=None, dtype=None, contiguous=True, merge_tr
         return ret_val
 
 
-def list_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, progress=True, force=False):
+def list_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False):
     """List the datasets in the repository
 
     Parameters
@@ -289,8 +269,6 @@ def list_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, pro
         - if str load a named repository
         - if str http(s) or file url, load it as a bundle
 
-    Other Parameters
-    ----------------
     progress: bool, optional
         Show a progress bar while downloading a bundle.
 
@@ -309,11 +287,8 @@ def list_datasets(repository=None, *, cache_dir=None, create_cache_dir=True, pro
             A set of dataset names
     """
     cache_dir = cache_dir or _default_cache_dir()
-    if repository is None:
-        return _BUNDLED_DATASETS.keys()
-    else:
-        repository = get_repository(repository)
-        return repository.list(cache_dir=cache_dir, create_cache_dir=create_cache_dir, progress=progress, force=force)
+    repository = get_repository(repository)
+    return repository.list(cache_dir=cache_dir, create_cache_dir=create_cache_dir, progress=progress, force=force)
 
 
 def get_repository(repository):
@@ -409,18 +384,3 @@ def _new_repository(name, description, download_url, hash, class_index, extensio
         return NpyRepository(name, download_url, description=description, hash=hash, class_index=class_index)
     else:
         raise ValueError("extension (%s) is not supported" % extension)
-
-
-def _load_bundled_dataset(name, dtype):
-    if name not in _BUNDLED_DATASETS:
-        raise ValueError("dataset (%s) does not exist" % name)
-    name = _BUNDLED_DATASETS[name]
-    train_file = pkg_resources.open_text(_resources, "%s_TRAIN.txt" % name)
-    test_file = pkg_resources.open_text(_resources, "%s_TEST.txt" % name)
-    train = np.loadtxt(train_file, delimiter=",")
-    test = np.loadtxt(test_file, delimiter=",")
-    n_train_samples = train.shape[0]
-    train = np.vstack([train, test])
-    y = train[:, 0].astype(dtype)
-    x = train[:, 1:].astype(dtype)
-    return x, y, n_train_samples
