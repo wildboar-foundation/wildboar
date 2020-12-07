@@ -1,5 +1,5 @@
 # wildboar
-![Python version](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)
+![Python version](https://img.shields.io/badge/python-3.6%20|%203.7%20|%203.8-blue)
 [![Build Status](https://travis-ci.com/isaksamsten/wildboar.svg?branch=master)](https://travis-ci.com/isaksamsten/wildboar)
 [![Docs Status](https://img.shields.io/badge/docs-passing-success)](http://isaksamsten.github.io/wildboar/index.html)
 [![PyPI version](https://badge.fury.io/py/wildboar.svg)](https://badge.fury.io/py/wildboar)
@@ -39,7 +39,7 @@ requires:
 
     pip install wildboar
 
-Universal binaries are compiled for GNU/Linux and Python 3.6 and 3.7.
+Universal binaries are compiled for GNU/Linux and Python 3.6, 3.7 and 3.8.
 
 ### Compilation
 
