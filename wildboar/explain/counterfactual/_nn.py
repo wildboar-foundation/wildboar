@@ -21,10 +21,6 @@ class KNeighborsCounterfactual(BaseCounterfactual):
     Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
         Locally and globally explainable time series tweaking.
         Knowledge and Information Systems, 62(5), 1671-1700.
-
-    Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2018).
-        Explainable time series tweaking via irreversible and reversible temporal
-        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
     """
 
     def __init__(self, random_state=None):

@@ -17,7 +17,7 @@
 
 # Authors: Isak Samsten
 
-import wildboar.distance._distance as _distance
+from . import _distance
 
 __all__ = ["distance", "matches"]
 
@@ -76,10 +76,12 @@ def distance(shapelet, x, dim=0, sample=None, metric="euclidean", metric_params=
     >>> i
     [10 29  9 72 20 30]
     """
-    return _distance.distance(shapelet, x, dim, sample, metric, metric_params, return_index)
+    return _distance.distance(shapelet, x, dim=dim, sample=sample, metric=metric, metric_params=metric_params,
+                              return_index=return_index)
 
 
-def matches(shapelet, x, threshold, *, dim=0, sample=None, metric="euclidean", metric_params=None, return_distance=False):
+def matches(shapelet, x, threshold, *, dim=0, sample=None, metric="euclidean", metric_params=None,
+            return_distance=False):
     """Return the positions in `x` (one list per `sample`) where `shapelet` is closer than `threshold`.
 
     Parameters

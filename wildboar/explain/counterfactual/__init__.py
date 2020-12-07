@@ -5,9 +5,11 @@ from sklearn.metrics.pairwise import paired_distances
 from wildboar.ensemble import ShapeletForestClassifier, ExtraShapeletTreesClassifier
 
 from ._nn import KNeighborsCounterfactual
+from ._sf import ShapeletForestCounterfactual
 
 __all__ = ['counterfactual',
            'score',
+           'ShapeletForestCounterfactual',
            'KNeighborsCounterfactual']
 
 _COUNTERFACTUAL_EXPLAINER = {}
@@ -27,14 +29,14 @@ def _infer_counterfactual(estimator):
         The counterfactual transformer
     """
     if isinstance(estimator, (ShapeletForestClassifier, ExtraShapeletTreesClassifier)):
-        raise NotImplemented("no support for shapelet forest yet")
+        return ShapeletForestCounterfactual()
     elif isinstance(estimator, KNeighborsClassifier):
         return KNeighborsCounterfactual()
     else:
         raise NotImplemented("no support for model agnostic counterfactuals yet")
 
 
-def score(x_true, counterfactuals, metric='euclidean'):
+def score(x_true, counterfactuals, metric='euclidean', success=None):
     """Compute the score for the counterfactuals
 
     Parameters
@@ -42,7 +44,7 @@ def score(x_true, counterfactuals, metric='euclidean'):
     x_true : array-like of shape (n_samples, n_timestep)
         The true samples
 
-    counterfactuals : array-like of shaåe (n_samples, n_timestep)
+    counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
 
     metric : str, callable, list or dict, optional
