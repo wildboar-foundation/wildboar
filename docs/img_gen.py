@@ -11,4 +11,5 @@ if __name__ == "__main__":
     if not os.path.exists(img_path):
         os.mkdir(img_path)
 
-    img.build_all(img_path, img.TUTORIAL)
+    img.build_all(img_path, img.TUTORIAL, subdir="tutorial")
+    img.build_all(img_path, img.COUNTERFACTUALS, subdir="explain")

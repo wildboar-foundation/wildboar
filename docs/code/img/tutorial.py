@@ -1,9 +1,8 @@
 import matplotlib.pylab as plt
+from wildboar.datasets import load_synthetic_control
 
 
 def time_series_predict():
-    from wildboar.datasets import load_synthetic_control
-
     x, y = load_synthetic_control()
     fig, ax = plt.subplots()
     for i in [-1, 12]:

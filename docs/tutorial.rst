@@ -75,12 +75,6 @@ The classifier (``clf``) is fitted using the training samples, i.e., a model is 
     The predict function expects an ``ndarray`` of shape ``(n_samples, n_timestep)``, where ``n_timestep`` is the size
     of training timestep.
 
-
-The time series in the `synthetic_control` dataset
-
-.. figure:: _static/img/tutorial/time_series_predict.png
-   :scale: 65%
-
 Model persistence
 =================
 
