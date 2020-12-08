@@ -14,16 +14,22 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+import math
+import numpy as np
 
 from copy import deepcopy
+from functools import partial
 
-import numpy as np
 from wildboar.distance import distance, matches
 
 from wildboar.ensemble._ensemble import BaseShapeletForestClassifier
 from wildboar.explain.counterfactual.base import BaseCounterfactual
 
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, check_array
+
+MIN_MATCHING_DISTANCE = 0.0001
+
+euclidean_distance = partial(distance, metric="euclidean", return_index=True)
 
 
 def _shapelet_transform(shapelet, x, start_index, theta):
@@ -91,6 +97,10 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
     -----
     This implementation only supports the reversible algorithm described by Karlsson (2020)
 
+    Warnings
+    --------
+    Only shapelet forests fit with the Euclidean distance is supported i.e., ``metric="euclidean"``
+
     References
     ----------
     Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
@@ -102,7 +112,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
     """
 
-    def __init__(self, *, epsilon=1, batch_size=1, random_state=10):
+    def __init__(self, *, epsilon=1.0, batch_size=1, random_state=10):
         """
 
         Parameters
@@ -110,8 +120,9 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         epsilon : float, optional
             Control the degree of change from the decision threshold
 
-        batch_size : int, optional
-            Batch size when evaluating the cost and predictions of counterfactual candidates
+        batch_size : float, optional
+            Batch size when evaluating the cost and predictions of counterfactual candidates.
+            The default setting is to evaluate all counterfactual samples.
 
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
@@ -132,6 +143,13 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
 
     def transform(self, x, y):
         check_is_fitted(self, "paths_")
+        y = check_array(y, ensure_2d=False)
+        x = check_array(x)
+        if len(y) != x.shape[0]:
+            raise ValueError(
+                "Number of labels={} does not match "
+                "number of samples={}".format(len(y), x.shape[0])
+            )
         counterfactuals = np.empty(x.shape)
         success = np.zeros(x.shape[0], dtype=bool)
         for i in range(x.shape[0]):
@@ -145,62 +163,66 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         return counterfactuals, success
 
     def _transform_single(self, x, y):
-        path_list = self.paths_[y]
-        x_prime = np.empty([len(path_list), x.shape[0]])
-        for i, path in enumerate(path_list):
-            x_i_prime = self._transform_single_path(x.copy(), path)
-            x_prime[i, :] = x_i_prime
+        if self.epsilon < 0.0:
+            raise ValueError("epsilon must be larger than 0, got %r" % self.epsilon)
 
-        cost = _compute_cost(x_prime, x)
-        cost_sort = np.argsort(cost)
+        if y not in self.paths_:
+            raise ValueError("unknown label, got %r" % y)
 
-        # If the cost of prediction didn't carry the overhead of
-        # copying data to different cores due to the python
-        # implementation of `BaggingClassifier` a `batch_size` of 1
-        # would be optimal. However, empirically half of the
-        # conversions seems to be the fastest in practice for this
-        # implementation.
-        #
-        # Note that the cost is ordered in increasing order; hence, if
-        # a conversion is successful there can exist no other
-        # successful transformation with lower cost.
-        batch_size = round(x_prime.shape[0] * self.batch_size) + 1
-        for i in range(0, len(cost_sort), batch_size):
-            end = min(len(cost_sort), i + batch_size)
-            cost_sort_i = cost_sort[i:end]
-            x_prime_i = x_prime[cost_sort_i, :]
-            y_prime_i = self._estimator.predict(x_prime_i)
-            condition_i = y_prime_i == y
-            x_prime_i = x_prime_i[condition_i]
-            y_prime_i = y_prime_i[condition_i]
-            if x_prime_i.shape[0] > 0:
-                return x_prime_i[0, :]
+        prediction_paths = self.paths_[y]
+        n_counterfactuals = len(prediction_paths)
+
+        if isinstance(self.batch_size, float):
+            if not 0.0 < self.batch_size <= 1:
+                raise ValueError(
+                    "batch_size should be in range (0, 1], got %r" % self.batch_size
+                )
+            batch_size = math.ceil(n_counterfactuals * self.batch_size) + 1
+        elif isinstance(self.batch_size, int):
+            if not 0 < self.batch_size <= n_counterfactuals:
+                raise ValueError(
+                    "batch_size should be (0, n_counterfactuals], got %r"
+                    % self.batch_size
+                )
+            batch_size = self.batch_size
+        else:
+            raise ValueError("unsupported batch_size, got %r" % self.batch_size)
+
+        counterfactuals = np.empty([n_counterfactuals, x.shape[0]])
+        for i, path in enumerate(prediction_paths):
+            counterfactuals[i, :] = self._transform_single_path(x.copy(), path)
+
+        # Note that the cost is ordered in increasing order; hence, if a conversion is successful
+        # there can exist no other successful transformation with lower cost.
+        cost_sort = np.argsort(_compute_cost(counterfactuals, x))
+        for i in range(0, n_counterfactuals, batch_size):
+            batch_cost = cost_sort[i : min(n_counterfactuals, i + batch_size)]
+            batch_counterfactuals = counterfactuals[batch_cost, :]
+            batch_prediction = self._estimator.predict(batch_counterfactuals)
+            batch_counterfactuals = batch_counterfactuals[batch_prediction == y]
+            if batch_counterfactuals.shape[0] > 0:
+                return batch_counterfactuals[0, :]
 
         return None
 
     def _transform_single_path(self, x, path):
         for direction, (dim, shapelet), threshold in path:
+            dist, location = euclidean_distance(shapelet, x, dim)
             if direction < 0:
-                dist, location = distance(
-                    shapelet, x, metric="euclidean", return_index=True
-                )
                 if dist > threshold:
                     impute_shape = _shapelet_transform(
                         shapelet, x, location, threshold - self.epsilon
                     )
                     x[location : location + len(shapelet)] = impute_shape
-            else:
-                dist, location = distance(
-                    shapelet, x, metric="euclidean", return_index=True
-                )
-                while dist - threshold < 0.0001:
+            elif direction > 0:
+                while dist - threshold < 0:
                     impute_shape = _shapelet_transform(
                         shapelet, x, location, threshold + self.epsilon
                     )
                     x[location : location + len(shapelet)] = impute_shape
-                    dist, location = distance(
-                        shapelet, x, metric="euclidean", return_index=True
-                    )
+                    dist, location = euclidean_distance(shapelet, x, dim)
+            else:
+                raise ValueError("invalid path")
         return x
 
 

@@ -15,6 +15,8 @@
 #
 # Authors: Isak Samsten
 
+import numpy as np
+
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.utils.validation import check_is_fitted
 from sklearn.metrics.pairwise import paired_distances
@@ -100,7 +102,7 @@ def score(x_true, counterfactuals, metric="euclidean", success=None):
         return sc
 
 
-def counterfactual(
+def counterfactuals(
     estimator,
     x,
     y,
@@ -121,7 +123,7 @@ def counterfactual(
     x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
         The data samples to fit counterfactuals to
 
-    y : array-like of shape (n_samples,)
+    y : array-like broadcast to shape (n_samples,)
         The desired label of the counterfactual
 
     method : str, optional
@@ -158,7 +160,7 @@ def counterfactual(
 
     if explainer is None:
         raise ValueError("no counterfactual explainer for '%r'" % method)
-
+    y = np.broadcast_to(y, (x.shape[0],))
     explainer.set_params(random_state=random_state, **(params or {}))
     explainer.fit(estimator)
     counterfactuals, success = explainer.transform(x, y)
