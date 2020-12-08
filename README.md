@@ -56,7 +56,7 @@ To install the requirements, use:
 ## Development
 
 Contributions are welcome. Pull requests should be
-formatted according to [PEP8](https://www.python.org/dev/peps/pep-0008/).
+formatted using [Black](https://black.readthedocs.io).
 
 ## Usage
 

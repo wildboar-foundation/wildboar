@@ -12,8 +12,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+#
 # Authors: Isak Samsten
+
 from copy import deepcopy
 
 import numpy as np
@@ -26,7 +27,7 @@ from sklearn.utils.validation import check_is_fitted
 
 
 def _shapelet_transform(shapelet, x, start_index, theta):
-    x_shapelet = x[start_index:(start_index + shapelet.shape[0])]
+    x_shapelet = x[start_index : (start_index + shapelet.shape[0])]
     shapelet_diff = x_shapelet - shapelet
     dist = np.linalg.norm(shapelet_diff)
     if dist == 0:
@@ -38,7 +39,6 @@ def _shapelet_transform(shapelet, x, start_index, theta):
 
 
 class PredictionPaths:
-
     def __init__(self, classes):
         self.classes = classes
         self._paths = {c: [] for c in classes}
@@ -174,7 +174,6 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
             x_prime_i = x_prime_i[condition_i]
             y_prime_i = y_prime_i[condition_i]
             if x_prime_i.shape[0] > 0:
-                print(cost[cost_sort_i[condition_i]][:2], y_prime_i[0:2])
                 return x_prime_i[0, :]
 
         return None
@@ -182,17 +181,28 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
     def _transform_single_path(self, x, path):
         for direction, (dim, shapelet), threshold in path:
             if direction < 0:
-                dist, location = distance(shapelet, x, metric="euclidean", return_index=True)
+                dist, location = distance(
+                    shapelet, x, metric="euclidean", return_index=True
+                )
                 if dist > threshold:
-                    impute_shape = _shapelet_transform(shapelet, x, location, threshold - self.epsilon)
-                    x[location:(location + len(shapelet))] = impute_shape
+                    impute_shape = _shapelet_transform(
+                        shapelet, x, location, threshold - self.epsilon
+                    )
+                    x[location : location + len(shapelet)] = impute_shape
             else:
-                dist, location = distance(shapelet, x, metric="euclidean", return_index=True)
+                dist, location = distance(
+                    shapelet, x, metric="euclidean", return_index=True
+                )
                 while dist - threshold < 0.0001:
-                    impute_shape = _shapelet_transform(shapelet, x, location, threshold + self.epsilon)
-                    x[location:(location + len(shapelet))] = impute_shape
-                    dist, location = distance(shapelet, x, metric="euclidean", return_index=True)
+                    impute_shape = _shapelet_transform(
+                        shapelet, x, location, threshold + self.epsilon
+                    )
+                    x[location : location + len(shapelet)] = impute_shape
+                    dist, location = distance(
+                        shapelet, x, metric="euclidean", return_index=True
+                    )
         return x
+
 
 # class IncrementalTreeLabelTransform(CounterfactualTransformer):
 #     def _transform_single_path(self, x, path):

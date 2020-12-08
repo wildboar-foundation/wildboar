@@ -1,7 +1,5 @@
-from sklearn.utils import check_random_state
-
-from wildboar.tree import ShapeletTreeRegressor
 import numpy as np
+from sklearn.utils import check_random_state
 
 train = np.loadtxt("data/synthetic_control_TRAIN", delimiter=",")
 test = np.loadtxt("data/synthetic_control_TEST", delimiter=",")
@@ -22,11 +20,13 @@ x = np.ascontiguousarray(train[:, 1:].astype(np.float64))
 from sklearn.model_selection import train_test_split
 
 x_train, x_test, y_train, y_test = train_test_split(
-    x, y, test_size=0.3, random_state=123)
+    x, y, test_size=0.3, random_state=123
+)
 
 print(x_train.shape)
 
-from wildboar.ensemble import ShapeletForestRegressor, ExtraShapeletTreesRegressor
+from wildboar.ensemble import ExtraShapeletTreesRegressor
+
 b = ExtraShapeletTreesRegressor(
     random_state=123,
     n_estimators=100,
@@ -35,7 +35,8 @@ b = ExtraShapeletTreesRegressor(
     max_shapelet_size=1,
     bootstrap=False,
     metric="euclidean",
-    metric_params={"r": 0.2})
+    metric_params={"r": 0.2},
+)
 
 b.fit(x_train, y_train)
 print(b.score(x_test, y_test))
@@ -44,4 +45,5 @@ left = b.estimators_[1].tree_.left
 right = b.estimators_[1].tree_.right
 value = b.estimators_[1].tree_.value
 from sklearn.neighbors import KNeighborsRegressor
+
 print(KNeighborsRegressor().fit(x_train, y_train).score(x_test, y_test))

@@ -236,7 +236,6 @@ cdef class Tree:
                 node_index = 0
                 while self._left[node_index] != -1:
                     threshold = self._thresholds[node_index]
-                    # TODO: avoid copying the shapelet
                     shapelet = self._shapelets[node_index]
                     if self.distance_measure.ts_copy_distance(shapelet, &ts, i) <= threshold:
                         node_index = self._left[node_index]

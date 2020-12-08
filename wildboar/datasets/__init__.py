@@ -1,3 +1,20 @@
+# This file is part of wildboar
+#
+# wildboar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Isak Samsten
+
 import os
 import re
 from urllib.parse import urlparse
@@ -7,24 +24,24 @@ import numpy as np
 from ._repository import ArffRepository, NpyRepository, Repository
 
 _REPOSITORIES = {
-    'timeseriesclassification/univariate': ArffRepository(
+    "timeseriesclassification/univariate": ArffRepository(
         name="UCR Time series repository, univariate",
         description="A collection of 128 univariate time series. Downloaded from UCR Time series repository",
         download_url="http://www.timeseriesclassification.com/Downloads/Archives/Univariate2018_arff.zip",
         hash="db696c772f0a0c2679fc41fed7b2bbe6a67af251",
         class_index=-1,
-        encoding='utf-8'
+        encoding="utf-8",
     ),
-    'wildboar/ucr': NpyRepository(
+    "wildboar/ucr": NpyRepository(
         name="UCR Time series repository, univariate (Numpy optimized)",
         description="A collection of 128 univariate time series. Downloaded from UCR Time series repository",
         download_url="https://github.com/isaksamsten/wildboar/releases/download/dataset-v1.0/ucr_2018_npy.zip",
         hash="11bacbb31ccfe928be38740107dab38218ac50fa",
-        class_index=-1
-    )
+        class_index=-1,
+    ),
 }
 
-_REPOSITORY_INFERENCE_TYPES = {'npy', 'arff'}
+_REPOSITORY_INFERENCE_TYPES = {"npy", "arff"}
 
 __all__ = [
     "Repository",
@@ -36,7 +53,7 @@ __all__ = [
     "load_all_datasets",
     "load_two_lead_ecg",
     "load_synthetic_control",
-    "load_gun_point"
+    "load_gun_point",
 ]
 
 
@@ -46,8 +63,9 @@ def _default_cache_dir():
 
 def _os_cache_path(dir):
     import platform
+
     if platform.system() == "Windows":
-        cache_dir = os.path.expandvars(r'%LOCALAPPDATA%\Caches')
+        cache_dir = os.path.expandvars(r"%LOCALAPPDATA%\Caches")
         return os.path.join(cache_dir, dir)
     elif platform.system() == "Linux":
         cache_dir = os.environ.get("XDG_CACHE_HOME")
@@ -67,7 +85,9 @@ def load_synthetic_control(merge_train_test=True):
     --------
     load_dataset : load a named dataset
     """
-    return load_dataset("SyntheticControl", repository='wildboar/ucr', merge_train_test=merge_train_test)
+    return load_dataset(
+        "SyntheticControl", repository="wildboar/ucr", merge_train_test=merge_train_test
+    )
 
 
 def load_two_lead_ecg(merge_train_test=True):
@@ -77,7 +97,9 @@ def load_two_lead_ecg(merge_train_test=True):
     --------
     load_dataset : load a named dataset
     """
-    return load_dataset('TwoLeadECG', repository='wildboar/ucr', merge_train_test=merge_train_test)
+    return load_dataset(
+        "TwoLeadECG", repository="wildboar/ucr", merge_train_test=merge_train_test
+    )
 
 
 def load_gun_point(merge_train_test=True):
@@ -87,11 +109,20 @@ def load_gun_point(merge_train_test=True):
     --------
     load_dataset : load a named dataset
     """
-    return load_dataset('GunPoint', repository='wildboar/ucr', merge_train_test=merge_train_test)
+    return load_dataset(
+        "GunPoint", repository="wildboar/ucr", merge_train_test=merge_train_test
+    )
 
 
-def load_all_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False,
-                      **kwargs):
+def load_all_datasets(
+    repository="wildboar/ucr",
+    *,
+    cache_dir=None,
+    create_cache_dir=True,
+    progress=True,
+    force=False,
+    **kwargs
+):
     """Load all datasets as a generator
 
     Parameters
@@ -129,13 +160,28 @@ def load_all_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache
     >>> for dataset, (x, y) in load_all_datasets(repository='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
     """
-    for dataset in list_datasets(repository=repository, cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                 progress=progress, force=force):
+    for dataset in list_datasets(
+        repository=repository,
+        cache_dir=cache_dir,
+        create_cache_dir=create_cache_dir,
+        progress=progress,
+        force=force,
+    ):
         yield dataset, load_dataset(dataset, repository=repository, **kwargs)
 
 
-def load_dataset(name, *, repository='wildboar/ucr', dtype=None, contiguous=True, merge_train_test=True, cache_dir=None,
-                 create_cache_dir=True, progress=True, force=False):
+def load_dataset(
+    name,
+    *,
+    repository="wildboar/ucr",
+    dtype=None,
+    contiguous=True,
+    merge_train_test=True,
+    cache_dir=None,
+    create_cache_dir=True,
+    progress=True,
+    force=False
+):
     """Load a dataset from a repository
 
     Parameters
@@ -236,8 +282,14 @@ def load_dataset(name, *, repository='wildboar/ucr', dtype=None, contiguous=True
     cache_dir = cache_dir or _default_cache_dir()
     ret_val = []
     repository = get_repository(repository)
-    x, y, n_train_samples = repository.load(name, dtype=dtype, cache_dir=cache_dir, force=force,
-                                            create_cache_dir=create_cache_dir, progress=progress)
+    x, y, n_train_samples = repository.load(
+        name,
+        dtype=dtype,
+        cache_dir=cache_dir,
+        force=force,
+        create_cache_dir=create_cache_dir,
+        progress=progress,
+    )
 
     if merge_train_test:
         ret_val.append(x)
@@ -257,7 +309,14 @@ def load_dataset(name, *, repository='wildboar/ucr', dtype=None, contiguous=True
         return ret_val
 
 
-def list_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False):
+def list_datasets(
+    repository="wildboar/ucr",
+    *,
+    cache_dir=None,
+    create_cache_dir=True,
+    progress=True,
+    force=False
+):
     """List the datasets in the repository
 
     Parameters
@@ -288,7 +347,12 @@ def list_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir
     """
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository)
-    return repository.list(cache_dir=cache_dir, create_cache_dir=create_cache_dir, progress=progress, force=force)
+    return repository.list(
+        cache_dir=cache_dir,
+        create_cache_dir=create_cache_dir,
+        progress=progress,
+        force=force,
+    )
 
 
 def get_repository(repository):
@@ -321,7 +385,7 @@ def get_repository(repository):
         return _REPOSITORIES[repository]
     elif isinstance(repository, Repository):
         return repository
-    elif re.match('(http|https|file)://', repository):
+    elif re.match("(http|https|file)://", repository):
         url = urlparse(repository)
         filename = os.path.basename(url.path)
         name, ext = os.path.splitext(filename)
@@ -331,8 +395,14 @@ def get_repository(repository):
         if repository_inference:
             repository_type = repository_inference.group(1)
             if repository_type in _REPOSITORY_INFERENCE_TYPES:
-                return _new_repository(name, "Temporary repository", download_url=repository,
-                                       extension=".%s" % repository_type, class_index=-1, hash=None)
+                return _new_repository(
+                    name,
+                    "Temporary repository",
+                    download_url=repository,
+                    extension=".%s" % repository_type,
+                    class_index=-1,
+                    hash=None,
+                )
             else:
                 raise ValueError("repository (%s) is not supported" % repository_type)
         else:
@@ -342,9 +412,17 @@ def get_repository(repository):
         raise ValueError("repository (%s) is not supported" % repository)
 
 
-def install_repository(name, repository=None, *, download_url=None, description=None, hash=None, class_index=-1,
-                       extension=None):
-    """ Install a named repository
+def install_repository(
+    name,
+    repository=None,
+    *,
+    download_url=None,
+    description=None,
+    hash=None,
+    class_index=-1,
+    extension=None
+):
+    """Install a named repository
 
     Parameters
     ----------
@@ -372,15 +450,29 @@ def install_repository(name, repository=None, *, download_url=None, description=
     if isinstance(repository, Repository):
         _REPOSITORIES[name] = repository
     elif download_url is not None and extension is not None:
-        _REPOSITORIES[name] = _new_repository(name, description, download_url, hash, class_index, extension)
+        _REPOSITORIES[name] = _new_repository(
+            name, description, download_url, hash, class_index, extension
+        )
     else:
         raise ValueError("not a valid repository")
 
 
 def _new_repository(name, description, download_url, hash, class_index, extension):
-    if extension == '.arff':
-        return ArffRepository(name, download_url, description=description, hash=hash, class_index=class_index)
-    elif extension == '.npy':
-        return NpyRepository(name, download_url, description=description, hash=hash, class_index=class_index)
+    if extension == ".arff":
+        return ArffRepository(
+            name,
+            download_url,
+            description=description,
+            hash=hash,
+            class_index=class_index,
+        )
+    elif extension == ".npy":
+        return NpyRepository(
+            name,
+            download_url,
+            description=description,
+            hash=hash,
+            class_index=class_index,
+        )
     else:
         raise ValueError("extension (%s) is not supported" % extension)

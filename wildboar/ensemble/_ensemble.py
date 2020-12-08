@@ -12,7 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+#
 # Authors: Isak Samsten
 import numbers
 from abc import abstractmethod
@@ -38,16 +38,17 @@ from ..tree import ShapeletTreeRegressor
 class ShapeletForestMixin:
     def _validate_x_predict(self, x, check_input):
         if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions X.ndim ({})".format(
-                x.ndim))
+            raise ValueError("illegal input dimensions X.ndim ({})".format(x.ndim))
         if self.n_dims > 1 and x.ndim != 3:
             raise ValueError("illegal input dimensions X.ndim != 3")
         if x.shape[-1] != self.n_timestep:
-            raise ValueError("illegal input shape ({} != {})".format(
-                x.shape[-1], self.n_timestep))
+            raise ValueError(
+                "illegal input shape ({} != {})".format(x.shape[-1], self.n_timestep)
+            )
         if x.ndim > 2 and x.shape[1] != self.n_dims:
-            raise ValueError("illegal input shape ({} != {}".format(
-                x.shape[1], self.n_dims))
+            raise ValueError(
+                "illegal input shape ({} != {}".format(x.shape[1], self.n_dims)
+            )
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
         if x.dtype != np.float64 or not x.flags.contiguous:
@@ -65,23 +66,25 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
     instead.
     """
 
-    def __init__(self,
-                 base_estimator,
-                 *,
-                 estimator_params=tuple(),
-                 oob_score=False,
-                 n_estimators=100,
-                 max_depth=None,
-                 min_samples_split=2,
-                 n_shapelets=10,
-                 min_shapelet_size=0,
-                 max_shapelet_size=1,
-                 metric='euclidean',
-                 metric_params=None,
-                 bootstrap=True,
-                 warm_start=False,
-                 n_jobs=None,
-                 random_state=None):
+    def __init__(
+        self,
+        base_estimator,
+        *,
+        estimator_params=tuple(),
+        oob_score=False,
+        n_estimators=100,
+        max_depth=None,
+        min_samples_split=2,
+        n_shapelets=10,
+        min_shapelet_size=0,
+        max_shapelet_size=1,
+        metric="euclidean",
+        metric_params=None,
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None
+    ):
         super().__init__(
             base_estimator=base_estimator,
             n_estimators=n_estimators,
@@ -90,7 +93,7 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
             n_jobs=n_jobs,
             warm_start=warm_start,
             random_state=random_state,
-            oob_score=oob_score
+            oob_score=oob_score,
         )
         self.estimator_params = estimator_params
         self.max_depth = max_depth
@@ -102,7 +105,7 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
         self.metric_params = metric_params
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer='threads')
+        return _joblib_parallel_args(prefer="threads")
 
     def predict(self, X, check_input=True):
         x = self._validate_x_predict(X, check_input)
@@ -117,8 +120,7 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
         return super().predict_log_proba(x)
 
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a random shapelet forest classifier
-        """
+        """Fit a random shapelet forest classifier"""
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
             y = check_array(y, ensure_2d=False)
@@ -166,21 +168,23 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
     >>> y_hat = f.predict(x)
     """
 
-    def __init__(self,
-                 *,
-                 n_estimators=100,
-                 n_shapelets=10,
-                 max_depth=None,
-                 min_samples_split=2,
-                 min_shapelet_size=0,
-                 max_shapelet_size=1,
-                 metric='euclidean',
-                 metric_params=None,
-                 oob_score=False,
-                 bootstrap=True,
-                 warm_start=False,
-                 n_jobs=None,
-                 random_state=None):
+    def __init__(
+        self,
+        *,
+        n_estimators=100,
+        n_shapelets=10,
+        max_depth=None,
+        min_samples_split=2,
+        min_shapelet_size=0,
+        max_shapelet_size=1,
+        metric="euclidean",
+        metric_params=None,
+        oob_score=False,
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None
+    ):
         """Shapelet forest classifier.
 
         Parameters
@@ -228,8 +232,13 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         super().__init__(
             base_estimator=ShapeletTreeClassifier(),
             estimator_params=(
-                "max_depth", "n_shapelets", "min_samples_split", "min_shapelet_size",
-                "max_shapelet_size", "metric", "metric_params"
+                "max_depth",
+                "n_shapelets",
+                "min_samples_split",
+                "min_shapelet_size",
+                "max_shapelet_size",
+                "metric",
+                "metric_params",
             ),
             n_shapelets=n_shapelets,
             n_estimators=n_estimators,
@@ -243,7 +252,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
             bootstrap=bootstrap,
             warm_start=warm_start,
             n_jobs=n_jobs,
-            random_state=random_state
+            random_state=random_state,
         )
 
 
@@ -262,20 +271,22 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 
     """
 
-    def __init__(self,
-                 *,
-                 n_estimators=100,
-                 max_depth=None,
-                 min_samples_split=2,
-                 min_shapelet_size=0,
-                 max_shapelet_size=1,
-                 metric='euclidean',
-                 metric_params=None,
-                 oob_score=False,
-                 bootstrap=True,
-                 warm_start=False,
-                 n_jobs=None,
-                 random_state=None):
+    def __init__(
+        self,
+        *,
+        n_estimators=100,
+        max_depth=None,
+        min_samples_split=2,
+        min_shapelet_size=0,
+        max_shapelet_size=1,
+        metric="euclidean",
+        metric_params=None,
+        oob_score=False,
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None
+    ):
         """Construct a extra shapelet trees classifier.
 
         Parameters
@@ -317,8 +328,12 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         super().__init__(
             base_estimator=ExtraShapeletTreeClassifier(),
             estimator_params=(
-                "max_depth", "min_samples_split", "min_shapelet_size",
-                "max_shapelet_size", "metric", "metric_params"
+                "max_depth",
+                "min_samples_split",
+                "min_shapelet_size",
+                "max_shapelet_size",
+                "metric",
+                "metric_params",
             ),
             n_shapelets=1,
             n_estimators=n_estimators,
@@ -332,7 +347,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
             bootstrap=bootstrap,
             warm_start=warm_start,
             n_jobs=n_jobs,
-            random_state=random_state
+            random_state=random_state,
         )
 
 
@@ -346,23 +361,25 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
     """
 
     @abstractmethod
-    def __init__(self,
-                 base_estimator,
-                 *,
-                 estimator_params=tuple(),
-                 oob_score=False,
-                 n_estimators=100,
-                 max_depth=None,
-                 min_samples_split=2,
-                 n_shapelets=10,
-                 min_shapelet_size=0,
-                 max_shapelet_size=1,
-                 metric='euclidean',
-                 metric_params=None,
-                 bootstrap=True,
-                 warm_start=False,
-                 n_jobs=None,
-                 random_state=None):
+    def __init__(
+        self,
+        base_estimator,
+        *,
+        estimator_params=tuple(),
+        oob_score=False,
+        n_estimators=100,
+        max_depth=None,
+        min_samples_split=2,
+        n_shapelets=10,
+        min_shapelet_size=0,
+        max_shapelet_size=1,
+        metric="euclidean",
+        metric_params=None,
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None
+    ):
         super().__init__(
             base_estimator=base_estimator,
             n_estimators=n_estimators,
@@ -371,7 +388,7 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
             n_jobs=n_jobs,
             warm_start=warm_start,
             random_state=random_state,
-            oob_score=oob_score
+            oob_score=oob_score,
         )
         self.estimator_params = estimator_params
         self.max_depth = max_depth
@@ -383,15 +400,14 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
         self.metric_params = metric_params
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer='threads')
+        return _joblib_parallel_args(prefer="threads")
 
     def predict(self, x, check_input=True):
         x = self._validate_x_predict(x, check_input)
         return super().predict(x)
 
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a random shapelet forest regressor
-        """
+        """Fit a random shapelet forest regressor"""
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
             y = check_array(y, dtype=np.float64, ensure_2d=False, order="C")
@@ -415,7 +431,9 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
             y = np.ascontiguousarray(y, dtype=np.float64)
 
         x = x.reshape(n_samples, n_dims * self.n_timestep)
-        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight=sample_weight)
+        super()._fit(
+            x, y, self.max_samples, self.max_depth, sample_weight=sample_weight
+        )
         return self
 
     def _make_estimator(self, append=True, random_state=None):
@@ -439,21 +457,23 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
     >>> y_hat = f.predict(x)
     """
 
-    def __init__(self,
-                 *,
-                 n_estimators=100,
-                 n_shapelets=10,
-                 max_depth=None,
-                 min_samples_split=2,
-                 min_shapelet_size=0,
-                 max_shapelet_size=1,
-                 metric='euclidean',
-                 metric_params=None,
-                 oob_score=False,
-                 bootstrap=True,
-                 warm_start=False,
-                 n_jobs=None,
-                 random_state=None):
+    def __init__(
+        self,
+        *,
+        n_estimators=100,
+        n_shapelets=10,
+        max_depth=None,
+        min_samples_split=2,
+        min_shapelet_size=0,
+        max_shapelet_size=1,
+        metric="euclidean",
+        metric_params=None,
+        oob_score=False,
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None
+    ):
         """Shapelet forest regressor.
 
         Parameters
@@ -501,8 +521,13 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         super().__init__(
             base_estimator=ShapeletTreeRegressor(),
             estimator_params=(
-                "max_depth", "n_shapelets", "min_samples_split", "min_shapelet_size",
-                "max_shapelet_size", "metric", "metric_params"
+                "max_depth",
+                "n_shapelets",
+                "min_samples_split",
+                "min_shapelet_size",
+                "max_shapelet_size",
+                "metric",
+                "metric_params",
             ),
             n_shapelets=n_shapelets,
             n_estimators=n_estimators,
@@ -516,7 +541,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             bootstrap=bootstrap,
             warm_start=warm_start,
             n_jobs=n_jobs,
-            random_state=random_state
+            random_state=random_state,
         )
 
 
@@ -535,20 +560,22 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
 
     """
 
-    def __init__(self,
-                 *,
-                 n_estimators=100,
-                 max_depth=None,
-                 min_samples_split=2,
-                 min_shapelet_size=0,
-                 max_shapelet_size=1,
-                 metric='euclidean',
-                 metric_params=None,
-                 oob_score=False,
-                 bootstrap=True,
-                 warm_start=False,
-                 n_jobs=None,
-                 random_state=None):
+    def __init__(
+        self,
+        *,
+        n_estimators=100,
+        max_depth=None,
+        min_samples_split=2,
+        min_shapelet_size=0,
+        max_shapelet_size=1,
+        metric="euclidean",
+        metric_params=None,
+        oob_score=False,
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None
+    ):
         """Construct a extra shapelet trees regressor.
 
         Parameters
@@ -590,8 +617,12 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         super().__init__(
             base_estimator=ExtraShapeletTreeRegressor(),
             estimator_params=(
-                "max_depth", "min_samples_split", "min_shapelet_size",
-                "max_shapelet_size", "metric", "metric_params"
+                "max_depth",
+                "min_samples_split",
+                "min_shapelet_size",
+                "max_shapelet_size",
+                "metric",
+                "metric_params",
             ),
             n_shapelets=1,
             n_estimators=n_estimators,
@@ -605,7 +636,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
             bootstrap=bootstrap,
             warm_start=warm_start,
             n_jobs=n_jobs,
-            random_state=random_state
+            random_state=random_state,
         )
 
 
@@ -647,21 +678,24 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
     >>> balanced_accuracy_score(y_test, y_pred)
     """
 
-    def __init__(self, *,
-                 n_estimators=100,
-                 bootstrap=False,
-                 n_jobs=None,
-                 min_shapelet_size=0,
-                 max_shapelet_size=1,
-                 min_samples_split=2,
-                 max_samples='auto',
-                 contamination='auto',
-                 contamination_set="training",
-                 warm_start=False,
-                 metric='euclidean',
-                 metric_params=None,
-                 random_state=None):
-        """ Construct a shapelet isolation forest
+    def __init__(
+        self,
+        *,
+        n_estimators=100,
+        bootstrap=False,
+        n_jobs=None,
+        min_shapelet_size=0,
+        max_shapelet_size=1,
+        min_samples_split=2,
+        max_samples="auto",
+        contamination="auto",
+        contamination_set="training",
+        warm_start=False,
+        metric="euclidean",
+        metric_params=None,
+        random_state=None
+    ):
+        """Construct a shapelet isolation forest
 
         Parameters
         ----------
@@ -728,11 +762,14 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             warm_start=warm_start,
             n_jobs=n_jobs,
             n_estimators=n_estimators,
-            random_state=random_state
+            random_state=random_state,
         )
         self.estimator_params = (
-            "min_samples_split", "min_shapelet_size",
-            "max_shapelet_size", "metric", "metric_params"
+            "min_samples_split",
+            "min_shapelet_size",
+            "max_shapelet_size",
+            "metric",
+            "metric_params",
         )
         self.metric = metric
         self.metric_params = metric_params
@@ -749,7 +786,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
         raise NotImplementedError("OOB score not supported")
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer='threads')
+        return _joblib_parallel_args(prefer="threads")
 
     def fit(self, x, y=None, sample_weight=None, check_input=True):
         random_state = check_random_state(self.random_state)
@@ -782,27 +819,42 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             if self.max_samples == "auto":
                 max_samples = min(x.shape[0], 256)
             else:
-                raise ValueError("max_samples (%s) is not supported." % self.max_samples)
+                raise ValueError(
+                    "max_samples (%s) is not supported." % self.max_samples
+                )
         elif isinstance(self.max_samples, numbers.Integral):
             max_samples = min(self.max_samples, x.shape[0])
         else:
-            if not 0. < self.max_samples <= 1.0:
-                raise ValueError("max_samples must be in (0, 1], got %r" % self.max_samples)
+            if not 0.0 < self.max_samples <= 1.0:
+                raise ValueError(
+                    "max_samples must be in (0, 1], got %r" % self.max_samples
+                )
             max_samples = int(self.max_samples * x.shape[0])
 
         super(IsolationShapeletForest, self)._fit(
-            x, rnd_y, max_samples=max_samples, max_depth=max_depth, sample_weight=sample_weight)
+            x,
+            rnd_y,
+            max_samples=max_samples,
+            max_depth=max_depth,
+            sample_weight=sample_weight,
+        )
 
         self.max_samples_ = max_samples
-        if self.contamination == 'auto':
+        if self.contamination == "auto":
             self.offset_ = -0.5
-        elif self.contamination in ["auc", "prc"] or hasattr(self.contamination, "__call__"):
+        elif self.contamination in ["auc", "prc"] or hasattr(
+            self.contamination, "__call__"
+        ):
             if y is None:
-                raise ValueError("contamination cannot be computed without training labels")
+                raise ValueError(
+                    "contamination cannot be computed without training labels"
+                )
 
             if self.contamination_set == "oob":
                 if not self.bootstrap:
-                    raise ValueError("contamination cannot be computed from oob-samples unless bootstrap=True")
+                    raise ValueError(
+                        "contamination cannot be computed from oob-samples unless bootstrap=True"
+                    )
                 scores = self._oob_score_samples(x)
             else:
                 scores = self.score_samples(x)
@@ -820,18 +872,30 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
                 thresholds = scores
             self.offset_ = thresholds[best_threshold]
         elif isinstance(self.contamination, numbers.Real):
-            if not 0. < self.contamination <= 1.0:
-                raise ValueError("contamination must be in (0, 1], got %r" % self.contamination)
+            if not 0.0 < self.contamination <= 1.0:
+                raise ValueError(
+                    "contamination must be in (0, 1], got %r" % self.contamination
+                )
             if self.contamination_set == "training":
-                self.offset_ = np.percentile(self.score_samples(x), 100.0 * self.contamination)
+                self.offset_ = np.percentile(
+                    self.score_samples(x), 100.0 * self.contamination
+                )
             elif self.contamination_set == "oob":
                 if not self.bootstrap:
-                    raise ValueError("contamination cannot be computed from oob-samples unless bootstrap=True")
-                self.offset_ = np.percentile(self._oob_score_samples(x), 100.0 * self.contamination)
+                    raise ValueError(
+                        "contamination cannot be computed from oob-samples unless bootstrap=True"
+                    )
+                self.offset_ = np.percentile(
+                    self._oob_score_samples(x), 100.0 * self.contamination
+                )
             else:
-                raise ValueError("contamination_set (%s) is not supported" % self.contamination_set)
+                raise ValueError(
+                    "contamination_set (%s) is not supported" % self.contamination_set
+                )
         else:
-            raise ValueError("contamination (%s) is not supported." % self.contamination)
+            raise ValueError(
+                "contamination (%s) is not supported." % self.contamination
+            )
 
         return self
 
@@ -857,8 +921,11 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             for estimator, samples in zip(self.estimators_, self.estimators_samples_):
                 if i not in samples:
                     estimators.append(estimator)
-            score_samples[i] = _score_samples(x[i].reshape((1, self.n_dims, self.n_timestep)),
-                                              estimators, self.max_samples_)
+            score_samples[i] = _score_samples(
+                x[i].reshape((1, self.n_dims, self.n_timestep)),
+                estimators,
+                self.max_samples_,
+            )
         return score_samples
 
 
@@ -871,8 +938,14 @@ def _score_samples(x, estimators, max_samples):
         node_indicator = tree.decision_path(x)
         n_samples_leaf = tree.tree_.n_node_samples[leaves_index]
 
-        depths += np.ravel(node_indicator.sum(axis=1)) + _average_path_length(n_samples_leaf) - 1.0
-    scores = 2 ** (-depths / (len(estimators) * _average_path_length(np.array([max_samples]))))
+        depths += (
+            np.ravel(node_indicator.sum(axis=1))
+            + _average_path_length(n_samples_leaf)
+            - 1.0
+        )
+    scores = 2 ** (
+        -depths / (len(estimators) * _average_path_length(np.array([max_samples])))
+    )
     return -scores
 
 
@@ -886,11 +959,11 @@ def _average_path_length(n_samples_leaf):
     mask_2 = n_samples_leaf == 2
     not_mask = ~np.logical_or(mask_1, mask_2)
 
-    average_path_length[mask_1] = 0.
-    average_path_length[mask_2] = 1.
+    average_path_length[mask_1] = 0.0
+    average_path_length[mask_2] = 1.0
     average_path_length[not_mask] = (
-            2.0 * (np.log(n_samples_leaf[not_mask] - 1.0) + np.euler_gamma)
-            - 2.0 * (n_samples_leaf[not_mask] - 1.0) / n_samples_leaf[not_mask]
+        2.0 * (np.log(n_samples_leaf[not_mask] - 1.0) + np.euler_gamma)
+        - 2.0 * (n_samples_leaf[not_mask] - 1.0) / n_samples_leaf[not_mask]
     )
 
     return average_path_length.reshape(n_samples_leaf_shape)

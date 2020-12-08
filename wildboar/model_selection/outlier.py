@@ -1,3 +1,20 @@
+# This file is part of wildboar
+#
+# wildboar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Isak Samsten
+
 import math
 
 import numpy as np
@@ -8,7 +25,9 @@ from sklearn.utils._random import sample_without_replacement
 __all__ = ["train_test_split", "threshold_score"]
 
 
-def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None):
+def train_test_split(
+    x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None
+):
     """Training and testing split from classification dataset
 
     Parameters
@@ -29,7 +48,7 @@ def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.0
         Contamination of anomalies in the training dataset
 
     random_state : int or RandomState
-        Random state used for randomization. Pass int for stable result between function calls.
+        Psudo random state used for stable results.
 
     Returns
     -------
@@ -63,13 +82,15 @@ def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.0
     y_normal = y[np.where(y == 1)]
     y_anomalous = y[np.where(y == -1)]
 
-    x_normal_train, x_normal_test, y_normal_train, y_normal_test = model_selection.train_test_split(
+    (xn_train, xn_test, yn_train, yn_test) = model_selection.train_test_split(
         x_normal, y_normal, test_size=test_size, random_state=random_state
     )
 
     n_sample = min(x_anomalous.shape[0], x_normal.shape[0])
-    idx = sample_without_replacement(x_anomalous.shape[0], n_sample, random_state=random_state)
-    n_training_anomalies = math.ceil(x_normal_train.shape[0] * anomalies_train_size)
+    idx = sample_without_replacement(
+        x_anomalous.shape[0], n_sample, random_state=random_state
+    )
+    n_training_anomalies = math.ceil(xn_train.shape[0] * anomalies_train_size)
     idx = idx[:n_training_anomalies]
 
     x_anomalous_train = x_anomalous[idx, :]
@@ -78,10 +99,10 @@ def train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.0
     x_anomalous_test = np.delete(x_anomalous, idx, axis=0)
     y_anomalous_test = np.delete(y_anomalous, idx)
 
-    x_train = np.vstack([x_normal_train, x_anomalous_train])
-    y_train = np.hstack([y_normal_train, y_anomalous_train])
-    x_test = np.vstack([x_normal_test, x_anomalous_test])
-    y_test = np.hstack([y_normal_test, y_anomalous_test])
+    x_train = np.vstack([xn_train, x_anomalous_train])
+    y_train = np.hstack([yn_train, y_anomalous_train])
+    x_test = np.vstack([xn_test, x_anomalous_test])
+    y_test = np.hstack([yn_test, y_anomalous_test])
     return x_train, x_test, y_train, y_test
 
 

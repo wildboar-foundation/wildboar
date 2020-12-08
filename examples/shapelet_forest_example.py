@@ -5,7 +5,9 @@ from wildboar import datasets
 from wildboar.ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
 
 x, y = datasets.load_gun_point()
-extra = ExtraShapeletTreesClassifier(n_estimators=100, n_jobs=16, metric="scaled_euclidean")
+extra = ExtraShapeletTreesClassifier(
+    n_estimators=100, n_jobs=16, metric="scaled_euclidean"
+)
 rsf = ShapeletForestClassifier(n_estimators=100, n_jobs=16, metric="scaled_euclidean")
 score = cross_val_score(rsf, x, y, cv=10)
 print("RSF", np.mean(score))

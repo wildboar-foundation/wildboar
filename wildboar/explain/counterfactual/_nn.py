@@ -1,3 +1,20 @@
+# This file is part of wildboar
+#
+# wildboar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Isak Samsten
+
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.neighbors import NearestNeighbors, KNeighborsClassifier
@@ -31,7 +48,9 @@ class KNeighborsCounterfactual(BaseCounterfactual):
             raise ValueError("not a valid estimator")
         check_is_fitted(estimator)
         if estimator.metric != "euclidean":
-            raise ValueError("only euclidean distance is supported, got %r" % estimator.metric)
+            raise ValueError(
+                "only euclidean distance is supported, got %r" % estimator.metric
+            )
 
         x = estimator._fit_X
         y = estimator._y
@@ -47,12 +66,16 @@ class KNeighborsCounterfactual(BaseCounterfactual):
             for cluster_label, class_label in zip(kmeans.labels_, y):
                 center_majority[cluster_label, class_label] += 1
 
-            center_prob = center_majority / np.sum(center_majority, axis=1).reshape(-1, 1)
+            center_prob = center_majority / np.sum(center_majority, axis=1).reshape(
+                -1, 1
+            )
             majority_class = center_prob[:, to_idx] > (1.0 / n_classes)
-            maximum_class = center_majority[:, to_idx] >= (estimator.n_neighbors // n_classes) + 1
+            maximum_class = (
+                center_majority[:, to_idx] >= (estimator.n_neighbors // n_classes) + 1
+            )
             cluster_centers = kmeans.cluster_centers_
             majority_centers = cluster_centers[majority_class & maximum_class, :]
-            majority_center_nn = NearestNeighbors(n_neighbors=1, metric='euclidean')
+            majority_center_nn = NearestNeighbors(n_neighbors=1, metric="euclidean")
             if majority_centers.shape[0] > 0:
                 majority_center_nn.fit(majority_centers)
 

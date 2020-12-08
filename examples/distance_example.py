@@ -4,14 +4,17 @@ from wildboar.distance import distance, matches
 
 from wildboar.datasets import load_two_lead_ecg
 
-x, y = load_two_lead_ecg()
-d, i = distance(x[0, 10:20], x, sample=[0, 1, 2, 3, 5, 10], metric='scaled_dtw', metric_params={'r': 0}, return_index=True)
-print(d)
-print(i)
+# x, y = load_two_lead_ecg()
+# d, i = distance(x[0, 10:20], x, sample=[0, 1, 2, 3, 5, 10], metric='scaled_dtw', metric_params={'r': 0}, return_index=True)
+# print(d)
+# print(i)
+#
+# d, i = matches(x[0, 10:20], x, 1.7, sample=[0, 1, 2], metric='scaled_euclidean', metric_params={'r': 0}, return_distance=True)
+# print(d)
+# print(i)
 
-d, i = matches(x[0, 10:20], x, 1.7, sample=[0, 1, 2], metric='scaled_euclidean', metric_params={'r': 0}, return_distance=True)
-print(d)
-print(i)
+x = [1, 2, 3, 4, 5]
+print(distance([1, 2, 3], x, dim=0))
 
 
 # from wildboar.distance import matches

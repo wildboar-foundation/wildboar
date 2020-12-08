@@ -1,4 +1,20 @@
-# Repository = namedtuple("Repository", "name description download_url hash extension ndim", defaults=[None, None, 1])
+# This file is part of wildboar
+#
+# wildboar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Isak Samsten
+
 import hashlib
 import io
 import os
@@ -35,7 +51,9 @@ class Repository(metaclass=ABCMeta):
         Index of the class label(s)
     """
 
-    def __init__(self, name, download_url, *, description=None, hash=None, class_index=-1):
+    def __init__(
+        self, name, download_url, *, description=None, hash=None, class_index=-1
+    ):
         """Construct a repository
 
         Parameters
@@ -83,8 +101,12 @@ class Repository(metaclass=ABCMeta):
         dataset_names : list
             A sorted list of datasets in the repository
         """
-        with self._download_repository(cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                       progress=progress, force=force) as archive:
+        with self._download_repository(
+            cache_dir=cache_dir,
+            create_cache_dir=create_cache_dir,
+            progress=progress,
+            force=force,
+        ) as archive:
             names = []
             for f in archive.filelist:
                 path, ext = os.path.splitext(f.filename)
@@ -95,7 +117,16 @@ class Repository(metaclass=ABCMeta):
 
             return sorted(set(names))
 
-    def load(self, name, cache_dir, *, create_cache_dir=True, progress=True, dtype=None, force=False):
+    def load(
+        self,
+        name,
+        cache_dir,
+        *,
+        create_cache_dir=True,
+        progress=True,
+        dtype=None,
+        force=False
+    ):
         """Load a dataset from the repository
 
         Parameters
@@ -130,17 +161,31 @@ class Repository(metaclass=ABCMeta):
             Number of samples that are for training. The value is <= x.shape[0]
         """
         dtype = dtype or np.float64
-        with self._download_repository(cache_dir=cache_dir, create_cache_dir=create_cache_dir,
-                                       progress=progress, force=force) as archive:
+        with self._download_repository(
+            cache_dir=cache_dir,
+            create_cache_dir=create_cache_dir,
+            progress=progress,
+            force=force,
+        ) as archive:
             datasets = []
             for dataset in map(_Dataset, archive.filelist):
-                if dataset.filename == name and self._is_dataset(dataset.path, dataset.ext):
+                if dataset.filename == name and self._is_dataset(
+                    dataset.path, dataset.ext
+                ):
                     datasets.append(dataset)
 
             if not datasets:
                 raise ValueError("no dataset found (%s)" % name)
-            train_parts = [self._load_array(archive, dataset.file) for dataset in datasets if dataset.part == 'train']
-            test_parts = [self._load_array(archive, dataset.file) for dataset in datasets if dataset.part == 'test']
+            train_parts = [
+                self._load_array(archive, dataset.file)
+                for dataset in datasets
+                if dataset.part == "train"
+            ]
+            test_parts = [
+                self._load_array(archive, dataset.file)
+                for dataset in datasets
+                if dataset.part == "test"
+            ]
 
             data = np.vstack(train_parts)
             n_train_samples = data.shape[0]
@@ -195,13 +240,17 @@ class Repository(metaclass=ABCMeta):
         """
         pass
 
-    def _download_repository(self, cache_dir, *, create_cache_dir=True, progress=True, force=False):
+    def _download_repository(
+        self, cache_dir, *, create_cache_dir=True, progress=True, force=False
+    ):
         """Download a repository to the cache directory"""
         if not os.path.exists(cache_dir):
             if create_cache_dir:
                 os.mkdir(cache_dir)
             else:
-                raise ValueError("output directory does not exist (set create_cache_dir=True to create it)")
+                raise ValueError(
+                    "output directory does not exist (set create_cache_dir=True to create it)"
+                )
 
         url_parse = urlparse(self.download_url)
         path = url_parse.path
@@ -218,18 +267,19 @@ class Repository(metaclass=ABCMeta):
                 os.remove(filename)
             else:
                 try:
-                    z_file = zipfile.ZipFile(open(filename, 'rb'))
+                    z_file = zipfile.ZipFile(open(filename, "rb"))
                     self._check_integrity(filename)
                     return z_file
                 except zipfile.BadZipFile:
                     os.remove(filename)
         if url_parse.scheme == "file":
             from shutil import copyfile
+
             copyfile(url_parse.path, filename)
         else:
-            with open(filename, 'wb') as f:
+            with open(filename, "wb") as f:
                 response = requests.get(self.download_url, stream=True)
-                total_length = response.headers.get('content-length')
+                total_length = response.headers.get("content-length")
                 if total_length is None:  # no content length header
                     f.write(response.content)
                 else:
@@ -240,26 +290,52 @@ class Repository(metaclass=ABCMeta):
                         f.write(data)
                         done = int(50 * length / total_length)
                         if length % 10 == 0 and progress:
-                            sys.stderr.write("\r[%s%s] %d/%d downloading %s" %
-                                             ('=' * done, ' ' * (50 - done), length, total_length, basename))
+                            sys.stderr.write(
+                                "\r[%s%s] %d/%d downloading %s"
+                                % (
+                                    "=" * done,
+                                    " " * (50 - done),
+                                    length,
+                                    total_length,
+                                    basename,
+                                )
+                            )
                             sys.stderr.flush()
 
             self._check_integrity(filename)
-            return zipfile.ZipFile(open(filename, 'rb'))
+            return zipfile.ZipFile(open(filename, "rb"))
 
     def _check_integrity(self, filename):
         """Check the integrity of the downloaded or cached file"""
         if self.hash is not None:
             actual_hash = _sha1(filename)
             if self.hash != actual_hash:
-                raise ValueError("integrity check failed, expected '%s', got '%s'" % (self.hash, actual_hash))
+                raise ValueError(
+                    "integrity check failed, expected '%s', got '%s'"
+                    % (self.hash, actual_hash)
+                )
 
 
 class ArffRepository(Repository):
     """Repository of .arff-files"""
 
-    def __init__(self, name, download_url, *, description=None, hash=None, class_index=-1, encoding='utf-8'):
-        super().__init__(name, download_url, hash=hash, description=description, class_index=class_index)
+    def __init__(
+        self,
+        name,
+        download_url,
+        *,
+        description=None,
+        hash=None,
+        class_index=-1,
+        encoding="utf-8"
+    ):
+        super().__init__(
+            name,
+            download_url,
+            hash=hash,
+            description=description,
+            class_index=class_index,
+        )
         self.encoding = encoding
 
     def _is_dataset(self, file_name, ext):
@@ -276,31 +352,30 @@ class NpyRepository(Repository):
     """Repository of numpy binary files"""
 
     def _is_dataset(self, file_name, ext):
-        return ext == '.npy'
+        return ext == ".npy"
 
     def _load_array(self, archive, file):
         return np.load(archive.open(file))
 
 
 class _Dataset:
-
     def __init__(self, zip_info):
         self.file = zip_info
         self.path, self.ext = os.path.splitext(zip_info.filename)
         self.filename = os.path.basename(self.path)
         if "_TRAIN" in self.filename:
-            self.part = 'train'
+            self.part = "train"
             self.filename = self.filename.replace("_TRAIN", "")
         elif "_TEST" in self.filename:
-            self.part = 'test'
+            self.part = "test"
             self.filename = self.filename.replace("_TEST", "")
         else:
-            self.part = 'train'
+            self.part = "train"
 
 
 def _sha1(file, buf_size=65536):
     sha1 = hashlib.sha1()
-    with open(file, 'rb') as f:
+    with open(file, "rb") as f:
         while True:
             data = f.read(buf_size)
             if not data:

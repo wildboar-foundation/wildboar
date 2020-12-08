@@ -1,5 +1,3 @@
-# cython: language_level=3
-
 # This file is part of wildboar
 #
 # wildboar is free software: you can redistribute it and/or modify it
@@ -14,7 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+#
 # Authors: Isak Samsten
 
 from . import _distance
@@ -22,7 +20,15 @@ from . import _distance
 __all__ = ["distance", "matches"]
 
 
-def distance(shapelet, x, dim=0, sample=None, metric="euclidean", metric_params=None, return_index=False):
+def distance(
+    shapelet,
+    x,
+    dim=0,
+    sample=None,
+    metric="euclidean",
+    metric_params=None,
+    return_index=False,
+):
     """Computes the minimum distance between a subsequence and the samples in `x`
 
     Parameters
@@ -76,12 +82,28 @@ def distance(shapelet, x, dim=0, sample=None, metric="euclidean", metric_params=
     >>> i
     [10 29  9 72 20 30]
     """
-    return _distance.distance(shapelet, x, dim=dim, sample=sample, metric=metric, metric_params=metric_params,
-                              return_index=return_index)
+    return _distance.distance(
+        shapelet,
+        x,
+        dim=dim,
+        sample=sample,
+        metric=metric,
+        metric_params=metric_params,
+        return_index=return_index,
+    )
 
 
-def matches(shapelet, x, threshold, *, dim=0, sample=None, metric="euclidean", metric_params=None,
-            return_distance=False):
+def matches(
+    shapelet,
+    x,
+    threshold,
+    *,
+    dim=0,
+    sample=None,
+    metric="euclidean",
+    metric_params=None,
+    return_distance=False
+):
     """Return the positions in `x` (one list per `sample`) where `shapelet` is closer than `threshold`.
 
     Parameters
@@ -128,4 +150,6 @@ def matches(shapelet, x, threshold, *, dim=0, sample=None, metric="euclidean", m
     --------
     'scaled_dtw' is not supported.
     """
-    return _distance.matches(shapelet, x, threshold, dim, sample, metric, metric_params, return_distance)
+    return _distance.matches(
+        shapelet, x, threshold, dim, sample, metric, metric_params, return_distance
+    )

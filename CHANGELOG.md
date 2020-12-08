@@ -1,3 +1,18 @@
+# 1.0
+
+# Major features
+
+Stability
+
+# 0.3.4
+
+## Major features
+
+Complete rewrite of the shapelet tree representation to allow releasing GIL.
+The prediction of trees should be backwards compatible, i.e., trees fitted using
+the new versions are functionally equivalent to the old but with another internal
+representation.
+
 # 0.3.1
 
 ## Major features

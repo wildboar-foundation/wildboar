@@ -1,3 +1,20 @@
+# This file is part of wildboar
+#
+# wildboar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Isak Samsten
+
 import math
 import numbers
 import warnings
@@ -13,7 +30,13 @@ from sklearn.utils import check_random_state, check_array
 
 from wildboar.linear_model import KernelLogisticRegression
 
-__all__ = ['OutlierLabeler', 'KMeansLabeler', 'DensityLabeler', 'MinorityLabeler', 'EmmottLabeler']
+__all__ = [
+    "OutlierLabeler",
+    "KMeansLabeler",
+    "DensityLabeler",
+    "MinorityLabeler",
+    "EmmottLabeler",
+]
 
 
 class OutlierLabeler(metaclass=ABCMeta):
@@ -75,7 +98,9 @@ class KMeansLabeler(OutlierLabeler):
         # skip clusters with too few samples
         invalid_clusters = np.where(count < 5)
 
-        centroid_distance = pairwise_distances(self.k_means_.cluster_centers_, metric='euclidean')
+        centroid_distance = pairwise_distances(
+            self.k_means_.cluster_centers_, metric="euclidean"
+        )
 
         # skip self matches and invalid clusters
         centroid_distance[centroid_distance == 0] = np.nan
@@ -99,11 +124,16 @@ class KMeansLabeler(OutlierLabeler):
             n_outliers = self.n_outliers or math.ceil(x.shape[0] * 0.05)
         elif isinstance(self.n_outliers, float):
             if not 0.0 < self.n_outliers <= 1.0:
-                raise ValueError("n_outliers must be in (0, 1], got %r" % self.n_outliers)
+                raise ValueError(
+                    "n_outliers must be in (0, 1], got %r" % self.n_outliers
+                )
             n_outliers = math.ceil(x.shape[0] * self.n_outliers)
         elif isinstance(self.n_outliers, int):
             if not 0 < self.n_outliers < x.shape[0]:
-                raise ValueError("n_outliers must be in (0, %d), got %r" % (x.shape[0], self.n_outliers))
+                raise ValueError(
+                    "n_outliers must be in (0, %d), got %r"
+                    % (x.shape[0], self.n_outliers)
+                )
             n_outliers = self.n_outliers
         else:
             raise ValueError("n_outliers (%s) not supported" % self.n_outliers)
@@ -119,11 +149,11 @@ class KMeansLabeler(OutlierLabeler):
         y_new[outlier_indices] = -1
         return (
             np.concatenate([x[inliers_indices, :], x[outlier_indices, :]], axis=0),
-            np.concatenate([y_new[inliers_indices], y_new[outlier_indices]], axis=0)
+            np.concatenate([y_new[inliers_indices], y_new[outlier_indices]], axis=0),
         )
 
 
-DENSITY_ESTIMATORS = {'dbscan': DBSCAN(), 'optics': OPTICS()}
+DENSITY_ESTIMATORS = {"dbscan": DBSCAN(), "optics": OPTICS()}
 DENSITY_ESTIMATORS_PARAMS = {}
 
 
@@ -139,14 +169,17 @@ class DensityLabeler(OutlierLabeler):
 
     def fit(self, x, y=None):
         if self.estimator is None:
-            self.estimator_ = DENSITY_ESTIMATORS['dbscan']
+            self.estimator_ = DENSITY_ESTIMATORS["dbscan"]
         elif self.estimator in DENSITY_ESTIMATORS:
             self.estimator_ = DENSITY_ESTIMATORS[self.estimator]
         else:
             self.estimator_ = self.estimator
 
-        estimator_params = self.estimator_params or DENSITY_ESTIMATORS_PARAMS[
-            self.estimator] if self.estimator in DENSITY_ESTIMATORS_PARAMS else {}
+        estimator_params = (
+            self.estimator_params or DENSITY_ESTIMATORS_PARAMS[self.estimator]
+            if self.estimator in DENSITY_ESTIMATORS_PARAMS
+            else {}
+        )
         self.estimator_.set_params(**estimator_params)
         self.estimator_.fit(x, y)
         label, count = np.unique(self.estimator_.labels_, return_counts=True)
@@ -165,10 +198,10 @@ class DensityLabeler(OutlierLabeler):
 
     def transform(self, x, y):
         y = np.ones(x.shape[0])
-        if hasattr(self.estimator_, 'predict'):
+        if hasattr(self.estimator_, "predict"):
             y[self.estimator.predict(x) == -1] = -1
         else:
-            raise ValueError('estimator does not support predict')
+            raise ValueError("estimator does not support predict")
 
 
 class MinorityLabeler(OutlierLabeler):
@@ -201,7 +234,9 @@ class MinorityLabeler(OutlierLabeler):
             n_outliers = outliers.shape[0]
         elif isinstance(self.n_outliers, numbers.Real):
             if not 0.0 < self.n_outliers <= 1.0:
-                raise ValueError("n_outliers must be in (0, 1], got %r" % self.n_outliers)
+                raise ValueError(
+                    "n_outliers must be in (0, 1], got %r" % self.n_outliers
+                )
             n_outliers = math.ceil(self.n_outliers * inliers.shape[0])
         else:
             raise ValueError("n_outlier (%r) is not supported" % self.n_outliers)
@@ -220,6 +255,7 @@ DEFAULT_EMMOTT_SCALE = np.array([0, 0.16, 0.3, 0.5])
 def _variation_dispersed(x, n_outliers, random_state):
     try:
         from sklearn_extra.cluster import KMedoids
+
         n_outliers = min(x.shape[0], n_outliers)
         f = KMedoids(n_clusters=n_outliers, random_state=random_state).fit(x)
         return f.medoid_indices_
@@ -241,14 +277,14 @@ def _set_random_states(estimator, random_state=None):
     random_state = check_random_state(random_state)
     to_set = {}
     for key in sorted(estimator.get_params(deep=True)):
-        if key == 'random_state' or key.endswith('__random_state'):
+        if key == "random_state" or key.endswith("__random_state"):
             to_set[key] = random_state.randint(np.iinfo(np.int32).max)
 
     if to_set:
         estimator.set_params(**to_set)
 
 
-_EMMOTT_VARIATION = {'tight': _variation_tight, 'dispersed': _variation_dispersed}
+_EMMOTT_VARIATION = {"tight": _variation_tight, "dispersed": _variation_dispersed}
 
 
 class EmmottLabeler(OutlierLabeler):
@@ -299,8 +335,17 @@ class EmmottLabeler(OutlierLabeler):
 
     """
 
-    def __init__(self, n_outliers=None, *, confusion_estimator=None, difficulty_estimator=None, difficulty='simplest',
-                 scale=None, variation='tight', random_state=None):
+    def __init__(
+        self,
+        n_outliers=None,
+        *,
+        confusion_estimator=None,
+        difficulty_estimator=None,
+        difficulty="simplest",
+        scale=None,
+        variation="tight",
+        random_state=None
+    ):
         """Construct a new emmott labeler for synthetic outlier datasets
 
         Parameters
@@ -355,7 +400,9 @@ class EmmottLabeler(OutlierLabeler):
 
         if self.n_classes_ > 2:
             if self.confusion_estimator is None:
-                self.confusion_estimator_ = RandomForestClassifier(n_jobs=-1, oob_score=True)
+                self.confusion_estimator_ = RandomForestClassifier(
+                    n_jobs=-1, oob_score=True
+                )
             else:
                 self.confusion_estimator_ = clone(self.confusion_estimator)
             _set_random_states(self.confusion_estimator_, random_state)
@@ -363,9 +410,13 @@ class EmmottLabeler(OutlierLabeler):
             self.confusion_estimator_.fit(x, y)
             try:
                 import networkx as nx
-                if hasattr(self.confusion_estimator_, 'oob_decision_function_'):
-                    y_pred = self.confusion_estimator_.classes_[np.argmax(
-                        self.confusion_estimator_.oob_decision_function_, axis=1)]
+
+                if hasattr(self.confusion_estimator_, "oob_decision_function_"):
+                    y_pred = self.confusion_estimator_.classes_[
+                        np.argmax(
+                            self.confusion_estimator_.oob_decision_function_, axis=1
+                        )
+                    ]
                 else:
                     y_pred = self.confusion_estimator_.predict(x)
                 cm = confusion_matrix(y, y_pred)  # TODO: use probabilities
@@ -375,9 +426,11 @@ class EmmottLabeler(OutlierLabeler):
                 for i in range(self.n_classes_):
                     for j in range(self.n_classes_):
                         if i != j:
-                            graph.add_edge(classes[i], classes[j], weight=cm[i][j] + cm[j][i])
+                            graph.add_edge(
+                                classes[i], classes[j], weight=cm[i][j] + cm[j][i]
+                            )
 
-                max_spanning_tree = nx.maximum_spanning_tree(graph, algorithm='kruskal')
+                max_spanning_tree = nx.maximum_spanning_tree(graph, algorithm="kruskal")
                 coloring = nx.algorithms.bipartite.color(max_spanning_tree)
                 labeling = {1: [], 0: []}
                 for cls in classes:
@@ -402,7 +455,9 @@ class EmmottLabeler(OutlierLabeler):
         y_new[np.isin(y, self.outlier_label_)] = -1
 
         if self.difficulty_estimator is None:
-            self.difficulty_estimator_ = KernelLogisticRegression(kernel='poly', max_iter=1000)
+            self.difficulty_estimator_ = KernelLogisticRegression(
+                kernel="poly", max_iter=1000
+            )
         else:
             self.difficulty_estimator_ = clone(self.difficulty_estimator)
         _set_random_states(self.difficulty_estimator_, random_state)
@@ -411,17 +466,21 @@ class EmmottLabeler(OutlierLabeler):
 
     def fit_transform(self, x, y=None):
         self.fit(x, y)
-        if hasattr(self.difficulty_estimator_, 'oob_decision_function_'):
+        if hasattr(self.difficulty_estimator_, "oob_decision_function_"):
             difficulty_estimate = self.difficulty_estimator_.oob_decision_function_
             print(self.difficulty_estimator_.oob_score_)
         else:
             difficulty_estimate = self.difficulty_estimator_.predict_proba(x)
-        difficulty_estimate = difficulty_estimate[:, np.where(self.difficulty_estimator_.classes_ == 1)[0]]
+        difficulty_estimate = difficulty_estimate[
+            :, np.where(self.difficulty_estimator_.classes_ == 1)[0]
+        ]
         return self._transform(x, y, difficulty_estimate)
 
     def transform(self, x, y):
         difficulty_estimate = self.difficulty_estimator_.predict_proba(x)
-        difficulty_estimate = difficulty_estimate[:, np.where(self.difficulty_estimator_.classes_ == 1)[0]]
+        difficulty_estimate = difficulty_estimate[
+            :, np.where(self.difficulty_estimator_.classes_ == 1)[0]
+        ]
         return self._transform(x, y, difficulty_estimate)
 
     def _transform(self, x, y, difficulty_estimate):
@@ -445,12 +504,17 @@ class EmmottLabeler(OutlierLabeler):
             n_outliers = y_outliers.shape[0]
         elif isinstance(self.n_outliers, float):
             if not 0.0 < self.n_outliers <= 1.0:
-                raise ValueError("n_outliers must be in (0, 1], got %r" % self.n_outliers)
+                raise ValueError(
+                    "n_outliers must be in (0, 1], got %r" % self.n_outliers
+                )
             n_outliers = math.ceil(self.n_outliers * inlier_indices[0].shape[0])
             n_outliers = min(y_outliers.shape[0], n_outliers)
         elif isinstance(self.n_outliers, int):
             if 0 < self.n_outliers <= y_outliers.shape[0]:
-                raise ValueError("n_outliers must be in (0, %d], got %r" % (y_outliers.shape[0], self.n_outliers))
+                raise ValueError(
+                    "n_outliers must be in (0, %d], got %r"
+                    % (y_outliers.shape[0], self.n_outliers)
+                )
             n_outliers = self.n_outliers
         else:
             raise ValueError("n_outlier (%r) is not supported" % self.n_outliers)
@@ -458,24 +522,38 @@ class EmmottLabeler(OutlierLabeler):
         if n_outliers < y_outliers.shape[0]:
             difficulty_scores = np.digitize(difficulty_estimate, self.scale)
             if isinstance(self.difficulty, str):
-                if self.difficulty == 'any':
+                if self.difficulty == "any":
                     outlier_selector = np.arange(0, difficulty_estimate.shape[0])
-                elif self.difficulty == 'simplest':
-                    outlier_selector = np.argpartition(difficulty_estimate, n_outliers)[:n_outliers]
-                elif self.difficulty == 'hardest':
-                    outlier_selector = np.argpartition(difficulty_estimate, -n_outliers)[-n_outliers:]
+                elif self.difficulty == "simplest":
+                    outlier_selector = np.argpartition(difficulty_estimate, n_outliers)[
+                        :n_outliers
+                    ]
+                elif self.difficulty == "hardest":
+                    outlier_selector = np.argpartition(
+                        difficulty_estimate, -n_outliers
+                    )[-n_outliers:]
                 else:
-                    raise ValueError("difficulty (%s) is not supported" % self.difficulty)
+                    raise ValueError(
+                        "difficulty (%s) is not supported" % self.difficulty
+                    )
             else:
                 outlier_selector = np.isin(difficulty_scores, self.difficulty)
             x_outliers = x_outliers[outlier_selector]
             if x_outliers.shape[0] == 0:
                 scores, counts = np.unique(difficulty_scores, return_counts=True)
                 raise ValueError(
-                    "no samples with the requested difficulty %s, available %s" % (
-                        self.difficulty, ", ".join(["%d: %d" % (s, c) for s, c in zip(scores, counts)])))
+                    "no samples with the requested difficulty %s, available %s"
+                    % (
+                        self.difficulty,
+                        ", ".join(["%d: %d" % (s, c) for s, c in zip(scores, counts)]),
+                    )
+                )
 
-        outlier_sampled = variation(x_outliers, n_outliers, random_state.randint(np.iinfo(np.int32).max))
+        outlier_sampled = variation(
+            x_outliers, n_outliers, random_state.randint(np.iinfo(np.int32).max)
+        )
 
-        return (np.concatenate([x[inlier_indices], x_outliers[outlier_sampled]], axis=0),
-                np.concatenate([y[inlier_indices], y_outliers[outlier_sampled]], axis=0))
+        return (
+            np.concatenate([x[inlier_indices], x_outliers[outlier_sampled]], axis=0),
+            np.concatenate([y[inlier_indices], y_outliers[outlier_sampled]], axis=0),
+        )
