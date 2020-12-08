@@ -181,7 +181,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
 
     def _transform_single_path(self, x, path):
         for direction, (dim, shapelet), threshold in path:
-            if direction == "<=":
+            if direction < 0:
                 dist, location = distance(shapelet, x, metric="euclidean", return_index=True)
                 if dist > threshold:
                     impute_shape = _shapelet_transform(shapelet, x, location, threshold - self.epsilon)
