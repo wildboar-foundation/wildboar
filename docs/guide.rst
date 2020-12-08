@@ -8,3 +8,4 @@ User guide
    guide/datasets
    guide/supervised
    guide/unsupervised
+   guide/explain
