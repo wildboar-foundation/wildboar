@@ -140,12 +140,81 @@ def dtw_pairwise_distance(x, r=1.0):
 
 
 def dtw_envelop(x, r=1.0):
+    """Compute the envelop for LB_keogh
+
+    Parameters
+    ----------
+    x : array-like of shape (x_timestep,)
+        The time series
+
+    r : float or int, optional
+        The size of the warping window
+
+        - if float in [0, 1] a fraction of x_timestep
+        - if int the exact warping window (max(1, r))
+
+    Returns
+    -------
+    lower : ndarray of shape (x_timestep,)
+        The min value of the envelop
+
+    upper : ndarray of shape (x_timestep,)
+        The max value of the envelop
+
+    References
+    ----------
+    Keogh, E. (2002).
+        Exact indexing of dynamic time warping.
+        In 28th International Conference on Very Large Data Bases.
+    """
     x = np.asarray(x)
     warp_size = _compute_warp_size(x.shape[0], r)
     return _dtw_envelop(x, warp_size)
 
 
 def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
+    """The LB_keogh lower bound
+
+    Parameters
+    ----------
+    x : array-like of shape (x_timestep,)
+        The first time series
+
+    y : array-like of shape (x_timestep,), optional
+        The second time series (same size as x)
+
+    lower : ndarray of shape (x_timestep,), optional
+        The min value of the envelop
+
+    upper : ndarray of shape (x_timestep,), optional
+        The max value of the envelop
+
+    r : float or int, optional
+        The size of the warping window
+
+        - if float in [0, 1] a fraction of x_timestep
+        - if int the exact warping window (max(1, r))
+
+    Returns
+    -------
+    min_dist : float
+        The cumulative minimum distance.
+
+    lb_keogh : ndarray of shape (x_timestep,),
+        The lower bound at each time step
+
+    Notes
+    -----
+    - if y=None, both lower and upper must be given
+    - if y is given, lower and upper are ignored
+    - if lower and upper is given and y=None, r is ignored
+
+    References
+    ----------
+    Keogh, E. (2002).
+        Exact indexing of dynamic time warping.
+        In 28th International Conference on Very Large Data Bases.
+    """
     x = np.asarray(x)
     if y is not None:
         y = np.asarray(y)

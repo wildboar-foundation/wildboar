@@ -877,7 +877,7 @@ def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r
         free(upper_data)
     if <double*> lower.data != lower_data:
         free(lower_data)
-    return cb
+    return min_dist, cb
 
 
 cdef inline Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
