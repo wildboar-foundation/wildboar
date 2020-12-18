@@ -19,10 +19,13 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
-
 from __future__ import print_function
 
+import numpy as np
+cimport numpy as np
+
 from libc.math cimport log2
+from libc.math cimport sqrt
 from libc.stdlib cimport realloc
 
 cdef class RollingVariance:
@@ -317,3 +320,60 @@ cdef int safe_realloc(void** ptr, size_t new_size) nogil except -1:
 
     ptr[0] = tmp
     return 0
+
+
+cdef void fast_mean_std(
+        size_t offset,
+        size_t stride,
+        size_t length,
+        double* data,
+        double *mean,
+        double* std,
+) nogil:
+    """Update the mean and standard deviation"""
+    cdef double ex = 0
+    cdef double ex2 = 0
+    cdef size_t i
+    for i in range(length):
+        current_value = data[offset + i * stride]
+        ex += current_value
+        ex2 += current_value ** 2
+
+    mean[0] = ex / length
+    std[0] = sqrt(ex2 / length - mean[0] * mean[0])
+
+
+def check_array_fast(np.ndarray x, bint ensure_2d=False, bint allow_nd=False, bint c_order=True):
+    """Ensure that the array is valid and with dtype=np.float64.
+
+    Parameters
+    ----------
+    x : ndarray
+        The array to validate.
+
+    ensure_2d : bool, optional
+        Ensure that the array has 2 dimensions.
+
+    allow_nd : bool, optional
+        Allow more than 2 dimensions. Only valid if ensure_2d=False.
+
+    c_order : bool, optional
+        Ensure that the returned array is in row-major order.
+
+    Returns
+    -------
+    x : ndarray
+        Either a copy or the original array validated.
+    """
+    if ensure_2d:
+        if x.ndim != 2:
+            raise ValueError("not 2d, got %rd" % x.ndim)
+    else:
+        if not allow_nd and x.ndim > 1:
+            raise ValueError("not 1d, got %rd" % x.ndim)
+
+    if not x.flags.c_contiguous and c_order:
+        x = np.ascontiguousarray(x, dtype=np.float64)
+    if not x.dtype == np.float64:
+        x = x.astype(np.float64)
+    return x

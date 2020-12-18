@@ -16,27 +16,41 @@
 # Authors: Isak Samsten
 
 from . import _distance
+from . import dtw
 
-__all__ = ["distance", "matches"]
+__all__ = ["distance", "matches", "dtw"]
+
+
+def paired_distance(
+    x,
+    y,
+    *,
+    metric="euclidean",
+    metric_params=None,
+    subsequence_distance=True,
+):
+    raise NotImplementedError()
 
 
 def distance(
-    shapelet,
     x,
+    y,
+    *,
     dim=0,
     sample=None,
     metric="euclidean",
     metric_params=None,
+    subsequence_distance=True,
     return_index=False,
 ):
-    """Computes the minimum distance between a subsequence and the samples in `x`
+    """Computes the distance between x and the samples of y
 
     Parameters
     ----------
-    shapelet : array-like
+    x : array-like of shape (x_timestep, )
         A 1-dimensional float array
 
-    x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
+    y : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
 
     dim : int, optional
         The time series dimension to search
@@ -50,14 +64,28 @@ def distance(
         - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
         - otherwise an array is returned
 
-    metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+    metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional
         The distance metric
+
+        - if str use optimized implementations of the named distance measure
+        - if callable a function taking two arrays as input
 
     metric_params: dict, optional
         Parameters to the metric
 
+        - 'euclidean' and 'scaled_euclidean' take no parameters
+        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+          is interpreted as a fraction of the time series length. If > 1 it
+          is interpreted as an exact time warping window. Use 'r' == 0 for
+          a widow size of exactly 1.
+
+    subsequence_distance: bool, optional
+        - if True, compute the minimum subsequence distance
+        - if False, compute the distance between two arrays of the same length
+          unless the specified metric support unaligned arrays
+
     return_index : bool, optional
-        - if `true` return the index of the best match. If there are many equally good
+        - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
 
     Returns
@@ -83,35 +111,36 @@ def distance(
     [10 29  9 72 20 30]
     """
     return _distance.distance(
-        shapelet,
         x,
+        y,
         dim=dim,
         sample=sample,
         metric=metric,
         metric_params=metric_params,
+        subsequence_distance=subsequence_distance,
         return_index=return_index,
     )
 
 
 def matches(
-    shapelet,
     x,
+    y,
     threshold,
     *,
     dim=0,
     sample=None,
     metric="euclidean",
     metric_params=None,
-    return_distance=False
+    return_distance=False,
 ):
-    """Return the positions in `x` (one list per `sample`) where `shapelet` is closer than `threshold`.
+    """Return the positions in `x` (one list per `sample`) where `x` is closer than `threshold`.
 
     Parameters
     ----------
-    shapelet : array-like
+    x : array-like of shape (x_timestep, )
         A 1-dimensional float array
 
-    x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
+    y : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
         The collection of samples
 
     threshold : float
@@ -151,5 +180,5 @@ def matches(
     'scaled_dtw' is not supported.
     """
     return _distance.matches(
-        shapelet, x, threshold, dim, sample, metric, metric_params, return_distance
+        x, y, threshold, dim, sample, metric, metric_params, return_distance
     )

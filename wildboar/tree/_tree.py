@@ -87,7 +87,7 @@ class BaseShapeletTree(BaseEstimator):
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
 
-        if x.dtype != np.float64 or not x.flags.contiguous:
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
         return x
 
@@ -246,10 +246,10 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
                 "number of samples={}".format(len(y), n_samples)
             )
 
-        if X.dtype != np.float64 or not X.flags.contiguous:
+        if X.dtype != np.float64 or not X.flags.c_contiguous:
             X = np.ascontiguousarray(X, dtype=np.float64)
 
-        if y.dtype != np.float64 or not y.flags.contiguous:
+        if y.dtype != np.float64 or not y.flags.c_contiguous:
             y = np.ascontiguousarray(y, dtype=np.float64)
 
         self.n_timestep_ = n_timesteps
@@ -545,10 +545,10 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
                 "number of samples={}".format(len(y), n_samples)
             )
 
-        if x.dtype != np.float64 or not x.flags.contiguous:
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
 
-        if not y.flags.contiguous:
+        if not y.flags.c_contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
         self.n_classes_ = len(self.classes_)

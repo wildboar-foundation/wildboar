@@ -55,3 +55,5 @@ cdef double rand_uniform(double low, double high, size_t *random_state) nogil
 cdef int realloc_array(void** a, size_t p, size_t size, size_t *cap)  nogil except -1
 
 cdef int safe_realloc(void** ptr, size_t new_size) nogil except -1
+
+cdef void fast_mean_std(size_t offset, size_t stride, size_t length, double* data, double *mean, double* std) nogil

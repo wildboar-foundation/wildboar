@@ -50,7 +50,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     def __dealloc__(self):
         free(self.X_buffer)
 
-    cdef double ts_copy_distance(self,
+    cdef double ts_copy_sub_distance(self,
                                  TSCopy *s,
                                  TSDatabase *td,
                                  size_t t_index,
@@ -72,7 +72,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
             self.X_buffer,
             return_index)
 
-    cdef double ts_view_distance(self,
+    cdef double ts_view_sub_distance(self,
                                  TSView *s,
                                  TSDatabase *td,
                                  size_t t_index) nogil:
@@ -120,7 +120,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
             n_matches)
 
 cdef class EuclideanDistance(DistanceMeasure):
-    cdef double ts_copy_distance(
+    cdef double ts_copy_sub_distance(
             self, TSCopy *s, TSDatabase *td, size_t t_index,
             size_t *return_index = NULL) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
@@ -137,7 +137,7 @@ cdef class EuclideanDistance(DistanceMeasure):
             td[0].data,
             return_index)
 
-    cdef double ts_view_distance(
+    cdef double ts_view_sub_distance(
             self, TSView *s, TSDatabase *td, size_t t_index) nogil:
         cdef size_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)

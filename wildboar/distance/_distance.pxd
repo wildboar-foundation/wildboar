@@ -59,15 +59,22 @@ cdef class DistanceMeasure:
 
     cdef int init_ts_copy(self, TSCopy *shapelet, TSView *s, TSDatabase *td) nogil
 
-    cdef int ts_copy_matches(self, TSCopy *s, TSDatabase *td, size_t t_index, double threshold, size_t** matches,
+    cdef int ts_copy_sub_matches(self, TSCopy *s, TSDatabase *td, size_t t_index, double threshold, size_t** matches,
                              double** distances, size_t *n_matches) nogil except -1
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, size_t t_index, size_t *return_index= *) nogil
+    cdef double ts_copy_sub_distance(self, TSCopy *s, TSDatabase *td, size_t t_index, size_t *return_index= *) nogil
 
-    cdef double ts_view_distance(self, TSView *s, TSDatabase *td, size_t t_index) nogil
+    cdef double ts_view_sub_distance(self, TSView *s, TSDatabase *td, size_t t_index) nogil
 
-    cdef void ts_view_distances(self, TSView *s, TSDatabase *td, size_t *samples, double *distances,
+    # Minumum subsequence distance
+    cdef void ts_view_sub_distances(self, TSView *s, TSDatabase *td, size_t *samples, double *distances,
                                 size_t n_samples) nogil
+
+    # Distance between s and td[t_index]
+    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, size_t t_index) nogil
+
+    # Return true if unaligned time series are supported for ts_copy_distance
+    cdef bint support_unaligned(self) nogil
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
     pass

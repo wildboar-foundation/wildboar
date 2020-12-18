@@ -51,7 +51,7 @@ class ShapeletForestMixin:
             )
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.dtype != np.float64 or not x.flags.contiguous:
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
         x = x.reshape(x.shape[0], self.n_dims * self.n_timestep)
         return x
@@ -137,10 +137,10 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
 
         self.n_dims = n_dims
 
-        if x.dtype != np.float64 or not x.flags.contiguous:
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
 
-        if not y.flags.contiguous:
+        if not y.flags.c_contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
         x = x.reshape(n_samples, n_dims * self.n_timestep)
@@ -424,10 +424,10 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
 
         self.n_dims = n_dims
 
-        if x.dtype != np.float64 or not x.flags.contiguous:
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
 
-        if y.dtype != np.float64 or not y.flags.contiguous:
+        if y.dtype != np.float64 or not y.flags.c_contiguous:
             y = np.ascontiguousarray(y, dtype=np.float64)
 
         x = x.reshape(n_samples, n_dims * self.n_timestep)
@@ -805,7 +805,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
         self.n_dims = n_dims
 
-        if x.dtype != np.float64 or not x.flags.contiguous:
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
 
         if n_dims > 1:

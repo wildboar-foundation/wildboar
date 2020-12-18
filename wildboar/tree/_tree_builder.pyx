@@ -237,7 +237,7 @@ cdef class Tree:
                 while self._left[node_index] != -1:
                     threshold = self._thresholds[node_index]
                     shapelet = self._shapelets[node_index]
-                    if self.distance_measure.ts_copy_distance(shapelet, &ts, i) <= threshold:
+                    if self.distance_measure.ts_copy_sub_distance(shapelet, &ts, i) <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
@@ -265,7 +265,7 @@ cdef class Tree:
                     # out_data[i, node_index] = 1
                     threshold = self._thresholds[node_index]
                     shapelet = self._shapelets[node_index]
-                    if self.distance_measure.ts_copy_distance(shapelet, &ts, i) <= threshold:
+                    if self.distance_measure.ts_copy_sub_distance(shapelet, &ts, i) <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
@@ -564,7 +564,7 @@ cdef class ShapeletTreeBuilder:
 
         for i in range(self.n_shapelets):
             self._sample_shapelet(&shapelet, start, end)
-            self.distance_measure.ts_view_distances(
+            self.distance_measure.ts_view_sub_distances(
                 &shapelet, &self.td, self.samples + start, self.distance_buffer + start, end - start)
             argsort(self.distance_buffer + start, self.samples + start, end - start)
 

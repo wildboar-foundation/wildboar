@@ -45,3 +45,9 @@ cdef size_t deque_back(Deque *c) nogil
 cdef size_t deque_size(Deque *c) nogil
 
 cdef bint deque_empty(Deque *c) nogil
+
+cdef void _dtw_align(double[:] A, double[:] B, Py_ssize_t warp_width, double[:,:] warp) nogil
+
+cdef double _dtw(Py_ssize_t x_offset, Py_ssize_t x_stride, Py_ssize_t x_length, double *X, double x_mean, double x_std,
+                 Py_ssize_t y_offset, Py_ssize_t y_stride, Py_ssize_t y_length, double *Y, double y_mean, double y_std,
+                 Py_ssize_t r, double *cost, double *cost_prev) nogil
