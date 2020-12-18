@@ -48,10 +48,10 @@ from .._utils cimport fast_mean_std
 from .._utils import check_array_fast
 
 
-cdef void deque_init(Deque *c, size_t capacity) nogil:
+cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
     c[0].capacity = capacity
     c[0].size = 0
-    c[0].queue = <size_t*> malloc(sizeof(size_t) * capacity)
+    c[0].queue = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
     c[0].front = 0
     c[0].back = capacity - 1
 
@@ -66,7 +66,7 @@ cdef void deque_destroy(Deque *c) nogil:
     free(c[0].queue)
 
 
-cdef void deque_push_back(Deque *c, size_t v) nogil:
+cdef void deque_push_back(Deque *c, Py_ssize_t v) nogil:
     c[0].queue[c[0].back] = v
     c[0].back -= 1
     if c[0].back < 0:
@@ -87,14 +87,14 @@ cdef void deque_pop_back(Deque *c) nogil:
     c[0].size -= 1
 
 
-cdef size_t deque_front(Deque *c) nogil:
+cdef Py_ssize_t deque_front(Deque *c) nogil:
     cdef int tmp = c[0].front - 1
     if tmp < 0:
         tmp = c[0].capacity - 1
     return c[0].queue[tmp]
 
 
-cdef size_t deque_back(Deque *c) nogil:
+cdef Py_ssize_t deque_back(Deque *c) nogil:
     cdef int tmp = (c[0].back + 1) % c[0].capacity
     return c[0].queue[tmp]
 
@@ -103,7 +103,7 @@ cdef bint deque_empty(Deque *c) nogil:
     return c[0].size == 0
 
 
-cdef size_t deque_size(Deque *c) nogil:
+cdef Py_ssize_t deque_size(Deque *c) nogil:
     return c[0].size
 
 
@@ -172,17 +172,17 @@ cdef inline double dist(double x, double y) nogil:
 
 
 cdef double constant_lower_bound(
-    size_t s_offset,
-    size_t s_stride,
+    Py_ssize_t s_offset,
+    Py_ssize_t s_stride,
     double *S,
     double s_mean,
     double s_std,
-    size_t t_offset,
-    size_t t_stride,
+    Py_ssize_t t_offset,
+    Py_ssize_t t_stride,
     double *T,
     double t_mean,
     double t_std,
-    size_t length,
+    Py_ssize_t length,
     double best_dist,
 ) nogil:
     cdef double t_x0, t_y0, s_x0, s_y0
@@ -245,9 +245,9 @@ cdef double constant_lower_bound(
 
 
 cdef double cumulative_bound(
-    size_t offset,
-    size_t stride,
-    size_t length,
+    Py_ssize_t offset,
+    Py_ssize_t stride,
+    Py_ssize_t length,
     double mean,
     double std,
     double *T,
@@ -260,7 +260,7 @@ cdef double cumulative_bound(
 ) nogil:
     cdef double min_dist = 0
     cdef double x, d, us, ls
-    cdef size_t i
+    cdef Py_ssize_t i
 
     for i in range(0, length):
         if min_dist >= best_so_far:
@@ -282,15 +282,15 @@ cdef double cumulative_bound(
 
 
 cdef inline double inner_scaled_dtw(
-    size_t s_offset,
-    size_t s_stride,
+    Py_ssize_t s_offset,
+    Py_ssize_t s_stride,
     int s_length,
     double s_mean,
     double s_std,
     double *S,
     double mean,
     double std,
-    size_t x_offset,
+    Py_ssize_t x_offset,
     double *X_buffer,
     int r,
     double *cb,
@@ -365,17 +365,17 @@ cdef inline double inner_scaled_dtw(
 
 
 cdef double scaled_dtw_distance(
-    size_t s_offset,
-    size_t s_stride,
-    size_t s_length,
+    Py_ssize_t s_offset,
+    Py_ssize_t s_stride,
+    Py_ssize_t s_length,
     double s_mean,
     double s_std,
     double *S,
-    size_t t_offset,
-    size_t t_stride,
-    size_t t_length,
+    Py_ssize_t t_offset,
+    Py_ssize_t t_stride,
+    Py_ssize_t t_length,
     double *T,
-    size_t r,
+    Py_ssize_t r,
     double *X_buffer,
     double *cost,
     double *cost_prev,
@@ -386,7 +386,7 @@ cdef double scaled_dtw_distance(
     double *cb,
     double *cb_1,
     double *cb_2,
-    size_t *index,
+    Py_ssize_t *index,
 ) nogil:
     cdef double current_value = 0
     cdef double mean = 0
@@ -401,11 +401,11 @@ cdef double scaled_dtw_distance(
     cdef double ex = 0
     cdef double ex2 = 0
 
-    cdef size_t i
-    cdef size_t j
-    cdef size_t k
-    cdef size_t I
-    cdef size_t buffer_pos
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t k
+    cdef Py_ssize_t I
+    cdef Py_ssize_t buffer_pos
 
     for i in range(t_length):
         current_value = T[t_offset + t_stride * i]
@@ -461,12 +461,12 @@ cdef double scaled_dtw_distance(
 
 
 cdef inline double inner_dtw(
-    size_t s_offset,
-    size_t s_stride,
+    Py_ssize_t s_offset,
+    Py_ssize_t s_stride,
     int s_length,
     double *S,
-    size_t t_offset,
-    size_t t_stride,
+    Py_ssize_t t_offset,
+    Py_ssize_t t_stride,
     double *T,
     int r,
     double *cost,
@@ -521,23 +521,23 @@ cdef inline double inner_dtw(
 
 
 cdef double dtw_distance(
-    size_t s_offset,
-    size_t s_stride,
-    size_t s_length,
+    Py_ssize_t s_offset,
+    Py_ssize_t s_stride,
+    Py_ssize_t s_length,
     double *S,
-    size_t t_offset,
-    size_t t_stride,
-    size_t t_length,
+    Py_ssize_t t_offset,
+    Py_ssize_t t_stride,
+    Py_ssize_t t_length,
     double *T,
-    size_t r,
+    Py_ssize_t r,
     double *cost,
     double *cost_prev,
-    size_t *index,
+    Py_ssize_t *index,
 ) nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
-    cdef size_t i
+    cdef Py_ssize_t i
     for i in range(t_length - s_length + 1):
         dist = inner_dtw(s_offset, s_stride, s_length, S,
                          t_offset + t_stride * i, t_stride, T,
@@ -880,14 +880,14 @@ def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r
     return cb
 
 
-cdef inline size_t _compute_warp_width(size_t length, double r) nogil:
+cdef inline Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
     # Warping path should be [0, length - 1]
     if r == 1:
         return length - 1
     if r < 1:
-        return <size_t> floor(length * r)
+        return <Py_ssize_t> floor(length * r)
     else:
-        return <size_t> min(floor(r), length - 1)
+        return <Py_ssize_t> min(floor(r), length - 1)
 
 
 cdef class ScaledDtwDistance(ScaledDistanceMeasure):
@@ -908,7 +908,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef double r
 
 
-    def __cinit__(self, size_t n_timestep, double r=0):
+    def __cinit__(self, Py_ssize_t n_timestep, double r=0):
         super().__init__(n_timestep)
         if r < 0:
             raise ValueError("illegal warp width")
@@ -960,10 +960,10 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         self,
         TSDatabase *td_ptr,
         TSView *ts_view,
-        size_t index,
-        size_t start,
-        size_t length,
-        size_t dim,
+        Py_ssize_t index,
+        Py_ssize_t start,
+        Py_ssize_t length,
+        Py_ssize_t dim,
     ) nogil:
         cdef TSDatabase td = td_ptr[0]
         ScaledDistanceMeasure.init_ts_view(
@@ -974,12 +974,12 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
         dtw_extra[0].upper = <double*> malloc(sizeof(double) * length)
 
-        cdef size_t shapelet_offset = (
+        cdef Py_ssize_t shapelet_offset = (
             index * td.sample_stride +
             start * td.timestep_stride +
             dim * td.dim_stride
         )
-        cdef size_t warp_width = _compute_warp_width(length, self.r)
+        cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
             shapelet_offset,
             td.timestep_stride,
@@ -1007,11 +1007,11 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         cdef TSView shapelet_info = tv_ptr[0]
 
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
-        cdef size_t length = shapelet[0].length
+        cdef Py_ssize_t length = shapelet[0].length
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
         dtw_extra[0].upper = <double*> malloc(sizeof(double) * length)
 
-        cdef size_t warp_width = _compute_warp_width(length, self.r)
+        cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
             0,
             1,
@@ -1027,18 +1027,18 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         return 0
 
 
-    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, size_t dim):
+    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, Py_ssize_t dim):
         cdef int err = ScaledDistanceMeasure.init_ts_copy_from_ndarray(
             self, tc, arr, dim
         )
         if err == -1:
             return -1
-        cdef size_t length = tc[0].length
+        cdef Py_ssize_t length = tc[0].length
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
         dtw_extra[0].upper = <double*> malloc(sizeof(double) * length)
 
-        cdef size_t warp_width = _compute_warp_width(length, self.r)
+        cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
             0,
             1,
@@ -1058,14 +1058,14 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         self,
         TSCopy *s,
         TSDatabase *td,
-        size_t t_index,
-        size_t *return_index=NULL,
+        Py_ssize_t t_index,
+        Py_ssize_t *return_index=NULL,
     ) nogil:
-        cdef size_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
         cdef double *s_lower
         cdef double *s_upper
         cdef DtwExtra *extra
-        cdef size_t warp_width = _compute_warp_width(s.length, self.r)
+        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
         if s.extra != NULL:
             extra = <DtwExtra*> s.extra
@@ -1130,15 +1130,15 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         return distance
 
 
-    cdef double ts_view_sub_distance(self, TSView *s, TSDatabase *td, size_t t_index) nogil:
-        cdef size_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
-        cdef size_t shapelet_offset = (
+    cdef double ts_view_sub_distance(self, TSView *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+        cdef Py_ssize_t shapelet_offset = (
             s.index * td.sample_stride +
             s.dim * td.dim_stride +
             s.start * td.timestep_stride
         )
 
-        cdef size_t warp_width = _compute_warp_width(s.length, self.r)
+        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(
             sample_offset,
@@ -1178,11 +1178,11 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         )
 
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, size_t t_index) nogil:
-        cdef size_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
-        cdef size_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
+    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+        cdef Py_ssize_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
 
-        cdef size_t max_length = max(s.length, td.n_timestep)
+        cdef Py_ssize_t max_length = max(s.length, td.n_timestep)
         if max_length > self.cost_size:
             free(self.cost)
             free(self.cost_prev)
@@ -1232,7 +1232,7 @@ cdef class DtwDistance(DistanceMeasure):
     cdef Py_ssize_t cost_size
 
 
-    def __cinit__(self, size_t n_timestep, double r=0):
+    def __cinit__(self, Py_ssize_t n_timestep, double r=0):
         super().__init__(n_timestep)
         if r < 0:
             raise ValueError("illegal warp width")
@@ -1258,11 +1258,11 @@ cdef class DtwDistance(DistanceMeasure):
         self,
         TSCopy *s,
         TSDatabase *td,
-        size_t t_index,
-        size_t *return_index = NULL,
+        Py_ssize_t t_index,
+        Py_ssize_t *return_index = NULL,
     ) nogil:
-        cdef size_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
-        cdef size_t warp_width = _compute_warp_width(s.length, self.r)
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
         return dtw_distance(
             0,
@@ -1281,15 +1281,15 @@ cdef class DtwDistance(DistanceMeasure):
 
 
     cdef double ts_view_sub_distance(
-            self, TSView *ts_ptr, TSDatabase *td_ptr, size_t t_index) nogil:
+            self, TSView *ts_ptr, TSDatabase *td_ptr, Py_ssize_t t_index) nogil:
         cdef TSDatabase td = td_ptr[0]
         cdef TSView s = ts_ptr[0]
-        cdef size_t sample_offset = (t_index * td.sample_stride +
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
-        cdef size_t shapelet_offset = (s.index * td.sample_stride +
+        cdef Py_ssize_t shapelet_offset = (s.index * td.sample_stride +
                                        s.dim * td.dim_stride +
                                        s.start * td.timestep_stride)
-        cdef size_t warp_width = _compute_warp_width(s.length, self.r)
+        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         return dtw_distance(
             shapelet_offset,
             td.timestep_stride,
@@ -1309,19 +1309,19 @@ cdef class DtwDistance(DistanceMeasure):
         self,
         TSCopy *s,
         TSDatabase *td,
-        size_t t_index,
+        Py_ssize_t t_index,
         double threshold,
-        size_t** matches,
+        Py_ssize_t** matches,
         double** distances,
-        size_t*n_matches,
+        Py_ssize_tn_matches,
     ) nogil except -1:
         with gil:
             raise NotImplemented()
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, size_t t_index) nogil:
-        cdef size_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
-        cdef size_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
-        cdef size_t max_length = max(s.length, td.n_timestep)
+    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+        cdef Py_ssize_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
+        cdef Py_ssize_t max_length = max(s.length, td.n_timestep)
 
         if max_length > self.cost_size:
             free(self.cost)

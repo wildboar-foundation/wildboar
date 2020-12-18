@@ -18,25 +18,25 @@
 # Authors: Isak Samsten
 
 
-cdef double scaled_euclidean_distance(size_t s_offset,
-                                      size_t s_stride,
-                                      size_t s_length,
+cdef double scaled_euclidean_distance(Py_ssize_t s_offset,
+                                      Py_ssize_t s_stride,
+                                      Py_ssize_t s_length,
                                       double s_mean,
                                       double s_std,
                                       double *S,
-                                      size_t t_offset,
-                                      size_t t_stride,
-                                      size_t t_length,
+                                      Py_ssize_t t_offset,
+                                      Py_ssize_t t_stride,
+                                      Py_ssize_t t_length,
                                       double *T,
                                       double *X_buffer,
-                                      size_t *index) nogil
+                                      Py_ssize_t *index) nogil
 
-cdef double euclidean_distance(size_t s_offset,
-                               size_t s_stride,
-                               size_t s_length,
+cdef double euclidean_distance(Py_ssize_t s_offset,
+                               Py_ssize_t s_stride,
+                               Py_ssize_t s_length,
                                double *S,
-                               size_t t_offset,
-                               size_t t_stride,
-                               size_t t_length,
+                               Py_ssize_t t_offset,
+                               Py_ssize_t t_stride,
+                               Py_ssize_t t_length,
                                double *T,
-                               size_t *index) nogil
+                               Py_ssize_t *index) nogil

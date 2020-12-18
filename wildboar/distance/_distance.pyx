@@ -49,7 +49,7 @@ _DISTANCE_MEASURE = {
     'scaled_dtw': _dtw_distance.ScaledDtwDistance,
 }
 
-cdef int ts_copy_init(TSCopy *shapelet, size_t dim, size_t length, double mean, double std) nogil:
+cdef int ts_copy_init(TSCopy *shapelet, Py_ssize_t dim, Py_ssize_t length, double mean, double std) nogil:
     shapelet[0].dim = dim
     shapelet[0].length = length
     shapelet[0].mean = mean
@@ -81,12 +81,12 @@ cdef int _ts_view_update_statistics(TSView *s_ptr, const TSDatabase *t_ptr) nogi
     """Update the mean and standard deviation of a shapelet info struct """
     cdef TSDatabase t = t_ptr[0]
     cdef TSView s = s_ptr[0]
-    cdef size_t shapelet_offset = (s.index * t.sample_stride +
+    cdef Py_ssize_t shapelet_offset = (s.index * t.sample_stride +
                                    s.dim * t.dim_stride +
                                    s.start * t.timestep_stride)
     cdef double ex = 0
     cdef double ex2 = 0
-    cdef size_t i
+    cdef Py_ssize_t i
     for i in range(s.length):
         current_value = t.data[shapelet_offset + i * t.timestep_stride]
         ex += current_value
@@ -103,17 +103,17 @@ cdef TSDatabase ts_database_new(np.ndarray data):
         raise ValueError("ndim {0} < 2 or {0} > 3".format(data.ndim))
 
     cdef TSDatabase sd
-    sd.n_samples = <size_t> data.shape[0]
-    sd.n_timestep = <size_t> data.shape[data.ndim - 1]
+    sd.n_samples = <Py_ssize_t> data.shape[0]
+    sd.n_timestep = <Py_ssize_t> data.shape[data.ndim - 1]
     sd.data = <double*> data.data
-    sd.sample_stride = <size_t> data.strides[0] / <size_t> data.itemsize
-    sd.timestep_stride = (<size_t> data.strides[data.ndim - 1] /
-                          <size_t> data.itemsize)
+    sd.sample_stride = <Py_ssize_t> data.strides[0] / <Py_ssize_t> data.itemsize
+    sd.timestep_stride = (<Py_ssize_t> data.strides[data.ndim - 1] /
+                          <Py_ssize_t> data.itemsize)
 
     if data.ndim == 3:
-        sd.n_dims = <size_t> data.shape[data.ndim - 2]
-        sd.dim_stride = (<size_t> data.strides[data.ndim - 2] /
-                         <size_t> data.itemsize)
+        sd.n_dims = <Py_ssize_t> data.shape[data.ndim - 2]
+        sd.dim_stride = (<Py_ssize_t> data.strides[data.ndim - 2] /
+                         <Py_ssize_t> data.itemsize)
     else:
         sd.n_dims = 1
         sd.dim_stride = 0
@@ -124,7 +124,7 @@ cdef class DistanceMeasure:
     """A distance measure can compute the distance between time series and
     shapelets """
 
-    def __cinit__(self, size_t n_timestep, *args, **kvargs):
+    def __cinit__(self, Py_ssize_t n_timestep, *args, **kvargs):
         """ Initialize a new distance measure
 
         :param n_timesteps: the (maximum) number of timepoints in a timeseries
@@ -138,8 +138,8 @@ cdef class DistanceMeasure:
     def __reduce__(self):
         return self.__class__, (self.n_timestep,)
 
-    cdef void ts_view_sub_distances(self, TSView *s, TSDatabase *td, size_t *samples, double *distances,
-                                size_t n_samples) nogil:
+    cdef void ts_view_sub_distances(self, TSView *s, TSDatabase *td, Py_ssize_t *samples, double *distances,
+                                Py_ssize_t n_samples) nogil:
         """ Compute the distance between the shapelet `s` in `td` and all
         samples in `samples`
 
@@ -153,13 +153,13 @@ cdef class DistanceMeasure:
         `samples`) and `s` [out param]
         :param n_samples: the number of samples 
         """
-        cdef size_t p
+        cdef Py_ssize_t p
         for p in range(n_samples):
             distances[p] = self.ts_view_sub_distance(s, td, samples[p])
 
     cdef int init_ts_view(
-            self, TSDatabase *_td, TSView *shapelet_info, size_t index, size_t start,
-            size_t length, size_t dim) nogil:
+            self, TSDatabase *_td, TSView *shapelet_info, Py_ssize_t index, Py_ssize_t start,
+            Py_ssize_t length, Py_ssize_t dim) nogil:
         """Return a information about a shapelet
 
         :param _td: shapelet database
@@ -179,7 +179,7 @@ cdef class DistanceMeasure:
         shapelet_info[0].extra = NULL
         return 0
 
-    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, size_t dim):
+    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, Py_ssize_t dim):
         tc[0].dim = dim
         tc[0].length = arr.shape[0]
         tc[0].mean = NAN
@@ -188,7 +188,7 @@ cdef class DistanceMeasure:
         if tc[0].data == NULL:
             return -1
 
-        cdef size_t i
+        cdef Py_ssize_t i
         for i in range(tc[0].length):
             tc[0].data[i] = arr[i]
         return 0
@@ -200,12 +200,12 @@ cdef class DistanceMeasure:
         tc[0].ts_start = s.start
         tc[0].ts_index = s.index
         cdef double *data = tc[0].data
-        cdef size_t tc_offset = (s.index * td.sample_stride +
+        cdef Py_ssize_t tc_offset = (s.index * td.sample_stride +
                                  s.start * td.timestep_stride +
                                  s.dim * td.dim_stride)
 
-        cdef size_t i
-        cdef size_t p
+        cdef Py_ssize_t i
+        cdef Py_ssize_t p
 
         for i in range(s.length):
             p = tc_offset + td.timestep_stride * i
@@ -213,7 +213,7 @@ cdef class DistanceMeasure:
 
         return 0
 
-    cdef double ts_view_sub_distance(self, TSView *tv, TSDatabase *td_ptr, size_t t_index) nogil:
+    cdef double ts_view_sub_distance(self, TSView *tv, TSDatabase *td_ptr, Py_ssize_t t_index) nogil:
         """Return the distance between `s` and the sample specified by the
         index `t_index` in `td`. Implemented by subclasses.
 
@@ -226,8 +226,8 @@ cdef class DistanceMeasure:
         with gil:
             raise NotImplementedError()
 
-    cdef double ts_copy_sub_distance(self, TSCopy *s_ptr, TSDatabase *td_ptr, size_t t_index,
-                                 size_t *return_index=NULL) nogil:
+    cdef double ts_copy_sub_distance(self, TSCopy *s_ptr, TSDatabase *td_ptr, Py_ssize_t t_index,
+                                 Py_ssize_t *return_index=NULL) nogil:
         """Return the distance between `s` and the sample specified by
         `t_index` in `td` setting the index of the best matching
         position to `return_index` unless `return_index == NULL`
@@ -243,8 +243,8 @@ cdef class DistanceMeasure:
         with gil:
             raise NotImplementedError("sub_distance must be overridden")
 
-    cdef int ts_copy_sub_matches(self, TSCopy *s_ptr, TSDatabase *td_ptr, size_t t_index, double threshold,
-                             size_t** matches, double** distances, size_t *n_matches) nogil except -1:
+    cdef int ts_copy_sub_matches(self, TSCopy *s_ptr, TSDatabase *td_ptr, Py_ssize_t t_index, double threshold,
+                             Py_ssize_t** matches, double** distances, Py_ssize_t *n_matches) nogil except -1:
         """Compute the matches for `s` in the sample `t_index` in `td` where
         the distance threshold is below `threshold`, storing the
         matching starting positions in `matches` and distance (<
@@ -274,7 +274,7 @@ cdef class DistanceMeasure:
         with gil:
             raise NotImplementedError()
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, size_t t_index) nogil:
+    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index) nogil:
         return self.ts_copy_sub_distance(s, td, t_index)
 
     cdef bint support_unaligned(self) nogil:
@@ -284,7 +284,7 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
     """Distance measure that uses computes the distance on mean and
     variance standardized shapelets"""
 
-    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, size_t dim):
+    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, Py_ssize_t dim):
         cdef int err = DistanceMeasure.init_ts_copy_from_ndarray(self, tc, arr, dim)
         if err == -1:
             return -1
@@ -292,8 +292,8 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
         tc[0].std = np.std(arr)
         return 0
 
-    cdef int init_ts_view(self, TSDatabase *td, TSView *tv, size_t index, size_t start,
-                          size_t length, size_t dim) nogil:
+    cdef int init_ts_view(self, TSDatabase *td, TSView *tv, Py_ssize_t index, Py_ssize_t start,
+                          Py_ssize_t length, Py_ssize_t dim) nogil:
         DistanceMeasure.init_ts_view(self, td, tv, index, start, length, dim)
         _ts_view_update_statistics(tv, td)
         return -1
@@ -304,16 +304,16 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
     cdef np.ndarray x_buffer
     cdef np.ndarray y_buffer
 
-    def __cinit__(self, size_t n_timestep, object func):
+    def __cinit__(self, Py_ssize_t n_timestep, object func):
         self.n_timestep = n_timestep
         self.func = func
         self.x_buffer = np.empty(n_timestep, dtype=np.float64)
         self.y_buffer = np.empty(n_timestep, dtype=np.float64)
 
 
-    cdef double ts_copy_sub_distance(self, TSCopy *s, TSDatabase *td, size_t t_index, size_t *return_index=NULL) nogil:
-        cdef size_t i
-        cdef size_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+    cdef double ts_copy_sub_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index, Py_ssize_t *return_index=NULL) nogil:
+        cdef Py_ssize_t i
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
         with gil:
             for i in range(td.n_timestep):
                 if i < s.length:
@@ -322,11 +322,11 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
 
             return self.func(self.x_buffer[:s.length], self.y_buffer)
 
-    cdef double ts_view_sub_distance(self, TSView *s, TSDatabase *td, size_t t_index) nogil:
-        cdef size_t i
-        cdef size_t sample_offset = (t_index * td.sample_stride +
+    cdef double ts_view_sub_distance(self, TSView *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+        cdef Py_ssize_t i
+        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride +
                                      s.dim * td.dim_stride)
-        cdef size_t shapelet_offset = (s.index * td.sample_stride +
+        cdef Py_ssize_t shapelet_offset = (s.index * td.sample_stride +
                                        s.dim * td.dim_stride +
                                        s.start * td.timestep_stride)
         with gil:
@@ -337,7 +337,7 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
 
             return self.func(self.x_buffer[:s.length], self.y_buffer)
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, size_t t_index) nogil:
+    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index) nogil:
         return self.ts_copy_sub_distance(s, td, t_index)
 
     cdef bint support_unaligned(self) nogil:
@@ -372,7 +372,7 @@ def _check_dim(dim, ndims):
     if dim < 0 or dim >= ndims:
         raise ValueError("illegal dimension {}".format(dim))
 
-cdef np.ndarray _new_match_array(size_t *matches, size_t n_matches):
+cdef np.ndarray _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
     if n_matches > 0:
         match_array = np.empty(n_matches, dtype=np.intp)
         for i in range(n_matches):
@@ -382,7 +382,7 @@ cdef np.ndarray _new_match_array(size_t *matches, size_t n_matches):
         return None
 
 cdef np.ndarray _new_distance_array(
-        double *distances, size_t n_matches):
+        double *distances, Py_ssize_t n_matches):
     if n_matches > 0:
         dist_array = np.empty(n_matches, dtype=np.float64)
         for i in range(n_matches):
@@ -433,7 +433,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
 
     _check_dim(dim, sd.n_dims)
     cdef double min_dist
-    cdef size_t min_index
+    cdef Py_ssize_t min_index
 
     cdef double mean = 0
     cdef double std = 0
@@ -508,16 +508,16 @@ def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metr
 
     cdef TSDatabase sd = ts_database_new(x)
 
-    cdef size_t *matches
+    cdef Py_ssize_t *matches
     cdef double *distances
-    cdef size_t n_matches
+    cdef Py_ssize_t n_matches
 
     cdef DistanceMeasure distance_measure = new_distance_measure(
         metric, sd.n_timestep, metric_params
     )
     cdef TSCopy shape
     distance_measure.init_ts_copy_from_ndarray(&shape, s, dim)
-    cdef size_t i
+    cdef Py_ssize_t i
     if isinstance(sample, int):
         _check_sample(sample, sd.n_samples)
         distance_measure.ts_copy_sub_matches(

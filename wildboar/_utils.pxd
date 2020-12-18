@@ -36,24 +36,24 @@ cdef class RollingVariance:
 cdef enum:
     RAND_R_MAX = 2147483647
 
-cdef void print_c_array_d(object name, double *arr, size_t length)
+cdef void print_c_array_d(object name, double *arr, Py_ssize_t length)
 
-cdef void print_c_array_i(object name, size_t *arr, size_t length)
+cdef void print_c_array_i(object name, Py_ssize_t *arr, Py_ssize_t length)
 
-cdef size_t label_distribution(const size_t *samples, double *sample_weights, size_t start, size_t end,
-                               const size_t *labels, size_t labels_stride, size_t n_classes,
+cdef Py_ssize_t label_distribution(const Py_ssize_t *samples, double *sample_weights, Py_ssize_t start, Py_ssize_t end,
+                               const Py_ssize_t *labels, Py_ssize_t labels_stride, Py_ssize_t n_classes,
                                double*n_weighted_samples, double*dist) nogil
 
-cdef void argsort(double *values, size_t *order, size_t length) nogil
+cdef void argsort(double *values, Py_ssize_t *order, Py_ssize_t length) nogil
 
-cdef size_t rand_r(size_t *seed) nogil
+cdef Py_ssize_t rand_r(Py_ssize_t *seed) nogil
 
-cdef size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil
+cdef Py_ssize_t rand_int(Py_ssize_t min_val, Py_ssize_t max_val, Py_ssize_t *seed) nogil
 
-cdef double rand_uniform(double low, double high, size_t *random_state) nogil
+cdef double rand_uniform(double low, double high, Py_ssize_t *random_state) nogil
 
-cdef int realloc_array(void** a, size_t p, size_t size, size_t *cap)  nogil except -1
+cdef int realloc_array(void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap)  nogil except -1
 
-cdef int safe_realloc(void** ptr, size_t new_size) nogil except -1
+cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1
 
-cdef void fast_mean_std(size_t offset, size_t stride, size_t length, double* data, double *mean, double* std) nogil
+cdef void fast_mean_std(Py_ssize_t offset, Py_ssize_t stride, Py_ssize_t length, double* data, double *mean, double* std) nogil

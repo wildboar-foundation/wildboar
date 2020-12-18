@@ -110,26 +110,26 @@ def print_tree(o, indent=1):
         print_tree(o.right, indent + 1)
 
 # For debugging
-cdef void print_c_array_d(object name, double *arr, size_t length):
+cdef void print_c_array_d(object name, double *arr, Py_ssize_t length):
     print(name, end=": ")
     for i in range(length):
         print(arr[i], end=" ")
     print()
 
 # For debugging
-cdef void print_c_array_i(object name, size_t *arr, size_t length):
+cdef void print_c_array_i(object name, Py_ssize_t *arr, Py_ssize_t length):
     print(name, end=": ")
     for i in range(length):
         print(arr[i], end=" ")
     print()
 
-cdef size_t label_distribution(const size_t *samples,
+cdef Py_ssize_t label_distribution(const Py_ssize_t *samples,
                                const double *sample_weights,
-                               size_t start,
-                               size_t end,
-                               const size_t *labels,
-                               size_t label_stride,
-                               size_t n_labels,
+                               Py_ssize_t start,
+                               Py_ssize_t end,
+                               const Py_ssize_t *labels,
+                               Py_ssize_t label_stride,
+                               Py_ssize_t n_labels,
                                double *n_weighted_samples,
                                double *dist) nogil:
     """Computes the label distribution
@@ -146,7 +146,7 @@ cdef size_t label_distribution(const size_t *samples,
     :return: number of classes included in the sample
     """
     cdef double sample_weight
-    cdef size_t i, j, p, n_pos
+    cdef Py_ssize_t i, j, p, n_pos
 
     n_pos = 0
     n_weighted_samples[0] = 0
@@ -168,16 +168,16 @@ cdef size_t label_distribution(const size_t *samples,
 
     return n_pos
 
-cdef inline size_t rand_r(size_t *seed) nogil:
+cdef inline Py_ssize_t rand_r(Py_ssize_t *seed) nogil:
     """Returns a pesudo-random number based on the seed.
 
     :param seed: the initial seed (updated)
     :return: a psudo-random number
     """
     seed[0] = seed[0] * 1103515245 + 12345
-    return seed[0] % (<size_t> RAND_R_MAX + 1)
+    return seed[0] % (<Py_ssize_t> RAND_R_MAX + 1)
 
-cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
+cdef inline Py_ssize_t rand_int(Py_ssize_t min_val, Py_ssize_t max_val, Py_ssize_t *seed) nogil:
     """Returns a pseudo-random number in the range [`min_val` `max_val`[
 
     :param min_val: the minimum value
@@ -189,7 +189,7 @@ cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
     else:
         return min_val + rand_r(seed) % (max_val - min_val)
 
-cdef inline double rand_uniform(double low, double high, size_t*random_state) nogil:
+cdef inline double rand_uniform(double low, double high, Py_ssize_t *random_state) nogil:
     """Generate a random double in the range [`low` `high`[."""
     return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
 
@@ -205,18 +205,18 @@ cdef inline double rand_uniform(double low, double high, size_t*random_state) no
 #  - heapsort
 
 
-cdef inline void argsort(double *values, size_t *samples, size_t n) nogil:
+cdef inline void argsort(double *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
     if n == 0:
         return
-    cdef size_t maxd = 2 * <size_t> log2(n)
+    cdef Py_ssize_t maxd = 2 * <Py_ssize_t> log2(n)
     introsort(values, samples, n, maxd)
 
-cdef inline void swap(double *values, size_t *samples,
-                      size_t i, size_t j) nogil:
+cdef inline void swap(double *values, Py_ssize_t *samples,
+                      Py_ssize_t i, Py_ssize_t j) nogil:
     values[i], values[j] = values[j], values[i]
     samples[i], samples[j] = samples[j], samples[i]
 
-cdef inline double median3(double *values, size_t n) nogil:
+cdef inline double median3(double *values, Py_ssize_t n) nogil:
     cdef double a = values[0]
     cdef double b = values[n / 2]
     cdef double c = values[n - 1]
@@ -235,10 +235,10 @@ cdef inline double median3(double *values, size_t n) nogil:
     else:
         return b
 
-cdef void introsort(double *values, size_t *samples,
-                    size_t n, size_t maxd) nogil:
+cdef void introsort(double *values, Py_ssize_t *samples,
+                    Py_ssize_t n, Py_ssize_t maxd) nogil:
     cdef double pivot, value
-    cdef size_t i, l, r
+    cdef Py_ssize_t i, l, r
 
     while n > 1:
         if maxd <= 0:
@@ -267,9 +267,9 @@ cdef void introsort(double *values, size_t *samples,
         samples += r
         n -= r
 
-cdef inline void sift_down(double *values, size_t *samples,
-                           size_t start, size_t end) nogil:
-    cdef size_t child, maxind, root
+cdef inline void sift_down(double *values, Py_ssize_t *samples,
+                           Py_ssize_t start, Py_ssize_t end) nogil:
+    cdef Py_ssize_t child, maxind, root
     root = start
     while True:
         child = root * 2 + 1
@@ -285,8 +285,8 @@ cdef inline void sift_down(double *values, size_t *samples,
             swap(values, samples, root, maxind)
             root = maxind
 
-cdef void heapsort(double *values, size_t *samples, size_t n) nogil:
-    cdef size_t start, end
+cdef void heapsort(double *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
+    cdef Py_ssize_t start, end
 
     start = (n - 2) / 2
     end = n
@@ -302,7 +302,7 @@ cdef void heapsort(double *values, size_t *samples, size_t n) nogil:
         sift_down(values, samples, 0, end)
         end = end - 1
 
-cdef int realloc_array(void** ptr, size_t old_size, size_t ptr_size, size_t *capacity)  nogil except -1:
+cdef int realloc_array(void** ptr, Py_ssize_t old_size, Py_ssize_t ptr_size, Py_ssize_t *capacity)  nogil except -1:
     cdef void *tmp = ptr[0]
     if old_size >= capacity[0]:
         capacity[0] = old_size * 2
@@ -312,7 +312,7 @@ cdef int realloc_array(void** ptr, size_t old_size, size_t ptr_size, size_t *cap
     ptr[0] = tmp
     return 0
 
-cdef int safe_realloc(void** ptr, size_t new_size) nogil except -1:
+cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1:
     cdef void *tmp = ptr[0]
     tmp = realloc(ptr[0], new_size)
     if tmp == NULL:
@@ -323,9 +323,9 @@ cdef int safe_realloc(void** ptr, size_t new_size) nogil except -1:
 
 
 cdef void fast_mean_std(
-        size_t offset,
-        size_t stride,
-        size_t length,
+        Py_ssize_t offset,
+        Py_ssize_t stride,
+        Py_ssize_t length,
         double* data,
         double *mean,
         double* std,
@@ -333,7 +333,7 @@ cdef void fast_mean_std(
     """Update the mean and standard deviation"""
     cdef double ex = 0
     cdef double ex2 = 0
-    cdef size_t i
+    cdef Py_ssize_t i
     for i in range(length):
         current_value = data[offset + i * stride]
         ex += current_value

@@ -21,4 +21,4 @@ cdef double entropy(double left_sum,
                     double* left_count,
                     double right_sum,
                     double* right_count,
-                    size_t n_labels) nogil
+                    Py_ssize_t n_labels) nogil

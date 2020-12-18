@@ -27,7 +27,7 @@ cdef inline double entropy(double  left_sum,
                            double *left_count,
                            double  right_sum,
                            double *right_count,
-                           size_t  n_labels) nogil:
+                           Py_ssize_t  n_labels) nogil:
     """Compute the entropy impurity
 
     :param left_sum: number of samples in the left partition
@@ -40,7 +40,7 @@ cdef inline double entropy(double  left_sum,
     cdef double x_sum = 0
     cdef double y_sum = 0
     cdef double xv, yv
-    cdef size_t i
+    cdef Py_ssize_t i
     for i in range(n_labels):
         xv = left_count[i] / n_samples
         yv = right_count[i] / n_samples
