@@ -39,6 +39,13 @@ _REPOSITORIES = {
         hash="11bacbb31ccfe928be38740107dab38218ac50fa",
         class_index=-1,
     ),
+    "wildboar/ucr-tiny": NpyRepository(
+        name="UCR Time series repository, univariate (Numpy optimized/small sample)",
+        description="A collection of 4 univariate time series. Downloaded from UCR Time series repository",
+        download_url="https://github.com/isaksamsten/wildboar/releases/download/dataset-v1.0/ucr_tiny_2018_npy.zip",
+        hash="a04e9a0327ad019ee72aa78519d8b43381357d4f",
+        class_index=-1,
+    ),
 }
 
 _REPOSITORY_INFERENCE_TYPES = {"npy", "arff"}
@@ -98,7 +105,7 @@ def load_two_lead_ecg(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "TwoLeadECG", repository="wildboar/ucr", merge_train_test=merge_train_test
+        "TwoLeadECG", repository="wildboar/ucr-tiny", merge_train_test=merge_train_test
     )
 
 
@@ -110,7 +117,7 @@ def load_gun_point(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "GunPoint", repository="wildboar/ucr", merge_train_test=merge_train_test
+        "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=merge_train_test
     )
 
 
