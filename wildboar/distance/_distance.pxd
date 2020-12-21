@@ -57,6 +57,9 @@ cdef class DistanceMeasure:
     cdef Py_ssize_t n_timestep
 
 
+    cdef int init(self, TSDatabase *td) nogil
+
+
     cdef int init_ts_view(
         self,
         TSDatabase *td,
@@ -148,12 +151,19 @@ cdef void ts_view_free(TSView *shapelet_info) nogil
 
 
 cdef int ts_copy_init(
-        TSCopy *ts_copy,
-        Py_ssize_t dim,
-        Py_ssize_t length,
-        double mean,
-        double std,
+    TSCopy *ts_copy,
+    Py_ssize_t dim,
+    Py_ssize_t length,
+    double mean,
+    double std,
 ) nogil
 
 
 cdef void ts_copy_free(TSCopy *shapelet) nogil
+
+
+cdef DistanceMeasure new_distance_measure(
+    TSDatabase *td,
+    object metric,
+    dict metric_params=*,
+)

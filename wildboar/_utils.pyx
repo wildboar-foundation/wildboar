@@ -168,16 +168,16 @@ cdef Py_ssize_t label_distribution(const Py_ssize_t *samples,
 
     return n_pos
 
-cdef inline Py_ssize_t rand_r(Py_ssize_t *seed) nogil:
+cdef inline size_t rand_r(size_t *seed) nogil:
     """Returns a pesudo-random number based on the seed.
 
     :param seed: the initial seed (updated)
     :return: a psudo-random number
     """
     seed[0] = seed[0] * 1103515245 + 12345
-    return seed[0] % (<Py_ssize_t> RAND_R_MAX + 1)
+    return seed[0] % (<size_t> RAND_R_MAX + 1)
 
-cdef inline Py_ssize_t rand_int(Py_ssize_t min_val, Py_ssize_t max_val, Py_ssize_t *seed) nogil:
+cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
     """Returns a pseudo-random number in the range [`min_val` `max_val`[
 
     :param min_val: the minimum value
@@ -189,7 +189,7 @@ cdef inline Py_ssize_t rand_int(Py_ssize_t min_val, Py_ssize_t max_val, Py_ssize
     else:
         return min_val + rand_r(seed) % (max_val - min_val)
 
-cdef inline double rand_uniform(double low, double high, Py_ssize_t *random_state) nogil:
+cdef inline double rand_uniform(double low, double high, size_t *random_state) nogil:
     """Generate a random double in the range [`low` `high`[."""
     return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
 

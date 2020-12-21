@@ -43,6 +43,7 @@ from ..distance._distance cimport ts_database_new
 from ..distance._distance cimport ts_view_init
 from ..distance._distance cimport ts_view_free
 from ..distance._distance cimport ts_copy_free
+from ..distance._distance cimport new_distance_measure
 
 from ._impurity cimport entropy
 
@@ -54,11 +55,19 @@ from .._utils cimport RollingVariance
 from .._utils cimport safe_realloc
 from .._utils cimport rand_uniform
 
-#(_make_tree, self._n_labels, self.shapelet, self.threshold, self.value, self.left, self.right,
-# self.impurity, self.n_node_samples, self.n_weighted_node_samples)
-cpdef Tree _make_tree(DistanceMeasure distance_measure, Py_ssize_t n_labels, list shapelets, np.ndarray threshold,
-                      np.ndarray value, np.ndarray left, np.ndarray right, np.ndarray impurity,
-                      np.ndarray n_node_samples, np.ndarray n_weighted_node_samples):
+
+cpdef Tree _make_tree(
+    DistanceMeasure distance_measure,
+    Py_ssize_t n_labels,
+    list shapelets,
+    np.ndarray threshold,
+    np.ndarray value,
+    np.ndarray left,
+    np.ndarray right,
+    np.ndarray impurity,
+    np.ndarray n_node_samples,
+    np.ndarray n_weighted_node_samples
+):
     cdef Tree tree = Tree(distance_measure, n_labels, capacity=len(shapelets) + 1)
     cdef Py_ssize_t node_count = len(shapelets)
     cdef Py_ssize_t i
@@ -87,8 +96,14 @@ cpdef Tree _make_tree(DistanceMeasure distance_measure, Py_ssize_t n_labels, lis
         tree._values[i] = value_reshape[i]
     return tree
 
+
 cdef class Tree:
-    def __cinit__(self, DistanceMeasure distance_measure, Py_ssize_t n_labels, Py_ssize_t capacity=10):
+    def __cinit__(
+        self,
+        DistanceMeasure distance_measure,
+        Py_ssize_t n_labels,
+        Py_ssize_t capacity=10
+    ):
         self.distance_measure = distance_measure
         self._node_count = 0
         self._capacity = capacity
@@ -133,8 +148,19 @@ cdef class Tree:
             free(self._n_weighted_node_samples)
 
     def __reduce__(self):
-        return _make_tree, (self.distance_measure, self._n_labels, self.shapelet, self.threshold, self.value, self.left,
-                            self.right, self.impurity, self.n_node_samples, self.n_weighted_node_samples)
+        return _make_tree, (
+            self.distance_measure,
+            self._n_labels,
+            self.shapelet,
+            self.threshold,
+            self.value,
+            self.left,
+            self.right,
+            self.impurity,
+            self.n_node_samples,
+            self.n_weighted_node_samples,
+        )
+
 
     @property
     def max_depth(self):
@@ -249,8 +275,8 @@ cdef class Tree:
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
         cdef TSDatabase ts = ts_database_new(X)
         cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
-        # cdef long[:, :] out_data = out
-        cdef long*out_data = <long*> out.data
+
+        cdef long *out_data = <long*> out.data
         cdef Py_ssize_t i_stride = <Py_ssize_t> out.strides[0] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t n_stride = <Py_ssize_t> out.strides[1] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t node_index
@@ -275,7 +301,13 @@ cdef class Tree:
     def node_count(self):
         return self._node_count
 
-    cdef int add_leaf_node(self, int parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples) nogil:
+    cdef int add_leaf_node(
+        self,
+        int parent,
+        bint is_left,
+        Py_ssize_t n_node_samples,
+        double n_weighted_node_samples,
+    ) nogil:
         cdef Py_ssize_t node_id = self._node_count
         if node_id >= self._capacity:
             if self._increase_capacity() == -1:
@@ -295,11 +327,24 @@ cdef class Tree:
         self._node_count += 1
         return node_id
 
-    cdef void set_leaf_value(self, Py_ssize_t node_id, Py_ssize_t out_label, double out_value) nogil:
+    cdef void set_leaf_value(
+        self,
+        Py_ssize_t node_id,
+        Py_ssize_t out_label,
+        double out_value,
+    ) nogil:
         self._values[out_label + node_id * self._n_labels] = out_value
 
-    cdef int add_branch_node(self, int parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples,
-                             TSCopy *shapelet, double threshold, double impurity) nogil:
+    cdef int add_branch_node(
+        self,
+        int parent,
+        bint is_left,
+        Py_ssize_t n_node_samples,
+        double n_weighted_node_samples,
+        TSCopy *shapelet,
+        double threshold,
+        double impurity,
+    ) nogil:
         cdef Py_ssize_t node_id = self._node_count
         if node_id >= self._capacity:
             if self._increase_capacity() == -1:
@@ -356,15 +401,21 @@ cdef class Tree:
 
         return 0
 
-cdef SplitPoint new_split_point(Py_ssize_t split_point, double threshold, TSView shapelet_info) nogil:
+
+cdef inline SplitPoint new_split_point(
+    Py_ssize_t split_point,
+    double threshold,
+    TSView shapelet_info,
+) nogil:
     cdef SplitPoint s
     s.split_point = split_point
     s.threshold = threshold
     s.shapelet_info = shapelet_info
     return s
 
+
 cdef class ShapeletTreeBuilder:
-    cdef Py_ssize_t random_seed
+    cdef size_t random_seed
 
     cdef Py_ssize_t n_shapelets
     cdef Py_ssize_t min_shapelet_size
@@ -403,29 +454,32 @@ cdef class ShapeletTreeBuilder:
     # the tree structure representation
     cdef Tree tree
 
-    def __cinit__(self,
-                  Py_ssize_t n_shapelets,
-                  Py_ssize_t min_shapelet_size,
-                  Py_ssize_t max_shapelet_size,
-                  Py_ssize_t max_depth,
-                  Py_ssize_t min_sample_split,
-                  DistanceMeasure distance_measure,
-                  np.ndarray X,
-                  np.ndarray y,
-                  np.ndarray sample_weights,
-                  object random_state,
-                  *args,
-                  **kwargs):
+    def __cinit__(
+        self,
+        Py_ssize_t n_shapelets,
+        Py_ssize_t min_shapelet_size,
+        Py_ssize_t max_shapelet_size,
+        Py_ssize_t max_depth,
+        Py_ssize_t min_sample_split,
+        object metric,
+        dict metric_params,
+        np.ndarray X,
+        np.ndarray y,
+        np.ndarray sample_weights,
+        object random_state,
+        *args,
+        **kwargs
+    ):
         self.random_seed = random_state.randint(0, RAND_R_MAX)
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.max_depth = max_depth
         self.min_sample_split = min_sample_split
-        self.distance_measure = distance_measure
         self.current_node_id = 0
 
         self.td = ts_database_new(X)
+        self.distance_measure = new_distance_measure(&self.td, metric, metric_params)
         self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
 
         self.n_samples = X.shape[0]
@@ -433,7 +487,11 @@ cdef class ShapeletTreeBuilder:
         self.samples_buffer = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.n_samples)
         self.distance_buffer = <double*> malloc(sizeof(double) * self.n_samples)
 
-        if self.samples == NULL or self.distance_buffer == NULL or self.samples_buffer == NULL:
+        if (
+            self.samples == NULL or
+            self.distance_buffer == NULL or
+            self.samples_buffer == NULL
+        ):
             raise MemoryError()
 
         cdef Py_ssize_t i
@@ -446,7 +504,6 @@ cdef class ShapeletTreeBuilder:
         self.n_samples = j
         self.n_weighted_samples = 0
 
-        self.distance_measure = distance_measure
         if sample_weights is None:
             self.sample_weights = NULL
         else:
@@ -470,15 +527,35 @@ cdef class ShapeletTreeBuilder:
         self.tree._max_depth = max_depth
         return root_node_id
 
-    cdef Py_ssize_t new_leaf_node(self, Py_ssize_t start, Py_ssize_t end, int parent, bint is_left) nogil:
+    cdef Py_ssize_t new_leaf_node(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        int parent,
+        bint is_left,
+    ) nogil:
         pass
 
-    cdef Py_ssize_t new_branch_node(self, Py_ssize_t start, Py_ssize_t end, SplitPoint sp,
-                                TSCopy *shapelet, int parent, bint is_left) nogil:
+    cdef Py_ssize_t new_branch_node(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        SplitPoint sp,
+        TSCopy *shapelet,
+        int parent,
+        bint is_left,
+    ) nogil:
         cdef Py_ssize_t node_id
-        node_id = self.tree.add_branch_node(parent, is_left, end - start, self.n_weighted_samples, shapelet,
-                                            sp.threshold, -1)
+        node_id = self.tree.add_branch_node(
+            parent,
+            is_left,
+            end - start,
+            self.n_weighted_samples,
+            shapelet,
+            sp.threshold, -1,
+        )
         return node_id
+
 
     cdef bint _is_pre_pruned(self, Py_ssize_t start, Py_ssize_t end) nogil:
         """Check if the tree should be pruned based on the samples in the
@@ -487,26 +564,52 @@ cdef class ShapeletTreeBuilder:
         Implementation detail: For optimization, subclasses *must* set
         the variable `self.n_weighted_samples` to the number of samples
         reaching this node in this method.
-
-        :param start: the start index
-
-        :param end: the end index
-
-        :return: if the current node should be pruned
+       
+        Parameters
+        ----------
+        start : int
+            The start position in samples
+            
+        end : int
+            The end position in samples
         """
         pass
 
-    cdef Py_ssize_t _build_tree(self, Py_ssize_t start, Py_ssize_t end, Py_ssize_t depth, int parent, bint is_left,
-                            Py_ssize_t *max_depth) nogil:
+    cdef Py_ssize_t _build_tree(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t depth,
+        int parent,
+        bint is_left,
+        Py_ssize_t *max_depth,
+    ) nogil:
         """Recursive function for building the tree
 
         Each call to this function is allowed to access and transpose
         samples (in `self.samples`) in the region indicated by `start`
         and `end`.
 
-        :param start: start index of samples in `samples`
-        :param end: the end index of samples in `samples`
-        :param depth: the current depth of the recursion"""
+        Parameters
+        ----------
+        start : int
+            The start position in samples
+            
+        end : int
+            The end position in samples
+            
+        depth : int (out)
+            The current recusion depth
+            
+        parent : int
+            The index of the parent node
+            
+        is_left : bool
+            True if current node is left
+            
+        max_depth : int (out)
+            The max depth reached in the tree        
+        """
         if depth > max_depth[0]:
             max_depth[0] = depth
 
@@ -519,14 +622,22 @@ cdef class ShapeletTreeBuilder:
         cdef int err
         if split.split_point > start and end - split.split_point > 0:
             shapelet = <TSCopy*> malloc(sizeof(TSCopy))
-            err = self.distance_measure.init_ts_copy(shapelet, &split.shapelet_info, &self.td)
+            err = self.distance_measure.init_ts_copy(
+                shapelet, &split.shapelet_info, &self.td
+            )
             if err == -1:
                 return -1
 
             # `shapelet` will be stored and freed by `self.tree`
-            current_node_id = self.new_branch_node(start, end, split, shapelet, parent, is_left)
-            left_node_id = self._build_tree(start, split.split_point, depth + 1, current_node_id, True, max_depth)
-            right_node_id = self._build_tree(split.split_point, end, depth + 1, current_node_id, False, max_depth)
+            current_node_id = self.new_branch_node(
+                start, end, split, shapelet, parent, is_left
+            )
+            left_node_id = self._build_tree(
+                start, split.split_point, depth + 1, current_node_id, True, max_depth
+            )
+            right_node_id = self._build_tree(
+                split.split_point, end, depth + 1, current_node_id, False, max_depth
+            )
 
             ts_view_free(&split.shapelet_info)  # RECLAIM THIS MEMORY
             return current_node_id
@@ -539,14 +650,18 @@ cdef class ShapeletTreeBuilder:
         """Split the `sample` array indicated by the region specified by
         `start` and `end` by minimizing an impurity measure
 
-        Requirements:
-
-         - `self._partition_distance_buffer`: implements the decision
-           to determine the split quality minimizing `impurity`
-
-        :params start: the start index of samples in `sample`
-        :params end: the end index of samples in `sample`
-        :returns: a split point minimizing the impurity
+        Parameters
+        ----------
+        start : int
+            The start position in samples
+            
+        end : int
+            The end position in samples
+            
+        Notes
+        -----
+         - `self._partition_distance_buffer`: implements the decision 
+            to determine the split quality minimizing `impurity`
         """
         cdef Py_ssize_t split_point, best_split_point
         cdef double threshold, best_threshold
@@ -565,13 +680,23 @@ cdef class ShapeletTreeBuilder:
         for i in range(self.n_shapelets):
             self._sample_shapelet(&shapelet, start, end)
             self.distance_measure.ts_view_sub_distances(
-                &shapelet, &self.td, self.samples + start, self.distance_buffer + start, end - start)
+                &shapelet,
+                &self.td,
+                self.samples + start,
+                self.distance_buffer + start,
+                end - start,
+            )
             argsort(self.distance_buffer + start, self.samples + start, end - start)
-
-            self._partition_distance_buffer(start, end, &split_point, &threshold, &impurity)
+            self._partition_distance_buffer(
+                start, end, &split_point, &threshold, &impurity
+            )
             if impurity < best_impurity:
                 # store the order of samples in `sample_buffer`
-                memcpy(self.samples_buffer, self.samples + start, sizeof(Py_ssize_t) * (end - start))
+                memcpy(
+                    self.samples_buffer,
+                    self.samples + start,
+                    sizeof(Py_ssize_t) * (end - start),
+                )
                 best_impurity = impurity
                 best_split_point = split_point
                 best_threshold = threshold
@@ -580,11 +705,19 @@ cdef class ShapeletTreeBuilder:
                 ts_view_free(&shapelet)
 
         # restore the best order to `samples`
-        memcpy(self.samples + start,
-               self.samples_buffer, sizeof(Py_ssize_t) * (end - start))
+        memcpy(
+            self.samples + start,
+            self.samples_buffer,
+            sizeof(Py_ssize_t) * (end - start),
+        )
         return new_split_point(best_split_point, best_threshold, best_shapelet)
 
-    cdef int _sample_shapelet(self, TSView *shapelet_info, Py_ssize_t start, Py_ssize_t end) nogil:
+    cdef int _sample_shapelet(
+        self,
+        TSView *shapelet_info,
+        Py_ssize_t start,
+        Py_ssize_t end,
+    ) nogil:
         cdef Py_ssize_t shapelet_length
         cdef Py_ssize_t shapelet_start
         cdef Py_ssize_t shapelet_index
@@ -615,22 +748,32 @@ cdef class ShapeletTreeBuilder:
                                          double *impurity) nogil:
         """ Partition the distance buffer such that an impurity measure is
         minimized
+        
+        Parameters
+        ----------
+        start : int
+            The start position in samples
+            
+        end : int
+            The end position in samples
+            
+        split_point : int (out) 
+            The split point: an index in `range(start, end)` minimizing impurity
 
-        :param start: the start index in `samples`
+        threshold : float (out) 
+            The threshold value
 
-        :param end: the end index in `samples`
-
-        :param split_point: (out) the split point (an index in
-        `range(start, end)` minimizing `impurity`
-
-        :param threshold: (out) the threshold value
-
-        :param impurity: (in) the initial impurity, (out) the optimal
-        impurity (possibly unchanged)
+        impurity : float (in, out) 
+            - The initial impurity (in) 
+            - The optimal impurity (out)
+            
+        Warnings
+        --------
+        - Must be implemented by subclasses
         """
-        # Overridden by subclasses
         with gil:
             raise NotImplementedError()
+
 
 cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
     # the number of labels
@@ -648,21 +791,24 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
     # the (strided) array of labels
     cdef Py_ssize_t *labels
 
-    def __cinit__(self,
-                  Py_ssize_t n_shapelets,
-                  Py_ssize_t min_shapelet_size,
-                  Py_ssize_t max_shapelet_size,
-                  Py_ssize_t max_depth,
-                  Py_ssize_t min_sample_split,
-                  DistanceMeasure distance_measure,
-                  np.ndarray X,
-                  np.ndarray y,
-                  np.ndarray sample_weights,
-                  object random_state,
-                  Py_ssize_t n_labels):
+    def __cinit__(
+        self,
+        Py_ssize_t n_shapelets,
+        Py_ssize_t min_shapelet_size,
+        Py_ssize_t max_shapelet_size,
+        Py_ssize_t max_depth,
+        Py_ssize_t min_sample_split,
+        object metric,
+        object metric_params,
+        np.ndarray X,
+        np.ndarray y,
+        np.ndarray sample_weights,
+        object random_state,
+        Py_ssize_t n_labels
+    ):
         self.labels = <Py_ssize_t*> y.data
         self.n_labels = n_labels
-        self.tree = Tree(distance_measure, n_labels)
+        self.tree = Tree(self.distance_measure, n_labels)
         self.label_buffer = <double*> malloc(sizeof(double) * n_labels)
         self.left_label_buffer = <double*> malloc(sizeof(double) * n_labels)
         self.right_label_buffer = <double*> malloc(sizeof(double) * n_labels)
@@ -676,12 +822,20 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
         free(self.left_label_buffer)
         free(self.right_label_buffer)
 
-    cdef Py_ssize_t new_leaf_node(self, Py_ssize_t start, Py_ssize_t end, int parent, bint is_left) nogil:
+    cdef Py_ssize_t new_leaf_node(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        int parent,
+        bint is_left,
+    ) nogil:
         cdef Py_ssize_t node_id
         cdef Py_ssize_t i
         cdef double prob
 
-        node_id = self.tree.add_leaf_node(parent, is_left, end - start, self.n_weighted_samples)
+        node_id = self.tree.add_leaf_node(
+            parent, is_left, end - start, self.n_weighted_samples
+        )
         for i in range(self.n_labels):
             prob = self.label_buffer[i] / self.n_weighted_samples
             self.tree.set_leaf_value(node_id, i, prob)
@@ -707,12 +861,14 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             return True
         return False
 
-    cdef void _partition_distance_buffer(self,
-                                         Py_ssize_t start,
-                                         Py_ssize_t end,
-                                         Py_ssize_t *split_point,
-                                         double *threshold,
-                                         double *impurity) nogil:
+    cdef void _partition_distance_buffer(
+            self,
+            Py_ssize_t start,
+            Py_ssize_t end,
+            Py_ssize_t *split_point,
+            double *threshold,
+            double *impurity,
+    ) nogil:
         memset(self.left_label_buffer, 0, sizeof(double) * self.n_labels)
 
         # store the label buffer temporarily in `right_label_buffer`,
@@ -770,11 +926,13 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             current_label = self.labels[p]
 
             if not current_label == prev_label:
-                current_impurity = entropy(left_sum,
-                                           self.left_label_buffer,
-                                           right_sum,
-                                           self.right_label_buffer,
-                                           self.n_labels)
+                current_impurity = entropy(
+                    left_sum,
+                    self.left_label_buffer,
+                    right_sum,
+                    self.right_label_buffer,
+                    self.n_labels,
+                )
 
                 if current_impurity <= impurity[0]:
                     impurity[0] = current_impurity
@@ -794,25 +952,29 @@ cdef class ClassificationShapeletTreeBuilder(ShapeletTreeBuilder):
             prev_label = current_label
             prev_distance = current_distance
 
+
 cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
     # the (strided) array of labels
     cdef double *labels
     cdef RollingVariance right
     cdef RollingVariance left
 
-    def __cinit__(self,
-                  Py_ssize_t n_shapelets,
-                  Py_ssize_t min_shapelet_size,
-                  Py_ssize_t max_shapelet_size,
-                  Py_ssize_t max_depth,
-                  Py_ssize_t min_sample_split,
-                  DistanceMeasure distance_measure,
-                  np.ndarray X,
-                  np.ndarray y,
-                  np.ndarray sample_weights,
-                  object random_state):
+    def __cinit__(
+        self,
+        Py_ssize_t n_shapelets,
+        Py_ssize_t min_shapelet_size,
+        Py_ssize_t max_shapelet_size,
+        Py_ssize_t max_depth,
+        Py_ssize_t min_sample_split,
+        object metric,
+        object metric_params,
+        np.ndarray X,
+        np.ndarray y,
+        np.ndarray sample_weights,
+        object random_state,
+    ):
         self.labels = <double*> y.data
-        self.tree = Tree(distance_measure, 1)
+        self.tree = Tree(self.distance_measure, 1)
         self.left = RollingVariance()
         self.right = RollingVariance()
 
@@ -833,7 +995,13 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
             return True
         return False
 
-    cdef Py_ssize_t new_leaf_node(self, Py_ssize_t start, Py_ssize_t end, int parent, bint is_left) nogil:
+    cdef Py_ssize_t new_leaf_node(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        int parent,
+        bint is_left,
+    ) nogil:
         cdef double leaf_sum = 0
         cdef double current_sample_weight = 0
         cdef Py_ssize_t j
@@ -857,19 +1025,19 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
                                          Py_ssize_t *split_point,
                                          double *threshold,
                                          double *impurity) nogil:
-        # Partitions the distance buffer into two binary partitions
-        # such that the sum of label variance in the two partitions is
-        # minimized.
-        #
-        # The implementation uses an efficient one-pass algorithm [1]
-        # for computing the variance of the two partitions and finding
-        # the optimal split point
-        #
-        # References
-        #
-        # [1] West, D. H. D. (1979). "Updating Mean and Variance
-        # Estimates: An Improved Method"
-
+        """Partitions the distance buffer into two binary partitions
+        such that the sum of label variance in the two partitions is
+        minimized.
+       
+        The implementation uses an efficient one-pass algorithm [1]
+        for computing the variance of the two partitions and finding
+        the optimal split point
+        
+        References
+        ----------
+        West, D. H. D. (1979). 
+            Updating Mean and Variance Estimates: An Improved Method
+        """
         cdef Py_ssize_t i  # real index of samples (in `range(start, end)`)
         cdef Py_ssize_t j  # sample index (in `samples`)
         cdef Py_ssize_t p  # label index (in `labels`)
@@ -936,17 +1104,23 @@ cdef class RegressionShapeletTreeBuilder(ShapeletTreeBuilder):
 
             prev_distance = current_distance
 
+
 cdef class ExtraRegressionShapeletTreeBuilder(RegressionShapeletTreeBuilder):
-    cdef void _partition_distance_buffer(self,
-                                         Py_ssize_t start,
-                                         Py_ssize_t end,
-                                         Py_ssize_t *split_point,
-                                         double *threshold,
-                                         double *impurity) nogil:
+
+    cdef void _partition_distance_buffer(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t *split_point,
+        double *threshold,
+        double *impurity,
+    ) nogil:
         # The smallest distance is always 0
         cdef double min_dist = self.distance_buffer[start + 1]
         cdef double max_dist = self.distance_buffer[end - 1]
-        cdef double rand_threshold = rand_uniform(min_dist, max_dist, &self.random_seed)
+        cdef double rand_threshold = rand_uniform(
+            min_dist, max_dist, &self.random_seed
+        )
         cdef Py_ssize_t i
         split_point[0] = start + 1
         for i in range(start + 1, end - 1):
@@ -958,17 +1132,23 @@ cdef class ExtraRegressionShapeletTreeBuilder(RegressionShapeletTreeBuilder):
         # TODO: compute impurity scoring
         impurity[0] = 0
 
+
 cdef class ExtraClassificationShapeletTreeBuilder(ClassificationShapeletTreeBuilder):
-    cdef void _partition_distance_buffer(self,
-                                         Py_ssize_t start,
-                                         Py_ssize_t end,
-                                         Py_ssize_t *split_point,
-                                         double *threshold,
-                                         double *impurity) nogil:
+
+    cdef void _partition_distance_buffer(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t *split_point,
+        double *threshold,
+        double *impurity,
+    ) nogil:
         # The smallest distance is always 0
         cdef double min_dist = self.distance_buffer[start + 1]
         cdef double max_dist = self.distance_buffer[end - 1]
-        cdef double rand_threshold = rand_uniform(min_dist, max_dist, &self.random_seed)
+        cdef double rand_threshold = rand_uniform(
+            min_dist, max_dist, &self.random_seed
+        )
         cdef Py_ssize_t i
 
         split_point[0] = start + 1

@@ -62,15 +62,6 @@ class BaseShapeletTree(BaseEstimator):
         self.n_timestep_ = None
         self.n_dims_ = None
 
-    def _make_distance_measure(self):
-        metric_params = self.metric_params
-        if metric_params is None:
-            metric_params = {}
-        distance_measure = _DISTANCE_MEASURE[self.metric](
-            self.n_timestep_, **metric_params
-        )
-        return distance_measure
-
     def _validate_x_predict(self, x, check_input):
         if x.ndim < 2 or x.ndim > 3:
             raise ValueError("illegal input dimensions X.ndim ({})".format(x.ndim))
@@ -183,14 +174,14 @@ class ShapeletTreeRegressor(RegressorMixin, BaseShapeletTree):
             min_shapelet_size = 2
 
         max_depth = self.max_depth or 2 ** 31
-        distance_measure = self._make_distance_measure()
         return RegressionShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
             max_depth,
             self.min_samples_split,
-            distance_measure,
+            self.metric,
+            self.metric_params,
             x,
             y,
             sample_weight,
@@ -366,14 +357,14 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             min_shapelet_size = 2
 
         max_depth = self.max_depth or 2 ** 31
-        distance_measure = self._make_distance_measure()
         return ExtraRegressionShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
             max_depth,
             self.min_samples_split,
-            distance_measure,
+            self.metric,
+            self.metric_params,
             x,
             y,
             sample_weight,
@@ -473,14 +464,14 @@ class ShapeletTreeClassifier(ClassifierMixin, BaseShapeletTree):
         if min_shapelet_size < 2:
             min_shapelet_size = 2
         max_depth = self.max_depth or 2 ** 31
-        distance_measure = self._make_distance_measure()
         return ClassificationShapeletTreeBuilder(
             self.n_shapelets,
             min_shapelet_size,
             max_shapelet_size,
             max_depth,
             self.min_samples_split,
-            distance_measure,
+            self.metric,
+            self.metric_params,
             x,
             y,
             sample_weight,
@@ -688,7 +679,6 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
-        distance_measure = self._make_distance_measure()
         max_depth = self.max_depth or 2 ** 31
         return ExtraClassificationShapeletTreeBuilder(
             1,
@@ -696,7 +686,8 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             max_shapelet_size,
             max_depth,
             self.min_samples_split,
-            distance_measure,
+            self.metric,
+            self.metric_params,
             x,
             y,
             sample_weight,

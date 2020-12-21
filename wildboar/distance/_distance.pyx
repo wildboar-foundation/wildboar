@@ -136,19 +136,15 @@ cdef class DistanceMeasure:
     shapelets """
 
     def __cinit__(self, Py_ssize_t n_timestep, *args, **kvargs):
-        """ Initialize a new distance measure
-
-        :param n_timesteps: the (maximum) number of timepoints in a timeseries
-
-        :param *args: optimal arguments for subclasses
-
-        :param **kvargs: optional arguments for subclasses
-        """
         self.n_timestep = n_timestep
 
 
     def __reduce__(self):
         return self.__class__, (self.n_timestep,)
+
+
+    cdef int init(self, TSDatabase *td) nogil:
+        return 0
 
 
     cdef void ts_view_sub_distances(
@@ -498,7 +494,11 @@ cdef np.ndarray _new_distance_array(
         return None
 
 
-def new_distance_measure(metric, n_timestep, metric_params=None):
+cdef DistanceMeasure new_distance_measure(
+    TSDatabase *td,
+    object metric,
+    dict metric_params=None,
+):
     """Create a new distance measure
 
     Parameters
@@ -506,7 +506,7 @@ def new_distance_measure(metric, n_timestep, metric_params=None):
     metric : str or callable
         A metric name or callable
 
-    n_timestep : int
+    td : TSDatabase
         Number of maximum number of timesteps in the database
 
     metric_params : dict, optional
@@ -516,16 +516,18 @@ def new_distance_measure(metric, n_timestep, metric_params=None):
     -------
     distance_measure : a distance measure instance
     """
+    cdef DistanceMeasure distance_measure
     metric_params = metric_params or {}
     if isinstance(metric, str):
         if metric in _DISTANCE_MEASURE:
-            distance_measure = _DISTANCE_MEASURE[metric](n_timestep, **metric_params)
+            distance_measure = _DISTANCE_MEASURE[metric](td.n_timestep, **metric_params)
         else:
             raise ValueError("metric (%s) is not supported" % metric)
     elif hasattr(metric, "__call__"):
-        distance_measure = FuncDistanceMeasure(n_timestep, metric)
+        distance_measure = FuncDistanceMeasure(td.n_timestep, metric)
     else:
         raise ValueError("unknown metric, got %r" % metric)
+    distance_measure.init(td)
     return distance_measure
 
 
@@ -547,7 +549,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
     cdef double std = 0
 
     cdef DistanceMeasure distance_measure = new_distance_measure(
-        metric, sd.n_timestep, metric_params
+        &sd, metric, metric_params
     )
 
     if (
@@ -622,7 +624,7 @@ def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metr
     cdef Py_ssize_t n_matches
 
     cdef DistanceMeasure distance_measure = new_distance_measure(
-        metric, sd.n_timestep, metric_params
+        &sd, metric, metric_params
     )
     cdef TSCopy shape
     distance_measure.init_ts_copy_from_ndarray(&shape, s, dim)

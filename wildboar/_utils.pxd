@@ -46,11 +46,11 @@ cdef Py_ssize_t label_distribution(const Py_ssize_t *samples, double *sample_wei
 
 cdef void argsort(double *values, Py_ssize_t *order, Py_ssize_t length) nogil
 
-cdef Py_ssize_t rand_r(Py_ssize_t *seed) nogil
+cdef size_t rand_r(size_t *seed) nogil
 
-cdef Py_ssize_t rand_int(Py_ssize_t min_val, Py_ssize_t max_val, Py_ssize_t *seed) nogil
+cdef size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil
 
-cdef double rand_uniform(double low, double high, Py_ssize_t *random_state) nogil
+cdef double rand_uniform(double low, double high, size_t *random_state) nogil
 
 cdef int realloc_array(void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap)  nogil except -1
 
