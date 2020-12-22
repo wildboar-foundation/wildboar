@@ -153,7 +153,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         counterfactuals = np.empty(x.shape)
         success = np.zeros(x.shape[0], dtype=bool)
         for i in range(x.shape[0]):
-            t = self._transform_single(x[i, :], y[i])
+            t = self.candidates(x[i, :], y[i])
             if t is not None:
                 counterfactuals[i, :] = t
                 success[i] = True
@@ -162,7 +162,14 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
 
         return counterfactuals, success
 
-    def _transform_single(self, x, y):
+    def candidates(self, x, y):
+        if x.ndim == 2 and x.shape[0] > 1:
+            raise ValueError(
+                "can only compute candidates for 1 sample, got %d" % x.shape[0]
+            )
+        # elif x.ndim == 1:
+        #     x = x.reshape(1, -1)
+
         if self.epsilon < 0.0:
             raise ValueError("epsilon must be larger than 0, got %r" % self.epsilon)
 
@@ -177,20 +184,15 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
                 raise ValueError(
                     "batch_size should be in range (0, 1], got %r" % self.batch_size
                 )
-            batch_size = math.ceil(n_counterfactuals * self.batch_size) + 1
+            batch_size = math.ceil(n_counterfactuals * self.batch_size)
         elif isinstance(self.batch_size, int):
-            if not 0 < self.batch_size <= n_counterfactuals:
-                raise ValueError(
-                    "batch_size should be (0, n_counterfactuals], got %r"
-                    % self.batch_size
-                )
-            batch_size = self.batch_size
+            batch_size = max(0, min(self.batch_size, n_counterfactuals))
         else:
             raise ValueError("unsupported batch_size, got %r" % self.batch_size)
 
         counterfactuals = np.empty([n_counterfactuals, x.shape[0]])
         for i, path in enumerate(prediction_paths):
-            counterfactuals[i, :] = self._transform_single_path(x.copy(), path)
+            counterfactuals[i, :] = self._path_transform(x.copy(), path)
 
         # Note that the cost is ordered in increasing order; hence, if a conversion is successful
         # there can exist no other successful transformation with lower cost.
@@ -205,9 +207,9 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
 
         return None
 
-    def _transform_single_path(self, x, path):
+    def _path_transform(self, x, path):
         for direction, (dim, shapelet), threshold in path:
-            dist, location = euclidean_distance(shapelet, x, dim)
+            dist, location = euclidean_distance(shapelet, x, dim=dim)
             if direction < 0:
                 if dist > threshold:
                     impute_shape = _shapelet_transform(
@@ -220,7 +222,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
                         shapelet, x, location, threshold + self.epsilon
                     )
                     x[location : location + len(shapelet)] = impute_shape
-                    dist, location = euclidean_distance(shapelet, x, dim)
+                    dist, location = euclidean_distance(shapelet, x, dim=dim)
             else:
                 raise ValueError("invalid path")
         return x

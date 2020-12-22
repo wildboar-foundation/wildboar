@@ -54,9 +54,10 @@ class BaseCounterfactual(BaseEstimator):
         -------
 
         counterfactuals : ndarray of same shape as x
-            The counterfactual for each sample
+            The counterfactual for each sample. If success[i] == False, then
+            the value of counterfactuals[i] is undefined.
 
         success : ndarray of shape (n_samples,)
-             Boolean matrix of successful transformations
+             Boolean vector indicating successful transformations.
         """
         pass

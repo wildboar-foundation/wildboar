@@ -14,6 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+import warnings
 
 import numpy as np
 
@@ -24,16 +25,20 @@ from sklearn.metrics.pairwise import paired_distances
 from wildboar.ensemble import ShapeletForestClassifier, ExtraShapeletTreesClassifier
 
 from ._nn import KNeighborsCounterfactual
+from ._proto import PrototypeCounterfactual
 from ._sf import ShapeletForestCounterfactual
 
 __all__ = [
-    "counterfactual",
+    "counterfactuals",
     "score",
     "ShapeletForestCounterfactual",
     "KNeighborsCounterfactual",
+    "PrototypeCounterfactual",
 ]
 
-_COUNTERFACTUAL_EXPLAINER = {}
+_COUNTERFACTUAL_EXPLAINER = {
+    "prototype": PrototypeCounterfactual,
+}
 
 
 def _infer_counterfactual(estimator):
@@ -50,14 +55,14 @@ def _infer_counterfactual(estimator):
         The counterfactual transformer
     """
     if isinstance(estimator, (ShapeletForestClassifier, ExtraShapeletTreesClassifier)):
-        return ShapeletForestCounterfactual()
+        return ShapeletForestCounterfactual
     elif isinstance(estimator, KNeighborsClassifier):
-        return KNeighborsCounterfactual()
+        return KNeighborsCounterfactual
     else:
-        raise NotImplemented("no support for model agnostic counterfactuals yet")
+        return PrototypeCounterfactual
 
 
-def score(x_true, counterfactuals, metric="euclidean", success=None):
+def score(x_true, x_counterfactuals, metric="euclidean", success=None):
     """Compute the score for the counterfactuals
 
     Parameters
@@ -65,7 +70,7 @@ def score(x_true, counterfactuals, metric="euclidean", success=None):
     x_true : array-like of shape (n_samples, n_timestep)
         The true samples
 
-    counterfactuals : array-like of shape (n_samples, n_timestep)
+    x_counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
 
     metric : str, callable, list or dict, optional
@@ -78,6 +83,9 @@ def score(x_true, counterfactuals, metric="euclidean", success=None):
           the key and the value an ndarry of scores
         - if callable
 
+    success : ndarray of shape (n_samples)
+        Indicator matrix of successful counterfactual transformations
+
     Returns
     -------
     score : ndarray or dict
@@ -85,18 +93,18 @@ def score(x_true, counterfactuals, metric="euclidean", success=None):
     """
     if success:
         x_true = x_true[success]
-        counterfactuals = counterfactuals[success]
+        x_counterfactuals = x_counterfactuals[success]
 
     if isinstance(metric, str) or hasattr(metric, "__call__"):
-        return paired_distances(x_true, counterfactuals, metric=metric)
+        return paired_distances(x_true, x_counterfactuals, metric=metric)
     else:
         sc = {}
         if isinstance(metric, dict):
             for key, value in metric.items():
-                sc[key] = paired_distances(x_true, counterfactuals, metric=value)
+                sc[key] = paired_distances(x_true, x_counterfactuals, metric=value)
         elif isinstance(metric, list):
             for item in metric:
-                sc[item] = paired_distances(x_true, counterfactuals, metric=item)
+                sc[item] = paired_distances(x_true, x_counterfactuals, metric=item)
         else:
             raise ValueError("invalid metric, got %r" % metric)
         return sc
@@ -111,7 +119,7 @@ def counterfactuals(
     scoring=None,
     success_scoring=False,
     random_state=None,
-    params=None
+    **kwargs
 ):
     """Compute a single counterfactual example for each sample
 
@@ -129,6 +137,11 @@ def counterfactuals(
     method : str, optional
         The method to generate counterfactual explanations
 
+        - if 'infer', infer the most appropriate counterfactual explanation method
+          based on the estimator
+        - if 'prototype', compute model agnostic counterfactual explanations using
+          the PrototypeCounterfactual method
+
     scoring : str, callable, list or dict, optional
         The scoring function to determine the goodness of
 
@@ -138,12 +151,12 @@ def counterfactuals(
     random_state : RandomState or int, optional
         The pseudo random number generator to ensure stable result
 
-    params : dict, optional
+    **kwargs : dict, optional
         Optional arguments to the counterfactual explainer
 
     Returns
     -------
-    counterfactuals : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+    x_counterfactuals : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
         The counterfactual example.
 
     success : ndarray of shape (n_samples,)
@@ -154,23 +167,31 @@ def counterfactuals(
     """
     check_is_fitted(estimator)
     if method == "infer":
-        explainer = _infer_counterfactual(estimator)
+        Explainer = _infer_counterfactual(estimator)
+        if Explainer == PrototypeCounterfactual:
+            warnings.warn(
+                "no specific counterfactual explanation method is available for the given estimator."
+            )
+            if not ("background_x" in kwargs or "background_y" in kwargs):
+                raise ValueError("background_x and background_y are required")
     else:
-        explainer = _COUNTERFACTUAL_EXPLAINER[method]
+        Explainer = _COUNTERFACTUAL_EXPLAINER[method]
 
-    if explainer is None:
+    if Explainer is None:
         raise ValueError("no counterfactual explainer for '%r'" % method)
+
     y = np.broadcast_to(y, (x.shape[0],))
-    explainer.set_params(random_state=random_state, **(params or {}))
+    explainer = Explainer(**kwargs)
+    explainer.set_params(random_state=random_state)
     explainer.fit(estimator)
-    counterfactuals, success = explainer.transform(x, y)
+    x_counterfactuals, success = explainer.transform(x, y)
     if scoring:
         sc = score(
             x,
-            counterfactuals,
+            x_counterfactuals,
             metric=scoring,
             success=success if success_scoring else None,
         )
-        return counterfactuals, success, sc
+        return x_counterfactuals, success, sc
     else:
-        return counterfactuals, success
+        return x_counterfactuals, success

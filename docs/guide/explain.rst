@@ -1,6 +1,6 @@
-=============
+==============
 Explainability
-=============
+==============
 
 Counterfactual explanations
 ===========================
@@ -13,7 +13,7 @@ labeled as `abnormal` to `normal`. In this scenario, the normal sample would
 be the counterfactual sample.
 
 In wildboar, counterfactual explainers are in the module ``wildboar.explain.counterfactual``.
-The easiest way to generate counterfactuals is to use the function ``counterfactual``:
+The easiest way to generate counterfactuals is to use the function ``counterfactuals``:
 
 .. code-block:: python
 
@@ -23,7 +23,8 @@ The easiest way to generate counterfactuals is to use the function ``counterfact
 
     Currently, the classifiers that supports counterfactual explanations
     are ``ShapeletForestClassifier`` and ``KNearestNeighborsClassifier``
-    from wildboar and scikit-learn respectively.
+    from wildboar and scikit-learn respectively. Model agnostic counterfactual
+    explanations can be provided for other estimators.
 
 To have more control over the generation of counterfactual samples, the classes
 ``KNeighborsCounterfactual`` and ``ShapeletForestCounterfactuals`` can be used.
