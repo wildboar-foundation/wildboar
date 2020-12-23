@@ -5,9 +5,9 @@ Explainability
 Counterfactual explanations
 ===========================
 
-wildboar can explain predictions of nearest neighbors classifiers and shapelet
+wildboar can explain predictions of nearest neighbors classifiers and shapelet forest classifiers
 using counterfactual samples. In this scenario, counterfactuals are samples that
-are transformed such that the labeling of a sample changes. For instance,
+are transformed such that the labeling of the sample changes. For instance,
 we might want to explain what changes are required to transforms a sample
 labeled as `abnormal` to `normal`. In this scenario, the normal sample would
 be the counterfactual sample.
