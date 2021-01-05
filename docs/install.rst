@@ -91,7 +91,7 @@ Platform specific instructions
 
 Windows
 *******
-First install `Build tools for Visual Studio 2019 <https://visualstudio.microsoft.com/downloads/>`_
+First install `Build tools for Visual Studio 2019 <https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16>`_
 
 .. note::
 
