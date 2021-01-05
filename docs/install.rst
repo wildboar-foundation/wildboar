@@ -95,9 +95,9 @@ First install `Build tools for Visual Studio 2019 <https://visualstudio.microsof
 
 .. note::
 
-    You only need build tools for Visual Studio 2019 and not Visual Studio 2019
+    You `do not` need to install Visual Studio 2019. You only need the **Build Tools for Visual Studio 2019**, under **All downloads** -> **Tools for Visual Studio 2019**.
 
-Then configure the build environment to build 64-bit Python.
+For 64-bit Python, configure the build environment by running the following commands in ``cmd`` console.
 
 .. code-block:: bat
 
