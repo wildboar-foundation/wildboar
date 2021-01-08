@@ -18,6 +18,7 @@ A clear and concise description of what you expected to happen.
  - Python version:
  - NumPy version:
  - Cython version:
+ - Wildboar version: (version or commit)
 
 **Additional context**
 Add any other context about the problem here.

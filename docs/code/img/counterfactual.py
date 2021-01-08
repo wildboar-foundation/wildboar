@@ -9,7 +9,7 @@ from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.explain.counterfactual import counterfactuals
 
 
-def counterfactuals_plot(estimator):
+def counterfactuals_plot(estimator, method="infer"):
     x, y = load_two_lead_ecg()
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, test_size=0.1, random_state=123
@@ -21,7 +21,7 @@ def counterfactuals_plot(estimator):
 
     print("computing %d counterfactuals" % x_test.shape[0])
     x_counterfactuals, success, score = counterfactuals(
-        estimator, x_test, 1.0, scoring="euclidean", random_state=123
+        estimator, x_test, 1.0, scoring="euclidean", method=method, random_state=123
     )
 
     x_test = x_test[success]
@@ -33,8 +33,8 @@ def counterfactuals_plot(estimator):
     fig, ax = plt.subplots(ncols=1, nrows=2, figsize=(6, 2.5))
     ax[0].plot(x_test[0, :], c="red")
     ax[0].plot(x_counterfactuals[0, :], c="blue")
-    ax[1].plot(x_test[0, :], c="red")
-    ax[1].plot(x_counterfactuals[0, :], c="blue")
+    ax[1].plot(x_test[1, :], c="red")
+    ax[1].plot(x_counterfactuals[1, :], c="blue")
     ax[1].legend(["y=abnormal", "y*=normal"])
     return fig
 
