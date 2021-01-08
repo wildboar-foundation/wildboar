@@ -1,0 +1,93 @@
+=====================
+``wildboar.datasets``
+=====================
+
+.. automodule:: wildboar.datasets
+
+   .. contents::
+      :local:
+
+
+Modules
+==========
+
+.. toctree::
+
+   wildboar.datasets.outlier
+
+.. currentmodule:: wildboar.datasets
+
+
+Functions
+=========
+
+- :py:func:`get_repository`:
+  Get a repository from a str
+
+- :py:func:`install_repository`:
+  Install a named repository
+
+- :py:func:`load_dataset`:
+  Load a dataset from a repository
+
+- :py:func:`load_all_datasets`:
+  Load all datasets as a generator
+
+- :py:func:`load_two_lead_ecg`:
+  Load the TwoLeadECG dataset
+
+- :py:func:`load_synthetic_control`:
+  Load the Synthetic_Control dataset
+
+- :py:func:`load_gun_point`:
+  Load the GunPoint dataset
+
+
+.. autofunction:: get_repository
+
+.. autofunction:: install_repository
+
+.. autofunction:: load_dataset
+
+.. autofunction:: load_all_datasets
+
+.. autofunction:: load_two_lead_ecg
+
+.. autofunction:: load_synthetic_control
+
+.. autofunction:: load_gun_point
+
+
+Classes
+=======
+
+- :py:class:`Repository`:
+  Base class for handling dataset repositories
+
+- :py:class:`ArffRepository`:
+  Repository of .arff-files
+
+- :py:class:`NpyRepository`:
+  Repository of numpy binary files
+
+
+.. autoclass:: Repository
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: Repository
+      :parts: 1
+
+.. autoclass:: ArffRepository
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ArffRepository
+      :parts: 1
+
+.. autoclass:: NpyRepository
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: NpyRepository
+      :parts: 1

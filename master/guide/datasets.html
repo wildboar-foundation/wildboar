@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Datasets &#8212; Wildboar 1.0.3dev documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Supervised learning" href="supervised.html" />
+    <link rel="prev" title="User guide" href="../guide.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Wildboar</a></h1>
+
+
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=isaksamsten&repo=wildboar&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing wildboar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">wildboar tutorial</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guide.html">User guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Datasets</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-is-a-repository">What is a repository?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-use-a-repository">How to use a repository?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-create-a-repository">How to create a repository?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="supervised.html">Supervised learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unsupervised.html">Unsupervised learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explain.html">Explainability</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../guide.html">User guide</a><ul>
+      <li>Previous: <a href="../guide.html" title="previous chapter">User guide</a></li>
+      <li>Next: <a href="supervised.html" title="next chapter">Supervised learning</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+<h3>Versions</h3>
+<ul>
+    <li><a href="datasets.html">master</a></li>
+</ul>
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="datasets">
+<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
+<p>Wildboar is distributed with an advanced system for handling dataset repositories. A dataset repository can
+be used to load benchmark datasets or to distribute or store datasets.</p>
+<div class="section" id="what-is-a-repository">
+<h2>What is a repository?<a class="headerlink" href="#what-is-a-repository" title="Permalink to this headline">¶</a></h2>
+<p>I short, a repository is a collection of datasets. More specifically, a repository is a zip-file containing datasets
+or dataset parts that can be downloaded, cached and loaded by wildboar.</p>
+</div>
+<div class="section" id="how-to-use-a-repository">
+<h2>How to use a repository?<a class="headerlink" href="#how-to-use-a-repository" title="Permalink to this headline">¶</a></h2>
+<p>Repositories are either initialized directly or used together with the <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;GunPoint&#39;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s1">&#39;wildboar/ucr&#39;</span><span class="p">)</span>
+<span class="go"># ... downloading repository to cache folder...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, wildboar bundles one collection of datasets, which can be downloaded from <a class="reference external" href="http://timeseriesclassification.com">timeseriesclassification.com</a>
+distributed as two different repositories for completeness:</p>
+<dl class="simple">
+<dt>wildboar/ucr</dt><dd><p>Optimized for loading and download speed.</p>
+</dd>
+<dt>timeseriesclassification/univariate</dt><dd><p>Original dataset in .arff-format. Slower to load.</p>
+</dd>
+</dl>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Repositories are cached locally in a folder controlled by the parameter <code class="docutils literal notranslate"><span class="pre">cache_dir</span></code>. The default directory
+depends on platform. To change the default cache-directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Wafer&quot;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">&quot;wildboar/ucr&quot;</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="s2">&quot;/data/my_cache_drive&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The default cache location changed in version 1.0.4. To use the old location set <code class="docutils literal notranslate"><span class="pre">cache_dir</span></code>
+to <code class="docutils literal notranslate"><span class="pre">'wildboar_cache'</span></code></p>
+</div>
+</div>
+<p>To force re-download of an already cached repository set the parameter <code class="docutils literal notranslate"><span class="pre">force</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</div>
+<div class="section" id="how-to-create-a-repository">
+<h2>How to create a repository?<a class="headerlink" href="#how-to-create-a-repository" title="Permalink to this headline">¶</a></h2>
+<p>To create a new (local or remote) repository one would create a collection of dataset-files, e.g.:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">50</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;folder_with_npy_files/example1.npy&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]),</span> <span class="n">allow_pickle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fix_import</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>and collect them in a zip-file (with a suitable utility, e.g., <code class="docutils literal notranslate"><span class="pre">zip</span></code>):</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ zip -r my_repo_npy.zip folder_with_npy_files/
+$ sha1sum my_repo_npy.zip
+464888e88e95d538ab6c134df0279a9776fd5dc7    my_repo_npy.zip
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It is also possible to create or use <cite>.arff</cite>-files. However, the utilities for loading
+such files are not as performant as the binary representation of Numpy.</p>
+</div>
+<p>Once the datasets are created and collected a new repository can be constructed in Python.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">NpyRepository</span><span class="p">,</span> <span class="n">load_dataset</span><span class="p">,</span> <span class="n">install_repository</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_repo</span> <span class="o">=</span> <span class="n">NpyRepository</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;My Repository&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">download_url</span><span class="o">=</span><span class="s2">&quot;file:///path/to/my_repo_npy.zip&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="nb">hash</span><span class="o">=</span><span class="s2">&quot;464888e88e95d538ab6c134df0279a9776fd5dc7&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">class_index</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">install_repository</span><span class="p">(</span><span class="s1">&#39;my_repo&#39;</span><span class="p">,</span> <span class="n">my_repo</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;example1&#39;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s1">&#39;my_repo&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To avoid some of the boilerplate-code, <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> can directly infer and implicitly
+construct a repository</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;example1&#39;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">&quot;file:///path/to/my_repo_npy.zip&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When inferring the type of repository, the filename of the repository should end with
+the type of repository, e.g., <code class="docutils literal notranslate"><span class="pre">_nyp</span></code> or <code class="docutils literal notranslate"><span class="pre">_arff</span></code>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Implicit repositories does not support repository integrity checks.</p>
+</div>
+<p>Repositories can also be uploaded and distributed over http(s):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_repo</span> <span class="o">=</span> <span class="n">NpyRepository</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;My Repository&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">download_url</span><span class="o">=</span><span class="s2">&quot;https://example.com/my_repo_npy.zip&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="nb">hash</span><span class="o">=</span><span class="s2">&quot;464888e88e95d538ab6c134df0279a9776fd5dc7&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                        <span class="n">class_index</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+              <div class="related bottom">
+                &nbsp;
+  <nav id="rellinks">
+    <ul>
+        <li>
+          &larr;
+          <a href="../guide.html" title="Previous document">User guide</a>
+        </li>
+        <li>
+          <a href="supervised.html" title="Next document">Supervised learning</a>
+          &rarr;
+        </li>
+    </ul>
+  </nav>
+              </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Isak Samsten.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/guide/datasets.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,46 @@
+=====================
+``wildboar.distance``
+=====================
+
+.. automodule:: wildboar.distance
+
+   .. contents::
+      :local:
+
+
+Modules
+==========
+
+.. toctree::
+
+   wildboar.distance.dtw
+
+.. currentmodule:: wildboar.distance
+
+
+Functions
+=========
+
+- :py:func:`distance`:
+  Computes the distance between x and the samples of y
+
+- :py:func:`matches`:
+  Return the positions in `x` (one list per `sample`) where `x` is closer than `threshold`.
+
+
+.. autofunction:: distance
+
+.. autofunction:: matches
+
+
+Variables
+=========
+
+- :py:data:`dtw`
+
+.. autodata:: dtw
+   :annotation:
+
+   .. code-block:: text
+
+      <module 'wildboar.distance.dtw' from '/home/travis/build/isaksamsten/wildboar/wildboar/distance/dtw.py'>

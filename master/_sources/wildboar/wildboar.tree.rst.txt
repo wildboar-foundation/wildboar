@@ -1,0 +1,55 @@
+=================
+``wildboar.tree``
+=================
+
+.. automodule:: wildboar.tree
+
+   .. contents::
+      :local:
+
+.. currentmodule:: wildboar.tree
+
+
+Classes
+=======
+
+- :py:class:`ShapeletTreeClassifier`:
+  A shapelet tree classifier.
+
+- :py:class:`ShapeletTreeRegressor`:
+  A shapelet tree regressor.
+
+- :py:class:`ExtraShapeletTreeClassifier`:
+  An extra shapelet tree classifier.
+
+- :py:class:`ExtraShapeletTreeRegressor`:
+  An extra shapelet tree regressor.
+
+
+.. autoclass:: ShapeletTreeClassifier
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ShapeletTreeClassifier
+      :parts: 1
+
+.. autoclass:: ShapeletTreeRegressor
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ShapeletTreeRegressor
+      :parts: 1
+
+.. autoclass:: ExtraShapeletTreeClassifier
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ExtraShapeletTreeClassifier
+      :parts: 1
+
+.. autoclass:: ExtraShapeletTreeRegressor
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ExtraShapeletTreeRegressor
+      :parts: 1

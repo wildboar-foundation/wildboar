@@ -1,0 +1,18 @@
+============================
+``wildboar.model_selection``
+============================
+
+.. automodule:: wildboar.model_selection
+
+   .. contents::
+      :local:
+
+
+Modules
+==========
+
+.. toctree::
+
+   wildboar.model_selection.outlier
+
+.. currentmodule:: wildboar.model_selection

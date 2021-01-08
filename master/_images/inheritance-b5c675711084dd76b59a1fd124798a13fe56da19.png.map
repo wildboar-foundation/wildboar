@@ -1,0 +1,8 @@
+<map id="inheritance11fb2496ea" name="inheritance11fb2496ea">
+<area shape="rect" id="node1" title="Base class for all estimators in scikit&#45;learn." alt="" coords="181,5,297,31"/>
+<area shape="rect" id="node4" title="Logistic Regression (aka logit, MaxEnt) classifier." alt="" coords="363,55,501,80"/>
+<area shape="rect" id="node2" title="Mixin class for all classifiers in scikit&#45;learn." alt="" coords="5,55,116,80"/>
+<area shape="rect" id="node5" title="Mixin for linear classifiers." alt="" coords="164,55,315,80"/>
+<area shape="rect" id="node3" title="A simple kernel logistic implementation using a Nystroem kernel approximation" alt="" coords="549,55,728,80"/>
+<area shape="rect" id="node6" title="Mixin for converting coef_ to and from CSR format." alt="" coords="175,104,303,129"/>
+</map>

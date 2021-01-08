@@ -1,0 +1,18 @@
+====================
+``wildboar.explain``
+====================
+
+.. automodule:: wildboar.explain
+
+   .. contents::
+      :local:
+
+
+Modules
+==========
+
+.. toctree::
+
+   wildboar.explain.counterfactual
+
+.. currentmodule:: wildboar.explain
