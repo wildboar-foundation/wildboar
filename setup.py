@@ -9,27 +9,38 @@ from setuptools.extension import Extension
 class np_include_dirs(str):
     def __str__(self):
         import numpy as np
+
         return np.get_include()
 
 
 def read(rel_path):
     import codecs
+
     here = os.path.abspath(os.path.dirname(__file__))
-    with codecs.open(os.path.join(here, rel_path), 'r') as fp:
+    with codecs.open(os.path.join(here, rel_path), "r") as fp:
         return fp.read()
 
 
 def get_version(rel_path):
     for line in read(rel_path).splitlines():
-        if line.startswith('__version__'):
+        if line.startswith("__version__"):
             delim = '"' if '"' in line else "'"
             return line.split(delim)[1]
     else:
         raise RuntimeError("Unable to find version string.")
 
 
-def declare_extension(root_module, ext_file, compile_args=None, link_args=None, use_openmp=False,
-                      include_dirs=None, libraries=None, extra_compile_args=None, extra_link_args=None):
+def declare_extension(
+    root_module,
+    ext_file,
+    compile_args=None,
+    link_args=None,
+    use_openmp=False,
+    include_dirs=None,
+    libraries=None,
+    extra_compile_args=None,
+    extra_link_args=None,
+):
     if not isinstance(root_module, list):
         root_module = [root_module]
 
@@ -45,19 +56,22 @@ def declare_extension(root_module, ext_file, compile_args=None, link_args=None, 
     link_args.extend(extra_link_args)
     libraries = libraries or []
     if use_openmp:
-        compile_args.insert(0, '-fopenmp')
-        link_args.insert(0, '-fopenmp')
+        compile_args.insert(0, "-fopenmp")
+        link_args.insert(0, "-fopenmp")
 
     import platform
+
     if platform.system() != "Windows":
         libraries.insert(0, "m")
 
     return Extension(
-        ext_module, ext_file,
+        ext_module,
+        ext_file,
         extra_compile_args=compile_args,
         extra_link_args=link_args,
         include_dirs=include_dirs,
-        libraries=libraries)
+        libraries=libraries,
+    )
 
 
 def declare_extensions(ext_module, ext_files, **kwargs):
@@ -68,21 +82,31 @@ PACKAGE_NAME = "wildboar"
 
 SHORT_DESCRIPTION = "Time series learning with Python"
 
-with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), 'README.md'), encoding='utf-8') as f:
+with open(
+    os.path.join(os.path.abspath(os.path.dirname(__file__)), "README.md"),
+    encoding="utf-8",
+) as f:
     DESCRIPTION = f.read()
 
 BUILD_TYPE = os.getenv("WILDBOAR_BUILD") or "default"
 
 BUILD_ARGS = {
-    'default': {
-        'compile_args': ['-O2'],
-        'link_args': [],
-        'libraries': [],
+    "default": {
+        "compile_args": ["-O2"],
+        "link_args": [],
+        "libraries": [],
     },
-    'optimized': {
-        'compile_args': ['-O2', '-march=native', '-msse', '-msse2', '-mfma', '-mfpmath=sse'],
-        'link_args': [],
-        'libraries': []
+    "optimized": {
+        "compile_args": [
+            "-O2",
+            "-march=native",
+            "-msse",
+            "-msse2",
+            "-mfma",
+            "-mfpmath=sse",
+        ],
+        "link_args": [],
+        "libraries": [],
     },
 }
 
@@ -92,17 +116,32 @@ build_args = BUILD_ARGS.get(BUILD_TYPE)
 if build_args is None:
     raise RuntimeError("%s is not a valid build type" % BUILD_TYPE)
 
-wildboar_ext = declare_extensions("wildboar", [
-    "_utils"
-], use_openmp=False, include_dirs=include_dirs, **build_args)
+wildboar_ext = declare_extensions(
+    "wildboar", ["_utils"], use_openmp=False, include_dirs=include_dirs, **build_args
+)
 
-distance_ext = declare_extensions(["wildboar", "distance"], [
-    "_distance", "_euclidean_distance", "_dtw_distance",
-], use_openmp=False, include_dirs=include_dirs, **build_args)
+distance_ext = declare_extensions(
+    ["wildboar", "distance"],
+    [
+        "_distance",
+        "_euclidean_distance",
+        "_dtw_distance",
+    ],
+    use_openmp=False,
+    include_dirs=include_dirs,
+    **build_args
+)
 
-tree_ext = declare_extensions(["wildboar", "tree"], [
-    "_impurity", "_tree_builder",
-], use_openmp=False, include_dirs=include_dirs, **build_args)
+tree_ext = declare_extensions(
+    ["wildboar", "tree"],
+    [
+        "_impurity",
+        "_tree_builder",
+    ],
+    use_openmp=False,
+    include_dirs=include_dirs,
+    **build_args
+)
 
 cython_ext_modules = wildboar_ext + distance_ext + tree_ext
 setup(
@@ -113,7 +152,7 @@ setup(
     url="https://github.com/isakkarlsson/wildboar",
     description=SHORT_DESCRIPTION,
     long_description=DESCRIPTION,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     license="GPLv3",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -136,14 +175,14 @@ setup(
         "Topic :: Software Development :: Libraries",
     ],
     setup_requires=[
-        'cython>=0.29.14',
-        'numpy>=1.17.4',
-        'setuptools>=18.0',
+        "cython>=0.29.14",
+        "numpy>=1.17.4",
+        "setuptools>=18.0",
     ],
     install_requires=[
-        'numpy>=1.17.4',
-        'scikit-learn>=0.21.3',
-        'scipy>=1.3.2',
+        "numpy>=1.17.4",
+        "scikit-learn>=0.21.3",
+        "scipy>=1.3.2",
     ],
     python_requires=">=3.7.0",
     provides=["wildboar"],
@@ -151,8 +190,8 @@ setup(
     ext_modules=cython_ext_modules,
     packages=find_packages(),
     package_data={
-        'wildboar': ['*.pxd', '*.pyx', '*.c'],
-        'wildboar.datasets._resources': ['*.txt'],
+        "wildboar": ["*.pxd", "*.pyx", "*.c"],
+        "wildboar.datasets._resources": ["*.txt"],
     },
     zip_safe=False,
 )
