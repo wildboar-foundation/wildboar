@@ -72,7 +72,7 @@ def _os_cache_path(dir):
     import platform
 
     if platform.system() == "Windows":
-        cache_dir = os.path.expandvars(r"%LOCALAPPDATA%\Caches")
+        cache_dir = os.path.expandvars(r"%LOCALAPPDATA%\cache")
         return os.path.join(cache_dir, dir)
     elif platform.system() == "Linux":
         cache_dir = os.environ.get("XDG_CACHE_HOME")
