@@ -35,14 +35,14 @@ _REPOSITORIES = {
     "wildboar/ucr": NpyRepository(
         name="UCR Time series repository, univariate (Numpy optimized)",
         description="A collection of 128 univariate time series. Downloaded from UCR Time series repository",
-        download_url="https://github.com/isaksamsten/wildboar/releases/download/dataset-v1.0/ucr_2018_npy.zip",
+        download_url="https://github.com/isaksamsten/wildboar-datasets/releases/download/v1.0/ucr_2018_npy.zip",
         hash="11bacbb31ccfe928be38740107dab38218ac50fa",
         class_index=-1,
     ),
     "wildboar/ucr-tiny": NpyRepository(
         name="UCR Time series repository, univariate (Numpy optimized/small sample)",
         description="A collection of 4 univariate time series. Downloaded from UCR Time series repository",
-        download_url="https://github.com/isaksamsten/wildboar/releases/download/dataset-v1.0/ucr_tiny_2018_npy.zip",
+        download_url="https://github.com/isaksamsten/wildboar-datasets/releases/download/v1.0/ucr_tiny_2018_npy.zip",
         hash="a04e9a0327ad019ee72aa78519d8b43381357d4f",
         class_index=-1,
     ),

@@ -12,6 +12,10 @@
 * Fast computation of scaled and unscaled dynamic time warping (using the UCRSuite algorithm).
 * LB_Keogh lower bound and envelope.
 
+### Deprecated
+
+* Dataset repository has changed.
+
 ## [v1.0.3]
 
 ### Added
