@@ -1,0 +1,38 @@
+name: Build and deploy documentation
+on: [push]
+jobs:
+  build_docs:
+    name: Build and deploy documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.8'
+
+      - name: Install requirements
+        run: |
+          sudo apt-get install graphviz
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install -r docs/requirements.txt
+
+      - name: Build Cython extensions inplace
+        run: python setup.py build_ext --inplace
+
+      - name: Build docmentation
+        run: |
+          mkdir html
+          touch html/.nojekyll
+          git fetch --all
+          python -I -m sphinx_multiversion docs html
+          cp docs/assets/index.html html/index.html
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
