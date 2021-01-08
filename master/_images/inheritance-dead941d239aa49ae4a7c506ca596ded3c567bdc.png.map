@@ -1,6 +1,6 @@
 <map id="inheritance287be2fd91" name="inheritance287be2fd91">
 <area shape="rect" id="node1" title="Base class for all estimators in scikit&#45;learn." alt="" coords="5,5,120,30"/>
-<area shape="rect" id="node4" title="A shapelet tree regressor." alt="" coords="350,30,516,55"/>
-<area shape="rect" id="node3" title="An extra shapelet tree regressor." alt="" coords="564,30,763,55"/>
-<area shape="rect" id="node5" title="Mixin class for all regression estimators in scikit&#45;learn." alt="" coords="177,54,293,79"/>
+<area shape="rect" id="node4" title="A shapelet tree regressor." alt="" coords="349,30,516,55"/>
+<area shape="rect" id="node3" title="An extra shapelet tree regressor." alt="" coords="563,30,763,55"/>
+<area shape="rect" id="node5" title="Mixin class for all regression estimators in scikit&#45;learn." alt="" coords="175,53,294,78"/>
 </map>

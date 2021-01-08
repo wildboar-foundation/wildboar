@@ -43,4 +43,4 @@ Variables
 
    .. code-block:: text
 
-      <module 'wildboar.distance.dtw' from '/home/travis/build/isaksamsten/wildboar/wildboar/distance/dtw.py'>
+      <module 'wildboar.distance.dtw' from '/home/runner/work/wildboar/wildboar/wildboar/distance/dtw.py'>

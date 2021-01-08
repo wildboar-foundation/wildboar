@@ -1,9 +1,9 @@
 <map id="inheritance035cd9165e" name="inheritance035cd9165e">
-<area shape="rect" id="node1" title="A Bagging regressor." alt="" coords="343,35,430,51"/>
-<area shape="rect" id="node7" title="Base class for shapelet forest regressors." alt="" coords="465,20,602,36"/>
-<area shape="rect" id="node2" title="Mixin class for all regression estimators in scikit&#45;learn." alt="" coords="233,19,308,35"/>
-<area shape="rect" id="node3" title="Base class for Bagging meta&#45;estimator." alt="" coords="237,50,305,66"/>
-<area shape="rect" id="node4" title="Base class for all ensemble classes." alt="" coords="128,50,203,66"/>
-<area shape="rect" id="node6" title="Base class for all estimators in scikit&#45;learn." alt="" coords="14,65,87,81"/>
-<area shape="rect" id="node9" title="An ensemble of extremely random shapelet trees for time series regression." alt="" coords="632,20,765,36"/>
+<area shape="rect" id="node1" title="A Bagging regressor." alt="" coords="345,34,432,50"/>
+<area shape="rect" id="node7" title="Base class for shapelet forest regressors." alt="" coords="467,19,602,35"/>
+<area shape="rect" id="node2" title="Mixin class for all regression estimators in scikit&#45;learn." alt="" coords="234,18,310,34"/>
+<area shape="rect" id="node3" title="Base class for Bagging meta&#45;estimator." alt="" coords="238,49,305,65"/>
+<area shape="rect" id="node4" title="Base class for all ensemble classes." alt="" coords="129,49,204,65"/>
+<area shape="rect" id="node6" title="Base class for all estimators in scikit&#45;learn." alt="" coords="14,64,88,80"/>
+<area shape="rect" id="node9" title="An ensemble of extremely random shapelet trees for time series regression." alt="" coords="632,19,765,35"/>
 </map>
