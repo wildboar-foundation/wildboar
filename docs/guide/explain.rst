@@ -54,7 +54,7 @@ Example
 In the following example, we explain the a nearest neighbors classifier and
 a shapelet forest classifier for the datasets `TwoLeadECG` and explaining samples
 classified as `2.0` if they instead where classified as `1.0` (in the legend
-denoted as `abnormal` and `normal` respectively`).
+denoted as `abnormal` and `normal` respectively).
 
 .. code-block:: python
 
