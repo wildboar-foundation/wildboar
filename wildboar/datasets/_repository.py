@@ -26,23 +26,87 @@ from urllib.parse import urlparse
 
 import numpy as np
 import requests
+from wildboar import __version__ as wildboar_version
+from pkg_resources import parse_version
 from scipy.io.arff import loadarff
 
 
-class Repository(metaclass=ABCMeta):
-    """Base class for handling dataset repositories
+class Repository:
+    def __init__(self, url):
+        self.url = url
+        self.refresh()
+
+    def get_bundle(self, key):
+        repositories = self.get_bundles()
+        return repositories.get(key)
+
+    def get_bundles(self):
+        return self.bundles
+
+    def refresh(self):
+        json = requests.get(self.url).json()
+        self.wildboar_requires = json["wildboar_requires"]
+        self.name = json["name"]
+        self.version = json["version"]
+        if parse_version(self.wildboar_requires) < parse_version(wildboar_version):
+            raise ValueError(
+                "repository requires wildboar (>=%s), got %s",
+                self.wildboar_requires,
+                wildboar_version,
+            )
+        self.url = json["url"]
+        bundles = {}
+        for bundle_json in json["bundles"]:
+            key = bundle_json["key"]
+            version = bundle_json["version"]
+            name = bundle_json["name"]
+            hash = bundle_json["hash"]
+            class_index = bundle_json["class_index"]
+            description = bundle_json["description"]
+            download_url = self.url.format(key=key, version=version)
+            bundles[bundle_json["key"]] = NpyBundle(
+                key=key,
+                version=version,
+                name=name,
+                download_url=download_url,
+                description=description,
+                hash=hash,
+                class_index=class_index,
+            )
+
+        self.bundles = bundles
+
+
+class RepositoryCollection:
+    def __init__(self):
+        self.repositories = []
+
+    def __getitem__(self, item):
+        return next(
+            (repository for repository in self.repositories if repository.name == item),
+            None,
+        )
+
+    def append(self, item):
+        if self[item]:
+            raise ValueError("cannot overwrite repository, %s" % item.name)
+        self.repositories.append(item)
+
+
+class Bundle(metaclass=ABCMeta):
+    """Base class for handling dataset bundles
 
     Attributes
     ----------
 
     name : str
-        Human-readable name of the repository
+        Human-readable name of the bundle
 
     description : str
-        Description of the repository
+        Description of the bundle
 
     download_url : str
-        Local or remote path to the repository
+        Local or remote path to the bundle
 
     hash : str
         SHA1 hash of the file pointed to by download_url
@@ -52,20 +116,34 @@ class Repository(metaclass=ABCMeta):
     """
 
     def __init__(
-        self, name, download_url, *, description=None, hash=None, class_index=-1
+        self,
+        key,
+        version,
+        name,
+        download_url,
+        *,
+        description=None,
+        hash=None,
+        class_index=-1
     ):
-        """Construct a repository
+        """Construct a bundle
 
         Parameters
         ----------
+        key : str
+            A unique key of the bundle
+
+        version : str
+            The version of the bundle
+
         name : str
-            Human-readable name of the repository
+            Human-readable name of the bundle
 
         description : str
-            Description of the repository
+            Description of the bundle
 
         download_url : str
-            Local or remote path to the repository. file:// or http(s):// paths are supported.
+            Local or remote path to the bundle. file:// or http(s):// paths are supported.
 
         hash : str
             SHA1 hash of the file pointed to by download_url
@@ -73,6 +151,8 @@ class Repository(metaclass=ABCMeta):
         class_index : int or array-like
             Index of the class label(s)
         """
+        self.key = key
+        self.version = version
         self.name = name
         self.description = description
         self.download_url = download_url
@@ -80,7 +160,7 @@ class Repository(metaclass=ABCMeta):
         self.class_index = class_index
 
     def list(self, cache_dir, *, create_cache_dir=True, progress=True, force=False):
-        """List all datasets in this repository
+        """List all datasets in this bundle
 
         Parameters
         ----------
@@ -94,14 +174,14 @@ class Repository(metaclass=ABCMeta):
             Write progress to standard error
 
         force : bool, optional
-            Force re-download of cached repository
+            Force re-download of cached bundle
 
         Returns
         -------
         dataset_names : list
-            A sorted list of datasets in the repository
+            A sorted list of datasets in the bundle
         """
-        with self._download_repository(
+        with self._download_bundle(
             cache_dir=cache_dir,
             create_cache_dir=create_cache_dir,
             progress=progress,
@@ -127,7 +207,7 @@ class Repository(metaclass=ABCMeta):
         dtype=None,
         force=False
     ):
-        """Load a dataset from the repository
+        """Load a dataset from the bundle
 
         Parameters
         ----------
@@ -147,7 +227,7 @@ class Repository(metaclass=ABCMeta):
              Cast the data and label matrix to a specific type
 
         force : bool, optional
-            Force re-download of cached repository
+            Force re-download of cached bundle
 
         Returns
         -------
@@ -161,7 +241,7 @@ class Repository(metaclass=ABCMeta):
             Number of samples that are for training. The value is <= x.shape[0]
         """
         dtype = dtype or np.float64
-        with self._download_repository(
+        with self._download_bundle(
             cache_dir=cache_dir,
             create_cache_dir=create_cache_dir,
             progress=progress,
@@ -240,10 +320,10 @@ class Repository(metaclass=ABCMeta):
         """
         pass
 
-    def _download_repository(
+    def _download_bundle(
         self, cache_dir, *, create_cache_dir=True, progress=True, force=False
     ):
-        """Download a repository to the cache directory"""
+        """Download a bundle to the cache directory"""
         if not os.path.exists(cache_dir):
             if create_cache_dir:
                 os.mkdir(cache_dir)
@@ -261,7 +341,7 @@ class Repository(metaclass=ABCMeta):
         if ext != ".zip":
             raise ValueError("expected .zip file got, %s" % ext)
 
-        filename = os.path.join(cache_dir, basename)
+        filename = os.path.join(cache_dir, "%s-v%s" % (self.key, self.version))
         if os.path.exists(filename):
             if force:
                 os.remove(filename)
@@ -279,6 +359,8 @@ class Repository(metaclass=ABCMeta):
         else:
             with open(filename, "wb") as f:
                 response = requests.get(self.download_url, stream=True)
+                if not response:
+                    raise ValueError("file not found, %s" % self.download_url)
                 total_length = response.headers.get("content-length")
                 if total_length is None:  # no content length header
                     f.write(response.content)
@@ -297,7 +379,7 @@ class Repository(metaclass=ABCMeta):
                                     " " * (50 - done),
                                     length,
                                     total_length,
-                                    basename,
+                                    self.download_url,
                                 )
                             )
                             sys.stderr.flush()
@@ -316,11 +398,13 @@ class Repository(metaclass=ABCMeta):
                 )
 
 
-class ArffRepository(Repository):
-    """Repository of .arff-files"""
+class ArffBundle(Bundle):
+    """bundle of .arff-files"""
 
     def __init__(
         self,
+        key,
+        version,
         name,
         download_url,
         *,
@@ -330,6 +414,8 @@ class ArffRepository(Repository):
         encoding="utf-8"
     ):
         super().__init__(
+            key,
+            version,
             name,
             download_url,
             hash=hash,
@@ -348,8 +434,8 @@ class ArffRepository(Repository):
             return arr
 
 
-class NpyRepository(Repository):
-    """Repository of numpy binary files"""
+class NpyBundle(Bundle):
+    """bundle of numpy binary files"""
 
     def _is_dataset(self, file_name, ext):
         return ext == ".npy"

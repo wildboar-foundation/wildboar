@@ -21,47 +21,22 @@ from urllib.parse import urlparse
 
 import numpy as np
 
-from ._repository import ArffRepository, NpyRepository, Repository
-
-_REPOSITORIES = {
-    "timeseriesclassification/univariate": ArffRepository(
-        name="UCR Time series repository, univariate",
-        description="A collection of 128 univariate time series. Downloaded from UCR Time series repository",
-        download_url="http://www.timeseriesclassification.com/Downloads/Archives/Univariate2018_arff.zip",
-        hash="db696c772f0a0c2679fc41fed7b2bbe6a67af251",
-        class_index=-1,
-        encoding="utf-8",
-    ),
-    "wildboar/ucr": NpyRepository(
-        name="UCR Time series repository, univariate (Numpy optimized)",
-        description="A collection of 128 univariate time series. Downloaded from UCR Time series repository",
-        download_url="https://github.com/isaksamsten/wildboar-datasets/releases/download/v1.0/ucr_2018_npy.zip",
-        hash="11bacbb31ccfe928be38740107dab38218ac50fa",
-        class_index=-1,
-    ),
-    "wildboar/ucr-tiny": NpyRepository(
-        name="UCR Time series repository, univariate (Numpy optimized/small sample)",
-        description="A collection of 4 univariate time series. Downloaded from UCR Time series repository",
-        download_url="https://github.com/isaksamsten/wildboar-datasets/releases/download/v1.0/ucr_tiny_2018_npy.zip",
-        hash="a04e9a0327ad019ee72aa78519d8b43381357d4f",
-        class_index=-1,
-    ),
-}
-
-_REPOSITORY_INFERENCE_TYPES = {"npy", "arff"}
+from ._repository import ArffBundle, NpyBundle, Bundle, Repository, RepositoryCollection
 
 __all__ = [
     "Repository",
-    "ArffRepository",
-    "NpyRepository",
-    "get_repository",
-    "install_repository",
+    "Bundle",
+    "ArffBundle",
+    "NpyBundle",
+    "get_bundle",
     "load_dataset",
     "load_all_datasets",
     "load_two_lead_ecg",
     "load_synthetic_control",
     "load_gun_point",
 ]
+
+_REPOSITORIES = RepositoryCollection()
 
 
 def _default_cache_dir():
@@ -93,7 +68,7 @@ def load_synthetic_control(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "SyntheticControl", repository="wildboar/ucr", merge_train_test=merge_train_test
+        "SyntheticControl", bundle="wildboar/ucr", merge_train_test=merge_train_test
     )
 
 
@@ -105,7 +80,7 @@ def load_two_lead_ecg(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "TwoLeadECG", repository="wildboar/ucr-tiny", merge_train_test=merge_train_test
+        "TwoLeadECG", bundle="wildboar/ucr-tiny", merge_train_test=merge_train_test
     )
 
 
@@ -117,12 +92,12 @@ def load_gun_point(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=merge_train_test
+        "GunPoint", bundle="wildboar/ucr-tiny", merge_train_test=merge_train_test
     )
 
 
 def load_all_datasets(
-    repository="wildboar/ucr",
+    bundle="wildboar/ucr",
     *,
     cache_dir=None,
     create_cache_dir=True,
@@ -134,8 +109,8 @@ def load_all_datasets(
 
     Parameters
     ----------
-    repository : str
-        A string with the repository.
+    bundle : str
+        A string with the bundle.
 
     progress : bool, optional
         If progress indicator is shown while downloading the bundle.
@@ -147,7 +122,7 @@ def load_all_datasets(
         Create the cache directory if it does not exist.
 
     force : bool, optional
-            Force re-download of cached repository
+            Force re-download of cached bundle
 
     kwargs : dict
         Optional arguments to ``load_dataset``
@@ -164,23 +139,23 @@ def load_all_datasets(
     --------
 
     >>> from wildboar.datasets import load_all_datasets
-    >>> for dataset, (x, y) in load_all_datasets(repository='wildboar/ucr'):
+    >>> for dataset, (x, y) in load_all_datasets(bundle='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
     """
     for dataset in list_datasets(
-        repository=repository,
+        bundle=bundle,
         cache_dir=cache_dir,
         create_cache_dir=create_cache_dir,
         progress=progress,
         force=force,
     ):
-        yield dataset, load_dataset(dataset, repository=repository, **kwargs)
+        yield dataset, load_dataset(dataset, bundle=bundle, **kwargs)
 
 
 def load_dataset(
     name,
     *,
-    repository="wildboar/ucr",
+    bundle="wildboar/ucr",
     dtype=None,
     contiguous=True,
     merge_train_test=True,
@@ -189,18 +164,18 @@ def load_dataset(
     progress=True,
     force=False
 ):
-    """Load a dataset from a repository
+    """Load a dataset from a bundle
 
     Parameters
     ----------
     name : str
         The name of the dataset to load.
 
-    repository : str or Repository, optional
-        The data repository
+    bundle : str or Bundle, optional
+        The data bundle
 
-        - if str load a named repository
-        - if str http(s) or file url, load it as a an anonymous bundle
+        - if str load a named bundle, format {repository}/{bundle}
+        - if Bundle, load from a given bundle
 
     dtype : dtype, optional, default=np.float64
         The data type of the returned data
@@ -221,7 +196,7 @@ def load_dataset(
         Create cache directory if missing (default=True)
 
     force : bool, optional
-        Force re-download of already cached repository
+        Force re-download of already cached bundle
 
         ..versionadded :: 1.0.4
 
@@ -254,8 +229,10 @@ def load_dataset(
     are considered as training parts.
 
     - `Currently only ".arff" and ".npy" files are supported.`
-    - To support other data formats create subclasses ``Repository``.
-    - If an url is given as repository, the type of bundle is inferred from the file name.
+    - To support other data formats create subclasses of ``Bundle``.
+
+    A repository
+
 
     Examples
     --------
@@ -268,28 +245,16 @@ def load_dataset(
 
     >>> x_train, x_test, y_train, y_test = load_dataset("synthetic_control", merge_train_test=False)
 
-    one can specify a different repository
-
-    >>> x, y = load_dataset('Adiac', repository='timeseriesclassification/univariate')
-
     and with training and testing parts
 
-    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr', merge_train_test=False)
-
-    or a selfhosted repository inferring the repository type from the bundle
-
-    >>> x, y = load_dataset('my_data', repository="https://example.org/my_repository_arff.zip")
-
-    or a selfhosted repository
-
-    >>> x, y = load_dataset("my_data", repository=NpyRepository("my_repo",download_url="https://example.org/my_repository.zip"))
+    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", bundle='wildboar/ucr', merge_train_test=False)
 
     """
+    repository, bundle = get_bundle(bundle)
     dtype = dtype or np.float64
-    cache_dir = cache_dir or _default_cache_dir()
+    cache_dir = os.path.join(cache_dir or _default_cache_dir(), repository)
     ret_val = []
-    repository = get_repository(repository)
-    x, y, n_train_samples = repository.load(
+    x, y, n_train_samples = bundle.load(
         name,
         dtype=dtype,
         cache_dir=cache_dir,
@@ -317,22 +282,22 @@ def load_dataset(
 
 
 def list_datasets(
-    repository="wildboar/ucr",
+    bundle="wildboar/ucr",
     *,
     cache_dir=None,
     create_cache_dir=True,
     progress=True,
     force=False
 ):
-    """List the datasets in the repository
+    """List the datasets in the bundle
 
     Parameters
     ----------
-    repository : str or Repository, optional
-        The data repository
+    bundle : str or bundle, optional
+        The data bundle
 
         - if `None` load one of the bundled data sets
-        - if str load a named repository
+        - if str load a named bundle
         - if str http(s) or file url, load it as a bundle
 
     progress: bool, optional
@@ -345,16 +310,16 @@ def list_datasets(
         Create cache directory if missing (default=True)
 
     force : bool, optional
-        Force re-download of cached repository
+        Force re-download of cached bundle
 
     Returns
     -------
         dataset : set
             A set of dataset names
     """
-    cache_dir = cache_dir or _default_cache_dir()
-    repository = get_repository(repository)
-    return repository.list(
+    repository, bundle = get_bundle(bundle)
+    cache_dir = os.path.join(cache_dir or _default_cache_dir(), repository)
+    return bundle.list(
         cache_dir=cache_dir,
         create_cache_dir=create_cache_dir,
         progress=progress,
@@ -362,124 +327,53 @@ def list_datasets(
     )
 
 
-def get_repository(repository):
-    """Get a repository from a str
+def get_bundle(bundle_name):
+    """Get a bundle from a str
 
     Parameters
     ----------
-    repository : str
-        Find a named repository or construct a new repository from the url
+    bundle_name : str
+        Find a named bundle
 
     Returns
     -------
-    repository : Repository
-        A repository
+    repository : str
+        Key of the repository
 
-    Examples
-    --------
+    bundle : Bundle
+        A bundle
 
-    Load a named repositoru
-
-    >>> repository = get_repository("wildboar/ucr")
-    >>> x, y, n_train_samples = repository.load("Wafer", dtype=np.float)
-
-    or from a url
-
-    >>> repository = get_repository("https://example.org/my_repository_arff.zip")
-    >>> x, y, n_train_samples = repository.load("my_data")
     """
-    if repository in _REPOSITORIES.keys():
-        return _REPOSITORIES[repository]
-    elif isinstance(repository, Repository):
-        return repository
-    elif re.match("(http|https|file)://", repository):
-        url = urlparse(repository)
-        filename = os.path.basename(url.path)
-        name, ext = os.path.splitext(filename)
-        if ext != ".zip":
-            raise ValueError("only .zip repositories are supported")
-        repository_inference = re.match(r".*?_([a-zA-Z]+)", name)
-        if repository_inference:
-            repository_type = repository_inference.group(1)
-            if repository_type in _REPOSITORY_INFERENCE_TYPES:
-                return _new_repository(
-                    name,
-                    "Temporary repository",
-                    download_url=repository,
-                    extension=".%s" % repository_type,
-                    class_index=-1,
-                    hash=None,
-                )
+    repo_bundle_match = re.match("([a-zA-Z]+)/([a-zA-Z0-9\-]+)$", bundle_name)
+    if repo_bundle_match:
+        repository_name = repo_bundle_match.group(1)
+        bundle_name = repo_bundle_match.group(2)
+        repository = _REPOSITORIES[repository_name]
+        if repository:
+            bundle = repository.get_bundle(bundle_name)
+            if bundle:
+                return repository_name, bundle
             else:
-                raise ValueError("repository (%s) is not supported" % repository_type)
+                raise ValueError("bundle (%s) does not exist" % bundle_name)
         else:
-            raise ValueError("unable to infer the repository type")
-
+            raise ValueError("repository (%s) does not exist" % repository_name)
     else:
-        raise ValueError("repository (%s) is not supported" % repository)
+        raise ValueError("bundle (%s) is not supported" % bundle_name)
 
 
-def install_repository(
-    name,
-    repository=None,
-    *,
-    download_url=None,
-    description=None,
-    hash=None,
-    class_index=-1,
-    extension=None
-):
-    """Install a named repository
+def install_repository(repository):
+    """Install repository
 
     Parameters
     ----------
-    name : str
-        The name of the repository.
-
-    repository : Repository, optional
-        Install repository if it exists
-
-    download_url : str, optional
-        If repository is None, create a new Repository from this bundle url.
-
-    description : str, optional
-        If repository is None, create a new Repository with this description
-
-    hash : str, optional
-        If repository is None, create a new Repository with this hash
-
-    class_index : int, optional
-        If repository is None, create a new Repository with this class index
-
-    extension : str, optional
-        If repository is None, create a new Repository with this type
+    repository : str or Repository
+        A repository
     """
-    if isinstance(repository, Repository):
-        _REPOSITORIES[name] = repository
-    elif download_url is not None and extension is not None:
-        _REPOSITORIES[name] = _new_repository(
-            name, description, download_url, hash, class_index, extension
-        )
-    else:
-        raise ValueError("not a valid repository")
+    if isinstance(repository, str):
+        repository = Repository(repository)
+    _REPOSITORIES.append(repository)
 
 
-def _new_repository(name, description, download_url, hash, class_index, extension):
-    if extension == ".arff":
-        return ArffRepository(
-            name,
-            download_url,
-            description=description,
-            hash=hash,
-            class_index=class_index,
-        )
-    elif extension == ".npy":
-        return NpyRepository(
-            name,
-            download_url,
-            description=description,
-            hash=hash,
-            class_index=class_index,
-        )
-    else:
-        raise ValueError("extension (%s) is not supported" % extension)
+install_repository(
+    "https://raw.githubusercontent.com/isaksamsten/wildboar-datasets/master/repo.json"
+)

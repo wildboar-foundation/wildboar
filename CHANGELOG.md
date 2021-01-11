@@ -12,9 +12,14 @@
 * Fast computation of scaled and unscaled dynamic time warping (using the UCRSuite algorithm).
 * LB_Keogh lower bound and envelope.
 
-### Deprecated
+### Removed
 
-* Dataset repository has changed.
+* `wildboar.datasets.install_repository`
+
+### Changed
+
+* Rename parameter `repository` of `load_dataset` to `bundle`
+* Rename `Repository` to `Bundle`
 
 ## [v1.0.3]
 

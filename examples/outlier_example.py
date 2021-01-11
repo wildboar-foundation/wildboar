@@ -6,7 +6,7 @@ from wildboar.datasets import load_dataset
 from wildboar.datasets.outlier import EmmottLabeler
 from wildboar.ensemble import IsolationShapeletForest
 
-x, y = load_dataset("SwedishLeaf", repository="wildboar/ucr", merge_train_test=True)
+x, y = load_dataset("SwedishLeaf", bundle="wildboar/ucr", merge_train_test=True)
 labeler = EmmottLabeler(
     n_outliers=0.05, difficulty=1, variation="tight", random_state=5
 )
