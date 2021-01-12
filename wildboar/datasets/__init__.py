@@ -20,16 +20,28 @@ import re
 
 import numpy as np
 
-from ._repository import ArffBundle, NpyBundle, Bundle, Repository, RepositoryCollection
+from ._repository import (
+    ArffBundle,
+    NpyBundle,
+    Bundle,
+    Repository,
+    RepositoryCollection,
+    JSONRepository,
+)
 
 __all__ = [
     "Repository",
+    "JSONRepository",
     "Bundle",
     "ArffBundle",
     "NpyBundle",
     "get_bundle",
+    "list_repositories",
+    "list_bundles",
+    "get_bundles",
     "install_repository",
     "load_dataset",
+    "list_datasets",
     "load_all_datasets",
     "load_two_lead_ecg",
     "load_synthetic_control",
@@ -69,7 +81,7 @@ def load_synthetic_control(merge_train_test=True):
     """
     return load_dataset(
         "SyntheticControl",
-        bundle="wildboar/ucr-tiny",
+        repository="wildboar/ucr-tiny",
         merge_train_test=merge_train_test,
     )
 
@@ -83,7 +95,7 @@ def load_two_lead_ecg(merge_train_test=True):
     """
     return load_dataset(
         "TwoLeadECG",
-        bundle="wildboar/ucr-tiny",
+        repository="wildboar/ucr-tiny",
         merge_train_test=merge_train_test,
     )
 
@@ -97,13 +109,13 @@ def load_gun_point(merge_train_test=True):
     """
     return load_dataset(
         "GunPoint",
-        bundle="wildboar/ucr-tiny",
+        repository="wildboar/ucr-tiny",
         merge_train_test=merge_train_test,
     )
 
 
 def load_all_datasets(
-    bundle="wildboar/ucr",
+    repository="wildboar/ucr",
     *,
     cache_dir=None,
     create_cache_dir=True,
@@ -115,20 +127,20 @@ def load_all_datasets(
 
     Parameters
     ----------
-    bundle : str
-        A string with the bundle.
+    repository : str
+        A string with the repository.
 
     progress : bool, optional
-        If progress indicator is shown while downloading the bundle.
+        If progress indicator is shown while downloading the repository.
 
     cache_dir : str, optional
-        The cache directory for downloaded dataset bundles.
+        The cache directory for downloaded dataset repositories.
 
     create_cache_dir : bool, optional
         Create the cache directory if it does not exist.
 
     force : bool, optional
-            Force re-download of cached bundle
+            Force re-download of cached repository
 
     kwargs : dict
         Optional arguments to ``load_dataset``
@@ -145,23 +157,23 @@ def load_all_datasets(
     --------
 
     >>> from wildboar.datasets import load_all_datasets
-    >>> for dataset, (x, y) in load_all_datasets(bundle='wildboar/ucr'):
+    >>> for dataset, (x, y) in load_all_datasets(repository='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
     """
     for dataset in list_datasets(
-        bundle=bundle,
+        repository=repository,
         cache_dir=cache_dir,
         create_cache_dir=create_cache_dir,
         progress=progress,
         force=force,
     ):
-        yield dataset, load_dataset(dataset, bundle=bundle, **kwargs)
+        yield dataset, load_dataset(dataset, repository=repository, **kwargs)
 
 
 def load_dataset(
     name,
     *,
-    bundle="wildboar/ucr",
+    repository="wildboar/ucr",
     dtype=None,
     contiguous=True,
     merge_train_test=True,
@@ -170,17 +182,17 @@ def load_dataset(
     progress=True,
     force=False
 ):
-    """Load a dataset from a bundle
+    """Load a dataset from a repository
 
     Parameters
     ----------
     name : str
         The name of the dataset to load.
 
-    bundle : str or Bundle, optional
-        The data bundle
+    repository : str or Bundle, optional
+        The data repository
 
-        - if str load a named bundle, format {repository}/{bundle}
+        - if str load a named repository, format {repository}/{bundle}
         - if Bundle, load from a given bundle
 
     dtype : dtype, optional, default=np.float64
@@ -253,10 +265,10 @@ def load_dataset(
 
     and with training and testing parts
 
-    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", bundle='wildboar/ucr', merge_train_test=False)
+    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr', merge_train_test=False)
 
     """
-    repository, bundle = get_bundle(bundle)
+    repository, bundle = get_bundle(repository)
     dtype = dtype or np.float64
     cache_dir = os.path.join(cache_dir or _default_cache_dir(), repository)
     ret_val = []
@@ -288,23 +300,21 @@ def load_dataset(
 
 
 def list_datasets(
-    bundle="wildboar/ucr",
+    repository="wildboar/ucr",
     *,
     cache_dir=None,
     create_cache_dir=True,
     progress=True,
     force=False
 ):
-    """List the datasets in the bundle
+    """List the datasets in the repository
 
     Parameters
     ----------
-    bundle : str or bundle, optional
-        The data bundle
+    repository : str or Bundle, optional
+        The data repository
 
-        - if `None` load one of the bundled data sets
-        - if str load a named bundle
-        - if str http(s) or file url, load it as a bundle
+        - if str load a named bundle, format {repository}/{bundle}
 
     progress: bool, optional
         Show a progress bar while downloading a bundle.
@@ -323,7 +333,7 @@ def list_datasets(
         dataset : set
             A set of dataset names
     """
-    repository, bundle = get_bundle(bundle)
+    repository, bundle = get_bundle(repository)
     cache_dir = os.path.join(cache_dir or _default_cache_dir(), repository)
     return bundle.list(
         cache_dir=cache_dir,
@@ -333,12 +343,12 @@ def list_datasets(
     )
 
 
-def get_bundle(bundle_name):
+def get_bundle(repo_bundle_name):
     """Get a bundle from a str
 
     Parameters
     ----------
-    bundle_name : str
+    repo_bundle_name : str
         Find a named bundle
 
     Returns
@@ -350,7 +360,7 @@ def get_bundle(bundle_name):
         A bundle
 
     """
-    repo_bundle_match = re.match("([a-zA-Z]+)/([a-zA-Z0-9\-]+)$", bundle_name)
+    repo_bundle_match = re.match("([a-zA-Z]+)/([a-zA-Z0-9\-]+)$", repo_bundle_name)
     if repo_bundle_match:
         repository_name = repo_bundle_match.group(1)
         bundle_name = repo_bundle_match.group(2)
@@ -364,7 +374,7 @@ def get_bundle(bundle_name):
         else:
             raise ValueError("repository (%s) does not exist" % repository_name)
     else:
-        raise ValueError("bundle (%s) is not supported" % bundle_name)
+        raise ValueError("bundle (%s) is not supported" % repo_bundle_name)
 
 
 def install_repository(repository):
@@ -376,10 +386,50 @@ def install_repository(repository):
         A repository
     """
     if isinstance(repository, str):
-        repository = Repository(repository)
+        repository = JSONRepository(repository)
     _REPOSITORIES.append(repository)
 
 
+def get_bundles(repository):
+    """Get all bundles in the repository
+
+    Parameters
+    ----------
+    repository : str
+        Name of the repository
+
+    Returns
+    -------
+    dict : A dict of key Bundle pairs
+    """
+    if repository in _REPOSITORIES:
+        return _REPOSITORIES[repository].get_bundles()
+    else:
+        raise ValueError("repository (%s) does not exist.")
+
+
+def list_bundles(repository):
+    """Get a list of all bundle names in the specified repository.
+
+    Parameters
+    ----------
+    repository : str
+        The name of the repository
+
+    Returns
+    -------
+    bundle : str
+        The name of the bundle
+    """
+    return [key for key, bundle in get_bundles(repository).items()]
+
+
+def list_repositories():
+    """List the key of all installed repositories"""
+    return [repo.name for repo in _REPOSITORIES]
+
+
+# Install the default 'wildboar' repository
 install_repository(
     "https://raw.githubusercontent.com/isaksamsten/wildboar-datasets/master/repo.json"
 )

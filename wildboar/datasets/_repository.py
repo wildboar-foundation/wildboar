@@ -31,23 +31,83 @@ from pkg_resources import parse_version
 from scipy.io.arff import loadarff
 
 
-class Repository:
-    def __init__(self, url):
-        self.url = url
-        self.refresh()
+class Repository(metaclass=ABCMeta):
+    """A repository is a collection of bundles"""
+
+    @property
+    @abstractmethod
+    def name(self):
+        pass
+
+    @property
+    @abstractmethod
+    def version(self):
+        pass
+
+    @property
+    @abstractmethod
+    def wildboar_requires(self):
+        pass
+
+    @abstractmethod
+    def get_bundles(self):
+        """Get all bundles
+
+        Returns
+        -------
+        dict : a dictionary of key and bundle
+        """
+        pass
 
     def get_bundle(self, key):
-        repositories = self.get_bundles()
-        return repositories.get(key)
+        """Get a bundle with the specified key
 
-    def get_bundles(self):
-        return self.bundles
+        Parameters
+        ----------
+        key : str
+            Key of the bundle
+
+        Returns
+        -------
+        bundle : Bundle, optional
+            A bundle or None
+        """
+        bundles = self.get_bundles()
+        return bundles.get(key)
 
     def refresh(self):
+        """Refresh the repository"""
+        pass
+
+
+class JSONRepository(Repository):
+    def __init__(self, url):
+        self.url = url
+        self.__refresh()
+
+    @property
+    def wildboar_requires(self):
+        return self._wildboar_requires
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def version(self):
+        return self._version
+
+    def get_bundles(self):
+        return self._bundles
+
+    def refresh(self):
+        self.__refresh()
+
+    def __refresh(self):
         json = requests.get(self.url).json()
-        self.wildboar_requires = json["wildboar_requires"]
-        self.name = json["name"]
-        self.version = json["version"]
+        self._wildboar_requires = json["wildboar_requires"]
+        self._name = json["name"]
+        self._version = json["version"]
         if parse_version(self.wildboar_requires) < parse_version(wildboar_version):
             raise ValueError(
                 "repository requires wildboar (>=%s), got %s",
@@ -74,7 +134,7 @@ class Repository:
                 class_index=class_index,
             )
 
-        self.bundles = bundles
+        self._bundles = bundles
 
 
 class RepositoryCollection:
@@ -86,6 +146,12 @@ class RepositoryCollection:
             (repository for repository in self.repositories if repository.name == item),
             None,
         )
+
+    def __contains__(self, item):
+        return any(r for r in self.repositories if r.name == item)
+
+    def __iter__(self):
+        return iter(self.repositories)
 
     def append(self, item):
         if self[item]:
