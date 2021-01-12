@@ -17,7 +17,6 @@
 
 import os
 import re
-from urllib.parse import urlparse
 
 import numpy as np
 
@@ -68,7 +67,9 @@ def load_synthetic_control(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "SyntheticControl", bundle="wildboar/ucr", merge_train_test=merge_train_test
+        "SyntheticControl",
+        bundle="wildboar/ucr-tiny",
+        merge_train_test=merge_train_test,
     )
 
 
@@ -80,7 +81,9 @@ def load_two_lead_ecg(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "TwoLeadECG", bundle="wildboar/ucr-tiny", merge_train_test=merge_train_test
+        "TwoLeadECG",
+        bundle="wildboar/ucr-tiny",
+        merge_train_test=merge_train_test,
     )
 
 
@@ -92,7 +95,9 @@ def load_gun_point(merge_train_test=True):
     load_dataset : load a named dataset
     """
     return load_dataset(
-        "GunPoint", bundle="wildboar/ucr-tiny", merge_train_test=merge_train_test
+        "GunPoint",
+        bundle="wildboar/ucr-tiny",
+        merge_train_test=merge_train_test,
     )
 
 
