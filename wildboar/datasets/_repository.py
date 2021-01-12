@@ -341,7 +341,7 @@ class Bundle(metaclass=ABCMeta):
         if ext != ".zip":
             raise ValueError("expected .zip file got, %s" % ext)
 
-        filename = os.path.join(cache_dir, "%s-v%s" % (self.key, self.version))
+        filename = os.path.join(cache_dir, "%s-v%s.zip" % (self.key, self.version))
         if os.path.exists(filename):
             if force:
                 os.remove(filename)
