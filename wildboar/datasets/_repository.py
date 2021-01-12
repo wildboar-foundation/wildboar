@@ -384,8 +384,8 @@ class Bundle(metaclass=ABCMeta):
                             )
                             sys.stderr.flush()
 
-            self._check_integrity(filename)
-            return zipfile.ZipFile(open(filename, "rb"))
+        self._check_integrity(filename)
+        return zipfile.ZipFile(open(filename, "rb"))
 
     def _check_integrity(self, filename):
         """Check the integrity of the downloaded or cached file"""
