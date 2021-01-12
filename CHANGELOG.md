@@ -11,11 +11,11 @@
   time series outliers.
 * Fast computation of scaled and unscaled dynamic time warping (using the UCRSuite algorithm).
 * LB_Keogh lower bound and envelope.
+* Add new class `Repository` which represents a collection of bundles
 
 ### Changed
 
 * `wildboar.datasets.install_repository` now installs a repository instead of a bundle
-* Rename parameter `repository` of `load_dataset` to `bundle`
 * Rename `Repository` to `Bundle`
 
 ## [v1.0.3]
