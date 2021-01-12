@@ -24,11 +24,23 @@ Functions
 - :py:func:`get_bundle`:
   Get a bundle from a str
 
+- :py:func:`list_repositories`:
+  List the key of all installed repositories
+
+- :py:func:`list_bundles`:
+  Get a list of all bundle names in the specified repository.
+
+- :py:func:`get_bundles`:
+  Get all bundles in the repository
+
 - :py:func:`install_repository`:
   Install repository
 
 - :py:func:`load_dataset`:
-  Load a dataset from a bundle
+  Load a dataset from a repository
+
+- :py:func:`list_datasets`:
+  List the datasets in the repository
 
 - :py:func:`load_all_datasets`:
   Load all datasets as a generator
@@ -45,9 +57,17 @@ Functions
 
 .. autofunction:: get_bundle
 
+.. autofunction:: list_repositories
+
+.. autofunction:: list_bundles
+
+.. autofunction:: get_bundles
+
 .. autofunction:: install_repository
 
 .. autofunction:: load_dataset
+
+.. autofunction:: list_datasets
 
 .. autofunction:: load_all_datasets
 
@@ -62,7 +82,10 @@ Classes
 =======
 
 - :py:class:`Repository`:
-  Undocumented.
+  A repository is a collection of bundles
+
+- :py:class:`JSONRepository`:
+  A repository is a collection of bundles
 
 - :py:class:`Bundle`:
   Base class for handling dataset bundles
@@ -79,6 +102,13 @@ Classes
 
    .. rubric:: Inheritance
    .. inheritance-diagram:: Repository
+      :parts: 1
+
+.. autoclass:: JSONRepository
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: JSONRepository
       :parts: 1
 
 .. autoclass:: Bundle
