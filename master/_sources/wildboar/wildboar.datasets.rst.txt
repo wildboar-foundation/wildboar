@@ -21,14 +21,14 @@ Modules
 Functions
 =========
 
-- :py:func:`get_repository`:
-  Get a repository from a str
+- :py:func:`get_bundle`:
+  Get a bundle from a str
 
 - :py:func:`install_repository`:
-  Install a named repository
+  Install repository
 
 - :py:func:`load_dataset`:
-  Load a dataset from a repository
+  Load a dataset from a bundle
 
 - :py:func:`load_all_datasets`:
   Load all datasets as a generator
@@ -43,7 +43,7 @@ Functions
   Load the GunPoint dataset
 
 
-.. autofunction:: get_repository
+.. autofunction:: get_bundle
 
 .. autofunction:: install_repository
 
@@ -62,13 +62,16 @@ Classes
 =======
 
 - :py:class:`Repository`:
-  Base class for handling dataset repositories
+  Undocumented.
 
-- :py:class:`ArffRepository`:
-  Repository of .arff-files
+- :py:class:`Bundle`:
+  Base class for handling dataset bundles
 
-- :py:class:`NpyRepository`:
-  Repository of numpy binary files
+- :py:class:`ArffBundle`:
+  bundle of .arff-files
+
+- :py:class:`NpyBundle`:
+  bundle of numpy binary files
 
 
 .. autoclass:: Repository
@@ -78,16 +81,23 @@ Classes
    .. inheritance-diagram:: Repository
       :parts: 1
 
-.. autoclass:: ArffRepository
+.. autoclass:: Bundle
    :members:
 
    .. rubric:: Inheritance
-   .. inheritance-diagram:: ArffRepository
+   .. inheritance-diagram:: Bundle
       :parts: 1
 
-.. autoclass:: NpyRepository
+.. autoclass:: ArffBundle
    :members:
 
    .. rubric:: Inheritance
-   .. inheritance-diagram:: NpyRepository
+   .. inheritance-diagram:: ArffBundle
+      :parts: 1
+
+.. autoclass:: NpyBundle
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: NpyBundle
       :parts: 1
