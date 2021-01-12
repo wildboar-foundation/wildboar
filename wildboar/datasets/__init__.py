@@ -28,6 +28,7 @@ __all__ = [
     "ArffBundle",
     "NpyBundle",
     "get_bundle",
+    "install_repository",
     "load_dataset",
     "load_all_datasets",
     "load_two_lead_ecg",
