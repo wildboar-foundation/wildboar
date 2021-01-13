@@ -19,6 +19,7 @@ import os
 import re
 
 import numpy as np
+from sklearn.utils import deprecated
 
 from ._repository import (
     ArffBundle,
@@ -44,6 +45,7 @@ __all__ = [
     "install_repository",
     "load_dataset",
     "list_datasets",
+    "load_datasets",
     "load_all_datasets",
     "load_two_lead_ecg",
     "load_synthetic_control",
@@ -147,7 +149,7 @@ def load_gun_point(merge_train_test=True):
     )
 
 
-def load_all_datasets(
+def load_datasets(
     repository="wildboar/ucr",
     *,
     cache_dir=None,
@@ -189,8 +191,8 @@ def load_all_datasets(
     Examples
     --------
 
-    >>> from wildboar.datasets import load_all_datasets
-    >>> for dataset, (x, y) in load_all_datasets(repository='wildboar/ucr'):
+    >>> from wildboar.datasets import load_datasets
+    >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
     """
     for dataset in list_datasets(
@@ -201,6 +203,26 @@ def load_all_datasets(
         force=force,
     ):
         yield dataset, load_dataset(dataset, repository=repository, **kwargs)
+
+
+@deprecated("use `load_datasets`. To be removed in v1.1.")
+def load_all_datasets(
+    repository="wildboar/ucr",
+    *,
+    cache_dir=None,
+    create_cache_dir=True,
+    progress=True,
+    force=False,
+    **kwargs
+):
+    return load_datasets(
+        repository,
+        cache_dir=cache_dir,
+        create_cache_dir=create_cache_dir,
+        progress=progress,
+        force=force,
+        **kwargs
+    )
 
 
 def load_dataset(
