@@ -21,8 +21,14 @@ Modules
 Functions
 =========
 
-- :py:func:`get_bundle`:
-  Get a bundle from a str
+- :py:func:`set_cache_dir`:
+  Undocumented.
+
+- :py:func:`get_repository`:
+  Get repository by name
+
+- :py:func:`clear_cache`:
+  Clear the cache by deleting cached datasets
 
 - :py:func:`list_repositories`:
   List the key of all installed repositories
@@ -55,7 +61,11 @@ Functions
   Load the GunPoint dataset
 
 
-.. autofunction:: get_bundle
+.. autofunction:: set_cache_dir
+
+.. autofunction:: get_repository
+
+.. autofunction:: clear_cache
 
 .. autofunction:: list_repositories
 
