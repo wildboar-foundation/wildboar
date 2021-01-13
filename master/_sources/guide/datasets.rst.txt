@@ -6,7 +6,7 @@ be used to load benchmark datasets or to distribute or store datasets.
 
 What is a repository?
 =====================
-I short, a repository is a collection of datasets. More specifically, a repository is a zip-file containing datasets
+I short, a repository is a collection of datasets bundles. More specifically, a repository links to bundles (zip-files) containing datasets
 or dataset parts that can be downloaded, cached and loaded by wildboar.
 
 How to use a repository?
@@ -20,16 +20,25 @@ Repositories are either initialized directly or used together with the ``load_da
     # ... downloading repository to cache folder...
     >>> x.shape
 
-.. note::
 
-    Currently, wildboar bundles one collection of datasets, which can be downloaded from `timeseriesclassification.com <http://timeseriesclassification.com>`_
-    distributed as two different repositories for completeness:
+In the default repository, wildboar bundles
 
-    wildboar/ucr
-      Optimized for loading and download speed.
+wildboar/ucr
+  UCR time series repository datasets optimized for loading and download speed.
 
-    timeseriesclassification/univariate
-      Original dataset in .arff-format. Slower to load.
+wildboar/ucr-tiny
+  A sample of datasets from the UCR time series repository
+
+Installed repositories and dataset bundles can be listed using the function
+``list_repositories`` and ``list_bundles`` respectively.
+
+.. code-block:: python
+
+ >>> from wildboar.datasets import list_repositories, list_bundles
+ >>> list_repositories()
+ ['wildboar']
+ >>> list_bundles("wildboar")
+ ['ucr', 'ucr-tiny']
 
 .. note::
 
@@ -47,67 +56,57 @@ Repositories are either initialized directly or used together with the ``load_da
 
 To force re-download of an already cached repository set the parameter ``force`` to ``True``.
 
-How to create a repository?
-===========================
-To create a new (local or remote) repository one would create a collection of dataset-files, e.g.:
+The format of the string to the ``repository`` parameter is ``{repository}/{bundle}``, where `repository`
+is a name of a repository consisting of letters, numbers and dashes and `bundle` is the name of a dataset bundle
+consisting of letters, numbers and dashes.
 
-.. code-block:: python
-
-    >>> x = np.arange(100 * 10).reshape(100, 10)
-    >>> y = np.concatenate([np.ones(50), np.zeros(50)], axis=0).reshape(-1, 1)
-    >>> np.save('folder_with_npy_files/example1.npy', np.hstack([x, y]), allow_pickle=False, fix_import=False)
-
-and collect them in a zip-file (with a suitable utility, e.g., ``zip``):
-
-.. code-block:: shell
-
-    $ zip -r my_repo_npy.zip folder_with_npy_files/
-    $ sha1sum my_repo_npy.zip
-    464888e88e95d538ab6c134df0279a9776fd5dc7    my_repo_npy.zip
+Installing repositories
+=======================
+A repository implements the interface of the class ``wildboar.datasets.Repository``
 
 .. note::
 
-    It is also possible to create or use `.arff`-files. However, the utilities for loading
-    such files are not as performant as the binary representation of Numpy.
+    The default wildboar-repository is implemented using a ``JSONRepository`` which
+    specifies (versioned) datasets on a JSON endpoint.
 
-Once the datasets are created and collected a new repository can be constructed in Python.
-
-.. code-block:: python
-
-    >>> from wildboar.datasets import NpyRepository, load_dataset, install_repository
-    >>> my_repo = NpyRepository(name="My Repository",
-    ...                         download_url="file:///path/to/my_repo_npy.zip",
-    ...                         hash="464888e88e95d538ab6c134df0279a9776fd5dc7",
-    ...                         class_index=-1)
-    >>> install_repository('my_repo', my_repo)
-    >>> x, y = load_dataset('example1', repository='my_repo')
-
-
-To avoid some of the boilerplate-code, ``load_dataset`` can directly infer and implicitly
-construct a repository
+Repositories are installed using the function ``install_repository`` which takes
+either an url to a JSON-file or an instance of a ``Repository``.
 
 .. code-block:: python
 
-    >>> x, y = load_dataset('example1', repository="file:///path/to/my_repo_npy.zip")
-
-.. note::
-
-    When inferring the type of repository, the filename of the repository should end with
-    the type of repository, e.g., ``_nyp`` or ``_arff``.
-
-.. warning::
-
-    Implicit repositories does not support repository integrity checks.
-
-Repositories can also be uploaded and distributed over http(s):
-
-.. code-block::
-
-    >>> my_repo = NpyRepository(name="My Repository",
-    ...                         download_url="https://example.com/my_repo_npy.zip",
-    ...                         hash="464888e88e95d538ab6c134df0279a9776fd5dc7",
-    ...                         class_index=-1)
+    >>> from wildboar.datasets import install_repository
+    >>> install_repository("https://www.example.org/repo.json")
+    >>> list_repositories("example")
+    >>> load_dataset("example", repository="example/example")
 
 
+Repository JSON specification
+-----------------------------
+
+The ``JSONRepository`` expects a JSON-file following the specification below.
+
+.. code-block:: javascript
+
+    {
+        "name": "example",
+        "version": "1.0",
+        "wildboar_requires": "1.0.4",
+        "url": "https://example.org/download/{key}-v{version}.zip",
+        "bundles": [
+          {
+            "key": "example",
+            "version": "1.0",
+            "name": "UCR Time series repository",
+            "description": "Example dataset",
+            "hash": "11bacbb31ccfe928be38740107dab38218ac50ex",
+            "class_index": -1
+          },
+        ]
+    }
 
 
+
+
+
+
+}
