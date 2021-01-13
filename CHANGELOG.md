@@ -12,6 +12,9 @@
 * Fast computation of scaled and unscaled dynamic time warping (using the UCRSuite algorithm).
 * LB_Keogh lower bound and envelope.
 * Add new class `Repository` which represents a collection of bundles
+* `datasets.set_cache_dir` to globally change the default cache directory
+* `datasets.clear_cache` to clear the cache
+*
 
 ### Changed
 

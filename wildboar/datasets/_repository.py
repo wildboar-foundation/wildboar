@@ -72,8 +72,62 @@ class Repository(metaclass=ABCMeta):
         bundle : Bundle, optional
             A bundle or None
         """
-        bundles = self.get_bundles()
-        return bundles.get(key)
+        bundle = self.get_bundles().get(key)
+        if bundle is None:
+            raise ValueError("bundle (%s) does not exist" % key)
+        return bundle
+
+    def load_dataset(
+        self,
+        bundle,
+        dataset,
+        *,
+        cache_dir,
+        create_cache_dir=True,
+        progress=True,
+        dtype=None,
+        force=False,
+    ):
+        cache_dir = os.path.join(cache_dir, self.name)
+        return self.get_bundle(bundle).load(
+            dataset,
+            cache_dir,
+            dtype=dtype,
+            create_cache_dir=create_cache_dir,
+            progress=progress,
+            force=force,
+        )
+
+    def list_datasets(
+        self,
+        bundle,
+        *,
+        cache_dir,
+        create_cache_dir=True,
+        progress=True,
+        force=False,
+    ):
+        cache_dir = os.path.join(cache_dir, self.name)
+        return self.get_bundle(bundle).list(
+            cache_dir,
+            create_cache_dir=create_cache_dir,
+            progress=progress,
+            force=force,
+        )
+
+    def clear_cache(self, cache_dir, keep_last_version=True):
+        cache_dir = os.path.join(cache_dir, self.name)
+        if not os.path.exists(cache_dir) or not os.path.isdir(cache_dir):
+            return
+
+        keep = []
+        if keep_last_version:
+            keep = [bundle.filename for _, bundle in self.get_bundles().items()]
+        for filename in os.listdir(cache_dir):
+            basename, ext = os.path.splitext(filename)
+            full_path = os.path.join(cache_dir, filename)
+            if os.path.isfile(full_path) and ext == ".zip" and not filename in keep:
+                os.remove(full_path)
 
     def refresh(self):
         """Refresh the repository"""
@@ -190,7 +244,7 @@ class Bundle(metaclass=ABCMeta):
         *,
         description=None,
         hash=None,
-        class_index=-1
+        class_index=-1,
     ):
         """Construct a bundle
 
@@ -224,6 +278,10 @@ class Bundle(metaclass=ABCMeta):
         self.download_url = download_url
         self.hash = hash
         self.class_index = class_index
+
+    @property
+    def filename(self):
+        return "%s-v%s.zip" % (self.key, self.version)
 
     def list(self, cache_dir, *, create_cache_dir=True, progress=True, force=False):
         """List all datasets in this bundle
@@ -271,7 +329,7 @@ class Bundle(metaclass=ABCMeta):
         create_cache_dir=True,
         progress=True,
         dtype=None,
-        force=False
+        force=False,
     ):
         """Load a dataset from the bundle
 
@@ -407,7 +465,7 @@ class Bundle(metaclass=ABCMeta):
         if ext != ".zip":
             raise ValueError("expected .zip file got, %s" % ext)
 
-        filename = os.path.join(cache_dir, "%s-v%s.zip" % (self.key, self.version))
+        filename = os.path.join(cache_dir, self.filename)
         if os.path.exists(filename):
             if force:
                 os.remove(filename)
@@ -477,7 +535,7 @@ class ArffBundle(Bundle):
         description=None,
         hash=None,
         class_index=-1,
-        encoding="utf-8"
+        encoding="utf-8",
     ):
         super().__init__(
             key,

@@ -35,7 +35,9 @@ __all__ = [
     "Bundle",
     "ArffBundle",
     "NpyBundle",
-    "get_bundle",
+    "set_cache_dir",
+    "get_repository",
+    "clear_cache",
     "list_repositories",
     "list_bundles",
     "get_bundles",
@@ -48,11 +50,42 @@ __all__ = [
     "load_gun_point",
 ]
 
+_CACHE_DIR = None
 _REPOSITORIES = RepositoryCollection()
 
 
+def _split_repo_bundle(repo_bundle_name):
+    """Split a repository bundle string of the format {repo}/{bundle}
+
+    Parameters
+    ----------
+    repo_bundle_name : str
+        {repo}/{bundle} name
+
+    Returns
+    -------
+    repository : str
+        Key of the repository
+
+    bundle : str
+        Name of the bundle
+    """
+    repo_bundle_match = re.match("([a-zA-Z]+)/([a-zA-Z0-9\-]+)$", repo_bundle_name)
+    if repo_bundle_match:
+        repository_name = repo_bundle_match.group(1)
+        bundle_name = repo_bundle_match.group(2)
+        return repository_name, bundle_name
+    else:
+        raise ValueError("repository (%s) is not supported" % repo_bundle_name)
+
+
+def set_cache_dir(cache_dir):
+    global _CACHE_DIR
+    _CACHE_DIR = cache_dir
+
+
 def _default_cache_dir():
-    return _os_cache_path("wildboar")
+    return _os_cache_path("wildboar") if not _CACHE_DIR else _CACHE_DIR
 
 
 def _os_cache_path(dir):
@@ -268,11 +301,13 @@ def load_dataset(
     >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr', merge_train_test=False)
 
     """
-    repository, bundle = get_bundle(repository)
+    repository_name, bundle_name = _split_repo_bundle(repository)
     dtype = dtype or np.float64
-    cache_dir = os.path.join(cache_dir or _default_cache_dir(), repository)
+    cache_dir = cache_dir or _default_cache_dir()
+    repository = get_repository(repository_name)
     ret_val = []
-    x, y, n_train_samples = bundle.load(
+    x, y, n_train_samples = repository.load_dataset(
+        bundle_name,
         name,
         dtype=dtype,
         cache_dir=cache_dir,
@@ -333,9 +368,11 @@ def list_datasets(
         dataset : set
             A set of dataset names
     """
-    repository, bundle = get_bundle(repository)
-    cache_dir = os.path.join(cache_dir or _default_cache_dir(), repository)
-    return bundle.list(
+    repository_name, bundle_name = _split_repo_bundle(repository)
+    cache_dir = cache_dir or _default_cache_dir()
+    repository = get_repository(repository_name)
+    return repository.list_datasets(
+        bundle_name,
         cache_dir=cache_dir,
         create_cache_dir=create_cache_dir,
         progress=progress,
@@ -343,38 +380,49 @@ def list_datasets(
     )
 
 
-def get_bundle(repo_bundle_name):
-    """Get a bundle from a str
+def clear_cache(repository=None, *, cache_dir=None, keep_last_version=True):
+    """Clear the cache by deleting cached datasets
 
     Parameters
     ----------
-    repo_bundle_name : str
-        Find a named bundle
+    repository : str, optional
+        The name of the repository to clear cache.
+
+        - if None, clear cache of all repositories
+
+    cache_dir : str, optional
+        The cache directory
+
+    keep_last_version : bool, optional
+        If true, keep the latest version of each repository.
+    """
+    cache_dir = cache_dir or _default_cache_dir()
+    if repository is None:
+        for repo in _REPOSITORIES:
+            repo.clear_cache(cache_dir=cache_dir, keep_last_version=keep_last_version)
+    else:
+        get_repository(repository).clear_cache(
+            cache_dir=cache_dir, keep_last_version=keep_last_version
+        )
+
+
+def get_repository(repository):
+    """Get repository by name
+
+    Parameters
+    ----------
+    repository : str
+        Repository name
 
     Returns
     -------
-    repository : str
-        Key of the repository
-
-    bundle : Bundle
-        A bundle
-
+    repository : Repository
+        A repository
     """
-    repo_bundle_match = re.match("([a-zA-Z]+)/([a-zA-Z0-9\-]+)$", repo_bundle_name)
-    if repo_bundle_match:
-        repository_name = repo_bundle_match.group(1)
-        bundle_name = repo_bundle_match.group(2)
-        repository = _REPOSITORIES[repository_name]
-        if repository:
-            bundle = repository.get_bundle(bundle_name)
-            if bundle:
-                return repository_name, bundle
-            else:
-                raise ValueError("bundle (%s) does not exist" % bundle_name)
-        else:
-            raise ValueError("repository (%s) does not exist" % repository_name)
+    if repository in _REPOSITORIES:
+        return _REPOSITORIES[repository]
     else:
-        raise ValueError("bundle (%s) is not supported" % repo_bundle_name)
+        raise ValueError("repository (%s) does not exist" % repository)
 
 
 def install_repository(repository):
