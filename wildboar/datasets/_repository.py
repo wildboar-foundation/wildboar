@@ -392,7 +392,7 @@ class Bundle(metaclass=ABCMeta):
         """Download a bundle to the cache directory"""
         if not os.path.exists(cache_dir):
             if create_cache_dir:
-                os.mkdir(cache_dir)
+                os.makedirs(os.path.abspath(cache_dir), exist_ok=True)
             else:
                 raise ValueError(
                     "output directory does not exist (set create_cache_dir=True to create it)"
