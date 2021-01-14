@@ -91,14 +91,13 @@ The ``JSONRepository`` expects a JSON-file following the specification below.
         "name": "example",
         "version": "1.0",
         "wildboar_requires": "1.0.4",
-        "url": "https://example.org/download/{key}-v{version}.zip",
+        "bundle_url": "https://example.org/download/{key}-v{version}.zip",
         "bundles": [
           {
             "key": "example",
             "version": "1.0",
             "name": "UCR Time series repository",
             "description": "Example dataset",
-            "hash": "11bacbb31ccfe928be38740107dab38218ac50ex",
             "class_index": -1
           },
         ]
