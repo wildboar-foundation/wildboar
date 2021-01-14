@@ -48,8 +48,11 @@ Functions
 - :py:func:`list_datasets`:
   List the datasets in the repository
 
-- :py:func:`load_all_datasets`:
+- :py:func:`load_datasets`:
   Load all datasets as a generator
+
+- :py:func:`load_all_datasets`:
+  DEPRECATED: use `load_datasets`. To be removed in v1.1.
 
 - :py:func:`load_two_lead_ecg`:
   Load the TwoLeadECG dataset
@@ -78,6 +81,8 @@ Functions
 .. autofunction:: load_dataset
 
 .. autofunction:: list_datasets
+
+.. autofunction:: load_datasets
 
 .. autofunction:: load_all_datasets
 

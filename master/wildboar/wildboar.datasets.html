@@ -135,8 +135,10 @@ Install repository</p></li>
 Load a dataset from a repository</p></li>
 <li><p><a class="reference internal" href="#wildboar.datasets.list_datasets" title="wildboar.datasets.list_datasets"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_datasets()</span></code></a>:
 List the datasets in the repository</p></li>
-<li><p><a class="reference internal" href="#wildboar.datasets.load_all_datasets" title="wildboar.datasets.load_all_datasets"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_all_datasets()</span></code></a>:
+<li><p><a class="reference internal" href="#wildboar.datasets.load_datasets" title="wildboar.datasets.load_datasets"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_datasets()</span></code></a>:
 Load all datasets as a generator</p></li>
+<li><p><a class="reference internal" href="#wildboar.datasets.load_all_datasets" title="wildboar.datasets.load_all_datasets"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_all_datasets()</span></code></a>:
+DEPRECATED: use <cite>load_datasets</cite>. To be removed in v1.1.</p></li>
 <li><p><a class="reference internal" href="#wildboar.datasets.load_two_lead_ecg" title="wildboar.datasets.load_two_lead_ecg"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_two_lead_ecg()</span></code></a>:
 Load the TwoLeadECG dataset</p></li>
 <li><p><a class="reference internal" href="#wildboar.datasets.load_synthetic_control" title="wildboar.datasets.load_synthetic_control"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_synthetic_control()</span></code></a>:
@@ -327,8 +329,8 @@ are considered as training parts.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="wildboar.datasets.load_all_datasets">
-<code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">load_all_datasets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">repository</span><span class="o">=</span><span class="default_value">'wildboar/ucr'</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">cache_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">create_cache_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.load_all_datasets" title="Permalink to this definition">¶</a></dt>
+<dt id="wildboar.datasets.load_datasets">
+<code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">load_datasets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">repository</span><span class="o">=</span><span class="default_value">'wildboar/ucr'</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">cache_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">create_cache_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.load_datasets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load all datasets as a generator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -349,11 +351,17 @@ are considered as training parts.</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_all_datasets</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">load_all_datasets</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="s1">&#39;wildboar/ucr&#39;</span><span class="p">):</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">load_datasets</span><span class="p">(</span><span class="n">repository</span><span class="o">=</span><span class="s1">&#39;wildboar/ucr&#39;</span><span class="p">):</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="wildboar.datasets.load_all_datasets">
+<code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">load_all_datasets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">repository</span><span class="o">=</span><span class="default_value">'wildboar/ucr'</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">cache_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">create_cache_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.load_all_datasets" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED: use <cite>load_datasets</cite>. To be removed in v1.1.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -417,6 +425,20 @@ bundle of numpy binary files</p></li>
 <p class="rubric">Inheritance</p>
 <div class="graphviz"><img src="../_images/inheritance-b06aef0aca55cbd0141a51e7e339e28c9992c721.png" alt="Inheritance diagram of Repository" class="inheritance graphviz" /></div>
 <dl class="py method">
+<dt id="wildboar.datasets.Repository.download_url">
+<em class="property">abstract property </em><code class="sig-name descname">download_url</code><a class="headerlink" href="#wildboar.datasets.Repository.download_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The url template for downloading bundles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the download url</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="wildboar.datasets.Repository.get_bundle">
 <code class="sig-name descname">get_bundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Repository.get_bundle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a bundle with the specified key</p>
@@ -448,9 +470,51 @@ bundle of numpy binary files</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt id="wildboar.datasets.Repository.name">
+<em class="property">abstract property </em><code class="sig-name descname">name</code><a class="headerlink" href="#wildboar.datasets.Repository.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the name of the repository</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="wildboar.datasets.Repository.refresh">
 <code class="sig-name descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Repository.refresh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Refresh the repository</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wildboar.datasets.Repository.version">
+<em class="property">abstract property </em><code class="sig-name descname">version</code><a class="headerlink" href="#wildboar.datasets.Repository.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The repository version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the version of the repository</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wildboar.datasets.Repository.wildboar_requires">
+<em class="property">abstract property </em><code class="sig-name descname">wildboar_requires</code><a class="headerlink" href="#wildboar.datasets.Repository.wildboar_requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The minimum required wildboar version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the min version</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -460,6 +524,20 @@ bundle of numpy binary files</p></li>
 <em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">JSONRepository</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.JSONRepository" title="Permalink to this definition">¶</a></dt>
 <dd><p class="rubric">Inheritance</p>
 <div class="graphviz"><img src="../_images/inheritance-1771382e309764524209a34564a1300a3466ce28.png" alt="Inheritance diagram of JSONRepository" class="inheritance graphviz" /></div>
+<dl class="py method">
+<dt id="wildboar.datasets.JSONRepository.download_url">
+<em class="property">property </em><code class="sig-name descname">download_url</code><a class="headerlink" href="#wildboar.datasets.JSONRepository.download_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The url template for downloading bundles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the download url</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="wildboar.datasets.JSONRepository.get_bundles">
 <code class="sig-name descname">get_bundles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.JSONRepository.get_bundles" title="Permalink to this definition">¶</a></dt>
@@ -475,16 +553,58 @@ bundle of numpy binary files</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt id="wildboar.datasets.JSONRepository.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#wildboar.datasets.JSONRepository.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of the repository</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the name of the repository</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="wildboar.datasets.JSONRepository.refresh">
 <code class="sig-name descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.JSONRepository.refresh" title="Permalink to this definition">¶</a></dt>
 <dd><p>Refresh the repository</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wildboar.datasets.JSONRepository.version">
+<em class="property">property </em><code class="sig-name descname">version</code><a class="headerlink" href="#wildboar.datasets.JSONRepository.version" title="Permalink to this definition">¶</a></dt>
+<dd><p>The repository version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the version of the repository</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wildboar.datasets.JSONRepository.wildboar_requires">
+<em class="property">property </em><code class="sig-name descname">wildboar_requires</code><a class="headerlink" href="#wildboar.datasets.JSONRepository.wildboar_requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>The minimum required wildboar version</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>str</strong></p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>the min version</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="wildboar.datasets.Bundle">
-<em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">Bundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">version</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">download_url</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hash</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">class_index</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Bundle" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">Bundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">version</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">class_index</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Bundle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for handling dataset bundles</p>
 <dl class="py attribute">
 <dt id="wildboar.datasets.Bundle.name">
@@ -501,28 +621,6 @@ bundle of numpy binary files</p></li>
 <dt id="wildboar.datasets.Bundle.description">
 <code class="sig-name descname">description</code><a class="headerlink" href="#wildboar.datasets.Bundle.description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Description of the bundle</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="wildboar.datasets.Bundle.download_url">
-<code class="sig-name descname">download_url</code><a class="headerlink" href="#wildboar.datasets.Bundle.download_url" title="Permalink to this definition">¶</a></dt>
-<dd><p>Local or remote path to the bundle</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="wildboar.datasets.Bundle.hash">
-<code class="sig-name descname">hash</code><a class="headerlink" href="#wildboar.datasets.Bundle.hash" title="Permalink to this definition">¶</a></dt>
-<dd><p>SHA1 hash of the file pointed to by download_url</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>str</p>
@@ -549,8 +647,6 @@ bundle of numpy binary files</p></li>
 <li><p><strong>version</strong> (<em>str</em>) – The version of the bundle</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – Human-readable name of the bundle</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description of the bundle</p></li>
-<li><p><strong>download_url</strong> (<em>str</em>) – Local or remote path to the bundle. <a class="reference external" href="file://">file://</a> or http(s):// paths are supported.</p></li>
-<li><p><strong>hash</strong> (<em>str</em>) – SHA1 hash of the file pointed to by download_url</p></li>
 <li><p><strong>class_index</strong> (<em>int</em><em> or </em><em>array-like</em>) – Index of the class label(s)</p></li>
 </ul>
 </dd>
@@ -559,16 +655,11 @@ bundle of numpy binary files</p></li>
 <div class="graphviz"><img src="../_images/inheritance-3c7ebd9ec93c0fe3663f6ab511484d2b6337a989.png" alt="Inheritance diagram of Bundle" class="inheritance graphviz" /></div>
 <dl class="py method">
 <dt id="wildboar.datasets.Bundle.list">
-<code class="sig-name descname">list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cache_dir</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">create_cache_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Bundle.list" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">archive</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Bundle.list" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all datasets in this bundle</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>cache_dir</strong> (<em>str</em>) – Location of the cached download</p></li>
-<li><p><strong>create_cache_dir</strong> (<em>bool</em><em>, </em><em>optional</em>) – Create cache directory if it does not exist.</p></li>
-<li><p><strong>progress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Write progress to standard error</p></li>
-<li><p><strong>force</strong> (<em>bool</em><em>, </em><em>optional</em>) – Force re-download of cached bundle</p></li>
-</ul>
+<dd class="field-odd"><p><strong>archive</strong> (<em>ZipFile</em>) – The bundle file</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>dataset_names</strong> – A sorted list of datasets in the bundle</p>
@@ -581,17 +672,14 @@ bundle of numpy binary files</p></li>
 
 <dl class="py method">
 <dt id="wildboar.datasets.Bundle.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">cache_dir</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">create_cache_dir</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">progress</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">force</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Bundle.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">archive</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">dtype</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.Bundle.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a dataset from the bundle</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<em>str</em>) – Name of the dataset</p></li>
-<li><p><strong>cache_dir</strong> (<em>str</em>) – Location of the cached download</p></li>
-<li><p><strong>create_cache_dir</strong> (<em>bool</em><em>, </em><em>optional</em>) – Create cache directory if it does not exist.</p></li>
-<li><p><strong>progress</strong> (<em>bool</em><em>, </em><em>optional</em>) – Write progress to standard error</p></li>
+<li><p><strong>archive</strong> (<em>ZipFile</em>) – The zip-file bundle</p></li>
 <li><p><strong>dtype</strong> (<em>object</em><em>, </em><em>optional</em>) – Cast the data and label matrix to a specific type</p></li>
-<li><p><strong>force</strong> (<em>bool</em><em>, </em><em>optional</em>) – Force re-download of cached bundle</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -609,7 +697,7 @@ bundle of numpy binary files</p></li>
 
 <dl class="py class">
 <dt id="wildboar.datasets.ArffBundle">
-<em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">ArffBundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">version</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">download_url</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hash</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">class_index</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="o">=</span><span class="default_value">'utf-8'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.ArffBundle" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">ArffBundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">version</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">class_index</span><span class="o">=</span><span class="default_value">- 1</span></em>, <em class="sig-param"><span class="n">encoding</span><span class="o">=</span><span class="default_value">'utf-8'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.ArffBundle" title="Permalink to this definition">¶</a></dt>
 <dd><p>bundle of .arff-files</p>
 <p>Construct a bundle</p>
 <dl class="field-list simple">
@@ -619,8 +707,6 @@ bundle of numpy binary files</p></li>
 <li><p><strong>version</strong> (<em>str</em>) – The version of the bundle</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – Human-readable name of the bundle</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description of the bundle</p></li>
-<li><p><strong>download_url</strong> (<em>str</em>) – Local or remote path to the bundle. <a class="reference external" href="file://">file://</a> or http(s):// paths are supported.</p></li>
-<li><p><strong>hash</strong> (<em>str</em>) – SHA1 hash of the file pointed to by download_url</p></li>
 <li><p><strong>class_index</strong> (<em>int</em><em> or </em><em>array-like</em>) – Index of the class label(s)</p></li>
 </ul>
 </dd>
@@ -631,7 +717,7 @@ bundle of numpy binary files</p></li>
 
 <dl class="py class">
 <dt id="wildboar.datasets.NpyBundle">
-<em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">NpyBundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">version</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">download_url</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hash</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">class_index</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.NpyBundle" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.</code><code class="sig-name descname">NpyBundle</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">key</span></em>, <em class="sig-param"><span class="n">version</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">description</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">class_index</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.NpyBundle" title="Permalink to this definition">¶</a></dt>
 <dd><p>bundle of numpy binary files</p>
 <p>Construct a bundle</p>
 <dl class="field-list simple">
@@ -641,8 +727,6 @@ bundle of numpy binary files</p></li>
 <li><p><strong>version</strong> (<em>str</em>) – The version of the bundle</p></li>
 <li><p><strong>name</strong> (<em>str</em>) – Human-readable name of the bundle</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description of the bundle</p></li>
-<li><p><strong>download_url</strong> (<em>str</em>) – Local or remote path to the bundle. <a class="reference external" href="file://">file://</a> or http(s):// paths are supported.</p></li>
-<li><p><strong>hash</strong> (<em>str</em>) – SHA1 hash of the file pointed to by download_url</p></li>
 <li><p><strong>class_index</strong> (<em>int</em><em> or </em><em>array-like</em>) – Index of the class label(s)</p></li>
 </ul>
 </dd>
