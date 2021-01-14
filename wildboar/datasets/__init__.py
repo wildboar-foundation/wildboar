@@ -71,12 +71,23 @@ def _split_repo_bundle(repo_bundle_name):
 
     bundle : str
         Name of the bundle
+
+    version : str
+        An optional version
+
+    tag : str
+        An optional tag
     """
-    repo_bundle_match = re.match("([a-zA-Z]+)/([a-zA-Z0-9\-]+)$", repo_bundle_name)
-    if repo_bundle_match:
-        repository_name = repo_bundle_match.group(1)
-        bundle_name = repo_bundle_match.group(2)
-        return repository_name, bundle_name
+    match = re.match(
+        "(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::([0-9.]+))?(?::([a-zA-Z\-]+))?$",
+        repo_bundle_name,
+    )
+    if match:
+        repository_name = match.group(1)
+        bundle_name = match.group(2)
+        version = match.group(3)
+        tag = match.group(4)
+        return repository_name, bundle_name, version, tag
     else:
         raise ValueError("repository (%s) is not supported" % repo_bundle_name)
 
@@ -323,7 +334,9 @@ def load_dataset(
     >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr', merge_train_test=False)
 
     """
-    repository_name, bundle_name = _split_repo_bundle(repository)
+    repository_name, bundle_name, bundle_version, bundle_tag = _split_repo_bundle(
+        repository
+    )
     dtype = dtype or np.float64
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
@@ -331,6 +344,8 @@ def load_dataset(
     x, y, n_train_samples = repository.load_dataset(
         bundle_name,
         name,
+        version=bundle_version,
+        tag=bundle_tag,
         dtype=dtype,
         cache_dir=cache_dir,
         force=force,
@@ -390,11 +405,15 @@ def list_datasets(
         dataset : set
             A set of dataset names
     """
-    repository_name, bundle_name = _split_repo_bundle(repository)
+    repository_name, bundle_name, bundle_version, bundle_tag = _split_repo_bundle(
+        repository
+    )
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
     return repository.list_datasets(
         bundle_name,
+        version=bundle_version,
+        tag=bundle_tag,
         cache_dir=cache_dir,
         create_cache_dir=create_cache_dir,
         progress=progress,

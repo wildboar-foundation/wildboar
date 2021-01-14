@@ -30,6 +30,124 @@ from wildboar import __version__ as wildboar_version
 from pkg_resources import parse_version
 from scipy.io.arff import loadarff
 
+DEFAULT_TAG = "default"
+
+
+def _translate_url(url, *, bundle, version, tag):
+    return (
+        url.replace("{bundle}", bundle)
+        .replace("{version}", version)
+        .replace("{tag}", tag)
+    )
+
+
+def _check_integrity(bundle_file, hash_file):
+    """Check the integrity of the downloaded or cached file"""
+    with open(hash_file, "r") as f:
+        hash = f.readline().strip()
+
+    if hash is not None:
+        actual_hash = _sha1(bundle_file)
+        if hash != actual_hash:
+            raise ValueError(
+                "integrity check failed, expected '%s', got '%s'" % (hash, actual_hash)
+            )
+
+
+def _sha1_is_sane(hash_file):
+    with open(hash_file, "r") as f:
+        return len(f.readline().strip()) == 40
+
+
+def _download_cache_bundle(
+    filename,
+    download_url,
+    cache_dir,
+    *,
+    create_cache_dir=True,
+    progress=True,
+    force=False,
+):
+    """Download a bundle to the cache directory"""
+    if not os.path.exists(cache_dir):
+        if create_cache_dir:
+            os.makedirs(os.path.abspath(cache_dir), exist_ok=True)
+        else:
+            raise ValueError(
+                "output directory does not exist (set create_cache_dir=True to create it)"
+            )
+
+    bundle_filename = "%s.zip" % filename
+    hash_filename = "%s.sha1" % filename
+
+    cached_hash = os.path.join(cache_dir, hash_filename)
+
+    # SHA1 in hex is 40 char long
+    if os.path.exists(cached_hash) and _sha1_is_sane(cached_hash):
+        if force:
+            os.remove(cached_hash)
+    else:
+        with open(cached_hash, "w") as f:
+            hash_url = "%s.sha1" % download_url
+            response = requests.get(hash_url)
+            if not response:
+                f.close()
+                os.remove(cached_hash)
+                raise ValueError(
+                    "bundle (%s) not found (.sha1-file is missing). Try another version or tag."
+                    % filename
+                )
+            f.write(response.text)
+
+    cached_bundle = os.path.join(cache_dir, bundle_filename)
+    if os.path.exists(cached_bundle):
+        if force:
+            os.remove(cached_bundle)
+        else:
+            try:
+                _check_integrity(cached_bundle, cached_hash)
+                z_file = zipfile.ZipFile(open(cached_bundle, "rb"))
+                return z_file
+            except zipfile.BadZipFile:
+                os.remove(cached_bundle)
+
+    with open(cached_bundle, "wb") as f:
+        bundle_url = "%s.zip" % download_url
+        response = requests.get(bundle_url, stream=True)
+        if not response:
+            f.close()
+            os.remove(cached_bundle)
+            raise ValueError(
+                "bundle (%s) not found (.zip-file is missing). Try another version or tag."
+                % filename
+            )
+
+        total_length = response.headers.get("content-length")
+        if total_length is None:  # no content length header
+            f.write(response.content)
+        else:
+            length = 0
+            total_length = int(total_length)
+            for data in response.iter_content(chunk_size=4096):
+                length += len(data)
+                f.write(data)
+                done = int(50 * length / total_length)
+                if length % 10 == 0 and progress:
+                    sys.stderr.write(
+                        "\r[%s%s] %d/%d downloading %s"
+                        % (
+                            "=" * done,
+                            " " * (50 - done),
+                            length,
+                            total_length,
+                            filename,
+                        )
+                    )
+                    sys.stderr.flush()
+
+    _check_integrity(cached_bundle, cached_hash)
+    return zipfile.ZipFile(open(cached_bundle, "rb"))
+
 
 class Repository(metaclass=ABCMeta):
     """A repository is a collection of bundles"""
@@ -37,16 +155,45 @@ class Repository(metaclass=ABCMeta):
     @property
     @abstractmethod
     def name(self):
+        """Name of the repository
+
+        Returns
+        -------
+        str : the name of the repository
+        """
         pass
 
     @property
     @abstractmethod
     def version(self):
+        """The repository version
+
+        Returns
+        -------
+        str : the version of the repository
+        """
+        pass
+
+    @property
+    @abstractmethod
+    def download_url(self):
+        """The url template for downloading bundles
+
+        Returns
+        -------
+        str : the download url
+        """
         pass
 
     @property
     @abstractmethod
     def wildboar_requires(self):
+        """The minimum required wildboar version
+
+        Returns
+        -------
+        str : the min version
+        """
         pass
 
     @abstractmethod
@@ -83,37 +230,60 @@ class Repository(metaclass=ABCMeta):
         dataset,
         *,
         cache_dir,
+        version=None,
+        tag=None,
         create_cache_dir=True,
         progress=True,
         dtype=None,
         force=False,
     ):
+        bundle = self.get_bundle(bundle)
+        version = version or bundle.version
+        tag = tag or DEFAULT_TAG
+
         cache_dir = os.path.join(cache_dir, self.name)
-        return self.get_bundle(bundle).load(
-            dataset,
-            cache_dir,
-            dtype=dtype,
+        download_url = _translate_url(
+            self.download_url, bundle=bundle.key, version=version, tag=tag
+        )
+
+        with _download_cache_bundle(
+            filename=bundle.get_filename(version, tag),
+            download_url=download_url,
+            cache_dir=cache_dir,
             create_cache_dir=create_cache_dir,
             progress=progress,
             force=force,
-        )
+        ) as archive:
+            return bundle.load(dataset, archive, dtype=dtype)
 
     def list_datasets(
         self,
         bundle,
         *,
         cache_dir,
+        version=None,
+        tag=None,
         create_cache_dir=True,
         progress=True,
         force=False,
     ):
+        bundle = self.get_bundle(bundle)
+        version = version or bundle.version
+        tag = tag or DEFAULT_TAG
+
         cache_dir = os.path.join(cache_dir, self.name)
-        return self.get_bundle(bundle).list(
-            cache_dir,
+        download_url = _translate_url(
+            self.download_url, bundle=bundle.key, version=version, tag=tag
+        )
+        with _download_cache_bundle(
+            filename=bundle.get_filename(version, tag),
+            download_url=download_url,
+            cache_dir=cache_dir,
             create_cache_dir=create_cache_dir,
             progress=progress,
             force=force,
-        )
+        ) as archive:
+            return bundle.list(archive)
 
     def clear_cache(self, cache_dir, keep_last_version=True):
         cache_dir = os.path.join(cache_dir, self.name)
@@ -122,11 +292,19 @@ class Repository(metaclass=ABCMeta):
 
         keep = []
         if keep_last_version:
-            keep = [bundle.filename for _, bundle in self.get_bundles().items()]
+            keep = [
+                bundle.get_filename(tag=DEFAULT_TAG)
+                for _, bundle in self.get_bundles().items()
+            ]
+
         for filename in os.listdir(cache_dir):
             basename, ext = os.path.splitext(filename)
             full_path = os.path.join(cache_dir, filename)
-            if os.path.isfile(full_path) and ext == ".zip" and not filename in keep:
+            if (
+                os.path.isfile(full_path)
+                and ext in [".zip", ".sha1"]
+                and not basename in keep
+            ):
                 os.remove(full_path)
 
     def refresh(self):
@@ -134,9 +312,19 @@ class Repository(metaclass=ABCMeta):
         pass
 
 
+def _validate_url(url):
+    if "{bundle}" in url and "{version}" in url and "{tag}" in url:
+        return url
+    else:
+        raise ValueError(
+            "repository url is invalid, got %s ({bundle}, {version} and {tag} are required)"
+            % url
+        )
+
+
 class JSONRepository(Repository):
     def __init__(self, url):
-        self.url = url
+        self.repo_url = url
         self.__refresh()
 
     @property
@@ -151,6 +339,10 @@ class JSONRepository(Repository):
     def version(self):
         return self._version
 
+    @property
+    def download_url(self):
+        return self._bundle_url
+
     def get_bundles(self):
         return self._bundles
 
@@ -158,7 +350,7 @@ class JSONRepository(Repository):
         self.__refresh()
 
     def __refresh(self):
-        json = requests.get(self.url).json()
+        json = requests.get(self.repo_url).json()
         self._wildboar_requires = json["wildboar_requires"]
         self._name = json["name"]
         self._version = json["version"]
@@ -168,23 +360,19 @@ class JSONRepository(Repository):
                 self.wildboar_requires,
                 wildboar_version,
             )
-        self.url = json["url"]
+        self._bundle_url = _validate_url(json["bundle_url"])
         bundles = {}
         for bundle_json in json["bundles"]:
             key = bundle_json["key"]
             version = bundle_json["version"]
             name = bundle_json["name"]
-            hash = bundle_json["hash"]
             class_index = bundle_json["class_index"]
             description = bundle_json["description"]
-            download_url = self.url.format(key=key, version=version)
             bundles[bundle_json["key"]] = NpyBundle(
                 key=key,
                 version=version,
                 name=name,
-                download_url=download_url,
                 description=description,
-                hash=hash,
                 class_index=class_index,
             )
 
@@ -225,25 +413,17 @@ class Bundle(metaclass=ABCMeta):
     description : str
         Description of the bundle
 
-    download_url : str
-        Local or remote path to the bundle
-
-    hash : str
-        SHA1 hash of the file pointed to by download_url
-
     class_index : int or array-like
         Index of the class label(s)
     """
 
     def __init__(
         self,
+        *,
         key,
         version,
         name,
-        download_url,
-        *,
         description=None,
-        hash=None,
         class_index=-1,
     ):
         """Construct a bundle
@@ -262,12 +442,6 @@ class Bundle(metaclass=ABCMeta):
         description : str
             Description of the bundle
 
-        download_url : str
-            Local or remote path to the bundle. file:// or http(s):// paths are supported.
-
-        hash : str
-            SHA1 hash of the file pointed to by download_url
-
         class_index : int or array-like
             Index of the class label(s)
         """
@@ -275,61 +449,45 @@ class Bundle(metaclass=ABCMeta):
         self.version = version
         self.name = name
         self.description = description
-        self.download_url = download_url
-        self.hash = hash
         self.class_index = class_index
 
-    @property
-    def filename(self):
-        return "%s-v%s.zip" % (self.key, self.version)
+    def get_filename(self, version=None, tag=None, ext=None):
+        filename = "%s-v%s" % (self.key, version or self.version)
+        if tag:
+            filename += ":%s" % tag
+        if ext:
+            filename += ext
+        return filename
 
-    def list(self, cache_dir, *, create_cache_dir=True, progress=True, force=False):
+    def list(self, archive):
         """List all datasets in this bundle
 
         Parameters
         ----------
-        cache_dir : str
-            Location of the cached download
-
-        create_cache_dir : bool, optional
-            Create cache directory if it does not exist.
-
-        progress : bool, optional
-            Write progress to standard error
-
-        force : bool, optional
-            Force re-download of cached bundle
+        archive : ZipFile
+            The bundle file
 
         Returns
         -------
         dataset_names : list
             A sorted list of datasets in the bundle
         """
-        with self._download_bundle(
-            cache_dir=cache_dir,
-            create_cache_dir=create_cache_dir,
-            progress=progress,
-            force=force,
-        ) as archive:
-            names = []
-            for f in archive.filelist:
-                path, ext = os.path.splitext(f.filename)
-                if self._is_dataset(path, ext):
-                    filename = os.path.basename(path)
-                    filename = re.sub("_(TRAIN|TEST)", "", filename)
-                    names.append(filename)
+        names = []
+        for f in archive.filelist:
+            path, ext = os.path.splitext(f.filename)
+            if self._is_dataset(path, ext):
+                filename = os.path.basename(path)
+                filename = re.sub("_(TRAIN|TEST)", "", filename)
+                names.append(filename)
 
-            return sorted(set(names))
+        return sorted(set(names))
 
     def load(
         self,
         name,
-        cache_dir,
+        archive,
         *,
-        create_cache_dir=True,
-        progress=True,
         dtype=None,
-        force=False,
     ):
         """Load a dataset from the bundle
 
@@ -338,20 +496,11 @@ class Bundle(metaclass=ABCMeta):
         name : str
             Name of the dataset
 
-        cache_dir : str
-            Location of the cached download
-
-        create_cache_dir : bool, optional
-            Create cache directory if it does not exist.
-
-        progress : bool, optional
-            Write progress to standard error
+        archive : ZipFile
+            The zip-file bundle
 
         dtype : object, optional
-             Cast the data and label matrix to a specific type
-
-        force : bool, optional
-            Force re-download of cached bundle
+            Cast the data and label matrix to a specific type
 
         Returns
         -------
@@ -365,41 +514,33 @@ class Bundle(metaclass=ABCMeta):
             Number of samples that are for training. The value is <= x.shape[0]
         """
         dtype = dtype or np.float64
-        with self._download_bundle(
-            cache_dir=cache_dir,
-            create_cache_dir=create_cache_dir,
-            progress=progress,
-            force=force,
-        ) as archive:
-            datasets = []
-            for dataset in map(_Dataset, archive.filelist):
-                if dataset.filename == name and self._is_dataset(
-                    dataset.path, dataset.ext
-                ):
-                    datasets.append(dataset)
+        datasets = []
+        for dataset in map(_Dataset, archive.filelist):
+            if dataset.filename == name and self._is_dataset(dataset.path, dataset.ext):
+                datasets.append(dataset)
 
-            if not datasets:
-                raise ValueError("no dataset found (%s)" % name)
-            train_parts = [
-                self._load_array(archive, dataset.file)
-                for dataset in datasets
-                if dataset.part == "train"
-            ]
-            test_parts = [
-                self._load_array(archive, dataset.file)
-                for dataset in datasets
-                if dataset.part == "test"
-            ]
+        if not datasets:
+            raise ValueError("no dataset found (%s)" % name)
+        train_parts = [
+            self._load_array(archive, dataset.file)
+            for dataset in datasets
+            if dataset.part == "train"
+        ]
+        test_parts = [
+            self._load_array(archive, dataset.file)
+            for dataset in datasets
+            if dataset.part == "test"
+        ]
 
-            data = np.vstack(train_parts)
-            n_train_samples = data.shape[0]
-            if test_parts:
-                test = np.vstack(test_parts)
-                data = np.vstack([data, test])
+        data = np.vstack(train_parts)
+        n_train_samples = data.shape[0]
+        if test_parts:
+            test = np.vstack(test_parts)
+            data = np.vstack([data, test])
 
-            y = data[:, self.class_index].astype(dtype)
-            x = np.delete(data, self.class_index, axis=1).astype(dtype)
-            return x, y, n_train_samples
+        y = data[:, self.class_index].astype(dtype)
+        x = np.delete(data, self.class_index, axis=1).astype(dtype)
+        return x, y, n_train_samples
 
     @abstractmethod
     def _is_dataset(self, file_name, ext):
@@ -444,105 +585,24 @@ class Bundle(metaclass=ABCMeta):
         """
         pass
 
-    def _download_bundle(
-        self, cache_dir, *, create_cache_dir=True, progress=True, force=False
-    ):
-        """Download a bundle to the cache directory"""
-        if not os.path.exists(cache_dir):
-            if create_cache_dir:
-                os.makedirs(os.path.abspath(cache_dir), exist_ok=True)
-            else:
-                raise ValueError(
-                    "output directory does not exist (set create_cache_dir=True to create it)"
-                )
-
-        url_parse = urlparse(self.download_url)
-        path = url_parse.path
-        basename = os.path.basename(path)
-        if basename == "":
-            raise ValueError("expected .zip file got, %s" % basename)
-        _, ext = os.path.splitext(basename)
-        if ext != ".zip":
-            raise ValueError("expected .zip file got, %s" % ext)
-
-        filename = os.path.join(cache_dir, self.filename)
-        if os.path.exists(filename):
-            if force:
-                os.remove(filename)
-            else:
-                try:
-                    z_file = zipfile.ZipFile(open(filename, "rb"))
-                    self._check_integrity(filename)
-                    return z_file
-                except zipfile.BadZipFile:
-                    os.remove(filename)
-        if url_parse.scheme == "file":
-            from shutil import copyfile
-
-            copyfile(url_parse.path, filename)
-        else:
-            with open(filename, "wb") as f:
-                response = requests.get(self.download_url, stream=True)
-                if not response:
-                    raise ValueError("file not found, %s" % self.download_url)
-                total_length = response.headers.get("content-length")
-                if total_length is None:  # no content length header
-                    f.write(response.content)
-                else:
-                    length = 0
-                    total_length = int(total_length)
-                    for data in response.iter_content(chunk_size=4096):
-                        length += len(data)
-                        f.write(data)
-                        done = int(50 * length / total_length)
-                        if length % 10 == 0 and progress:
-                            sys.stderr.write(
-                                "\r[%s%s] %d/%d downloading %s"
-                                % (
-                                    "=" * done,
-                                    " " * (50 - done),
-                                    length,
-                                    total_length,
-                                    self.download_url,
-                                )
-                            )
-                            sys.stderr.flush()
-
-        self._check_integrity(filename)
-        return zipfile.ZipFile(open(filename, "rb"))
-
-    def _check_integrity(self, filename):
-        """Check the integrity of the downloaded or cached file"""
-        if self.hash is not None:
-            actual_hash = _sha1(filename)
-            if self.hash != actual_hash:
-                raise ValueError(
-                    "integrity check failed, expected '%s', got '%s'"
-                    % (self.hash, actual_hash)
-                )
-
 
 class ArffBundle(Bundle):
     """bundle of .arff-files"""
 
     def __init__(
         self,
+        *,
         key,
         version,
         name,
-        download_url,
-        *,
         description=None,
-        hash=None,
         class_index=-1,
         encoding="utf-8",
     ):
         super().__init__(
-            key,
-            version,
-            name,
-            download_url,
-            hash=hash,
+            key=key,
+            version=version,
+            name=name,
             description=description,
             class_index=class_index,
         )

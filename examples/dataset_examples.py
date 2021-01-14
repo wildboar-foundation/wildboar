@@ -8,8 +8,8 @@ from wildboar.datasets import (
 )
 
 set_cache_dir("wildboar_dataset_cache")
-clear_cache()
-x, y = load_dataset("Wafer", repository="wildboar/ucr")
-print(list_datasets(repository="wildboar/ucr-tiny"))
+# x, y = load_dataset("Wafer", repository="wildboar/ucr")
+print(list_datasets(repository="wildboar/ucr:no-missing"))
+print(list_datasets(repository="wildboar/outlier:1.0:hard"))
 print(list_repositories())
 print(list_bundles("wildboar"))
