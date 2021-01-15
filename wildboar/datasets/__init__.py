@@ -86,6 +86,8 @@ def _split_repo_bundle(repo_bundle_name):
         repository_name = match.group(1)
         bundle_name = match.group(2)
         version = match.group(3)
+        if version:
+            version = re.sub("(\d+\.\d+)((?:\.0+)*)$", "\\1", version)
         tag = match.group(4)
         return repository_name, bundle_name, version, tag
     else:
