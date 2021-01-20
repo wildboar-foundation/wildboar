@@ -22,7 +22,6 @@ import re
 import sys
 import zipfile
 from abc import abstractmethod, ABCMeta
-from urllib.parse import urlparse
 
 import numpy as np
 import requests
@@ -33,16 +32,41 @@ from scipy.io.arff import loadarff
 DEFAULT_TAG = "default"
 
 
-def _translate_url(url, *, bundle, version, tag):
-    return (
-        url.replace("{bundle}", bundle)
-        .replace("{version}", version)
-        .replace("{tag}", tag)
-    )
+def _replace_placeholders(url, **kwargs):
+    """Replace placeholder values of the format {key} with kwargs[key]
+
+    Parameters
+    ----------
+    url : str
+        The input string
+
+    **kwargs : dict
+        The key and values to replace
+
+    Returns
+    -------
+    str : url with placeholder values replaced
+    """
+    for arg, value in kwargs.items():
+        url = url.replace("{%s}" % arg, value)
+    return url
 
 
 def _check_integrity(bundle_file, hash_file):
-    """Check the integrity of the downloaded or cached file"""
+    """Check the integrity of the downloaded or cached file
+
+    Parameters
+    ----------
+    bundle_file : str, bytes or PathLike
+        Path to the bundle file
+
+    hash_file : str, bytes or PathLike
+        Path to the hash file
+
+    Returns
+    -------
+    bool : true if the hash of bundle file matches the contents of the hash file
+    """
     with open(hash_file, "r") as f:
         hash = f.readline().strip()
 
@@ -52,15 +76,27 @@ def _check_integrity(bundle_file, hash_file):
             raise ValueError(
                 "integrity check failed, expected '%s', got '%s'" % (hash, actual_hash)
             )
+    return True
 
 
 def _sha1_is_sane(hash_file):
+    """Check the sanity of a hash file
+
+    Parameters
+    ----------
+    hash_file : str, bytes or PathLike
+        The path to the hash file
+
+    Returns
+    -------
+    bool : Returns true if hash is 40 characters long; otherwise false.
+    """
     with open(hash_file, "r") as f:
         return len(f.readline().strip()) == 40
 
 
-def _download_cache_bundle(
-    filename,
+def _load_archive(
+    bundle_name,
     download_url,
     cache_dir,
     *,
@@ -68,7 +104,33 @@ def _download_cache_bundle(
     progress=True,
     force=False,
 ):
-    """Download a bundle to the cache directory"""
+    """Load or download a bundle
+
+    Parameters
+    ----------
+    bundle_name : str
+        The name of the cached file
+
+    download_url : str
+        The download url to the bundle and hash file
+
+    cache_dir : str
+        The cache directory
+
+    create_cache_dir : bool
+        Create the cache directory if missing
+
+    progress : bool
+        Show progress information
+
+    force : bool
+        Remove any cached files and force re-download
+
+    Returns
+    -------
+    archive : zipfile.ZipFile
+        A zip-archive with datasets
+    """
     if not os.path.exists(cache_dir):
         if create_cache_dir:
             os.makedirs(os.path.abspath(cache_dir), exist_ok=True)
@@ -77,42 +139,73 @@ def _download_cache_bundle(
                 "output directory does not exist (set create_cache_dir=True to create it)"
             )
 
-    bundle_filename = "%s.zip" % filename
-    hash_filename = "%s.sha1" % filename
+    cached_hash = os.path.join(cache_dir, "%s.sha1" % bundle_name)
+    cached_bundle = os.path.join(cache_dir, "%s.zip" % bundle_name)
 
-    cached_hash = os.path.join(cache_dir, hash_filename)
-
-    # SHA1 in hex is 40 char long
-    if os.path.exists(cached_hash) and _sha1_is_sane(cached_hash):
-        if force:
+    if force:
+        if os.path.exists(cached_hash):
             os.remove(cached_hash)
-    else:
-        with open(cached_hash, "w") as f:
-            hash_url = "%s.sha1" % download_url
-            response = requests.get(hash_url)
-            if not response:
-                f.close()
-                os.remove(cached_hash)
-                raise ValueError(
-                    "bundle (%s) not found (.sha1-file is missing). Try another version or tag."
-                    % filename
-                )
-            f.write(response.text)
-
-    cached_bundle = os.path.join(cache_dir, bundle_filename)
-    if os.path.exists(cached_bundle):
-        if force:
+        if os.path.exists(cached_bundle):
             os.remove(cached_bundle)
-        else:
-            try:
-                _check_integrity(cached_bundle, cached_hash)
-                z_file = zipfile.ZipFile(open(cached_bundle, "rb"))
-                return z_file
-            except zipfile.BadZipFile:
-                os.remove(cached_bundle)
 
+    if not os.path.exists(cached_hash) or not _sha1_is_sane(cached_hash):
+        _download_hash_file(cached_hash, "%s.sha1" % download_url, bundle_name)
+
+    if os.path.exists(cached_bundle) and _check_integrity(cached_bundle, cached_hash):
+        try:
+            return zipfile.ZipFile(open(cached_bundle, "rb"))
+        except zipfile.BadZipFile:
+            os.remove(cached_bundle)
+
+    _download_bundle_file(cached_bundle, "%s.zip" % download_url, bundle_name, progress)
+    _check_integrity(cached_bundle, cached_hash)
+    return zipfile.ZipFile(open(cached_bundle, "rb"))
+
+
+def _download_hash_file(cached_hash, hash_url, filename):
+    """Download the
+
+    Parameters
+    ----------
+    cached_hash : str, bytes or PathLike
+        The path to the cached hash
+
+    hash_url : str
+        The download url
+
+    filename : str
+        The filename of the bundle
+    """
+    with open(cached_hash, "w") as f:
+        response = requests.get(hash_url)
+        if not response:
+            f.close()
+            os.remove(cached_hash)
+            raise ValueError(
+                "bundle (%s) not found (.sha1-file is missing). Try another version or tag."
+                % filename
+            )
+        f.write(response.text)
+
+
+def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
+    """Download the bundle
+
+    Parameters
+    ----------
+    cached_bundle : str, bytes or PathLike
+        The path to the cached bundle
+
+    bundle_url : str
+        The download url
+
+    filename : str
+        The filename of the bundle
+
+    progress : bool
+        Show progress bar
+    """
     with open(cached_bundle, "wb") as f:
-        bundle_url = "%s.zip" % download_url
         response = requests.get(bundle_url, stream=True)
         if not response:
             f.close()
@@ -144,9 +237,6 @@ def _download_cache_bundle(
                         )
                     )
                     sys.stderr.flush()
-
-    _check_integrity(cached_bundle, cached_hash)
-    return zipfile.ZipFile(open(cached_bundle, "rb"))
 
 
 class Repository(metaclass=ABCMeta):
@@ -242,12 +332,12 @@ class Repository(metaclass=ABCMeta):
         tag = tag or DEFAULT_TAG
 
         cache_dir = os.path.join(cache_dir, self.name)
-        download_url = _translate_url(
+        download_url = _replace_placeholders(
             self.download_url, bundle=bundle.key, version=version, tag=tag
         )
 
-        with _download_cache_bundle(
-            filename=bundle.get_filename(version, tag),
+        with _load_archive(
+            bundle_name=bundle.get_filename(version, tag),
             download_url=download_url,
             cache_dir=cache_dir,
             create_cache_dir=create_cache_dir,
@@ -272,11 +362,11 @@ class Repository(metaclass=ABCMeta):
         tag = tag or DEFAULT_TAG
 
         cache_dir = os.path.join(cache_dir, self.name)
-        download_url = _translate_url(
+        download_url = _replace_placeholders(
             self.download_url, bundle=bundle.key, version=version, tag=tag
         )
-        with _download_cache_bundle(
-            filename=bundle.get_filename(version, tag),
+        with _load_archive(
+            bundle_name=bundle.get_filename(version, tag),
             download_url=download_url,
             cache_dir=cache_dir,
             create_cache_dir=create_cache_dir,
