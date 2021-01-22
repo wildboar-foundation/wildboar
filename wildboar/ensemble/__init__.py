@@ -20,6 +20,7 @@ from ._ensemble import ExtraShapeletTreesClassifier
 from ._ensemble import ShapeletForestRegressor
 from ._ensemble import ExtraShapeletTreesRegressor
 from ._ensemble import IsolationShapeletForest
+from ._ensemble import ShapeletForestEmbedding
 
 __all__ = [
     "ShapeletForestClassifier",
@@ -27,4 +28,5 @@ __all__ = [
     "ShapeletForestRegressor",
     "ExtraShapeletTreesRegressor",
     "IsolationShapeletForest",
+    "ShapeletForestEmbedding",
 ]
