@@ -12,6 +12,13 @@ distributed under the GNU General Public License Version 3.
 
 It is currently maintained by Isak Samsten
 
+## Features
+| **Data**                                                                          | **Classification**               | **Regression**                  | **Explainability**               | **Metric** | **Unsupervised**            | **Outlier**                 |
+|-----------------------------------------------------------------------------------|----------------------------------|---------------------------------|----------------------------------|------------|-----------------------------|-----------------------------|
+| [Repositories](https://isaksamsten.github.io/wildboar/master/guide/datasets.html) | ``ShapeletForestClassifier``     | ``ShapeletForestRegressor``     | ``ShapeletForestCounterfactual`` | UCR-suite  | ``ShapeletForestEmbedding`` | ``IsolationShapeletForest`` |
+|                                                                                   | ``ExtraShapeletTreesClassifier`` | ``ExtraShapeletTreesRegressor`` | ``KNearestCounterfactual``       |            |                             |                             |
+|                                                                                   |                                  |                                 | ``PrototypeCounterfactual``      |            |                             |                             |
+
 ## Installation
 
 ### Dependencies
@@ -94,3 +101,12 @@ citations to the paper:
   - `ExtraShapeletForestClassifier`
   - `ExtraShapeletForestRegressor`
   - `IsolationShapeletForest`
+  - `ShapeletForestEmbedding`
+  - `PrototypeCounterfactual`  
+    
+- Karlsson, I., Rebane, J., Papapetrou, P. et al. 
+  Locally and globally explainable time series tweaking. 
+  Knowl Inf Syst 62, 1671–1700 (2020)
+  
+  - `ShapeletForestCounterfactual`
+  - `KNearestCounterfactual`
