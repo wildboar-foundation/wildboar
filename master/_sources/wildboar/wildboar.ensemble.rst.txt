@@ -28,6 +28,9 @@ Classes
 - :py:class:`IsolationShapeletForest`:
   A isolation shapelet forest.
 
+- :py:class:`ShapeletForestEmbedding`:
+  An ensemble of random shapelet trees
+
 
 .. autoclass:: ShapeletForestClassifier
    :members:
@@ -62,4 +65,11 @@ Classes
 
    .. rubric:: Inheritance
    .. inheritance-diagram:: IsolationShapeletForest
+      :parts: 1
+
+.. autoclass:: ShapeletForestEmbedding
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ShapeletForestEmbedding
       :parts: 1

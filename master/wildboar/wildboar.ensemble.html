@@ -114,6 +114,8 @@ An ensemble of random shapelet regression trees.</p></li>
 An ensemble of extremely random shapelet trees for time series regression.</p></li>
 <li><p><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest" title="wildboar.ensemble.IsolationShapeletForest"><code class="xref py py-class docutils literal notranslate"><span class="pre">IsolationShapeletForest</span></code></a>:
 A isolation shapelet forest.</p></li>
+<li><p><a class="reference internal" href="#wildboar.ensemble.ShapeletForestEmbedding" title="wildboar.ensemble.ShapeletForestEmbedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">ShapeletForestEmbedding</span></code></a>:
+An ensemble of random shapelet trees</p></li>
 </ul>
 <dl class="py class">
 <dt id="wildboar.ensemble.ShapeletForestClassifier">
@@ -381,6 +383,48 @@ sample weighting.</p></li>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="wildboar.ensemble.ShapeletForestEmbedding">
+<em class="property">class </em><code class="sig-prename descclassname">wildboar.ensemble.</code><code class="sig-name descname">ShapeletForestEmbedding</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_estimators</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">n_shapelets</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">max_depth</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">min_samples_split</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">min_shapelet_size</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_shapelet_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'euclidean'</span></em>, <em class="sig-param"><span class="n">metric_params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">oob_score</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">bootstrap</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">warm_start</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">n_jobs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sparse_output</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.ensemble.ShapeletForestEmbedding" title="Permalink to this definition">¶</a></dt>
+<dd><p>An ensemble of random shapelet trees</p>
+<p>An unsupervised transformation of a time series dataset
+to a high-dimensional sparse representation. A time series i
+indexed by the leaf that it falls into. This leads to a binary
+coding of a time series with as many ones as trees in the forest.</p>
+<p>The dimensionality of the resulting representation is
+<code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">n_estimators</span> <span class="pre">*</span> <span class="pre">2^max_depth</span></code></p>
+<p>Construct a shapelet forest embedding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
+<li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of processor cores used for fitting the ensemble</p></li>
+<li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum shapelet size to sample</p></li>
+<li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum shapelet size to sample</p></li>
+<li><p><strong>min_samples_split</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum samples required to split the decision trees</p></li>
+<li><p><strong>warm_start</strong> (<em>bool</em><em>, </em><em>optional</em>) – When set to True, reuse the solution of the previous call to fit
+and add more estimators to the ensemble, otherwise, just fit
+a whole new ensemble.</p></li>
+<li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'scaled_euclidean'</em><em>, </em><em>'scaled_dtw'}</em><em>, </em><em>optional</em>) – Set the metric used to compute the distance between shapelet and time series</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – Parameters passed to the metric construction</p></li>
+<li><p><strong>sparse_output</strong> (<em>bool</em><em>, </em><em>optional</em>) – Return a sparse CSR-matrix.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – Controls the random resampling of the original dataset and the construction of
+the base estimators. Pass an int for reproducible output across multiple
+function calls.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Inheritance</p>
+<div class="graphviz"><img src="../_images/inheritance-52e67039a2dde4777bf8bc57b1d3175de5fb8acb.png" alt="Inheritance diagram of ShapeletForestEmbedding" class="inheritance graphviz" /></div>
+<dl class="py method">
+<dt id="wildboar.ensemble.ShapeletForestEmbedding.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sample_weight</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">check_input</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.ensemble.ShapeletForestEmbedding.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a random shapelet forest regressor</p>
 </dd></dl>
 
 </dd></dl>
