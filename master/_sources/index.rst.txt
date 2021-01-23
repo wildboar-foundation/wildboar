@@ -12,6 +12,7 @@ series data.
    install
    tutorial
    guide
+   examples
    api
 
 
