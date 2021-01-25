@@ -115,7 +115,7 @@ Compute the score for the counterfactuals</p></li>
 </ul>
 <dl class="py function">
 <dt id="wildboar.explain.counterfactual.counterfactuals">
-<code class="sig-prename descclassname">wildboar.explain.counterfactual.</code><code class="sig-name descname">counterfactuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">estimator</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'infer'</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">success_scoring</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">wildboar.explain.counterfactual.</code><code class="sig-name descname">counterfactuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">estimator</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'infer'</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valid_scoring</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a single counterfactual example for each sample</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -132,7 +132,7 @@ the PrototypeCounterfactual method</p></li>
 </ul>
 </p></li>
 <li><p><strong>scoring</strong> (<em>str</em><em>, </em><em>callable</em><em>, </em><em>list</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – The scoring function to determine the goodness of</p></li>
-<li><p><strong>success_scoring</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only compute score for successful counterfactuals</p></li>
+<li><p><strong>valid_scoring</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only compute score for successful counterfactuals</p></li>
 <li><p><strong>random_state</strong> (<em>RandomState</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – The pseudo random number generator to ensure stable result</p></li>
 <li><p><strong>**kwargs</strong> (<em>dict</em><em>, </em><em>optional</em>) – Optional arguments to the counterfactual explainer</p></li>
 </ul>
@@ -140,7 +140,7 @@ the PrototypeCounterfactual method</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>x_counterfactuals</strong> (<em>ndarray of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)</em>) – The counterfactual example.</p></li>
-<li><p><strong>success</strong> (<em>ndarray of shape (n_samples,)</em>) – Indicator matrix for successful transformations</p></li>
+<li><p><strong>valid</strong> (<em>ndarray of shape (n_samples,)</em>) – Indicator matrix for valid counterfactuals</p></li>
 <li><p><strong>score</strong> (<em>ndarray of shape (n_samples,) or dict, optional</em>) – Score of the counterfactual transform. Only returned if <code class="docutils literal notranslate"><span class="pre">scoring</span></code> is not None</p></li>
 </ul>
 </p>
