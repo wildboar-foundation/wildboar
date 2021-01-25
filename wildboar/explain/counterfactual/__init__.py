@@ -117,7 +117,7 @@ def counterfactuals(
     *,
     method="infer",
     scoring=None,
-    success_scoring=False,
+    valid_scoring=False,
     random_state=None,
     **kwargs
 ):
@@ -145,7 +145,7 @@ def counterfactuals(
     scoring : str, callable, list or dict, optional
         The scoring function to determine the goodness of
 
-    success_scoring : bool, optional
+    valid_scoring : bool, optional
         Only compute score for successful counterfactuals
 
     random_state : RandomState or int, optional
@@ -159,8 +159,8 @@ def counterfactuals(
     x_counterfactuals : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
         The counterfactual example.
 
-    success : ndarray of shape (n_samples,)
-        Indicator matrix for successful transformations
+    valid : ndarray of shape (n_samples,)
+        Indicator matrix for valid counterfactuals
 
     score : ndarray of shape (n_samples,) or dict, optional
         Score of the counterfactual transform. Only returned if ``scoring`` is not None
@@ -190,7 +190,7 @@ def counterfactuals(
             x,
             x_counterfactuals,
             metric=scoring,
-            success=success if success_scoring else None,
+            success=success if valid_scoring else None,
         )
         return x_counterfactuals, success, sc
     else:

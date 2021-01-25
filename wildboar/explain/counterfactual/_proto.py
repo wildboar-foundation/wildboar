@@ -222,7 +222,6 @@ class PrototypeCounterfactual(BaseCounterfactual):
             o = sampler.sample_move(o)
             n_iter += 1
 
-        print(n_iter)
         if n_iter > self.max_iter:
             return None
         else:
