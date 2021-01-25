@@ -6,3 +6,4 @@ Examples
    :maxdepth: 3
 
    examples/shapelet_forest_embedding
+   examples/counterfactuals
