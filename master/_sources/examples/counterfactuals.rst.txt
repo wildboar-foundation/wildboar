@@ -1,6 +1,9 @@
-===========================
-Time series counterfactuals
-===========================
+===============
+Counterfactuals
+===============
+
+Comparison of counterfactual explanations
+=========================================
 
 The following example show a few ways of computing counterfactual explanations.
 

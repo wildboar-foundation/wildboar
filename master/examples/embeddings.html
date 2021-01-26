@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shapelet forest Embeddings &#8212; Wildboar 1.0.3dev documentation</title>
+    <title>Embeddings &#8212; Wildboar 1.0.3dev documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -15,7 +15,7 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Time series counterfactuals" href="counterfactuals.html" />
+    <link rel="next" title="Counterfactuals" href="counterfactuals.html" />
     <link rel="prev" title="Examples" href="../examples.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -50,12 +50,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">wildboar tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../guide.html">User guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../examples.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Shapelet forest Embeddings</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#classification-with-logistic-regression">Classification with logistic regression</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#embedding-with-pca">Embedding with PCA</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Embeddings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#shapelet-forest-embedding-with-lr">Shapelet forest embedding with LR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#shapelet-forest-embedding-with-pca">Shapelet forest embedding with PCA</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="counterfactuals.html">Time series counterfactuals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="counterfactuals.html">Counterfactuals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="classification.html">Classification</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
@@ -67,7 +68,7 @@
   <li><a href="../index.html">Documentation overview</a><ul>
   <li><a href="../examples.html">Examples</a><ul>
       <li>Previous: <a href="../examples.html" title="previous chapter">Examples</a></li>
-      <li>Next: <a href="counterfactuals.html" title="next chapter">Time series counterfactuals</a></li>
+      <li>Next: <a href="counterfactuals.html" title="next chapter">Counterfactuals</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -84,7 +85,7 @@
 <script>$('#searchbox').show(0);</script>
 <h3>Versions</h3>
 <ul>
-    <li><a href="shapelet_forest_embedding.html">master</a></li>
+    <li><a href="embeddings.html">master</a></li>
 </ul>
 
         </div>
@@ -95,10 +96,10 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="shapelet-forest-embeddings">
-<h1>Shapelet forest Embeddings<a class="headerlink" href="#shapelet-forest-embeddings" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="classification-with-logistic-regression">
-<h2>Classification with logistic regression<a class="headerlink" href="#classification-with-logistic-regression" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="embeddings">
+<h1>Embeddings<a class="headerlink" href="#embeddings" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="shapelet-forest-embedding-with-lr">
+<h2>Shapelet forest embedding with LR<a class="headerlink" href="#shapelet-forest-embedding-with-lr" title="Permalink to this headline">¶</a></h2>
 <p>This example shows how to compute a shapelet forest embedding for
 a univariate time series dataset and use a logistic regression model
 to classify new samples</p>
@@ -138,8 +139,8 @@ to classify new samples</p>
 <img alt="../_images/sfe_lr.png" src="../_images/sfe_lr.png" />
 </div>
 </div>
-<div class="section" id="embedding-with-pca">
-<h2>Embedding with PCA<a class="headerlink" href="#embedding-with-pca" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="shapelet-forest-embedding-with-pca">
+<h2>Shapelet forest embedding with PCA<a class="headerlink" href="#shapelet-forest-embedding-with-pca" title="Permalink to this headline">¶</a></h2>
 <p>This example shows how PCA can be used to plot the resulting embedding</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -190,7 +191,7 @@ to classify new samples</p>
           <a href="../examples.html" title="Previous document">Examples</a>
         </li>
         <li>
-          <a href="counterfactuals.html" title="Next document">Time series counterfactuals</a>
+          <a href="counterfactuals.html" title="Next document">Counterfactuals</a>
           &rarr;
         </li>
     </ul>
@@ -209,7 +210,7 @@ to classify new samples</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../_sources/examples/shapelet_forest_embedding.rst.txt"
+      <a href="../_sources/examples/embeddings.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
