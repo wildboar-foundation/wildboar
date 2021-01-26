@@ -34,7 +34,7 @@ n_classes = len(classes)
 fig, ax = plt.subplots(
     nrows=len(classifiers),
     ncols=n_classes,
-    figsize=(3 * n_classes, 4),
+    figsize=(3 * n_classes, 6),
     sharex=True,
     sharey=True,
 )
