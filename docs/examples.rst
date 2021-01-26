@@ -3,7 +3,7 @@ Examples
 ==========
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
    examples/shapelet_forest_embedding
    examples/counterfactuals
