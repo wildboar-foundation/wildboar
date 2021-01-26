@@ -1,9 +1,9 @@
-==========================
-Shapelet forest Embeddings
-==========================
+==========
+Embeddings
+==========
 
-Classification with logistic regression
-=======================================
+Shapelet forest embedding with LR
+=================================
 
 This example shows how to compute a shapelet forest embedding for
 a univariate time series dataset and use a logistic regression model
@@ -14,8 +14,8 @@ to classify new samples
 
 .. figure:: fig/sfe_lr.png
 
-Embedding with PCA
-==================
+Shapelet forest embedding with PCA
+==================================
 
 This example shows how PCA can be used to plot the resulting embedding
 
