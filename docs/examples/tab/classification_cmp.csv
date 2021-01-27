@@ -1,0 +1,6 @@
+,Nearest neighbors,Shapelet forest,Extra shapelet trees
+Beef,0.762,0.891,0.858
+Coffee,1.000,1.000,1.000
+GunPoint,0.945,1.000,1.000
+SyntheticControl,0.949,1.000,1.000
+TwoLeadECG,0.997,1.000,1.000
