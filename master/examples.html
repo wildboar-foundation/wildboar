@@ -15,7 +15,7 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Embeddings" href="examples/embeddings.html" />
+    <link rel="next" title="Supervised" href="examples/supervised.html" />
     <link rel="prev" title="Explainability" href="guide/explain.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -31,6 +31,8 @@
 <h1 class="logo"><a href="index.html">Wildboar</a></h1>
 
 
+
+<p class="blurb">A Python module for temporal machine learning</p>
 
 
 
@@ -50,9 +52,10 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">wildboar tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guide.html">User guide</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/embeddings.html">Embeddings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/supervised.html">Supervised</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/unsupervised.html">Unsupervised</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples/counterfactuals.html">Counterfactuals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/classification.html">Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/embeddings.html">Embeddings</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
@@ -63,7 +66,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="guide/explain.html" title="previous chapter">Explainability</a></li>
-      <li>Next: <a href="examples/embeddings.html" title="next chapter">Embeddings</a></li>
+      <li>Next: <a href="examples/supervised.html" title="next chapter">Supervised</a></li>
   </ul></li>
 </ul>
 </div>
@@ -94,19 +97,23 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples/embeddings.html">Embeddings</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/embeddings.html#shapelet-forest-embedding-with-lr">Shapelet forest embedding with LR</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/embeddings.html#shapelet-forest-embedding-with-pca">Shapelet forest embedding with PCA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/supervised.html">Supervised</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/supervised.html#shapelet-forest-vs-nearest-neighbors">Shapelet forest vs. Nearest neighbors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/supervised.html#univariate-shapelet-forest">Univariate shapelet forest</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/supervised.html#comparing-classifiers">Comparing classifiers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples/unsupervised.html">Unsupervised</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/unsupervised.html#outlier-detection">Outlier detection</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="examples/counterfactuals.html">Counterfactuals</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="examples/counterfactuals.html#comparison-of-counterfactual-explanations">Comparison of counterfactual explanations</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples/classification.html">Classification</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/classification.html#shapelet-forest-vs-nearest-neighbors">Shapelet forest vs. Nearest neighbors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/classification.html#univariate-shapelet-forest">Univariate shapelet forest</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/classification.html#comparing-classifiers">Comparing classifiers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/embeddings.html">Embeddings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples/embeddings.html#shapelet-forest-embedding-with-lr">Shapelet forest embedding with LR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples/embeddings.html#shapelet-forest-embedding-with-pca">Shapelet forest embedding with PCA</a></li>
 </ul>
 </li>
 </ul>
@@ -124,7 +131,7 @@
           <a href="guide/explain.html" title="Previous document">Explainability</a>
         </li>
         <li>
-          <a href="examples/embeddings.html" title="Next document">Embeddings</a>
+          <a href="examples/supervised.html" title="Next document">Supervised</a>
           &rarr;
         </li>
     </ul>
