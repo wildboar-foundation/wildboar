@@ -1,6 +1,6 @@
-==============
-Classification
-==============
+==========
+Supervised
+==========
 
 Shapelet forest vs. Nearest neighbors
 =====================================

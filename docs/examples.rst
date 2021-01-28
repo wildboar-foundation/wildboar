@@ -5,6 +5,7 @@ Examples
 .. toctree::
    :maxdepth: 2
 
-   examples/embeddings
+   examples/supervised
+   examples/unsupervised
    examples/counterfactuals
-   examples/classification
+   examples/embeddings
