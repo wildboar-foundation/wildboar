@@ -31,7 +31,7 @@ embedding.fit(x_train)
 x_embedding = embedding.transform(x_test)
 
 y_score = isf.decision_function(x_test)
-y_pred = y_score < 0
+y_pred = isf.predict(x)
 
 fig, ax = plt.subplots()
 mapping = ax.scatter(
