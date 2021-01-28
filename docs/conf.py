@@ -63,6 +63,7 @@ autoapi_modules = {"wildboar": {"prune": True}}
 #
 html_theme = "alabaster"
 html_theme_options = {
+    "description": "A Python module for temporal machine learning",
     "github_user": "isaksamsten",
     "github_repo": "wildboar",
     "github_button": True,
