@@ -118,13 +118,6 @@ or dataset parts that can be downloaded, cached and loaded by wildboar.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
-<p>In the default repository, wildboar bundles</p>
-<dl class="simple">
-<dt>wildboar/ucr</dt><dd><p>UCR time series repository datasets optimized for loading and download speed.</p>
-</dd>
-<dt>wildboar/ucr-tiny</dt><dd><p>A sample of datasets from the UCR time series repository</p>
-</dd>
-</dl>
 <p>Installed repositories and dataset bundles can be listed using the function
 <code class="docutils literal notranslate"><span class="pre">list_repositories</span></code> and <code class="docutils literal notranslate"><span class="pre">list_bundles</span></code> respectively.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">list_repositories</span><span class="p">,</span> <span class="n">list_bundles</span>
@@ -148,9 +141,36 @@ to <code class="docutils literal notranslate"><span class="pre">'wildboar_cache'
 </div>
 </div>
 <p>To force re-download of an already cached repository set the parameter <code class="docutils literal notranslate"><span class="pre">force</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
-<p>The format of the string to the <code class="docutils literal notranslate"><span class="pre">repository</span></code> parameter is <code class="docutils literal notranslate"><span class="pre">{repository}/{bundle}</span></code>, where <cite>repository</cite>
-is a name of a repository consisting of letters, numbers and dashes and <cite>bundle</cite> is the name of a dataset bundle
-consisting of letters, numbers and dashes.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A wildboar repository string is composed of 2 mandatory and two optional
+components written as <code class="docutils literal notranslate"><span class="pre">{repository}/{bundle}[:{version}][:{tag}]</span></code></p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">{repository}</span></code></dt><dd><p>The repository identifier. List available bundles use <code class="docutils literal notranslate"><span class="pre">list_bundles(repository)</span></code>.
+The identifier is composed of letters and match <code class="docutils literal notranslate"><span class="pre">\w+</span></code>. List repositories
+with <code class="docutils literal notranslate"><span class="pre">list_repositories()</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">{bundle}</span></code></dt><dd><p>The bundle identifier, i.e., the dataset bundle of a repository. The available datasets
+can be listed with <code class="docutils literal notranslate"><span class="pre">list_datasets(&quot;{repository}/{bundle}&quot;)</span></code>. The identifier
+is composed of alphanumeric characters and -, matching <code class="docutils literal notranslate"><span class="pre">[a-zA-Z0-9\-]+</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">{version}</span></code></dt><dd><p>The bundle version (defaults to the version specified by the repository). The version
+must match <code class="docutils literal notranslate"><span class="pre">{major}[.{minor}][.{revision}]</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">{tag}</span></code></dt><dd><p>The bundle tag (defaults to <code class="docutils literal notranslate"><span class="pre">default</span></code>). The bundle tag is composed of
+letters and -, matching <code class="docutils literal notranslate"><span class="pre">[a-zA-Z-]+</span></code>.</p>
+</dd>
+</dl>
+<p><strong>Examples</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code>: the <cite>ucr</cite> bundle from the <cite>wildboar</cite> repository using the
+latest version and the ´default` tag.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wildboar/ucr-tiny:1.0</span></code>: the <cite>ucr-tiny</cite> bundle from the <cite>wildboar</cite> repository
+using the version <cite>1.0</cite> and <cite>default</cite> tag.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wildboar/outlier:1.0:hard</span></code>: the <cite>outlier</cite> bundle, with version <cite>1.0</cite>, from
+the <cite>wildboar</cite> repository using the tag <cite>hard</cite>.</p></li>
+</ul>
+</div>
 </div>
 <div class="section" id="installing-repositories">
 <h2>Installing repositories<a class="headerlink" href="#installing-repositories" title="Permalink to this headline">¶</a></h2>
@@ -188,7 +208,6 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>}</p>
 </div>
 </div>
 </div>

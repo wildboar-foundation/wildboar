@@ -20,15 +20,6 @@ Repositories are either initialized directly or used together with the ``load_da
     # ... downloading repository to cache folder...
     >>> x.shape
 
-
-In the default repository, wildboar bundles
-
-wildboar/ucr
-  UCR time series repository datasets optimized for loading and download speed.
-
-wildboar/ucr-tiny
-  A sample of datasets from the UCR time series repository
-
 Installed repositories and dataset bundles can be listed using the function
 ``list_repositories`` and ``list_bundles`` respectively.
 
@@ -56,9 +47,37 @@ Installed repositories and dataset bundles can be listed using the function
 
 To force re-download of an already cached repository set the parameter ``force`` to ``True``.
 
-The format of the string to the ``repository`` parameter is ``{repository}/{bundle}``, where `repository`
-is a name of a repository consisting of letters, numbers and dashes and `bundle` is the name of a dataset bundle
-consisting of letters, numbers and dashes.
+.. note::
+
+    A wildboar repository string is composed of 2 mandatory and two optional
+    components written as ``{repository}/{bundle}[:{version}][:{tag}]``
+
+    ``{repository}``
+       The repository identifier. List available bundles use ``list_bundles(repository)``.
+       The identifier is composed of letters and match ``\w+``. List repositories
+       with ``list_repositories()``.
+
+    ``{bundle}``
+       The bundle identifier, i.e., the dataset bundle of a repository. The available datasets
+       can be listed with ``list_datasets("{repository}/{bundle}")``. The identifier
+       is composed of alphanumeric characters and -, matching ``[a-zA-Z0-9\-]+``.
+
+    ``{version}``
+       The bundle version (defaults to the version specified by the repository). The version
+       must match ``{major}[.{minor}][.{revision}]``.
+
+    ``{tag}``
+       The bundle tag (defaults to ``default``). The bundle tag is composed of
+       letters and -, matching ``[a-zA-Z-]+``.
+
+    **Examples**
+
+    - ``wildboar/ucr``: the `ucr` bundle from the `wildboar` repository using the
+      latest version and the ´default` tag.
+    - ``wildboar/ucr-tiny:1.0``: the `ucr-tiny` bundle from the `wildboar` repository
+      using the version `1.0` and `default` tag.
+    - ``wildboar/outlier:1.0:hard``: the `outlier` bundle, with version `1.0`, from
+      the `wildboar` repository using the tag `hard`.
 
 Installing repositories
 =======================
@@ -78,7 +97,6 @@ either an url to a JSON-file or an instance of a ``Repository``.
     >>> install_repository("https://www.example.org/repo.json")
     >>> list_repositories("example")
     >>> load_dataset("example", repository="example/example")
-
 
 Repository JSON specification
 -----------------------------
@@ -102,10 +120,3 @@ The ``JSONRepository`` expects a JSON-file following the specification below.
           },
         ]
     }
-
-
-
-
-
-
-}

@@ -22,7 +22,7 @@ Functions
 =========
 
 - :py:func:`set_cache_dir`:
-  Undocumented.
+  Change the global cache directory
 
 - :py:func:`get_repository`:
   Get repository by name
@@ -52,7 +52,7 @@ Functions
   Load all datasets as a generator
 
 - :py:func:`load_all_datasets`:
-  DEPRECATED: use `load_datasets`. To be removed in v1.1.
+  DEPRECATED: the function datasets.load_all_datasets has been deprecated in 1.0.3 and will be removed in in 1.0.5.
 
 - :py:func:`load_two_lead_ecg`:
   Load the TwoLeadECG dataset
