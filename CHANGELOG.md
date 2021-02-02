@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 ### Added
-* Model agnostic counterfactual explanations have been added.
+* Model agnostic counterfactual explanations has been added.
 * Shapelet forest counterfactual explanations has been refined.
 * KNearestNeighbors counterfactual explanations has been refined.
 * Synthetic generation of outlier detection datasets.
@@ -14,7 +14,10 @@
 * Add new class `Repository` which represents a collection of bundles
 * `datasets.set_cache_dir` to globally change the default cache directory
 * `datasets.clear_cache` to clear the cache
-*
+
+### Deprecated
+
+* `datasets.load_all_datasets` has been replaced by `load_datasets`
 
 ### Changed
 

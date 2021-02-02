@@ -95,6 +95,11 @@ def _split_repo_bundle(repo_bundle_name):
 
 
 def set_cache_dir(cache_dir):
+    """Change the global cache directory
+
+    cache_dir : str
+        The cache directory root
+    """
     global _CACHE_DIR
     _CACHE_DIR = cache_dir
 
@@ -176,7 +181,7 @@ def load_datasets(
     Parameters
     ----------
     repository : str
-        A string with the repository.
+        The repository string
 
     progress : bool, optional
         If progress indicator is shown while downloading the repository.
@@ -218,7 +223,10 @@ def load_datasets(
         yield dataset, load_dataset(dataset, repository=repository, **kwargs)
 
 
-@deprecated("use `load_datasets`. To be removed in v1.1.")
+@deprecated(
+    "the function datasets.load_all_datasets has been deprecated in "
+    "1.0.3 and will be removed in in 1.0.5."
+)
 def load_all_datasets(
     repository="wildboar/ucr",
     *,
@@ -257,13 +265,10 @@ def load_dataset(
     name : str
         The name of the dataset to load.
 
-    repository : str or Bundle, optional
-        The data repository
+    repository : str, optional
+        The data repository formatted as {repository}/{bundle}[:{version}][:{tag}]
 
-        - if str load a named repository, format {repository}/{bundle}
-        - if Bundle, load from a given bundle
-
-    dtype : dtype, optional, default=np.float64
+    dtype : dtype, optional
         The data type of the returned data
 
     contiguous : bool, optional
@@ -306,39 +311,27 @@ def load_dataset(
     y_test : ndarray, optional
         The testing labels if ``merge_train_test=False``
 
-    Notes
-    -----
-    A dataset bundle is defined as zip-file. Matching files will be considered as dataset parts.
-    Parts sharing the same name will be merged (two files with the same name in different folders share
-    name). Filenames (without extension) with the suffix '_TRAIN' or '_TEST' are considered as training
-    and testing parts and are used togheter with the attribute ``merge_train_test=False``. Parts without any suffix
-    are considered as training parts.
-
-    - `Currently only ".arff" and ".npy" files are supported.`
-    - To support other data formats create subclasses of ``Bundle``.
-
-    A repository
-
-
     Examples
     --------
 
-    Load one of the bundled datasets
+    Load a dataset from the default repository
 
-    >>> x, y = load_dataset("synthetic_control")
+    >>> x, y = load_dataset("SyntheticControl")
 
     or if original training and testing splits are to be preserved
 
-    >>> x_train, x_test, y_train, y_test = load_dataset("synthetic_control", merge_train_test=False)
+    >>> x_train, x_test, y_train, y_test = load_dataset("SyntheticControl", merge_train_test=False)
 
-    and with training and testing parts
+    or for a specific version of the dataset
 
-    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr', merge_train_test=False)
-
+    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr-tiny:1.0')
     """
-    repository_name, bundle_name, bundle_version, bundle_tag = _split_repo_bundle(
-        repository
-    )
+    (
+        repository_name,
+        bundle_name,
+        bundle_version,
+        bundle_tag,
+    ) = _split_repo_bundle(repository)
     dtype = dtype or np.float64
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
@@ -407,9 +400,12 @@ def list_datasets(
         dataset : set
             A set of dataset names
     """
-    repository_name, bundle_name, bundle_version, bundle_tag = _split_repo_bundle(
-        repository
-    )
+    (
+        repository_name,
+        bundle_name,
+        bundle_version,
+        bundle_tag,
+    ) = _split_repo_bundle(repository)
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
     return repository.list_datasets(
