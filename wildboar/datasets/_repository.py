@@ -412,6 +412,27 @@ def _validate_url(url):
         )
 
 
+def _validate_repository_name(str):
+    if re.match("[a-zA-Z]+", str):
+        return str
+    else:
+        raise ValueError("repository name (%s) is not valid" % str)
+
+
+def _validate_bundle_key(str):
+    if re.match("[a-zA-Z0-9\-]+", str):
+        return str
+    else:
+        raise ValueError("bundle key (%s) is not valid" % str)
+
+
+def _validate_version(str):
+    if re.match("(^(?:\d+\.)?(?:\d+\.)?(?:\*|\d+)$)", str):
+        return str
+    else:
+        raise ValueError("version (%s) is not valid" % str)
+
+
 class JSONRepository(Repository):
     def __init__(self, url):
         self.repo_url = url
@@ -442,8 +463,8 @@ class JSONRepository(Repository):
     def __refresh(self):
         json = requests.get(self.repo_url).json()
         self._wildboar_requires = json["wildboar_requires"]
-        self._name = json["name"]
-        self._version = json["version"]
+        self._name = _validate_repository_name(json["name"])
+        self._version = _validate_version(json["version"])
         if parse_version(self.wildboar_requires) < parse_version(wildboar_version):
             raise ValueError(
                 "repository requires wildboar (>=%s), got %s",
@@ -453,8 +474,8 @@ class JSONRepository(Repository):
         self._bundle_url = _validate_url(json["bundle_url"])
         bundles = {}
         for bundle_json in json["bundles"]:
-            key = bundle_json["key"]
-            version = bundle_json["version"]
+            key = _validate_bundle_key(bundle_json["key"])
+            version = _validate_version(bundle_json["version"])
             name = bundle_json["name"]
             class_index = bundle_json["class_index"]
             description = bundle_json["description"]

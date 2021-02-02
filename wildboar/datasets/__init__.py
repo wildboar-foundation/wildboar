@@ -79,7 +79,7 @@ def _split_repo_bundle(repo_bundle_name):
         An optional tag
     """
     match = re.match(
-        "(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::([0-9.]+))?(?::([a-zA-Z\-]+))?$",
+        "(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::((?:\d+\.)?(?:\d+\.)?(?:\*|\d+)))?(?::([a-zA-Z\-]+))?$",
         repo_bundle_name,
     )
     if match:
