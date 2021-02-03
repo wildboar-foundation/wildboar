@@ -1,0 +1,148 @@
+=====================
+``wildboar.datasets``
+=====================
+
+.. automodule:: wildboar.datasets
+
+   .. contents::
+      :local:
+
+
+Modules
+==========
+
+.. toctree::
+
+   wildboar.datasets.outlier
+
+.. currentmodule:: wildboar.datasets
+
+
+Functions
+=========
+
+- :py:func:`set_cache_dir`:
+  Change the global cache directory
+
+- :py:func:`get_repository`:
+  Get repository by name
+
+- :py:func:`clear_cache`:
+  Clear the cache by deleting cached datasets
+
+- :py:func:`list_repositories`:
+  List the key of all installed repositories
+
+- :py:func:`list_bundles`:
+  Get a list of all bundle names in the specified repository.
+
+- :py:func:`get_bundles`:
+  Get all bundles in the repository
+
+- :py:func:`install_repository`:
+  Install repository
+
+- :py:func:`load_dataset`:
+  Load a dataset from a repository
+
+- :py:func:`list_datasets`:
+  List the datasets in the repository
+
+- :py:func:`load_datasets`:
+  Load all datasets as a generator
+
+- :py:func:`load_all_datasets`:
+  DEPRECATED: the function datasets.load_all_datasets has been deprecated in 1.0.3 and will be removed in in 1.0.5.
+
+- :py:func:`load_two_lead_ecg`:
+  Load the TwoLeadECG dataset
+
+- :py:func:`load_synthetic_control`:
+  Load the Synthetic_Control dataset
+
+- :py:func:`load_gun_point`:
+  Load the GunPoint dataset
+
+
+.. autofunction:: set_cache_dir
+
+.. autofunction:: get_repository
+
+.. autofunction:: clear_cache
+
+.. autofunction:: list_repositories
+
+.. autofunction:: list_bundles
+
+.. autofunction:: get_bundles
+
+.. autofunction:: install_repository
+
+.. autofunction:: load_dataset
+
+.. autofunction:: list_datasets
+
+.. autofunction:: load_datasets
+
+.. autofunction:: load_all_datasets
+
+.. autofunction:: load_two_lead_ecg
+
+.. autofunction:: load_synthetic_control
+
+.. autofunction:: load_gun_point
+
+
+Classes
+=======
+
+- :py:class:`Repository`:
+  A repository is a collection of bundles
+
+- :py:class:`JSONRepository`:
+  A repository is a collection of bundles
+
+- :py:class:`Bundle`:
+  Base class for handling dataset bundles
+
+- :py:class:`ArffBundle`:
+  bundle of .arff-files
+
+- :py:class:`NpyBundle`:
+  bundle of numpy binary files
+
+
+.. autoclass:: Repository
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: Repository
+      :parts: 1
+
+.. autoclass:: JSONRepository
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: JSONRepository
+      :parts: 1
+
+.. autoclass:: Bundle
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: Bundle
+      :parts: 1
+
+.. autoclass:: ArffBundle
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ArffBundle
+      :parts: 1
+
+.. autoclass:: NpyBundle
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: NpyBundle
+      :parts: 1

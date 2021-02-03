@@ -13,6 +13,7 @@ Modules
 
 .. toctree::
 
+   wildboar.datasets
    wildboar.distance
    wildboar.ensemble
    wildboar.explain
