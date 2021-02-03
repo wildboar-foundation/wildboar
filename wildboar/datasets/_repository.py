@@ -465,7 +465,7 @@ class JSONRepository(Repository):
         self._wildboar_requires = json["wildboar_requires"]
         self._name = _validate_repository_name(json["name"])
         self._version = _validate_version(json["version"])
-        if parse_version(self.wildboar_requires) < parse_version(wildboar_version):
+        if parse_version(self.wildboar_requires) > parse_version(wildboar_version):
             raise ValueError(
                 "repository requires wildboar (>=%s), got %s",
                 self.wildboar_requires,
