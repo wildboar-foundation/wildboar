@@ -44,10 +44,37 @@ class OutlierLabeler(metaclass=ABCMeta):
 
     @abstractmethod
     def fit(self, x, y=None):
+        """Fit the outlier labeler to the give samples
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep)
+            The time series samples
+
+        y : array-like of shape (n_samples, ) optional
+            The optional original labels
+        """
         pass
 
     @abstractmethod
-    def transform(self, x, y):
+    def transform(self, x, y=None):
+        """Transform the labels of (a subset) of samples in x to inlier and outliers
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep)
+            The time series samples
+        y : array-like of shape (n_samples, ), optional
+            The optional original labels
+
+        Returns
+        -------
+        x_new : array-like of shape (n_samples_new, n_timestep)
+            The outlier and inlier samples
+
+        y_new : array-like of shape (n_samples_new, )
+            The labels
+        """
         pass
 
     def fit_transform(self, x, y=None):
@@ -118,7 +145,7 @@ class KMeansLabeler(OutlierLabeler):
     def fit_transform(self, x, y=None):
         return self.fit(x, y).transform(x, y)
 
-    def transform(self, x, y):
+    def transform(self, x, y=None):
         random_state = check_random_state(self.random_state)
         if self.n_outliers is None:
             n_outliers = self.n_outliers or math.ceil(x.shape[0] * 0.05)
@@ -196,7 +223,7 @@ class DensityLabeler(OutlierLabeler):
         y[self.estimator_.labels_ == -1] = -1
         return x, y
 
-    def transform(self, x, y):
+    def transform(self, x, y=None):
         y = np.ones(x.shape[0])
         if hasattr(self.estimator_, "predict"):
             y[self.estimator.predict(x) == -1] = -1
@@ -224,7 +251,7 @@ class MinorityLabeler(OutlierLabeler):
         self.outlier_label_ = labels[min_label]
         return self
 
-    def transform(self, x, y):
+    def transform(self, x, y=None):
         random_state = check_random_state(self.random_state)
         outliers = np.where(y == self.outlier_label_)[0]
         random_state.shuffle(outliers)
@@ -239,7 +266,7 @@ class MinorityLabeler(OutlierLabeler):
                 )
             n_outliers = math.ceil(self.n_outliers * inliers.shape[0])
         else:
-            raise ValueError("n_outlier (%r) is not supported" % self.n_outliers)
+            raise ValueError("n_outliers (%r) is not supported" % self.n_outliers)
 
         n_outliers = min(n_outliers, x.shape[0])
         x = np.concatenate([x[outliers[0:n_outliers], :], x[inliers, :]], axis=0)
@@ -249,7 +276,7 @@ class MinorityLabeler(OutlierLabeler):
         return x, y
 
 
-DEFAULT_EMMOTT_SCALE = np.array([0, 0.16, 0.3, 0.5])
+_DEFAULT_EMMOTT_SCALE = np.array([0, 0.16, 0.3, 0.5])
 
 
 def _variation_dispersed(x, n_outliers, random_state):
@@ -388,7 +415,7 @@ class EmmottLabeler(OutlierLabeler):
         self.confusion_estimator = confusion_estimator
         self.difficulty_estimator = difficulty_estimator
         self.difficulty = difficulty
-        self.scale = scale or DEFAULT_EMMOTT_SCALE
+        self.scale = scale or _DEFAULT_EMMOTT_SCALE
         self.variation = variation
         self.random_state = random_state
 
@@ -468,7 +495,6 @@ class EmmottLabeler(OutlierLabeler):
         self.fit(x, y)
         if hasattr(self.difficulty_estimator_, "oob_decision_function_"):
             difficulty_estimate = self.difficulty_estimator_.oob_decision_function_
-            print(self.difficulty_estimator_.oob_score_)
         else:
             difficulty_estimate = self.difficulty_estimator_.predict_proba(x)
         difficulty_estimate = difficulty_estimate[
@@ -476,7 +502,7 @@ class EmmottLabeler(OutlierLabeler):
         ]
         return self._transform(x, y, difficulty_estimate)
 
-    def transform(self, x, y):
+    def transform(self, x, y=None):
         difficulty_estimate = self.difficulty_estimator_.predict_proba(x)
         difficulty_estimate = difficulty_estimate[
             :, np.where(self.difficulty_estimator_.classes_ == 1)[0]
