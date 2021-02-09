@@ -27,6 +27,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import pairwise_distances, confusion_matrix
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import check_random_state, check_array
+from sklearn.utils.validation import check_is_fitted
 
 from wildboar.linear_model import KernelLogisticRegression
 
@@ -35,6 +36,7 @@ __all__ = [
     "KMeansLabeler",
     "DensityLabeler",
     "MinorityLabeler",
+    "MajorityLabeler",
     "EmmottLabeler",
 ]
 
@@ -229,6 +231,64 @@ class DensityLabeler(OutlierLabeler):
             y[self.estimator.predict(x) == -1] = -1
         else:
             raise ValueError("estimator does not support predict")
+
+
+class MajorityLabeler(OutlierLabeler):
+    """Labels the majority class as inliers
+
+    Attributes
+    ----------
+
+    outlier_labels_ : ndarray
+        The outlier labels
+    """
+
+    def __init__(self, n_outliers=None, random_state=None):
+        """Create a new majority labeler
+
+        Parameters
+        ----------
+        n_outliers : float, optional
+            The fraction of outliers, by default None
+        random_state : int or RandomState, optional
+            The psudo-random number generator, by default None
+        """
+        self.n_outliers = n_outliers
+        self.random_state = random_state
+
+    def fit(self, x, y=None):
+        x = check_array(x)
+        y = check_array(y, ensure_2d=False)
+        labels, counts = np.unique(y, return_counts=True)
+        max_label = np.argmax(counts)
+        self.outlier_label_ = labels[labels != labels[max_label]]
+        return self
+
+    def transform(self, x, y=None):
+        check_is_fitted(self)
+        random_state = check_random_state(self.random_state)
+        outlier_indicator = np.isin(y, self.outlier_label_)
+        outlier_indices = outlier_indicator.nonzero()[0]
+        inlier_index = (~outlier_indicator).nonzero()[0]
+        random_state.shuffle(outlier_indicator)
+
+        if self.n_outliers is None:
+            n_outliers = outlier_indices.shape[0]
+        elif isinstance(self.n_outliers, float):
+            if not 0.0 < self.n_outliers <= 1.0:
+                raise ValueError(
+                    "n_outliers must be in (0, 1), got %r" % self.n_outliers
+                )
+            n_outliers = math.ceil(self.n_outliers * inlier_index.shape[0])
+        else:
+            raise ValueError("n_outliers (%r) is not supported" % self.n_outliers)
+
+        x_outlier = x[outlier_indices[:n_outliers]]
+        x_inlier = x[inlier_index]
+        x = np.concatenate([x_outlier, x_inlier], axis=0)
+        y = np.ones(x.shape[0])
+        y[: x_outlier.shape[0]] = -1
+        return x, y
 
 
 class MinorityLabeler(OutlierLabeler):
