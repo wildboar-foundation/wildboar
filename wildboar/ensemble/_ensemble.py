@@ -985,8 +985,6 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
         x = x.reshape(n_samples, n_dims * self.n_timestep)
         rnd_y = random_state.uniform(size=x.shape[0])
-        max_depth = int(np.ceil(np.log2(max(x.shape[0], 2))))
-
         if isinstance(self.max_samples, str):
             if self.max_samples == "auto":
                 max_samples = min(x.shape[0], 256)
@@ -1003,6 +1001,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
                 )
             max_samples = int(self.max_samples * x.shape[0])
 
+        max_depth = int(np.ceil(np.log2(max(max_samples, 2))))
         super(IsolationShapeletForest, self)._fit(
             x,
             rnd_y,
