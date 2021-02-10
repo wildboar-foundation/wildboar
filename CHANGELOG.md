@@ -1,6 +1,16 @@
 # Changelog
 
-## [Unreleased]
+## [v1.0.5]
+
+### Added
+
+* Add `MajorityLabeler` to construct synthetic outlier datasets
+
+### Fixed
+
+* Fix bug in `IsolationShapeletForest` where `max_depth` was incorrectly computed
+
+## [v1.0.4]
 
 ### Added
 * Model agnostic counterfactual explanations has been added.
@@ -76,7 +86,7 @@
   `wildboar.ensemble.ShapeletForestRegressor` which allows for constructing
   shapelet forests for predicting real value outputs.
 
-### Fixes
+### Fixed
 
  * a6f656d Fix bug for strided labels not correctly accounted for
  * 321a04d Remove unused property `unscaled_threshold`
