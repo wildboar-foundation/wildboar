@@ -1,6 +1,10 @@
 # Changelog
 
-## [Unreleased]
+## [v1.0.6]
+
+### Fixed
+
+* Fix bug in source distribution
 
 ## [v1.0.5]
 

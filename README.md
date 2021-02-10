@@ -37,8 +37,8 @@ requires:
 
 ### Current version
 
-- Current release: 1.0.5
-- Current development release: 1.0.5dev
+- Current release: 1.0.6
+- Current development release: 1.0.6dev
 
 ### Binaries
 
