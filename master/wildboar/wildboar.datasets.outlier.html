@@ -117,6 +117,8 @@ KMeans labeler that assign an outlier label to the most deviating cluster</p></l
 Density based clustering labeler</p></li>
 <li><p><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler" title="wildboar.datasets.outlier.MinorityLabeler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinorityLabeler</span></code></a>:
 Labels the minority class as the outlier</p></li>
+<li><p><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler" title="wildboar.datasets.outlier.MajorityLabeler"><code class="xref py py-class docutils literal notranslate"><span class="pre">MajorityLabeler</span></code></a>:
+Labels the majority class as inliers</p></li>
 <li><p><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler" title="wildboar.datasets.outlier.EmmottLabeler"><code class="xref py py-class docutils literal notranslate"><span class="pre">EmmottLabeler</span></code></a>:
 Create a synthetic outlier detection dataset from a labeled classification dataset</p></li>
 </ul>
@@ -331,6 +333,72 @@ Create a synthetic outlier detection dataset from a labeled classification datas
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.MinorityLabeler.transform">
 <code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x_new</strong> (<em>array-like of shape (n_samples_new, n_timestep)</em>) – The outlier and inlier samples</p></li>
+<li><p><strong>y_new</strong> (<em>array-like of shape (n_samples_new, )</em>) – The labels</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="wildboar.datasets.outlier.MajorityLabeler">
+<em class="property">class </em><code class="sig-prename descclassname">wildboar.datasets.outlier.</code><code class="sig-name descname">MajorityLabeler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_outliers</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Labels the majority class as inliers</p>
+<dl class="py attribute">
+<dt id="wildboar.datasets.outlier.MajorityLabeler.outlier_labels_">
+<code class="sig-name descname">outlier_labels_</code><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.outlier_labels_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The outlier labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Create a new majority labeler</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_outliers</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of outliers, by default None</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – The psudo-random number generator, by default None</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Inheritance</p>
+<div class="graphviz"><img src="../_images/inheritance-673fca8d06994ef174e5b54dbd92c9ef81af2e17.png" alt="Inheritance diagram of MajorityLabeler" usemap="#inheritance5c5a14a09e" class="inheritance graphviz" /></div>
+<map id="inheritance5c5a14a09e" name="inheritance5c5a14a09e">
+<area shape="rect" id="node1" href="#wildboar.datasets.outlier.MajorityLabeler" target="_top" title="Labels the majority class as inliers" alt="" coords="168,5,291,31"/>
+<area shape="rect" id="node2" href="#wildboar.datasets.outlier.OutlierLabeler" target="_top" title="Base&#45;class for outlier labelers" alt="" coords="5,5,120,31"/>
+</map><dl class="py method">
+<dt id="wildboar.datasets.outlier.MajorityLabeler.fit">
+<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit the outlier labeler to the give samples</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="wildboar.datasets.outlier.MajorityLabeler.transform">
+<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

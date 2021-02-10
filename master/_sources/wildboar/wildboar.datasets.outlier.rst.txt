@@ -25,6 +25,9 @@ Classes
 - :py:class:`MinorityLabeler`:
   Labels the minority class as the outlier
 
+- :py:class:`MajorityLabeler`:
+  Labels the majority class as inliers
+
 - :py:class:`EmmottLabeler`:
   Create a synthetic outlier detection dataset from a labeled classification dataset
 
@@ -55,6 +58,13 @@ Classes
 
    .. rubric:: Inheritance
    .. inheritance-diagram:: MinorityLabeler
+      :parts: 1
+
+.. autoclass:: MajorityLabeler
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: MajorityLabeler
       :parts: 1
 
 .. autoclass:: EmmottLabeler
