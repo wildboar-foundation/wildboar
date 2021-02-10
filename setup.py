@@ -190,8 +190,9 @@ setup(
     ext_modules=cython_ext_modules,
     packages=find_packages(),
     package_data={
-        "wildboar": ["*.pxd", "*.pyx", "*.c"],
-        "wildboar.datasets._resources": ["*.txt"],
+        "wildboar": ["*.pxd", "*.pyx"],
+        "wildboar.distance": ["*.pxd"],
+        "wildboar.tree": ["*.pxd"],
     },
     zip_safe=False,
 )
