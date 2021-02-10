@@ -270,7 +270,7 @@ class MajorityLabeler(OutlierLabeler):
         outlier_indicator = np.isin(y, self.outlier_label_)
         outlier_indices = outlier_indicator.nonzero()[0]
         inlier_index = (~outlier_indicator).nonzero()[0]
-        random_state.shuffle(outlier_indicator)
+        random_state.shuffle(outlier_indices)
 
         if self.n_outliers is None:
             n_outliers = outlier_indices.shape[0]
