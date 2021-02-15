@@ -271,7 +271,8 @@ def load_datasets(
     >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
 
-    Print the names of datasets with mor than 200 samples
+    Print the names of datasets with more than 200 samples
+
     >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr', filter={"n_samples": ">200"}):
     >>>     print(dataset)
     """
