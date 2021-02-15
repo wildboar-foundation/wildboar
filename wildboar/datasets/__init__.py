@@ -55,6 +55,49 @@ __all__ = [
 _CACHE_DIR = None
 _REPOSITORIES = RepositoryCollection()
 
+__CMP_PATTERN = re.compile("^(<|<=|>=|>|=)\s*(\d+)$")
+
+
+def __make_cmp(op):
+    def f(v):
+        match = re.match(__CMP_PATTERN, op)
+        if match:
+            cmp = match.group(1)
+            value = match.group(2)
+            if cmp == "<":
+                return v < int(value)
+            elif cmp == "<=":
+                return v <= int(value)
+            elif cmp == ">":
+                return v > int(value)
+            elif cmp == ">=":
+                return v >= int(value)
+            elif cmp == "=":
+                return v == int(value)
+        else:
+            raise ValueError("invalid comparision (%s)" % op)
+
+    return f
+
+
+def _make_filter(filter):
+    def f(dataset, x, y):
+        for key, value in filter.items():
+            if key == "dataset":
+                if not re.match(value, dataset):
+                    return False
+            elif key == "n_samples":
+                if not __make_cmp(value)(x.shape[0]):
+                    return False
+            elif key == "n_timestep":
+                if not __make_cmp(value)(x.shape[-1]):
+                    return False
+            else:
+                raise ValueError("invalid filter (%s)" % filter)
+        return True
+
+    return f
+
 
 def _split_repo_bundle(repo_bundle_name):
     """Split a repository bundle string of the format {repo}/{bundle}
@@ -174,6 +217,7 @@ def load_datasets(
     create_cache_dir=True,
     progress=True,
     force=False,
+    filter=None,
     **kwargs
 ):
     """Load all datasets as a generator
@@ -193,7 +237,21 @@ def load_datasets(
         Create the cache directory if it does not exist.
 
     force : bool, optional
-            Force re-download of cached repository
+        Force re-download of cached repository
+
+    filter: dict or callable, optional
+        Filter the datasets
+
+        - if callable, only yield those datasets for which the callable returns True.
+          ``f(dataset, x, y) -> bool``
+
+        - if dict, filter based on the keys and values
+            - "dataset": regex matching dataset name
+            - "n_samples": comparison spec
+            - "n_timestep": comparison spec
+
+        Comparison spec
+            str of two parts, comparison operator (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
 
     kwargs : dict
         Optional arguments to ``load_dataset``
@@ -212,6 +270,10 @@ def load_datasets(
     >>> from wildboar.datasets import load_datasets
     >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
+
+    Print the names of datasets with mor than 200 samples
+    >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr', filter={"n_samples": ">200"}):
+    >>>     print(dataset)
     """
     for dataset in list_datasets(
         repository=repository,
@@ -220,7 +282,15 @@ def load_datasets(
         progress=progress,
         force=force,
     ):
-        yield dataset, load_dataset(dataset, repository=repository, **kwargs)
+        x, y = load_dataset(dataset, repository=repository, **kwargs)
+        if filter is None:
+            yield dataset, (x, y)
+        elif hasattr(filter, "__call__"):
+            if filter(dataset, x, y):
+                yield dataset, (x, y)
+        else:
+            if _make_filter(filter)(dataset, x, y):
+                yield dataset, (x, y)
 
 
 @deprecated(

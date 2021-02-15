@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+* `filter` keyword-argument to `datasets.load_datasets`
+
 ## [v1.0.6]
 
 ### Fixed
