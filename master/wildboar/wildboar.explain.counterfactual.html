@@ -117,7 +117,7 @@ Compute the score for the counterfactuals</p></li>
 </ul>
 <dl class="py function">
 <dt id="wildboar.explain.counterfactual.counterfactuals">
-<code class="sig-prename descclassname">wildboar.explain.counterfactual.</code><code class="sig-name descname">counterfactuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">estimator</span></em>, <em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'infer'</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valid_scoring</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></code><code class="sig-name descname"><span class="pre">counterfactuals</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'infer'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a single counterfactual example for each sample</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -152,7 +152,7 @@ the PrototypeCounterfactual method</p></li>
 
 <dl class="py function">
 <dt id="wildboar.explain.counterfactual.score">
-<code class="sig-prename descclassname">wildboar.explain.counterfactual.</code><code class="sig-name descname">score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_true</span></em>, <em class="sig-param"><span class="n">x_counterfactuals</span></em>, <em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'euclidean'</span></em>, <em class="sig-param"><span class="n">success</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></code><code class="sig-name descname"><span class="pre">score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the score for the counterfactuals</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -194,11 +194,11 @@ Model agnostic approach for constructing counterfactual explanations</p></li>
 </ul>
 <dl class="py class">
 <dt id="wildboar.explain.counterfactual.ShapeletForestCounterfactual">
-<em class="property">class </em><code class="sig-prename descclassname">wildboar.explain.counterfactual.</code><code class="sig-name descname">ShapeletForestCounterfactual</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">epsilon</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></code><code class="sig-name descname"><span class="pre">ShapeletForestCounterfactual</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Counterfactual explanations for shapelet forest classifiers</p>
 <dl class="py attribute">
 <dt id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.paths_">
-<code class="sig-name descname">paths_</code><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.paths_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">paths_</span></code><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.paths_" title="Permalink to this definition">¶</a></dt>
 <dd><p>A dictionary of prediction paths per label</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -236,7 +236,7 @@ The default setting is to evaluate all counterfactual samples.</p></li>
 <div class="graphviz"><img src="../_images/inheritance-99736676ed83472255b16ec85b108fe1461f02bf.png" alt="Inheritance diagram of ShapeletForestCounterfactual" class="inheritance graphviz" /></div>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">estimator</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the counterfactual to a given estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -253,7 +253,7 @@ The default setting is to evaluate all counterfactual samples.</p></li>
 
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.transform">
-<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th label in y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -277,11 +277,11 @@ the value of counterfactuals[i] is undefined.</p></li>
 
 <dl class="py class">
 <dt id="wildboar.explain.counterfactual.KNeighborsCounterfactual">
-<em class="property">class </em><code class="sig-prename descclassname">wildboar.explain.counterfactual.</code><code class="sig-name descname">KNeighborsCounterfactual</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></code><code class="sig-name descname"><span class="pre">KNeighborsCounterfactual</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit a counterfactual explainer to a k-nearest neighbors classifier</p>
 <dl class="py attribute">
 <dt id="wildboar.explain.counterfactual.KNeighborsCounterfactual.explainer_">
-<code class="sig-name descname">explainer_</code><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.explainer_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">explainer_</span></code><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.explainer_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The explainer for each label</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -300,7 +300,7 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
 <div class="graphviz"><img src="../_images/inheritance-3f5aa4960a96f487abdd591436a35439bc7cf4d2.png" alt="Inheritance diagram of KNeighborsCounterfactual" class="inheritance graphviz" /></div>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.KNeighborsCounterfactual.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">estimator</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the counterfactual to a given estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -317,7 +317,7 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
 
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.KNeighborsCounterfactual.transform">
-<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th label in y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -341,11 +341,11 @@ the value of counterfactuals[i] is undefined.</p></li>
 
 <dl class="py class">
 <dt id="wildboar.explain.counterfactual.PrototypeCounterfactual">
-<em class="property">class </em><code class="sig-prename descclassname">wildboar.explain.counterfactual.</code><code class="sig-name descname">PrototypeCounterfactual</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">background_x</span></em>, <em class="sig-param"><span class="n">background_y</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">metric</span><span class="o">=</span><span class="default_value">'euclidean'</span></em>, <em class="sig-param"><span class="n">metric_params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">step_size</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">n_prototypes</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'sample'</span></em>, <em class="sig-param"><span class="n">method_params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></code><code class="sig-name descname"><span class="pre">PrototypeCounterfactual</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">background_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_prototypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model agnostic approach for constructing counterfactual explanations</p>
 <dl class="py attribute">
 <dt id="wildboar.explain.counterfactual.PrototypeCounterfactual.estimator_">
-<code class="sig-name descname">estimator_</code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.estimator_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">estimator_</span></code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.estimator_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The estimator for which counterfactuals are computed</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -356,7 +356,7 @@ the value of counterfactuals[i] is undefined.</p></li>
 
 <dl class="py attribute">
 <dt id="wildboar.explain.counterfactual.PrototypeCounterfactual.classes_">
-<code class="sig-name descname">classes_</code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.classes_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">classes_</span></code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.classes_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The classes</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -367,7 +367,7 @@ the value of counterfactuals[i] is undefined.</p></li>
 
 <dl class="py attribute">
 <dt id="wildboar.explain.counterfactual.PrototypeCounterfactual.partitions_">
-<code class="sig-name descname">partitions_</code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.partitions_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">partitions_</span></code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.partitions_" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary of classes and PrototypeSampler</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -378,7 +378,7 @@ the value of counterfactuals[i] is undefined.</p></li>
 
 <dl class="py attribute">
 <dt id="wildboar.explain.counterfactual.PrototypeCounterfactual.target_">
-<code class="sig-name descname">target_</code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.target_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">target_</span></code><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.target_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The target evaluator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -448,7 +448,7 @@ closest n prototypes</p></li>
 <div class="graphviz"><img src="../_images/inheritance-ac86ec77b5b8345279de106381672371ea01840d.png" alt="Inheritance diagram of PrototypeCounterfactual" class="inheritance graphviz" /></div>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.PrototypeCounterfactual.fit">
-<code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">estimator</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the counterfactual to a given estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -465,7 +465,7 @@ closest n prototypes</p></li>
 
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.PrototypeCounterfactual.transform">
-<code class="sig-name descname">transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th label in y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -516,7 +516,7 @@ the value of counterfactuals[i] is undefined.</p></li>
       &copy;2020, Isak Samsten.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.4.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
