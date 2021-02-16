@@ -5,6 +5,8 @@
 ### Fixed
 
 * Fix bug in `filter` of `datasets.load_datasets`
+* Fix the number of returned outliers when setting `n_outliers` to `None` for
+  `KMeansLabeler`
 
 ## [v1.0.7]
 

@@ -150,7 +150,7 @@ class KMeansLabeler(OutlierLabeler):
     def transform(self, x, y=None):
         random_state = check_random_state(self.random_state)
         if self.n_outliers is None:
-            n_outliers = self.n_outliers or math.ceil(x.shape[0] * 0.05)
+            n_outliers = x.shape[0]
         elif isinstance(self.n_outliers, float):
             if not 0.0 < self.n_outliers <= 1.0:
                 raise ValueError(
