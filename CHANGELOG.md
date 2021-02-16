@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+
+* Fix bug in `filter` of `datasets.load_datasets`
+
 ## [v1.0.7]
 
 ### Added

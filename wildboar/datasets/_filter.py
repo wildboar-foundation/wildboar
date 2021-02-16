@@ -168,5 +168,5 @@ _OPERATORS = {
     "<=": lambda x, y: __casting_op(operator.le, x, y),
     ">=": lambda x, y: __casting_op(operator.ge, x, y),
     "<": lambda x, y: __casting_op(operator.lt, x, y),
-    ">": lambda x, y: __casting_op(operator.ge, x, y),
+    ">": lambda x, y: __casting_op(operator.gt, x, y),
 }
