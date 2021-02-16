@@ -15,4 +15,4 @@
 #
 # Authors: Isak Samsten
 
-__version__ = "1.0.7"
+__version__ = "1.0.7dev"
