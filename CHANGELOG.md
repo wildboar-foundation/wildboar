@@ -4,7 +4,7 @@
 
 ### Added
 
-* `filter` keyword-argument to `datasets.load_datasets`
+* Add `filter` keyword-argument to `datasets.load_datasets`
 
 ## [v1.0.6]
 
