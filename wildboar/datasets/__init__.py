@@ -30,6 +30,8 @@ from ._repository import (
     JSONRepository,
 )
 
+from ._filter import make_filter
+
 __all__ = [
     "Repository",
     "JSONRepository",
@@ -54,49 +56,6 @@ __all__ = [
 
 _CACHE_DIR = None
 _REPOSITORIES = RepositoryCollection()
-
-__CMP_PATTERN = re.compile("^(<|<=|>=|>|=)\s*(\d+)$")
-
-
-def __make_cmp(op):
-    def f(v):
-        match = re.match(__CMP_PATTERN, op)
-        if match:
-            cmp = match.group(1)
-            value = match.group(2)
-            if cmp == "<":
-                return v < int(value)
-            elif cmp == "<=":
-                return v <= int(value)
-            elif cmp == ">":
-                return v > int(value)
-            elif cmp == ">=":
-                return v >= int(value)
-            elif cmp == "=":
-                return v == int(value)
-        else:
-            raise ValueError("invalid comparision (%s)" % op)
-
-    return f
-
-
-def _make_filter(filter):
-    def f(dataset, x, y):
-        for key, value in filter.items():
-            if key == "dataset":
-                if not re.match(value, dataset):
-                    return False
-            elif key == "n_samples":
-                if not __make_cmp(value)(x.shape[0]):
-                    return False
-            elif key == "n_timestep":
-                if not __make_cmp(value)(x.shape[-1]):
-                    return False
-            else:
-                raise ValueError("invalid filter (%s)" % filter)
-        return True
-
-    return f
 
 
 def _split_repo_bundle(repo_bundle_name):
@@ -290,7 +249,7 @@ def load_datasets(
             if filter(dataset, x, y):
                 yield dataset, (x, y)
         else:
-            if _make_filter(filter)(dataset, x, y):
+            if make_filter(filter)(dataset, x, y):
                 yield dataset, (x, y)
 
 
