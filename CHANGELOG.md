@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [v1.0.7]
+
 ### Added
 
 * Add `filter` keyword-argument to `datasets.load_datasets`
