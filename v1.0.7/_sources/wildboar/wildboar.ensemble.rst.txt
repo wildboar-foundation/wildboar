@@ -1,0 +1,75 @@
+=====================
+``wildboar.ensemble``
+=====================
+
+.. automodule:: wildboar.ensemble
+
+   .. contents::
+      :local:
+
+.. currentmodule:: wildboar.ensemble
+
+
+Classes
+=======
+
+- :py:class:`ShapeletForestClassifier`:
+  An ensemble of random shapelet tree classifiers.
+
+- :py:class:`ExtraShapeletTreesClassifier`:
+  An ensemble of extremely random shapelet trees for time series regression.
+
+- :py:class:`ShapeletForestRegressor`:
+  An ensemble of random shapelet regression trees.
+
+- :py:class:`ExtraShapeletTreesRegressor`:
+  An ensemble of extremely random shapelet trees for time series regression.
+
+- :py:class:`IsolationShapeletForest`:
+  A isolation shapelet forest.
+
+- :py:class:`ShapeletForestEmbedding`:
+  An ensemble of random shapelet trees
+
+
+.. autoclass:: ShapeletForestClassifier
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ShapeletForestClassifier
+      :parts: 1
+
+.. autoclass:: ExtraShapeletTreesClassifier
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ExtraShapeletTreesClassifier
+      :parts: 1
+
+.. autoclass:: ShapeletForestRegressor
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ShapeletForestRegressor
+      :parts: 1
+
+.. autoclass:: ExtraShapeletTreesRegressor
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ExtraShapeletTreesRegressor
+      :parts: 1
+
+.. autoclass:: IsolationShapeletForest
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: IsolationShapeletForest
+      :parts: 1
+
+.. autoclass:: ShapeletForestEmbedding
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: ShapeletForestEmbedding
+      :parts: 1

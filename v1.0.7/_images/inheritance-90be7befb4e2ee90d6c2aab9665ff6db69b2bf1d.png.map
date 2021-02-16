@@ -1,0 +1,9 @@
+<map id="inheritancecd3e0eb099" name="inheritancecd3e0eb099">
+<area shape="rect" id="node1" title="A Bagging classifier." alt="" coords="347,35,433,51"/>
+<area shape="rect" id="node7" title="Base class for shapelet forest classifiers." alt="" coords="469,19,603,36"/>
+<area shape="rect" id="node2" title="Mixin class for all classifiers in scikit&#45;learn." alt="" coords="236,19,310,35"/>
+<area shape="rect" id="node3" title="Base class for Bagging meta&#45;estimator." alt="" coords="239,50,307,66"/>
+<area shape="rect" id="node4" title="Base class for all ensemble classes." alt="" coords="130,50,206,66"/>
+<area shape="rect" id="node6" title="Base class for all estimators in scikit&#45;learn." alt="" coords="14,65,89,81"/>
+<area shape="rect" id="node9" title="An ensemble of extremely random shapelet trees for time series regression." alt="" coords="634,19,765,36"/>
+</map>
