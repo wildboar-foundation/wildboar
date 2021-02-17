@@ -22,7 +22,13 @@ from sklearn import model_selection
 from sklearn.utils import check_random_state
 from sklearn.utils._random import sample_without_replacement
 
-__all__ = ["train_test_split", "threshold_score"]
+from wildboar.model_selection._cv import RepeatedOutlierSplit
+
+__all__ = [
+    "train_test_split",
+    "threshold_score",
+    "RepeatedOutlierSplit",
+]
 
 
 def train_test_split(

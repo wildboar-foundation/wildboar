@@ -2,10 +2,15 @@
 
 ## [Unreleased]
 
+### Added
+
+* Add `model_selection.outlier.RepeatedOutlierSplit` to cross-validate
+  outlier detection algorithms
+
 ### Fixed
 
 * Fix bug in `filter` of `datasets.load_datasets`
-* Fix the number of returned outliers when setting `n_outliers` to `None` for
+* Fix the number of outliers when setting `n_outliers` to `None` for
   `KMeansLabeler`
 * Fix the number of outliers when setting `n_outliers` to `float` for
   `MinorityLabeler`
