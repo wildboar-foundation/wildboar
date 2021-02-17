@@ -279,7 +279,10 @@ class MajorityLabeler(OutlierLabeler):
                 raise ValueError(
                     "n_outliers must be in (0, 1), got %r" % self.n_outliers
                 )
-            n_outliers = math.ceil(self.n_outliers * inlier_index.shape[0])
+            n_outliers = min(
+                outlier_indices.shape[0],
+                math.ceil(self.n_outliers * inlier_index.shape[0]),
+            )
         else:
             raise ValueError("n_outliers (%r) is not supported" % self.n_outliers)
 
@@ -324,7 +327,9 @@ class MinorityLabeler(OutlierLabeler):
                 raise ValueError(
                     "n_outliers must be in (0, 1], got %r" % self.n_outliers
                 )
-            n_outliers = math.ceil(self.n_outliers * inliers.shape[0])
+            n_outliers = min(
+                outliers.shape[0], math.ceil(self.n_outliers * inliers.shape[0])
+            )
         else:
             raise ValueError("n_outliers (%r) is not supported" % self.n_outliers)
 
@@ -431,7 +436,7 @@ class EmmottLabeler(OutlierLabeler):
         difficulty="simplest",
         scale=None,
         variation="tight",
-        random_state=None
+        random_state=None,
     ):
         """Construct a new emmott labeler for synthetic outlier datasets
 
@@ -593,8 +598,10 @@ class EmmottLabeler(OutlierLabeler):
                 raise ValueError(
                     "n_outliers must be in (0, 1], got %r" % self.n_outliers
                 )
-            n_outliers = math.ceil(self.n_outliers * inlier_indices[0].shape[0])
-            n_outliers = min(y_outliers.shape[0], n_outliers)
+            n_outliers = min(
+                y_outliers.shape[0],
+                math.ceil(self.n_outliers * inlier_indices[0].shape[0]),
+            )
         elif isinstance(self.n_outliers, int):
             if 0 < self.n_outliers <= y_outliers.shape[0]:
                 raise ValueError(
