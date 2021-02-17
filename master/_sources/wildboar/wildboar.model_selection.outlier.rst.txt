@@ -23,3 +23,18 @@ Functions
 .. autofunction:: train_test_split
 
 .. autofunction:: threshold_score
+
+
+Classes
+=======
+
+- :py:class:`RepeatedOutlierSplit`:
+  Repeated random outlier cross-validator
+
+
+.. autoclass:: RepeatedOutlierSplit
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: RepeatedOutlierSplit
+      :parts: 1
