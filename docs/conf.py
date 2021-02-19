@@ -14,7 +14,12 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../src"))
-from wildboar import __version__
+sys.path.insert(0, os.path.abspath(".."))
+
+try:
+    from wildboar import __version__
+except:
+    __version__ = "latest"
 
 # -- Project information -----------------------------------------------------
 
@@ -52,7 +57,7 @@ autoclass_content = "both"
 autodoc_default_flags = [
     "members",
     "inherited-members",
-    "show-inheritance",
+    # "show-inheritance",
 ]
 
 autoapi_modules = {"wildboar": {"prune": True}}
@@ -85,3 +90,6 @@ html_sidebars = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+smv_tag_whitelist = r"^v[1|2|3].*"  # Include tags like "v2.1"
+smv_branch_whitelist = r"master"
