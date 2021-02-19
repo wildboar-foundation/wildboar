@@ -17,12 +17,12 @@ BUILD_TYPE = os.getenv("WILDBOAR_BUILD") or "default"
 
 BUILD_ARGS = {
     "default": {
-        "compile_args": ["-O2"],
-        "link_args": [],
+        "extra_compile_args": ["-O2"],
+        "extra_link_args": [],
         "libraries": [],
     },
     "optimized": {
-        "compile_args": [
+        "extra_compile_args": [
             "-O2",
             "-march=native",
             "-msse",
@@ -30,7 +30,7 @@ BUILD_ARGS = {
             "-mfma",
             "-mfpmath=sse",
         ],
-        "link_args": [],
+        "extra_link_args": [],
         "libraries": [],
     },
 }
