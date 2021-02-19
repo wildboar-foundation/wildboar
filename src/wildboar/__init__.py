@@ -15,4 +15,6 @@
 #
 # Authors: Isak Samsten
 
-__version__ = "1.0.7dev"
+from .version import version as __version__
+
+# __version__ = "1.0.7dev"

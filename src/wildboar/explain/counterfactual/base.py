@@ -19,6 +19,8 @@ import abc
 
 from sklearn.base import BaseEstimator
 
+__all__ = ["BaseCounterfactual"]
+
 
 class BaseCounterfactual(BaseEstimator):
     """Base estimator for counterfactual explanations"""

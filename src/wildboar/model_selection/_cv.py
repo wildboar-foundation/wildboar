@@ -105,6 +105,22 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         return n_splits
 
     def split(self, x, y, groups=None):
+        """Return training and test indicies
+
+        Parameters
+        ----------
+        x : object
+            Always ignored, exists for compatibility.
+        y : object
+            The labels
+        groups : object, optional
+            Always ignored, exists for compatibility.
+
+        Yields
+        -------
+        train_idx, test_idx : ndarray
+            The training and test indicies
+        """
         y = check_array(y, ensure_2d=False)
         random_state = check_random_state(self.random_state)
         outlier_index = (y == -1).nonzero()[0]
