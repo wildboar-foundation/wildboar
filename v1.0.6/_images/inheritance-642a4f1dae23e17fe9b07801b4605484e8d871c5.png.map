@@ -1,0 +1,7 @@
+<map id="inheritance50164f3b0b" name="inheritance50164f3b0b">
+<area shape="rect" id="node1" title="Base class for Bagging meta&#45;estimator." alt="" coords="396,104,503,129"/>
+<area shape="rect" id="node5" title="A isolation shapelet forest." alt="" coords="575,55,749,80"/>
+<area shape="rect" id="node2" title="Base class for all ensemble classes." alt="" coords="205,104,324,129"/>
+<area shape="rect" id="node4" title="Base class for all estimators in scikit&#45;learn." alt="" coords="23,128,140,153"/>
+<area shape="rect" id="node7" title="Mixin class for all outlier detection estimators in scikit&#45;learn." alt="" coords="399,55,500,80"/>
+</map>

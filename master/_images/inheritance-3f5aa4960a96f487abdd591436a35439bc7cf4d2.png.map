@@ -1,5 +1,0 @@
-<map id="inheritance80071963fe" name="inheritance80071963fe">
-<area shape="rect" id="node1" title="Base estimator for counterfactual explanations" alt="" coords="171,5,321,31"/>
-<area shape="rect" id="node3" title="Fit a counterfactual explainer to a k&#45;nearest neighbors classifier" alt="" coords="369,5,563,31"/>
-<area shape="rect" id="node2" title="Base class for all estimators in scikit&#45;learn." alt="" coords="5,5,123,31"/>
-</map>

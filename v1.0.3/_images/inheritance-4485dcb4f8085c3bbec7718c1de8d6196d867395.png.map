@@ -1,0 +1,4 @@
+<map id="inheritance8044ce8d09" name="inheritance8044ce8d09">
+<area shape="rect" id="node1" href="#wildboar.datasets.outlier.KMeansLabeler" target="_top" title="KMeans labeler that assign an outlier label to the most deviating cluster" alt="" coords="168,5,289,31"/>
+<area shape="rect" id="node2" href="#wildboar.datasets.outlier.OutlierLabeler" target="_top" title="Base&#45;class for outlier labelers" alt="" coords="5,5,120,31"/>
+</map>

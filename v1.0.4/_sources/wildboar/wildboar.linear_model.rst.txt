@@ -1,0 +1,25 @@
+=========================
+``wildboar.linear_model``
+=========================
+
+.. automodule:: wildboar.linear_model
+
+   .. contents::
+      :local:
+
+.. currentmodule:: wildboar.linear_model
+
+
+Classes
+=======
+
+- :py:class:`KernelLogisticRegression`:
+  A simple kernel logistic implementation using a Nystroem kernel approximation
+
+
+.. autoclass:: KernelLogisticRegression
+   :members:
+
+   .. rubric:: Inheritance
+   .. inheritance-diagram:: KernelLogisticRegression
+      :parts: 1

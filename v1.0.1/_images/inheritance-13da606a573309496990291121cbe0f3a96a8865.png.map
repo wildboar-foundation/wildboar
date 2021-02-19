@@ -1,0 +1,4 @@
+<map id="inheritance0e8e0a4422" name="inheritance0e8e0a4422">
+<area shape="rect" id="node1" href="#wildboar.datasets.outlier.DensityLabeler" target="_top" title="Density based clustering labeler" alt="" coords="168,5,288,31"/>
+<area shape="rect" id="node2" href="#wildboar.datasets.outlier.OutlierLabeler" target="_top" title="Base&#45;class for outlier labelers" alt="" coords="5,5,120,31"/>
+</map>

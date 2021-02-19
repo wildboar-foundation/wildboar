@@ -1,0 +1,24 @@
+============
+``wildboar``
+============
+
+.. automodule:: wildboar
+
+   .. contents::
+      :local:
+
+
+Modules
+==========
+
+.. toctree::
+
+   wildboar.datasets
+   wildboar.distance
+   wildboar.ensemble
+   wildboar.explain
+   wildboar.linear_model
+   wildboar.model_selection
+   wildboar.tree
+
+.. currentmodule:: wildboar
