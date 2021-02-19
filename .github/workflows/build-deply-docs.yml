@@ -7,6 +7,8 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow    
 
       - uses: actions/setup-python@v2
         name: Install Python
@@ -16,18 +18,20 @@ jobs:
       - name: Install requirements
         run: |
           sudo apt-get install graphviz
+          python -m pip install build
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install -r docs/requirements.txt
 
       - name: Build Cython extensions inplace
-        run: python setup.py build_ext --inplace
+        run: |
+          python -m build --sdist .
+          python setup.py build_ext --inplace
 
       - name: Build docmentation
         run: |
           mkdir html
           touch html/.nojekyll
-          git fetch --all
           python -I -m sphinx_multiversion docs html
           cp docs/assets/index.html html/index.html
 
