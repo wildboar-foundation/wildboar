@@ -1,0 +1,507 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="prev" title="wildboar.model_selection.outlier" href="../model_selection/outlier/index.html" />
+
+    <meta name="generator" content="sphinx-3.5.1, furo 2021.02.21.beta25"/>
+        <title>wildboar.tree - Wildboar 1.0.8 documentation</title>
+      <link rel="stylesheet" href="../../_static/styles/furo.css?digest=33d2fc4f3f180ec1ffc6524e273e21d7d58cbe49">
+    <link rel="stylesheet" href="../../_static/pygments.css">
+    <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../_static/pygments_dark.css">
+    
+
+
+<style>
+  :root {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+
+  /* For allowing end-user-specific overrides */
+  .override-light {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  .override-dark {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+</style><link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" href="../../_static/styles/furo-extensions.css?digest=d391b54134226e4196576da3bdb6dddb7e05ba2b"></head>
+  <body dir="">
+    
+
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z"/>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Wildboar 1.0.8 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
+    
+    
+    <span class="sidebar-brand-text">Wildboar
+        <small>1.0.X</small></span>
+    
+</a><form class="sidebar-search-container" method="get" action="../../search.html">
+  <input class="sidebar-search" placeholder=Search name="q">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installing wildboar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">wildboar tutorial</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../guide.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/datasets.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/supervised.html">Supervised learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/unsupervised.html">Unsupervised learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../guide/explain.html">Explainability</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/supervised.html">Supervised</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/unsupervised.html">Unsupervised</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/counterfactuals.html">Counterfactuals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/embeddings.html">Embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label for="toctree-checkbox-4"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label for="toctree-checkbox-5"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label for="toctree-checkbox-6"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label for="toctree-checkbox-7"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../explain/counterfactual/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label for="toctree-checkbox-8"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+<div class="rst-versions">
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            <dd><a href="../../../master/index.html">master</a></dd>
+            <dd> 1.0.8 </dd>
+        </dl>
+    </div>
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <main class="main">
+    <div class="content">
+      <article role="main">
+        <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        </label>
+        <div class="section" id="module-wildboar.tree">
+<span id="wildboar-tree"></span><h1><a class="reference internal" href="#module-wildboar.tree" title="wildboar.tree"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><a class="headerlink" href="#module-wildboar.tree" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<div class="table-wrapper"><table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%"/>
+<col style="width: 90%"/>
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier" title="wildboar.tree.ShapeletTreeClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletTreeClassifier</span></code></a></p></td>
+<td><p>A shapelet tree classifier.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree.ShapeletTreeRegressor" title="wildboar.tree.ShapeletTreeRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletTreeRegressor</span></code></a></p></td>
+<td><p>A shapelet tree regressor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree.ExtraShapeletTreeClassifier" title="wildboar.tree.ExtraShapeletTreeClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreeClassifier</span></code></a></p></td>
+<td><p>An extra shapelet tree classifier.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree.ExtraShapeletTreeRegressor" title="wildboar.tree.ExtraShapeletTreeRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreeRegressor</span></code></a></p></td>
+<td><p>An extra shapelet tree regressor.</p></td>
+</tr>
+</tbody>
+</table></div>
+<dl class="py class">
+<dt id="wildboar.tree.ShapeletTreeClassifier">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree.</span></code><code class="sig-name descname"><span class="pre">ShapeletTreeClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ShapeletTreeClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code>, <a class="reference internal" href="_tree/index.html#wildboar.tree._tree.BaseShapeletTree" title="wildboar.tree._tree.BaseShapeletTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.BaseShapeletTree</span></code></a></p>
+<p>A shapelet tree classifier.</p>
+<dl class="py attribute">
+<dt id="wildboar.tree.ShapeletTreeClassifier.tree_">
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree.ShapeletTreeClassifier.tree_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tree data structure used internally</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tree</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt id="wildboar.tree.ShapeletTreeClassifier.classes_">
+<code class="sig-name descname"><span class="pre">classes_</span></code><a class="headerlink" href="#wildboar.tree.ShapeletTreeClassifier.classes_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of shape (n_classes,)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt id="wildboar.tree.ShapeletTreeClassifier.n_classes_">
+<code class="sig-name descname"><span class="pre">n_classes_</span></code><a class="headerlink" href="#wildboar.tree.ShapeletTreeClassifier.n_classes_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of class labels</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.tree.ShapeletTreeRegressor" title="wildboar.tree.ShapeletTreeRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletTreeRegressor</span></code></a></dt><dd><p>A shapelet tree regressor.</p>
+</dd>
+<dt><a class="reference internal" href="#wildboar.tree.ExtraShapeletTreeClassifier" title="wildboar.tree.ExtraShapeletTreeClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreeClassifier</span></code></a></dt><dd><p>An extra random shapelet tree classifier.</p>
+</dd>
+</dl>
+</div>
+<dl class="py method">
+<dt id="wildboar.tree.ShapeletTreeClassifier.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ShapeletTreeClassifier.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a shapelet tree regressor from the training set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>)</em>) – The training time series.</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_classes</em><em>)</em>) – The target values (class labels) as integers</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – If <cite>None</cite>, then samples are equally weighted. Splits that would create child
+nodes with net zero or negative weight are ignored while searching for a split
+in each node. Splits are also ignored if they would result in any single class
+carrying a negative weight in either child node.</p></li>
+<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="wildboar.tree.ShapeletTreeClassifier.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ShapeletTreeClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the regression of the input samples x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>]</em><em>)</em>) – The input time series</p></li>
+<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="wildboar.tree.ShapeletTreeClassifier.predict_proba">
+<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ShapeletTreeClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict class probabilities of the input samples X.  The predicted
+class probability is the fraction of samples of the same class
+in a leaf.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>]</em><em>)</em>) – The input time series</p></li>
+<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>proba</strong> – The class probabilities of the input samples. The order of the classes corresponds to
+that in the attribute <cite>classes_</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples, n_classes)</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="wildboar.tree.ShapeletTreeRegressor">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree.</span></code><code class="sig-name descname"><span class="pre">ShapeletTreeRegressor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ShapeletTreeRegressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.RegressorMixin</span></code>, <a class="reference internal" href="_tree/index.html#wildboar.tree._tree.BaseShapeletTree" title="wildboar.tree._tree.BaseShapeletTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.BaseShapeletTree</span></code></a></p>
+<p>A shapelet tree regressor.</p>
+<dl class="py attribute">
+<dt id="wildboar.tree.ShapeletTreeRegressor.tree_">
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree.ShapeletTreeRegressor.tree_" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tree</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="wildboar.tree.ShapeletTreeRegressor.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ShapeletTreeRegressor.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a shapelet tree regressor from the training set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>)</em>) – The training time series.</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values as floating point values</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – If <cite>None</cite>, then samples are equally weighted. Splits that would create child
+nodes with net zero or negative weight are ignored while searching for a split
+in each node. Splits are also ignored if they would result in any single class
+carrying a negative weight in either child node.</p></li>
+<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="wildboar.tree.ShapeletTreeRegressor.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ShapeletTreeRegressor.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the regression of the input samples x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>]</em><em>)</em>) – The input time series</p></li>
+<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="wildboar.tree.ExtraShapeletTreeClassifier">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree.</span></code><code class="sig-name descname"><span class="pre">ExtraShapeletTreeClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ExtraShapeletTreeClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="_tree/index.html#wildboar.tree._tree.ShapeletTreeClassifier" title="wildboar.tree._tree.ShapeletTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.ShapeletTreeClassifier</span></code></a></p>
+<p>An extra shapelet tree classifier.</p>
+<p>Extra shapelet trees are constructed by sampling a distance threshold
+uniformly in the range [min(dist), max(dist)].</p>
+<dl class="py attribute">
+<dt id="wildboar.tree.ExtraShapeletTreeClassifier.tree_">
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree.ExtraShapeletTreeClassifier.tree_" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tree</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+<dl class="py class">
+<dt id="wildboar.tree.ExtraShapeletTreeRegressor">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree.</span></code><code class="sig-name descname"><span class="pre">ExtraShapeletTreeRegressor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree.ExtraShapeletTreeRegressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="_tree/index.html#wildboar.tree._tree.ShapeletTreeRegressor" title="wildboar.tree._tree.ShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.ShapeletTreeRegressor</span></code></a></p>
+<p>An extra shapelet tree regressor.</p>
+<p>Extra shapelet trees are constructed by sampling a distance threshold
+uniformly in the range [min(dist), max(dist)].</p>
+<dl class="py attribute">
+<dt id="wildboar.tree.ExtraShapeletTreeRegressor.tree_">
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree.ExtraShapeletTreeRegressor.tree_" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>Tree</p>
+</dd>
+</dl>
+</dd></dl>
+</dd></dl>
+</div>
+</div>
+</div>
+
+      </article>
+      <footer>
+        
+        <div class="related-pages">
+          
+          <a class="prev-page" href="../model_selection/outlier/index.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></div>
+                
+              </div>
+            </a>
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2020, Isak Samsten
+            |
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+              and
+              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            |
+            <a class="muted-link" href="../../_sources/wildboar/tree/index.rst.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><ul>
+<li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier">ShapeletTreeClassifier</a><ul>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier.tree_">tree_</a></li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier.classes_">classes_</a></li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier.n_classes_">n_classes_</a></li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier.predict">predict</a></li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeClassifier.predict_proba">predict_proba</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeRegressor">ShapeletTreeRegressor</a><ul>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeRegressor.tree_">tree_</a></li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeRegressor.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.tree.ShapeletTreeRegressor.predict">predict</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.tree.ExtraShapeletTreeClassifier">ExtraShapeletTreeClassifier</a><ul>
+<li><a class="reference internal" href="#wildboar.tree.ExtraShapeletTreeClassifier.tree_">tree_</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.tree.ExtraShapeletTreeRegressor">ExtraShapeletTreeRegressor</a><ul>
+<li><a class="reference internal" href="#wildboar.tree.ExtraShapeletTreeRegressor.tree_">tree_</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </main>
+</div>
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/scripts/main.js?digest=e931d09b2a40c1bb82b542effe772014573baf67"></script></body>
+</html>

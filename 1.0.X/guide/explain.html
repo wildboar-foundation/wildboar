@@ -1,0 +1,354 @@
+<!doctype html>
+<html class="no-js">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Examples" href="../examples.html" /><link rel="prev" title="Unsupervised learning" href="unsupervised.html" />
+
+    <meta name="generator" content="sphinx-3.5.1, furo 2021.02.21.beta25"/>
+        <title>Explainability - Wildboar 1.0.8 documentation</title>
+      <link rel="stylesheet" href="../_static/styles/furo.css?digest=33d2fc4f3f180ec1ffc6524e273e21d7d58cbe49">
+    <link rel="stylesheet" href="../_static/pygments.css">
+    <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../_static/pygments_dark.css">
+    
+
+
+<style>
+  :root {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+  }
+
+  /* For allowing end-user-specific overrides */
+  .override-light {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  .override-dark {
+    --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+  }
+</style><link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" href="../_static/styles/furo-extensions.css?digest=d391b54134226e4196576da3bdb6dddb7e05ba2b"></head>
+  <body dir="">
+    
+
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke-width="1.5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z"/>
+      <line x1="4" y1="6" x2="20" y2="6" />
+      <line x1="10" y1="12" x2="20" y2="12" />
+      <line x1="6" y1="18" x2="20" y2="18" />
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+      class="feather feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Wildboar 1.0.8 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../index.html">
+    
+    
+    <span class="sidebar-brand-text">Wildboar
+        <small>1.0.X</small></span>
+    
+</a><form class="sidebar-search-container" method="get" action="../search.html">
+  <input class="sidebar-search" placeholder=Search name="q">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing wildboar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">wildboar tutorial</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../guide.html">User guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label for="toctree-checkbox-1"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="supervised.html">Supervised learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unsupervised.html">Unsupervised learning</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Explainability</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/supervised.html">Supervised</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/unsupervised.html">Unsupervised</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/counterfactuals.html">Counterfactuals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/embeddings.html">Embeddings</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../wildboar/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label for="toctree-checkbox-3"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../wildboar/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label for="toctree-checkbox-4"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../wildboar/datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../wildboar/distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label for="toctree-checkbox-5"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../wildboar/distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../wildboar/ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../wildboar/explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label for="toctree-checkbox-6"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label for="toctree-checkbox-7"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../wildboar/explain/counterfactual/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../wildboar/linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../wildboar/model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label for="toctree-checkbox-8"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../wildboar/model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../wildboar/tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+<div class="rst-versions">
+
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Versions</dt>
+            <dd><a href="../../master/guide/explain.html">master</a></dd>
+            <dd> 1.0.8 </dd>
+        </dl>
+    </div>
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <main class="main">
+    <div class="content">
+      <article role="main">
+        <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+        </label>
+        <div class="section" id="explainability">
+<h1>Explainability<a class="headerlink" href="#explainability" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="counterfactual-explanations">
+<h2>Counterfactual explanations<a class="headerlink" href="#counterfactual-explanations" title="Permalink to this headline">¶</a></h2>
+<p>wildboar can explain predictions of nearest neighbors classifiers and shapelet forest classifiers
+using counterfactual samples. In this scenario, counterfactuals are samples that
+are transformed such that the labeling of the sample changes. For instance,
+we might want to explain what changes are required to transforms a sample
+labeled as <cite>abnormal</cite> to <cite>normal</cite>. In this scenario, the normal sample would
+be the counterfactual sample.</p>
+<p>In wildboar, counterfactual explainers are in the module <code class="docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code>.
+The easiest way to generate counterfactuals is to use the function <code class="docutils literal notranslate"><span class="pre">counterfactuals</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactual</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently, the classifiers that supports counterfactual explanations
+are <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">KNearestNeighborsClassifier</span></code>
+from wildboar and scikit-learn respectively. Model agnostic counterfactual
+explanations can be provided for other estimators.</p>
+</div>
+<p>To have more control over the generation of counterfactual samples, the classes
+<code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual</span></code> and <code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactuals</span></code> can be used.
+They implement the interface of <code class="docutils literal notranslate"><span class="pre">BaseCounterfactuals</span></code> which exposes two
+methods <code class="docutils literal notranslate"><span class="pre">fit(estimator)</span></code> and <code class="docutils literal notranslate"><span class="pre">transform(x,</span> <span class="pre">y)</span></code>, where the former fits
+a counterfactual explainer to an estimator and the latter transform the i:th sample
+of <cite>x</cite> to a sample labeled as the i:th label in <cite>y</cite>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">KNeighborsCounterfactuals</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">'euclidean'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">KNeighborsCounterfactuals</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counterfactual</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_desired</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">counterfactual</span><span class="p">[</span><span class="n">success</span><span class="p">]</span> <span class="c1"># only successful transformations</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactuals</span></code> only supports <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code> fit
+with the Euclidean distance.</p>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>In the following example, we explain the a nearest neighbors classifier and
+a shapelet forest classifier for the datasets <cite>TwoLeadECG</cite> and explaining samples
+classified as <cite>2.0</cite> if they instead where classified as <cite>1.0</cite> (in the legend
+denoted as <cite>abnormal</cite> and <cite>normal</cite> respectively).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
+<span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
+<span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactuals</span>
+
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="c1"># Change estimator to `KNeighborsClassifier(metric='euclidean')`</span>
+<span class="c1"># to generate k-nearest counterfactuals instead</span>
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">)</span>
+
+<span class="c1"># fit the estimator to the training data</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># only consider samples predicted as 2</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">==</span> <span class="mf">2.0</span><span class="p">]</span>
+
+<span class="c1"># generate counterfactuals for the samples classified as 2, instead labeled as 1</span>
+<span class="n">x_counterfactuals</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">counterfactuals</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="c1"># only consider the successful counterfactuals</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">success</span><span class="p">]</span>
+<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">success</span><span class="p">]</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="n">success</span><span class="p">])[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+<p>Plotting the first two counterfactual samples with the lowest score yields the following
+figure for the <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code>:</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/counterfactuals_nn.png"><img alt="../_images/counterfactuals_nn.png" src="../_images/counterfactuals_nn.png" style="width: 390.0px; height: 162.5px;"/></a>
+</div>
+<p>and for the <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code>:</p>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="../_images/counterfactuals_sf.png"><img alt="../_images/counterfactuals_sf.png" src="../_images/counterfactuals_sf.png" style="width: 390.0px; height: 162.5px;"/></a>
+</div>
+<p>We can observe that the counterfactual explainer for nearest neighbors classifier
+tend to change larger parts of the time series, while the shapelet forest counterfactuals
+tend to have fewer and smaller changes.</p>
+</div>
+</div>
+</div>
+
+      </article>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../examples.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Examples</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="unsupervised.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Unsupervised learning</div>
+                
+              </div>
+            </a>
+        </div>
+
+        <div class="related-information">
+              Copyright &#169; 2020, Isak Samsten
+            |
+            Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
+              and
+              <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
+            |
+            <a class="muted-link" href="../_sources/guide/explain.rst.txt"
+               rel="nofollow">
+              Show Source
+            </a>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Explainability</a><ul>
+<li><a class="reference internal" href="#counterfactual-explanations">Counterfactual explanations</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </main>
+</div>
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/scripts/main.js?digest=e931d09b2a40c1bb82b542effe772014573baf67"></script></body>
+</html>

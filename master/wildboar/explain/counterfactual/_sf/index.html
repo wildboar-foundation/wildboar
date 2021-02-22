@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <meta name="generator" content="sphinx-3.5.1, furo 2021.02.21.beta25"/>
-        <title>wildboar.explain.counterfactual._sf - Wildboar documentation</title>
+        <title>wildboar.explain.counterfactual._sf - Wildboar 0.1.dev1+g4c1dd7a documentation</title>
       <link rel="stylesheet" href="../../../../_static/styles/furo.css?digest=33d2fc4f3f180ec1ffc6524e273e21d7d58cbe49">
     <link rel="stylesheet" href="../../../../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../../../_static/pygments_dark.css">
@@ -37,9 +37,24 @@
   
   }
 </style><link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     <link rel="stylesheet" href="../../../../_static/styles/furo-extensions.css?digest=d391b54134226e4196576da3bdb6dddb7e05ba2b"></head>
   <body dir="">
     
+
+<div class="announcement">
+    <aside class="announcement-content">
+        
+        You're reading the documentation for a development version.
+        For the latest released version, please have a look at <a
+            href="../../../../../1.0.X/index.html">1.0.8</a>.
+        
+    </aside>
+</div>
+
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -86,7 +101,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar  documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 0.1.dev1+g4c1dd7a documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -100,7 +115,8 @@
       <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../../../index.html">
     
     
-    <span class="sidebar-brand-text">Wildboar <small>master</small></span>
+    <span class="sidebar-brand-text">Wildboar
+        <small>master</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../../search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -158,7 +174,7 @@
         <dl>
             <dt>Versions</dt>
             <dd> master </dd>
-            <dd><a href="../../../../../1.0/index.html">1.0</a></dd>
+            <dd><a href="../../../../../1.0.X/index.html">1.0.8</a></dd>
         </dl>
     </div>
 </div></div>
@@ -245,11 +261,40 @@ transformations. In 2018 IEEE International Conference on Data Mining (ICDM)</p>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.fit">
 <code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Fit the counterfactual to a given estimator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>estimator</strong> (<em>object</em>) – An estimator for which counterfactual explanations are produced</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform">
 <code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th label in y</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>)</em>) – The samples to generate counterfactual explanations for</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual sample</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>counterfactuals</strong> (<em>ndarray of same shape as x</em>) – The counterfactual for each sample. If success[i] == False, then
+the value of counterfactuals[i] is undefined.</p></li>
+<li><p><strong>success</strong> (<em>ndarray of shape (n_samples,)</em>) – Boolean vector indicating successful transformations.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates">
 <code class="sig-name descname"><span class="pre">candidates</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates" title="Permalink to this definition">¶</a></dt>
@@ -328,6 +373,7 @@ transformations. In 2018 IEEE International Conference on Data Mining (ICDM)</p>
     </aside>
   </main>
 </div>
+
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
