@@ -1,16 +1,3 @@
-{#-
-
-Hi there!
-
-You might be interested in https://pradyunsg.me/furo/customisation/sidebar/
-
-Although if you're reading this, chances are that you're either familiar
-enough with Sphinx that you know what you're doing, or landed here from that
-documentation page.
-
-Hope your day's going well. :)
-
--#}
 <a class="sidebar-brand{% if logo %} centered{% endif %}" href="{{ pathto(master_doc) }}">
     {% block brand_content %}
     {%- if logo %}
@@ -26,7 +13,7 @@ Hope your day's going well. :)
     {%- endif %}
     {% if not theme_sidebar_hide_name %}
     <span class="sidebar-brand-text">{{ project }}
-        <small>{{current_version.name}}</small></span>
+        <small>{{current_version_tag}}</small></span>
     {%- endif %}
     {% endblock brand_content %}
 </a>

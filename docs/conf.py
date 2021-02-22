@@ -93,28 +93,27 @@ def setup(app):
         gitroot = pathlib.Path(
             git.get_toplevel_path(cwd=os.path.abspath(app.confdir))
         ).resolve()
-        print("GITROOT: ", gitroot)
         gitrefs = list(git.get_all_refs(gitroot))
         latest_version_tags = {}
         for ver, metadata in config.smv_metadata.items():
-            print("TAGS FOR:", ver)
-            latest_version_tags[ver] = "dev"
+            latest_version_tags[ver] = ver
             current_version = re.match("(\d)\.(\d)(?:.X)?", ver)
             if current_version:
                 matching_tags = []
                 for gitref in gitrefs:
-                    match = re.match(SEM_VER_REGEX, gitref.name)
-                    if gitref.source == "tags" and match:
-                        if match.group(1) == current_version.group(1) and match.group(
-                            2
-                        ) == current_version.group(2):
+                    if gitref.source == "tags":
+                        match = re.match(SEM_VER_REGEX, gitref.name)
+                        if (
+                            match
+                            and match.group(1) == current_version.group(1)
+                            and match.group(2) == current_version.group(2)
+                        ):
                             matching_tags.append(gitref.name.replace("v", ""))
-                print("MATCHING TAGS:", matching_tags)
                 matching_tags.sort(key=lambda x: parse_version(x))
-                latest_version_tags[ver] = matching_tags[-1]
-                metadata["version"] = matching_tags[-1]
-            else:
-                metadata["version"] = ver
+                latest_tag = matching_tags[-1] if matching_tags else ver
+                latest_version_tags[ver] = latest_tag
+
+            metadata["version"] = latest_version_tags[ver]
 
         if config.smv_current_version != "master":
             config.version = config.smv_metadata[config.smv_current_version]["version"]
@@ -125,7 +124,7 @@ def setup(app):
         version_sorted = sorted(
             config.smv_metadata.keys(), key=lambda x: parse_version(x)
         )
-        config.smv_latest_stable = version_sorted[-1]
+        config.smv_latest_stable = version_sorted[-1] if version_sorted else "master"
 
     def set_latest_version(app, pagename, templatename, context, doctree):
         from sphinx_multiversion.sphinx import VersionInfo
@@ -133,6 +132,7 @@ def setup(app):
         versioninfo = VersionInfo(
             app, context, app.config.smv_metadata, app.config.smv_current_version
         )
+        context["current_version_tag"] = app.config.smv_current_version_tag
         context["latest_version_tags"] = app.config.smv_latest_version_tags
         context["latest_stable_version"] = versioninfo[app.config.smv_latest_stable]
 
