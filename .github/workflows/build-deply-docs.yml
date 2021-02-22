@@ -23,13 +23,16 @@ jobs:
         run: |
           sudo apt-get install graphviz
           python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
           python -m pip install -r docs/requirements.txt
+
+      - name: Install latest version
+        run: pip install .
 
       - name: Build docmentation
         run: |
           mkdir html
           touch html/.nojekyll
-          python -I -m sphinx_multiversion docs html -D "autoapi_root=\${sourcedir}" -D "autoapi_dirs=\${sourcedir}/../src" --dump-metadata
           python -I -m sphinx_multiversion docs html -D "autoapi_root=\${sourcedir}" -D "autoapi_dirs=\${sourcedir}/../src"
           cp docs/assets/index.html html/index.html
 

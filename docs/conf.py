@@ -7,10 +7,15 @@
 # -- Path setup --------------------------------------------------------------
 
 import os
+import pathlib
 import sys
 
-sys.path.insert(0, os.path.abspath(".."))
+SEM_VER_REGEX = "^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
+from pkg_resources import get_distribution, parse_version
+
+release = get_distribution("wildboar").version
+version = ".".join(release.split(".")[:3])
 # -- Project information -----------------------------------------------------
 
 project = "Wildboar"
@@ -75,6 +80,60 @@ html_sidebars = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 smv_branch_whitelist = r"^master|\d+\.\d+$"
-smv_remote_whitelist = r"^origin$"
+# smv_remote_whitelist = r"^origin$"
 smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+$"
 smv_tag_whitelist = None
+
+
+def setup(app):
+    def read_latest_version(app, config):
+        import pathlib
+        import re
+        from sphinx_multiversion import git
+
+        gitroot = pathlib.Path(
+            git.get_toplevel_path(cwd=os.path.abspath(app.confdir))
+        ).resolve()
+        gitrefs = list(git.get_all_refs(gitroot))
+        latest_version_tags = {}
+        for ver, metadata in config.smv_metadata.items():
+            latest_version_tags[ver] = "dev"
+            current_version = re.match("(\d)\.(\d)(?:.X)?", ver)
+            if current_version:
+                matching_tags = []
+                for gitref in gitrefs:
+                    match = re.match(SEM_VER_REGEX, gitref.name)
+                    if gitref.source == "tags" and match:
+                        if match.group(1) == current_version.group(1) and match.group(
+                            2
+                        ) == current_version.group(2):
+                            matching_tags.append(gitref.name.replace("v", ""))
+                matching_tags.sort(key=lambda x: parse_version(x))
+                latest_version_tags[ver] = matching_tags[-1]
+                metadata["version"] = matching_tags[-1]
+            else:
+                metadata["version"] = ver
+
+        if config.smv_current_version != "master":
+            config.version = config.smv_metadata[config.smv_current_version]["version"]
+            config.release = config.version
+
+        config.smv_latest_version_tags = latest_version_tags
+        config.smv_current_version_tag = latest_version_tags[config.smv_current_version]
+        version_sorted = sorted(
+            config.smv_metadata.keys(), key=lambda x: parse_version(x)
+        )
+        config.smv_latest_stable = version_sorted[-1]
+
+    def set_latest_version(app, pagename, templatename, context, doctree):
+        from sphinx_multiversion.sphinx import VersionInfo
+
+        versioninfo = VersionInfo(
+            app, context, app.config.smv_metadata, app.config.smv_current_version
+        )
+        context["latest_version_tags"] = app.config.smv_latest_version_tags
+        context["latest_stable_version"] = versioninfo[app.config.smv_latest_stable]
+        context["latest_develop_version"] = versioninfo["master"]
+
+    app.connect("config-inited", read_latest_version)
+    app.connect("html-page-context", set_latest_version)

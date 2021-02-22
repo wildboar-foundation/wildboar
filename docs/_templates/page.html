@@ -1,0 +1,20 @@
+{% extends "!page.html" %}
+{% block body %}
+{% if current_version and latest_stable_version and current_version !=
+latest_stable_version %}
+<div class="announcement">
+    <aside class="announcement-content">
+        {% if current_version.is_released %}
+        You're reading an old version of this documentation.
+        If you want up-to-date information, please have a look at <a
+            href="{{ vpathto(latest_stable_version.name) }}">{{latest_stable_version.version}}</a>.
+        {% else %}
+        You're reading the documentation for a development version.
+        For the latest released version, please have a look at <a
+            href="{{ vpathto(latest_stable_version.name) }}">{{latest_stable_version.version}}</a>.
+        {% endif %}
+    </aside>
+</div>
+{% endif %}
+{{ super() }}
+{% endblock %}%
