@@ -1,0 +1,468 @@
+:mod:`wildboar.datasets`
+========================
+
+.. py:module:: wildboar.datasets
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   outlier/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets.ArffBundle
+   wildboar.datasets.NpyBundle
+   wildboar.datasets.Bundle
+   wildboar.datasets.Repository
+   wildboar.datasets.JSONRepository
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets.set_cache_dir
+   wildboar.datasets.load_synthetic_control
+   wildboar.datasets.load_two_lead_ecg
+   wildboar.datasets.load_gun_point
+   wildboar.datasets.load_datasets
+   wildboar.datasets.load_all_datasets
+   wildboar.datasets.load_dataset
+   wildboar.datasets.list_datasets
+   wildboar.datasets.clear_cache
+   wildboar.datasets.get_repository
+   wildboar.datasets.install_repository
+   wildboar.datasets.get_bundles
+   wildboar.datasets.list_bundles
+   wildboar.datasets.list_repositories
+
+
+.. class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
+
+
+   Bases: :class:`wildboar.datasets._repository.Bundle`
+
+   bundle of .arff-files
+
+
+.. class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
+
+
+   Bases: :class:`wildboar.datasets._repository.Bundle`
+
+   bundle of numpy binary files
+
+
+.. class:: Bundle(*, key, version, name, description=None, class_index=-1)
+
+
+   Base class for handling dataset bundles
+
+   .. attribute:: name
+
+      Human-readable name of the bundle
+
+      :type: str
+
+   .. attribute:: description
+
+      Description of the bundle
+
+      :type: str
+
+   .. attribute:: class_index
+
+      Index of the class label(s)
+
+      :type: int or array-like
+
+   .. method:: get_filename(self, version=None, tag=None, ext=None)
+
+
+   .. method:: list(self, archive)
+
+      List all datasets in this bundle
+
+      :param archive: The bundle file
+      :type archive: ZipFile
+
+      :returns: **dataset_names** -- A sorted list of datasets in the bundle
+      :rtype: list
+
+
+   .. method:: load(self, name, archive, *, dtype=None)
+
+      Load a dataset from the bundle
+
+      :param name: Name of the dataset
+      :type name: str
+      :param archive: The zip-file bundle
+      :type archive: ZipFile
+      :param dtype: Cast the data and label matrix to a specific type
+      :type dtype: object, optional
+
+      :returns: * **x** (*ndarray*) -- Data samples
+                * **y** (*ndarray*) -- Data labels
+                * **n_training_samples** (*int*) -- Number of samples that are for training. The value is <= x.shape[0]
+
+
+
+.. class:: Repository
+
+   A repository is a collection of bundles
+
+   .. method:: name(self)
+      :property:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+
+   .. method:: version(self)
+      :property:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+
+   .. method:: download_url(self)
+      :property:
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+
+   .. method:: wildboar_requires(self)
+      :property:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+
+   .. method:: get_bundles(self)
+      :abstractmethod:
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+   .. method:: get_bundle(self, key)
+
+      Get a bundle with the specified key
+
+      :param key: Key of the bundle
+      :type key: str
+
+      :returns: **bundle** -- A bundle or None
+      :rtype: Bundle, optional
+
+
+   .. method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
+
+
+   .. method:: list_datasets(self, bundle, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+
+
+   .. method:: clear_cache(self, cache_dir, keep_last_version=True)
+
+
+   .. method:: refresh(self)
+
+      Refresh the repository
+
+
+
+.. class:: JSONRepository(url)
+
+
+   Bases: :class:`wildboar.datasets._repository.Repository`
+
+   A repository is a collection of bundles
+
+   .. method:: wildboar_requires(self)
+      :property:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+
+   .. method:: name(self)
+      :property:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+
+   .. method:: version(self)
+      :property:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+
+   .. method:: download_url(self)
+      :property:
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+
+   .. method:: get_bundles(self)
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+   .. method:: refresh(self)
+
+      Refresh the repository
+
+
+
+.. function:: set_cache_dir(cache_dir)
+
+   Change the global cache directory
+
+   cache_dir : str
+       The cache directory root
+
+
+.. function:: load_synthetic_control(merge_train_test=True)
+
+   Load the Synthetic_Control dataset
+
+   .. seealso::
+
+      :obj:`load_dataset`
+          load a named dataset
+
+
+.. function:: load_two_lead_ecg(merge_train_test=True)
+
+   Load the TwoLeadECG dataset
+
+   .. seealso::
+
+      :obj:`load_dataset`
+          load a named dataset
+
+
+.. function:: load_gun_point(merge_train_test=True)
+
+   Load the GunPoint dataset
+
+   .. seealso::
+
+      :obj:`load_dataset`
+          load a named dataset
+
+
+.. function:: load_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False, filter=None, **kwargs)
+
+   Load all datasets as a generator
+
+   :param repository: The repository string
+   :type repository: str
+   :param progress: If progress indicator is shown while downloading the repository.
+   :type progress: bool, optional
+   :param cache_dir: The cache directory for downloaded dataset repositories.
+   :type cache_dir: str, optional
+   :param create_cache_dir: Create the cache directory if it does not exist.
+   :type create_cache_dir: bool, optional
+   :param force: Force re-download of cached repository
+   :type force: bool, optional
+   :param filter: Filter the datasets
+
+                  - if callable, only yield those datasets for which the callable returns True.
+                    ``f(dataset, x, y) -> bool``
+
+                  - if dict, filter based on the keys and values
+                      - "dataset": regex matching dataset name
+                      - "n_samples": comparison spec
+                      - "n_timestep": comparison spec
+
+                  Comparison spec
+                      str of two parts, comparison operator (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
+   :type filter: dict or callable, optional
+   :param kwargs: Optional arguments to ``load_dataset``
+   :type kwargs: dict
+
+   :Yields: * **x** (*array-like*) -- Data samples
+            * **y** (*array-like*) -- Data labels
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_datasets
+   >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr'):
+   >>>     print(dataset, x.shape, y.shape)
+
+   Print the names of datasets with more than 200 samples
+
+   >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr', filter={"n_samples": ">200"}):
+   >>>     print(dataset)
+
+
+.. function:: load_all_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False, **kwargs)
+
+
+.. function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, force=False)
+
+   Load a dataset from a repository
+
+   :param name: The name of the dataset to load.
+   :type name: str
+   :param repository: The data repository formatted as {repository}/{bundle}[:{version}][:{tag}]
+   :type repository: str, optional
+   :param dtype: The data type of the returned data
+   :type dtype: dtype, optional
+   :param contiguous: Ensure that the returned dataset is memory contiguous.
+   :type contiguous: bool, optional
+   :param merge_train_test: Merge the existing training and testing partitions.
+   :type merge_train_test: bool, optional
+   :param progress: Show a progress bar while downloading a bundle.
+   :type progress: bool, optional
+   :param cache_dir: The directory where downloaded files are cached
+   :type cache_dir: str, optional
+   :param create_cache_dir: Create cache directory if missing (default=True)
+   :type create_cache_dir: bool, optional
+   :param force: Force re-download of already cached bundle
+
+                 ..versionadded :: 1.0.4
+   :type force: bool, optional
+
+   :returns: * **x** (*ndarray*) -- The data samples
+             * **y** (*ndarray*) -- The labels
+             * **x_train** (*ndarray, optional*) -- The training samples if ``merge_train_test=False``
+             * **x_test** (*ndarray, optional*) -- The testing samples if ``merge_train_test=False``
+             * **y_train** (*ndarray, optional*) -- The training labels if ``merge_train_test=False``
+             * **y_test** (*ndarray, optional*) -- The testing labels if ``merge_train_test=False``
+
+   .. rubric:: Examples
+
+   Load a dataset from the default repository
+
+   >>> x, y = load_dataset("SyntheticControl")
+
+   or if original training and testing splits are to be preserved
+
+   >>> x_train, x_test, y_train, y_test = load_dataset("SyntheticControl", merge_train_test=False)
+
+   or for a specific version of the dataset
+
+   >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr-tiny:1.0')
+
+
+.. function:: list_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False)
+
+   List the datasets in the repository
+
+   :param repository: The data repository
+
+                      - if str load a named bundle, format {repository}/{bundle}
+   :type repository: str or Bundle, optional
+   :param progress: Show a progress bar while downloading a bundle.
+   :type progress: bool, optional
+   :param cache_dir: The directory where downloaded files are cached (default='wildboar_cache')
+   :type cache_dir: str, optional
+   :param create_cache_dir: Create cache directory if missing (default=True)
+   :type create_cache_dir: bool, optional
+   :param force: Force re-download of cached bundle
+   :type force: bool, optional
+
+   :returns: **dataset** -- A set of dataset names
+   :rtype: set
+
+
+.. function:: clear_cache(repository=None, *, cache_dir=None, keep_last_version=True)
+
+   Clear the cache by deleting cached datasets
+
+   :param repository: The name of the repository to clear cache.
+
+                      - if None, clear cache of all repositories
+   :type repository: str, optional
+   :param cache_dir: The cache directory
+   :type cache_dir: str, optional
+   :param keep_last_version: If true, keep the latest version of each repository.
+   :type keep_last_version: bool, optional
+
+
+.. function:: get_repository(repository)
+
+   Get repository by name
+
+   :param repository: Repository name
+   :type repository: str
+
+   :returns: **repository** -- A repository
+   :rtype: Repository
+
+
+.. function:: install_repository(repository)
+
+   Install repository
+
+   :param repository: A repository
+   :type repository: str or Repository
+
+
+.. function:: get_bundles(repository)
+
+   Get all bundles in the repository
+
+   :param repository: Name of the repository
+   :type repository: str
+
+   :returns: **dict**
+   :rtype: A dict of key Bundle pairs
+
+
+.. function:: list_bundles(repository)
+
+   Get a list of all bundle names in the specified repository.
+
+   :param repository: The name of the repository
+   :type repository: str
+
+   :returns: **bundle** -- The name of the bundle
+   :rtype: str
+
+
+.. function:: list_repositories()
+
+   List the key of all installed repositories
+
+

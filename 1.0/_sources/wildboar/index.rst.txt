@@ -1,0 +1,21 @@
+:mod:`wildboar`
+===============
+
+.. py:module:: wildboar
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   datasets/index.rst
+   distance/index.rst
+   ensemble/index.rst
+   explain/index.rst
+   linear_model/index.rst
+   model_selection/index.rst
+   tree/index.rst
+
+

@@ -1,0 +1,15 @@
+:mod:`wildboar.explain`
+=======================
+
+.. py:module:: wildboar.explain
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   counterfactual/index.rst
+
+

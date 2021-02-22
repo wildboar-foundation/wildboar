@@ -1,0 +1,68 @@
+:orphan:
+
+:mod:`wildboar.model_selection._cv`
+===================================
+
+.. py:module:: wildboar.model_selection._cv
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.model_selection._cv.RepeatedOutlierSplit
+
+
+
+.. class:: RepeatedOutlierSplit(n_splits=None, *, test_size=0.2, n_outlier=0.05, shuffle=True, random_state=None)
+
+
+   Repeated random outlier cross-validator
+
+   Yields indicies that split the dataset into training and test sets.
+
+   .. note::
+
+      Contrary to other cross-validation strategies, the random outlier
+      cross-validator does not ensure that all folds will be different.
+      Instead, the inlier samples are shuffled and new outlier samples
+      are inserted in the training and test sets repeatedly.
+
+   .. method:: get_n_splits(self, X, y, groups=None)
+
+      Returns the number of splitting iterations in the cross-validator
+      :param X: The samples
+      :type X: object
+      :param y: The labels
+      :type y: object
+      :param groups: Always ignored, exists for compatibility.
+      :type groups: object
+
+      :returns: **n_splits** -- Returns the number of splitting iterations in the cross-validator.
+      :rtype: int
+
+
+   .. method:: split(self, x, y, groups=None)
+
+      Return training and test indicies
+
+      :param x: Always ignored, exists for compatibility.
+      :type x: object
+      :param y: The labels
+      :type y: object
+      :param groups: Always ignored, exists for compatibility.
+      :type groups: object, optional
+
+      :Yields: **train_idx, test_idx** (*ndarray*) -- The training and test indicies
+
+
+   .. method:: __repr__(self)
+
+      Return repr(self).
+
+
+

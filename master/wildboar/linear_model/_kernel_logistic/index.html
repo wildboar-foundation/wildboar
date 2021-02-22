@@ -158,6 +158,7 @@
         <dl>
             <dt>Versions</dt>
             <dd> master </dd>
+            <dd><a href="../../../../1.0/index.html">1.0</a></dd>
         </dl>
     </div>
 </div></div>
@@ -207,51 +208,11 @@
 <dl class="py method">
 <dt id="wildboar.linear_model._kernel_logistic.KernelLogisticRegression.fit">
 <code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the model according to the given training data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vector, where n_samples is the number of samples and
-n_features is the number of features.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target vector relative to X.</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>) </em><em>default=None</em>) – <p>Array of weights that are assigned to individual samples.
-If not provided, then each sample is given unit weight.</p>
-<div class="versionadded">
-<p><span class="versionmodified added">New in version 0.17: </span><em>sample_weight</em> support to LogisticRegression.</p>
-</div>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Fitted estimator.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>self</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The SAGA solver supports both float64 and float32 bit arrays.</p>
-</dd></dl>
+<dd></dd></dl>
 <dl class="py method">
 <dt id="wildboar.linear_model._kernel_logistic.KernelLogisticRegression.decision_function">
 <code class="sig-name descname"><span class="pre">decision_function</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.decision_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict confidence scores for samples.</p>
-<p>The confidence score for a sample is proportional to the signed
-distance of that sample to the hyperplane.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>array-like</em><em> or </em><em>sparse matrix</em><em>, </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Samples.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Confidence scores per (sample, class) combination. In the binary
-case, confidence score for self.classes_[1] where &gt;0 means this
-class would be predicted.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>array, shape=(n_samples,) if n_classes == 2 else (n_samples, n_classes)</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 </dd></dl>
 </div>
 </div>
