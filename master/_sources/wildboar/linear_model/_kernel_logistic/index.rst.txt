@@ -1,0 +1,75 @@
+:orphan:
+
+:mod:`wildboar.linear_model._kernel_logistic`
+=============================================
+
+.. py:module:: wildboar.linear_model._kernel_logistic
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.linear_model._kernel_logistic.KernelLogisticRegression
+
+
+
+.. class:: KernelLogisticRegression(kernel=None, *, kernel_params=None, n_components=100, penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver='lbfgs', max_iter=100, multi_class='auto', verbose=0, warm_start=False, n_jobs=None, l1_ratio=None)
+
+
+   Bases: :class:`sklearn.linear_model.LogisticRegression`
+
+   A simple kernel logistic implementation using a Nystroem kernel approximation
+
+   .. warning:: This kernel method is not specialized for temporal classification.
+
+   .. seealso::
+
+      :obj:`wildboar.datasets.outlier.EmmottLabeler`
+          Synthetic outlier dataset construction
+
+   .. method:: fit(self, x, y, sample_weight=None)
+
+      Fit the model according to the given training data.
+
+      :param X: Training vector, where n_samples is the number of samples and
+                n_features is the number of features.
+      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
+      :param y: Target vector relative to X.
+      :type y: array-like of shape (n_samples,)
+      :param sample_weight: Array of weights that are assigned to individual samples.
+                            If not provided, then each sample is given unit weight.
+
+                            .. versionadded:: 0.17
+                               *sample_weight* support to LogisticRegression.
+      :type sample_weight: array-like of shape (n_samples,) default=None
+
+      :returns: Fitted estimator.
+      :rtype: self
+
+      .. rubric:: Notes
+
+      The SAGA solver supports both float64 and float32 bit arrays.
+
+
+   .. method:: decision_function(self, x)
+
+      Predict confidence scores for samples.
+
+      The confidence score for a sample is proportional to the signed
+      distance of that sample to the hyperplane.
+
+      :param X: Samples.
+      :type X: array-like or sparse matrix, shape (n_samples, n_features)
+
+      :returns: Confidence scores per (sample, class) combination. In the binary
+                case, confidence score for self.classes_[1] where >0 means this
+                class would be predicted.
+      :rtype: array, shape=(n_samples,) if n_classes == 2 else (n_samples, n_classes)
+
+
+

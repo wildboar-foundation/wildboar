@@ -1,8 +1,0 @@
-=====================
-Unsupervised learning
-=====================
-
-Outlier detection
-=================
-
-

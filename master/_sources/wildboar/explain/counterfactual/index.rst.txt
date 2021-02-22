@@ -1,0 +1,258 @@
+:mod:`wildboar.explain.counterfactual`
+======================================
+
+.. py:module:: wildboar.explain.counterfactual
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain.counterfactual.KNeighborsCounterfactual
+   wildboar.explain.counterfactual.PrototypeCounterfactual
+   wildboar.explain.counterfactual.ShapeletForestCounterfactual
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain.counterfactual.score
+   wildboar.explain.counterfactual.counterfactuals
+
+
+.. class:: KNeighborsCounterfactual(random_state=None)
+
+
+   Bases: :class:`wildboar.explain.counterfactual.base.BaseCounterfactual`
+
+   Fit a counterfactual explainer to a k-nearest neighbors classifier
+
+   .. attribute:: explainer_
+
+      The explainer for each label
+
+      :type: dict
+
+   .. rubric:: References
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
+
+   .. method:: fit(self, estimator)
+
+      Fit the counterfactual to a given estimator
+
+      :param estimator: An estimator for which counterfactual explanations are produced
+      :type estimator: object
+
+      :returns:
+      :rtype: self
+
+
+   .. method:: transform(self, x, y)
+
+      Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
+
+      :param x: The samples to generate counterfactual explanations for
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+      :param y: The desired label of the counterfactual sample
+      :type y: array-like of shape (n_samples,)
+
+      :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
+                  the value of counterfactuals[i] is undefined.
+                * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
+
+
+
+.. class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
+
+
+   Bases: :class:`wildboar.explain.counterfactual.base.BaseCounterfactual`
+
+   Model agnostic approach for constructing counterfactual explanations
+
+   .. attribute:: estimator_
+
+      The estimator for which counterfactuals are computed
+
+      :type: object
+
+   .. attribute:: classes_
+
+      The classes
+
+      :type: ndarray
+
+   .. attribute:: partitions_
+
+      Dictionary of classes and PrototypeSampler
+
+      :type: dict
+
+   .. attribute:: target_
+
+      The target evaluator
+
+      :type: TargetEvaluator
+
+   .. rubric:: References
+
+   Samsten, Isak (2020).
+       Model agnostic time series counterfactuals
+
+   .. method:: fit(self, estimator)
+
+      Fit the counterfactual to a given estimator
+
+      :param estimator: An estimator for which counterfactual explanations are produced
+      :type estimator: object
+
+      :returns:
+      :rtype: self
+
+
+   .. method:: transform(self, x, y)
+
+      Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
+
+      :param x: The samples to generate counterfactual explanations for
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+      :param y: The desired label of the counterfactual sample
+      :type y: array-like of shape (n_samples,)
+
+      :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
+                  the value of counterfactuals[i] is undefined.
+                * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
+
+
+
+.. class:: ShapeletForestCounterfactual(*, epsilon=1.0, batch_size=1, random_state=10)
+
+
+   Bases: :class:`wildboar.explain.counterfactual.base.BaseCounterfactual`
+
+   Counterfactual explanations for shapelet forest classifiers
+
+   .. attribute:: paths_
+
+      A dictionary of prediction paths per label
+
+      :type: dict
+
+   .. rubric:: Notes
+
+   This implementation only supports the reversible algorithm described by Karlsson (2020)
+
+   .. warning:: Only shapelet forests fit with the Euclidean distance is supported i.e., ``metric="euclidean"``
+
+   .. rubric:: References
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2018).
+       Explainable time series tweaking via irreversible and reversible temporal
+       transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
+
+   .. method:: fit(self, estimator)
+
+      Fit the counterfactual to a given estimator
+
+      :param estimator: An estimator for which counterfactual explanations are produced
+      :type estimator: object
+
+      :returns:
+      :rtype: self
+
+
+   .. method:: transform(self, x, y)
+
+      Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
+
+      :param x: The samples to generate counterfactual explanations for
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+      :param y: The desired label of the counterfactual sample
+      :type y: array-like of shape (n_samples,)
+
+      :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
+                  the value of counterfactuals[i] is undefined.
+                * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
+
+
+   .. method:: candidates(self, x, y)
+
+
+
+.. function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
+
+   Compute the score for the counterfactuals
+
+   :param x_true: The true samples
+   :type x_true: array-like of shape (n_samples, n_timestep)
+   :param x_counterfactuals: The counterfactual samples
+   :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
+   :param metric: The scoring metric
+
+                  - if str use metrics from scikit-learn
+                  - if list compute all metrics and return a dict where the key is
+                    the name of the metric and the value an ndarray of scores
+                  - if dict compute all metrics and return a dict where the key is
+                    the key and the value an ndarry of scores
+                  - if callable
+   :type metric: str, callable, list or dict, optional
+   :param success: Indicator matrix of successful counterfactual transformations
+   :type success: ndarray of shape (n_samples)
+
+   :returns: **score** -- The scores
+   :rtype: ndarray or dict
+
+
+.. function:: counterfactuals(estimator, x, y, *, method='infer', scoring=None, valid_scoring=False, random_state=None, **kwargs)
+
+   Compute a single counterfactual example for each sample
+
+   :param estimator: The estimator used to compute the counterfactual example
+   :type estimator: object
+   :param x: The data samples to fit counterfactuals to
+   :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+   :param y: The desired label of the counterfactual
+   :type y: array-like broadcast to shape (n_samples,)
+   :param method: The method to generate counterfactual explanations
+
+                  - if 'infer', infer the most appropriate counterfactual explanation method
+                    based on the estimator
+                  - if 'prototype', compute model agnostic counterfactual explanations using
+                    the PrototypeCounterfactual method
+   :type method: str, optional
+   :param scoring: The scoring function to determine the goodness of
+   :type scoring: str, callable, list or dict, optional
+   :param valid_scoring: Only compute score for successful counterfactuals
+   :type valid_scoring: bool, optional
+   :param random_state: The pseudo random number generator to ensure stable result
+   :type random_state: RandomState or int, optional
+   :param \*\*kwargs: Optional arguments to the counterfactual explainer
+   :type \*\*kwargs: dict, optional
+
+   :returns: * **x_counterfactuals** (*ndarray of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)*) -- The counterfactual example.
+             * **valid** (*ndarray of shape (n_samples,)*) -- Indicator matrix for valid counterfactuals
+             * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Score of the counterfactual transform. Only returned if ``scoring`` is not None
+
+

@@ -1,0 +1,177 @@
+:mod:`wildboar.distance.dtw`
+============================
+
+.. py:module:: wildboar.distance.dtw
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.distance.dtw.dtw_alignment
+   wildboar.distance.dtw.dtw_distance
+   wildboar.distance.dtw.dtw_pairwise_distance
+   wildboar.distance.dtw.dtw_envelop
+   wildboar.distance.dtw.dtw_lb_keogh
+   wildboar.distance.dtw.dtw_mapping
+
+
+.. function:: dtw_alignment(x, y, r=1.0, out=None)
+
+   Compute the Dynamic time warping alignment matrix
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,)
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep,)
+   :param r: The warping window
+
+             - if float in [0, 1] a fraction of max(x_timestep, y_timestep)
+             - if int the exact warping window (max(1, r))
+   :type r: int or float, optional
+   :param out: Store the warping path in this array.
+   :type out: array-like of shape (x_timestep, y_timestep), optional
+
+   :returns: **alignment** -- The dynamic time warping alignment matrix
+   :rtype: ndarray of shape (x_timestep, y_timestep)
+
+   .. rubric:: Notes
+
+   If only the distance between two series is required use `dtw_distance` instead
+
+   .. seealso::
+
+      :obj:`dtw_distance`
+          compute the dtw distance
+
+
+.. function:: dtw_distance(x, y, r=1.0, scale=False)
+
+   Compute the dynamic time warping distance
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep, )
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep, )
+   :param r: The warping window
+
+             - if float in [0, 1] a fraction of max(x_timestep, y_timestep)
+             - if int the exact warping window (max(1, r))
+   :type r: int or float, optional
+   :param scale: If True, x and y are standardized before calculation
+   :type scale: bool, optional
+
+   :returns: **distance** -- The dynamic time warping distance
+   :rtype: float
+
+   .. seealso::
+
+      :obj:`dtw_alignment`
+          compute the dtw alignment matrix
+
+
+.. function:: dtw_pairwise_distance(x, r=1.0)
+
+   Compute the distance between all pairs of rows
+
+   :param x: An array of samples
+   :type x: array-like of shape (n_samples, n_timestep)
+   :param r: The size of the warping window
+
+             - if float in [0, 1] a fraction of x_timestep
+             - if int the exact warping window (max(1, r))
+   :type r: float or int, optional
+
+   :returns: **distances** -- The distance between pairs of rows
+   :rtype: ndarray of shape (n_samples, n_samples)
+
+
+.. function:: dtw_envelop(x, r=1.0)
+
+   Compute the envelop for LB_keogh
+
+   :param x: The time series
+   :type x: array-like of shape (x_timestep,)
+   :param r: The size of the warping window
+
+             - if float in [0, 1] a fraction of x_timestep
+             - if int the exact warping window (max(1, r))
+   :type r: float or int, optional
+
+   :returns: * **lower** (*ndarray of shape (x_timestep,)*) -- The min value of the envelop
+             * **upper** (*ndarray of shape (x_timestep,)*) -- The max value of the envelop
+
+   .. rubric:: References
+
+   Keogh, E. (2002).
+       Exact indexing of dynamic time warping.
+       In 28th International Conference on Very Large Data Bases.
+
+
+.. function:: dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0)
+
+   The LB_keogh lower bound
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,)
+   :param y: The second time series (same size as x)
+   :type y: array-like of shape (x_timestep,), optional
+   :param lower: The min value of the envelop
+   :type lower: ndarray of shape (x_timestep,), optional
+   :param upper: The max value of the envelop
+   :type upper: ndarray of shape (x_timestep,), optional
+   :param r: The size of the warping window
+
+             - if float in [0, 1] a fraction of x_timestep
+             - if int the exact warping window (max(1, r))
+   :type r: float or int, optional
+
+   :returns: * **min_dist** (*float*) -- The cumulative minimum distance.
+             * **lb_keogh** (*ndarray of shape (x_timestep,),*) -- The lower bound at each time step
+
+   .. rubric:: Notes
+
+   - if y=None, both lower and upper must be given
+   - if y is given, lower and upper are ignored
+   - if lower and upper is given and y=None, r is ignored
+
+   .. rubric:: References
+
+   Keogh, E. (2002).
+       Exact indexing of dynamic time warping.
+       In 28th International Conference on Very Large Data Bases.
+
+
+.. function:: dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False)
+
+   Compute the optimal warping path between two series or from a given
+   alignment matrix
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,), optional
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep,), optional
+   :param alignment: Precomputed alignment
+   :type alignment: ndarray of shape (x_timestep, y_timestep), optional
+   :param r:
+             - if float, the warping path is a fraction of
+   :type r: float or int, optional
+   :param return_index: Return the indices of the warping path
+   :type return_index: bool, optional
+
+   :returns: * **indicator** (*ndarray of shape (x_timestep, y_timestep)*) -- Boolean array with the dtw path
+             * **(x_indices, y_indices)** (*tuple, optional*) -- The indices of the first and second dimension of
+               the optimal alignment path.
+
+   .. rubric:: Notes
+
+   - either x and y or alignment must be provided
+   - if alignment is given x and y are ignored
+   - if alignment is given r is ignored
+
+

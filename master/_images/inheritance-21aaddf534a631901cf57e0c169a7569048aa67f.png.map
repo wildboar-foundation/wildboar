@@ -1,4 +1,0 @@
-<map id="inheritanceb401e17832" name="inheritanceb401e17832">
-<area shape="rect" id="node1" href="#wildboar.datasets.outlier.MinorityLabeler" target="_top" title="Labels the minority class as the outlier" alt="" coords="168,5,291,31"/>
-<area shape="rect" id="node2" href="#wildboar.datasets.outlier.OutlierLabeler" target="_top" title="Base&#45;class for outlier labelers" alt="" coords="5,5,120,31"/>
-</map>

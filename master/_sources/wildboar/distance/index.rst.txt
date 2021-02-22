@@ -1,0 +1,121 @@
+:mod:`wildboar.distance`
+========================
+
+.. py:module:: wildboar.distance
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   dtw/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.distance.distance
+   wildboar.distance.matches
+
+
+.. function:: distance(x, y, *, dim=0, sample=None, metric='euclidean', metric_params=None, subsequence_distance=True, return_index=False)
+
+   Computes the distance between x and the samples of y
+
+   :param x: A 1-dimensional float array
+   :type x: array-like of shape (x_timestep, )
+   :param y:
+   :type y: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
+   :param dim: The time series dimension to search
+   :type dim: int, optional
+   :param sample: The samples to compare to
+
+                  - if ``sample=None`` the distances to all samples in data is returned
+                  - if sample is an int the distance to that sample is returned
+                  - if sample is an array-like the distance to all samples in sample are returned
+                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
+                  - otherwise an array is returned
+   :type sample: int or array-like, optional
+   :param metric: The distance metric
+
+                  - if str use optimized implementations of the named distance measure
+                  - if callable a function taking two arrays as input
+   :type metric: {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional
+   :param metric_params: Parameters to the metric
+
+                         - 'euclidean' and 'scaled_euclidean' take no parameters
+                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+                           is interpreted as a fraction of the time series length. If > 1 it
+                           is interpreted as an exact time warping window. Use 'r' == 0 for
+                           a widow size of exactly 1.
+   :type metric_params: dict, optional
+   :param subsequence_distance:
+                                - if True, compute the minimum subsequence distance
+                                - if False, compute the distance between two arrays of the same length
+                                  unless the specified metric support unaligned arrays
+   :type subsequence_distance: bool, optional
+   :param return_index:
+                        - if True return the index of the best match. If there are many equally good
+                          matches, the first match is returned.
+   :type return_index: bool, optional
+
+   :returns: * **dist** (*float, ndarray*) -- The smallest distance to each time series
+             * **indices** (*int, ndarray*) -- The start position of the best match in each time series
+
+   .. seealso::
+
+      :obj:`matches`
+          find shapelets within a threshold
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_two_lead_ecg
+   >>> x, y = load_two_lead_ecg()
+   >>> _, i = distance(x[0, 10:20], x, sample=[0, 1, 2, 3, 5, 10],
+   ...                 metric="scaled_euclidean", return_index=True)
+   >>> i
+   [10 29  9 72 20 30]
+
+
+.. function:: matches(x, y, threshold, *, dim=0, sample=None, metric='euclidean', metric_params=None, return_distance=False)
+
+   Return the positions in `x` (one list per `sample`) where `x` is closer than `threshold`.
+
+   :param x: A 1-dimensional float array
+   :type x: array-like of shape (x_timestep, )
+   :param y: The collection of samples
+   :type y: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
+   :param threshold: The maximum threshold to consider a match
+   :type threshold: float
+   :param dim: The time series dimension to search
+   :type dim: int, optional
+   :param sample: The samples to compare to
+
+                  - if ``sample=None`` the distances to all samples in data is returned
+                  - if sample is an int the distance to that sample is returned
+                  - if sample is an array-like the distance to all samples in sample are returned
+                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
+                  - otherwise an array is returned
+   :type sample: int or array-like, optional
+   :param metric: The distance metric
+   :type metric: {'euclidean', 'scaled_euclidean'}, optional
+   :param metric_params: Parameters to the metric
+   :type metric_params: dict, optional
+   :param return_distance:
+                           - if `true` return the distance of the best match.
+   :type return_distance: bool, optional
+
+   :returns: * **dist** (*list*) -- The distances of the matching positions
+             * **matches** (*list*) -- The start position of the matches in each time series
+
+   .. warning:: 'scaled_dtw' is not supported.
+
+

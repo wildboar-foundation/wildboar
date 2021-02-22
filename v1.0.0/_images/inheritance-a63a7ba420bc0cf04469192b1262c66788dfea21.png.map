@@ -1,5 +1,0 @@
-<map id="inheritance1e6a4ddb82" name="inheritance1e6a4ddb82">
-<area shape="rect" id="node1" title="Base class for all estimators in scikit&#45;learn." alt="" coords="5,5,123,31"/>
-<area shape="rect" id="node4" title="A shapelet tree regressor." alt="" coords="357,31,528,56"/>
-<area shape="rect" id="node3" title="Mixin class for all regression estimators in scikit&#45;learn." alt="" coords="179,55,301,80"/>
-</map>

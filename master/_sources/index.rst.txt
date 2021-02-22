@@ -13,10 +13,7 @@ series data.
    tutorial
    guide
    examples
-   api
-
-
-
+   API Reference <wildboar/index>
 
 
 Indices and tables
