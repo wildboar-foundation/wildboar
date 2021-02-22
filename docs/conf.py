@@ -75,5 +75,6 @@ html_sidebars = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 smv_branch_whitelist = r"^master|\d+\.\d+$"
-smv_released_pattern = r"^refs/heads/\d+\.\d+$"
+smv_remote_whitelist = r"^\d+\.\d+$"
+smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+$"
 smv_tag_whitelist = None
