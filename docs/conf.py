@@ -37,8 +37,8 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-autoapi_dirs = None
-autoapi_root = None
+autoapi_dirs = "autoapi"
+autoapi_root = "."
 autoapi_template_dir = "_templates/autoapi/"
 autoapi_ignore = ["*tests*", "_*.py"]
 autoapi_keep_files = True
@@ -75,5 +75,5 @@ html_sidebars = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 smv_branch_whitelist = r"^master|\d+\.\d+$"
-smv_released_pattern = r"^heads/\d+\.\d+$"
+smv_released_pattern = r"^refs/heads/\d+\.\d+$"
 smv_tag_whitelist = None

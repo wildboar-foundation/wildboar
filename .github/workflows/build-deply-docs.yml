@@ -9,6 +9,8 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name:
+        run: git branch
 
       - uses: actions/setup-python@v2
         name: Install Python
@@ -26,6 +28,7 @@ jobs:
         run: |
           mkdir html
           touch html/.nojekyll
+          python -I -m sphinx_multiversion docs html -D "autoapi_root=\${sourcedir}" -D "autoapi_dirs=\${sourcedir}/../src" --dump-metadata
           python -I -m sphinx_multiversion docs html -D "autoapi_root=\${sourcedir}" -D "autoapi_dirs=\${sourcedir}/../src"
           cp docs/assets/index.html html/index.html
 
