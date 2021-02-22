@@ -10,9 +10,9 @@ jobs:
 
       - name: Fetch all branches
         run: git fetch --unshallow --all
-        
+
       - name: List branches
-        run: git branch
+        run: git branch -a
 
       - uses: actions/setup-python@v2
         name: Install Python
@@ -23,7 +23,6 @@ jobs:
         run: |
           sudo apt-get install graphviz
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
           python -m pip install -r docs/requirements.txt
 
       - name: Build docmentation
