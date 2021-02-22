@@ -7,9 +7,11 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name:
+
+      - name: Fetch all branches
+        run: git fetch --unshallow --all
+        
+      - name: List branches
         run: git branch
 
       - uses: actions/setup-python@v2
