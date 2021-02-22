@@ -7,8 +7,6 @@
 # -- Path setup --------------------------------------------------------------
 
 import os
-import pathlib
-import sys
 
 SEM_VER_REGEX = "^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
@@ -32,6 +30,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "autoapi.extension",
     "sphinx_multiversion",
+    "sphinx_panels",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -79,9 +78,9 @@ html_sidebars = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-smv_branch_whitelist = r"^master|\d+\.\d+$"
-# smv_remote_whitelist = r"^origin$"
-smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+$"
+smv_branch_whitelist = r"^master|\d+\.\d+\.X$"
+smv_remote_whitelist = r"^origin$"
+smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+\.X$"
 smv_tag_whitelist = None
 
 
@@ -133,7 +132,6 @@ def setup(app):
         )
         context["latest_version_tags"] = app.config.smv_latest_version_tags
         context["latest_stable_version"] = versioninfo[app.config.smv_latest_stable]
-        context["latest_develop_version"] = versioninfo["master"]
 
     app.connect("config-inited", read_latest_version)
     app.connect("html-page-context", set_latest_version)
