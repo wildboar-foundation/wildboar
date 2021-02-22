@@ -14,12 +14,11 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../src"))
-sys.path.insert(0, os.path.abspath(".."))
 
-try:
-    from wildboar import __version__
-except:
-    __version__ = "latest"
+from pkg_resources import get_distribution
+
+release = get_distribution("wildboar").version
+version = ".".join(release.split(".")[:2])
 
 # -- Project information -----------------------------------------------------
 
@@ -29,8 +28,8 @@ copyright = "2020, Isak Samsten"
 author = "Isak Samsten"
 
 # The full version, including alpha/beta/rc tags
-version = __version__
-release = __version__
+version = version
+release = release
 
 # -- General configuration ---------------------------------------------------
 
@@ -38,10 +37,8 @@ release = __version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "autoapi.sphinx",
+    "autoapi.extension",
     "sphinx_multiversion",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.inheritance_diagram",
     "sphinx.ext.napoleon",
 ]
 
@@ -53,43 +50,41 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-autoclass_content = "both"
-autodoc_default_flags = [
-    "members",
-    "inherited-members",
-    # "show-inheritance",
-]
+autoapi_dirs = ["../src"]
+autoapi_root = "."
+autoapi_template_dir = "_templates/autoapi/"
+autoapi_ignore = ["*tests*", "_*.py"]
+autoapi_keep_files = True
+autoapi_add_toctree_entry = False
 
-autoapi_modules = {"wildboar": {"prune": True}}
+
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-inheritance",
+    "show-module-summary",
+    "special-members",
+    "imported-members",
+]
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "alabaster"
-html_theme_options = {
-    "description": "A Python module for temporal machine learning",
-    "github_user": "isaksamsten",
-    "github_repo": "wildboar",
-    "github_button": True,
-    "github_type": "star",
-    "fixed_sidebar": True,
-    "sidebar_collapse": True,
-    "show_relbar_bottom": True,
-}
+html_theme = "furo"
+html_theme_options = {}
 html_sidebars = {
     "**": [
-        "about.html",
-        "navigation.html",
-        "relations.html",
-        "searchbox.html",
+        "sidebar/scroll-start.html",
+        "brand.html",
+        "sidebar/search.html",
+        "sidebar/navigation.html",
         "versions.html",
+        "sidebar/scroll-end.html",
     ],
 }
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-
-smv_tag_whitelist = r"^v[1|2|3].*"  # Include tags like "v2.1"
-smv_branch_whitelist = r"master"
+smv_branch_whitelist = "master"
