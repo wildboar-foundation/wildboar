@@ -6,19 +6,10 @@
 
 # -- Path setup --------------------------------------------------------------
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../src"))
-
-from pkg_resources import get_distribution
-
-release = get_distribution("wildboar").version
-version = ".".join(release.split(".")[:3])
+sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
@@ -26,10 +17,6 @@ project = "Wildboar"
 description = "Time series learning with Python"
 copyright = "2020, Isak Samsten"
 author = "Isak Samsten"
-
-# The full version, including alpha/beta/rc tags
-version = version
-release = release
 
 # -- General configuration ---------------------------------------------------
 
@@ -88,5 +75,5 @@ html_sidebars = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 smv_branch_whitelist = r"^master|\d+\.\d+$"
-smv_released_pattern = r"^refs/heads/\d+\.\d+$"
+smv_released_pattern = r"^heads/\d+\.\d+$"
 smv_tag_whitelist = None
