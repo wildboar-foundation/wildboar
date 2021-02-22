@@ -93,9 +93,11 @@ def setup(app):
         gitroot = pathlib.Path(
             git.get_toplevel_path(cwd=os.path.abspath(app.confdir))
         ).resolve()
+        print("GITROOT: ", gitroot)
         gitrefs = list(git.get_all_refs(gitroot))
         latest_version_tags = {}
         for ver, metadata in config.smv_metadata.items():
+            print("TAGS FOR:", ver)
             latest_version_tags[ver] = "dev"
             current_version = re.match("(\d)\.(\d)(?:.X)?", ver)
             if current_version:
@@ -107,6 +109,7 @@ def setup(app):
                             2
                         ) == current_version.group(2):
                             matching_tags.append(gitref.name.replace("v", ""))
+                print("MATCHING TAGS:", matching_tags)
                 matching_tags.sort(key=lambda x: parse_version(x))
                 latest_version_tags[ver] = matching_tags[-1]
                 metadata["version"] = matching_tags[-1]
