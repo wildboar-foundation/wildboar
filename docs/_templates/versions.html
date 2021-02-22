@@ -1,8 +1,19 @@
-{% if versions %}
-<h3>{{ _('Versions') }}</h3>
-<ul>
-    {%- for item in versions %}
-    <li><a href="{{ item.url }}">{{ item.name }}</a></li>
-    {%- endfor %}
-</ul>
-{% endif %}
+{%- if current_version %}
+<div class="rst-versions">
+
+    <div class="rst-other-versions">
+        {%- if versions.branches %}
+        <dl>
+            <dt>Versions</dt>
+            {%- for item in versions %}
+            {%- if not current_version.name == item.name %}
+            <dd><a href="{{ item.url }}">{{ item.name }}</a></dd>
+            {%- else %}
+            <dd> {{ item.name }} </dd>
+            {%- endif %}
+            {%- endfor %}
+        </dl>
+        {%- endif %}
+    </div>
+</div>
+{%- endif %}

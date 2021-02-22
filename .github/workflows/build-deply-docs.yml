@@ -18,21 +18,19 @@ jobs:
       - name: Install requirements
         run: |
           sudo apt-get install graphviz
-          python -m pip install build
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install -r docs/requirements.txt
 
       - name: Build Cython extensions inplace
         run: |
-          python -m build --sdist .
-          python setup.py build_ext --inplace
+          python -m pip install .
 
       - name: Build docmentation
         run: |
           mkdir html
           touch html/.nojekyll
-          python -I -m sphinx_multiversion docs html
+          python -I -m sphinx_multiversion docs html -D "autoapi_root=\${sourcedir}" -D "autoapi_dirs=\${sourcedir}/../src"
           cp docs/assets/index.html html/index.html
 
       - name: Deploy documentation

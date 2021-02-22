@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath("../src"))
 from pkg_resources import get_distribution
 
 release = get_distribution("wildboar").version
-version = ".".join(release.split(".")[:2])
+version = ".".join(release.split(".")[:3])
 
 # -- Project information -----------------------------------------------------
 
@@ -37,9 +37,9 @@ release = release
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx.ext.napoleon",
     "autoapi.extension",
     "sphinx_multiversion",
-    "sphinx.ext.napoleon",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -50,8 +50,8 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-autoapi_dirs = ["../src"]
-autoapi_root = "."
+autoapi_dirs = None
+autoapi_root = None
 autoapi_template_dir = "_templates/autoapi/"
 autoapi_ignore = ["*tests*", "_*.py"]
 autoapi_keep_files = True
@@ -87,4 +87,6 @@ html_sidebars = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
-smv_branch_whitelist = "master"
+smv_branch_whitelist = r"^master|\d+\.\d+$"
+smv_released_pattern = r"^heads/\d+\.\d+$"
+smv_tag_whitelist = None

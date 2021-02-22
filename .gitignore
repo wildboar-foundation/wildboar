@@ -177,7 +177,7 @@ venv.bak/
 # End of https://www.gitignore.io/api/emacs,python,jupyternotebook
 
 *.c
-*.html
+#*.html
 *.so
 __pycache__/
 build/
