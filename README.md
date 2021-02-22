@@ -35,11 +35,6 @@ requires:
 
  * cython (>= 0.29.14)
 
-### Current version
-
-- Current release: 1.0.7
-- Current development release: 1.0.7dev
-
 ### Binaries
 
 `wildboar` is available through `pip` and can be installed with:
