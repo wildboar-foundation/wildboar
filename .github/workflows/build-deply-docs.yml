@@ -10,14 +10,11 @@ jobs:
 
       - name: Fetch all branches
         run: |
-          git fetch --prune --unshallow --all --tags
+          git fetch --prune --unshallow
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
-      - name: List branches
-        run: git branch -a
-
       - name: List tags
-        run : git tag
+        run: git tag
 
       - uses: actions/setup-python@v2
         name: Install Python
@@ -28,7 +25,6 @@ jobs:
         run: |
           sudo apt-get install graphviz
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
           python -m pip install -r docs/requirements.txt
 
       - name: Install latest version
