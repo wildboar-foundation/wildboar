@@ -8,6 +8,7 @@
 
 from logging import log
 import os
+import sys
 
 SEM_VER_REGEX = "^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
 
@@ -29,6 +30,7 @@ author = "Isak Samsten"
 # ones.
 extensions = [
     "sphinx.ext.napoleon",
+    "sphinx.ext.linkcode",
     "autoapi.extension",
     "sphinx_multiversion",
     "sphinx_panels",
@@ -48,7 +50,8 @@ autoapi_template_dir = "_templates/autoapi/"
 autoapi_ignore = ["*tests*", "_*.py"]
 autoapi_keep_files = True
 autoapi_add_toctree_entry = False
-
+autoapi_python_class_content = "both"
+autoapi_member_order = "groupwise"
 
 autoapi_options = [
     "members",
@@ -86,8 +89,10 @@ smv_tag_whitelist = None
 
 
 def setup(app):
+    import inspect
     import re
     import pathlib
+    import importlib
     from sphinx.util.logging import getLogger
 
     logger = getLogger(__name__)
@@ -101,7 +106,63 @@ def setup(app):
             and match.group(2) == minor
         )
 
+    # Build the local version of wildboar into a temporary directory
+    def build_local_version(app):
+        import subprocess
+
+        logger.info("[CONF] building and installing local version")
+        env = os.environ.copy()
+        env["SETUPTOOLS_SCM_PRETEND_VERSION"] = "99.9.99"
+        version_file = os.path.join(app.srcdir, "../src/wildboar/version.py")
+        with open(os.path.abspath(version_file), "w") as f:
+            f.write("version='99.9.99'")  # dummy version
+
+        # Build and install local version in temporary directory
+        output = subprocess.run(
+            ["python", "-m", "pip", "install", "--target", "../_build", "."],
+            cwd=os.path.abspath(os.path.join(app.srcdir, "..")),
+            env=env,
+        )
+        output.check_returncode()  # Abort if build failed
+
+    # Find the source file given a module
+    def find_source(info):
+        obj = importlib.import_module(info["module"])
+        for part in info["fullname"].split("."):
+            obj = getattr(obj, part)
+
+        fn = os.path.normpath(inspect.getsourcefile(obj))
+        fn_split = fn.split(os.sep)
+        fn_index = fn_split.index("wildboar")
+        fn = os.path.join(*fn_split[fn_index:])
+        source, lineno = inspect.getsourcelines(obj)
+        return fn, lineno, lineno + len(source) - 1
+
     def read_latest_version(app, config):
+
+        build_local_version(app)
+
+        def linkcode_resolve(domain, info):
+            sys.path.insert(0, "../_build/")  # Insert the local build dir first in path
+            from wildboar import __version__
+
+            if __version__ != "99.9.99":  # ensure we are using the local build
+                raise ValueError("Local build failed")
+
+            if domain != "py" or not info["module"]:
+                return None
+            try:
+                filename = "%s#L%d-L%d" % find_source(info)
+            except:
+                filename = info["module"].replace(".", "/") + ".py"
+
+            del sys.path[0]
+            return "https://github.com/isaksamsten/wildboar/blob/%s/src/%s" % (
+                config.smv_current_version,
+                filename,
+            )
+
+        config.linkcode_resolve = linkcode_resolve
         if not hasattr(config, "smv_metadata") or len(config.smv_metadata) == 0:
             return
 
