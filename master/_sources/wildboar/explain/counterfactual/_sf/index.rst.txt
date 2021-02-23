@@ -68,6 +68,17 @@ Classes
        Explainable time series tweaking via irreversible and reversible temporal
        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
 
+   :param epsilon: Control the degree of change from the decision threshold
+   :type epsilon: float, optional
+   :param batch_size: Batch size when evaluating the cost and predictions of counterfactual candidates.
+                      The default setting is to evaluate all counterfactual samples.
+   :type batch_size: float, optional
+   :param random_state: Pseudo-random number for consistency between different runs
+   :type random_state: RandomState or int, optional
+
+   .. method:: candidates(self, x, y)
+
+
    .. method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
@@ -91,9 +102,6 @@ Classes
       :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
                   the value of counterfactuals[i] is undefined.
                 * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
-
-
-   .. method:: candidates(self, x, y)
 
 
 

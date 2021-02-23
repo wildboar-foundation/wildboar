@@ -30,6 +30,32 @@ Classes
       :obj:`wildboar.datasets.outlier.EmmottLabeler`
           Synthetic outlier dataset construction
 
+   Create a new kernel logistic regression
+
+   :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric` for kernels. The default kernel
+                  is 'rbf'.
+   :type kernel: str, optional
+   :param kernel_params: Parameters to the kernel function.
+   :type kernel_params: dict, optional
+   :param n_components: Number of features to construct
+   :type n_components: int, optional
+
+   .. method:: decision_function(self, x)
+
+      Predict confidence scores for samples.
+
+      The confidence score for a sample is proportional to the signed
+      distance of that sample to the hyperplane.
+
+      :param X: Samples.
+      :type X: array-like or sparse matrix, shape (n_samples, n_features)
+
+      :returns: Confidence scores per (sample, class) combination. In the binary
+                case, confidence score for self.classes_[1] where >0 means this
+                class would be predicted.
+      :rtype: array, shape=(n_samples,) if n_classes == 2 else (n_samples, n_classes)
+
+
    .. method:: fit(self, x, y, sample_weight=None)
 
       Fit the model according to the given training data.
@@ -52,22 +78,6 @@ Classes
       .. rubric:: Notes
 
       The SAGA solver supports both float64 and float32 bit arrays.
-
-
-   .. method:: decision_function(self, x)
-
-      Predict confidence scores for samples.
-
-      The confidence score for a sample is proportional to the signed
-      distance of that sample to the hyperplane.
-
-      :param X: Samples.
-      :type X: array-like or sparse matrix, shape (n_samples, n_features)
-
-      :returns: Confidence scores per (sample, class) combination. In the binary
-                case, confidence score for self.classes_[1] where >0 means this
-                class would be predicted.
-      :rtype: array, shape=(n_samples,) if n_classes == 2 else (n_samples, n_classes)
 
 
 

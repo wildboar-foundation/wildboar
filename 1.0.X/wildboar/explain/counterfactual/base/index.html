@@ -153,20 +153,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
 </ul>
 
 </div>
-<div class="rst-versions">
-
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Versions</dt>
-            <dd><a href="../../../../../master/index.html">1.0.9</a></dd>
-            <dd> 1.0.8 </dd>
-        </dl>
-    </div>
+<div class="sidebar-tree">
+    <ul>
+        <li class="toctree-l1 has-children"><a class="reference internal" href="#">Versions</a>
+            <input class="toctree-checkbox" id="version-checkbox-1" name="version-checkbox-1" type="checkbox"><label
+                for="version-checkbox-1"><i class="icon"><svg>
+                        <use href="#svg-arrow-right"></use>
+                    </svg></i></label>
+            <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../../master/index.html">1.0.9</a></li>
+                <li class="toctree-l2"><span class="reference internal">1.0.8</span></li>
+            </ul>
+        </li>
+    </ul>
 </div></div>
       </div>
       
@@ -197,12 +202,12 @@
 </table></div>
 <dl class="py class">
 <dt id="wildboar.explain.counterfactual.base.BaseCounterfactual">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.base.</span></code><code class="sig-name descname"><span class="pre">BaseCounterfactual</span></code><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.base.</span></code><code class="sig-name descname"><span class="pre">BaseCounterfactual</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/base.py#L25-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
 <p>Base estimator for counterfactual explanations</p>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.base.BaseCounterfactual.fit">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/base.py#L28-L41"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the counterfactual to a given estimator</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -218,7 +223,7 @@
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.explain.counterfactual.base.BaseCounterfactual.transform">
-<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/base.py#L43-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th label in y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

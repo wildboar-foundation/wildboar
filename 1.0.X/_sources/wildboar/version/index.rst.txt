@@ -1,0 +1,14 @@
+:mod:`wildboar.version`
+=======================
+
+.. py:module:: wildboar.version
+
+
+Module Contents
+---------------
+
+.. data:: version
+   :annotation: = 99.9.99
+
+   
+

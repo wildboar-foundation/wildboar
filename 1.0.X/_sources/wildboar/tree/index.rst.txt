@@ -12,11 +12,105 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.tree.ShapeletTreeClassifier
-   wildboar.tree.ShapeletTreeRegressor
    wildboar.tree.ExtraShapeletTreeClassifier
    wildboar.tree.ExtraShapeletTreeRegressor
+   wildboar.tree.ShapeletTreeClassifier
+   wildboar.tree.ShapeletTreeRegressor
 
+
+
+.. class:: ExtraShapeletTreeClassifier(max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+
+
+   Bases: :class:`wildboar.tree._tree.ShapeletTreeClassifier`
+
+   An extra shapelet tree classifier.
+
+   Extra shapelet trees are constructed by sampling a distance threshold
+   uniformly in the range [min(dist), max(dist)].
+
+   .. attribute:: tree_
+
+
+
+      :type: Tree
+
+   Construct a extra shapelet tree regressor
+
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
+                     are pure or until all leaves contain less than `min_samples_split` samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
+                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
+                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :type max_shapelet_size: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters for the distance measure
+   :type metric_params: dict, optional
+   :param force_dim: Force the number of dimensions.
+
+                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+                       or interoperability with `sklearn`.
+   :type force_dim: int, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator;
+                        - If `RandomState` instance, `random_state` is the random number generator;
+                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+   :type random_state: int or RandomState
+
+
+.. class:: ExtraShapeletTreeRegressor(*, max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+
+
+   Bases: :class:`wildboar.tree._tree.ShapeletTreeRegressor`
+
+   An extra shapelet tree regressor.
+
+   Extra shapelet trees are constructed by sampling a distance threshold
+   uniformly in the range [min(dist), max(dist)].
+
+   .. attribute:: tree_
+
+
+
+      :type: Tree
+
+   Construct a extra shapelet tree regressor
+
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
+                     are pure or until all leaves contain less than `min_samples_split` samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
+                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
+                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :type max_shapelet_size: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters for the distance measure
+   :type metric_params: dict, optional
+   :param force_dim: Force the number of dimensions.
+
+                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+                       for interoperability with `sklearn`.
+   :type force_dim: int, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator;
+                        - If `RandomState` instance, `random_state` is the random number generator;
+                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+   :type random_state: int or RandomState
 
 
 .. class:: ShapeletTreeClassifier(max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
@@ -51,6 +145,36 @@ Classes
 
       :obj:`ExtraShapeletTreeClassifier`
           An extra random shapelet tree classifier.
+
+   Construct a shapelet tree classifier
+
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
+                     are pure or until all leaves contain less than `min_samples_split` samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
+                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
+                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :type max_shapelet_size: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters for the distance measure
+   :type metric_params: dict, optional
+   :param force_dim: Force the number of dimensions.
+
+                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+                       for interoperability with `sklearn`.
+   :type force_dim: int, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator;
+                        - If `RandomState` instance, `random_state` is the random number generator;
+                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+   :type random_state: int or RandomState
 
    .. method:: fit(self, x, y, sample_weight=None, check_input=True)
 
@@ -115,6 +239,36 @@ Classes
 
       :type: Tree
 
+   Construct a shapelet tree regressor
+
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
+                     are pure or until all leaves contain less than `min_samples_split` samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
+                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
+                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :type max_shapelet_size: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters for the distance measure
+   :type metric_params: dict, optional
+   :param force_dim: Force the number of dimensions.
+
+                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+                       for interoperability with `sklearn`.
+   :type force_dim: int, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator;
+                        - If `RandomState` instance, `random_state` is the random number generator;
+                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+   :type random_state: int or RandomState
+
    .. method:: fit(self, X, y, sample_weight=None, check_input=True)
 
       Fit a shapelet tree regressor from the training set
@@ -147,39 +301,5 @@ Classes
       :returns: **y** -- The predicted classes.
       :rtype: ndarray of shape (n_samples,)
 
-
-
-.. class:: ExtraShapeletTreeClassifier(max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
-
-
-   Bases: :class:`wildboar.tree._tree.ShapeletTreeClassifier`
-
-   An extra shapelet tree classifier.
-
-   Extra shapelet trees are constructed by sampling a distance threshold
-   uniformly in the range [min(dist), max(dist)].
-
-   .. attribute:: tree_
-
-
-
-      :type: Tree
-
-
-.. class:: ExtraShapeletTreeRegressor(*, max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
-
-
-   Bases: :class:`wildboar.tree._tree.ShapeletTreeRegressor`
-
-   An extra shapelet tree regressor.
-
-   Extra shapelet trees are constructed by sampling a distance threshold
-   uniformly in the range [min(dist), max(dist)].
-
-   .. attribute:: tree_
-
-
-
-      :type: Tree
 
 

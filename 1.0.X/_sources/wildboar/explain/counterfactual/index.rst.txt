@@ -32,8 +32,8 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.explain.counterfactual.score
    wildboar.explain.counterfactual.counterfactuals
+   wildboar.explain.counterfactual.score
 
 
 .. class:: KNeighborsCounterfactual(random_state=None)
@@ -117,6 +117,56 @@ Functions
    Samsten, Isak (2020).
        Model agnostic time series counterfactuals
 
+   Crate a new model agnostic counterfactual explainer.
+
+   :param background_x: The background data from which prototypes are sampled
+   :type background_x: array-like of shape (n_samples, n_timestep)
+   :param background_y: The background label from which prototypes are sampled
+   :type background_y: array-like of shape (n_samples,)
+   :param metric: The metric used to move the samples
+   :type metric: {'euclidean', 'dtw'}, optional
+   :param metric_params: Optional parameters to the metric
+
+                         If 'dtw':
+
+                             r : int or float, optional
+                                 The warping window size
+   :type metric_params: dict, optional
+   :param max_iter: The maximum number of iterations
+   :type max_iter: int, optional
+   :param step_size: The step size when moving samples toward class prototypes
+   :type step_size: float, optional
+   :param n_prototypes: The number of initial prototypes to sample from
+   :type n_prototypes: int, float or str, optional
+   :param target: The target evaluation of counterfactuals:
+
+                  - if 'auto' the counterfactual prediction must return the correct
+                    label
+                  - if float, the counterfactual prediction probability must
+                    exceed target value
+   :type target: float or str, optional
+   :param method: Method for selecting prototypes
+
+                  - if 'sample' a prototype is sampled among the initial prototypes
+                  - if 'shapelet' a prototype shapelet is sampled among the initial
+                    prototypes
+                  - if 'nearest' a prototype is sampled from the closest n prototypes
+                  - if 'nearest_shapelet' a prototype shapelet is sampled from the
+                    closest n prototypes
+   :type method: {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
+   :param method_params: Additional parameters to the method
+
+                         If 'shapelet' or 'nearest_shapelet'
+
+                             min_shapelet_size : float, optional
+                                 Minimum shapelet size.
+
+                             max_shapelet_size : float, optional
+                                 Maximum shapelet size.
+   :type method_params: dict, optional
+   :param random_state: Pseudo-random number for consistency between different runs
+   :type random_state: RandomState or int, optional
+
    .. method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
@@ -172,6 +222,17 @@ Functions
        Explainable time series tweaking via irreversible and reversible temporal
        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
 
+   :param epsilon: Control the degree of change from the decision threshold
+   :type epsilon: float, optional
+   :param batch_size: Batch size when evaluating the cost and predictions of counterfactual candidates.
+                      The default setting is to evaluate all counterfactual samples.
+   :type batch_size: float, optional
+   :param random_state: Pseudo-random number for consistency between different runs
+   :type random_state: RandomState or int, optional
+
+   .. method:: candidates(self, x, y)
+
+
    .. method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
@@ -196,33 +257,6 @@ Functions
                   the value of counterfactuals[i] is undefined.
                 * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
 
-
-   .. method:: candidates(self, x, y)
-
-
-
-.. function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
-
-   Compute the score for the counterfactuals
-
-   :param x_true: The true samples
-   :type x_true: array-like of shape (n_samples, n_timestep)
-   :param x_counterfactuals: The counterfactual samples
-   :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
-   :param metric: The scoring metric
-
-                  - if str use metrics from scikit-learn
-                  - if list compute all metrics and return a dict where the key is
-                    the name of the metric and the value an ndarray of scores
-                  - if dict compute all metrics and return a dict where the key is
-                    the key and the value an ndarry of scores
-                  - if callable
-   :type metric: str, callable, list or dict, optional
-   :param success: Indicator matrix of successful counterfactual transformations
-   :type success: ndarray of shape (n_samples)
-
-   :returns: **score** -- The scores
-   :rtype: ndarray or dict
 
 
 .. function:: counterfactuals(estimator, x, y, *, method='infer', scoring=None, valid_scoring=False, random_state=None, **kwargs)
@@ -254,5 +288,29 @@ Functions
    :returns: * **x_counterfactuals** (*ndarray of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)*) -- The counterfactual example.
              * **valid** (*ndarray of shape (n_samples,)*) -- Indicator matrix for valid counterfactuals
              * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Score of the counterfactual transform. Only returned if ``scoring`` is not None
+
+
+.. function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
+
+   Compute the score for the counterfactuals
+
+   :param x_true: The true samples
+   :type x_true: array-like of shape (n_samples, n_timestep)
+   :param x_counterfactuals: The counterfactual samples
+   :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
+   :param metric: The scoring metric
+
+                  - if str use metrics from scikit-learn
+                  - if list compute all metrics and return a dict where the key is
+                    the name of the metric and the value an ndarray of scores
+                  - if dict compute all metrics and return a dict where the key is
+                    the key and the value an ndarry of scores
+                  - if callable
+   :type metric: str, callable, list or dict, optional
+   :param success: Indicator matrix of successful counterfactual transformations
+   :type success: ndarray of shape (n_samples)
+
+   :returns: **score** -- The scores
+   :rtype: ndarray or dict
 
 

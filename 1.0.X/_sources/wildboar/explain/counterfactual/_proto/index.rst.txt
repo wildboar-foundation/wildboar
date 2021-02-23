@@ -14,19 +14,222 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.explain.counterfactual._proto.PrototypeCounterfactual
-   wildboar.explain.counterfactual._proto.TargetEvaluator
-   wildboar.explain.counterfactual._proto.PredictEvaluator
-   wildboar.explain.counterfactual._proto.ProbabilityEvaluator
-   wildboar.explain.counterfactual._proto.PrototypeSampler
-   wildboar.explain.counterfactual._proto.UniformPrototypeSampler
+   wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform
+   wildboar.explain.counterfactual._proto.EuclideanTransform
    wildboar.explain.counterfactual._proto.KNearestPrototypeSampler
-   wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler
    wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler
    wildboar.explain.counterfactual._proto.MetricTransform
-   wildboar.explain.counterfactual._proto.EuclideanTransform
-   wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform
+   wildboar.explain.counterfactual._proto.PredictEvaluator
+   wildboar.explain.counterfactual._proto.ProbabilityEvaluator
+   wildboar.explain.counterfactual._proto.PrototypeCounterfactual
+   wildboar.explain.counterfactual._proto.PrototypeSampler
+   wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler
+   wildboar.explain.counterfactual._proto.TargetEvaluator
+   wildboar.explain.counterfactual._proto.UniformPrototypeSampler
 
+
+
+.. class:: DynamicTimeWarpTransform(gamma, r=1.0)
+
+
+   Bases: :class:`wildboar.explain.counterfactual._proto.MetricTransform`
+
+   Transform a sample by moving it closer using the dtw alignment matrix
+
+   Construct a new transformer
+
+   :param gamma: The strength of the move, where values close to 0 means that the
+                 sample is moved less and values closer to 1 mean that the sample
+                 is moved more.
+   :type gamma: float
+
+   .. method:: move(self, o, p)
+
+      Move the sample o towards p
+
+      :param o: An array
+      :type o: ndarray of shape (n_timestep,)
+      :param p: An array
+      :type p: ndarray of shape (n_timestep,)
+
+      :returns: **ndarray**
+      :rtype: an array
+
+
+
+.. class:: EuclideanTransform(gamma)
+
+
+   Bases: :class:`wildboar.explain.counterfactual._proto.MetricTransform`
+
+   Transform a sample by moving it closer in euclidean space
+
+   Construct a new transformer
+
+   :param gamma: The strength of the move, where values close to 0 means that the
+                 sample is moved less and values closer to 1 mean that the sample
+                 is moved more.
+   :type gamma: float
+
+   .. method:: move(self, o, p)
+
+      Move the sample o towards p
+
+      :param o: An array
+      :type o: ndarray of shape (n_timestep,)
+      :param p: An array
+      :type p: ndarray of shape (n_timestep,)
+
+      :returns: **ndarray**
+      :rtype: an array
+
+
+
+.. class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+
+
+   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
+
+   Sample a prototype among the samples closest to the current counterfactual
+
+   Sample and refine counterfactuals
+
+   :param x: The data samples labeled as y
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The label of the samples in x
+   :type y: object
+   :param n_prototypes: The number of prototypes in the initial sample
+   :type n_prototypes: int
+   :param metric_transform: The metric transformer.
+   :type metric_transform: MetricTransform
+   :param random_state: The random number generator.
+   :type random_state: RandomState
+
+   .. method:: nearest_index(self, o)
+
+      Return the index of the closest sample
+
+      :param o: The current counterfactual sample
+      :type o: ndarray of shape (n_timestep,)
+
+      :returns: **int**
+      :rtype: an index
+
+
+   .. method:: sample(self, o)
+
+      Sample an example
+
+      :param o: The current counterfactual sample
+      :type o: ndarray of shape (n_timestep,)
+
+      :returns: **prototype** -- A prototype of the counterfactual label
+      :rtype: ndarray of shape (n_timestep,)
+
+
+
+.. class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
+
+
+   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
+
+   Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler
+   such that prototype samples are sampled among the nearest neighbors of the
+   counterfactual
+
+   Sample and refine counterfactuals
+
+   :param x: The data samples labeled as y
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The label of the samples in x
+   :type y: object
+   :param n_prototypes: The number of prototypes in the initial sample
+   :type n_prototypes: int
+   :param metric_transform: The metric transformer.
+   :type metric_transform: MetricTransform
+   :param random_state: The random number generator.
+   :type random_state: RandomState
+
+   .. method:: move(self, o, p)
+
+      Move the current counterfactual toward the prototype
+
+      :param o: The current counterfactual sample
+      :type o: ndarray of shape (n_timestep,)
+      :param p: The prototype of the counterfactual label
+      :type p: ndarray of shape (n_timestep,)
+
+      :returns: **new_counterfactual** -- The new counterfactual moved towards the prototype
+      :rtype: ndarray of shape (n_timestep,)
+
+
+   .. method:: sample(self, o)
+
+      Sample an example
+
+      :param o: The current counterfactual sample
+      :type o: ndarray of shape (n_timestep,)
+
+      :returns: **prototype** -- A prototype of the counterfactual label
+      :rtype: ndarray of shape (n_timestep,)
+
+
+
+.. class:: MetricTransform(gamma)
+
+
+   Bases: :class:`abc.ABC`
+
+   Move a time series towards a prototype
+
+   Construct a new transformer
+
+   :param gamma: The strength of the move, where values close to 0 means that the
+                 sample is moved less and values closer to 1 mean that the sample
+                 is moved more.
+   :type gamma: float
+
+   .. method:: move(self, o, p)
+      :abstractmethod:
+
+      Move the sample o towards p
+
+      :param o: An array
+      :type o: ndarray of shape (n_timestep,)
+      :param p: An array
+      :type p: ndarray of shape (n_timestep,)
+
+      :returns: **ndarray**
+      :rtype: an array
+
+
+
+.. class:: PredictEvaluator(estimator)
+
+
+   Bases: :class:`wildboar.explain.counterfactual._proto.TargetEvaluator`
+
+   Evaluate if a counterfactual is predicted as y
+
+   Construct a new evaluator
+
+   :param estimator: The estimator
+   :type estimator: object
+
+
+.. class:: ProbabilityEvaluator(estimator, probability=0.5)
+
+
+   Bases: :class:`wildboar.explain.counterfactual._proto.TargetEvaluator`
+
+   Evaluate if the probability of a counterfactual is at least a given constant
+
+   Construct a new evaluator
+
+   :param estimator: The estimator
+   :type estimator: object
+   :param probability: The minimum probability of the predicted label
+   :type probability: float
 
 
 .. class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
@@ -65,6 +268,56 @@ Classes
    Samsten, Isak (2020).
        Model agnostic time series counterfactuals
 
+   Crate a new model agnostic counterfactual explainer.
+
+   :param background_x: The background data from which prototypes are sampled
+   :type background_x: array-like of shape (n_samples, n_timestep)
+   :param background_y: The background label from which prototypes are sampled
+   :type background_y: array-like of shape (n_samples,)
+   :param metric: The metric used to move the samples
+   :type metric: {'euclidean', 'dtw'}, optional
+   :param metric_params: Optional parameters to the metric
+
+                         If 'dtw':
+
+                             r : int or float, optional
+                                 The warping window size
+   :type metric_params: dict, optional
+   :param max_iter: The maximum number of iterations
+   :type max_iter: int, optional
+   :param step_size: The step size when moving samples toward class prototypes
+   :type step_size: float, optional
+   :param n_prototypes: The number of initial prototypes to sample from
+   :type n_prototypes: int, float or str, optional
+   :param target: The target evaluation of counterfactuals:
+
+                  - if 'auto' the counterfactual prediction must return the correct
+                    label
+                  - if float, the counterfactual prediction probability must
+                    exceed target value
+   :type target: float or str, optional
+   :param method: Method for selecting prototypes
+
+                  - if 'sample' a prototype is sampled among the initial prototypes
+                  - if 'shapelet' a prototype shapelet is sampled among the initial
+                    prototypes
+                  - if 'nearest' a prototype is sampled from the closest n prototypes
+                  - if 'nearest_shapelet' a prototype shapelet is sampled from the
+                    closest n prototypes
+   :type method: {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
+   :param method_params: Additional parameters to the method
+
+                         If 'shapelet' or 'nearest_shapelet'
+
+                             min_shapelet_size : float, optional
+                                 Minimum shapelet size.
+
+                             max_shapelet_size : float, optional
+                                 Maximum shapelet size.
+   :type method_params: dict, optional
+   :param random_state: Pseudo-random number for consistency between different runs
+   :type random_state: RandomState or int, optional
+
    .. method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
@@ -91,43 +344,6 @@ Classes
 
 
 
-.. class:: TargetEvaluator(estimator)
-
-
-   Bases: :class:`abc.ABC`
-
-   Evaluate if a sample is a counterfactual
-
-   .. method:: is_counterfactual(self, x, y)
-
-      Return true if x is a counterfactual of label y
-
-      :param x: The counterfactual sample
-      :type x: ndarray of shape (n_samples, n_timestep) or (n_timestep,)
-      :param y: The counterfactual label
-      :type y: object
-
-      :returns: **bool**
-      :rtype: true if counterfactual
-
-
-
-.. class:: PredictEvaluator(estimator)
-
-
-   Bases: :class:`wildboar.explain.counterfactual._proto.TargetEvaluator`
-
-   Evaluate if a counterfactual is predicted as y
-
-
-.. class:: ProbabilityEvaluator(estimator, probability=0.5)
-
-
-   Bases: :class:`wildboar.explain.counterfactual._proto.TargetEvaluator`
-
-   Evaluate if the probability of a counterfactual is at least a given constant
-
-
 .. class:: PrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
 
@@ -136,17 +352,18 @@ Classes
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   .. method:: sample(self, o)
-      :abstractmethod:
+   Sample and refine counterfactuals
 
-      Sample an example
-
-      :param o: The current counterfactual sample
-      :type o: ndarray of shape (n_timestep,)
-
-      :returns: **prototype** -- A prototype of the counterfactual label
-      :rtype: ndarray of shape (n_timestep,)
-
+   :param x: The data samples labeled as y
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The label of the samples in x
+   :type y: object
+   :param n_prototypes: The number of prototypes in the initial sample
+   :type n_prototypes: int
+   :param metric_transform: The metric transformer.
+   :type metric_transform: MetricTransform
+   :param random_state: The random number generator.
+   :type random_state: RandomState
 
    .. method:: move(self, o, p)
 
@@ -158,6 +375,18 @@ Classes
       :type p: ndarray of shape (n_timestep,)
 
       :returns: **new_counterfactual** -- The new counterfactual moved towards the prototype
+      :rtype: ndarray of shape (n_timestep,)
+
+
+   .. method:: sample(self, o)
+      :abstractmethod:
+
+      Sample an example
+
+      :param o: The current counterfactual sample
+      :type o: ndarray of shape (n_timestep,)
+
+      :returns: **prototype** -- A prototype of the counterfactual label
       :rtype: ndarray of shape (n_timestep,)
 
 
@@ -173,55 +402,6 @@ Classes
 
 
 
-.. class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
-
-
-   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
-
-   Sample a prototype uniformly at random from the initial prototype sample
-
-   .. method:: sample(self, _o)
-
-      Sample an example
-
-      :param o: The current counterfactual sample
-      :type o: ndarray of shape (n_timestep,)
-
-      :returns: **prototype** -- A prototype of the counterfactual label
-      :rtype: ndarray of shape (n_timestep,)
-
-
-
-.. class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
-
-
-   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
-
-   Sample a prototype among the samples closest to the current counterfactual
-
-   .. method:: nearest_index(self, o)
-
-      Return the index of the closest sample
-
-      :param o: The current counterfactual sample
-      :type o: ndarray of shape (n_timestep,)
-
-      :returns: **int**
-      :rtype: an index
-
-
-   .. method:: sample(self, o)
-
-      Sample an example
-
-      :param o: The current counterfactual sample
-      :type o: ndarray of shape (n_timestep,)
-
-      :returns: **prototype** -- A prototype of the counterfactual label
-      :rtype: ndarray of shape (n_timestep,)
-
-
-
 .. class:: ShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
 
 
@@ -229,27 +409,20 @@ Classes
 
    Sample shapelet prototypes
 
-   .. method:: sample_shapelet(self, p)
+   Sample shapelet
 
-      Sample a shapelet from x
-
-      :param p: The prototype sample
-      :type p: ndarray of shape (n_timestep,)
-
-      :returns: **shapelet** -- A shapelet
-      :rtype: ndarray
-
-
-   .. method:: sample(self, _o)
-
-      Sample an example
-
-      :param o: The current counterfactual sample
-      :type o: ndarray of shape (n_timestep,)
-
-      :returns: **prototype** -- A prototype of the counterfactual label
-      :rtype: ndarray of shape (n_timestep,)
-
+   :param x: The data samples
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The label of the samples in x
+   :type y: object
+   :param metric_transform: The metric transformer.
+   :type metric_transform: MetricTransform
+   :param random_state: The random number generator.
+   :type random_state: RandomState
+   :param min_shapelet_size: The minimum shapelet size
+   :type min_shapelet_size: float
+   :param max_shapelet_size: The maximum shapelet size
+   :type max_shapelet_size: float
 
    .. method:: move(self, o, p)
 
@@ -265,17 +438,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-
-.. class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
-
-
-   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
-
-   Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler
-   such that prototype samples are sampled among the nearest neighbors of the
-   counterfactual
-
-   .. method:: sample(self, o)
+   .. method:: sample(self, _o)
 
       Sample an example
 
@@ -286,81 +449,73 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. method:: move(self, o, p)
+   .. method:: sample_shapelet(self, p)
 
-      Move the current counterfactual toward the prototype
+      Sample a shapelet from x
 
-      :param o: The current counterfactual sample
-      :type o: ndarray of shape (n_timestep,)
-      :param p: The prototype of the counterfactual label
+      :param p: The prototype sample
       :type p: ndarray of shape (n_timestep,)
 
-      :returns: **new_counterfactual** -- The new counterfactual moved towards the prototype
-      :rtype: ndarray of shape (n_timestep,)
+      :returns: **shapelet** -- A shapelet
+      :rtype: ndarray
 
 
 
-.. class:: MetricTransform(gamma)
+.. class:: TargetEvaluator(estimator)
 
 
    Bases: :class:`abc.ABC`
 
-   Move a time series towards a prototype
+   Evaluate if a sample is a counterfactual
 
-   .. method:: move(self, o, p)
-      :abstractmethod:
+   Construct a new evaluator
 
-      Move the sample o towards p
+   :param estimator: The estimator
+   :type estimator: object
 
-      :param o: An array
+   .. method:: is_counterfactual(self, x, y)
+
+      Return true if x is a counterfactual of label y
+
+      :param x: The counterfactual sample
+      :type x: ndarray of shape (n_samples, n_timestep) or (n_timestep,)
+      :param y: The counterfactual label
+      :type y: object
+
+      :returns: **bool**
+      :rtype: true if counterfactual
+
+
+
+.. class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+
+
+   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
+
+   Sample a prototype uniformly at random from the initial prototype sample
+
+   Sample and refine counterfactuals
+
+   :param x: The data samples labeled as y
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The label of the samples in x
+   :type y: object
+   :param n_prototypes: The number of prototypes in the initial sample
+   :type n_prototypes: int
+   :param metric_transform: The metric transformer.
+   :type metric_transform: MetricTransform
+   :param random_state: The random number generator.
+   :type random_state: RandomState
+
+   .. method:: sample(self, _o)
+
+      Sample an example
+
+      :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
-      :param p: An array
-      :type p: ndarray of shape (n_timestep,)
 
-      :returns: **ndarray**
-      :rtype: an array
-
-
-
-.. class:: EuclideanTransform(gamma)
-
-
-   Bases: :class:`wildboar.explain.counterfactual._proto.MetricTransform`
-
-   Transform a sample by moving it closer in euclidean space
-
-   .. method:: move(self, o, p)
-
-      Move the sample o towards p
-
-      :param o: An array
-      :type o: ndarray of shape (n_timestep,)
-      :param p: An array
-      :type p: ndarray of shape (n_timestep,)
-
-      :returns: **ndarray**
-      :rtype: an array
-
-
-
-.. class:: DynamicTimeWarpTransform(gamma, r=1.0)
-
-
-   Bases: :class:`wildboar.explain.counterfactual._proto.MetricTransform`
-
-   Transform a sample by moving it closer using the dtw alignment matrix
-
-   .. method:: move(self, o, p)
-
-      Move the sample o towards p
-
-      :param o: An array
-      :type o: ndarray of shape (n_timestep,)
-      :param p: An array
-      :type p: ndarray of shape (n_timestep,)
-
-      :returns: **ndarray**
-      :rtype: an array
+      :returns: **prototype** -- A prototype of the counterfactual label
+      :rtype: ndarray of shape (n_timestep,)
 
 
 

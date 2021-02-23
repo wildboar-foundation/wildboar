@@ -12,30 +12,13 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.ensemble.ShapeletForestClassifier
    wildboar.ensemble.ExtraShapeletTreesClassifier
-   wildboar.ensemble.ShapeletForestRegressor
    wildboar.ensemble.ExtraShapeletTreesRegressor
    wildboar.ensemble.IsolationShapeletForest
+   wildboar.ensemble.ShapeletForestClassifier
    wildboar.ensemble.ShapeletForestEmbedding
+   wildboar.ensemble.ShapeletForestRegressor
 
-
-
-.. class:: ShapeletForestClassifier(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
-
-   Bases: :class:`wildboar.ensemble._ensemble.BaseShapeletForestClassifier`
-
-   An ensemble of random shapelet tree classifiers.
-
-   .. rubric:: Examples
-
-   >>> from wildboar.ensemble import ShapeletForestClassifier
-   >>> from wildboar.datasets import load_synthetic_control
-   >>> x, y = load_synthetic_control()
-   >>> f = ShapeletForestClassifier(n_estimators=100, metric='scaled_euclidean')
-   >>> f.fit(x, y)
-   >>> y_hat = f.predict(x)
 
 
 .. class:: ExtraShapeletTreesClassifier(*, n_estimators=100, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
@@ -54,22 +37,32 @@ Classes
    >>> f.fit(x, y)
    >>> y_hat = f.predict(x)
 
+   Construct a extra shapelet trees classifier.
 
-.. class:: ShapeletForestRegressor(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
-
-   Bases: :class:`wildboar.ensemble._ensemble.BaseShapeletForestRegressor`
-
-   An ensemble of random shapelet regression trees.
-
-   .. rubric:: Examples
-
-   >>> from wildboar.ensemble import ShapeletForestRegressor
-   >>> from wildboar.datasets import load_synthetic_control
-   >>> x, y = load_synthetic_control()
-   >>> f = ShapeletForestRegressor(n_estimators=100, metric='scaled_euclidean')
-   >>> f.fit(x, y)
-   >>> y_hat = f.predict(x)
+   :param n_estimators: The number of estimators
+   :type n_estimators: int, optional
+   :param bootstrap: Use bootstrap sampling to fit the base estimators
+   :type bootstrap: bool, optional
+   :param n_jobs: The number of processor cores used for fitting the ensemble
+   :type n_jobs: int, optional
+   :param min_shapelet_size: The minimum shapelet size to sample
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum shapelet size to sample
+   :type max_shapelet_size: float, optional
+   :param min_samples_split: The minimum samples required to split the decision trees
+   :type min_samples_split: int, optional
+   :param warm_start: When set to True, reuse the solution of the previous call to fit
+                      and add more estimators to the ensemble, otherwise, just fit
+                      a whole new ensemble.
+   :type warm_start: bool, optional
+   :param metric: Set the metric used to compute the distance between shapelet and time series
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters passed to the metric construction
+   :type metric_params: dict, optional
+   :param random_state: Controls the random resampling of the original dataset and the construction of
+                        the base estimators. Pass an int for reproducible output across multiple
+                        function calls.
+   :type random_state: int or RandomState, optional
 
 
 .. class:: ExtraShapeletTreesRegressor(*, n_estimators=100, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
@@ -87,6 +80,33 @@ Classes
    >>> f = ExtraShapeletTreesRegressor(n_estimators=100, metric='scaled_euclidean')
    >>> f.fit(x, y)
    >>> y_hat = f.predict(x)
+
+   Construct a extra shapelet trees regressor.
+
+   :param n_estimators: The number of estimators
+   :type n_estimators: int, optional
+   :param bootstrap: Use bootstrap sampling to fit the base estimators
+   :type bootstrap: bool, optional
+   :param n_jobs: The number of processor cores used for fitting the ensemble
+   :type n_jobs: int, optional
+   :param min_shapelet_size: The minimum shapelet size to sample
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum shapelet size to sample
+   :type max_shapelet_size: float, optional
+   :param min_samples_split: The minimum samples required to split the decision trees
+   :type min_samples_split: int, optional
+   :param warm_start: When set to True, reuse the solution of the previous call to fit
+                      and add more estimators to the ensemble, otherwise, just fit
+                      a whole new ensemble.
+   :type warm_start: bool, optional
+   :param metric: Set the metric used to compute the distance between shapelet and time series
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters passed to the metric construction
+   :type metric_params: dict, optional
+   :param random_state: Controls the random resampling of the original dataset and the construction of
+                        the base estimators. Pass an int for reproducible output across multiple
+                        function calls.
+   :type random_state: int or RandomState, optional
 
 
 .. class:: IsolationShapeletForest(*, n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', contamination_set='training', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
@@ -130,6 +150,55 @@ Classes
    >>> y_pred = f.predict(x_test)
    >>> balanced_accuracy_score(y_test, y_pred)
 
+   Construct a shapelet isolation forest
+
+   :param n_estimators: The number of estimators
+   :type n_estimators: int, optional
+   :param bootstrap: Use bootstrap sampling to fit the base estimators
+   :type bootstrap: bool, optional
+   :param n_jobs: The number of processor cores used for fitting the ensemble
+   :type n_jobs: int, optional
+   :param min_shapelet_size: The minimum shapelet size to sample
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum shapelet size to sample
+   :type max_shapelet_size: float, optional
+   :param min_samples_split: The minimum samples required to split the decision trees
+   :type min_samples_split: int, optional
+   :param max_samples: The number of samples to draw to train each base estimator
+   :type max_samples: float or int
+   :param contamination: The strategy for computing the offset (see `offset_`)
+
+                         - if 'auto' ``offset_=-0.5``
+                         - if 'auc' ``offset_`` is computed as the offset that maximizes the
+                           area under ROC in the training or out-of-bag set (see ``contamination_set``).
+                         - if 'prc' ``offset_`` is computed as the offset that maximizes the
+                           area under PRC in the training or out-of-bag set (see ``contamination_set``)
+                         - if callable ``offset_`` is computed as the offset that maximizes the score
+                           computed by the callable in training or out-of-bag set (see ``contamination_set``)
+                         - if float ``offset_`` is computed as the c:th percentile of scores in the training
+                           or out-of-bag set (see ``contamination_set``)
+
+                         Setting contamination to either 'auc' or 'prc' require that `y` is passed to `fit`.
+   :type contamination: str, float or callable
+   :param contamination_set: Compute the ``offset_`` from either the out-of-bag samples or the training samples.
+                             'oob' require `bootstrap=True`.
+   :type contamination_set: {'training', 'oob'}, optional
+   :param warm_start: When set to True, reuse the solution of the previous call to fit
+                      and add more estimators to the ensemble, otherwise, just fit
+                      a whole new ensemble.
+   :type warm_start: bool, optional
+   :param metric: Set the metric used to compute the distance between shapelet and time series
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters passed to the metric construction
+   :type metric_params: dict, optional
+   :param random_state: Controls the random resampling of the original dataset and the construction of
+                        the base estimators. Pass an int for reproducible output across multiple
+                        function calls.
+   :type random_state: int or RandomState, optional
+
+   .. method:: decision_function(self, x)
+
+
    .. method:: fit(self, x, y=None, sample_weight=None, check_input=True)
 
       Build a Bagging ensemble of estimators from the training
@@ -153,11 +222,56 @@ Classes
    .. method:: predict(self, x)
 
 
-   .. method:: decision_function(self, x)
-
-
    .. method:: score_samples(self, x)
 
+
+
+.. class:: ShapeletForestClassifier(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+
+
+   Bases: :class:`wildboar.ensemble._ensemble.BaseShapeletForestClassifier`
+
+   An ensemble of random shapelet tree classifiers.
+
+   .. rubric:: Examples
+
+   >>> from wildboar.ensemble import ShapeletForestClassifier
+   >>> from wildboar.datasets import load_synthetic_control
+   >>> x, y = load_synthetic_control()
+   >>> f = ShapeletForestClassifier(n_estimators=100, metric='scaled_euclidean')
+   >>> f.fit(x, y)
+   >>> y_hat = f.predict(x)
+
+   Shapelet forest classifier.
+
+   :param n_estimators: The number of estimators
+   :type n_estimators: int, optional
+   :param n_shapelets: The number of shapelets to sample at each node
+   :type n_shapelets: int, optional
+   :param bootstrap: Use bootstrap sampling to fit the base estimators
+   :type bootstrap: bool, optional
+   :param n_jobs: The number of processor cores used for fitting the ensemble
+   :type n_jobs: int, optional
+   :param min_shapelet_size: The minimum shapelet size to sample
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum shapelet size to sample
+   :type max_shapelet_size: float, optional
+   :param min_samples_split: The minimum samples required to split the decision trees
+   :type min_samples_split: int, optional
+   :param warm_start: When set to True, reuse the solution of the previous call to fit
+                      and add more estimators to the ensemble, otherwise, just fit
+                      a whole new ensemble.
+   :type warm_start: bool, optional
+   :param metric: Set the metric used to compute the distance between shapelet and time series
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters passed to the metric construction
+   :type metric_params: dict, optional
+   :param oob_score: Compute out-of-bag estimates of the ensembles performance.
+   :type oob_score: bool, optional
+   :param random_state: Controls the random resampling of the original dataset and the construction of
+                        the base estimators. Pass an int for reproducible output across multiple
+                        function calls.
+   :type random_state: int or RandomState, optional
 
 
 .. class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
@@ -175,6 +289,35 @@ Classes
    The dimensionality of the resulting representation is
    ``<= n_estimators * 2^max_depth``
 
+   Construct a shapelet forest embedding.
+
+   :param n_estimators: The number of estimators
+   :type n_estimators: int, optional
+   :param bootstrap: Use bootstrap sampling to fit the base estimators
+   :type bootstrap: bool, optional
+   :param n_jobs: The number of processor cores used for fitting the ensemble
+   :type n_jobs: int, optional
+   :param min_shapelet_size: The minimum shapelet size to sample
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum shapelet size to sample
+   :type max_shapelet_size: float, optional
+   :param min_samples_split: The minimum samples required to split the decision trees
+   :type min_samples_split: int, optional
+   :param warm_start: When set to True, reuse the solution of the previous call to fit
+                      and add more estimators to the ensemble, otherwise, just fit
+                      a whole new ensemble.
+   :type warm_start: bool, optional
+   :param metric: Set the metric used to compute the distance between shapelet and time series
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters passed to the metric construction
+   :type metric_params: dict, optional
+   :param sparse_output: Return a sparse CSR-matrix.
+   :type sparse_output: bool, optional
+   :param random_state: Controls the random resampling of the original dataset and the construction of
+                        the base estimators. Pass an int for reproducible output across multiple
+                        function calls.
+   :type random_state: int or RandomState, optional
+
    .. method:: fit(self, x, y=None, sample_weight=None, check_input=True)
 
       Fit a random shapelet forest regressor
@@ -185,5 +328,53 @@ Classes
 
    .. method:: transform(self, x)
 
+
+
+.. class:: ShapeletForestRegressor(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+
+
+   Bases: :class:`wildboar.ensemble._ensemble.BaseShapeletForestRegressor`
+
+   An ensemble of random shapelet regression trees.
+
+   .. rubric:: Examples
+
+   >>> from wildboar.ensemble import ShapeletForestRegressor
+   >>> from wildboar.datasets import load_synthetic_control
+   >>> x, y = load_synthetic_control()
+   >>> f = ShapeletForestRegressor(n_estimators=100, metric='scaled_euclidean')
+   >>> f.fit(x, y)
+   >>> y_hat = f.predict(x)
+
+   Shapelet forest regressor.
+
+   :param n_estimators: The number of estimators
+   :type n_estimators: int, optional
+   :param n_shapelets: The number of shapelets to sample at each node
+   :type n_shapelets: int, optional
+   :param bootstrap: Use bootstrap sampling to fit the base estimators
+   :type bootstrap: bool, optional
+   :param n_jobs: The number of processor cores used for fitting the ensemble
+   :type n_jobs: int, optional
+   :param min_shapelet_size: The minimum shapelet size to sample
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum shapelet size to sample
+   :type max_shapelet_size: float, optional
+   :param min_samples_split: The minimum samples required to split the decision trees
+   :type min_samples_split: int, optional
+   :param warm_start: When set to True, reuse the solution of the previous call to fit
+                      and add more estimators to the ensemble, otherwise, just fit
+                      a whole new ensemble.
+   :type warm_start: bool, optional
+   :param metric: Set the metric used to compute the distance between shapelet and time series
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters passed to the metric construction
+   :type metric_params: dict, optional
+   :param oob_score: Compute out-of-bag estimates of the ensembles performance.
+   :type oob_score: bool, optional
+   :param random_state: Controls the random resampling of the original dataset and the construction of
+                        the base estimators. Pass an int for reproducible output across multiple
+                        function calls.
+   :type random_state: int or RandomState, optional
 
 

@@ -153,20 +153,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
 </ul>
 
 </div>
-<div class="rst-versions">
-
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Versions</dt>
-            <dd><a href="../../../../master/index.html">1.0.9</a></dd>
-            <dd> 1.0.8 </dd>
-        </dl>
-    </div>
+<div class="sidebar-tree">
+    <ul>
+        <li class="toctree-l1 has-children"><a class="reference internal" href="#">Versions</a>
+            <input class="toctree-checkbox" id="version-checkbox-1" name="version-checkbox-1" type="checkbox"><label
+                for="version-checkbox-1"><i class="icon"><svg>
+                        <use href="#svg-arrow-right"></use>
+                    </svg></i></label>
+            <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.0.9</a></li>
+                <li class="toctree-l2"><span class="reference internal">1.0.8</span></li>
+            </ul>
+        </li>
+    </ul>
 </div></div>
       </div>
       
@@ -190,14 +195,14 @@
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets._filter.make_filter" title="wildboar.datasets._filter.make_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_filter</span></code></a>(filter)</p></td>
-<td><p>Create a new filter</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets._filter.make_list_filter" title="wildboar.datasets._filter.make_list_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_list_filter</span></code></a>(filter)</p></td>
-<td><p>Make a new filter based on a list of filter strings</p></td>
-</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets._filter.make_dict_filter" title="wildboar.datasets._filter.make_dict_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dict_filter</span></code></a>(filter)</p></td>
 <td><p>Make a new filter</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets._filter.make_filter" title="wildboar.datasets._filter.make_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_filter</span></code></a>(filter)</p></td>
+<td><p>Create a new filter</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets._filter.make_list_filter" title="wildboar.datasets._filter.make_list_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_list_filter</span></code></a>(filter)</p></td>
+<td><p>Make a new filter based on a list of filter strings</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets._filter.make_str_filter" title="wildboar.datasets._filter.make_str_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_str_filter</span></code></a>(filter)</p></td>
 <td><p>Make a new filter</p></td>
@@ -205,8 +210,24 @@
 </tbody>
 </table></div>
 <dl class="py function">
+<dt id="wildboar.datasets._filter.make_dict_filter">
+<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_dict_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/datasets/_filter.py#L103-L122"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_dict_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a new filter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filter</strong> (<em>dict</em>) – The dict of [subject] -&gt; [op][verb]</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The filter function</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>function</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py function">
 <dt id="wildboar.datasets._filter.make_filter">
-<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets._filter.make_filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/datasets/_filter.py#L60-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new filter</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -222,7 +243,7 @@
 </dd></dl>
 <dl class="py function">
 <dt id="wildboar.datasets._filter.make_list_filter">
-<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_list_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets._filter.make_list_filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_list_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/datasets/_filter.py#L83-L100"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_list_filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a new filter based on a list of filter strings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -237,24 +258,8 @@
 </dl>
 </dd></dl>
 <dl class="py function">
-<dt id="wildboar.datasets._filter.make_dict_filter">
-<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_dict_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets._filter.make_dict_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a new filter</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filter</strong> (<em>dict</em>) – The dict of [subject] -&gt; [op][verb]</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The filter function</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>function</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py function">
 <dt id="wildboar.datasets._filter.make_str_filter">
-<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_str_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets._filter.make_str_filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></code><code class="sig-name descname"><span class="pre">make_str_filter</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/datasets/_filter.py#L125-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_str_filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a new filter</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -311,9 +316,9 @@
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets._filter</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#wildboar.datasets._filter.make_dict_filter">make_dict_filter</a></li>
 <li><a class="reference internal" href="#wildboar.datasets._filter.make_filter">make_filter</a></li>
 <li><a class="reference internal" href="#wildboar.datasets._filter.make_list_filter">make_list_filter</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._filter.make_dict_filter">make_dict_filter</a></li>
 <li><a class="reference internal" href="#wildboar.datasets._filter.make_str_filter">make_str_filter</a></li>
 </ul>
 </li>

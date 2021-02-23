@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.tree" href="../../tree/index.html" /><link rel="prev" title="wildboar.model_selection" href="../index.html" />
 
     <meta name="generator" content="sphinx-3.5.1, furo 2021.02.21.beta25"/>
-        <title>wildboar.model_selection.outlier - Wildboar 1.0.9.dev6+gf644248 documentation</title>
+        <title>wildboar.model_selection.outlier - Wildboar 1.0.9.dev9+g821e77a documentation</title>
       <link rel="stylesheet" href="../../../_static/styles/furo.css?digest=33d2fc4f3f180ec1ffc6524e273e21d7d58cbe49">
     <link rel="stylesheet" href="../../../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../../_static/pygments_dark.css">
@@ -101,7 +101,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.0.9.dev6+gf644248 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.0.9.dev9+g821e77a documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -163,20 +163,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
 </ul>
 
 </div>
-<div class="rst-versions">
-
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Versions</dt>
-            <dd> 1.0.9 </dd>
-            <dd><a href="../../../../1.0.X/index.html">1.0.8</a></dd>
-        </dl>
-    </div>
+<div class="sidebar-tree">
+    <ul>
+        <li class="toctree-l1 has-children"><a class="reference internal" href="#">Versions</a>
+            <input class="toctree-checkbox" id="version-checkbox-1" name="version-checkbox-1" type="checkbox"><label
+                for="version-checkbox-1"><i class="icon"><svg>
+                        <use href="#svg-arrow-right"></use>
+                    </svg></i></label>
+            <ul>
+                <li class="toctree-l2"><span class="reference internal">1.0.9</span></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.8</a></li>
+            </ul>
+        </li>
+    </ul>
 </div></div>
       </div>
       
@@ -214,17 +219,17 @@
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.model_selection.outlier.train_test_split" title="wildboar.model_selection.outlier.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_test_split</span></code></a>(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None)</p></td>
-<td><p>Training and testing split from classification dataset</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.model_selection.outlier.threshold_score" title="wildboar.model_selection.outlier.threshold_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">threshold_score</span></code></a>(y_true, score, score_f)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.model_selection.outlier.threshold_score" title="wildboar.model_selection.outlier.threshold_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">threshold_score</span></code></a>(y_true, score, score_f)</p></td>
 <td><p>Compute the performance of using the i:th score</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.model_selection.outlier.train_test_split" title="wildboar.model_selection.outlier.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_test_split</span></code></a>(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None)</p></td>
+<td><p>Training and testing split from classification dataset</p></td>
 </tr>
 </tbody>
 </table></div>
 <dl class="py class">
 <dt id="wildboar.model_selection.outlier.RepeatedOutlierSplit">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></code><code class="sig-name descname"><span class="pre">RepeatedOutlierSplit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outlier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></code><code class="sig-name descname"><span class="pre">RepeatedOutlierSplit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outlier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L28-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Repeated random outlier cross-validator</p>
 <p>Yields indicies that split the dataset into training and test sets.</p>
 <div class="admonition note">
@@ -234,9 +239,32 @@ cross-validator does not ensure that all folds will be different.
 Instead, the inlier samples are shuffled and new outlier samples
 are inserted in the training and test sets repeatedly.</p>
 </div>
+<p>Construct a new cross-validator</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>The maximum number of splits.</p>
+<ul>
+<li><p>if None, the number of splits is determined by the number of
+outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
+<li><p>if int, the number of splits is an upper-bound</p></li>
+</ul>
+</p></li>
+<li><p><strong>test_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The size of the test set.</p></li>
+<li><p><strong>n_outlier</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of outliers in the training and test sets.</p></li>
+<li><p><strong>shuffle</strong> (<em>bool</em><em>, </em><em>optional</em>) – Shuffle the training indicies in each iteration.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – The psudo-random number generator</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__">
+<code class="sig-name descname"><span class="pre">__repr__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L166-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
 <dl class="py method">
 <dt id="wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits">
-<code class="sig-name descname"><span class="pre">get_n_splits</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_n_splits</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L80-L105"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of splitting iterations in the cross-validator
 :param X: The samples
 :type X: object
@@ -255,7 +283,7 @@ are inserted in the training and test sets repeatedly.</p>
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.model_selection.outlier.RepeatedOutlierSplit.split">
-<code class="sig-name descname"><span class="pre">split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.split" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L107-L164"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.split" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return training and test indicies</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -270,47 +298,10 @@ are inserted in the training and test sets repeatedly.</p>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__">
-<code class="sig-name descname"><span class="pre">__repr__</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return repr(self).</p>
-</dd></dl>
-</dd></dl>
-<dl class="py function">
-<dt id="wildboar.model_selection.outlier.train_test_split">
-<code class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></code><code class="sig-name descname"><span class="pre">train_test_split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalies_train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.model_selection.outlier.train_test_split" title="Permalink to this definition">¶</a></dt>
-<dd><p>Training and testing split from classification dataset</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dim</em><em>, </em><em>n_timestep</em><em>)</em>) – Input data samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Input class label</p></li>
-<li><p><strong>normal_class</strong> (<em>int</em>) – Class label that should be considered as the normal class</p></li>
-<li><p><strong>test_size</strong> (<em>float</em>) – Size of the test set</p></li>
-<li><p><strong>anomalies_train_size</strong> (<em>float</em>) – Contamination of anomalies in the training dataset</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – Psudo random state used for stable results.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>x_train</strong> (<em>array-like</em>) – Training samples</p></li>
-<li><p><strong>x_test</strong> (<em>array-like</em>) – Test samples</p></li>
-<li><p><strong>y_train</strong> (<em>array-like</em>) – Training labels (either 1 or -1, where 1 denotes normal and -1 anomalous)</p></li>
-<li><p><strong>y_test</strong> (<em>array-like</em>) – Test labels (either 1 or -1, where 1 denotes normal and -1 anomalous)</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">anomalies_train_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 <dl class="py function">
 <dt id="wildboar.model_selection.outlier.threshold_score">
-<code class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></code><code class="sig-name descname"><span class="pre">threshold_score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.model_selection.outlier.threshold_score" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></code><code class="sig-name descname"><span class="pre">threshold_score</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_f</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/outlier.py#L115-L163"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.threshold_score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the performance of using the i:th score</p>
 <p>The scores are typically computed using an outlier detection algorithm</p>
 <dl class="field-list simple">
@@ -347,6 +338,38 @@ are inserted in the training and test sets repeatedly.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">scores</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">score_samples</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">perf</span> <span class="o">=</span> <span class="n">threshold_score</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">scores</span><span class="p">,</span> <span class="n">balanced_accuracy_score</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">offset_</span> <span class="o">=</span> <span class="n">score</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">perf</span><span class="p">)]</span>
+</pre></div>
+</div>
+</dd></dl>
+<dl class="py function">
+<dt id="wildboar.model_selection.outlier.train_test_split">
+<code class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></code><code class="sig-name descname"><span class="pre">train_test_split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalies_train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/outlier.py#L34-L112"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.train_test_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Training and testing split from classification dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dim</em><em>, </em><em>n_timestep</em><em>)</em>) – Input data samples</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Input class label</p></li>
+<li><p><strong>normal_class</strong> (<em>int</em>) – Class label that should be considered as the normal class</p></li>
+<li><p><strong>test_size</strong> (<em>float</em>) – Size of the test set</p></li>
+<li><p><strong>anomalies_train_size</strong> (<em>float</em>) – Contamination of anomalies in the training dataset</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – Psudo random state used for stable results.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>x_train</strong> (<em>array-like</em>) – Training samples</p></li>
+<li><p><strong>x_test</strong> (<em>array-like</em>) – Test samples</p></li>
+<li><p><strong>y_train</strong> (<em>array-like</em>) – Training labels (either 1 or -1, where 1 denotes normal and -1 anomalous)</p></li>
+<li><p><strong>y_test</strong> (<em>array-like</em>) – Test labels (either 1 or -1, where 1 denotes normal and -1 anomalous)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">anomalies_train_size</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -413,13 +436,13 @@ are inserted in the training and test sets repeatedly.</p>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit">RepeatedOutlierSplit</a><ul>
+<li><a class="reference internal" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__">__repr__</a></li>
 <li><a class="reference internal" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits">get_n_splits</a></li>
 <li><a class="reference internal" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.split">split</a></li>
-<li><a class="reference internal" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__">__repr__</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.model_selection.outlier.train_test_split">train_test_split</a></li>
 <li><a class="reference internal" href="#wildboar.model_selection.outlier.threshold_score">threshold_score</a></li>
+<li><a class="reference internal" href="#wildboar.model_selection.outlier.train_test_split">train_test_split</a></li>
 </ul>
 </li>
 </ul>

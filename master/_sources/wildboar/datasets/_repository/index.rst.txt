@@ -14,12 +14,12 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.datasets._repository.Repository
-   wildboar.datasets._repository.JSONRepository
-   wildboar.datasets._repository.RepositoryCollection
-   wildboar.datasets._repository.Bundle
    wildboar.datasets._repository.ArffBundle
+   wildboar.datasets._repository.Bundle
+   wildboar.datasets._repository.JSONRepository
    wildboar.datasets._repository.NpyBundle
+   wildboar.datasets._repository.Repository
+   wildboar.datasets._repository.RepositoryCollection
 
 
 
@@ -28,152 +28,25 @@ Classes
 
    
 
-.. class:: Repository
+.. class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
 
-   A repository is a collection of bundles
 
-   .. method:: name(self)
-      :property:
+   Bases: :class:`wildboar.datasets._repository.Bundle`
 
-      Name of the repository
+   bundle of .arff-files
 
-      :returns: **str**
-      :rtype: the name of the repository
+   Construct a bundle
 
-
-   .. method:: version(self)
-      :property:
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-
-   .. method:: download_url(self)
-      :property:
-
-      The url template for downloading bundles
-
-      :returns: **str**
-      :rtype: the download url
-
-
-   .. method:: wildboar_requires(self)
-      :property:
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
-
-
-   .. method:: get_bundles(self)
-      :abstractmethod:
-
-      Get all bundles
-
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
-
-
-   .. method:: get_bundle(self, key)
-
-      Get a bundle with the specified key
-
-      :param key: Key of the bundle
-      :type key: str
-
-      :returns: **bundle** -- A bundle or None
-      :rtype: Bundle, optional
-
-
-   .. method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
-
-
-   .. method:: list_datasets(self, bundle, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
-
-
-   .. method:: clear_cache(self, cache_dir, keep_last_version=True)
-
-
-   .. method:: refresh(self)
-
-      Refresh the repository
-
-
-
-.. class:: JSONRepository(url)
-
-
-   Bases: :class:`wildboar.datasets._repository.Repository`
-
-   A repository is a collection of bundles
-
-   .. method:: wildboar_requires(self)
-      :property:
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
-
-
-   .. method:: name(self)
-      :property:
-
-      Name of the repository
-
-      :returns: **str**
-      :rtype: the name of the repository
-
-
-   .. method:: version(self)
-      :property:
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-
-   .. method:: download_url(self)
-      :property:
-
-      The url template for downloading bundles
-
-      :returns: **str**
-      :rtype: the download url
-
-
-   .. method:: get_bundles(self)
-
-      Get all bundles
-
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
-
-
-   .. method:: refresh(self)
-
-      Refresh the repository
-
-
-
-.. class:: RepositoryCollection
-
-
-   .. method:: __getitem__(self, item)
-
-
-   .. method:: __contains__(self, item)
-
-
-   .. method:: __iter__(self)
-
-
-   .. method:: append(self, item)
-
+   :param key: A unique key of the bundle
+   :type key: str
+   :param version: The version of the bundle
+   :type version: str
+   :param name: Human-readable name of the bundle
+   :type name: str
+   :param description: Description of the bundle
+   :type description: str
+   :param class_index: Index of the class label(s)
+   :type class_index: int or array-like
 
 
 .. class:: Bundle(*, key, version, name, description=None, class_index=-1)
@@ -198,6 +71,19 @@ Classes
       Index of the class label(s)
 
       :type: int or array-like
+
+   Construct a bundle
+
+   :param key: A unique key of the bundle
+   :type key: str
+   :param version: The version of the bundle
+   :type version: str
+   :param name: Human-readable name of the bundle
+   :type name: str
+   :param description: Description of the bundle
+   :type description: str
+   :param class_index: Index of the class label(s)
+   :type class_index: int or array-like
 
    .. method:: get_filename(self, version=None, tag=None, ext=None)
 
@@ -230,12 +116,61 @@ Classes
 
 
 
-.. class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
+.. class:: JSONRepository(url)
 
 
-   Bases: :class:`wildboar.datasets._repository.Bundle`
+   Bases: :class:`wildboar.datasets._repository.Repository`
 
-   bundle of .arff-files
+   A repository is a collection of bundles
+
+   .. method:: download_url(self)
+      :property:
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+
+   .. method:: get_bundles(self)
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+   .. method:: name(self)
+      :property:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+
+   .. method:: refresh(self)
+
+      Refresh the repository
+
+
+   .. method:: version(self)
+      :property:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+
+   .. method:: wildboar_requires(self)
+      :property:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
 
 
 .. class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
@@ -244,5 +179,109 @@ Classes
    Bases: :class:`wildboar.datasets._repository.Bundle`
 
    bundle of numpy binary files
+
+   Construct a bundle
+
+   :param key: A unique key of the bundle
+   :type key: str
+   :param version: The version of the bundle
+   :type version: str
+   :param name: Human-readable name of the bundle
+   :type name: str
+   :param description: Description of the bundle
+   :type description: str
+   :param class_index: Index of the class label(s)
+   :type class_index: int or array-like
+
+
+.. class:: Repository
+
+   A repository is a collection of bundles
+
+   .. method:: clear_cache(self, cache_dir, keep_last_version=True)
+
+
+   .. method:: download_url(self)
+      :property:
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+
+   .. method:: get_bundle(self, key)
+
+      Get a bundle with the specified key
+
+      :param key: Key of the bundle
+      :type key: str
+
+      :returns: **bundle** -- A bundle or None
+      :rtype: Bundle, optional
+
+
+   .. method:: get_bundles(self)
+      :abstractmethod:
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+   .. method:: list_datasets(self, bundle, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+
+
+   .. method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
+
+
+   .. method:: name(self)
+      :property:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+
+   .. method:: refresh(self)
+
+      Refresh the repository
+
+
+   .. method:: version(self)
+      :property:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+
+   .. method:: wildboar_requires(self)
+      :property:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+
+
+.. class:: RepositoryCollection
+
+
+   .. method:: __contains__(self, item)
+
+
+   .. method:: __getitem__(self, item)
+
+
+   .. method:: __iter__(self)
+
+
+   .. method:: append(self, item)
+
 
 

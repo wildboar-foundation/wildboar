@@ -153,20 +153,25 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
 </ul>
 
 </div>
-<div class="rst-versions">
-
-    <div class="rst-other-versions">
-        <dl>
-            <dt>Versions</dt>
-            <dd><a href="../../../../master/index.html">1.0.9</a></dd>
-            <dd> 1.0.8 </dd>
-        </dl>
-    </div>
+<div class="sidebar-tree">
+    <ul>
+        <li class="toctree-l1 has-children"><a class="reference internal" href="#">Versions</a>
+            <input class="toctree-checkbox" id="version-checkbox-1" name="version-checkbox-1" type="checkbox"><label
+                for="version-checkbox-1"><i class="icon"><svg>
+                        <use href="#svg-arrow-right"></use>
+                    </svg></i></label>
+            <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.0.9</a></li>
+                <li class="toctree-l2"><span class="reference internal">1.0.8</span></li>
+            </ul>
+        </li>
+    </ul>
 </div></div>
       </div>
       
@@ -193,8 +198,8 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree" title="wildboar.tree._tree.BaseShapeletTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseShapeletTree</span></code></a></p></td>
 <td><p>Base class for all estimators in scikit-learn.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor" title="wildboar.tree._tree.ShapeletTreeRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletTreeRegressor</span></code></a></p></td>
-<td><p>A shapelet tree regressor.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier" title="wildboar.tree._tree.ExtraShapeletTreeClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreeClassifier</span></code></a></p></td>
+<td><p>An extra shapelet tree classifier.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeRegressor" title="wildboar.tree._tree.ExtraShapeletTreeRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreeRegressor</span></code></a></p></td>
 <td><p>An extra shapelet tree regressor.</p></td>
@@ -202,14 +207,14 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeClassifier" title="wildboar.tree._tree.ShapeletTreeClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletTreeClassifier</span></code></a></p></td>
 <td><p>A shapelet tree classifier.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier" title="wildboar.tree._tree.ExtraShapeletTreeClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreeClassifier</span></code></a></p></td>
-<td><p>An extra shapelet tree classifier.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor" title="wildboar.tree._tree.ShapeletTreeRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletTreeRegressor</span></code></a></p></td>
+<td><p>A shapelet tree regressor.</p></td>
 </tr>
 </tbody>
 </table></div>
 <dl class="py class">
 <dt id="wildboar.tree._tree.BaseShapeletTree">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">BaseShapeletTree</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.BaseShapeletTree" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">BaseShapeletTree</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L31-L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.BaseShapeletTree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
 <p>Base class for all estimators in scikit-learn.</p>
 <p class="rubric">Notes</p>
@@ -217,97 +222,114 @@
 at the class level in their <code class="docutils literal notranslate"><span class="pre">__init__</span></code> as explicit keyword
 arguments (no <code class="docutils literal notranslate"><span class="pre">*args</span></code> or <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>).</p>
 <dl class="py method">
-<dt id="wildboar.tree._tree.BaseShapeletTree.decision_path">
-<code class="sig-name descname"><span class="pre">decision_path</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.BaseShapeletTree.decision_path" title="Permalink to this definition">¶</a></dt>
+<dt id="wildboar.tree._tree.BaseShapeletTree.apply">
+<code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L90-L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.BaseShapeletTree.apply" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py method">
-<dt id="wildboar.tree._tree.BaseShapeletTree.apply">
-<code class="sig-name descname"><span class="pre">apply</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.BaseShapeletTree.apply" title="Permalink to this definition">¶</a></dt>
+<dt id="wildboar.tree._tree.BaseShapeletTree.decision_path">
+<code class="sig-name descname"><span class="pre">decision_path</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L85-L88"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.BaseShapeletTree.decision_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="wildboar.tree._tree.ShapeletTreeRegressor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ShapeletTreeRegressor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.RegressorMixin</span></code>, <a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree" title="wildboar.tree._tree.BaseShapeletTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.BaseShapeletTree</span></code></a></p>
-<p>A shapelet tree regressor.</p>
+<dt id="wildboar.tree._tree.ExtraShapeletTreeClassifier">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ExtraShapeletTreeClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L599-L696"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeClassifier" title="wildboar.tree._tree.ShapeletTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.ShapeletTreeClassifier</span></code></a></p>
+<p>An extra shapelet tree classifier.</p>
+<p>Extra shapelet trees are constructed by sampling a distance threshold
+uniformly in the range [min(dist), max(dist)].</p>
 <dl class="py attribute">
-<dt id="wildboar.tree._tree.ShapeletTreeRegressor.tree_">
-<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor.tree_" title="Permalink to this definition">¶</a></dt>
+<dt id="wildboar.tree._tree.ExtraShapeletTreeClassifier.tree_">
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier.tree_" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Tree</p>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="wildboar.tree._tree.ShapeletTreeRegressor.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a shapelet tree regressor from the training set</p>
+<p>Construct a extra shapelet tree regressor</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>)</em>) – The training time series.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values as floating point values</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – If <cite>None</cite>, then samples are equally weighted. Splits that would create child
-nodes with net zero or negative weight are ignored while searching for a split
-in each node. Splits are also ignored if they would result in any single class
-carrying a negative weight in either child node.</p></li>
-<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+<li><p><strong>max_depth</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum depth of the tree. If <cite>None</cite> the tree is expanded until all leaves
+are pure or until all leaves contain less than <cite>min_samples_split</cite> samples</p></li>
+<li><p><strong>min_samples_split</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of samples to split an internal node</p></li>
+<li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node.</p></li>
+<li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum length of a sampled shapelet expressed as a fraction, computed as
+<cite>min(ceil(X.shape[-1] * min_shapelet_size), 2)</cite>.</p></li>
+<li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum length of a sampled shapelet, expressed as a fraction, computed as
+<cite>ceil(X.shape[-1] * max_shapelet_size)</cite>.</p></li>
+<li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'scaled_euclidean'</em><em>, </em><em>'scaled_dtw'}</em><em>, </em><em>optional</em>) – Distance metric used to identify the best shapelet.</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – Parameters for the distance measure</p></li>
+<li><p><strong>force_dim</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Force the number of dimensions.</p>
+<ul>
+<li><p>If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+or interoperability with <cite>sklearn</cite>.</p></li>
+</ul>
+</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator;</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator;</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used by <cite>np.random</cite>.</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>object</p>
-</dd>
 </dl>
-</dd></dl>
-<dl class="py method">
-<dt id="wildboar.tree._tree.ShapeletTreeRegressor.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor.predict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Predict the regression of the input samples x.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>]</em><em>)</em>) – The input time series</p></li>
-<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
-</dd>
-</dl>
-</dd></dl>
 </dd></dl>
 <dl class="py class">
 <dt id="wildboar.tree._tree.ExtraShapeletTreeRegressor">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ExtraShapeletTreeRegressor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeRegressor" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ExtraShapeletTreeRegressor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L276-L372"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeRegressor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor" title="wildboar.tree._tree.ShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.ShapeletTreeRegressor</span></code></a></p>
 <p>An extra shapelet tree regressor.</p>
 <p>Extra shapelet trees are constructed by sampling a distance threshold
 uniformly in the range [min(dist), max(dist)].</p>
 <dl class="py attribute">
 <dt id="wildboar.tree._tree.ExtraShapeletTreeRegressor.tree_">
-<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeRegressor.tree_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeRegressor.tree_" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Tree</p>
 </dd>
 </dl>
 </dd></dl>
+<p>Construct a extra shapelet tree regressor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_depth</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum depth of the tree. If <cite>None</cite> the tree is expanded until all leaves
+are pure or until all leaves contain less than <cite>min_samples_split</cite> samples</p></li>
+<li><p><strong>min_samples_split</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of samples to split an internal node</p></li>
+<li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node.</p></li>
+<li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum length of a sampled shapelet expressed as a fraction, computed as
+<cite>min(ceil(X.shape[-1] * min_shapelet_size), 2)</cite>.</p></li>
+<li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum length of a sampled shapelet, expressed as a fraction, computed as
+<cite>ceil(X.shape[-1] * max_shapelet_size)</cite>.</p></li>
+<li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'scaled_euclidean'</em><em>, </em><em>'scaled_dtw'}</em><em>, </em><em>optional</em>) – Distance metric used to identify the best shapelet.</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – Parameters for the distance measure</p></li>
+<li><p><strong>force_dim</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Force the number of dimensions.</p>
+<ul>
+<li><p>If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+for interoperability with <cite>sklearn</cite>.</p></li>
+</ul>
+</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator;</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator;</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used by <cite>np.random</cite>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 <dl class="py class">
 <dt id="wildboar.tree._tree.ShapeletTreeClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ShapeletTreeClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ShapeletTreeClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L375-L596"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code>, <a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree" title="wildboar.tree._tree.BaseShapeletTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.BaseShapeletTree</span></code></a></p>
 <p>A shapelet tree classifier.</p>
 <dl class="py attribute">
 <dt id="wildboar.tree._tree.ShapeletTreeClassifier.tree_">
-<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.tree_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.tree_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The tree data structure used internally</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -317,7 +339,7 @@ uniformly in the range [min(dist), max(dist)].</p>
 </dd></dl>
 <dl class="py attribute">
 <dt id="wildboar.tree._tree.ShapeletTreeClassifier.classes_">
-<code class="sig-name descname"><span class="pre">classes_</span></code><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.classes_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">classes_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.classes_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The class labels</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -327,7 +349,7 @@ uniformly in the range [min(dist), max(dist)].</p>
 </dd></dl>
 <dl class="py attribute">
 <dt id="wildboar.tree._tree.ShapeletTreeClassifier.n_classes_">
-<code class="sig-name descname"><span class="pre">n_classes_</span></code><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.n_classes_" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">n_classes_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.n_classes_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of class labels</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -344,9 +366,38 @@ uniformly in the range [min(dist), max(dist)].</p>
 </dd>
 </dl>
 </div>
+<p>Construct a shapelet tree classifier</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_depth</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum depth of the tree. If <cite>None</cite> the tree is expanded until all leaves
+are pure or until all leaves contain less than <cite>min_samples_split</cite> samples</p></li>
+<li><p><strong>min_samples_split</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of samples to split an internal node</p></li>
+<li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node.</p></li>
+<li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum length of a sampled shapelet expressed as a fraction, computed as
+<cite>min(ceil(X.shape[-1] * min_shapelet_size), 2)</cite>.</p></li>
+<li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum length of a sampled shapelet, expressed as a fraction, computed as
+<cite>ceil(X.shape[-1] * max_shapelet_size)</cite>.</p></li>
+<li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'scaled_euclidean'</em><em>, </em><em>'scaled_dtw'}</em><em>, </em><em>optional</em>) – Distance metric used to identify the best shapelet.</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – Parameters for the distance measure</p></li>
+<li><p><strong>force_dim</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Force the number of dimensions.</p>
+<ul>
+<li><p>If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+for interoperability with <cite>sklearn</cite>.</p></li>
+</ul>
+</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator;</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator;</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used by <cite>np.random</cite>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="wildboar.tree._tree.ShapeletTreeClassifier.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L482-L552"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit a shapelet tree regressor from the training set</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -370,7 +421,7 @@ carrying a negative weight in either child node.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.tree._tree.ShapeletTreeClassifier.predict">
-<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L554-L573"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict the regression of the input samples x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -389,7 +440,7 @@ carrying a negative weight in either child node.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.tree._tree.ShapeletTreeClassifier.predict_proba">
-<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L575-L596"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predict class probabilities of the input samples X.  The predicted
 class probability is the fraction of samples of the same class
 in a leaf.</p>
@@ -411,18 +462,88 @@ that in the attribute <cite>classes_</cite></p>
 </dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt id="wildboar.tree._tree.ExtraShapeletTreeClassifier">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ExtraShapeletTreeClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeClassifier" title="wildboar.tree._tree.ShapeletTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.ShapeletTreeClassifier</span></code></a></p>
-<p>An extra shapelet tree classifier.</p>
-<p>Extra shapelet trees are constructed by sampling a distance threshold
-uniformly in the range [min(dist), max(dist)].</p>
+<dt id="wildboar.tree._tree.ShapeletTreeRegressor">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.tree._tree.</span></code><code class="sig-name descname"><span class="pre">ShapeletTreeRegressor</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L96-L273"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.RegressorMixin</span></code>, <a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree" title="wildboar.tree._tree.BaseShapeletTree"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.tree._tree.BaseShapeletTree</span></code></a></p>
+<p>A shapelet tree regressor.</p>
 <dl class="py attribute">
-<dt id="wildboar.tree._tree.ExtraShapeletTreeClassifier.tree_">
-<code class="sig-name descname"><span class="pre">tree_</span></code><a class="headerlink" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier.tree_" title="Permalink to this definition">¶</a></dt>
+<dt id="wildboar.tree._tree.ShapeletTreeRegressor.tree_">
+<code class="sig-name descname"><span class="pre">tree_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor.tree_" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Tree</p>
+</dd>
+</dl>
+</dd></dl>
+<p>Construct a shapelet tree regressor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_depth</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum depth of the tree. If <cite>None</cite> the tree is expanded until all leaves
+are pure or until all leaves contain less than <cite>min_samples_split</cite> samples</p></li>
+<li><p><strong>min_samples_split</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of samples to split an internal node</p></li>
+<li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node.</p></li>
+<li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum length of a sampled shapelet expressed as a fraction, computed as
+<cite>min(ceil(X.shape[-1] * min_shapelet_size), 2)</cite>.</p></li>
+<li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum length of a sampled shapelet, expressed as a fraction, computed as
+<cite>ceil(X.shape[-1] * max_shapelet_size)</cite>.</p></li>
+<li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'scaled_euclidean'</em><em>, </em><em>'scaled_dtw'}</em><em>, </em><em>optional</em>) – Distance metric used to identify the best shapelet.</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – Parameters for the distance measure</p></li>
+<li><p><strong>force_dim</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>Force the number of dimensions.</p>
+<ul>
+<li><p>If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+for interoperability with <cite>sklearn</cite>.</p></li>
+</ul>
+</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator;</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator;</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used by <cite>np.random</cite>.</p></li>
+</ul>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="wildboar.tree._tree.ShapeletTreeRegressor.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L191-L252"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a shapelet tree regressor from the training set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>)</em>) – The training time series.</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values as floating point values</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – If <cite>None</cite>, then samples are equally weighted. Splits that would create child
+nodes with net zero or negative weight are ignored while searching for a split
+in each node. Splits are also ignored if they would result in any single class
+carrying a negative weight in either child node.</p></li>
+<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>object</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
+<dt id="wildboar.tree._tree.ShapeletTreeRegressor.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/tree/_tree.py#L254-L273"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._tree.ShapeletTreeRegressor.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the regression of the input samples x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timesteps</em><em>]</em><em>)</em>) – The input time series</p></li>
+<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you know what you do.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -471,14 +592,12 @@ uniformly in the range [min(dist), max(dist)].</p>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
 <li><a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree">BaseShapeletTree</a><ul>
-<li><a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree.decision_path">decision_path</a></li>
 <li><a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree.apply">apply</a></li>
+<li><a class="reference internal" href="#wildboar.tree._tree.BaseShapeletTree.decision_path">decision_path</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor">ShapeletTreeRegressor</a><ul>
-<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor.tree_">tree_</a></li>
-<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor.predict">predict</a></li>
+<li><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier">ExtraShapeletTreeClassifier</a><ul>
+<li><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier.tree_">tree_</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeRegressor">ExtraShapeletTreeRegressor</a><ul>
@@ -494,8 +613,10 @@ uniformly in the range [min(dist), max(dist)].</p>
 <li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeClassifier.predict_proba">predict_proba</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier">ExtraShapeletTreeClassifier</a><ul>
-<li><a class="reference internal" href="#wildboar.tree._tree.ExtraShapeletTreeClassifier.tree_">tree_</a></li>
+<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor">ShapeletTreeRegressor</a><ul>
+<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor.tree_">tree_</a></li>
+<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.tree._tree.ShapeletTreeRegressor.predict">predict</a></li>
 </ul>
 </li>
 </ul>
