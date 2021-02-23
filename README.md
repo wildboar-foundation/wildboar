@@ -1,7 +1,7 @@
 # wildboar
 ![Python version](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9-blue)
 ![Build, test and upload to PyPI](https://github.com/isaksamsten/wildboar/workflows/Build,%20test%20and%20upload%20to%20PyPI/badge.svg)
-[![Docs Status](https://img.shields.io/badge/docs-passing-success)](http://isaksamsten.github.io/wildboar/index.html)
+[![Build and deploy documentation](https://github.com/isaksamsten/wildboar/actions/workflows/build-deply-docs.yml/badge.svg)](http://isaksamsten.github.io/wildboar/index.html)
 [![PyPI version](https://badge.fury.io/py/wildboar.svg)](https://badge.fury.io/py/wildboar)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4264063.svg)](https://doi.org/10.5281/zenodo.4264063)
 
@@ -34,6 +34,11 @@ Some parts of wildboar is implemented using Cython. Hence, compilation
 requires:
 
  * cython (>= 0.29.14)
+
+### Current version
+
+- Current release: 1.0.7
+- Current development release: 1.0.7dev
 
 ### Binaries
 
