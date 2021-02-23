@@ -20,7 +20,9 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Fetch all history for all tags and branches
-        run: git fetch --prune --unshallow   
+        run: |
+          git fetch --prune --unshallow
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
       - uses: actions/setup-python@v2
         name: Install Python
@@ -46,7 +48,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Fetch all history for all tags and branches
-        run: git fetch --prune --unshallow 
+        run: |
+          git fetch --prune --unshallow
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
 
       - uses: actions/setup-python@v2
         name: Install Python

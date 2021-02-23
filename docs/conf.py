@@ -6,6 +6,7 @@
 
 # -- Path setup --------------------------------------------------------------
 
+from logging import log
 import os
 
 SEM_VER_REGEX = "^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
@@ -85,9 +86,27 @@ smv_tag_whitelist = None
 
 
 def setup(app):
+    import re
+    import pathlib
+    from sphinx.util.logging import getLogger
+
+    logger = getLogger(__name__)
+
+    def is_tag_for(gitref, major, minor):
+        match = re.match(SEM_VER_REGEX, gitref.name)
+        return (
+            gitref.source == "tags"
+            and match
+            and match.group(1) == major
+            and match.group(2) == minor
+        )
+
     def read_latest_version(app, config):
-        import pathlib
-        import re
+        if not hasattr(config, "smv_metadata") or len(config.smv_metadata) == 0:
+            return
+
+        logger.info("[CONF] installed version %s", config.release)
+
         from sphinx_multiversion import git
 
         gitroot = pathlib.Path(
@@ -96,23 +115,29 @@ def setup(app):
         gitrefs = list(git.get_all_refs(gitroot))
         latest_version_tags = {}
         for ver, metadata in config.smv_metadata.items():
-            latest_version_tags[ver] = ver
             current_version = re.match("(\d)\.(\d)(?:.X)?", ver)
             if current_version:
-                matching_tags = []
-                for gitref in gitrefs:
-                    if gitref.source == "tags":
-                        match = re.match(SEM_VER_REGEX, gitref.name)
-                        if (
-                            match
-                            and match.group(1) == current_version.group(1)
-                            and match.group(2) == current_version.group(2)
-                        ):
-                            matching_tags.append(gitref.name.replace("v", ""))
-                matching_tags.sort(key=lambda x: parse_version(x))
+                major = current_version.group(1)
+                minor = current_version.group(2)
+                matching_tags = [
+                    re.sub("^v", "", gitref.name)
+                    for gitref in gitrefs
+                    if is_tag_for(gitref, major, minor)
+                ]
+                matching_tags.sort(key=parse_version)
                 latest_tag = matching_tags[-1] if matching_tags else ver
                 latest_version_tags[ver] = latest_tag
+            elif ver == "master":
+                latest_version_tags[ver] = config.version
+            else:
+                logger.warning("[CONF] using branch version for tag (%s)", ver)
+                latest_version_tags[ver] = ver
 
+            logger.info(
+                "[CONF] latest version tag for '%s' is '%s'",
+                ver,
+                latest_version_tags[ver],
+            )
             metadata["version"] = latest_version_tags[ver]
 
         if config.smv_current_version != "master":
@@ -121,12 +146,19 @@ def setup(app):
 
         config.smv_latest_version_tags = latest_version_tags
         config.smv_current_version_tag = latest_version_tags[config.smv_current_version]
+
         version_sorted = sorted(
-            config.smv_metadata.keys(), key=lambda x: parse_version(x)
+            config.smv_metadata.keys(),
+            key=lambda x: parse_version(re.sub(".X$", "", x)),
         )
         config.smv_latest_stable = version_sorted[-1] if version_sorted else "master"
 
+        logger.info("[DOCS] latest stable version is %s", config.smv_latest_stable)
+
     def set_latest_version(app, pagename, templatename, context, doctree):
+        if not hasattr(app.config, "smv_metadata") or len(app.config.smv_metadata) == 0:
+            return
+
         from sphinx_multiversion.sphinx import VersionInfo
 
         versioninfo = VersionInfo(
