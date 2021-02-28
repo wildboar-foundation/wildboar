@@ -20,6 +20,8 @@
 
 cimport numpy as np
 
+from .._data cimport TSDatabase
+
 
 cdef struct TSView:
     Py_ssize_t index  # the index of the shapelet sample
@@ -29,17 +31,6 @@ cdef struct TSView:
     double mean  # the mean of the shapelet
     double std  # the stanard devision
     void *extra
-
-
-cdef struct TSDatabase:
-    Py_ssize_t n_samples  # the number of samples
-    Py_ssize_t n_timestep  # the number of timesteps
-    Py_ssize_t n_dims
-
-    double *data  # the data
-    Py_ssize_t sample_stride  # the stride for samples
-    Py_ssize_t timestep_stride  # the `feature` stride
-    Py_ssize_t dim_stride  # the dimension stride
 
 
 cdef struct TSCopy:
@@ -56,9 +47,7 @@ cdef struct TSCopy:
 cdef class DistanceMeasure:
     cdef Py_ssize_t n_timestep
 
-
     cdef int init(self, TSDatabase *td) nogil
-
 
     cdef int init_ts_view(
         self,
@@ -70,14 +59,16 @@ cdef class DistanceMeasure:
         Py_ssize_t dim,
     ) nogil
 
-
-    cdef int init_ts_copy_from_ndarray(
+    cdef int init_ts_copy_from_obj(
         self,
         TSCopy *ts_copy,
-        np.ndarray arr,
-        Py_ssize_t dim,
+        object obj,
     )
 
+    cdef object object_from_ts_copy(
+        self, 
+        TSCopy *ts_copy
+    )
 
     cdef int init_ts_copy(
         self,
@@ -85,7 +76,6 @@ cdef class DistanceMeasure:
         TSView *s,
         TSDatabase *td,
     ) nogil
-
 
     cdef int ts_copy_sub_matches(
         self,
@@ -98,7 +88,6 @@ cdef class DistanceMeasure:
         Py_ssize_t *n_matches,
     ) nogil except -1
 
-
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *ts_copy,
@@ -107,14 +96,12 @@ cdef class DistanceMeasure:
         Py_ssize_t *return_index= *,
     ) nogil
 
-
     cdef double ts_view_sub_distance(
         self,
         TSView *ts_view,
         TSDatabase *td,
         Py_ssize_t t_index,
     ) nogil
-
 
     cdef void ts_view_sub_distances(
         self,
@@ -125,7 +112,6 @@ cdef class DistanceMeasure:
         Py_ssize_t n_samples,
     ) nogil
 
-
     cdef double ts_copy_distance(
         self,
         TSCopy *ts_copy,
@@ -133,15 +119,11 @@ cdef class DistanceMeasure:
         Py_ssize_t t_index,
     ) nogil
 
-
     cdef bint support_unaligned(self) nogil
 
 
 cdef class ScaledDistanceMeasure(DistanceMeasure):
     pass
-
-
-cdef TSDatabase ts_database_new(np.ndarray X)
 
 
 cdef void ts_view_init(TSView *s) nogil
@@ -162,8 +144,8 @@ cdef int ts_copy_init(
 cdef void ts_copy_free(TSCopy *shapelet) nogil
 
 
-cdef DistanceMeasure new_distance_measure(
-    TSDatabase *td,
+cpdef DistanceMeasure get_distance_measure(
+    Py_ssize_t n_timestep,
     object metric,
     dict metric_params=*,
 )

@@ -37,7 +37,7 @@ from libc.math cimport INFINITY
 from libc.math cimport sqrt
 from libc.math cimport floor
 
-from ._distance cimport TSDatabase
+from .._data cimport TSDatabase
 
 from ._distance cimport TSView
 from ._distance cimport ScaledDistanceMeasure
@@ -1027,12 +1027,13 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         return 0
 
 
-    cdef int init_ts_copy_from_ndarray(self, TSCopy *tc, np.ndarray arr, Py_ssize_t dim):
-        cdef int err = ScaledDistanceMeasure.init_ts_copy_from_ndarray(
-            self, tc, arr, dim
+    cdef int init_ts_copy_from_obj(self, TSCopy *tc, object obj):
+        cdef int err = ScaledDistanceMeasure.init_ts_copy_from_obj(
+            self, tc, obj
         )
         if err == -1:
             return -1
+        dim, arr = obj
         cdef Py_ssize_t length = tc[0].length
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)

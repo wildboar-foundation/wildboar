@@ -1,5 +1,3 @@
-# cython: language_level=3
-
 # This file is part of wildboar
 #
 # wildboar is free software: you can redistribute it and/or modify it
@@ -14,11 +12,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-
+#
 # Authors: Isak Samsten
 
-cdef double entropy(double left_sum,
-                    double* left_count,
-                    double right_sum,
-                    double* right_count,
-                    Py_ssize_t n_labels) nogil
+from .base import BaseEmbedding
+from .shapelet import RandomShapeletEmbedding
+from .rocket import RocketEmbedding
+
+__all__ = [
+    "BaseEmbedding",
+    "RandomShapeletEmbedding",
+    "RocketEmbedding",
+]

@@ -128,51 +128,6 @@ cdef void print_c_array_i(object name, Py_ssize_t *arr, Py_ssize_t length):
         print(arr[i], end=" ")
     print()
 
-cdef Py_ssize_t label_distribution(const Py_ssize_t *samples,
-                               const double *sample_weights,
-                               Py_ssize_t start,
-                               Py_ssize_t end,
-                               const Py_ssize_t *labels,
-                               Py_ssize_t label_stride,
-                               Py_ssize_t n_labels,
-                               double *n_weighted_samples,
-                               double *dist) nogil:
-    """Computes the label distribution
-
-    :param samples: the samples to include
-    :param sample_weights: 
-    :param start: the start position in samples
-    :param end: the end position in samples
-    :param labels: the labels
-    :param label_stride: the stride in labels
-    :param n_labels: the number labeles
-    :param n_weighted_samples: (out) number of samples according to weight
-    :param dist: (out) label distribution
-    :return: number of classes included in the sample
-    """
-    cdef double sample_weight
-    cdef Py_ssize_t i, j, p, n_pos
-
-    n_pos = 0
-    n_weighted_samples[0] = 0
-    for i in range(start, end):
-        j = samples[i]
-        p = j * label_stride
-
-        if sample_weights != NULL:
-            sample_weight = sample_weights[j]
-        else:
-            sample_weight = 1.0
-
-        dist[labels[p]] += sample_weight
-        n_weighted_samples[0] += sample_weight
-
-    for i in range(n_labels):
-        if dist[i] > 0:
-            n_pos += 1
-
-    return n_pos
-
 cdef inline size_t rand_r(size_t *seed) nogil:
     """Returns a pesudo-random number based on the seed.
 
@@ -365,7 +320,7 @@ cdef void fast_mean_std(
     std[0] = sqrt(ex2 / length - mean[0] * mean[0])
 
 
-def check_array_fast(np.ndarray x, bint ensure_2d=False, bint allow_nd=False, bint c_order=True):
+cpdef check_array_fast(np.ndarray x, bint ensure_2d=False, bint allow_nd=False, bint c_order=True):
     """Ensure that the array is valid and with dtype=np.float64.
 
     Parameters

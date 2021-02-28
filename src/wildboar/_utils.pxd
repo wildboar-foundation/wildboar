@@ -16,6 +16,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+cimport numpy as np
 
 cdef class RollingVariance:
     cdef double _n_samples
@@ -40,10 +41,6 @@ cdef void print_c_array_d(object name, double *arr, Py_ssize_t length)
 
 cdef void print_c_array_i(object name, Py_ssize_t *arr, Py_ssize_t length)
 
-cdef Py_ssize_t label_distribution(const Py_ssize_t *samples, double *sample_weights, Py_ssize_t start, Py_ssize_t end,
-                               const Py_ssize_t *labels, Py_ssize_t labels_stride, Py_ssize_t n_classes,
-                               double*n_weighted_samples, double*dist) nogil
-
 cdef void argsort(double *values, Py_ssize_t *order, Py_ssize_t length) nogil
 
 cdef size_t rand_r(size_t *seed) nogil
@@ -59,3 +56,5 @@ cdef int realloc_array(void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap)
 cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1
 
 cdef void fast_mean_std(Py_ssize_t offset, Py_ssize_t stride, Py_ssize_t length, double* data, double *mean, double* std) nogil
+
+cpdef check_array_fast(np.ndarray x, bint ensure_2d=*, bint allow_nd=*, bint c_order=*)

@@ -71,17 +71,37 @@ if __name__ == "__main__":
         ),
         Extension(
             "wildboar.tree._tree_builder",
-            sources=[
-                "src/wildboar/tree/_tree_builder.pyx",
-            ],
+            sources=["src/wildboar/tree/_tree_builder.pyx"],
             include_dirs=include_dirs,
             **build_args,
         ),
         Extension(
-            "wildboar.tree._impurity",
-            sources=[
-                "src/wildboar/tree/_impurity.pyx",
-            ],
+            "wildboar._data",
+            sources=["src/wildboar/_data.pyx"],
+            include_dirs=include_dirs,
+            **build_args,
+        ),
+        Extension(
+            "wildboar.embedding._feature",
+            sources=["src/wildboar/embedding/_feature.pyx"],
+            include_dirs=include_dirs,
+            **build_args,
+        ),
+        Extension(
+            "wildboar.embedding._shapelet",
+            sources=["src/wildboar/embedding/_shapelet.pyx"],
+            include_dirs=include_dirs,
+            **build_args,
+        ),
+        Extension(
+            "wildboar.embedding._rocket",
+            sources=["src/wildboar/embedding/_rocket.pyx"],
+            include_dirs=include_dirs,
+            **build_args,
+        ),
+        Extension(
+            "wildboar.embedding._embedding",
+            sources=["src/wildboar/embedding/_embedding.pyx"],
             include_dirs=include_dirs,
             **build_args,
         ),

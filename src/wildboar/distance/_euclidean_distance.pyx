@@ -33,7 +33,7 @@ from libc.math cimport INFINITY
 from ._distance cimport ScaledDistanceMeasure
 from ._distance cimport DistanceMeasure
 
-from ._distance cimport TSDatabase
+from .._data cimport TSDatabase
 
 from ._distance cimport TSCopy
 from ._distance cimport TSView

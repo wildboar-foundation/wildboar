@@ -18,43 +18,70 @@
 # Authors: Isak Samsten
 cimport numpy as np
 
-from ..distance._distance cimport DistanceMeasure
-from ..distance._distance cimport TSView, TSCopy
+from ..embedding._feature cimport Feature
+from ..embedding._feature cimport FeatureEngineer
 
 # TODO: include impurity score...
 cdef struct SplitPoint:
     Py_ssize_t split_point
     double threshold
-    TSView shapelet_info
+    Feature feature
 
 cdef class Tree:
-    cdef DistanceMeasure distance_measure
+    cdef FeatureEngineer feature_engineer
 
     cdef Py_ssize_t _max_depth
     cdef Py_ssize_t _capacity
     cdef Py_ssize_t _n_labels  # 1 for regression
 
     cdef Py_ssize_t _node_count
-    cdef int *_left
-    cdef int *_right
-    cdef TSCopy ** _shapelets
+    cdef Py_ssize_t *_left
+    cdef Py_ssize_t *_right
+    cdef Feature **_features
     cdef double *_thresholds
     cdef double *_impurity
     cdef double *_values
     cdef double *_n_weighted_node_samples
     cdef Py_ssize_t *_n_node_samples
 
-    cdef int _increase_capacity(self) nogil except -1
+    cdef Py_ssize_t _increase_capacity(self) nogil except -1
 
-    cdef int add_leaf_node(self, int parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples) nogil
+    cdef Py_ssize_t add_leaf_node(
+        self, 
+        Py_ssize_t parent, 
+        bint is_left, 
+        Py_ssize_t n_node_samples, 
+        double n_weighted_node_samples,
+    ) nogil
 
-    cdef void set_leaf_value(self, Py_ssize_t node_id, Py_ssize_t out_label, double out_value) nogil
+    cdef void set_leaf_value(
+        self,
+        Py_ssize_t node_id,
+        Py_ssize_t out_label,
+        double out_value,
+    ) nogil
 
-    cdef int add_branch_node(self, int parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples,
-                             TSCopy *shapelet, double threshold, double impurity) nogil
+    cdef Py_ssize_t add_branch_node(
+        self, 
+        Py_ssize_t parent, 
+        bint is_left, 
+        Py_ssize_t n_node_samples, 
+        double n_weighted_node_samples,
+        Feature *feature,
+        double threshold,
+        double impurity,
+    ) nogil
 
     cpdef np.ndarray predict(self, object X)
 
     cpdef np.ndarray apply(self, object X)
 
     cpdef np.ndarray decision_path(self, object X)
+
+cdef double entropy(
+    double left_sum,
+    double* left_count,
+    double right_sum,
+    double* right_count,
+    Py_ssize_t n_labels
+) nogil
