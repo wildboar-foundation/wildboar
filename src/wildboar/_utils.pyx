@@ -25,7 +25,12 @@ import numpy as np
 cimport numpy as np
 
 from libc.math cimport log2
+from libc.math cimport log
 from libc.math cimport sqrt
+from libc.math cimport cos
+from libc.math cimport sin
+from libc.math cimport M_PI
+
 from libc.stdlib cimport realloc
 
 cdef class RollingVariance:
@@ -192,6 +197,23 @@ cdef inline size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
 cdef inline double rand_uniform(double low, double high, size_t *random_state) nogil:
     """Generate a random double in the range [`low` `high`[."""
     return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
+
+cdef inline double rand_normal(double mu, double sigma, size_t *random_state) nogil:
+    cdef double x1, x2, w, _y1
+    x1 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
+    x2 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
+    w = x1 * x1 + x2 * x2
+    while w >= 1.0:
+        x1 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
+        x2 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
+        w = x1 * x1 + x2 * x2
+
+    w = sqrt( (-2.0 * log( w ) ) / w )
+    _y1 = x1 * w
+    y2 = x2 * w
+    return mu + _y1 * sigma
+
+
 
 # Implementation of introsort. Inspired by sklearn.tree
 # implementation. This code is licensed under BSD3 (and not GPLv3)

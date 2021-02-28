@@ -52,6 +52,8 @@ cdef size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil
 
 cdef double rand_uniform(double low, double high, size_t *random_state) nogil
 
+cdef double rand_normal(double mean, double std, size_t *random_state) nogil
+
 cdef int realloc_array(void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap)  nogil except -1
 
 cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1
