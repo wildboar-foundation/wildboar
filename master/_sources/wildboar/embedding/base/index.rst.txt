@@ -1,0 +1,68 @@
+:mod:`wildboar.embedding.base`
+==============================
+
+.. py:module:: wildboar.embedding.base
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.embedding.base.BaseEmbedding
+
+
+
+.. class:: BaseEmbedding
+
+   Bases: :class:`sklearn.base.TransformerMixin`, :class:`sklearn.base.BaseEstimator`
+
+   Base embedding
+
+   .. attribute:: embedding_
+
+      The underlying embedding.
+
+      :type: Embedding
+
+   .. method:: fit(self, x, y=None)
+
+      Fit the embedding.
+
+      :param x: The time series dataset.
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+      :param y: For compatibility.
+      :type y: None, optional
+
+      :returns: **embedding**
+      :rtype: self
+
+
+   .. method:: fit_transform(self, x, y=None)
+
+      Fit the embedding and return the transform of x.
+
+      :param x: The time series dataset.
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+      :param y: For compatibility.
+      :type y: None, optional
+
+      :returns: **x_embedding** -- The embedding.
+      :rtype: ndarray of shape [n_samples, n_outputs]
+
+
+   .. method:: transform(self, x)
+
+      Transform the dataset.
+
+      :param x: The time series dataset.
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+
+      :returns: **x_embedding** -- The embedding.
+      :rtype: ndarray of shape [n_samples, n_outputs]
+
+
+

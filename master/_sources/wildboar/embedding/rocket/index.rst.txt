@@ -1,0 +1,44 @@
+:mod:`wildboar.embedding.rocket`
+================================
+
+.. py:module:: wildboar.embedding.rocket
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.embedding.rocket.RocketEmbedding
+
+
+
+.. class:: RocketEmbedding(n_kernels=1000, *, random_state=None)
+
+
+   Bases: :class:`wildboar.embedding.base.BaseEmbedding`
+
+   Embedd a time series using random convolution features
+
+   .. attribute:: embedding_
+
+      The underlying embedding
+
+      :type: Embedding
+
+   .. rubric:: References
+
+   Dempster, Angus, François Petitjean, and Geoffrey I. Webb.
+       ROCKET: exceptionally fast and accurate time series classification using
+       random convolutional kernels.
+       Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
+
+   :param n_kernels: The number of kernels.
+   :type n_kernels: int, optional
+   :param random_state: The psuodo-random number generator.
+   :type random_state: int or RandomState, optional
+
+

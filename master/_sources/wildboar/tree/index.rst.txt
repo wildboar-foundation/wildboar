@@ -116,7 +116,7 @@ Classes
 .. class:: ShapeletTreeClassifier(max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`wildboar.tree._tree.BaseShapeletTree`
+   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`wildboar.tree._tree.ClassifierTreeMixin`, :class:`wildboar.tree._tree.BaseShapeletTree`
 
    A shapelet tree classifier.
 
@@ -176,60 +176,11 @@ Classes
                         - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
    :type random_state: int or RandomState
 
-   .. method:: fit(self, x, y, sample_weight=None, check_input=True)
-
-      Fit a shapelet tree regressor from the training set
-
-      :param X: The training time series.
-      :type X: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
-      :param y: The target values (class labels) as integers
-      :type y: array-like of shape (n_samples,) or (n_samples, n_classes)
-      :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
-                            nodes with net zero or negative weight are ignored while searching for a split
-                            in each node. Splits are also ignored if they would result in any single class
-                            carrying a negative weight in either child node.
-      :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
-      :type check_input: bool, optional
-
-      :returns: **self**
-      :rtype: object
-
-
-   .. method:: predict(self, x, check_input=True)
-
-      Predict the regression of the input samples x.
-
-      :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
-      :type check_input: bool, optional
-
-      :returns: **y** -- The predicted classes.
-      :rtype: ndarray of shape (n_samples,)
-
-
-   .. method:: predict_proba(self, x, check_input=True)
-
-      Predict class probabilities of the input samples X.  The predicted
-      class probability is the fraction of samples of the same class
-      in a leaf.
-
-      :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
-      :type check_input: bool, optional
-
-      :returns: **proba** -- The class probabilities of the input samples. The order of the classes corresponds to
-                that in the attribute `classes_`
-      :rtype: ndarray of shape (n_samples, n_classes)
-
-
 
 .. class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.RegressorMixin`, :class:`wildboar.tree._tree.BaseShapeletTree`
+   Bases: :class:`sklearn.base.RegressorMixin`, :class:`wildboar.tree._tree.RegressorTreeMixin`, :class:`wildboar.tree._tree.BaseShapeletTree`
 
    A shapelet tree regressor.
 
@@ -268,38 +219,5 @@ Classes
                         - If `RandomState` instance, `random_state` is the random number generator;
                         - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
    :type random_state: int or RandomState
-
-   .. method:: fit(self, X, y, sample_weight=None, check_input=True)
-
-      Fit a shapelet tree regressor from the training set
-
-      :param X: The training time series.
-      :type X: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
-      :param y: Target values as floating point values
-      :type y: array-like of shape (n_samples,)
-      :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
-                            nodes with net zero or negative weight are ignored while searching for a split
-                            in each node. Splits are also ignored if they would result in any single class
-                            carrying a negative weight in either child node.
-      :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
-      :type check_input: bool, optional
-
-      :returns: **self**
-      :rtype: object
-
-
-   .. method:: predict(self, x, check_input=True)
-
-      Predict the regression of the input samples x.
-
-      :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
-      :type check_input: bool, optional
-
-      :returns: **y** -- The predicted classes.
-      :rtype: ndarray of shape (n_samples,)
-
 
 

@@ -12,6 +12,7 @@ Subpackages
 
    datasets/index.rst
    distance/index.rst
+   embedding/index.rst
    ensemble/index.rst
    explain/index.rst
    linear_model/index.rst

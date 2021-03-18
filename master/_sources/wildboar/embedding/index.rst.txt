@@ -1,0 +1,149 @@
+:mod:`wildboar.embedding`
+=========================
+
+.. py:module:: wildboar.embedding
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
+   rocket/index.rst
+   shapelet/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.embedding.BaseEmbedding
+   wildboar.embedding.RandomShapeletEmbedding
+   wildboar.embedding.RocketEmbedding
+
+
+
+.. class:: BaseEmbedding
+
+   Bases: :class:`sklearn.base.TransformerMixin`, :class:`sklearn.base.BaseEstimator`
+
+   Base embedding
+
+   .. attribute:: embedding_
+
+      The underlying embedding.
+
+      :type: Embedding
+
+   .. method:: fit(self, x, y=None)
+
+      Fit the embedding.
+
+      :param x: The time series dataset.
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+      :param y: For compatibility.
+      :type y: None, optional
+
+      :returns: **embedding**
+      :rtype: self
+
+
+   .. method:: fit_transform(self, x, y=None)
+
+      Fit the embedding and return the transform of x.
+
+      :param x: The time series dataset.
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+      :param y: For compatibility.
+      :type y: None, optional
+
+      :returns: **x_embedding** -- The embedding.
+      :rtype: ndarray of shape [n_samples, n_outputs]
+
+
+   .. method:: transform(self, x)
+
+      Transform the dataset.
+
+      :param x: The time series dataset.
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+
+      :returns: **x_embedding** -- The embedding.
+      :rtype: ndarray of shape [n_samples, n_outputs]
+
+
+
+.. class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, random_state=None)
+
+
+   Bases: :class:`wildboar.embedding.base.BaseEmbedding`
+
+   Embed a time series as the distances to a selection of random shapelets.
+
+   .. attribute:: embedding_
+
+      The underlying embedding object.
+
+      :type: Embedding
+
+   .. rubric:: References
+
+   Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
+       Ultra-fast shapelets for time series classification.
+       arXiv preprint arXiv:1503.05018 (2015).
+
+   :param n_shapelets: The number of shapelets in the resulting embedding
+   :type n_shapelets: int, optional
+   :param metric: The distance metric
+
+                  - if str use optimized implementations of the named distance measure
+                  - if callable a function taking two arrays as input
+   :type metric: str, optional
+   :param metric_params: Parameters to the metric
+
+                         - 'euclidean' and 'scaled_euclidean' take no parameters
+                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+                         is interpreted as a fraction of the time series length. If > 1 it
+                         is interpreted as an exact time warping window. Use 'r' == 0 for
+                         a widow size of exactly 1.
+   :type metric_params: dict, optional
+   :param min_shapelet_size: Minimum shapelet size.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: Maximum shapelet size.
+   :type max_shapelet_size: float, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+
+.. class:: RocketEmbedding(n_kernels=1000, *, random_state=None)
+
+
+   Bases: :class:`wildboar.embedding.base.BaseEmbedding`
+
+   Embedd a time series using random convolution features
+
+   .. attribute:: embedding_
+
+      The underlying embedding
+
+      :type: Embedding
+
+   .. rubric:: References
+
+   Dempster, Angus, François Petitjean, and Geoffrey I. Webb.
+       ROCKET: exceptionally fast and accurate time series classification using
+       random convolutional kernels.
+       Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
+
+   :param n_kernels: The number of kernels.
+   :type n_kernels: int, optional
+   :param random_state: The psuodo-random number generator.
+   :type random_state: int or RandomState, optional
+
+
