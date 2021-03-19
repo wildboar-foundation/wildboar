@@ -18,8 +18,8 @@
 # Authors: Isak Samsten
 cimport numpy as np
 
-from ..embedding._feature cimport Feature
-from ..embedding._feature cimport FeatureEngineer
+from ..embed._feature cimport Feature
+from ..embed._feature cimport FeatureEngineer
 
 # TODO: include impurity score...
 cdef struct SplitPoint:

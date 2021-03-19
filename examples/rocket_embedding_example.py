@@ -1,4 +1,4 @@
-from wildboar.embedding import RocketEmbedding
+from wildboar.embed import RocketEmbedding
 from wildboar.datasets import load_dataset
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import RidgeClassifierCV

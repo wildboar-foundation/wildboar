@@ -1,4 +1,4 @@
-from wildboar.embedding import RandomShapeletEmbedding
+from wildboar.embed import RandomShapeletEmbedding
 from wildboar.datasets import load_dataset
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import RidgeClassifierCV

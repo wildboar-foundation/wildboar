@@ -29,9 +29,9 @@ from ._tree_builder import ExtraClassificationTreeBuilder
 from ._tree_builder import ExtraRegressionTreeBuilder
 from ._tree_builder import RegressionTreeBuilder
 
-from ..embedding._shapelet import RandomShapeletFeatureEngineer
+from ..embed._shapelet import RandomShapeletFeatureEngineer
 
-from ..embedding._rocket import RocketFeatureEngineer
+from ..embed._rocket import RocketFeatureEngineer
 
 
 class BaseTree(BaseEstimator, metaclass=ABCMeta):

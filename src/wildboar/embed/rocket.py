@@ -16,7 +16,7 @@
 # Authors: Isak Samsten
 
 from sklearn.utils.validation import check_random_state
-from wildboar.embedding.base import BaseEmbedding
+from .base import BaseEmbedding
 from ._rocket import RocketFeatureEngineer
 
 

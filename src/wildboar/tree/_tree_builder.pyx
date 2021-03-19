@@ -44,8 +44,8 @@ from .._utils cimport RollingVariance
 from .._utils cimport safe_realloc
 from .._utils cimport rand_uniform
 
-from ..embedding._feature cimport FeatureEngineer
-from ..embedding._feature cimport Feature
+from ..embed._feature cimport FeatureEngineer
+from ..embed._feature cimport Feature
 
 cpdef Tree _make_tree(
     FeatureEngineer feature_engineer,
