@@ -543,7 +543,7 @@ class EmmottLabeler(OutlierLabeler):
         else:
             raise ValueError("require more than 1 labels, got %r" % self.n_classes_)
 
-        y_new = np.ones(x.shape[0], dtype=np.int)
+        y_new = np.ones(x.shape[0], dtype=int)
         y_new[np.isin(y, self.outlier_label_)] = -1
 
         if self.difficulty_estimator is None:
@@ -575,7 +575,7 @@ class EmmottLabeler(OutlierLabeler):
         return self._transform(x, y, difficulty_estimate)
 
     def _transform(self, x, y, difficulty_estimate):
-        y_new = np.ones(x.shape[0], dtype=np.int)
+        y_new = np.ones(x.shape[0], dtype=int)
         y_new[np.isin(y, self.outlier_label_)] = -1
         y = y_new
         random_state = check_random_state(self.random_state)

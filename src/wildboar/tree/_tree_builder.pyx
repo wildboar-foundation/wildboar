@@ -180,7 +180,7 @@ cdef class Tree:
 
     @property
     def n_node_samples(self):
-        cdef np.ndarray arr = np.zeros(self._node_count, dtype=np.int)
+        cdef np.ndarray arr = np.zeros(self._node_count, dtype=int)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._n_node_samples[i]
@@ -196,7 +196,7 @@ cdef class Tree:
 
     @property
     def left(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.int)
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=int)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._left[i]
@@ -204,7 +204,7 @@ cdef class Tree:
 
     @property
     def right(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.int)
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=int)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._right[i]

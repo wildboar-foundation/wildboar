@@ -582,7 +582,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
         else:
             return min_dist
     else:  # assume an `array_like` object for `samples`
-        samples = check_array(sample, ensure_2d=False, dtype=np.int)
+        samples = check_array(sample, ensure_2d=False, dtype=int)
         dist = []
         ind = []
         for i in samples:
@@ -642,7 +642,7 @@ def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metr
         else:
             return match_array
     else:
-        samples = check_array(sample, ensure_2d=False, dtype=np.int)
+        samples = check_array(sample, ensure_2d=False, dtype=int)
         match_list = []
         distance_list = []
         for i in samples:
