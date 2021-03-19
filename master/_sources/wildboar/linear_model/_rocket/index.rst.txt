@@ -1,0 +1,40 @@
+:orphan:
+
+:mod:`wildboar.linear_model._rocket`
+====================================
+
+.. py:module:: wildboar.linear_model._rocket
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.linear_model._rocket.RocketClassifier
+
+
+
+.. class:: RocketClassifier(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None)
+
+
+   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`sklearn.base.BaseEstimator`
+
+   Mixin class for all classifiers in scikit-learn.
+
+   .. method:: fit(self, x, y, sample_weight=None)
+
+
+   .. method:: predict(self, x)
+
+
+   .. method:: predict_log_proba(self, x)
+
+
+   .. method:: predict_proba(self, x)
+
+
+

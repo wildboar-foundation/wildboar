@@ -1,10 +1,10 @@
 <!doctype html>
 <html class="no-js">
   <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.embedding.rocket" href="../rocket/index.html" /><link rel="prev" title="wildboar.embedding" href="../index.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.embed.shapelet" href="../shapelet/index.html" /><link rel="prev" title="wildboar.embed.base" href="../base/index.html" />
 
     <meta name="generator" content="sphinx-3.5.2, furo 2021.02.28.beta28"/>
-        <title>wildboar.embedding.base - Wildboar 1.0.9.dev11+gdbc228d documentation</title>
+        <title>wildboar.embed.rocket - Wildboar 1.0.9.dev17+g155574a documentation</title>
       <link rel="stylesheet" href="../../../_static/styles/furo.css?digest=be5985a4059b5c2cd56ed0804790452beca62674">
     <link rel="stylesheet" href="../../../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../../_static/pygments_dark.css">
@@ -101,7 +101,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.0.9.dev11+gdbc228d documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.0.9.dev17+g155574a documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -149,10 +149,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label for="toctree-checkbox-6"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.base</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../rocket/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.rocket</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../shapelet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.shapelet</span></code></a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label for="toctree-checkbox-6"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.rocket</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../shapelet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.shapelet</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
@@ -199,8 +199,8 @@
         <label class="toc-overlay-icon toc-content-icon" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
-        <div class="section" id="module-wildboar.embedding.base">
-<span id="wildboar-embedding-base"></span><h1><a class="reference internal" href="#module-wildboar.embedding.base" title="wildboar.embedding.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.base</span></code></a><a class="headerlink" href="#module-wildboar.embedding.base" title="Permalink to this headline">¶</a></h1>
+        <div class="section" id="module-wildboar.embed.rocket">
+<span id="wildboar-embed-rocket"></span><h1><a class="reference internal" href="#module-wildboar.embed.rocket" title="wildboar.embed.rocket"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.rocket</span></code></a><a class="headerlink" href="#module-wildboar.embed.rocket" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="classes">
@@ -211,80 +211,41 @@
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.embedding.base.BaseEmbedding" title="wildboar.embedding.base.BaseEmbedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseEmbedding</span></code></a></p></td>
-<td><p>Base embedding</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.embed.rocket.RocketEmbedding" title="wildboar.embed.rocket.RocketEmbedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketEmbedding</span></code></a></p></td>
+<td><p>Embedd a time series using random convolution features</p></td>
 </tr>
 </tbody>
 </table></div>
 <dl class="py class">
-<dt id="wildboar.embedding.base.BaseEmbedding">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embedding.base.</span></code><code class="sig-name descname"><span class="pre">BaseEmbedding</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embedding/base.py#L29-L103"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embedding.base.BaseEmbedding" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
-<p>Base embedding</p>
+<dt id="wildboar.embed.rocket.RocketEmbedding">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embed.rocket.</span></code><code class="sig-name descname"><span class="pre">RocketEmbedding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/rocket.py#L23-L57"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.rocket.RocketEmbedding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../base/index.html#wildboar.embed.base.BaseEmbedding" title="wildboar.embed.base.BaseEmbedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.embed.base.BaseEmbedding</span></code></a></p>
+<p>Embedd a time series using random convolution features</p>
 <dl class="py attribute">
-<dt id="wildboar.embedding.base.BaseEmbedding.embedding_">
-<code class="sig-name descname"><span class="pre">embedding_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embedding/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embedding.base.BaseEmbedding.embedding_" title="Permalink to this definition">¶</a></dt>
-<dd><p>The underlying embedding.</p>
+<dt id="wildboar.embed.rocket.RocketEmbedding.embedding_">
+<code class="sig-name descname"><span class="pre">embedding_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/rocket.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.rocket.RocketEmbedding.embedding_" title="Permalink to this definition">¶</a></dt>
+<dd><p>The underlying embedding</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Embedding</p>
 </dd>
 </dl>
 </dd></dl>
-<dl class="py method">
-<dt id="wildboar.embedding.base.BaseEmbedding.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embedding/base.py#L39-L59"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embedding.base.BaseEmbedding.fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the embedding.</p>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>Dempster, Angus, François Petitjean, and Geoffrey I. Webb.</dt><dd><p>ROCKET: exceptionally fast and accurate time series classification using
+random convolutional kernels.
+Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] or </em><em>[</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timestep</em><em>]</em>) – The time series dataset.</p></li>
-<li><p><strong>y</strong> (<em>None</em><em>, </em><em>optional</em>) – For compatibility.</p></li>
+<li><p><strong>n_kernels</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of kernels.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – The psuodo-random number generator.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>embedding</strong></p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>self</p>
-</dd>
 </dl>
-</dd></dl>
-<dl class="py method">
-<dt id="wildboar.embedding.base.BaseEmbedding.fit_transform">
-<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embedding/base.py#L78-L99"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embedding.base.BaseEmbedding.fit_transform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit the embedding and return the transform of x.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] or </em><em>[</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timestep</em><em>]</em>) – The time series dataset.</p></li>
-<li><p><strong>y</strong> (<em>None</em><em>, </em><em>optional</em>) – For compatibility.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>x_embedding</strong> – The embedding.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray of shape [n_samples, n_outputs]</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py method">
-<dt id="wildboar.embedding.base.BaseEmbedding.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embedding/base.py#L61-L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embedding.base.BaseEmbedding.transform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the dataset.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] or </em><em>[</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timestep</em><em>]</em>) – The time series dataset.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>x_embedding</strong> – The embedding.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>ndarray of shape [n_samples, n_outputs]</p>
-</dd>
-</dl>
-</dd></dl>
 </dd></dl>
 </div>
 </div>
@@ -294,23 +255,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../rocket/index.html">
+          <a class="next-page" href="../shapelet/index.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.rocket</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.shapelet</span></code></div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../index.html">
+          <a class="prev-page" href="../base/index.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></div>
                 
               </div>
             </a>
@@ -324,7 +285,7 @@
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
               <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             |
-            <a class="muted-link" href="../../../_sources/wildboar/embedding/base/index.rst.txt"
+            <a class="muted-link" href="../../../_sources/wildboar/embed/rocket/index.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -344,14 +305,11 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.base</span></code></a><ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.rocket</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
-<li><a class="reference internal" href="#wildboar.embedding.base.BaseEmbedding">BaseEmbedding</a><ul>
-<li><a class="reference internal" href="#wildboar.embedding.base.BaseEmbedding.embedding_">embedding_</a></li>
-<li><a class="reference internal" href="#wildboar.embedding.base.BaseEmbedding.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.embedding.base.BaseEmbedding.fit_transform">fit_transform</a></li>
-<li><a class="reference internal" href="#wildboar.embedding.base.BaseEmbedding.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.embed.rocket.RocketEmbedding">RocketEmbedding</a><ul>
+<li><a class="reference internal" href="#wildboar.embed.rocket.RocketEmbedding.embedding_">embedding_</a></li>
 </ul>
 </li>
 </ul>

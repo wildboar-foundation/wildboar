@@ -1,7 +1,7 @@
-:mod:`wildboar.embedding.rocket`
-================================
+:mod:`wildboar.embed.rocket`
+============================
 
-.. py:module:: wildboar.embedding.rocket
+.. py:module:: wildboar.embed.rocket
 
 
 Module Contents
@@ -12,14 +12,14 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.embedding.rocket.RocketEmbedding
+   wildboar.embed.rocket.RocketEmbedding
 
 
 
 .. class:: RocketEmbedding(n_kernels=1000, *, random_state=None)
 
 
-   Bases: :class:`wildboar.embedding.base.BaseEmbedding`
+   Bases: :class:`wildboar.embed.base.BaseEmbedding`
 
    Embedd a time series using random convolution features
 

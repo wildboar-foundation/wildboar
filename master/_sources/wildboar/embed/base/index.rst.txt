@@ -1,7 +1,7 @@
-:mod:`wildboar.embedding.base`
-==============================
+:mod:`wildboar.embed.base`
+==========================
 
-.. py:module:: wildboar.embedding.base
+.. py:module:: wildboar.embed.base
 
 
 Module Contents
@@ -12,7 +12,7 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.embedding.base.BaseEmbedding
+   wildboar.embed.base.BaseEmbedding
 
 
 

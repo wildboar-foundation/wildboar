@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.model_selection" href="../model_selection/index.html" /><link rel="prev" title="wildboar.explain.counterfactual.base" href="../explain/counterfactual/base/index.html" />
 
     <meta name="generator" content="sphinx-3.5.2, furo 2021.02.28.beta28"/>
-        <title>wildboar.linear_model - Wildboar 1.0.9.dev11+gdbc228d documentation</title>
+        <title>wildboar.linear_model - Wildboar 1.0.9.dev17+g155574a documentation</title>
       <link rel="stylesheet" href="../../_static/styles/furo.css?digest=be5985a4059b5c2cd56ed0804790452beca62674">
     <link rel="stylesheet" href="../../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../_static/pygments_dark.css">
@@ -101,7 +101,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.0.9.dev11+gdbc228d documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.0.9.dev17+g155574a documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -149,10 +149,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../embedding/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label for="toctree-checkbox-6"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../embedding/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.base</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../embedding/rocket/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.rocket</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../embedding/shapelet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embedding.shapelet</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../embed/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label for="toctree-checkbox-6"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../embed/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embed/rocket/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.rocket</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../embed/shapelet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.shapelet</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
@@ -213,6 +213,9 @@
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression" title="wildboar.linear_model.KernelLogisticRegression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KernelLogisticRegression</span></code></a></p></td>
 <td><p>A simple kernel logistic implementation using a Nystroem kernel approximation</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketClassifier</span></code></a></p></td>
+<td><p>Mixin class for all classifiers in scikit-learn.</p></td>
 </tr>
 </tbody>
 </table></div>
@@ -292,6 +295,28 @@ If not provided, then each sample is given unit weight.</p>
 <p>The SAGA solver supports both float64 and float32 bit arrays.</p>
 </dd></dl>
 </dd></dl>
+<dl class="py class">
+<dt id="wildboar.linear_model.RocketClassifier">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.linear_model.</span></code><code class="sig-name descname"><span class="pre">RocketClassifier</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">1.0,</span> <span class="pre">10.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_rocket.py#L27-L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.RocketClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
+<p>Mixin class for all classifiers in scikit-learn.</p>
+<dl class="py method">
+<dt id="wildboar.linear_model.RocketClassifier.fit">
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_rocket.py#L49-L66"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.RocketClassifier.fit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="wildboar.linear_model.RocketClassifier.predict">
+<code class="sig-name descname"><span class="pre">predict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_rocket.py#L68-L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.RocketClassifier.predict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="wildboar.linear_model.RocketClassifier.predict_log_proba">
+<code class="sig-name descname"><span class="pre">predict_log_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_rocket.py#L78-L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.RocketClassifier.predict_log_proba" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py method">
+<dt id="wildboar.linear_model.RocketClassifier.predict_proba">
+<code class="sig-name descname"><span class="pre">predict_proba</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_rocket.py#L73-L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.RocketClassifier.predict_proba" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+</dd></dl>
 </div>
 </div>
 </div>
@@ -356,6 +381,13 @@ If not provided, then each sample is given unit weight.</p>
 <li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression">KernelLogisticRegression</a><ul>
 <li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression.decision_function">decision_function</a></li>
 <li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression.fit">fit</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.linear_model.RocketClassifier">RocketClassifier</a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model.RocketClassifier.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model.RocketClassifier.predict">predict</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model.RocketClassifier.predict_log_proba">predict_log_proba</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model.RocketClassifier.predict_proba">predict_proba</a></li>
 </ul>
 </li>
 </ul>
