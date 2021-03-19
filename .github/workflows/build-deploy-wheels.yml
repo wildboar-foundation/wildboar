@@ -14,7 +14,7 @@ jobs:
       CIBW_BUILD: cp37-* cp38-* cp39-*
       CIBW_SKIP: "*-win32 *-manylinux_i686"
       CIBW_BEFORE_TEST: pip install -r {package}/requirements-dev.txt
-      CIBW_TEST_COMMAND: python -m pytest --pyargs wildboar
+      CIBW_TEST_COMMAND: python -m pytest {package}/tests
 
     steps:
       - uses: actions/checkout@v2
