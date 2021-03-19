@@ -16,5 +16,9 @@
 # Authors: Isak Samsten
 
 from ._kernel_logistic import KernelLogisticRegression
+from ._rocket import RocketClassifier
 
-__all__ = ["KernelLogisticRegression"]
+__all__ = [
+    "KernelLogisticRegression",
+    "RocketClassifier",
+]
