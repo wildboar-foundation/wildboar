@@ -6,6 +6,13 @@
 
 * Add `model_selection.outlier.RepeatedOutlierSplit` to cross-validate
   outlier detection algorithms
+* Add `liner_model.RocketClassifier
+* Add `wildboar.embed` with `RandomShapeletEmbedding` and `RocketEmbedding`
+* Add `tree.RocketTreeClassifier`
+* For implementors:
+  * Add `FeaturEngineer` to `*TreeBuilder` to support different
+    feature types
+  * Add `_utils.random_normal`
 
 ### Fixed
 
@@ -14,6 +21,13 @@
   `KMeansLabeler`
 * Fix the number of outliers when setting `n_outliers` to `float` for
   `MinorityLabeler`
+
+### Changed
+
+* Parameter `shapelets` of `Tree` is changed to `features`
+* For implementors
+  * `ShapeletTreeBuilder` is renamed to `TreeBuilder`
+  * Data handling has been refactored to `_data`
 
 ## [v1.0.7]
 
