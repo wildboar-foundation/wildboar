@@ -16,8 +16,9 @@ It is currently maintained by Isak Samsten
 | **Data**                                                                          | **Classification**               | **Regression**                  | **Explainability**               | **Metric** | **Unsupervised**            | **Outlier**                 |
 |-----------------------------------------------------------------------------------|----------------------------------|---------------------------------|----------------------------------|------------|-----------------------------|-----------------------------|
 | [Repositories](https://isaksamsten.github.io/wildboar/master/guide/datasets.html) | ``ShapeletForestClassifier``     | ``ShapeletForestRegressor``     | ``ShapeletForestCounterfactual`` | UCR-suite  | ``ShapeletForestEmbedding`` | ``IsolationShapeletForest`` |
-|                                                                                   | ``ExtraShapeletTreesClassifier`` | ``ExtraShapeletTreesRegressor`` | ``KNearestCounterfactual``       |            |                             |                             |
-|                                                                                   |                                  |                                 | ``PrototypeCounterfactual``      |            |                             |                             |
+|                                                                                   | ``ExtraShapeletTreesClassifier`` | ``ExtraShapeletTreesRegressor`` | ``KNearestCounterfactual``       |            | ``RandomShapeletEmbedding`` |                             |
+|                                                                                   | ``RocketTreeClassifier``         |                                 | ``PrototypeCounterfactual``      |            | ``RocketEmbedding``         |                             |
+|                                                                                   | ``RocketClassifier``             |                                 |                                  |            |                             |                             |
 
 ## Installation
 
@@ -34,11 +35,7 @@ Some parts of wildboar is implemented using Cython. Hence, compilation
 requires:
 
  * cython (>= 0.29.14)
-
-### Current version
-
-- Current release: 1.0.7
-- Current development release: 1.0.7dev
+ 
 
 ### Binaries
 
