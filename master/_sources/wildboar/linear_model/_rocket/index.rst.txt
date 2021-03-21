@@ -15,26 +15,23 @@ Classes
 .. autoapisummary::
 
    wildboar.linear_model._rocket.RocketClassifier
+   wildboar.linear_model._rocket.RocketRegressor
 
 
 
 .. class:: RocketClassifier(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`sklearn.base.BaseEstimator`
+   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeClassifierCV`
 
    Mixin class for all classifiers in scikit-learn.
 
-   .. method:: fit(self, x, y, sample_weight=None)
+
+.. class:: RocketRegressor(n_kernels=None, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, random_state=None)
 
 
-   .. method:: predict(self, x)
+   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeCV`
 
-
-   .. method:: predict_log_proba(self, x)
-
-
-   .. method:: predict_proba(self, x)
-
+   Mixin class for all regression estimators in scikit-learn.
 
 

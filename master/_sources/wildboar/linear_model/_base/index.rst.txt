@@ -1,0 +1,81 @@
+:orphan:
+
+:mod:`wildboar.linear_model._base`
+==================================
+
+.. py:module:: wildboar.linear_model._base
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.linear_model._base.BaseEmbeddingEstimator
+   wildboar.linear_model._base.EmbeddingClassifierMixin
+   wildboar.linear_model._base.EmbeddingRegressorMixin
+   wildboar.linear_model._base.EmbeddingRidgeCV
+   wildboar.linear_model._base.EmbeddingRidgeClassifierCV
+
+
+
+.. class:: BaseEmbeddingEstimator(random_state=None)
+
+
+   Bases: :class:`sklearn.base.BaseEstimator`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   .. method:: fit(self, x, y, sample_weight=None)
+
+
+
+.. class:: EmbeddingClassifierMixin
+
+   .. method:: decision_function(self, x)
+
+
+   .. method:: predict(self, x)
+
+
+   .. method:: predict_log_proba(self, x)
+
+
+   .. method:: predict_proba(self, x)
+
+
+
+.. class:: EmbeddingRegressorMixin
+
+   .. method:: decision_function(self, x)
+
+
+   .. method:: predict(self, x)
+
+
+
+.. class:: EmbeddingRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, random_state=None)
+
+
+   Bases: :class:`sklearn.base.RegressorMixin`, :class:`wildboar.linear_model._base.EmbeddingRegressorMixin`, :class:`wildboar.linear_model._base.BaseEmbeddingEstimator`
+
+   Mixin class for all regression estimators in scikit-learn.
+
+
+.. class:: EmbeddingRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None)
+
+
+   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`wildboar.linear_model._base.EmbeddingClassifierMixin`, :class:`wildboar.linear_model._base.BaseEmbeddingEstimator`
+
+   Mixin class for all classifiers in scikit-learn.
+
+

@@ -12,8 +12,55 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.linear_model.BaseEmbeddingEstimator
+   wildboar.linear_model.EmbeddingClassifierMixin
+   wildboar.linear_model.EmbeddingRegressorMixin
    wildboar.linear_model.KernelLogisticRegression
+   wildboar.linear_model.RandomShapeletClassifier
+   wildboar.linear_model.RandomShapeletRegressor
    wildboar.linear_model.RocketClassifier
+   wildboar.linear_model.RocketRegressor
+
+
+
+.. class:: BaseEmbeddingEstimator(random_state=None)
+
+
+   Bases: :class:`sklearn.base.BaseEstimator`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   .. method:: fit(self, x, y, sample_weight=None)
+
+
+
+.. class:: EmbeddingClassifierMixin
+
+   .. method:: decision_function(self, x)
+
+
+   .. method:: predict(self, x)
+
+
+   .. method:: predict_log_proba(self, x)
+
+
+   .. method:: predict_proba(self, x)
+
+
+
+.. class:: EmbeddingRegressorMixin
+
+   .. method:: decision_function(self, x)
+
+
+   .. method:: predict(self, x)
 
 
 
@@ -82,23 +129,35 @@ Classes
 
 
 
-.. class:: RocketClassifier(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None)
+.. class:: RandomShapeletClassifier(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`sklearn.base.BaseEstimator`
+   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeClassifierCV`
 
    Mixin class for all classifiers in scikit-learn.
 
-   .. method:: fit(self, x, y, sample_weight=None)
+
+.. class:: RandomShapeletRegressor(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, random_state=None)
 
 
-   .. method:: predict(self, x)
+   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeCV`
+
+   Mixin class for all regression estimators in scikit-learn.
 
 
-   .. method:: predict_log_proba(self, x)
+.. class:: RocketClassifier(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, random_state=None)
 
 
-   .. method:: predict_proba(self, x)
+   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeClassifierCV`
 
+   Mixin class for all classifiers in scikit-learn.
+
+
+.. class:: RocketRegressor(n_kernels=None, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, random_state=None)
+
+
+   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeCV`
+
+   Mixin class for all regression estimators in scikit-learn.
 
 
