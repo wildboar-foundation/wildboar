@@ -16,9 +16,21 @@
 # Authors: Isak Samsten
 
 from ._kernel_logistic import KernelLogisticRegression
-from ._rocket import RocketClassifier
+from ._rocket import RocketClassifier, RocketRegressor
+from ._shapelet import RandomShapeletClassifier, RandomShapeletRegressor
+from ._base import (
+    EmbeddingClassifierMixin,
+    EmbeddingRegressorMixin,
+    BaseEmbeddingEstimator,
+)
 
 __all__ = [
     "KernelLogisticRegression",
+    "EmbeddingClassifierMixin",
+    "EmbeddingRegressorMixin",
+    "BaseEmbeddingEstimator",
     "RocketClassifier",
+    "RocketRegressor",
+    "RandomShapeletClassifier",
+    "RandomShapeletRegressor",
 ]

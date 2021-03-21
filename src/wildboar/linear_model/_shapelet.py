@@ -15,21 +15,22 @@
 #
 # Authors: Isak Samsten
 import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.utils import check_array
-from sklearn.pipeline import make_pipeline
-from sklearn.utils.validation import check_is_fitted, check_random_state
-from sklearn.linear_model import RidgeClassifierCV
+from numpy.random import rand
 
 from ._base import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
-from ..embed import RocketEmbedding
+
+from ..embed import RandomShapeletEmbedding
 
 
-class RocketClassifier(EmbeddingRidgeClassifierCV):
+class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
     def __init__(
         self,
-        n_kernels=10000,
+        n_shapelets=1000,
         *,
+        metric="euclidean",
+        metric_params=None,
+        min_shapelet_size=0.1,
+        max_shapelet_size=1.0,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
         normalize=False,
@@ -47,17 +48,32 @@ class RocketClassifier(EmbeddingRidgeClassifierCV):
             class_weight=class_weight,
             random_state=random_state,
         )
-        self.n_kernels = n_kernels
+        self.n_shapelets = n_shapelets
+        self.metric = metric
+        self.metric_params = metric_params
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
 
     def _get_embedding(self, random_state):
-        return RocketEmbedding(self.n_kernels, random_state=random_state)
+        return RandomShapeletEmbedding(
+            self.n_shapelets,
+            metric=self.metric,
+            metric_params=self.metric_params,
+            min_shapelet_size=self.min_shapelet_size,
+            max_shapelet_size=self.max_shapelet_size,
+            random_state=random_state,
+        )
 
 
-class RocketRegressor(EmbeddingRidgeCV):
+class RandomShapeletRegressor(EmbeddingRidgeCV):
     def __init__(
         self,
-        n_kernels=None,
+        n_shapelets=1000,
         *,
+        metric="euclidean",
+        metric_params=None,
+        min_shapelet_size=0.1,
+        max_shapelet_size=1.0,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
         normalize=False,
@@ -75,7 +91,18 @@ class RocketRegressor(EmbeddingRidgeCV):
             gcv_mode=gcv_mode,
             random_state=random_state,
         )
-        self.n_kernels = n_kernels
+        self.n_shapelets = n_shapelets
+        self.metric = metric
+        self.metric_params = metric_params
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
 
     def _get_embedding(self, random_state):
-        return RocketEmbedding(self.n_kernels, random_state=random_state)
+        return RandomShapeletEmbedding(
+            self.n_shapelets,
+            metric=self.metric,
+            metric_params=self.metric_params,
+            min_shapelet_size=self.min_shapelet_size,
+            max_shapelet_size=self.max_shapelet_size,
+            random_state=random_state,
+        )
