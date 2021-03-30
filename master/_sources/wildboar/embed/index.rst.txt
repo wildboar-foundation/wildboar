@@ -11,8 +11,6 @@ Submodules
    :maxdepth: 1
 
    base/index.rst
-   rocket/index.rst
-   shapelet/index.rst
 
 
 Package Contents
@@ -29,7 +27,8 @@ Classes
 
 
 
-.. class:: BaseEmbedding
+.. class:: BaseEmbedding(*, random_state=None, n_jobs=None)
+
 
    Bases: :class:`sklearn.base.TransformerMixin`, :class:`sklearn.base.BaseEstimator`
 
@@ -40,6 +39,10 @@ Classes
       The underlying embedding.
 
       :type: Embedding
+
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
 
    .. method:: fit(self, x, y=None)
 
@@ -79,7 +82,7 @@ Classes
 
 
 
-.. class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, random_state=None)
+.. class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, n_jobs=None, random_state=None)
 
 
    Bases: :class:`wildboar.embed.base.BaseEmbedding`
@@ -117,11 +120,14 @@ Classes
    :type min_shapelet_size: float, optional
    :param max_shapelet_size: Maximum shapelet size.
    :type max_shapelet_size: float, optional
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
    :param random_state: The psudo-random number generator.
    :type random_state: int or RandomState, optional
 
 
-.. class:: RocketEmbedding(n_kernels=1000, *, random_state=None)
+.. class:: RocketEmbedding(n_kernels=1000, *, n_jobs=None, random_state=None)
 
 
    Bases: :class:`wildboar.embed.base.BaseEmbedding`
@@ -143,6 +149,9 @@ Classes
 
    :param n_kernels: The number of kernels.
    :type n_kernels: int, optional
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
    :param random_state: The psuodo-random number generator.
    :type random_state: int or RandomState, optional
 

@@ -1,7 +1,9 @@
-:mod:`wildboar.embed.rocket`
-============================
+:orphan:
 
-.. py:module:: wildboar.embed.rocket
+:mod:`wildboar.embed._rocket`
+=============================
+
+.. py:module:: wildboar.embed._rocket
 
 
 Module Contents
@@ -12,11 +14,11 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.embed.rocket.RocketEmbedding
+   wildboar.embed._rocket.RocketEmbedding
 
 
 
-.. class:: RocketEmbedding(n_kernels=1000, *, random_state=None)
+.. class:: RocketEmbedding(n_kernels=1000, *, n_jobs=None, random_state=None)
 
 
    Bases: :class:`wildboar.embed.base.BaseEmbedding`
@@ -38,6 +40,9 @@ Classes
 
    :param n_kernels: The number of kernels.
    :type n_kernels: int, optional
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
    :param random_state: The psuodo-random number generator.
    :type random_state: int or RandomState, optional
 

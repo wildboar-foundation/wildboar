@@ -16,7 +16,8 @@ Classes
 
 
 
-.. class:: BaseEmbedding
+.. class:: BaseEmbedding(*, random_state=None, n_jobs=None)
+
 
    Bases: :class:`sklearn.base.TransformerMixin`, :class:`sklearn.base.BaseEstimator`
 
@@ -27,6 +28,10 @@ Classes
       The underlying embedding.
 
       :type: Embedding
+
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
 
    .. method:: fit(self, x, y=None)
 

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.embed.base" href="base/index.html" /><link rel="prev" title="wildboar.distance.dtw" href="../distance/dtw/index.html" />
 
     <meta name="generator" content="sphinx-3.5.3, furo 2021.03.20.beta30"/>
-        <title>wildboar.embed - Wildboar 1.0.9.dev20+ged3f709 documentation</title>
+        <title>wildboar.embed - Wildboar 1.0.9.dev21+g97cbcca documentation</title>
       <link rel="stylesheet" href="../../_static/styles/furo.css?digest=978e1795dfe158b585dda6a8417f6411828bf3ed">
     <link rel="stylesheet" href="../../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../_static/pygments_dark.css">
@@ -38,8 +38,8 @@
   
   }
 </style><link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     <link rel="stylesheet" href="../../_static/styles/furo-extensions.css?digest=d391b54134226e4196576da3bdb6dddb7e05ba2b"></head>
   <body dir="">
@@ -102,7 +102,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.0.9.dev20+ged3f709 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.0.9.dev21+g97cbcca documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -152,8 +152,6 @@
 </li>
 <li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label for="toctree-checkbox-6"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="rocket/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.rocket</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="shapelet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.shapelet</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
@@ -207,8 +205,6 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="rocket/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.rocket</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="shapelet/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.shapelet</span></code></a></li>
 </ul>
 </div>
 </div>
@@ -235,7 +231,7 @@
 </table></div>
 <dl class="py class">
 <dt id="wildboar.embed.BaseEmbedding">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></code><code class="sig-name descname"><span class="pre">BaseEmbedding</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L29-L103"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></code><code class="sig-name descname"><span class="pre">BaseEmbedding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L31-L128"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
 <p>Base embedding</p>
 <dl class="py attribute">
@@ -248,9 +244,15 @@
 </dd>
 </dl>
 </dd></dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of jobs to run in parallel. None means 1 and
+-1 means using all processors.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="wildboar.embed.BaseEmbedding.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L39-L59"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L52-L78"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the embedding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -269,7 +271,7 @@
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.embed.BaseEmbedding.fit_transform">
-<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L78-L99"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding.fit_transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L97-L124"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the embedding and return the transform of x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -288,7 +290,7 @@
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.embed.BaseEmbedding.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L61-L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L80-L95"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.BaseEmbedding.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -305,7 +307,7 @@
 </dd></dl>
 <dl class="py class">
 <dt id="wildboar.embed.RandomShapeletEmbedding">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></code><code class="sig-name descname"><span class="pre">RandomShapeletEmbedding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/shapelet.py#L23-L112"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.RandomShapeletEmbedding" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></code><code class="sig-name descname"><span class="pre">RandomShapeletEmbedding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_shapelet.py#L23-L116"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.RandomShapeletEmbedding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="base/index.html#wildboar.embed.base.BaseEmbedding" title="wildboar.embed.base.BaseEmbedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.embed.base.BaseEmbedding</span></code></a></p>
 <p>Embed a time series as the distances to a selection of random shapelets.</p>
 <dl class="py attribute">
@@ -345,6 +347,8 @@ a widow size of exactly 1.</p>
 </p></li>
 <li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum shapelet size.</p></li>
 <li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum shapelet size.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of jobs to run in parallel. None means 1 and
+-1 means using all processors.</p></li>
 <li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – The psudo-random number generator.</p></li>
 </ul>
 </dd>
@@ -352,7 +356,7 @@ a widow size of exactly 1.</p>
 </dd></dl>
 <dl class="py class">
 <dt id="wildboar.embed.RocketEmbedding">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></code><code class="sig-name descname"><span class="pre">RocketEmbedding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/rocket.py#L23-L57"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.RocketEmbedding" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></code><code class="sig-name descname"><span class="pre">RocketEmbedding</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_rocket.py#L23-L58"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.RocketEmbedding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="base/index.html#wildboar.embed.base.BaseEmbedding" title="wildboar.embed.base.BaseEmbedding"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.embed.base.BaseEmbedding</span></code></a></p>
 <p>Embedd a time series using random convolution features</p>
 <dl class="py attribute">
@@ -376,6 +380,8 @@ Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_kernels</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of kernels.</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of jobs to run in parallel. None means 1 and
+-1 means using all processors.</p></li>
 <li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – The psuodo-random number generator.</p></li>
 </ul>
 </dd>
