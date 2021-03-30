@@ -62,11 +62,9 @@ cpdef enum RocketValue:
 
 cdef class RocketFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_kernels
-    cdef size_t random_seed
 
-    def __init__(self, n_kernels, random_state):
+    def __init__(self, n_kernels):
         self.n_kernels = n_kernels
-        self.random_seed = random_state.randint(0, RAND_R_MAX)
 
     cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:
         return self.n_kernels
@@ -80,10 +78,11 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         TSDatabase *td, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
-        Feature *transient
+        Feature *transient,
+        size_t *seed
     ) nogil:
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
-        rocket_init(rocket, td.n_timestep, &self.random_seed)
+        rocket_init(rocket, td.n_timestep, seed)
         transient.dim = 1
         transient.feature = rocket
         return 0

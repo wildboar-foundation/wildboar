@@ -17,7 +17,7 @@
 
 from sklearn.utils.validation import check_random_state
 from .base import BaseEmbedding
-from ._shapelet import RandomShapeletFeatureEngineer
+from ._shapelet_feature import RandomShapeletFeatureEngineer
 
 
 class RandomShapeletEmbedding(BaseEmbedding):
@@ -43,6 +43,7 @@ class RandomShapeletEmbedding(BaseEmbedding):
         metric_params=None,
         min_shapelet_size=0.1,
         max_shapelet_size=1.0,
+        n_jobs=None,
         random_state=None
     ):
         """
@@ -72,9 +73,14 @@ class RandomShapeletEmbedding(BaseEmbedding):
         max_shapelet_size : float, optional
             Maximum shapelet size.
 
+        n_jobs : int, optional
+            The number of jobs to run in parallel. None means 1 and
+            -1 means using all processors.
+
         random_state : int or RandomState, optional
             The psudo-random number generator.
         """
+        super().__init__(n_jobs=n_jobs)
         self.n_shapelets = n_shapelets
         self.metric = metric
         self.metric_params = metric_params
@@ -83,7 +89,6 @@ class RandomShapeletEmbedding(BaseEmbedding):
         self.random_state = random_state
 
     def _get_feature_engineer(self):
-        random_state = check_random_state(self.random_state)
         if (
             self.min_shapelet_size < 0
             or self.min_shapelet_size > self.max_shapelet_size
@@ -108,5 +113,4 @@ class RandomShapeletEmbedding(BaseEmbedding):
             min_shapelet_size,
             max_shapelet_size,
             self.n_shapelets,
-            random_state,
         )

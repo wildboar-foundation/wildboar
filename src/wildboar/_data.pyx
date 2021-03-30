@@ -21,6 +21,14 @@ cimport numpy as np
 
 from ._utils import check_array_fast
 
+def ts_database_dims(np.ndarray x):
+    n_samples = x.shape[0]
+    n_timestep = x.shape[x.ndim - 1]
+    n_dims = 1
+    if x.ndim == 3:
+        n_dims = x.shape[1]
+    return n_samples, n_dims, n_timestep
+
 cdef TSDatabase ts_database_new(np.ndarray data):
     """Construct a new time series database from a ndarray """
     data = check_array_fast(data, allow_nd=True)

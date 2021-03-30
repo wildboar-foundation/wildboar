@@ -37,6 +37,7 @@ class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
+        n_jobs=None,
         random_state=None
     ):
         super().__init__(
@@ -46,6 +47,7 @@ class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
             scoring=scoring,
             cv=cv,
             class_weight=class_weight,
+            n_jobs=n_jobs,
             random_state=random_state,
         )
         self.n_shapelets = n_shapelets
@@ -62,6 +64,7 @@ class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
             random_state=random_state,
+            n_jobs=self.n_jobs,
         )
 
 
@@ -80,6 +83,7 @@ class RandomShapeletRegressor(EmbeddingRidgeCV):
         scoring=None,
         cv=None,
         gcv_mode=None,
+        n_jobs=None,
         random_state=None
     ):
         super().__init__(
@@ -89,6 +93,7 @@ class RandomShapeletRegressor(EmbeddingRidgeCV):
             scoring=scoring,
             cv=cv,
             gcv_mode=gcv_mode,
+            n_jobs=n_jobs,
             random_state=random_state,
         )
         self.n_shapelets = n_shapelets
@@ -105,4 +110,5 @@ class RandomShapeletRegressor(EmbeddingRidgeCV):
             min_shapelet_size=self.min_shapelet_size,
             max_shapelet_size=self.max_shapelet_size,
             random_state=random_state,
+            n_jobs=self.n_jobs,
         )

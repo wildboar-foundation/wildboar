@@ -16,8 +16,8 @@
 # Authors: Isak Samsten
 
 from .base import BaseEmbedding
-from .shapelet import RandomShapeletEmbedding
-from .rocket import RocketEmbedding
+from ._shapelet import RandomShapeletEmbedding
+from ._rocket import RocketEmbedding
 
 __all__ = [
     "BaseEmbedding",

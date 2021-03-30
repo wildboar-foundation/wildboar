@@ -17,9 +17,11 @@
 
 from abc import ABCMeta, abstractmethod
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils.validation import check_array, check_is_fitted
+from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
 
-from ._embedding import FeatureEngineerEmbedding
+from ._embedding import feature_embedding_fit
+from ._embedding import feature_embedding_fit_transform
+from ._embedding import feature_embedding_transform
 
 __all__ = [
     "BaseEmbedding",
@@ -35,6 +37,17 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
     embedding_ : Embedding
         The underlying embedding.
     """
+
+    def __init__(self, *, random_state=None, n_jobs=None):
+        """
+        Parameters
+        ----------
+        n_jobs : int, optional
+            The number of jobs to run in parallel. None means 1 and
+            -1 means using all processors.
+        """
+        self.n_jobs = n_jobs
+        self.random_state = random_state
 
     def fit(self, x, y=None):
         """Fit the embedding.
@@ -52,10 +65,16 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         embedding : self
         """
         x = check_array(x)
+        random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
-        fee = FeatureEngineerEmbedding(self._get_feature_engineer())
-        fee.fit_embedding(x)
-        self.embedding_ = fee.embedding_
+
+        # fee = FeatureEngineerEmbedding(
+        #     self._get_feature_engineer(), random_state, self.n_jobs
+        # )
+        # fee.fit_embedding(x)
+        self.embedding_ = feature_embedding_fit(
+            self._get_feature_engineer(), x, random_state, self.n_jobs
+        )
         return self
 
     def transform(self, x):
@@ -73,7 +92,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         """
         check_is_fitted(self, attributes="embedding_")
         x = check_array(x)
-        return self.embedding_.apply(x)
+        return feature_embedding_transform(self.embedding_, x, self.n_jobs)
 
     def fit_transform(self, x, y=None):
         """Fit the embedding and return the transform of x.
@@ -92,10 +111,16 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
             The embedding.
         """
         x = check_array(x)
+        random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
-        fee = FeatureEngineerEmbedding(self._get_feature_engineer())
-        x_out = fee.fit_embedding_transform(x)
-        self.embedding_ = fee.embedding_
+        # fee = FeatureEngineerEmbedding(
+        #     self._get_feature_engineer(), random_state, self.n_jobs
+        # )
+        # x_out = fee.fit_embedding_transform(x)
+        embedding, x_out = feature_embedding_fit_transform(
+            self._get_feature_engineer(), x, random_state, self.n_jobs
+        )
+        self.embedding_ = embedding
         return x_out
 
     @abstractmethod

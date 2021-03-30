@@ -38,7 +38,8 @@ cdef class FeatureEngineer:
         TSDatabase *td, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
-        Feature *transient
+        Feature *transient,
+        size_t *seed
     ) nogil
 
     # Initialize a persisent feature from a transient feature

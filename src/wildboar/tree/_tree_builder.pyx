@@ -514,6 +514,8 @@ cdef class TreeBuilder:
     # the tree structure representation
     cdef Tree tree
 
+    cdef size_t random_seed
+
     def __cinit__(
         self,
         Py_ssize_t max_depth,
@@ -522,13 +524,15 @@ cdef class TreeBuilder:
         np.ndarray y,
         np.ndarray sample_weights,
         FeatureEngineer feature_engineer,
+        object random_state,
         *args,
         **kwargs
     ):
         self.max_depth = max_depth
         self.min_sample_split = min_sample_split
         self.current_node_id = 0
-        
+        self.random_seed = random_state.randint(0, RAND_R_MAX)
+
         self.td = ts_database_new(X)
         self.feature_engineer = feature_engineer
         self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
@@ -731,7 +735,7 @@ cdef class TreeBuilder:
         split_point = 0
         for i in range(self.feature_engineer.get_n_features(&self.td)):
             self.feature_engineer.next_feature(
-                i, &self.td, self.samples + start, n_samples, &feature)
+                i, &self.td, self.samples + start, n_samples, &feature, &self.random_seed)
             
             self.feature_engineer.transient_feature_values(
                 &feature,
@@ -827,6 +831,7 @@ cdef class ClassificationTreeBuilder(TreeBuilder):
         np.ndarray y,
         np.ndarray sample_weights,
         FeatureEngineer feature_engineer,
+        object random_state,
         Py_ssize_t n_labels,
         *args,
         **kwargs,
@@ -1132,19 +1137,6 @@ cdef class RegressionTreeBuilder(TreeBuilder):
 
 
 cdef class ExtraRegressionTreeBuilder(RegressionTreeBuilder):
-    cdef size_t random_seed
-
-    def __cinit__(
-        self,
-        Py_ssize_t max_depth,
-        Py_ssize_t min_sample_split,
-        np.ndarray X,
-        np.ndarray y,
-        np.ndarray sample_weights,
-        FeatureEngineer feature_engineer,
-        object random_state,
-    ):
-        self.random_seed = random_state.randint(0, RAND_R_MAX)
 
     cdef void _partition_feature_buffer(
         self,
@@ -1173,20 +1165,6 @@ cdef class ExtraRegressionTreeBuilder(RegressionTreeBuilder):
 
 
 cdef class ExtraClassificationTreeBuilder(ClassificationTreeBuilder):
-    cdef size_t random_seed
-
-    def __cinit__(
-        self,
-        Py_ssize_t max_depth,
-        Py_ssize_t min_sample_split,
-        np.ndarray X,
-        np.ndarray y,
-        np.ndarray sample_weights,
-        FeatureEngineer feature_engineer,
-        Py_ssize_t n_labels,
-        object random_state,
-    ):
-        self.random_seed = random_state.randint(0, RAND_R_MAX)
 
     cdef void _partition_feature_buffer(
         self,
@@ -1214,54 +1192,3 @@ cdef class ExtraClassificationTreeBuilder(ClassificationTreeBuilder):
         threshold[0] = rand_threshold
         # TODO: compute impurity scoring
         impurity[0] = -INFINITY
-
-
-# cdef class _RocketTreeBuilder(ClassificationTreeBuilder):
-
-#     cdef int _sample_shapelet(
-#         self,
-#         TSView *shapelet_info,
-#         Py_ssize_t start,
-#         Py_ssize_t end,
-#     ) nogil:
-#         cdef Py_ssize_t shapelet_dim
-#         if self.td.n_dims > 1:
-#             shapelet_dim = rand_int(0, self.td.n_dims, &self.random_seed)
-#         else:
-#             shapelet_dim = 1
-#         return self.distance_measure.init_ts_view(
-#             &self.td, shapelet_info, 0, 0, 0, shapelet_dim
-#         )
-
-
-# class RocketTreeBuilder(ClassificationTreeBuilder):
-
-#     def __new__(
-#         cls,
-#         Py_ssize_t n_kernels,
-#         Py_ssize_t max_depth,
-#         Py_ssize_t min_sample_split,
-#         np.ndarray X,
-#         np.ndarray y,
-#         np.ndarray sample_weights,
-#         object random_state,
-#         Py_ssize_t n_labels
-#     ):
-#         cdef object measure = RocketMeasure(
-#             X.shape[1], random_state.randint(0, RAND_R_MAX)
-#         )
-#         return super().__new__(
-#             cls,
-#             n_kernels, 
-#             0, 
-#             1, 
-#             max_depth, 
-#             min_sample_split, 
-#             measure,
-#             None,
-#             X,
-#             y,
-#             sample_weights,
-#             random_state,
-#             n_labels
-#         )

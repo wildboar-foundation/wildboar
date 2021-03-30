@@ -6,12 +6,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
 from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 
-from wildboar.embed.base import BaseEmbedding
-
 
 class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
-    def __init__(self, random_state=None):
+    def __init__(self, *, random_state=None, n_jobs=None):
         self.random_state = random_state
+        self.n_jobs = n_jobs
 
     def fit(self, x, y, sample_weight=None):
         x = check_array(x, dtype=np.float64, order="C")
@@ -81,9 +80,10 @@ class EmbeddingRidgeClassifierCV(
         scoring=None,
         cv=None,
         class_weight=None,
+        n_jobs=None,
         random_state=None,
     ):
-        super().__init__(random_state=random_state)
+        super().__init__(random_state=random_state, n_jobs=n_jobs)
         self.alphas = alphas
         self.fit_intercept = fit_intercept
         self.normalize = normalize
@@ -114,9 +114,10 @@ class EmbeddingRidgeCV(RegressorMixin, EmbeddingRegressorMixin, BaseEmbeddingEst
         scoring=None,
         cv=None,
         gcv_mode=None,
+        n_jobs=None,
         random_state=None,
     ):
-        super().__init__(random_state=random_state)
+        super().__init__(random_state=random_state, n_jobs=n_jobs)
         self.alphas = np.asarray(alphas)
         self.fit_intercept = fit_intercept
         self.normalize = normalize

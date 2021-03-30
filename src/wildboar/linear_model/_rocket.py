@@ -36,6 +36,7 @@ class RocketClassifier(EmbeddingRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
+        n_jobs=None,
         random_state=None
     ):
         super().__init__(
@@ -45,12 +46,15 @@ class RocketClassifier(EmbeddingRidgeClassifierCV):
             scoring=scoring,
             cv=cv,
             class_weight=class_weight,
+            n_jobs=n_jobs,
             random_state=random_state,
         )
         self.n_kernels = n_kernels
 
     def _get_embedding(self, random_state):
-        return RocketEmbedding(self.n_kernels, random_state=random_state)
+        return RocketEmbedding(
+            self.n_kernels, random_state=random_state, n_jobs=self.n_jobs
+        )
 
 
 class RocketRegressor(EmbeddingRidgeCV):
@@ -64,6 +68,7 @@ class RocketRegressor(EmbeddingRidgeCV):
         scoring=None,
         cv=None,
         gcv_mode=None,
+        n_jobs=None,
         random_state=None
     ):
         super().__init__(
@@ -73,9 +78,12 @@ class RocketRegressor(EmbeddingRidgeCV):
             scoring=scoring,
             cv=cv,
             gcv_mode=gcv_mode,
+            n_jobs=n_jobs,
             random_state=random_state,
         )
         self.n_kernels = n_kernels
 
     def _get_embedding(self, random_state):
-        return RocketEmbedding(self.n_kernels, random_state=random_state)
+        return RocketEmbedding(
+            self.n_kernels, random_state=random_state, n_jobs=self.n_jobs
+        )

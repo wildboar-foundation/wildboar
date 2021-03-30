@@ -88,14 +88,14 @@ if __name__ == "__main__":
             **build_args,
         ),
         Extension(
-            "wildboar.embed._shapelet",
-            sources=["src/wildboar/embed/_shapelet.pyx"],
+            "wildboar.embed._shapelet_feature",
+            sources=["src/wildboar/embed/_shapelet_feature.pyx"],
             include_dirs=include_dirs,
             **build_args,
         ),
         Extension(
-            "wildboar.embed._rocket",
-            sources=["src/wildboar/embed/_rocket.pyx"],
+            "wildboar.embed._rocket_feature",
+            sources=["src/wildboar/embed/_rocket_feature.pyx"],
             include_dirs=include_dirs,
             **build_args,
         ),

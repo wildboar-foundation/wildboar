@@ -70,7 +70,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         return self.tree_.apply(x)
 
     @abstractmethod
-    def _get_feature_engineer(self, random_state):
+    def _get_feature_engineer(self):
         pass
 
     @abstractmethod
@@ -78,7 +78,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         pass
 
     def _fit(self, x, y, sample_weights, random_state):
-        feature_engineer = self._get_feature_engineer(random_state)
+        feature_engineer = self._get_feature_engineer()
         tree_builder = self._get_tree_builder(
             x, y, sample_weights, feature_engineer, random_state
         )
@@ -177,6 +177,7 @@ class RegressorTreeMixin:
             y,
             sample_weights,
             feature_engineer,
+            random_state,
         )
 
 
@@ -303,6 +304,7 @@ class ClassifierTreeMixin:
             y,
             sample_weights,
             feature_engineer,
+            random_state,
             self.n_classes_,
         )
 
@@ -340,7 +342,7 @@ class BaseShapeletTree(BaseTree):
         self.n_timestep_ = None
         self.n_dims_ = None
 
-    def _get_feature_engineer(self, random_state):
+    def _get_feature_engineer(self):
         max_shapelet_size = int(self.n_timestep_ * self.max_shapelet_size)
         min_shapelet_size = int(self.n_timestep_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
@@ -353,7 +355,6 @@ class BaseShapeletTree(BaseTree):
             min_shapelet_size,
             max_shapelet_size,
             self.n_shapelets,
-            random_state,
         )
 
 
@@ -689,8 +690,8 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             y,
             sample_weights,
             feature_engineer,
-            self.n_classes_,
             random_state,
+            self.n_classes_,
         )
 
 
@@ -736,8 +737,8 @@ class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseTree):
         self.force_dim = force_dim
         self.random_state = random_state
 
-    def _get_feature_engineer(self, random_state):
-        return RocketFeatureEngineer(self.n_kernels, random_state)
+    def _get_feature_engineer(self):
+        return RocketFeatureEngineer(self.n_kernels)
 
 
 class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseTree):
@@ -782,5 +783,5 @@ class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseTree):
         self.force_dim = force_dim
         self.random_state = random_state
 
-    def _get_feature_engineer(self, random_state):
-        return RocketFeatureEngineer(self.n_kernels, random_state)
+    def _get_feature_engineer(self):
+        return RocketFeatureEngineer(self.n_kernels)

@@ -17,7 +17,7 @@
 
 from sklearn.utils.validation import check_random_state
 from .base import BaseEmbedding
-from ._rocket import RocketFeatureEngineer
+from ._rocket_feature import RocketFeatureEngineer
 
 
 class RocketEmbedding(BaseEmbedding):
@@ -36,22 +36,23 @@ class RocketEmbedding(BaseEmbedding):
         Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
     """
 
-    def __init__(self, n_kernels=1000, *, random_state=None):
+    def __init__(self, n_kernels=1000, *, n_jobs=None, random_state=None):
         """
         Parameters
         ----------
         n_kernels : int, optional
             The number of kernels.
 
+        n_jobs : int, optional
+            The number of jobs to run in parallel. None means 1 and
+            -1 means using all processors.
+
         random_state : int or RandomState, optional
             The psuodo-random number generator.
         """
+        super().__init__(n_jobs=n_jobs)
         self.n_kernels = n_kernels
         self.random_state = random_state
 
     def _get_feature_engineer(self):
-        random_state = check_random_state(self.random_state)
-        return RocketFeatureEngineer(
-            self.n_kernels,
-            random_state,
-        )
+        return RocketFeatureEngineer(self.n_kernels)
