@@ -248,6 +248,7 @@ cdef double scaled_euclidean_distance(
 
     cdef double ex = 0
     cdef double ex2 = 0
+    cdef double tmp
 
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -264,7 +265,11 @@ cdef double scaled_euclidean_distance(
         if i >= s_length - 1:
             j = (i + 1) % s_length
             mean = ex / s_length
-            std = sqrt(ex2 / s_length - mean * mean)
+            tmp = ex2 / s_length - mean * mean
+            if tmp > 0:
+                std = sqrt(tmp)
+            else:
+                std = 0
             dist = inner_scaled_euclidean_distance(s_offset, s_length, s_mean, s_std,
                                                    j, mean, std, S, s_stride,
                                                    X_buffer, min_dist)

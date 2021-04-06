@@ -404,6 +404,7 @@ cdef double scaled_dtw_distance(
 
     cdef double ex = 0
     cdef double ex2 = 0
+    cdef double tmp = 0
 
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -424,7 +425,11 @@ cdef double scaled_dtw_distance(
             j = (i + 1) % s_length
             I = i - (s_length - 1)
             mean = ex / s_length
-            std = sqrt(ex2 / s_length - mean * mean)
+            tmp = ex2 / s_length - mean * mean
+            if tmp > 0:
+                std = sqrt(tmp)
+            else:
+                std = 0
             lb_kim = constant_lower_bound(s_offset, s_stride, S,
                                           s_mean, s_std, j, 1, X_buffer,
                                           mean, std, s_length, min_dist)

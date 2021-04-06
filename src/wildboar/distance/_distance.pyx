@@ -111,7 +111,11 @@ cdef int _ts_view_update_statistics(TSView *ts_view, const TSDatabase *td) nogil
         ex2 += current_value ** 2
 
     ts_view.mean = ex / ts_view.length
-    ts_view.std = sqrt(ex2 / ts_view.length - ts_view.mean * ts_view.mean)
+    ex2 = ex2 / ts_view.length - ts_view.mean * ts_view.mean
+    if ex2 > 0:
+        ts_view.std = sqrt(ex2)
+    else:
+        ts_view.std = 0
     return 0
 
 
@@ -565,7 +569,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
         )
 
 
-    cdef TSCopy shape
+    cdef TSCopy shape # TODO: free me
     distance_measure.init_ts_copy_from_obj(&shape, (dim, s))
     if isinstance(sample, int):
         if subsequence_distance:
@@ -585,6 +589,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
         samples = check_array(sample, ensure_2d=False, dtype=int)
         dist = []
         ind = []
+        # TODO: add n_jobs
         for i in samples:
             if subsequence_distance:
                 min_dist = distance_measure.ts_copy_sub_distance(
@@ -592,7 +597,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
                 )
             else:
                 min_dist = distance_measure.ts_copy_distance(
-                    &shape, &sd, sample
+                    &shape, &sd, i
                 )
                 min_index = 0
 
