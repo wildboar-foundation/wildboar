@@ -2,10 +2,11 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supervised learning" href="supervised.html" /><link rel="prev" title="User guide" href="../guide.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supervised learning" href="supervised.html" /><link rel="prev" title="User guide" href="../guide.html" />
 
     <meta name="generator" content="sphinx-3.5.3, furo 2021.03.20.beta30"/>
-        <title>Datasets - Wildboar 1.0.9.dev21+g97cbcca documentation</title>
+        <title>Datasets - Wildboar 1.0.9.dev26+g988924f documentation</title>
       <link rel="stylesheet" href="../_static/styles/furo.css?digest=978e1795dfe158b585dda6a8417f6411828bf3ed">
     <link rel="stylesheet" href="../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../_static/pygments_dark.css">
@@ -38,8 +39,8 @@
   
   }
 </style><link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     <link rel="stylesheet" href="../_static/styles/furo-extensions.css?digest=d391b54134226e4196576da3bdb6dddb7e05ba2b"></head>
   <body dir="">
@@ -102,7 +103,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.0.9.dev21+g97cbcca documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.0.9.dev26+g988924f documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -198,16 +199,16 @@
         <label class="toc-overlay-icon toc-content-icon" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
-        <div class="section" id="datasets">
+        <section id="datasets">
 <h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h1>
 <p>Wildboar is distributed with an advanced system for handling dataset repositories. A dataset repository can
 be used to load benchmark datasets or to distribute or store datasets.</p>
-<div class="section" id="what-is-a-repository">
+<section id="what-is-a-repository">
 <h2>What is a repository?<a class="headerlink" href="#what-is-a-repository" title="Permalink to this headline">¶</a></h2>
 <p>I short, a repository is a collection of datasets bundles. More specifically, a repository links to bundles (zip-files) containing datasets
 or dataset parts that can be downloaded, cached and loaded by wildboar.</p>
-</div>
-<div class="section" id="how-to-use-a-repository">
+</section>
+<section id="how-to-use-a-repository">
 <h2>How to use a repository?<a class="headerlink" href="#how-to-use-a-repository" title="Permalink to this headline">¶</a></h2>
 <p>Repositories are either initialized directly or used together with the <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
@@ -269,8 +270,8 @@ using the version <cite>1.0</cite> and <cite>default</cite> tag.</p></li>
 the <cite>wildboar</cite> repository using the tag <cite>hard</cite>.</p></li>
 </ul>
 </div>
-</div>
-<div class="section" id="installing-repositories">
+</section>
+<section id="installing-repositories">
 <h2>Installing repositories<a class="headerlink" href="#installing-repositories" title="Permalink to this headline">¶</a></h2>
 <p>A repository implements the interface of the class <code class="docutils literal notranslate"><span class="pre">wildboar.datasets.Repository</span></code></p>
 <div class="admonition note">
@@ -286,7 +287,7 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">"example"</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">"example/example"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="repository-json-specification">
+<section id="repository-json-specification">
 <h3>Repository JSON specification<a class="headerlink" href="#repository-json-specification" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code> expects a JSON-file following the specification below.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
@@ -306,9 +307,9 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
       </article>
       <footer>
