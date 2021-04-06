@@ -1,6 +1,7 @@
-from abc import ABCMeta, abstractmethod
 import numpy as np
-from numpy.random import rand
+
+from abc import ABCMeta, abstractmethod
+
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import check_array, check_is_fitted, check_random_state

@@ -14,14 +14,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.utils import check_array
-from sklearn.pipeline import make_pipeline
-from sklearn.utils.validation import check_is_fitted, check_random_state
-from sklearn.linear_model import RidgeClassifierCV
 
-from ._base import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
+from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
 from ..embed import RocketEmbedding
 
 

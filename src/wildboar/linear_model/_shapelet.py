@@ -17,7 +17,7 @@
 import numpy as np
 from numpy.random import rand
 
-from ._base import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
+from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
 
 from ..embed import RandomShapeletEmbedding
 
