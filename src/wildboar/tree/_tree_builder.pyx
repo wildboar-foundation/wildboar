@@ -417,19 +417,6 @@ cdef inline Py_ssize_t label_distribution(
     double *n_weighted_samples,
     double *label_dist,
 ) nogil:
-    """Computes the label distribution
-
-    :param samples: the samples to include
-    :param sample_weights: 
-    :param start: the start position in samples
-    :param end: the end position in samples
-    :param labels: the labels
-    :param label_stride: the stride in labels
-    :param n_labels: the number labeles
-    :param n_weighted_samples: (out) number of samples according to weight
-    :param label_dist: (out) label distribution
-    :return: number of classes included in the sample
-    """
     cdef double sample_weight
     cdef Py_ssize_t i, j, p, n_pos
 
@@ -474,8 +461,10 @@ cdef inline double entropy(
         if yv > 0:
             y_sum += yv * log2(yv)
 
-    return fabs((left_sum / n_samples) * -x_sum +
-                (right_sum / n_samples) * -y_sum)
+    return fabs(
+        (left_sum / n_samples) * -x_sum +
+        (right_sum / n_samples) * -y_sum
+    )
 
 
 cdef class TreeBuilder:
