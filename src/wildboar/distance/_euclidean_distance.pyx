@@ -311,8 +311,10 @@ cdef double inner_scaled_euclidean_distance(
     for i in range(length):
         if dist >= min_dist:
             break
-
-        x = (X[offset + timestep_stride * i] - s_mean) / s_std
+        if not s_std_zero:
+            x = (X[offset + timestep_stride * i] - s_mean) / s_std
+        else:
+            x = 0
         if not std_zero:
             x -= (X_buffer[i + j] - mean) / std
         dist += x * x
