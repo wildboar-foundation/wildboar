@@ -16,7 +16,6 @@
 # Authors: Isak Samsten
 
 from libc.stdlib cimport malloc, free
-from libc.math cimport NAN
 
 from ._feature cimport Feature
 from ._feature cimport FeatureEngineer
@@ -27,8 +26,8 @@ from ..distance._distance cimport DistanceMeasure
 from ..distance._distance cimport get_distance_measure
 from ..distance._distance cimport TSView
 from ..distance._distance cimport TSCopy
-from ..distance._distance cimport ts_copy_init
-from ..distance._distance cimport ts_view_free, ts_copy_free
+from ..distance._distance cimport ts_copy_free
+from ..distance._distance cimport ts_view_free
 
 from .._utils cimport rand_int, RAND_R_MAX
 
@@ -143,7 +142,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         return 0
 
     cdef object persistent_feature_to_object(self, Feature *feature):
-        return (feature.dim, self._distance_measure.object_from_ts_copy(<TSCopy*>feature.feature))
+        return feature.dim, self._distance_measure.object_from_ts_copy(<TSCopy*>feature.feature)
 
     cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
         cdef TSCopy *ts_copy = <TSCopy*> malloc(sizeof(TSCopy))

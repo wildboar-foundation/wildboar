@@ -190,6 +190,11 @@ cdef class FeatureEmbedding:
             for i in range(self._n_features)
         ]
 
+    def __getitem__(self, item):
+        if not isinstance(item, int) or 0 > item > self._n_features:
+            raise ValueError()
+        return self.feature_engineer.persistent_feature_to_object(self._features[item])
+
 def feature_embedding_fit(FeatureEngineer feature_engineer, np.ndarray x, object random_state):
     cdef TSDatabase td = ts_database_new(x)
     cdef Py_ssize_t i

@@ -42,8 +42,6 @@ from .._utils cimport RAND_R_MAX
 from ._feature cimport FeatureEngineer
 from ._feature cimport Feature
 
-
-# TODO: rename
 cdef struct Rocket:
     Py_ssize_t length
     Py_ssize_t dilation
@@ -52,19 +50,33 @@ cdef struct Rocket:
     double bias
     double *weight
 
+cdef np.ndarray _to_ndarray(Py_ssize_t *arr, Py_ssize_t n):
+    cdef Py_ssize_t i
+    cdef np.ndarray out = np.zeros(n, dtype=int)
+    for i in range(n):
+        out[i] = arr[i]
 
-# TODO: add to Rocket
-cpdef enum RocketValue:
-    MEAN = 1,
-    MAX = 2,
-    MIN = 3
-
+    return out
 
 cdef class RocketFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_kernels
+    cdef Py_ssize_t *lengths
+    cdef Py_ssize_t n_lengths
 
-    def __init__(self, n_kernels):
+    def __cinit__(self, n_kernels, lengths):
         self.n_kernels = n_kernels
+        self.lengths = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * len(lengths))
+        self.n_lengths = len(lengths)
+
+        cdef Py_ssize_t i
+        for i in range(len(lengths)):
+            self.lengths[i] = lengths[i]
+
+    def __reduce__(self):
+        return self.__class__, (self.n_kernels, _to_ndarray(self.lengths, self.n_lengths))
+
+    def __dealloc__(self):
+        free(self.lengths)
 
     cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:
         return self.n_kernels
@@ -82,7 +94,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         size_t *seed
     ) nogil:
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
-        rocket_init(rocket, td.n_timestep, seed)
+        rocket_init(rocket, td.n_timestep, self.lengths, self.n_lengths, seed)
         transient.dim = 1
         transient.feature = rocket
         return 0
@@ -135,7 +147,13 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         )
         cdef Rocket* rocket = <Rocket*> feature.feature
         rocket_apply(
-            rocket, 
+            rocket.length,
+            rocket.dilation,
+            rocket.padding,
+            rocket.bias,
+            0,
+            1,
+            rocket.weight,
             sample_offset, 
             td.timestep_stride,
             td.n_timestep,
@@ -171,8 +189,14 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         )
         cdef Rocket* rocket = <Rocket*> feature.feature
         rocket_apply(
-            rocket, 
-            sample_offset, 
+            rocket.length,
+            rocket.dilation,
+            rocket.padding,
+            rocket.bias,
+            0,
+            1,
+            rocket.weight,
+            sample_offset,
             td.timestep_stride,
             td.n_timestep,
             td.data,
@@ -228,10 +252,15 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         return 0
 
 
-cdef void rocket_init(Rocket *rocket, Py_ssize_t n_timestep, size_t *random_state) nogil:
+cdef void rocket_init(
+    Rocket *rocket,
+    Py_ssize_t n_timestep,
+    Py_ssize_t *lengths,
+    Py_ssize_t n_lengths,
+    size_t *random_state) nogil:
     cdef Py_ssize_t i
     cdef double mean = 0.0
-    cdef Py_ssize_t length = 7
+    cdef Py_ssize_t length = lengths[rand_int(0, n_lengths, random_state)]
     cdef double* weight = <double*> malloc(sizeof(double) * length)
     
     for i in range(length):
@@ -251,98 +280,42 @@ cdef void rocket_init(Rocket *rocket, Py_ssize_t n_timestep, size_t *random_stat
     rocket.bias = rand_uniform(-1, 1, random_state)
 
 
-cdef void rocket_apply(Rocket *rocket, Py_ssize_t offset, Py_ssize_t stride, Py_ssize_t length, double* T, double* mean_val, double* max_val) nogil:
+cdef void rocket_apply(
+    Py_ssize_t length,
+    Py_ssize_t dilation,
+    Py_ssize_t padding,
+    double bias,
+    Py_ssize_t w_offset,
+    Py_ssize_t w_stride,
+    double *weight,
+    Py_ssize_t x_offset,
+    Py_ssize_t x_stride,
+    Py_ssize_t x_length,
+    double* x,
+    double* mean_val,
+    double* max_val
+) nogil:
     cdef Py_ssize_t out_len, end
     cdef Py_ssize_t i, j, k
     cdef double ppv
     cdef double max
     cdef double sum
 
-    out_len = (length + 2 * rocket.padding) - ((rocket.length - 1) * rocket.dilation)
-    end = (length + rocket.padding) - ((rocket.length - 1) * rocket.dilation)
+    out_len = (x_length + 2 * padding) - ((length - 1) * dilation)
+    end = (x_length + padding) - ((length - 1) * dilation)
     max_val[0] = -INFINITY
     mean_val[0] = 0.0
-    for i in range(-rocket.padding, end):
-        sum = rocket.bias
+    for i in range(-padding, end):
+        inner_prod = bias
         k = i
-        for j in range(rocket.length):
-            if k > -1 and k < length:
-                sum += rocket.weight[j] * T[offset + stride * k]
-            k += rocket.dilation
-        if sum > max_val[0]:
-            max_val[0] = sum
+        for j in range(length):
+            if -1 < k < x_length:
+                inner_prod += weight[w_offset + w_stride * j] * x[x_offset + x_stride * k]
+            k += dilation
+        if inner_prod > max_val[0]:
+            max_val[0] = inner_prod
 
-        if sum > 0:
+        if inner_prod > 0:
             mean_val[0] += 1
 
     mean_val[0] /= out_len
-
-def apply_kernel(X, weights, length, bias, dilation, padding):
-    cdef double* V = <double*> malloc(sizeof(double) * len(X))
-    cdef Py_ssize_t i
-    for i in range(len(X)):
-        V[i] = X[i]
-
-    cdef Rocket rocket
-    rocket.weight = <double*> malloc(sizeof(double) * length)
-    for i in range(length):
-        rocket.weight[i] = weights[i]
-
-    rocket.bias = bias
-    rocket.dilation = dilation
-    rocket.padding = padding
-    rocket.length = length
-    cdef double mean_val, max_val
-    rocket_apply(&rocket, 0, 1, len(X), V, &mean_val, &max_val)
-    free(V)
-    free(rocket.weight)
-    return mean_val, max_val
-
-
-# # TODO: rename
-# cdef class RocketTransform:
-
-#     cdef Py_ssize_t n_kernels
-#     cdef object random_state
-#     cdef Rocket** kernels
-
-#     def __cinit__(self, *, n_kernels=10000, random_state=None):
-#         self.n_kernels = n_kernels
-#         self.random_state = random_state
-#         self.kernels = <Rocket**> malloc(sizeof(Rocket) * n_kernels)
-
-#     def __dealloc__(self):
-#         for i in range(self.n_kernels):
-#             free(self.kernels[i].weight)
-#         free(self.kernels)
-
-#     def fit(self, x, y=None):
-#         random_state = check_random_state(self.random_state)
-#         cdef size_t seed = random_state.randint(0, RAND_R_MAX)
-#         cdef Rocket* rocket
-#         cdef Py_ssize_t i
-#         for i in range(self.n_kernels):
-#             rocket = <Rocket*> malloc(sizeof(Rocket))
-#             rocket_init(rocket, x.shape[1], &seed)
-#             self.kernels[i] = rocket
-#         return self
-
-#     def transform(self, x, y=None):
-#         x_out = np.empty((x.shape[0], self.n_kernels * 2))
-#         cdef TSDatabase td = ts_database_new(x)
-#         cdef Py_ssize_t sample_offset
-#         cdef Rocket* rocket
-#         cdef double mean_val = 0, max_val = 0
-#         for i in range(x.shape[0]):
-#             sample_offset = i * td.sample_stride
-#             k = 0
-#             for j in range(self.n_kernels):
-#                 rocket = self.kernels[j]
-#                 rocket_apply(rocket, sample_offset, td.timestep_stride, td.n_timestep, td.data, &mean_val, &max_val)
-#                 x_out[i, k] = mean_val
-#                 x_out[i, k + 1] = max_val
-#                 k += 2
-#         return x_out
-
-
-

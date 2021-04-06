@@ -17,7 +17,7 @@
 
 from sklearn.utils.validation import check_random_state
 from .base import BaseEmbedding
-from ._rocket_feature import RocketFeatureEngineer
+from ._rocket_fast import RocketFeatureEngineer
 
 
 class RocketEmbedding(BaseEmbedding):
@@ -55,4 +55,4 @@ class RocketEmbedding(BaseEmbedding):
         self.random_state = random_state
 
     def _get_feature_engineer(self):
-        return RocketFeatureEngineer(self.n_kernels)
+        return RocketFeatureEngineer(self.n_kernels, [7, 9, 11])

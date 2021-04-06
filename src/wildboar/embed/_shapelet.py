@@ -15,9 +15,8 @@
 #
 # Authors: Isak Samsten
 
-from sklearn.utils.validation import check_random_state
 from .base import BaseEmbedding
-from ._shapelet_feature import RandomShapeletFeatureEngineer
+from ._shapelet_fast import RandomShapeletFeatureEngineer
 
 
 class RandomShapeletEmbedding(BaseEmbedding):
@@ -41,7 +40,7 @@ class RandomShapeletEmbedding(BaseEmbedding):
         *,
         metric="euclidean",
         metric_params=None,
-        min_shapelet_size=0.1,
+        min_shapelet_size=0,
         max_shapelet_size=1.0,
         n_jobs=None,
         random_state=None

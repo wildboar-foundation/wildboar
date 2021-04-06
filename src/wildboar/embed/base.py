@@ -14,14 +14,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-
+import numpy as np
 from abc import ABCMeta, abstractmethod
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
 
-from ._embedding import feature_embedding_fit
-from ._embedding import feature_embedding_fit_transform
-from ._embedding import feature_embedding_transform
+from ._embed_fast import feature_embedding_fit
+from ._embed_fast import feature_embedding_fit_transform
+from ._embed_fast import feature_embedding_transform
 
 __all__ = [
     "BaseEmbedding",
@@ -67,11 +67,6 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         x = check_array(x)
         random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
-
-        # fee = FeatureEngineerEmbedding(
-        #     self._get_feature_engineer(), random_state, self.n_jobs
-        # )
-        # fee.fit_embedding(x)
         self.embedding_ = feature_embedding_fit(
             self._get_feature_engineer(), x, random_state, self.n_jobs
         )
@@ -113,10 +108,6 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         x = check_array(x)
         random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
-        # fee = FeatureEngineerEmbedding(
-        #     self._get_feature_engineer(), random_state, self.n_jobs
-        # )
-        # x_out = fee.fit_embedding_transform(x)
         embedding, x_out = feature_embedding_fit_transform(
             self._get_feature_engineer(), x, random_state, self.n_jobs
         )
