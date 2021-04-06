@@ -323,7 +323,11 @@ cdef inline double inner_scaled_dtw(
         min_cost = INFINITY
         for j in range(max(0, i - r), min(s_length, i + r + 1)):
             if i == 0 and j == 0:
-                v = (S[s_offset] - s_mean) / s_std
+                if not s_std_zero:
+                    v = (S[s_offset] - s_mean) / s_std
+                else:
+                    v = 0
+
                 if not std_zero:
                     v -= (X_buffer[x_offset] - mean) / std
                 cost[k] = v * v
