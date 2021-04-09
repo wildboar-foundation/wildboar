@@ -3,7 +3,10 @@
 ## [Unreleased]
 
 ### Added
-
+* Add parameter `collection` to `datasets.load_datasets` and `list_datasets`
+* Add parameter `preprocess` to `datasets.load_dataset`
+* Add `datasets.preprocess`
+* Add `datasets.list_collections`
 * Add `model_selection.outlier.RepeatedOutlierSplit` to cross-validate
   outlier detection algorithms
 * Add `liner_model.RocketClassifier
@@ -24,6 +27,7 @@
 
 ### Changed
 
+* Rename `datasets._filter` to `datasets.filter`
 * Parameter `shapelets` of `Tree` is changed to `features`
 * For implementors
   * `ShapeletTreeBuilder` is renamed to `TreeBuilder`

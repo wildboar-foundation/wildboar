@@ -351,6 +351,7 @@ class Repository(metaclass=ABCMeta):
         bundle,
         *,
         cache_dir,
+        collection=None,
         version=None,
         tag=None,
         create_cache_dir=True,
@@ -373,7 +374,7 @@ class Repository(metaclass=ABCMeta):
             progress=progress,
             force=force,
         ) as archive:
-            return bundle.list(archive)
+            return bundle.list(archive, collection)
 
     def clear_cache(self, cache_dir, keep_last_version=True):
         cache_dir = os.path.join(cache_dir, self.name)
@@ -476,14 +477,18 @@ class JSONRepository(Repository):
         for bundle_json in json["bundles"]:
             key = _validate_bundle_key(bundle_json["key"])
             version = _validate_version(bundle_json["version"])
-            name = bundle_json["name"]
-            class_index = bundle_json["class_index"]
-            description = bundle_json["description"]
+            name = bundle_json.get("name")
+            if name is None:
+                raise ValueError("Bundle name is required (%s)" % key)
+            class_index = bundle_json.get("class_index")
+            description = bundle_json.get("description")
+            collections = bundle_json.get("collections")
             bundles[bundle_json["key"]] = NpyBundle(
                 key=key,
                 version=version,
                 name=name,
                 description=description,
+                collections=collections,
                 class_index=class_index,
             )
 
@@ -535,6 +540,7 @@ class Bundle(metaclass=ABCMeta):
         version,
         name,
         description=None,
+        collections=None,
         class_index=-1,
     ):
         """Construct a bundle
@@ -560,6 +566,7 @@ class Bundle(metaclass=ABCMeta):
         self.version = version
         self.name = name
         self.description = description
+        self.collections = collections
         self.class_index = class_index
 
     def get_filename(self, version=None, tag=None, ext=None):
@@ -570,7 +577,16 @@ class Bundle(metaclass=ABCMeta):
             filename += ext
         return filename
 
-    def list(self, archive):
+    def get_collection(self, collection):
+        if self.collections is None:
+            raise ValueError("collection (%s) found" % collection)
+        else:
+            c = self.collections.get(collection)
+            if c is None:
+                raise ValueError("collection (%s) found" % collection)
+            return c
+
+    def list(self, archive, collection=None):
         """List all datasets in this bundle
 
         Parameters
@@ -578,18 +594,26 @@ class Bundle(metaclass=ABCMeta):
         archive : ZipFile
             The bundle file
 
+        collection : str, optional
+            The collection name
+
         Returns
         -------
         dataset_names : list
             A sorted list of datasets in the bundle
         """
         names = []
+        if collection is not None:
+            sample = self.get_collection(collection)
+        else:
+            sample = None
         for f in archive.filelist:
             path, ext = os.path.splitext(f.filename)
             if self._is_dataset(path, ext):
                 filename = os.path.basename(path)
                 filename = re.sub("_(TRAIN|TEST)", "", filename)
-                names.append(filename)
+                if sample is None or filename in sample:
+                    names.append(filename)
 
         return sorted(set(names))
 
@@ -649,8 +673,12 @@ class Bundle(metaclass=ABCMeta):
             test = np.vstack(test_parts)
             data = np.vstack([data, test])
 
-        y = data[:, self.class_index].astype(dtype)
-        x = np.delete(data, self.class_index, axis=1).astype(dtype)
+        if self.class_index is not None:
+            y = data[:, self.class_index].astype(dtype)
+            x = np.delete(data, self.class_index, axis=1).astype(dtype)
+        else:
+            x = data.astype(dtype)
+            y = None
         return x, y, n_train_samples
 
     @abstractmethod
@@ -707,6 +735,7 @@ class ArffBundle(Bundle):
         version,
         name,
         description=None,
+        collections=None,
         class_index=-1,
         encoding="utf-8",
     ):
@@ -715,6 +744,7 @@ class ArffBundle(Bundle):
             version=version,
             name=name,
             description=description,
+            collection=collections,
             class_index=class_index,
         )
         self.encoding = encoding

@@ -19,7 +19,6 @@ import os
 import re
 
 import numpy as np
-from sklearn.utils import deprecated
 
 from ._repository import (
     ArffBundle,
@@ -30,7 +29,8 @@ from ._repository import (
     JSONRepository,
 )
 
-from ._filter import make_filter
+from .filter import make_filter
+from .preprocess import named_preprocess
 
 __all__ = [
     "Repository",
@@ -48,7 +48,7 @@ __all__ = [
     "load_dataset",
     "list_datasets",
     "load_datasets",
-    "load_all_datasets",
+    "list_collections",
     "load_two_lead_ecg",
     "load_synthetic_control",
     "load_gun_point",
@@ -81,7 +81,7 @@ def _split_repo_bundle(repo_bundle_name):
         An optional tag
     """
     match = re.match(
-        "(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::((?:\d+\.)?(?:\d+\.)?(?:\*|\d+)))?(?::([a-zA-Z\-]+))?$",
+        r"(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::((?:\d+\.)?(?:\d+\.)?(?:\*|\d+)))?(?::([a-zA-Z\-]+))?$",
         repo_bundle_name,
     )
     if match:
@@ -89,7 +89,7 @@ def _split_repo_bundle(repo_bundle_name):
         bundle_name = match.group(2)
         version = match.group(3)
         if version:
-            version = re.sub("(\d+\.\d+)((?:\.0+)*)$", "\\1", version)
+            version = re.sub(r"(\d+\.\d+)((?:\.0+)*)$", "\\1", version)
         tag = match.group(4)
         return repository_name, bundle_name, version, tag
     else:
@@ -172,6 +172,7 @@ def load_gun_point(merge_train_test=True):
 def load_datasets(
     repository="wildboar/ucr",
     *,
+    collection=None,
     cache_dir=None,
     create_cache_dir=True,
     progress=True,
@@ -237,6 +238,7 @@ def load_datasets(
     """
     for dataset in list_datasets(
         repository=repository,
+        collection=collection,
         cache_dir=cache_dir,
         create_cache_dir=create_cache_dir,
         progress=progress,
@@ -253,34 +255,12 @@ def load_datasets(
                 yield dataset, (x, y)
 
 
-@deprecated(
-    "the function datasets.load_all_datasets has been deprecated in "
-    "1.0.3 and will be removed in in 1.0.5."
-)
-def load_all_datasets(
-    repository="wildboar/ucr",
-    *,
-    cache_dir=None,
-    create_cache_dir=True,
-    progress=True,
-    force=False,
-    **kwargs
-):
-    return load_datasets(
-        repository,
-        cache_dir=cache_dir,
-        create_cache_dir=create_cache_dir,
-        progress=progress,
-        force=force,
-        **kwargs
-    )
-
-
 def load_dataset(
     name,
     *,
     repository="wildboar/ucr",
     dtype=None,
+    preprocess=None,
     contiguous=True,
     merge_train_test=True,
     cache_dir=None,
@@ -303,6 +283,12 @@ def load_dataset(
 
     contiguous : bool, optional
         Ensure that the returned dataset is memory contiguous.
+
+    preprocess : str or callable, optional
+        Preprocess the dataset
+
+        - if str, "standardize"
+        - if callable, function taking a dataset and returning the preprocessed dataset
 
     merge_train_test : bool, optional
         Merge the existing training and testing partitions.
@@ -377,16 +363,22 @@ def load_dataset(
         create_cache_dir=create_cache_dir,
         progress=progress,
     )
+    if preprocess is None:
+        preprocess = lambda identity: identity
+    elif isinstance(preprocess, str):
+        preprocess = named_preprocess(preprocess)
+    elif not hasattr(preprocess, "__call__"):
+        raise ValueError("preprocess (%r) is not supported" % preprocess)
 
     if merge_train_test:
-        ret_val.append(x)
+        ret_val.append(preprocess(x))
         ret_val.append(y)
     else:
         if n_train_samples == x.shape[0]:
             raise ValueError("found no test parts. Set merge_train_test=True.")
 
-        ret_val.append(x[:n_train_samples])
-        ret_val.append(x[n_train_samples:])
+        ret_val.append(preprocess(x[:n_train_samples]))
+        ret_val.append(preprocess(x[n_train_samples:]))
         ret_val.append(y[:n_train_samples])
         ret_val.append(y[n_train_samples:])
 
@@ -399,6 +391,7 @@ def load_dataset(
 def list_datasets(
     repository="wildboar/ucr",
     *,
+    collection=None,
     cache_dir=None,
     create_cache_dir=True,
     progress=True,
@@ -440,6 +433,7 @@ def list_datasets(
     repository = get_repository(repository_name)
     return repository.list_datasets(
         bundle_name,
+        collection=collection,
         version=bundle_version,
         tag=bundle_tag,
         cache_dir=cache_dir,
@@ -539,6 +533,31 @@ def list_bundles(repository):
         The name of the bundle
     """
     return [key for key, bundle in get_bundles(repository).items()]
+
+
+def list_collections(repository):
+    """List the collections of the repository
+
+    Parameters
+    ----------
+    repository : str or Bundle, optional
+        The data repository
+
+        - if str load a named bundle, format {repository}/{bundle}
+
+    Returns
+    -------
+    list : a list of collections
+    """
+    (
+        repository_name,
+        bundle_name,
+        bundle_version,
+        bundle_tag,
+    ) = _split_repo_bundle(repository)
+    repository = get_repository(repository_name)
+    collections = repository.get_bundle(bundle_name).collections
+    return list(collections.keys()) if collections is not None else []
 
 
 def list_repositories():

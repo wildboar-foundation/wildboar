@@ -5,6 +5,7 @@ from wildboar.datasets import (
     list_repositories,
     list_bundles,
     load_datasets,
+    list_collections,
 )
 
 print(list_datasets(repository="wildboar/ucr:no-missing"))
@@ -17,5 +18,10 @@ for dataset, (x, y) in load_datasets(
     filter=["n_timestep>10", "n_samples<=200", "n_labels<=3"],
 ):
     print(dataset)
+
+for dataset in list_datasets(repository="wildboar/ucr", collection="bake-off"):
+    print(dataset)
+
+print(list_collections("wildboar/ucr"))
 
 load_dataset("GunPoint", repository="wildboar/ucr-tiny")

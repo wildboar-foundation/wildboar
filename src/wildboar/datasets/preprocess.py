@@ -14,16 +14,27 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-
 import numpy as np
-from wildboar.datasets.filter import make_str_filter
 
 
-class TestStrFilter:
-    def test_n_samples(self):
-        f = make_str_filter("n_samples<100")
-        assert f("hello", np.zeros((101, 10)), None) == False
+def named_preprocess(name):
+    if name == "standardize":
+        return standardize
+    else:
+        raise ValueError("%s does not exists" % name)
 
-    def test_dataset(self):
-        f = make_str_filter("dataset=~TwoLead")
-        assert f("TwoLeadECG", None, None) == True
+
+def standardize(x):
+    """Standardize x (along the time dimension) to have zero mean and unit standard deviation
+
+    Parameters
+    ----------
+    x : ndarray of shape (n_samples, n_timestep)
+        The dataset
+
+    Returns
+    -------
+    x : ndarray of shape (n_samples, n_timestep)
+        The standardized dataset
+    """
+    return (x - np.mean(x, axis=1, keepdims=True)) / np.std(x, axis=1, keepdims=True)
