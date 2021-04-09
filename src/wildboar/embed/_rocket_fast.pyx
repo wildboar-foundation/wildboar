@@ -73,12 +73,12 @@ cdef class WeightSampler:
         pass
 
 cdef class NormalWeightSampler(WeightSampler):
-    cdef double mu
-    cdef double sigma
+    cdef double mean
+    cdef double scale
 
-    def __init__(self, mu=0.0, sigma=1.0):
-        self.mu = mu
-        self.sigma = sigma
+    def __init__(self, mean=0.0, scale=1.0):
+        self.mean = mean
+        self.scale = scale
 
     cdef void sample(
         self,
@@ -93,7 +93,7 @@ cdef class NormalWeightSampler(WeightSampler):
         cdef Py_ssize_t i
         mean[0] = 0
         for i in range(length):
-            weights[i] = rand_normal(self.mu, self.sigma, seed)
+            weights[i] = rand_normal(self.mean, self.scale, seed)
             mean[0] += weights[i]
         mean[0] = mean[0] / length
 

@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 # x_train, x_test, y_train, y_test = load_dataset(
 #    "FaceAll", repository="wildboar/ucr:no-missing", merge_train_test=False
 # )
-x, y = load_dataset("FaceAll", merge_train_test=True, preprocess="standardize")
+x, y = load_dataset("ItalyPowerDemand", merge_train_test=True, preprocess="standardize")
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=123)
 print(np.mean(x_train, axis=1))
 
@@ -22,10 +22,8 @@ print(np.mean(x_train, axis=1))
 
 f = RocketClassifier(
     n_kernels=10000,
-    normalize_prob=0.5,
-    bias_prob=0.5,
-    sampling="uniform",
-    sampling_params={"lower": -1, "upper": 1},
+    sampling="normal",
+    sampling_params={"mean": 0, "scale": 1},
     n_jobs=16,
     random_state=123,
     alphas=np.logspace(-3, 3, 10),
