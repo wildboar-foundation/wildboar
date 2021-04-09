@@ -58,25 +58,149 @@ cdef np.ndarray _to_ndarray(Py_ssize_t *arr, Py_ssize_t n):
 
     return out
 
+cdef class WeightSampler:
+
+    cdef void sample(
+        self,
+        TSDatabase *td,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        double *weights,
+        Py_ssize_t length,
+        double *mean,
+        size_t *seed
+    ) nogil:
+        pass
+
+cdef class NormalWeightSampler(WeightSampler):
+    cdef double mu
+    cdef double sigma
+
+    def __init__(self, mu=0.0, sigma=1.0):
+        self.mu = mu
+        self.sigma = sigma
+
+    cdef void sample(
+        self,
+        TSDatabase *td,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        double *weights,
+        Py_ssize_t length,
+        double *mean,
+        size_t *seed
+    ) nogil:
+        cdef Py_ssize_t i
+        mean[0] = 0
+        for i in range(length):
+            weights[i] = rand_normal(self.mu, self.sigma, seed)
+            mean[0] += weights[i]
+        mean[0] = mean[0] / length
+
+cdef class UniformWeightSampler(WeightSampler):
+
+    cdef double lower
+    cdef double upper
+
+    def __init__(self, lower=-1.0, upper=1.0):
+        self.lower = lower
+        self.upper = upper
+
+    cdef void sample(
+        self,
+        TSDatabase *td,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        double *weights,
+        Py_ssize_t length,
+        double *mean,
+        size_t *seed
+    ) nogil:
+        cdef Py_ssize_t i
+        mean[0] = 0
+        for i in range(length):
+            weights[i] = rand_uniform(self.lower, self.upper, seed)
+            mean[0] += weights[i]
+        mean[0] = mean[0] / length
+
+cdef class ShapeletWeightSampler(WeightSampler):
+    cdef void sample(
+        self,
+        TSDatabase *td,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        double *weights,
+        Py_ssize_t length,
+        double *mean,
+        size_t *seed
+    ) nogil:
+        cdef Py_ssize_t start
+        cdef Py_ssize_t index
+        cdef Py_ssize_t dim
+        cdef Py_ssize_t i, offset
+
+        start = rand_int(0, td.n_timestep - length, seed)
+        index = samples[rand_int(0, n_samples, seed)]
+        if td.n_dims > 1:
+            dim = rand_int(0, td.n_dims, seed)
+        else:
+            dim = 1
+
+        offset = (
+            index * td.sample_stride +
+            start * td.timestep_stride +
+            dim * td.dim_stride
+        )
+        mean[0] = 0
+        for i in range(length):
+            weights[i] = td.data[offset + i * td.timestep_stride]
+            mean[0] += weights[i]
+        mean[0] /= length
+
+
 cdef class RocketFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_kernels
-    cdef Py_ssize_t *lengths
-    cdef Py_ssize_t n_lengths
+    cdef WeightSampler weight_sampler
+    cdef double padding_prob
+    cdef double bias_prob
+    cdef double normalize_prob
+    cdef Py_ssize_t *kernel_size
+    cdef Py_ssize_t n_kernel_size
 
-    def __cinit__(self, n_kernels, lengths):
+    def __cinit__(
+        self,
+        Py_ssize_t n_kernels,
+        WeightSampler weight_sampler,
+        np.ndarray kernel_size,
+        double bias_prob,
+        double padding_prob,
+        double normalize_prob
+    ):
         self.n_kernels = n_kernels
-        self.lengths = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * len(lengths))
-        self.n_lengths = len(lengths)
+        self.weight_sampler = weight_sampler
+        self.kernel_size = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * len(kernel_size))
+        self.n_kernel_size = len(kernel_size)
 
         cdef Py_ssize_t i
-        for i in range(len(lengths)):
-            self.lengths[i] = lengths[i]
+        for i in range(len(kernel_size)):
+            self.kernel_size[i] = kernel_size[i]
+
+        self.bias_prob = bias_prob
+        self.padding_prob = padding_prob
+        self.normalize_prob = normalize_prob
 
     def __reduce__(self):
-        return self.__class__, (self.n_kernels, _to_ndarray(self.lengths, self.n_lengths))
+        return self.__class__, (
+            self.n_kernels,
+            self.weight_sampler,
+            _to_ndarray(self.kernel_size, self.n_kernel_size),
+            self.bias_prob,
+            self.padding_prob,
+            self.normalize_prob
+        )
 
     def __dealloc__(self):
-        free(self.lengths)
+        free(self.kernel_size)
 
     cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:
         return self.n_kernels
@@ -94,7 +218,33 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         size_t *seed
     ) nogil:
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
-        rocket_init(rocket, td.n_timestep, self.lengths, self.n_lengths, seed)
+        cdef Py_ssize_t i
+        cdef double mean
+        cdef Py_ssize_t length = self.kernel_size[rand_int(0, self.n_kernel_size, seed)]
+        cdef double* weight = <double*> malloc(sizeof(double) * length)
+
+        self.weight_sampler.sample(
+            td, samples, n_samples, weight, length, &mean, seed
+        )
+        if rand_uniform(0, 1, seed) < self.normalize_prob:
+            for i in range(length):
+                weight[i] -= mean
+
+        rocket.length = length
+        rocket.dilation = <Py_ssize_t> floor(
+            pow(2, rand_uniform(0, log2((td.n_timestep - 1) / (rocket.length - 1)), seed))
+        )
+        rocket.padding = 0
+        if rand_uniform(0, 1, seed) < self.padding_prob:
+            rocket.padding = ((rocket.length - 1) * rocket.dilation) // 2
+
+        rocket.return_mean = rand_uniform(0, 1, seed) < 0.5
+        rocket.weight = weight
+
+        rocket.bias = 0
+        if rand_uniform(0, 1, seed) < self.bias_prob:
+            rocket.bias = rand_uniform(-1, 1, seed)
+
         transient.dim = 1
         transient.feature = rocket
         return 0
@@ -146,7 +296,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             sample * td.sample_stride + feature.dim * td.dim_stride
         )
         cdef Rocket* rocket = <Rocket*> feature.feature
-        rocket_apply(
+        apply_convolution(
             rocket.length,
             rocket.dilation,
             rocket.padding,
@@ -188,7 +338,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             sample * td.sample_stride + feature.dim * td.dim_stride
         )
         cdef Rocket* rocket = <Rocket*> feature.feature
-        rocket_apply(
+        apply_convolution(
             rocket.length,
             rocket.dilation,
             rocket.padding,
@@ -230,7 +380,14 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         for j in range(rocket.length):
             weights[j] = rocket.weight[j]
 
-        return (feature.dim, (rocket.length, rocket.dilation, rocket.padding, weights, rocket.bias, rocket.return_mean))
+        return feature.dim, (
+            rocket.length,
+            rocket.dilation,
+            rocket.padding,
+            weights,
+            rocket.bias,
+            rocket.return_mean
+        )
 
     cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
         dim, (length, dilation, padding, weight, bias, return_mean) = object
@@ -251,36 +408,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         feature.dim = dim
         return 0
 
-
-cdef void rocket_init(
-    Rocket *rocket,
-    Py_ssize_t n_timestep,
-    Py_ssize_t *lengths,
-    Py_ssize_t n_lengths,
-    size_t *random_state) nogil:
-    cdef Py_ssize_t i
-    cdef double mean = 0.0
-    cdef Py_ssize_t length = lengths[rand_int(0, n_lengths, random_state)]
-    cdef double* weight = <double*> malloc(sizeof(double) * length)
-    
-    for i in range(length):
-        weight[i] = rand_normal(0, 1, random_state)
-        mean += weight[i]
-    mean = mean / length
-    for i in range(length):
-        weight[i] -= mean
-    
-    rocket.length = length
-    rocket.dilation = <Py_ssize_t> floor(pow(2, rand_uniform(0, log2((n_timestep - 1) / (rocket.length - 1)), random_state)))
-    rocket.padding = 0
-    if rand_uniform(0, 1, random_state) < 0.5:
-        rocket.padding = ((rocket.length - 1) * rocket.dilation) // 2
-    rocket.return_mean = rand_uniform(0, 1, random_state) < 0.5
-    rocket.weight = weight
-    rocket.bias = rand_uniform(-1, 1, random_state)
-
-
-cdef void rocket_apply(
+cdef void apply_convolution(
     Py_ssize_t length,
     Py_ssize_t dilation,
     Py_ssize_t padding,
