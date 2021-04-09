@@ -317,7 +317,11 @@ cdef void fast_mean_std(
         ex2 += current_value ** 2
 
     mean[0] = ex / length
-    std[0] = sqrt(ex2 / length - mean[0] * mean[0])
+    ex2 = ex2 / length - mean[0] * mean[0]
+    if ex2 > 0:
+        std[0] = sqrt(ex2)
+    else:
+        std[0] = 0.0
 
 
 cpdef check_array_fast(np.ndarray x, bint ensure_2d=False, bint allow_nd=False, bint c_order=True):

@@ -269,7 +269,7 @@ cdef double scaled_euclidean_distance(
             if tmp > 0:
                 std = sqrt(tmp)
             else:
-                std = 0
+                std = 1.0
             dist = inner_scaled_euclidean_distance(s_offset, s_length, s_mean, s_std,
                                                    j, mean, std, S, s_stride,
                                                    X_buffer, min_dist)
@@ -306,22 +306,12 @@ cdef double inner_scaled_euclidean_distance(
     cdef double dist = 0
     cdef double x
     cdef Py_ssize_t i
-    cdef bint std_zero = std == 0
-    cdef bint s_std_zero = s_std == 0
-
-    # distance is zero
-    if s_std_zero and std_zero:
-        return 0
 
     for i in range(length):
         if dist >= min_dist:
             break
-        if not s_std_zero:
-            x = (X[offset + timestep_stride * i] - s_mean) / s_std
-        else:
-            x = 0
-        if not std_zero:
-            x -= (X_buffer[i + j] - mean) / std
+        x = (X[offset + timestep_stride * i] - s_mean) / s_std
+        x -= (X_buffer[i + j] - mean) / std
         dist += x * x
 
     return dist
@@ -456,7 +446,11 @@ cdef int scaled_euclidean_distance_matches(
         if i >= s_length - 1:
             j = (i + 1) % s_length
             mean = ex / s_length
-            std = sqrt(ex2 / s_length - mean * mean)
+            ex2 = ex2 / s_length - mean * mean
+            if ex2 > 0:
+                std = sqrt(ex2)
+            else:
+                std = 1.0
             dist = inner_scaled_euclidean_distance(
                 s_offset, s_length, s_mean, s_std, j, mean, std, S, s_stride,
                 X_buffer, threshold)

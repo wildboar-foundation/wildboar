@@ -429,7 +429,7 @@ cdef double scaled_dtw_distance(
             if tmp > 0:
                 std = sqrt(tmp)
             else:
-                std = 0
+                std = 1.0
             lb_kim = constant_lower_bound(s_offset, s_stride, S,
                                           s_mean, s_std, j, 1, X_buffer,
                                           mean, std, s_length, min_dist)
@@ -608,20 +608,14 @@ cdef double _dtw(
     cdef double y
     cdef double z
     cdef double v
-    cdef bint y_std_zero = y_std == 0.0
-    cdef bint x_std_zero = x_std == 0.0
-    if x_std_zero and x_std_zero:
-        return 0.0
 
-    v = (X[x_offset] - x_mean) / x_std if not x_std_zero else 0.0
-    if not y_std_zero:
-        v -= (Y[y_offset] - y_mean) / y_std if not y_std_zero else 0.0
+    v = (X[x_offset] - x_mean) / x_std
+    v -= (Y[y_offset] - y_mean) / y_std
 
     cost_prev[0] = v * v
     for i in range(1, min(y_length, max(0, y_length - x_length) + r)):
-        v = (X[x_offset] - x_mean) / x_std if not x_std_zero else 0.0
-        if not y_std_zero:
-            v -= (Y[y_offset + y_stride * i] - y_mean) / y_std if not y_std_zero else 0.0
+        v = (X[x_offset] - x_mean) / x_std
+        v -= (Y[y_offset + y_stride * i] - y_mean) / y_std
         cost_prev[i] = cost_prev[i - 1] + v * v
 
     if max(0, y_length - x_length) + r < y_length:
@@ -640,9 +634,8 @@ cdef double _dtw(
             else:
                 y = INFINITY
                 z = INFINITY
-            v = (X[x_offset + x_stride * i] - x_mean) / x_std if not x_std_zero else 0.0
-            if not y_std_zero:
-                v -= (Y[y_offset + y_stride * j] - y_mean) / y_std if not y_std_zero else 0.0
+            v = (X[x_offset + x_stride * i] - x_mean) / x_std
+            v -= (Y[y_offset + y_stride * j] - y_mean) / y_std
             cost[j] = min(min(x, y), z) + v * v
 
         if j_stop < y_length:
@@ -772,8 +765,14 @@ def _dtw_distance(np.ndarray x, np.ndarray y, Py_ssize_t r, bint scale=False):
     if scale:
         x_mean = np.mean(x)
         x_std = np.std(x)
+        if x_std == 0.0:
+            x_std = 1.0
+
         y_mean = np.mean(y)
         y_std = np.std(y)
+        if y_std == 0.0:
+            x_std = 1.0
+
     cdef double *cost = <double*> malloc(sizeof(double) * max(x_length, y_length))
     cdef double *cost_prev = <double*> malloc(sizeof(double) * max(x_length, y_length))
     cdef dist = _dtw(0, x_stride, x_length, x_data, x_mean, x_std,
@@ -1211,6 +1210,8 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             &t_mean,
             &t_std,
         )
+        if t_std == 0.0:
+            t_std = 1.0
 
         cdef double dist = _dtw(
             0,

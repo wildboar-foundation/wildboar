@@ -115,7 +115,7 @@ cdef int _ts_view_update_statistics(TSView *ts_view, const TSDatabase *td) nogil
     if ex2 > 0:
         ts_view.std = sqrt(ex2)
     else:
-        ts_view.std = 0
+        ts_view.std = 1.0
     return 0
 
 
@@ -359,6 +359,8 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
         dim, arr = obj
         ts_copy.mean = np.mean(arr)
         ts_copy.std = np.std(arr)
+        if ts_copy.std == 0.0:
+            ts_copy.std = 1.0
         return 0
 
     cdef int init_ts_view(
