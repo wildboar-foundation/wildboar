@@ -28,7 +28,7 @@ Classes
 
    
 
-.. class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
+.. class:: ArffBundle(*, key, version, name, description=None, collections=None, class_index=-1, encoding='utf-8')
 
 
    Bases: :class:`wildboar.datasets._repository.Bundle`
@@ -49,7 +49,7 @@ Classes
    :type class_index: int or array-like
 
 
-.. class:: Bundle(*, key, version, name, description=None, class_index=-1)
+.. class:: Bundle(*, key, version, name, description=None, collections=None, class_index=-1)
 
 
    Base class for handling dataset bundles
@@ -85,15 +85,20 @@ Classes
    :param class_index: Index of the class label(s)
    :type class_index: int or array-like
 
+   .. method:: get_collection(self, collection)
+
+
    .. method:: get_filename(self, version=None, tag=None, ext=None)
 
 
-   .. method:: list(self, archive)
+   .. method:: list(self, archive, collection=None)
 
       List all datasets in this bundle
 
       :param archive: The bundle file
       :type archive: ZipFile
+      :param collection: The collection name
+      :type collection: str, optional
 
       :returns: **dataset_names** -- A sorted list of datasets in the bundle
       :rtype: list
@@ -173,7 +178,7 @@ Classes
 
 
 
-.. class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
+.. class:: NpyBundle(*, key, version, name, description=None, collections=None, class_index=-1)
 
 
    Bases: :class:`wildboar.datasets._repository.Bundle`
@@ -230,7 +235,7 @@ Classes
       :rtype: a dictionary of key and bundle
 
 
-   .. method:: list_datasets(self, bundle, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+   .. method:: list_datasets(self, bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
    .. method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)

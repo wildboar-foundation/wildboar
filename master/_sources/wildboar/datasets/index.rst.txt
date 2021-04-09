@@ -10,7 +10,9 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   filter/index.rst
    outlier/index.rst
+   preprocess/index.rst
 
 
 Package Contents
@@ -39,9 +41,9 @@ Functions
    wildboar.datasets.get_repository
    wildboar.datasets.install_repository
    wildboar.datasets.list_bundles
+   wildboar.datasets.list_collections
    wildboar.datasets.list_datasets
    wildboar.datasets.list_repositories
-   wildboar.datasets.load_all_datasets
    wildboar.datasets.load_dataset
    wildboar.datasets.load_datasets
    wildboar.datasets.load_gun_point
@@ -50,7 +52,7 @@ Functions
    wildboar.datasets.set_cache_dir
 
 
-.. class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
+.. class:: ArffBundle(*, key, version, name, description=None, collections=None, class_index=-1, encoding='utf-8')
 
 
    Bases: :class:`wildboar.datasets._repository.Bundle`
@@ -71,7 +73,7 @@ Functions
    :type class_index: int or array-like
 
 
-.. class:: Bundle(*, key, version, name, description=None, class_index=-1)
+.. class:: Bundle(*, key, version, name, description=None, collections=None, class_index=-1)
 
 
    Base class for handling dataset bundles
@@ -107,15 +109,20 @@ Functions
    :param class_index: Index of the class label(s)
    :type class_index: int or array-like
 
+   .. method:: get_collection(self, collection)
+
+
    .. method:: get_filename(self, version=None, tag=None, ext=None)
 
 
-   .. method:: list(self, archive)
+   .. method:: list(self, archive, collection=None)
 
       List all datasets in this bundle
 
       :param archive: The bundle file
       :type archive: ZipFile
+      :param collection: The collection name
+      :type collection: str, optional
 
       :returns: **dataset_names** -- A sorted list of datasets in the bundle
       :rtype: list
@@ -195,7 +202,7 @@ Functions
 
 
 
-.. class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
+.. class:: NpyBundle(*, key, version, name, description=None, collections=None, class_index=-1)
 
 
    Bases: :class:`wildboar.datasets._repository.Bundle`
@@ -252,7 +259,7 @@ Functions
       :rtype: a dictionary of key and bundle
 
 
-   .. method:: list_datasets(self, bundle, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+   .. method:: list_datasets(self, bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
    .. method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
@@ -346,7 +353,20 @@ Functions
    :rtype: str
 
 
-.. function:: list_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False)
+.. function:: list_collections(repository)
+
+   List the collections of the repository
+
+   :param repository: The data repository
+
+                      - if str load a named bundle, format {repository}/{bundle}
+   :type repository: str or Bundle, optional
+
+   :returns: **list**
+   :rtype: a list of collections
+
+
+.. function:: list_datasets(repository='wildboar/ucr', *, collection=None, cache_dir=None, create_cache_dir=True, progress=True, force=False)
 
    List the datasets in the repository
 
@@ -372,10 +392,7 @@ Functions
    List the key of all installed repositories
 
 
-.. function:: load_all_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False, **kwargs)
-
-
-.. function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, force=False)
+.. function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, force=False)
 
    Load a dataset from a repository
 
@@ -387,6 +404,11 @@ Functions
    :type dtype: dtype, optional
    :param contiguous: Ensure that the returned dataset is memory contiguous.
    :type contiguous: bool, optional
+   :param preprocess: Preprocess the dataset
+
+                      - if str, "standardize"
+                      - if callable, function taking a dataset and returning the preprocessed dataset
+   :type preprocess: str or callable, optional
    :param merge_train_test: Merge the existing training and testing partitions.
    :type merge_train_test: bool, optional
    :param progress: Show a progress bar while downloading a bundle.
@@ -422,7 +444,7 @@ Functions
    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr-tiny:1.0')
 
 
-.. function:: load_datasets(repository='wildboar/ucr', *, cache_dir=None, create_cache_dir=True, progress=True, force=False, filter=None, **kwargs)
+.. function:: load_datasets(repository='wildboar/ucr', *, collection=None, cache_dir=None, create_cache_dir=True, progress=True, force=False, filter=None, **kwargs)
 
    Load all datasets as a generator
 

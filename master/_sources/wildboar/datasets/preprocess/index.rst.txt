@@ -1,0 +1,33 @@
+:mod:`wildboar.datasets.preprocess`
+===================================
+
+.. py:module:: wildboar.datasets.preprocess
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets.preprocess.named_preprocess
+   wildboar.datasets.preprocess.standardize
+
+
+.. function:: named_preprocess(name)
+
+
+.. function:: standardize(x)
+
+   Standardize x (along the time dimension) to have zero mean and unit standard deviation
+
+   :param x: The dataset
+   :type x: ndarray of shape (n_samples, n_timestep)
+
+   :returns: **x** -- The standardized dataset
+   :rtype: ndarray of shape (n_samples, n_timestep)
+
+

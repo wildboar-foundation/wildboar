@@ -1,9 +1,7 @@
-:orphan:
+:mod:`wildboar.datasets.filter`
+===============================
 
-:mod:`wildboar.datasets._filter`
-================================
-
-.. py:module:: wildboar.datasets._filter
+.. py:module:: wildboar.datasets.filter
 
 
 Module Contents
@@ -15,10 +13,11 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.datasets._filter.make_dict_filter
-   wildboar.datasets._filter.make_filter
-   wildboar.datasets._filter.make_list_filter
-   wildboar.datasets._filter.make_str_filter
+   wildboar.datasets.filter.make_dict_filter
+   wildboar.datasets.filter.make_filter
+   wildboar.datasets.filter.make_list_filter
+   wildboar.datasets.filter.make_str_filter
+   wildboar.datasets.filter.named_filter
 
 
 .. function:: make_dict_filter(filter)
@@ -63,5 +62,8 @@ Functions
 
    :returns: The filter function
    :rtype: function
+
+
+.. function:: named_filter(name)
 
 

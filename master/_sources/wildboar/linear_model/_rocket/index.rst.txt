@@ -19,10 +19,10 @@ Classes
 
 
 
-.. class:: RocketClassifier(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
+.. class:: RocketClassifier(n_kernels=10000, *, kernel_size=None, sampling='auto', sampling_params=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
 
 
-   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeClassifierCV`
+   Bases: :class:`wildboar.linear_model._embed.EmbeddingRidgeClassifierCV`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -30,7 +30,7 @@ Classes
 .. class:: RocketRegressor(n_kernels=None, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
 
 
-   Bases: :class:`wildboar.linear_model._base.EmbeddingRidgeCV`
+   Bases: :class:`wildboar.linear_model._embed.EmbeddingRidgeCV`
 
    Mixin class for all regression estimators in scikit-learn.
 

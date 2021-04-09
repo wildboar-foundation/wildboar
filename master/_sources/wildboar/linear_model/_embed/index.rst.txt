@@ -1,9 +1,9 @@
 :orphan:
 
-:mod:`wildboar.linear_model._base`
-==================================
+:mod:`wildboar.linear_model._embed`
+===================================
 
-.. py:module:: wildboar.linear_model._base
+.. py:module:: wildboar.linear_model._embed
 
 
 Module Contents
@@ -14,11 +14,11 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.linear_model._base.BaseEmbeddingEstimator
-   wildboar.linear_model._base.EmbeddingClassifierMixin
-   wildboar.linear_model._base.EmbeddingRegressorMixin
-   wildboar.linear_model._base.EmbeddingRidgeCV
-   wildboar.linear_model._base.EmbeddingRidgeClassifierCV
+   wildboar.linear_model._embed.BaseEmbeddingEstimator
+   wildboar.linear_model._embed.EmbeddingClassifierMixin
+   wildboar.linear_model._embed.EmbeddingRegressorMixin
+   wildboar.linear_model._embed.EmbeddingRidgeCV
+   wildboar.linear_model._embed.EmbeddingRidgeClassifierCV
 
 
 
@@ -66,7 +66,7 @@ Classes
 .. class:: EmbeddingRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.RegressorMixin`, :class:`wildboar.linear_model._base.EmbeddingRegressorMixin`, :class:`wildboar.linear_model._base.BaseEmbeddingEstimator`
+   Bases: :class:`sklearn.base.RegressorMixin`, :class:`wildboar.linear_model._embed.EmbeddingRegressorMixin`, :class:`wildboar.linear_model._embed.BaseEmbeddingEstimator`
 
    Mixin class for all regression estimators in scikit-learn.
 
@@ -74,7 +74,7 @@ Classes
 .. class:: EmbeddingRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`wildboar.linear_model._base.EmbeddingClassifierMixin`, :class:`wildboar.linear_model._base.BaseEmbeddingEstimator`
+   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`wildboar.linear_model._embed.EmbeddingClassifierMixin`, :class:`wildboar.linear_model._embed.BaseEmbeddingEstimator`
 
    Mixin class for all classifiers in scikit-learn.
 
