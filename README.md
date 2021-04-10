@@ -8,7 +8,7 @@
 [wildboar](https://isaksamsten.github.io/wildboar/) is a Python module for temporal machine learning and fast
 distance computations built on top of
 [scikit-learn](https://scikit-learn.org) and [numpy](https://numpy.org)
-distributed under the GNU General Public License Version 3.
+distributed under the GNU Lesser General Public License Version 3.
 
 It is currently maintained by Isak Samsten
 
