@@ -19,13 +19,13 @@ import math
 
 import numpy as np
 
-from ._dtw_distance import _dtw_alignment
-from ._dtw_distance import _dtw_distance
-from ._dtw_distance import _dtw_pairwise_distance
-from ._dtw_distance import _dtw_envelop
-from ._dtw_distance import _dtw_lb_keogh
-
-from .._utils import check_array_fast
+from ._dtw_distance import (
+    _dtw_alignment,
+    _dtw_distance,
+    _dtw_envelop,
+    _dtw_lb_keogh,
+    _dtw_pairwise_distance,
+)
 
 __all__ = [
     "dtw_alignment",

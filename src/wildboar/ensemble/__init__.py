@@ -15,12 +15,14 @@
 #
 # Authors: Isak Samsten
 
-from ._ensemble import ShapeletForestClassifier
-from ._ensemble import ExtraShapeletTreesClassifier
-from ._ensemble import ShapeletForestRegressor
-from ._ensemble import ExtraShapeletTreesRegressor
-from ._ensemble import IsolationShapeletForest
-from ._ensemble import ShapeletForestEmbedding
+from ._ensemble import (
+    ExtraShapeletTreesClassifier,
+    ExtraShapeletTreesRegressor,
+    IsolationShapeletForest,
+    ShapeletForestClassifier,
+    ShapeletForestEmbedding,
+    ShapeletForestRegressor,
+)
 
 __all__ = [
     "ShapeletForestClassifier",

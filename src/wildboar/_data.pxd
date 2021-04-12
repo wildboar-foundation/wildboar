@@ -16,7 +16,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+
 cimport numpy as np
+
 
 cdef struct TSDatabase:
     Py_ssize_t n_samples  # the number of samples

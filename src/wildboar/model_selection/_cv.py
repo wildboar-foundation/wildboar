@@ -16,12 +16,12 @@
 # Authors: Isak Samsten
 
 import math
-from abc import ABCMeta
 import warnings
+from abc import ABCMeta
 
 import numpy as np
-from sklearn.utils import check_random_state
 from sklearn.model_selection._split import _build_repr
+from sklearn.utils import check_random_state
 from sklearn.utils.validation import check_array
 
 

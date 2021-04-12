@@ -17,7 +17,7 @@
 
 import numpy as np
 from sklearn.cluster import KMeans
-from sklearn.neighbors import NearestNeighbors, KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from sklearn.utils.validation import check_is_fitted
 
 from .base import BaseCounterfactual

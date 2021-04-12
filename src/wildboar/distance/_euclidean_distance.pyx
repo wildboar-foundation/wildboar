@@ -21,23 +21,14 @@
 # Authors: Isak Samsten
 
 import numpy as np
+
 cimport numpy as np
-
-from libc.stdlib cimport malloc
-from libc.stdlib cimport free
-
-from libc.math cimport sqrt
-from libc.math cimport INFINITY
-
-from ._distance cimport ScaledDistanceMeasure
-from ._distance cimport DistanceMeasure
+from libc.math cimport INFINITY, sqrt
+from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase
-
-from ._distance cimport TSCopy
-from ._distance cimport TSView
-
 from .._utils cimport realloc_array
+from ._distance cimport DistanceMeasure, ScaledDistanceMeasure, TSCopy, TSView
 
 
 cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):

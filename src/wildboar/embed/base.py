@@ -14,14 +14,16 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-import numpy as np
 from abc import ABCMeta, abstractmethod
+
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
 
-from ._embed_fast import feature_embedding_fit
-from ._embed_fast import feature_embedding_fit_transform
-from ._embed_fast import feature_embedding_transform
+from ._embed_fast import (
+    feature_embedding_fit,
+    feature_embedding_fit_transform,
+    feature_embedding_transform,
+)
 
 __all__ = [
     "BaseEmbedding",
@@ -54,7 +56,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
             The time series dataset.
 
         y : None, optional
@@ -77,7 +79,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
             The time series dataset.
 
         Returns
@@ -94,7 +96,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
             The time series dataset.
 
         y : None, optional

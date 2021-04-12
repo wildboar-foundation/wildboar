@@ -21,13 +21,14 @@ import os
 import re
 import sys
 import zipfile
-from abc import abstractmethod, ABCMeta
+from abc import ABCMeta, abstractmethod
 
 import numpy as np
 import requests
-from wildboar import __version__ as wildboar_version
 from pkg_resources import parse_version
 from scipy.io.arff import loadarff
+
+from wildboar import __version__ as wildboar_version
 
 DEFAULT_TAG = "default"
 
@@ -136,7 +137,8 @@ def _load_archive(
             os.makedirs(os.path.abspath(cache_dir), exist_ok=True)
         else:
             raise ValueError(
-                "output directory does not exist (set create_cache_dir=True to create it)"
+                "output directory does not exist "
+                "(set create_cache_dir=True to create it)"
             )
 
     cached_hash = os.path.join(cache_dir, "%s.sha1" % bundle_name)
@@ -182,8 +184,8 @@ def _download_hash_file(cached_hash, hash_url, filename):
             f.close()
             os.remove(cached_hash)
             raise ValueError(
-                "bundle (%s) not found (.sha1-file is missing). Try another version or tag."
-                % filename
+                "bundle (%s) not found (.sha1-file is missing). "
+                "Try another version or tag." % filename
             )
         f.write(response.text)
 
@@ -211,8 +213,8 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
             f.close()
             os.remove(cached_bundle)
             raise ValueError(
-                "bundle (%s) not found (.zip-file is missing). Try another version or tag."
-                % filename
+                "bundle (%s) not found (.zip-file is missing). "
+                "Try another version or tag." % filename
             )
 
         total_length = response.headers.get("content-length")
@@ -394,7 +396,7 @@ class Repository(metaclass=ABCMeta):
             if (
                 os.path.isfile(full_path)
                 and ext in [".zip", ".sha1"]
-                and not basename in keep
+                and basename not in keep
             ):
                 os.remove(full_path)
 
@@ -408,8 +410,8 @@ def _validate_url(url):
         return url
     else:
         raise ValueError(
-            "repository url is invalid, got %s ({bundle}, {version} and {tag} are required)"
-            % url
+            "repository url is invalid, got %s "
+            "({bundle}, {version} and {tag} are required)" % url
         )
 
 
@@ -421,14 +423,14 @@ def _validate_repository_name(str):
 
 
 def _validate_bundle_key(str):
-    if re.match("[a-zA-Z0-9\-]+", str):
+    if re.match(r"[a-zA-Z0-9\-]+", str):
         return str
     else:
         raise ValueError("bundle key (%s) is not valid" % str)
 
 
 def _validate_version(str):
-    if re.match("(^(?:\d+\.)?(?:\d+\.)?(?:\*|\d+)$)", str):
+    if re.match(r"(^(?:\d+\.)?(?:\d+\.)?(?:\*|\d+)$)", str):
         return str
     else:
         raise ValueError("version (%s) is not valid" % str)
@@ -685,8 +687,9 @@ class Bundle(metaclass=ABCMeta):
     def _is_dataset(self, file_name, ext):
         """Overridden by subclasses
 
-        Check if a path and extension is to be considered a dataset. The check should be simple and only consider
-        the filename and or extension of the file. Validation of the file should be deferred to `_load_array`
+        Check if a path and extension is to be considered a dataset. The check should be
+        simple and only consider the filename and or extension of the file.
+        Validation of the file should be deferred to `_load_array`
 
         Parameters
         ----------

@@ -23,22 +23,12 @@
 import numpy as np
 
 cimport numpy as np
+from libc.math cimport INFINITY, NAN, sqrt
+from libc.stdlib cimport free, malloc, realloc
 
-from libc.stdlib cimport realloc
-from libc.stdlib cimport malloc
-from libc.stdlib cimport free
+from .._data cimport TSDatabase, ts_database_new
+from ._distance cimport DistanceMeasure, ScaledDistanceMeasure, TSCopy, TSView
 
-from libc.math cimport sqrt
-from libc.math cimport INFINITY, NAN
-
-from ._distance cimport ScaledDistanceMeasure
-from ._distance cimport DistanceMeasure
-
-from ._distance cimport TSCopy
-from ._distance cimport TSView
-
-from .._data cimport TSDatabase
-from .._data cimport ts_database_new
 
 cdef void simple_z_norm(TSCopy s, double *out) nogil:
     for i in range(s.length):

@@ -19,24 +19,23 @@ from abc import abstractmethod
 
 import numpy as np
 from joblib import Parallel, delayed
+from scipy import sparse
 from sklearn.base import OutlierMixin
-from sklearn.ensemble import BaggingClassifier
-from sklearn.ensemble import BaggingRegressor
+from sklearn.ensemble import BaggingClassifier, BaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging
-from sklearn.metrics import roc_curve, precision_recall_curve
+from sklearn.metrics import precision_recall_curve, roc_curve
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.utils import check_array
-from sklearn.utils import check_random_state
+from sklearn.utils import check_array, check_random_state
 from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
-from scipy import sparse
-
 from ..model_selection.outlier import threshold_score
-from ..tree import ExtraShapeletTreeClassifier
-from ..tree import ExtraShapeletTreeRegressor
-from ..tree import ShapeletTreeClassifier
-from ..tree import ShapeletTreeRegressor
+from ..tree import (
+    ExtraShapeletTreeClassifier,
+    ExtraShapeletTreeRegressor,
+    ShapeletTreeClassifier,
+    ShapeletTreeRegressor,
+)
 
 
 class ShapeletForestMixin:
@@ -138,9 +137,9 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")
 
-    def predict(self, X, check_input=True):
-        x = self._validate_x_predict(X, check_input)
-        return super().predict(X)
+    def predict(self, x, check_input=True):
+        x = self._validate_x_predict(x, check_input)
+        return super().predict(x)
 
     def predict_proba(self, x, check_input=True):
         x = self._validate_x_predict(x, check_input)
@@ -256,8 +255,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
             Compute out-of-bag estimates of the ensembles performance.
 
         random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction of
-            the base estimators. Pass an int for reproducible output across multiple
+            Controls the random resampling of the original dataset and the construction
+            of the base estimators. Pass an int for reproducible output across multiple
             function calls.
         """
         super().__init__(
@@ -352,8 +351,8 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
             Parameters passed to the metric construction
 
         random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction of
-            the base estimators. Pass an int for reproducible output across multiple
+            Controls the random resampling of the original dataset and the construction
+            of the base estimators. Pass an int for reproducible output across multiple
             function calls.
         """
         super().__init__(
@@ -545,8 +544,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             Compute out-of-bag estimates of the ensembles performance.
 
         random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction of
-            the base estimators. Pass an int for reproducible output across multiple
+            Controls the random resampling of the original dataset and the construction
+            of the base estimators. Pass an int for reproducible output across multiple
             function calls.
         """
         super().__init__(
@@ -641,8 +640,8 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
             Parameters passed to the metric construction
 
         random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction of
-            the base estimators. Pass an int for reproducible output across multiple
+            Controls the random resampling of the original dataset and the construction
+            of the base estimators. Pass an int for reproducible output across multiple
             function calls.
         """
         super().__init__(
@@ -738,8 +737,8 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
             Return a sparse CSR-matrix.
 
         random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction of
-            the base estimators. Pass an int for reproducible output across multiple
+            Controls the random resampling of the original dataset and the construction
+            of the base estimators. Pass an int for reproducible output across multiple
             function calls.
         """
         super().__init__(
@@ -830,8 +829,12 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
     >>> from model_selection.outlier import train_test_split
     >>> from sklearn.metrics import balanced_accuracy_score
     >>> x, y = load_two_lead_ecg("two_lead_ecg")
-    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
-    >>> f = IsolationShapeletForest(n_estimators=100, contamination=balanced_accuracy_score)
+    >>> x_train, x_test, y_train, y_test = train_test_split(
+    ...    x, y, 1, test_size=0.2, anomalies_train_size=0.05
+    ... )
+    >>> f = IsolationShapeletForest(
+    ...     n_estimators=100, contamination=balanced_accuracy_score
+    ... )
     >>> f.fit(x_train, y_train)
     >>> y_pred = f.predict(x_test)
     >>> balanced_accuracy_score(y_test, y_pred)
@@ -844,7 +847,9 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
     >>> from sklearn.metrics import balanced_accuracy_score
     >>> f = IsolationShapeletForest()
     >>> x, y = load_two_lead_ecg("two_lead_ecg")
-    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+    >>> x_train, x_test, y_train, y_test = train_test_split(
+    ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+    ... )
     >>> f.fit(x_train)
     >>> y_pred = f.predict(x_test)
     >>> balanced_accuracy_score(y_test, y_pred)
@@ -897,19 +902,23 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
             - if 'auto' ``offset_=-0.5``
             - if 'auc' ``offset_`` is computed as the offset that maximizes the
-              area under ROC in the training or out-of-bag set (see ``contamination_set``).
+              area under ROC in the training or out-of-bag set
+              (see ``contamination_set``).
             - if 'prc' ``offset_`` is computed as the offset that maximizes the
-              area under PRC in the training or out-of-bag set (see ``contamination_set``)
+              area under PRC in the training or out-of-bag set
+              (see ``contamination_set``)
             - if callable ``offset_`` is computed as the offset that maximizes the score
-              computed by the callable in training or out-of-bag set (see ``contamination_set``)
-            - if float ``offset_`` is computed as the c:th percentile of scores in the training
-              or out-of-bag set (see ``contamination_set``)
+              computed by the callable in training or out-of-bag set
+              (see ``contamination_set``)
+            - if float ``offset_`` is computed as the c:th percentile of scores in the
+              training or out-of-bag set (see ``contamination_set``)
 
-            Setting contamination to either 'auc' or 'prc' require that `y` is passed to `fit`.
+            Setting contamination to either 'auc' or 'prc' require that `y` is passed
+            to `fit`.
 
         contamination_set : {'training', 'oob'}, optional
-            Compute the ``offset_`` from either the out-of-bag samples or the training samples.
-            'oob' require `bootstrap=True`.
+            Compute the ``offset_`` from either the out-of-bag samples or the training
+            samples.'oob' require `bootstrap=True`.
 
         warm_start : bool, optional
             When set to True, reuse the solution of the previous call to fit
@@ -923,8 +932,8 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             Parameters passed to the metric construction
 
         random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction of
-            the base estimators. Pass an int for reproducible output across multiple
+            Controls the random resampling of the original dataset and the construction
+            of the base estimators. Pass an int for reproducible output across multiple
             function calls.
         """
         super(IsolationShapeletForest, self).__init__(
@@ -1024,7 +1033,8 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             if self.contamination_set == "oob":
                 if not self.bootstrap:
                     raise ValueError(
-                        "contamination cannot be computed from oob-samples unless bootstrap=True"
+                        "contamination cannot be computed from oob-samples "
+                        "unless bootstrap is set to true"
                     )
                 scores = self._oob_score_samples(x)
             else:
@@ -1054,7 +1064,8 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             elif self.contamination_set == "oob":
                 if not self.bootstrap:
                     raise ValueError(
-                        "contamination cannot be computed from oob-samples unless bootstrap=True"
+                        "contamination cannot be computed from oob-samples "
+                        "unless bootstrap is set to True"
                     )
                 self.offset_ = np.percentile(
                     self._oob_score_samples(x), 100.0 * self.contamination
@@ -1101,7 +1112,8 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
 
 def _score_samples(x, estimators, max_samples):
-    # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
+    # From: https://github.com/scikit-learn/scikit-learn/blob/
+    # 0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
     depths = np.zeros(x.shape[0], order="f")
 
     for tree in estimators:
@@ -1121,7 +1133,8 @@ def _score_samples(x, estimators, max_samples):
 
 
 def _average_path_length(n_samples_leaf):
-    # From: https://github.com/scikit-learn/scikit-learn/blob/0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L480
+    # From: https://github.com/scikit-learn/scikit-learn/blob/
+    # 0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L480
     n_samples_leaf_shape = n_samples_leaf.shape
     n_samples_leaf = n_samples_leaf.reshape((1, -1))
     average_path_length = np.zeros(n_samples_leaf.shape)

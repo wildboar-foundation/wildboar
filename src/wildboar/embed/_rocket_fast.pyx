@@ -19,30 +19,19 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+
 cimport numpy as np
+
 import numpy as np
 
-from libc.stdlib cimport malloc
-from libc.stdlib cimport free
+from libc.math cimport INFINITY, floor, log2, pow, sqrt
+from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 
-from libc.math cimport INFINITY
-from libc.math cimport sqrt
-from libc.math cimport log2
-from libc.math cimport pow
-from libc.math cimport floor
+from .._data cimport TSDatabase, ts_database_new
+from .._utils cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
+from ._feature cimport Feature, FeatureEngineer
 
-
-from .._data cimport TSDatabase
-from .._data cimport ts_database_new
-
-from .._utils cimport rand_normal
-from .._utils cimport rand_uniform
-from .._utils cimport rand_int
-from .._utils cimport RAND_R_MAX
-
-from ._feature cimport FeatureEngineer
-from ._feature cimport Feature
 
 cdef struct Rocket:
     Py_ssize_t length

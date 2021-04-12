@@ -16,10 +16,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-from libc.stdlib cimport malloc, free
 from libc.math cimport NAN
+from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase
+
 
 cdef class FeatureEngineer:
 

@@ -22,13 +22,12 @@ import numpy as np
 
 from ._repository import (
     ArffBundle,
-    NpyBundle,
     Bundle,
+    JSONRepository,
+    NpyBundle,
     Repository,
     RepositoryCollection,
-    JSONRepository,
 )
-
 from .filter import make_filter
 from .preprocess import named_preprocess
 
@@ -81,7 +80,7 @@ def _split_repo_bundle(repo_bundle_name):
         An optional tag
     """
     match = re.match(
-        r"(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::((?:\d+\.)?(?:\d+\.)?(?:\*|\d+)))?(?::([a-zA-Z\-]+))?$",
+        r"(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::((?:\d+\.)?(?:\d+\.)?(?:\*|\d+)))?(?::([a-zA-Z\-]+))?$",  # noqa: E501
         repo_bundle_name,
     )
     if match:
@@ -211,7 +210,8 @@ def load_datasets(
             - "n_timestep": comparison spec
 
         Comparison spec
-            str of two parts, comparison operator (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
+            str of two parts, comparison operator (<, <=, >, >= or =) and a number,
+            e.g., "<100", "<= 200", or ">300"
 
     kwargs : dict
         Optional arguments to ``load_dataset``
@@ -233,7 +233,9 @@ def load_datasets(
 
     Print the names of datasets with more than 200 samples
 
-    >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr', filter={"n_samples": ">200"}):
+    >>> for dataset, (x, y) in load_datasets(
+    ...    repository='wildboar/ucr', filter={"n_samples": ">200"}
+    ... ):
     >>>     print(dataset)
     """
     for dataset in list_datasets(
@@ -336,11 +338,15 @@ def load_dataset(
 
     or if original training and testing splits are to be preserved
 
-    >>> x_train, x_test, y_train, y_test = load_dataset("SyntheticControl", merge_train_test=False)
+    >>> x_train, x_test, y_train, y_test = load_dataset(
+    ...     "SyntheticControl", merge_train_test=False
+    ... )
 
     or for a specific version of the dataset
 
-    >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr-tiny:1.0')
+    >>> x_train, x_test, y_train, y_test = load_dataset(
+    ...     "Wafer", repository='wildboar/ucr-tiny:1.0'
+    ... )
     """
     (
         repository_name,
@@ -364,7 +370,10 @@ def load_dataset(
         progress=progress,
     )
     if preprocess is None:
-        preprocess = lambda identity: identity
+
+        def preprocess(identity):
+            return identity
+
     elif isinstance(preprocess, str):
         preprocess = named_preprocess(preprocess)
     elif not hasattr(preprocess, "__call__"):

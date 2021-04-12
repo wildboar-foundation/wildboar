@@ -14,8 +14,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-import re
 import operator
+import re
 
 import numpy as np
 
@@ -35,9 +35,9 @@ def __n_dims_filter(verb, dataset, x, y):
         return __verb_compare(verb, x.shape[1])
 
 
-def __casting_op(op, l, r):
-    lhs_class = l.__class__
-    return op(l, lhs_class(r))
+def __casting_op(op, lhs, rhs):
+    lhs_class = lhs.__class__
+    return op(lhs, lhs_class(rhs))
 
 
 def __verb_compare(verb, value):
@@ -165,8 +165,8 @@ def make_str_filter(filter):
     return f
 
 
-__VERB_PATTERN = re.compile("^(<|<=|>=|>|=|=~)\s*(\w+)$")
-__SUBJECT_VERB_PATTERN = re.compile("^(\w+)\s*((?:<|<=|>=|>|=|=~)\s*\w+)$")
+__VERB_PATTERN = re.compile(r"^(<|<=|>=|>|=|=~)\s*(\w+)$")
+__SUBJECT_VERB_PATTERN = re.compile(r"^(\w+)\s*((?:<|<=|>=|>|=|=~)\s*\w+)$")
 
 
 _SUBJECTS = {

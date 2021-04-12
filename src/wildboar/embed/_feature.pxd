@@ -19,6 +19,7 @@
 
 from .._data cimport TSDatabase
 
+
 cdef struct Feature:
     Py_ssize_t dim       # the dimension of the feature -1 for undefined
     void* feature        # the feature value

@@ -16,9 +16,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+
 cimport numpy as np
 
 from ._utils import check_array_fast
+
 
 def ts_database_dims(np.ndarray x):
     n_samples = x.shape[0]

@@ -21,31 +21,23 @@
 # Authors: Isak Samsten
 
 import numpy as np
+
 cimport numpy as np
+from libc.math cimport INFINITY, NAN, fabs, log2
+from libc.stdlib cimport free, malloc
+from libc.string cimport memcpy, memset
 
-from libc.math cimport INFINITY
-from libc.math cimport NAN
-from libc.math cimport fabs
-from libc.math cimport log2
+from .._data cimport TSDatabase, ts_database_new
+from .._utils cimport (
+    RAND_R_MAX,
+    RollingVariance,
+    argsort,
+    rand_int,
+    rand_uniform,
+    safe_realloc,
+)
+from ..embed._feature cimport Feature, FeatureEngineer
 
-from libc.stdlib cimport malloc
-from libc.stdlib cimport free
-
-from libc.string cimport memcpy
-from libc.string cimport memset
-
-from .._data cimport TSDatabase
-from .._data cimport ts_database_new
-
-from .._utils cimport argsort
-from .._utils cimport rand_int
-from .._utils cimport RAND_R_MAX
-from .._utils cimport RollingVariance
-from .._utils cimport safe_realloc
-from .._utils cimport rand_uniform
-
-from ..embed._feature cimport FeatureEngineer
-from ..embed._feature cimport Feature
 
 cpdef Tree _make_tree(
     FeatureEngineer feature_engineer,

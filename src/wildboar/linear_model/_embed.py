@@ -15,14 +15,13 @@
 
 # Authors: Isak Samsten
 
-import numpy as np
-
 from abc import ABCMeta, abstractmethod
 
+import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
+from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
-from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 
 
 class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):

@@ -21,10 +21,10 @@ from functools import partial
 
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
-from sklearn.utils.validation import check_is_fitted, check_array, check_random_state
+from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
 
-from wildboar.distance.dtw import dtw_mapping, dtw_distance
 from wildboar.distance import distance
+from wildboar.distance.dtw import dtw_distance, dtw_mapping
 
 from .base import BaseCounterfactual
 

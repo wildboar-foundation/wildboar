@@ -16,13 +16,13 @@
 # Authors: Isak Samsten
 import numpy as np
 
-from .base import BaseEmbedding
-from ._rocket_fast import RocketFeatureEngineer
 from ._rocket_fast import (
     NormalWeightSampler,
-    UniformWeightSampler,
+    RocketFeatureEngineer,
     ShapeletWeightSampler,
+    UniformWeightSampler,
 )
+from .base import BaseEmbedding
 
 _SAMPLING_METHOD = {
     "auto": NormalWeightSampler,

@@ -15,8 +15,8 @@
 #
 # Authors: Isak Samsten
 
-from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
 from ..embed import RocketEmbedding
+from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
 
 
 class RocketClassifier(EmbeddingRidgeClassifierCV):

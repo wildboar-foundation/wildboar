@@ -15,21 +15,20 @@
 #
 # Authors: Isak Samsten
 
-from libc.stdlib cimport malloc, free
-
-from ._feature cimport Feature
-from ._feature cimport FeatureEngineer
+from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase
+from .._utils cimport RAND_R_MAX, rand_int
+from ..distance._distance cimport (
+    DistanceMeasure,
+    TSCopy,
+    TSView,
+    get_distance_measure,
+    ts_copy_free,
+    ts_view_free,
+)
+from ._feature cimport Feature, FeatureEngineer
 
-from ..distance._distance cimport DistanceMeasure
-from ..distance._distance cimport get_distance_measure
-from ..distance._distance cimport TSView
-from ..distance._distance cimport TSCopy
-from ..distance._distance cimport ts_copy_free
-from ..distance._distance cimport ts_view_free
-
-from .._utils cimport rand_int, RAND_R_MAX
 
 cdef class ShapeletFeatureEngineer(FeatureEngineer):
 

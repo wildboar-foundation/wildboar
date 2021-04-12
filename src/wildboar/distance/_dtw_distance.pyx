@@ -27,23 +27,17 @@
 #  - Rakthanmanon, et al., Searching and Mining Trillions of Time
 #    Series Subsequences under Dynamic Time Warping (2012)
 #  - http://www.cs.ucr.edu/~eamonn/UCRsuite.html
+
 cimport numpy as np
+
 import numpy as np
 
-from libc.stdlib cimport malloc
-from libc.stdlib cimport free
-
-from libc.math cimport INFINITY
-from libc.math cimport sqrt
-from libc.math cimport floor
+from libc.math cimport INFINITY, floor, sqrt
+from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase
-
-from ._distance cimport TSView
-from ._distance cimport ScaledDistanceMeasure
-from ._distance cimport DistanceMeasure
-from ._distance cimport TSCopy
 from .._utils cimport fast_mean_std
+from ._distance cimport DistanceMeasure, ScaledDistanceMeasure, TSCopy, TSView
 
 from .._utils import check_array_fast
 

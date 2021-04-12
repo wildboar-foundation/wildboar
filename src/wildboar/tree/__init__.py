@@ -15,10 +15,12 @@
 #
 # Authors: Isak Samsten
 
-from ._tree import ShapeletTreeClassifier
-from ._tree import ShapeletTreeRegressor
-from ._tree import ExtraShapeletTreeClassifier
-from ._tree import ExtraShapeletTreeRegressor
+from ._tree import (
+    ExtraShapeletTreeClassifier,
+    ExtraShapeletTreeRegressor,
+    ShapeletTreeClassifier,
+    ShapeletTreeRegressor,
+)
 
 __all__ = [
     "ShapeletTreeClassifier",

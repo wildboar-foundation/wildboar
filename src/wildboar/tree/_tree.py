@@ -15,23 +15,21 @@
 #
 # Authors: Isak Samsten
 
-import numpy as np
-
 from abc import ABCMeta, abstractmethod
 
-from sklearn.base import BaseEstimator
-from sklearn.base import ClassifierMixin, RegressorMixin
+import numpy as np
+from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state
-from sklearn.utils.validation import check_is_fitted, check_array
-
-from ._tree_builder import ClassificationTreeBuilder
-from ._tree_builder import ExtraClassificationTreeBuilder
-from ._tree_builder import ExtraRegressionTreeBuilder
-from ._tree_builder import RegressionTreeBuilder
-
-from ..embed._shapelet import RandomShapeletFeatureEngineer
+from sklearn.utils.validation import check_array, check_is_fitted
 
 from ..embed._rocket import RocketFeatureEngineer
+from ..embed._shapelet import RandomShapeletFeatureEngineer
+from ._tree_builder import (
+    ClassificationTreeBuilder,
+    ExtraClassificationTreeBuilder,
+    ExtraRegressionTreeBuilder,
+    RegressionTreeBuilder,
+)
 
 
 class BaseTree(BaseEstimator, metaclass=ABCMeta):
@@ -92,7 +90,7 @@ class RegressorTreeMixin:
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
+        X : array-like of shape (n_samples, n_timesteps)
             The training time series.
 
         y : array-like of shape (n_samples,)
@@ -100,12 +98,13 @@ class RegressorTreeMixin:
 
         sample_weight : array-like of shape (n_samples,)
             If `None`, then samples are equally weighted. Splits that would create child
-            nodes with net zero or negative weight are ignored while searching for a split
-            in each node. Splits are also ignored if they would result in any single class
-            carrying a negative weight in either child node.
+            nodes with net zero or negative weight are ignored while searching for a
+            split in each node. Splits are also ignored if they would result in any
+            single class carrying a negative weight in either child node.
 
         check_input : bool, optional
-            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+            Allow to bypass several input checking. Don't use this parameter unless you
+            know what you do.
 
         Returns
         -------
@@ -153,11 +152,12 @@ class RegressorTreeMixin:
 
         Parameters
         ----------
-        x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
+        x : array-like of shape (n_samples, n_timesteps)
             The input time series
 
         check_input : bool, optional
-            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+            Allow to bypass several input checking. Don't use this parameter unless you
+            know what you do.
 
         Returns
         -------
@@ -187,7 +187,7 @@ class ClassifierTreeMixin:
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
+        x : array-like of shape (n_samples, n_timesteps)
             The training time series.
 
         y : array-like of shape (n_samples,) or (n_samples, n_classes)
@@ -195,12 +195,13 @@ class ClassifierTreeMixin:
 
         sample_weight : array-like of shape (n_samples,)
             If `None`, then samples are equally weighted. Splits that would create child
-            nodes with net zero or negative weight are ignored while searching for a split
-            in each node. Splits are also ignored if they would result in any single class
-            carrying a negative weight in either child node.
+            nodes with net zero or negative weight are ignored while searching for a
+            split in each node. Splits are also ignored if they would result in any
+            single class carrying a negative weight in either child node.
 
         check_input : bool, optional
-            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+            Allow to bypass several input checking. Don't use this parameter unless you
+            know what you do.
 
         Returns
         -------
@@ -257,11 +258,12 @@ class ClassifierTreeMixin:
 
         Parameters
         ----------
-        x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
+        x : array-like of shape (n_samples, n_timesteps)
             The input time series
 
         check_input : bool, optional
-            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+            Allow to bypass several input checking. Don't use this parameter unless you
+            know what you do.
 
         Returns
         -------
@@ -280,17 +282,18 @@ class ClassifierTreeMixin:
 
         Parameters
         ----------
-        x :  array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
+        x :  array-like of shape (n_samples, n_timesteps)
             The input time series
 
         check_input : bool, optional
-            Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+            Allow to bypass several input checking. Don't use this parameter unless you
+            know what you do.
 
         Returns
         -------
         proba : ndarray of shape (n_samples, n_classes)
-            The class probabilities of the input samples. The order of the classes corresponds to
-            that in the attribute `classes_`
+            The class probabilities of the input samples. The order of the classes
+            corresponds to that in the attribute `classes_`
         """
         check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)
@@ -385,8 +388,9 @@ class ShapeletTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseShapeletTree
         Parameters
         ----------
         max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all leaves
-            are pure or until all leaves contain less than `min_samples_split` samples
+            The maximum depth of the tree. If `None` the tree is expanded until all
+            leaves are pure or until all leaves contain less than `min_samples_split`
+            samples
 
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
@@ -395,12 +399,12 @@ class ShapeletTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseShapeletTree
             The number of shapelets to sample at each node.
 
         min_shapelet_size : float, optional
-            The minimum length of a sampled shapelet expressed as a fraction, computed as
-            `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+            The minimum length of a sampled shapelet expressed as a fraction, computed
+            as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
         max_shapelet_size : float, optional
-            The maximum length of a sampled shapelet, expressed as a fraction, computed as
-            `ceil(X.shape[-1] * max_shapelet_size)`.
+            The maximum length of a sampled shapelet, expressed as a fraction, computed
+            as `ceil(X.shape[-1] * max_shapelet_size)`.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
@@ -417,7 +421,8 @@ class ShapeletTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseShapeletTree
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
-            - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super(ShapeletTreeRegressor, self).__init__(
             max_depth=max_depth,
@@ -462,8 +467,9 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         Parameters
         ----------
         max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all leaves
-            are pure or until all leaves contain less than `min_samples_split` samples
+            The maximum depth of the tree. If `None` the tree is expanded until all
+            leaves are pure or until all leaves contain less than `min_samples_split`
+            samples
 
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
@@ -472,12 +478,12 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             The number of shapelets to sample at each node.
 
         min_shapelet_size : float, optional
-            The minimum length of a sampled shapelet expressed as a fraction, computed as
-            `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+            The minimum length of a sampled shapelet expressed as a fraction, computed
+            as`min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
         max_shapelet_size : float, optional
-            The maximum length of a sampled shapelet, expressed as a fraction, computed as
-            `ceil(X.shape[-1] * max_shapelet_size)`.
+            The maximum length of a sampled shapelet, expressed as a fraction, computed
+            as `ceil(X.shape[-1] * max_shapelet_size)`.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
@@ -494,7 +500,8 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
-            - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super(ExtraShapeletTreeRegressor, self).__init__(
             max_depth=max_depth,
@@ -558,8 +565,9 @@ class ShapeletTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseShapeletT
         Parameters
         ----------
         max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all leaves
-            are pure or until all leaves contain less than `min_samples_split` samples
+            The maximum depth of the tree. If `None` the tree is expanded until all
+            leaves are pure or until all leaves contain less than `min_samples_split`
+            samples
 
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
@@ -568,12 +576,12 @@ class ShapeletTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseShapeletT
             The number of shapelets to sample at each node.
 
         min_shapelet_size : float, optional
-            The minimum length of a sampled shapelet expressed as a fraction, computed as
-            `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+            The minimum length of a sampled shapelet expressed as a fraction, computed
+            as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
         max_shapelet_size : float, optional
-            The maximum length of a sampled shapelet, expressed as a fraction, computed as
-            `ceil(X.shape[-1] * max_shapelet_size)`.
+            The maximum length of a sampled shapelet, expressed as a fraction, computed
+            as `ceil(X.shape[-1] * max_shapelet_size)`.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
@@ -590,7 +598,8 @@ class ShapeletTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseShapeletT
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
-            - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super(ShapeletTreeClassifier, self).__init__(
             max_depth=max_depth,
@@ -635,8 +644,9 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         Parameters
         ----------
         max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all leaves
-            are pure or until all leaves contain less than `min_samples_split` samples
+            The maximum depth of the tree. If `None` the tree is expanded until all
+            leaves are pure or until all leaves contain less than `min_samples_split`
+             samples
 
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
@@ -645,12 +655,12 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             The number of shapelets to sample at each node.
 
         min_shapelet_size : float, optional
-            The minimum length of a sampled shapelet expressed as a fraction, computed as
-            `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+            The minimum length of a sampled shapelet expressed as a fraction,
+             computed as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
         max_shapelet_size : float, optional
-            The maximum length of a sampled shapelet, expressed as a fraction, computed as
-            `ceil(X.shape[-1] * max_shapelet_size)`.
+            The maximum length of a sampled shapelet, expressed as a fraction,
+            computed as `ceil(X.shape[-1] * max_shapelet_size)`.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
@@ -667,7 +677,8 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
-            - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+            - If `None`, the random number generator is the `RandomState` instance
+              used by `np.random`.
         """
         super(ShapeletTreeClassifier, self).__init__(
             max_depth=max_depth,

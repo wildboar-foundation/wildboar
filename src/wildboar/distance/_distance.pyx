@@ -21,25 +21,19 @@
 # Authors: Isak Samsten
 
 import numpy as np
+
 cimport numpy as np
+from libc.math cimport NAN, sqrt
+from libc.stdlib cimport free, malloc
 
-from libc.stdlib cimport malloc
+from . import _dtw_distance, _euclidean_distance
 
-from libc.math cimport sqrt
-from libc.math cimport NAN
-from libc.stdlib cimport free
-
-from . import _dtw_distance
-from . import _euclidean_distance
-
-from ._distance cimport TSCopy
-from ._distance cimport DistanceMeasure
-
-from .._data cimport ts_database_new
-from .._data cimport TSDatabase
-from .._utils import check_array_fast
+from .._data cimport TSDatabase, ts_database_new
+from ._distance cimport DistanceMeasure, TSCopy
 
 from sklearn.utils import check_array
+
+from .._utils import check_array_fast
 
 _DISTANCE_MEASURE = {
     'euclidean': _euclidean_distance.EuclideanDistance,

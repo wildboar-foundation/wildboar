@@ -22,16 +22,11 @@
 from __future__ import print_function
 
 import numpy as np
+
 cimport numpy as np
-
-from libc.math cimport log2
-from libc.math cimport log
-from libc.math cimport sqrt
-from libc.math cimport cos
-from libc.math cimport sin
-from libc.math cimport M_PI
-
+from libc.math cimport M_PI, cos, log, log2, sin, sqrt
 from libc.stdlib cimport realloc
+
 
 cdef class RollingVariance:
     def __cinit__(self):

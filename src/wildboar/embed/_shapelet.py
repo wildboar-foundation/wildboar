@@ -15,8 +15,8 @@
 #
 # Authors: Isak Samsten
 
-from .base import BaseEmbedding
 from ._shapelet_fast import RandomShapeletFeatureEngineer
+from .base import BaseEmbedding
 
 
 class RandomShapeletEmbedding(BaseEmbedding):

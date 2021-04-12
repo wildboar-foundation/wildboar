@@ -16,10 +16,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+
 cimport numpy as np
 
-from ..embed._feature cimport Feature
-from ..embed._feature cimport FeatureEngineer
+from ..embed._feature cimport Feature, FeatureEngineer
+
 
 # TODO: include impurity score...
 cdef struct SplitPoint:

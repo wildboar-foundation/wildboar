@@ -17,26 +17,19 @@
 #
 # Authors: Isak Samsten
 cimport numpy as np
+from libc.stdlib cimport free, malloc
 
-from libc.stdlib cimport malloc, free
-
-from .._utils cimport safe_realloc, RAND_R_MAX
-
-from .._data cimport ts_database_new
-from .._data cimport TSDatabase
-
-from ._feature cimport FeatureEngineer
-from ._feature cimport Feature
-
-import numpy as np
+from .._data cimport TSDatabase, ts_database_new
+from .._utils cimport RAND_R_MAX, safe_realloc
+from ._feature cimport Feature, FeatureEngineer
 
 from copy import deepcopy
 
-from joblib import Parallel
-from joblib import delayed
-from joblib import effective_n_jobs
+import numpy as np
+from joblib import Parallel, delayed, effective_n_jobs
 
 from .._data import ts_database_dims
+
 
 def clone_embedding(FeatureEngineer feature_engineer, features):
     cdef FeatureEmbedding embedding = FeatureEmbedding(feature_engineer, len(features))

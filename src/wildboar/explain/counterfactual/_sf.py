@@ -15,17 +15,15 @@
 #
 # Authors: Isak Samsten
 import math
-import numpy as np
-
 from copy import deepcopy
 from functools import partial
 
-from wildboar.distance import distance, matches
+import numpy as np
+from sklearn.utils.validation import check_array, check_is_fitted
 
+from wildboar.distance import distance
 from wildboar.ensemble._ensemble import BaseShapeletForestClassifier
 from wildboar.explain.counterfactual.base import BaseCounterfactual
-
-from sklearn.utils.validation import check_is_fitted, check_array
 
 MIN_MATCHING_DISTANCE = 0.0001
 
@@ -95,11 +93,13 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
 
     Notes
     -----
-    This implementation only supports the reversible algorithm described by Karlsson (2020)
+    This implementation only supports the reversible algorithm
+    described by Karlsson (2020)
 
     Warnings
     --------
-    Only shapelet forests fit with the Euclidean distance is supported i.e., ``metric="euclidean"``
+    Only shapelet forests fit with the Euclidean distance is supported i.e.,
+    ``metric="euclidean"``
 
     References
     ----------
@@ -121,8 +121,9 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
             Control the degree of change from the decision threshold
 
         batch_size : float, optional
-            Batch size when evaluating the cost and predictions of counterfactual candidates.
-            The default setting is to evaluate all counterfactual samples.
+            Batch size when evaluating the cost and predictions of
+            counterfactual candidates. The default setting is to evaluate
+            all counterfactual samples.
 
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
@@ -194,8 +195,9 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         for i, path in enumerate(prediction_paths):
             counterfactuals[i, :] = self._path_transform(x.copy(), path)
 
-        # Note that the cost is ordered in increasing order; hence, if a conversion is successful
-        # there can exist no other successful transformation with lower cost.
+        # Note that the cost is ordered in increasing order; hence, if a
+        # conversion is successful there can exist no other successful
+        # transformation with lower cost.
         cost_sort = np.argsort(_compute_cost(counterfactuals, x))
         for i in range(0, n_counterfactuals, batch_size):
             batch_cost = cost_sort[i : min(n_counterfactuals, i + batch_size)]

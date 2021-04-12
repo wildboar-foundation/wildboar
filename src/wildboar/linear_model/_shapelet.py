@@ -14,12 +14,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-import numpy as np
-from numpy.random import rand
-
-from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
-
 from ..embed import RandomShapeletEmbedding
+from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
 
 
 class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):

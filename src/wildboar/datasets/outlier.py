@@ -22,11 +22,11 @@ from abc import ABCMeta, abstractmethod
 
 import numpy as np
 from sklearn import clone
-from sklearn.cluster import KMeans, DBSCAN, OPTICS
+from sklearn.cluster import DBSCAN, OPTICS, KMeans
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import pairwise_distances, confusion_matrix
+from sklearn.metrics import confusion_matrix, pairwise_distances
 from sklearn.neighbors import NearestNeighbors
-from sklearn.utils import check_random_state, check_array
+from sklearn.utils import check_array, check_random_state
 from sklearn.utils.validation import check_is_fitted
 
 from wildboar.linear_model import KernelLogisticRegression
@@ -189,7 +189,8 @@ DENSITY_ESTIMATORS_PARAMS = {}
 class DensityLabeler(OutlierLabeler):
     """Density based clustering labeler
 
-    Labels samples as outliers if a density cluster algorithm fail to assign them to a cluster
+    Labels samples as outliers if a density cluster algorithm fail to assign them to a
+    cluster
     """
 
     def __init__(self, *, estimator=None, estimator_params=None):
@@ -380,15 +381,16 @@ _EMMOTT_VARIATION = {"tight": _variation_tight, "dispersed": _variation_disperse
 
 
 class EmmottLabeler(OutlierLabeler):
-    """Create a synthetic outlier detection dataset from a labeled classification dataset
-    using a method described by Emmott et.al. (2013).
+    """Create a synthetic outlier detection dataset from a labeled classification
+    dataset using the method described by Emmott et.al. (2013).
 
-    The Emmott labeler can reliably label both binary and multiclass datasets. For binary datasets
-    a random label is selected as the outlier class. For multiclass datasets a set of classes with
-    maximal confusion (as measured by ``confusion_estimator`` is selected as outlier label. For each
-    outlier sample the ``difficulty_estimator`` assigns a difficulty score which is digitized into
-    ranges and selected according to the ``difficulty`` parameters. Finally a sample of approximately
-    ``n_outlier`` is selected either maximally dispersed or tight.
+    The Emmott labeler can reliably label both binary and multiclass datasets. For
+    binary datasets a random label is selected as the outlier class. For multiclass
+    datasets a set of classes with maximal confusion (as measured by
+    ``confusion_estimator`` is selected as outlier label. For each outlier sample the
+    ``difficulty_estimator`` assigns a difficulty score which is digitized into ranges
+    and selected according to the ``difficulty`` parameters. Finally a sample of
+    approximately ``n_outlier`` is selected either maximally dispersed or tight.
 
     Attributes
     ----------
@@ -407,23 +409,27 @@ class EmmottLabeler(OutlierLabeler):
     Notes
     -----
     - For multiclass datasets the Emmott labeler require the package `networkx`
-    - For dispersed outlier selection the Emmott labeler require the package `scikit-learn-extra`
+    - For dispersed outlier selection the Emmott labeler require the package
+      `scikit-learn-extra`
 
-    The difficulty parameters 'simplest' and 'hardest' are not described by Emmott et.al. (2013)
+    The difficulty parameters 'simplest' and 'hardest' are not described by
+    Emmott et.al. (2013)
 
     Warnings
     --------
     n_outliers
-        The number of outliers returned is dependent on the difficulty setting and the available
-        number of samples of the minority class. If the minority class does not contain sufficient
-        number of samples of the desired difficulty, fewer than n_outliers may be returned.
+        The number of outliers returned is dependent on the difficulty setting and the
+        available number of samples of the minority class. If the minority class does
+        not contain sufficient number of samples of the desired difficulty, fewer than
+        n_outliers may be returned.
 
 
     References
     ----------
     Emmott, A. F., Das, S., Dietterich, T., Fern, A., & Wong, W. K. (2013).
         Systematic construction of anomaly detection benchmarks from real data.
-        In Proceedings of the ACM SIGKDD workshop on outlier detection and description (pp. 16-21).
+        In Proceedings of the ACM SIGKDD workshop on outlier detection and description
+        (pp. 16-21).
 
     """
 
@@ -443,35 +449,40 @@ class EmmottLabeler(OutlierLabeler):
         Parameters
         ----------
         n_outliers : int, float, optional
-            Number of desired (but not guaranteed) outliers in the resulting transformation.
+            Number of desired (but not guaranteed) outliers in the resulting
+            transformation.
 
         confusion_estimator : object, optional
-            Estimator of class confusion for datasets where n_classes > 2. Default to a random forest classifier.
+            Estimator of class confusion for datasets where n_classes > 2. Default to a
+            random forest classifier.
 
         difficulty_estimator : object, optional
-            Estimator for sample difficulty. The difficulty estimator must support ``predict_proba``. Defaults
-            to a kernel logistic regression model with a RBF-kernel.
+            Estimator for sample difficulty. The difficulty estimator must support
+            ``predict_proba``. Defaults to a kernel logistic regression model with
+            a RBF-kernel.
 
         difficulty : {'any', 'simplest', 'hardest'}, int or array-like, optional
-            The difficulty of the outlier points quantized according to scale. The value should be in the range
-            `[1, len(scale)]` with lower difficulty denoting simpler outliers. If an array is given, multiple
-            difficulties can be included, e.g., `[1, 4]` would mix easy and difficult outliers.
+            The difficulty of the outlier points quantized according to scale. The value
+            should be in the range `[1, len(scale)]` with lower difficulty denoting
+            simpler outliers. If an array is given, multiple difficulties can be
+            included, e.g., `[1, 4]` would mix easy and difficult outliers.
 
             - if 'any' outliers are sampled from all scores
             - if 'simplest' the simplest n_outliers are selected
             - if 'hardest' the hardest n_outliers are selected
 
         scale : array-like, optional
-            The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5]. Scores (which are probabilities
-            in the range [0, 1]) are fit into the ranges using ``np.digitize(difficulty, scale)``.
+            The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5].
+            Scores (which are probabilities in the range [0, 1]) are fit into the ranges
+            using ``np.digitize(difficulty, scale)``.
 
         variation : {'tight', 'dispersed'}, optional
             Selection procedure for sampling outlier samples
 
-            - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples are selected according to
-              their euclidean distance
-            - if 'dispersed' ``n_outlier`` points are selected according to a facility location algorithm such that
-              they are distributed among the outliers.
+            - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples
+              are selected according to their euclidean distance
+            - if 'dispersed' ``n_outlier`` points are selected according to a facility
+              location algorithm such that they are distributed among the outliers.
 
         random_state : RandomState or int, optinal
             A pseudo-random number generator to control the randomness of the algorithm.

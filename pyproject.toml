@@ -12,5 +12,11 @@ requires = [
 
 build-backend = "setuptools.build_meta"
 
+[tool.isort]
+profile = "black"
+
+[tool.black]
+include = '\.pyi?$'
+
 [tool.setuptools_scm]
 write_to = "src/wildboar/version.py"

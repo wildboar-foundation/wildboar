@@ -17,12 +17,11 @@
 import warnings
 
 import numpy as np
-
+from sklearn.metrics.pairwise import paired_distances
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.utils.validation import check_is_fitted
-from sklearn.metrics.pairwise import paired_distances
 
-from wildboar.ensemble import ShapeletForestClassifier, ExtraShapeletTreesClassifier
+from wildboar.ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
 
 from ._nn import KNeighborsCounterfactual
 from ._proto import PrototypeCounterfactual
@@ -128,7 +127,7 @@ def counterfactuals(
     estimator : object
         The estimator used to compute the counterfactual example
 
-    x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+    x : array-like of shape (n_samples, n_timestep)
         The data samples to fit counterfactuals to
 
     y : array-like broadcast to shape (n_samples,)
@@ -156,7 +155,7 @@ def counterfactuals(
 
     Returns
     -------
-    x_counterfactuals : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+    x_counterfactuals : ndarray of shape (n_samples, n_timestep)
         The counterfactual example.
 
     valid : ndarray of shape (n_samples,)
@@ -170,7 +169,8 @@ def counterfactuals(
         Explainer = _infer_counterfactual(estimator)
         if Explainer == PrototypeCounterfactual:
             warnings.warn(
-                "no specific counterfactual explanation method is available for the given estimator."
+                "no specific counterfactual explanation method "
+                "is available for the given estimator."
             )
             if not ("background_x" in kwargs or "background_y" in kwargs):
                 raise ValueError("background_x and background_y are required")

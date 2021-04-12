@@ -15,8 +15,7 @@
 #
 # Authors: Isak Samsten
 
-from . import _distance
-from . import dtw
+from . import _distance, dtw
 
 __all__ = ["distance", "matches", "dtw"]
 
@@ -61,10 +60,11 @@ def distance(
         - if ``sample=None`` the distances to all samples in data is returned
         - if sample is an int the distance to that sample is returned
         - if sample is an array-like the distance to all samples in sample are returned
-        - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
+        - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
+          returned
         - otherwise an array is returned
 
-    metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional
+    metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -133,7 +133,8 @@ def matches(
     metric_params=None,
     return_distance=False,
 ):
-    """Return the positions in `x` (one list per `sample`) where `x` is closer than `threshold`.
+    """Return the positions in `x` (one list per `sample`) where `x` is closer than
+    `threshold`.
 
     Parameters
     ----------
@@ -155,7 +156,8 @@ def matches(
         - if ``sample=None`` the distances to all samples in data is returned
         - if sample is an int the distance to that sample is returned
         - if sample is an array-like the distance to all samples in sample are returned
-        - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
+        - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
+          returned
         - otherwise an array is returned
 
     metric : {'euclidean', 'scaled_euclidean'}, optional
