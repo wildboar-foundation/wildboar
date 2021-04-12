@@ -80,6 +80,14 @@ def _check_integrity(bundle_file, hash_file):
     return True
 
 
+
+
+
+
+
+
+
+# dsajdksjaldjsal jdslakjd klsajd klasjd klsajdlksajkldjaslkd jsalkdjsalkdj kslajd klsajd lksajdklasjd klsajdkl sajdkl sajkld jsald as
 def _sha1_is_sane(hash_file):
     """Check the sanity of a hash file
 
