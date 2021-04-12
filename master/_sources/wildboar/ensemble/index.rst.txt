@@ -59,8 +59,8 @@ Classes
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
    :param metric_params: Parameters passed to the metric construction
    :type metric_params: dict, optional
-   :param random_state: Controls the random resampling of the original dataset and the construction of
-                        the base estimators. Pass an int for reproducible output across multiple
+   :param random_state: Controls the random resampling of the original dataset and the construction
+                        of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 
@@ -103,8 +103,8 @@ Classes
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
    :param metric_params: Parameters passed to the metric construction
    :type metric_params: dict, optional
-   :param random_state: Controls the random resampling of the original dataset and the construction of
-                        the base estimators. Pass an int for reproducible output across multiple
+   :param random_state: Controls the random resampling of the original dataset and the construction
+                        of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 
@@ -131,8 +131,12 @@ Classes
    >>> from model_selection.outlier import train_test_split
    >>> from sklearn.metrics import balanced_accuracy_score
    >>> x, y = load_two_lead_ecg("two_lead_ecg")
-   >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
-   >>> f = IsolationShapeletForest(n_estimators=100, contamination=balanced_accuracy_score)
+   >>> x_train, x_test, y_train, y_test = train_test_split(
+   ...    x, y, 1, test_size=0.2, anomalies_train_size=0.05
+   ... )
+   >>> f = IsolationShapeletForest(
+   ...     n_estimators=100, contamination=balanced_accuracy_score
+   ... )
    >>> f.fit(x_train, y_train)
    >>> y_pred = f.predict(x_test)
    >>> balanced_accuracy_score(y_test, y_pred)
@@ -145,7 +149,9 @@ Classes
    >>> from sklearn.metrics import balanced_accuracy_score
    >>> f = IsolationShapeletForest()
    >>> x, y = load_two_lead_ecg("two_lead_ecg")
-   >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+   >>> x_train, x_test, y_train, y_test = train_test_split(
+   ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+   ... )
    >>> f.fit(x_train)
    >>> y_pred = f.predict(x_test)
    >>> balanced_accuracy_score(y_test, y_pred)
@@ -170,18 +176,22 @@ Classes
 
                          - if 'auto' ``offset_=-0.5``
                          - if 'auc' ``offset_`` is computed as the offset that maximizes the
-                           area under ROC in the training or out-of-bag set (see ``contamination_set``).
+                           area under ROC in the training or out-of-bag set
+                           (see ``contamination_set``).
                          - if 'prc' ``offset_`` is computed as the offset that maximizes the
-                           area under PRC in the training or out-of-bag set (see ``contamination_set``)
+                           area under PRC in the training or out-of-bag set
+                           (see ``contamination_set``)
                          - if callable ``offset_`` is computed as the offset that maximizes the score
-                           computed by the callable in training or out-of-bag set (see ``contamination_set``)
-                         - if float ``offset_`` is computed as the c:th percentile of scores in the training
-                           or out-of-bag set (see ``contamination_set``)
+                           computed by the callable in training or out-of-bag set
+                           (see ``contamination_set``)
+                         - if float ``offset_`` is computed as the c:th percentile of scores in the
+                           training or out-of-bag set (see ``contamination_set``)
 
-                         Setting contamination to either 'auc' or 'prc' require that `y` is passed to `fit`.
+                         Setting contamination to either 'auc' or 'prc' require that `y` is passed
+                         to `fit`.
    :type contamination: str, float or callable
-   :param contamination_set: Compute the ``offset_`` from either the out-of-bag samples or the training samples.
-                             'oob' require `bootstrap=True`.
+   :param contamination_set: Compute the ``offset_`` from either the out-of-bag samples or the training
+                             samples.'oob' require `bootstrap=True`.
    :type contamination_set: {'training', 'oob'}, optional
    :param warm_start: When set to True, reuse the solution of the previous call to fit
                       and add more estimators to the ensemble, otherwise, just fit
@@ -191,8 +201,8 @@ Classes
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
    :param metric_params: Parameters passed to the metric construction
    :type metric_params: dict, optional
-   :param random_state: Controls the random resampling of the original dataset and the construction of
-                        the base estimators. Pass an int for reproducible output across multiple
+   :param random_state: Controls the random resampling of the original dataset and the construction
+                        of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 
@@ -268,8 +278,8 @@ Classes
    :type metric_params: dict, optional
    :param oob_score: Compute out-of-bag estimates of the ensembles performance.
    :type oob_score: bool, optional
-   :param random_state: Controls the random resampling of the original dataset and the construction of
-                        the base estimators. Pass an int for reproducible output across multiple
+   :param random_state: Controls the random resampling of the original dataset and the construction
+                        of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 
@@ -313,8 +323,8 @@ Classes
    :type metric_params: dict, optional
    :param sparse_output: Return a sparse CSR-matrix.
    :type sparse_output: bool, optional
-   :param random_state: Controls the random resampling of the original dataset and the construction of
-                        the base estimators. Pass an int for reproducible output across multiple
+   :param random_state: Controls the random resampling of the original dataset and the construction
+                        of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 
@@ -372,8 +382,8 @@ Classes
    :type metric_params: dict, optional
    :param oob_score: Compute out-of-bag estimates of the ensembles performance.
    :type oob_score: bool, optional
-   :param random_state: Controls the random resampling of the original dataset and the construction of
-                        the base estimators. Pass an int for reproducible output across multiple
+   :param random_state: Controls the random resampling of the original dataset and the construction
+                        of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 

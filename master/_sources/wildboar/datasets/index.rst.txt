@@ -437,11 +437,15 @@ Functions
 
    or if original training and testing splits are to be preserved
 
-   >>> x_train, x_test, y_train, y_test = load_dataset("SyntheticControl", merge_train_test=False)
+   >>> x_train, x_test, y_train, y_test = load_dataset(
+   ...     "SyntheticControl", merge_train_test=False
+   ... )
 
    or for a specific version of the dataset
 
-   >>> x_train, x_test, y_train, y_test = load_dataset("Wafer", repository='wildboar/ucr-tiny:1.0')
+   >>> x_train, x_test, y_train, y_test = load_dataset(
+   ...     "Wafer", repository='wildboar/ucr-tiny:1.0'
+   ... )
 
 
 .. function:: load_datasets(repository='wildboar/ucr', *, collection=None, cache_dir=None, create_cache_dir=True, progress=True, force=False, filter=None, **kwargs)
@@ -469,7 +473,8 @@ Functions
                       - "n_timestep": comparison spec
 
                   Comparison spec
-                      str of two parts, comparison operator (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
+                      str of two parts, comparison operator (<, <=, >, >= or =) and a number,
+                      e.g., "<100", "<= 200", or ">300"
    :type filter: dict or callable, optional
    :param kwargs: Optional arguments to ``load_dataset``
    :type kwargs: dict
@@ -485,7 +490,9 @@ Functions
 
    Print the names of datasets with more than 200 samples
 
-   >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr', filter={"n_samples": ">200"}):
+   >>> for dataset, (x, y) in load_datasets(
+   ...    repository='wildboar/ucr', filter={"n_samples": ">200"}
+   ... ):
    >>>     print(dataset)
 
 

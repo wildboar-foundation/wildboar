@@ -41,14 +41,15 @@ Functions
                   - if ``sample=None`` the distances to all samples in data is returned
                   - if sample is an int the distance to that sample is returned
                   - if sample is an array-like the distance to all samples in sample are returned
-                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
+                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
+                    returned
                   - otherwise an array is returned
    :type sample: int or array-like, optional
    :param metric: The distance metric
 
                   - if str use optimized implementations of the named distance measure
                   - if callable a function taking two arrays as input
-   :type metric: {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional
+   :type metric: {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
    :param metric_params: Parameters to the metric
 
                          - 'euclidean' and 'scaled_euclidean' take no parameters
@@ -87,7 +88,8 @@ Functions
 
 .. function:: matches(x, y, threshold, *, dim=0, sample=None, metric='euclidean', metric_params=None, return_distance=False)
 
-   Return the positions in `x` (one list per `sample`) where `x` is closer than `threshold`.
+   Return the positions in `x` (one list per `sample`) where `x` is closer than
+   `threshold`.
 
    :param x: A 1-dimensional float array
    :type x: array-like of shape (x_timestep, )
@@ -102,7 +104,8 @@ Functions
                   - if ``sample=None`` the distances to all samples in data is returned
                   - if sample is an int the distance to that sample is returned
                   - if sample is an array-like the distance to all samples in sample are returned
-                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is returned
+                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
+                    returned
                   - otherwise an array is returned
    :type sample: int or array-like, optional
    :param metric: The distance metric

@@ -67,16 +67,17 @@ Classes
 
       Fit a shapelet tree regressor from the training set
 
-      :param X: The training time series.
-      :type X: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
+      :param x: The training time series.
+      :type x: array-like of shape (n_samples, n_timesteps)
       :param y: The target values (class labels) as integers
       :type y: array-like of shape (n_samples,) or (n_samples, n_classes)
       :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
-                            nodes with net zero or negative weight are ignored while searching for a split
-                            in each node. Splits are also ignored if they would result in any single class
-                            carrying a negative weight in either child node.
+                            nodes with net zero or negative weight are ignored while searching for a
+                            split in each node. Splits are also ignored if they would result in any
+                            single class carrying a negative weight in either child node.
       :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
       :type check_input: bool, optional
 
       :returns: **self**
@@ -88,8 +89,9 @@ Classes
       Predict the regression of the input samples x.
 
       :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+      :type x: array-like of shape (n_samples, n_timesteps)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
       :type check_input: bool, optional
 
       :returns: **y** -- The predicted classes.
@@ -103,12 +105,13 @@ Classes
       in a leaf.
 
       :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+      :type x: array-like of shape (n_samples, n_timesteps)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
       :type check_input: bool, optional
 
-      :returns: **proba** -- The class probabilities of the input samples. The order of the classes corresponds to
-                that in the attribute `classes_`
+      :returns: **proba** -- The class probabilities of the input samples. The order of the classes
+                corresponds to that in the attribute `classes_`
       :rtype: ndarray of shape (n_samples, n_classes)
 
 
@@ -131,18 +134,20 @@ Classes
 
    Construct a extra shapelet tree regressor
 
-   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
-                     are pure or until all leaves contain less than `min_samples_split` samples
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                      samples
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
    :param n_shapelets: The number of shapelets to sample at each node.
    :type n_shapelets: int, optional
-   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
-                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :param min_shapelet_size:
+                             The minimum length of a sampled shapelet expressed as a fraction,
+                              computed as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
    :type min_shapelet_size: float, optional
-   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
-                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction,
+                             computed as `ceil(X.shape[-1] * max_shapelet_size)`.
    :type max_shapelet_size: float, optional
    :param metric: Distance metric used to identify the best shapelet.
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
@@ -156,7 +161,8 @@ Classes
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator;
                         - If `RandomState` instance, `random_state` is the random number generator;
-                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+                        - If `None`, the random number generator is the `RandomState` instance
+                          used by `np.random`.
    :type random_state: int or RandomState
 
 
@@ -178,18 +184,19 @@ Classes
 
    Construct a extra shapelet tree regressor
 
-   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
-                     are pure or until all leaves contain less than `min_samples_split` samples
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
    :param n_shapelets: The number of shapelets to sample at each node.
    :type n_shapelets: int, optional
-   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
-                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as`min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
    :type min_shapelet_size: float, optional
-   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
-                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as `ceil(X.shape[-1] * max_shapelet_size)`.
    :type max_shapelet_size: float, optional
    :param metric: Distance metric used to identify the best shapelet.
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
@@ -203,7 +210,8 @@ Classes
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator;
                         - If `RandomState` instance, `random_state` is the random number generator;
-                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
    :type random_state: int or RandomState
 
 
@@ -214,15 +222,16 @@ Classes
       Fit a shapelet tree regressor from the training set
 
       :param X: The training time series.
-      :type X: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps)
+      :type X: array-like of shape (n_samples, n_timesteps)
       :param y: Target values as floating point values
       :type y: array-like of shape (n_samples,)
       :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
-                            nodes with net zero or negative weight are ignored while searching for a split
-                            in each node. Splits are also ignored if they would result in any single class
-                            carrying a negative weight in either child node.
+                            nodes with net zero or negative weight are ignored while searching for a
+                            split in each node. Splits are also ignored if they would result in any
+                            single class carrying a negative weight in either child node.
       :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
       :type check_input: bool, optional
 
       :returns: **self**
@@ -234,8 +243,9 @@ Classes
       Predict the regression of the input samples x.
 
       :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dimensions, n_timesteps])
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you know what you do.
+      :type x: array-like of shape (n_samples, n_timesteps)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
       :type check_input: bool, optional
 
       :returns: **y** -- The predicted classes.
@@ -324,18 +334,19 @@ Classes
 
    Construct a shapelet tree classifier
 
-   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
-                     are pure or until all leaves contain less than `min_samples_split` samples
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
    :param n_shapelets: The number of shapelets to sample at each node.
    :type n_shapelets: int, optional
-   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
-                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
    :type min_shapelet_size: float, optional
-   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
-                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as `ceil(X.shape[-1] * max_shapelet_size)`.
    :type max_shapelet_size: float, optional
    :param metric: Distance metric used to identify the best shapelet.
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
@@ -349,7 +360,8 @@ Classes
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator;
                         - If `RandomState` instance, `random_state` is the random number generator;
-                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
    :type random_state: int or RandomState
 
 
@@ -368,18 +380,19 @@ Classes
 
    Construct a shapelet tree regressor
 
-   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all leaves
-                     are pure or until all leaves contain less than `min_samples_split` samples
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
    :param n_shapelets: The number of shapelets to sample at each node.
    :type n_shapelets: int, optional
-   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed as
-                             `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
    :type min_shapelet_size: float, optional
-   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed as
-                             `ceil(X.shape[-1] * max_shapelet_size)`.
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as `ceil(X.shape[-1] * max_shapelet_size)`.
    :type max_shapelet_size: float, optional
    :param metric: Distance metric used to identify the best shapelet.
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
@@ -393,7 +406,8 @@ Classes
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator;
                         - If `RandomState` instance, `random_state` is the random number generator;
-                        - If `None`, the random number generator is the `RandomState` instance used by `np.random`.
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
    :type random_state: int or RandomState
 
 

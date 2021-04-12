@@ -28,7 +28,8 @@ Classes
 
    Density based clustering labeler
 
-   Labels samples as outliers if a density cluster algorithm fail to assign them to a cluster
+   Labels samples as outliers if a density cluster algorithm fail to assign them to a
+   cluster
 
    .. method:: fit(self, x, y=None)
 
@@ -62,15 +63,16 @@ Classes
 
    Bases: :class:`wildboar.datasets.outlier.OutlierLabeler`
 
-   Create a synthetic outlier detection dataset from a labeled classification dataset
-   using a method described by Emmott et.al. (2013).
+   Create a synthetic outlier detection dataset from a labeled classification
+   dataset using the method described by Emmott et.al. (2013).
 
-   The Emmott labeler can reliably label both binary and multiclass datasets. For binary datasets
-   a random label is selected as the outlier class. For multiclass datasets a set of classes with
-   maximal confusion (as measured by ``confusion_estimator`` is selected as outlier label. For each
-   outlier sample the ``difficulty_estimator`` assigns a difficulty score which is digitized into
-   ranges and selected according to the ``difficulty`` parameters. Finally a sample of approximately
-   ``n_outlier`` is selected either maximally dispersed or tight.
+   The Emmott labeler can reliably label both binary and multiclass datasets. For
+   binary datasets a random label is selected as the outlier class. For multiclass
+   datasets a set of classes with maximal confusion (as measured by
+   ``confusion_estimator`` is selected as outlier label. For each outlier sample the
+   ``difficulty_estimator`` assigns a difficulty score which is digitized into ranges
+   and selected according to the ``difficulty`` parameters. Finally a sample of
+   approximately ``n_outlier`` is selected either maximally dispersed or tight.
 
    .. attribute:: outlier_label_
 
@@ -99,49 +101,58 @@ Classes
    .. rubric:: Notes
 
    - For multiclass datasets the Emmott labeler require the package `networkx`
-   - For dispersed outlier selection the Emmott labeler require the package `scikit-learn-extra`
+   - For dispersed outlier selection the Emmott labeler require the package
+     `scikit-learn-extra`
 
-   The difficulty parameters 'simplest' and 'hardest' are not described by Emmott et.al. (2013)
+   The difficulty parameters 'simplest' and 'hardest' are not described by
+   Emmott et.al. (2013)
 
    .. warning::
 
       n_outliers
-          The number of outliers returned is dependent on the difficulty setting and the available
-          number of samples of the minority class. If the minority class does not contain sufficient
-          number of samples of the desired difficulty, fewer than n_outliers may be returned.
+          The number of outliers returned is dependent on the difficulty setting and the
+          available number of samples of the minority class. If the minority class does
+          not contain sufficient number of samples of the desired difficulty, fewer than
+          n_outliers may be returned.
 
    .. rubric:: References
 
    Emmott, A. F., Das, S., Dietterich, T., Fern, A., & Wong, W. K. (2013).
        Systematic construction of anomaly detection benchmarks from real data.
-       In Proceedings of the ACM SIGKDD workshop on outlier detection and description (pp. 16-21).
+       In Proceedings of the ACM SIGKDD workshop on outlier detection and description
+       (pp. 16-21).
 
    Construct a new emmott labeler for synthetic outlier datasets
 
-   :param n_outliers: Number of desired (but not guaranteed) outliers in the resulting transformation.
+   :param n_outliers: Number of desired (but not guaranteed) outliers in the resulting
+                      transformation.
    :type n_outliers: int, float, optional
-   :param confusion_estimator: Estimator of class confusion for datasets where n_classes > 2. Default to a random forest classifier.
+   :param confusion_estimator: Estimator of class confusion for datasets where n_classes > 2. Default to a
+                               random forest classifier.
    :type confusion_estimator: object, optional
-   :param difficulty_estimator: Estimator for sample difficulty. The difficulty estimator must support ``predict_proba``. Defaults
-                                to a kernel logistic regression model with a RBF-kernel.
+   :param difficulty_estimator: Estimator for sample difficulty. The difficulty estimator must support
+                                ``predict_proba``. Defaults to a kernel logistic regression model with
+                                a RBF-kernel.
    :type difficulty_estimator: object, optional
-   :param difficulty: The difficulty of the outlier points quantized according to scale. The value should be in the range
-                      `[1, len(scale)]` with lower difficulty denoting simpler outliers. If an array is given, multiple
-                      difficulties can be included, e.g., `[1, 4]` would mix easy and difficult outliers.
+   :param difficulty: The difficulty of the outlier points quantized according to scale. The value
+                      should be in the range `[1, len(scale)]` with lower difficulty denoting
+                      simpler outliers. If an array is given, multiple difficulties can be
+                      included, e.g., `[1, 4]` would mix easy and difficult outliers.
 
                       - if 'any' outliers are sampled from all scores
                       - if 'simplest' the simplest n_outliers are selected
                       - if 'hardest' the hardest n_outliers are selected
    :type difficulty: {'any', 'simplest', 'hardest'}, int or array-like, optional
-   :param scale: The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5]. Scores (which are probabilities
-                 in the range [0, 1]) are fit into the ranges using ``np.digitize(difficulty, scale)``.
+   :param scale: The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5].
+                 Scores (which are probabilities in the range [0, 1]) are fit into the ranges
+                 using ``np.digitize(difficulty, scale)``.
    :type scale: array-like, optional
    :param variation: Selection procedure for sampling outlier samples
 
-                     - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples are selected according to
-                       their euclidean distance
-                     - if 'dispersed' ``n_outlier`` points are selected according to a facility location algorithm such that
-                       they are distributed among the outliers.
+                     - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples
+                       are selected according to their euclidean distance
+                     - if 'dispersed' ``n_outlier`` points are selected according to a facility
+                       location algorithm such that they are distributed among the outliers.
    :type variation: {'tight', 'dispersed'}, optional
    :param random_state: A pseudo-random number generator to control the randomness of the algorithm.
    :type random_state: RandomState or int, optinal

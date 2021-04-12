@@ -54,9 +54,13 @@ Classes
 
    .. rubric:: Notes
 
-   This implementation only supports the reversible algorithm described by Karlsson (2020)
+   This implementation only supports the reversible algorithm
+   described by Karlsson (2020)
 
-   .. warning:: Only shapelet forests fit with the Euclidean distance is supported i.e., ``metric="euclidean"``
+   .. warning::
+
+      Only shapelet forests fit with the Euclidean distance is supported i.e.,
+      ``metric="euclidean"``
 
    .. rubric:: References
 
@@ -70,8 +74,9 @@ Classes
 
    :param epsilon: Control the degree of change from the decision threshold
    :type epsilon: float, optional
-   :param batch_size: Batch size when evaluating the cost and predictions of counterfactual candidates.
-                      The default setting is to evaluate all counterfactual samples.
+   :param batch_size: Batch size when evaluating the cost and predictions of
+                      counterfactual candidates. The default setting is to evaluate
+                      all counterfactual samples.
    :type batch_size: float, optional
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional

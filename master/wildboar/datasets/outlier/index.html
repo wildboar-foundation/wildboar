@@ -2,12 +2,11 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.datasets.preprocess" href="../preprocess/index.html" /><link rel="prev" title="wildboar.datasets.filter" href="../filter/index.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.datasets.preprocess" href="../preprocess/index.html" /><link rel="prev" title="wildboar.datasets.filter" href="../filter/index.html" />
 
-    <meta name="generator" content="sphinx-3.5.3, furo 2021.03.20.beta30"/>
-        <title>wildboar.datasets.outlier - Wildboar 1.0.9.dev34+g4bd0566 documentation</title>
-      <link rel="stylesheet" href="../../../_static/styles/furo.css?digest=978e1795dfe158b585dda6a8417f6411828bf3ed">
+    <meta name="generator" content="sphinx-3.5.4, furo 2021.04.11.beta34"/>
+        <title>wildboar.datasets.outlier - Wildboar 1.0.9.dev35+g34c5e20 documentation</title>
+      <link rel="stylesheet" href="../../../_static/styles/furo.css?digest=59ab60ac09ea94ccfe6deddff6d715cce948a6fc">
     <link rel="stylesheet" href="../../../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../../_static/pygments_dark.css">
     
@@ -103,7 +102,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.0.9.dev34+g4bd0566 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.0.9.dev35+g34c5e20 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -201,11 +200,11 @@
         <label class="toc-overlay-icon toc-content-icon" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
-        <section id="module-wildboar.datasets.outlier">
+        <div class="section" id="module-wildboar.datasets.outlier">
 <span id="wildboar-datasets-outlier"></span><h1><a class="reference internal" href="#module-wildboar.datasets.outlier" title="wildboar.datasets.outlier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><a class="headerlink" href="#module-wildboar.datasets.outlier" title="Permalink to this headline">¶</a></h1>
-<section id="module-contents">
+<div class="section" id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-<section id="classes">
+<div class="section" id="classes">
 <h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
 <div class="table-wrapper"><table class="longtable docutils align-default">
 <colgroup>
@@ -217,7 +216,7 @@
 <td><p>Density based clustering labeler</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler" title="wildboar.datasets.outlier.EmmottLabeler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EmmottLabeler</span></code></a></p></td>
-<td><p>Create a synthetic outlier detection dataset from a labeled classification dataset</p></td>
+<td><p>Create a synthetic outlier detection dataset from a labeled classification</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler" title="wildboar.datasets.outlier.KMeansLabeler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KMeansLabeler</span></code></a></p></td>
 <td><p>KMeans labeler that assign an outlier label to the most deviating cluster</p></td>
@@ -235,13 +234,14 @@
 </table></div>
 <dl class="py class">
 <dt id="wildboar.datasets.outlier.DensityLabeler">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">DensityLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L189-L233"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">DensityLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L189-L234"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler" title="wildboar.datasets.outlier.OutlierLabeler"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.datasets.outlier.OutlierLabeler</span></code></a></p>
 <p>Density based clustering labeler</p>
-<p>Labels samples as outliers if a density cluster algorithm fail to assign them to a cluster</p>
+<p>Labels samples as outliers if a density cluster algorithm fail to assign them to a
+cluster</p>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.DensityLabeler.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L199-L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L200-L221"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -254,11 +254,11 @@
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.DensityLabeler.fit_transform">
-<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L222-L226"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.fit_transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L223-L227"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.DensityLabeler.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L228-L233"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L229-L234"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -279,16 +279,17 @@
 </dd></dl>
 <dl class="py class">
 <dt id="wildboar.datasets.outlier.EmmottLabeler">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">EmmottLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confusion_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'simplest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L382-L652"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">EmmottLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confusion_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'simplest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L383-L663"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler" title="wildboar.datasets.outlier.OutlierLabeler"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.datasets.outlier.OutlierLabeler</span></code></a></p>
-<p>Create a synthetic outlier detection dataset from a labeled classification dataset
-using a method described by Emmott et.al. (2013).</p>
-<p>The Emmott labeler can reliably label both binary and multiclass datasets. For binary datasets
-a random label is selected as the outlier class. For multiclass datasets a set of classes with
-maximal confusion (as measured by <code class="docutils literal notranslate"><span class="pre">confusion_estimator</span></code> is selected as outlier label. For each
-outlier sample the <code class="docutils literal notranslate"><span class="pre">difficulty_estimator</span></code> assigns a difficulty score which is digitized into
-ranges and selected according to the <code class="docutils literal notranslate"><span class="pre">difficulty</span></code> parameters. Finally a sample of approximately
-<code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> is selected either maximally dispersed or tight.</p>
+<p>Create a synthetic outlier detection dataset from a labeled classification
+dataset using the method described by Emmott et.al. (2013).</p>
+<p>The Emmott labeler can reliably label both binary and multiclass datasets. For
+binary datasets a random label is selected as the outlier class. For multiclass
+datasets a set of classes with maximal confusion (as measured by
+<code class="docutils literal notranslate"><span class="pre">confusion_estimator</span></code> is selected as outlier label. For each outlier sample the
+<code class="docutils literal notranslate"><span class="pre">difficulty_estimator</span></code> assigns a difficulty score which is digitized into ranges
+and selected according to the <code class="docutils literal notranslate"><span class="pre">difficulty</span></code> parameters. Finally a sample of
+approximately <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> is selected either maximally dispersed or tight.</p>
 <dl class="py attribute">
 <dt id="wildboar.datasets.outlier.EmmottLabeler.outlier_label_">
 <code class="sig-name descname"><span class="pre">outlier_label_</span></code><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.outlier_label_" title="Permalink to this definition">¶</a></dt>
@@ -332,49 +333,58 @@ ranges and selected according to the <code class="docutils literal notranslate">
 <p class="rubric">Notes</p>
 <ul class="simple">
 <li><p>For multiclass datasets the Emmott labeler require the package <cite>networkx</cite></p></li>
-<li><p>For dispersed outlier selection the Emmott labeler require the package <cite>scikit-learn-extra</cite></p></li>
+<li><p>For dispersed outlier selection the Emmott labeler require the package
+<cite>scikit-learn-extra</cite></p></li>
 </ul>
-<p>The difficulty parameters ‘simplest’ and ‘hardest’ are not described by Emmott et.al. (2013)</p>
+<p>The difficulty parameters ‘simplest’ and ‘hardest’ are not described by
+Emmott et.al. (2013)</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <dl class="simple">
-<dt>n_outliers</dt><dd><p>The number of outliers returned is dependent on the difficulty setting and the available
-number of samples of the minority class. If the minority class does not contain sufficient
-number of samples of the desired difficulty, fewer than n_outliers may be returned.</p>
+<dt>n_outliers</dt><dd><p>The number of outliers returned is dependent on the difficulty setting and the
+available number of samples of the minority class. If the minority class does
+not contain sufficient number of samples of the desired difficulty, fewer than
+n_outliers may be returned.</p>
 </dd>
 </dl>
 </div>
 <p class="rubric">References</p>
 <dl class="simple">
 <dt>Emmott, A. F., Das, S., Dietterich, T., Fern, A., &amp; Wong, W. K. (2013).</dt><dd><p>Systematic construction of anomaly detection benchmarks from real data.
-In Proceedings of the ACM SIGKDD workshop on outlier detection and description (pp. 16-21).</p>
+In Proceedings of the ACM SIGKDD workshop on outlier detection and description
+(pp. 16-21).</p>
 </dd>
 </dl>
 <p>Construct a new emmott labeler for synthetic outlier datasets</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>n_outliers</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>optional</em>) – Number of desired (but not guaranteed) outliers in the resulting transformation.</p></li>
-<li><p><strong>confusion_estimator</strong> (<em>object</em><em>, </em><em>optional</em>) – Estimator of class confusion for datasets where n_classes &gt; 2. Default to a random forest classifier.</p></li>
-<li><p><strong>difficulty_estimator</strong> (<em>object</em><em>, </em><em>optional</em>) – Estimator for sample difficulty. The difficulty estimator must support <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>. Defaults
-to a kernel logistic regression model with a RBF-kernel.</p></li>
-<li><p><strong>difficulty</strong> (<em>{'any'</em><em>, </em><em>'simplest'</em><em>, </em><em>'hardest'}</em><em>, </em><em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The difficulty of the outlier points quantized according to scale. The value should be in the range
-<cite>[1, len(scale)]</cite> with lower difficulty denoting simpler outliers. If an array is given, multiple
-difficulties can be included, e.g., <cite>[1, 4]</cite> would mix easy and difficult outliers.</p>
+<li><p><strong>n_outliers</strong> (<em>int</em><em>, </em><em>float</em><em>, </em><em>optional</em>) – Number of desired (but not guaranteed) outliers in the resulting
+transformation.</p></li>
+<li><p><strong>confusion_estimator</strong> (<em>object</em><em>, </em><em>optional</em>) – Estimator of class confusion for datasets where n_classes &gt; 2. Default to a
+random forest classifier.</p></li>
+<li><p><strong>difficulty_estimator</strong> (<em>object</em><em>, </em><em>optional</em>) – Estimator for sample difficulty. The difficulty estimator must support
+<code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>. Defaults to a kernel logistic regression model with
+a RBF-kernel.</p></li>
+<li><p><strong>difficulty</strong> (<em>{'any'</em><em>, </em><em>'simplest'</em><em>, </em><em>'hardest'}</em><em>, </em><em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The difficulty of the outlier points quantized according to scale. The value
+should be in the range <cite>[1, len(scale)]</cite> with lower difficulty denoting
+simpler outliers. If an array is given, multiple difficulties can be
+included, e.g., <cite>[1, 4]</cite> would mix easy and difficult outliers.</p>
 <ul>
 <li><p>if ‘any’ outliers are sampled from all scores</p></li>
 <li><p>if ‘simplest’ the simplest n_outliers are selected</p></li>
 <li><p>if ‘hardest’ the hardest n_outliers are selected</p></li>
 </ul>
 </p></li>
-<li><p><strong>scale</strong> (<em>array-like</em><em>, </em><em>optional</em>) – The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5]. Scores (which are probabilities
-in the range [0, 1]) are fit into the ranges using <code class="docutils literal notranslate"><span class="pre">np.digitize(difficulty,</span> <span class="pre">scale)</span></code>.</p></li>
+<li><p><strong>scale</strong> (<em>array-like</em><em>, </em><em>optional</em>) – The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5].
+Scores (which are probabilities in the range [0, 1]) are fit into the ranges
+using <code class="docutils literal notranslate"><span class="pre">np.digitize(difficulty,</span> <span class="pre">scale)</span></code>.</p></li>
 <li><p><strong>variation</strong> (<em>{'tight'</em><em>, </em><em>'dispersed'}</em><em>, </em><em>optional</em>) – <p>Selection procedure for sampling outlier samples</p>
 <ul>
-<li><p>if ‘tight’ a pivot point is selected and the <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> closest samples are selected according to
-their euclidean distance</p></li>
-<li><p>if ‘dispersed’ <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> points are selected according to a facility location algorithm such that
-they are distributed among the outliers.</p></li>
+<li><p>if ‘tight’ a pivot point is selected and the <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> closest samples
+are selected according to their euclidean distance</p></li>
+<li><p>if ‘dispersed’ <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> points are selected according to a facility
+location algorithm such that they are distributed among the outliers.</p></li>
 </ul>
 </p></li>
 <li><p><strong>random_state</strong> (<em>RandomState</em><em> or </em><em>int</em><em>, </em><em>optinal</em>) – A pseudo-random number generator to control the randomness of the algorithm.</p></li>
@@ -383,7 +393,7 @@ they are distributed among the outliers.</p></li>
 </dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.EmmottLabeler.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L487-L557"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L498-L568"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -396,11 +406,11 @@ they are distributed among the outliers.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.EmmottLabeler.fit_transform">
-<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L559-L568"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.fit_transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit_transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L570-L579"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.EmmottLabeler.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L570-L575"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L581-L586"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -498,7 +508,7 @@ they are distributed among the outliers.</p></li>
 </dd></dl>
 <dl class="py class">
 <dt id="wildboar.datasets.outlier.MajorityLabeler">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">MajorityLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L236-L294"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">MajorityLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L237-L295"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler" title="wildboar.datasets.outlier.OutlierLabeler"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.datasets.outlier.OutlierLabeler</span></code></a></p>
 <p>Labels the majority class as inliers</p>
 <dl class="py attribute">
@@ -522,7 +532,7 @@ they are distributed among the outliers.</p></li>
 </dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.MajorityLabeler.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L259-L265"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L260-L266"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -535,7 +545,7 @@ they are distributed among the outliers.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.MajorityLabeler.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L267-L294"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L268-L295"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -556,7 +566,7 @@ they are distributed among the outliers.</p></li>
 </dd></dl>
 <dl class="py class">
 <dt id="wildboar.datasets.outlier.MinorityLabeler">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">MinorityLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L297-L341"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></code><code class="sig-name descname"><span class="pre">MinorityLabeler</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L298-L342"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler" title="wildboar.datasets.outlier.OutlierLabeler"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.datasets.outlier.OutlierLabeler</span></code></a></p>
 <p>Labels the minority class as the outlier</p>
 <dl class="py attribute">
@@ -571,7 +581,7 @@ they are distributed among the outliers.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.MinorityLabeler.fit">
-<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L311-L315"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">fit</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L312-L316"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -584,7 +594,7 @@ they are distributed among the outliers.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt id="wildboar.datasets.outlier.MinorityLabeler.transform">
-<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L317-L341"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.transform" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">transform</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L318-L342"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -645,9 +655,9 @@ they are distributed among the outliers.</p></li>
 </dl>
 </dd></dl>
 </dd></dl>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
       </article>
       <footer>

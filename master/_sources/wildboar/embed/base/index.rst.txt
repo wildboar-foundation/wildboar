@@ -38,7 +38,7 @@ Classes
       Fit the embedding.
 
       :param x: The time series dataset.
-      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
       :param y: For compatibility.
       :type y: None, optional
 
@@ -51,7 +51,7 @@ Classes
       Fit the embedding and return the transform of x.
 
       :param x: The time series dataset.
-      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
       :param y: For compatibility.
       :type y: None, optional
 
@@ -64,7 +64,7 @@ Classes
       Transform the dataset.
 
       :param x: The time series dataset.
-      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep]
+      :type x: array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
 
       :returns: **x_embedding** -- The embedding.
       :rtype: ndarray of shape [n_samples, n_outputs]
