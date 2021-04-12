@@ -1,11 +1,9 @@
-import numpy as np
 import matplotlib.pylab as plt
-from sklearn.ensemble import RandomForestClassifier
+import numpy as np
 
-from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.datasets import load_dataset
+from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.explain.counterfactual import PrototypeCounterfactual
-from sklearn.neighbors import KNeighborsClassifier
 
 x_train, x_test, y_train, y_test = load_dataset(
     "TwoLeadECG", repository="wildboar/ucr", merge_train_test=False

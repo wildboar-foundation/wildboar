@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 
 from wildboar.datasets import load_dataset
-from wildboar.ensemble import ShapeletForestEmbedding, IsolationShapeletForest
+from wildboar.ensemble import IsolationShapeletForest, ShapeletForestEmbedding
 
 random_state = 1234
 

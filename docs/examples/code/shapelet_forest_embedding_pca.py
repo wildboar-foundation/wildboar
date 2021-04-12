@@ -1,7 +1,6 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.decomposition import PCA
-
 from sklearn.pipeline import make_pipeline
 
 from wildboar.datasets import load_dataset

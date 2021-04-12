@@ -1,11 +1,11 @@
-import numpy as np
 import matplotlib.pylab as plt
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 
-from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.datasets import load_dataset
+from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.explain.counterfactual import counterfactuals
 
 random_state = 1234

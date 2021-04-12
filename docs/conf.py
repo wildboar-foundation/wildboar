@@ -6,11 +6,10 @@
 
 # -- Path setup --------------------------------------------------------------
 
-from logging import log
 import os
 import sys
 
-SEM_VER_REGEX = "^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+SEM_VER_REGEX = r"^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"  # noqa E501
 
 from pkg_resources import get_distribution, parse_version
 
@@ -89,10 +88,11 @@ smv_tag_whitelist = None
 
 
 def setup(app):
-    import inspect
-    import re
-    import pathlib
     import importlib
+    import inspect
+    import pathlib
+    import re
+
     from sphinx.util.logging import getLogger
 
     logger = getLogger(__name__)

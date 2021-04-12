@@ -1,11 +1,10 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import cross_validate
-
-from wildboar.datasets import load_dataset, list_datasets
-from wildboar.ensemble import ShapeletForestClassifier, ExtraShapeletTreesClassifier
-from wildboar.distance.dtw import dtw_distance
 from sklearn.neighbors import KNeighborsClassifier
+
+from wildboar.datasets import list_datasets, load_dataset
+from wildboar.ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
 
 random_state = 1234
 classifiers = {

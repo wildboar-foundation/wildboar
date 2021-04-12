@@ -1,8 +1,8 @@
-import numpy as np
 import matplotlib.pylab as plt
+import numpy as np
 
-from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.datasets import load_dataset
+from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.explain.counterfactual import counterfactuals
 
 x_train, x_test, y_train, y_test = load_dataset(

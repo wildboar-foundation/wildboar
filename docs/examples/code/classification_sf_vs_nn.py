@@ -1,13 +1,12 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.decomposition import PCA
-from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import make_pipeline
 
 from wildboar.datasets import load_dataset
-from wildboar.ensemble import ShapeletForestEmbedding, ShapeletForestClassifier
+from wildboar.ensemble import ShapeletForestClassifier, ShapeletForestEmbedding
 
 random_state = 1234
 

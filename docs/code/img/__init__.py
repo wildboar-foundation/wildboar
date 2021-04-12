@@ -1,6 +1,9 @@
 import os
-from .tutorial import PLOT_DICT as TUTORIAL
+
 from .counterfactual import PLOT_DICT as COUNTERFACTUALS
+from .tutorial import PLOT_DICT as TUTORIAL
+
+__all__ = ["COUNTERFACTUALS", "TUTORIAL"]
 
 
 def build_all(output_path, plot_dict, subdir=None, output_ext=".png"):

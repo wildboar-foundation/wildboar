@@ -1,8 +1,7 @@
-import numpy as np
 import matplotlib.pylab as plt
-
-from sklearn.neighbors import KNeighborsClassifier
+import numpy as np
 from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
 
 from wildboar.datasets import load_two_lead_ecg
 from wildboar.ensemble import ShapeletForestClassifier

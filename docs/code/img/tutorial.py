@@ -1,4 +1,5 @@
 import matplotlib.pylab as plt
+
 from wildboar.datasets import load_synthetic_control
 
 

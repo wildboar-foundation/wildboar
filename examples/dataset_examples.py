@@ -1,11 +1,10 @@
-import numpy as np
 from wildboar.datasets import (
-    load_dataset,
+    list_bundles,
+    list_collections,
     list_datasets,
     list_repositories,
-    list_bundles,
+    load_dataset,
     load_datasets,
-    list_collections,
 )
 
 print(list_datasets(repository="wildboar/ucr:no-missing"))

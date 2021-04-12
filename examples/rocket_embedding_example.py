@@ -1,7 +1,8 @@
-from wildboar.embed import RocketEmbedding
-from wildboar.datasets import load_dataset
-from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import RidgeClassifierCV
+from sklearn.pipeline import make_pipeline
+
+from wildboar.datasets import load_dataset
+from wildboar.embed import RocketEmbedding
 
 x_train, x_test, y_train, y_test = load_dataset("GunPoint", merge_train_test=False)
 

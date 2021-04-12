@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_validate
 from sklearn.pipeline import make_pipeline

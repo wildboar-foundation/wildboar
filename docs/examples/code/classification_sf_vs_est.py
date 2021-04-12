@@ -1,8 +1,8 @@
 import numpy as np
-from sklearn.model_selection import cross_validate, StratifiedKFold
+from sklearn.model_selection import cross_validate
 
 from wildboar.datasets import load_dataset
-from wildboar.ensemble import ShapeletForestClassifier, ExtraShapeletTreesClassifier
+from wildboar.ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
 
 random_state = 1234
 

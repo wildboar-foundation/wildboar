@@ -1,7 +1,8 @@
 import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+
 from wildboar.datasets import load_dataset
 from wildboar.explain.counterfactual import counterfactuals
-from sklearn.neighbors import KNeighborsClassifier
 
 x_train, x_test, y_train, y_test = load_dataset(
     "GunPoint", repository="wildboar/ucr", merge_train_test=False
