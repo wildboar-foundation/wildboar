@@ -547,4 +547,4 @@ def list_repositories():
 
 
 # Install the default 'wildboar' repository
-install_repository("https://isaksamsten.github.io/wildboar-datasets/master/repo.json")
+install_repository("https://isaksamsten.github.io/wildboar-datasets/1.0/repo.json")
