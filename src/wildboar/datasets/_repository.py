@@ -429,14 +429,19 @@ def _validate_bundle_key(str):
         raise ValueError("bundle key (%s) is not valid" % str)
 
 
-def _validate_version(str):
+def _validate_version(str, *, max_version=None):
     if re.match(r"(^(?:\d+\.)?(?:\d+\.)?(?:\*|\d+)$)", str):
+        if max_version and parse_version(str) > parse_version(max_version):
+            raise ValueError("unsupported version (%s > %s)" % (str, max_version))
         return str
     else:
         raise ValueError("version (%s) is not valid" % str)
 
 
 class JSONRepository(Repository):
+
+    supported_version = "1.1"
+
     def __init__(self, url):
         self.repo_url = url
         self.__refresh()
@@ -467,7 +472,9 @@ class JSONRepository(Repository):
         json = requests.get(self.repo_url).json()
         self._wildboar_requires = json["wildboar_requires"]
         self._name = _validate_repository_name(json["name"])
-        self._version = _validate_version(json["version"])
+        self._version = _validate_version(
+            json["version"], max_version=JSONRepository.supported_version
+        )
         if parse_version(self.wildboar_requires) > parse_version(wildboar_version):
             raise ValueError(
                 "repository requires wildboar (>=%s), got %s",
@@ -482,7 +489,7 @@ class JSONRepository(Repository):
             name = bundle_json.get("name")
             if name is None:
                 raise ValueError("Bundle name is required (%s)" % key)
-            class_index = bundle_json.get("class_index")
+            label_index = bundle_json.get("label_index")
             description = bundle_json.get("description")
             collections = bundle_json.get("collections")
             bundles[bundle_json["key"]] = NpyBundle(
@@ -491,7 +498,7 @@ class JSONRepository(Repository):
                 name=name,
                 description=description,
                 collections=collections,
-                class_index=class_index,
+                label_index=label_index,
             )
 
         self._bundles = bundles
@@ -531,7 +538,7 @@ class Bundle(metaclass=ABCMeta):
     description : str
         Description of the bundle
 
-    class_index : int or array-like
+    label_index : int or array-like
         Index of the class label(s)
     """
 
@@ -543,7 +550,7 @@ class Bundle(metaclass=ABCMeta):
         name,
         description=None,
         collections=None,
-        class_index=-1,
+        label_index=-1,
     ):
         """Construct a bundle
 
@@ -561,7 +568,7 @@ class Bundle(metaclass=ABCMeta):
         description : str
             Description of the bundle
 
-        class_index : int or array-like
+        label_index : int or array-like
             Index of the class label(s)
         """
         self.key = key
@@ -569,7 +576,7 @@ class Bundle(metaclass=ABCMeta):
         self.name = name
         self.description = description
         self.collections = collections
-        self.class_index = class_index
+        self.label_index = label_index
 
     def get_filename(self, version=None, tag=None, ext=None):
         filename = "%s-v%s" % (self.key, version or self.version)
@@ -675,9 +682,9 @@ class Bundle(metaclass=ABCMeta):
             test = np.vstack(test_parts)
             data = np.vstack([data, test])
 
-        if self.class_index is not None:
-            y = data[:, self.class_index].astype(dtype)
-            x = np.delete(data, self.class_index, axis=1).astype(dtype)
+        if self.label_index is not None:
+            y = data[:, self.label_index].astype(dtype)
+            x = np.delete(data, self.label_index, axis=1).astype(dtype)
         else:
             x = data.astype(dtype)
             y = None
@@ -739,7 +746,7 @@ class ArffBundle(Bundle):
         name,
         description=None,
         collections=None,
-        class_index=-1,
+        label_index=-1,
         encoding="utf-8",
     ):
         super().__init__(
@@ -747,8 +754,8 @@ class ArffBundle(Bundle):
             version=version,
             name=name,
             description=description,
-            collection=collections,
-            class_index=class_index,
+            collections=collections,
+            label_index=label_index,
         )
         self.encoding = encoding
 

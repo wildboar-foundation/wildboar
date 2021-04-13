@@ -186,6 +186,9 @@ def load_datasets(
     repository : str
         The repository string
 
+    collection : str, optional
+        A collection of named datasets.
+
     progress : bool, optional
         If progress indicator is shown while downloading the repository.
 
@@ -388,8 +391,12 @@ def load_dataset(
 
         ret_val.append(preprocess(x[:n_train_samples]))
         ret_val.append(preprocess(x[n_train_samples:]))
-        ret_val.append(y[:n_train_samples])
-        ret_val.append(y[n_train_samples:])
+        if y is not None:
+            ret_val.append(y[:n_train_samples])
+            ret_val.append(y[n_train_samples:])
+        else:
+            ret_val.append(None)
+            ret_val.append(None)
 
     if contiguous:
         return [np.ascontiguousarray(x) for x in ret_val]
@@ -414,6 +421,9 @@ def list_datasets(
         The data repository
 
         - if str load a named bundle, format {repository}/{bundle}
+
+    collection : str, optional
+        A collection of named datasets.
 
     progress: bool, optional
         Show a progress bar while downloading a bundle.
