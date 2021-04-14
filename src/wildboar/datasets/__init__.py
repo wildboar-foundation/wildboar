@@ -585,4 +585,18 @@ def list_repositories():
 
 
 # Install the default 'wildboar' repository
-install_repository("https://isaksamsten.github.io/wildboar-datasets/1.1/repo.json")
+def _get_dataset_version():
+    from wildboar import __version__
+    from pkg_resources import parse_version
+
+    v = parse_version(__version__)
+    if v.is_prerelease:
+        return "master"
+    else:
+        return "%d.%d" % (v.major, v.minor)
+
+
+install_repository(
+    "https://isaksamsten.github.io/wildboar-datasets/%s/repo.json"
+    % _get_dataset_version()
+)
