@@ -21,6 +21,7 @@ Functions
    wildboar.distance.dtw.dtw_pairwise_distance
 
 
+
 .. function:: dtw_alignment(x, y, r=1.0, out=None)
 
    Compute the Dynamic time warping alignment matrix

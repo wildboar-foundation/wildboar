@@ -26,6 +26,7 @@ Functions
    wildboar.distance.matches
 
 
+
 .. function:: distance(x, y, *, dim=0, sample=None, metric='euclidean', metric_params=None, subsequence_distance=True, return_index=False)
 
    Computes the distance between x and the samples of y

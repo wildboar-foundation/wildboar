@@ -21,10 +21,11 @@ Classes
 
 
 
+
 .. class:: DensityLabeler(*, estimator=None, estimator_params=None)
 
 
-   Bases: :class:`wildboar.datasets.outlier.OutlierLabeler`
+   Bases: :py:obj:`OutlierLabeler`
 
    Density based clustering labeler
 
@@ -60,7 +61,7 @@ Classes
 .. class:: EmmottLabeler(n_outliers=None, *, confusion_estimator=None, difficulty_estimator=None, difficulty='simplest', scale=None, variation='tight', random_state=None)
 
 
-   Bases: :class:`wildboar.datasets.outlier.OutlierLabeler`
+   Bases: :py:obj:`OutlierLabeler`
 
    Create a synthetic outlier detection dataset from a labeled classification dataset
    using a method described by Emmott et.al. (2013).
@@ -176,7 +177,7 @@ Classes
 .. class:: KMeansLabeler(*, n_clusters=None, n_outliers=None, random_state=None)
 
 
-   Bases: :class:`wildboar.datasets.outlier.OutlierLabeler`
+   Bases: :py:obj:`OutlierLabeler`
 
    KMeans labeler that assign an outlier label to the most deviating cluster
 
@@ -233,7 +234,7 @@ Classes
 .. class:: MajorityLabeler(n_outliers=None, random_state=None)
 
 
-   Bases: :class:`wildboar.datasets.outlier.OutlierLabeler`
+   Bases: :py:obj:`OutlierLabeler`
 
    Labels the majority class as inliers
 
@@ -277,7 +278,7 @@ Classes
 .. class:: MinorityLabeler(n_outliers=None, random_state=None)
 
 
-   Bases: :class:`wildboar.datasets.outlier.OutlierLabeler`
+   Bases: :py:obj:`OutlierLabeler`
 
    Labels the minority class as the outlier
 

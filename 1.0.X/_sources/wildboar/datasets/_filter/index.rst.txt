@@ -21,6 +21,7 @@ Functions
    wildboar.datasets._filter.make_str_filter
 
 
+
 .. function:: make_dict_filter(filter)
 
    Make a new filter

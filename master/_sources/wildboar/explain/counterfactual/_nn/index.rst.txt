@@ -18,10 +18,11 @@ Classes
 
 
 
+
 .. class:: KNeighborsCounterfactual(random_state=None)
 
 
-   Bases: :class:`wildboar.explain.counterfactual.base.BaseCounterfactual`
+   Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
    Fit a counterfactual explainer to a k-nearest neighbors classifier
 

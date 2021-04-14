@@ -19,10 +19,11 @@ Classes
 
 
 
+
 .. class:: ExtraShapeletTreeClassifier(max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
 
-   Bases: :class:`wildboar.tree._tree.ShapeletTreeClassifier`
+   Bases: :py:obj:`ShapeletTreeClassifier`
 
    An extra shapelet tree classifier.
 
@@ -69,7 +70,7 @@ Classes
 .. class:: ExtraShapeletTreeRegressor(*, max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
 
-   Bases: :class:`wildboar.tree._tree.ShapeletTreeRegressor`
+   Bases: :py:obj:`ShapeletTreeRegressor`
 
    An extra shapelet tree regressor.
 
@@ -116,7 +117,7 @@ Classes
 .. class:: ShapeletTreeClassifier(max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.ClassifierMixin`, :class:`wildboar.tree._tree.BaseShapeletTree`
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree classifier.
 
@@ -229,7 +230,7 @@ Classes
 .. class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
 
-   Bases: :class:`sklearn.base.RegressorMixin`, :class:`wildboar.tree._tree.BaseShapeletTree`
+   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree regressor.
 

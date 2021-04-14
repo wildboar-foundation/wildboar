@@ -29,10 +29,11 @@ Classes
 
 
 
+
 .. class:: DynamicTimeWarpTransform(gamma, r=1.0)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.MetricTransform`
+   Bases: :py:obj:`MetricTransform`
 
    Transform a sample by moving it closer using the dtw alignment matrix
 
@@ -60,7 +61,7 @@ Classes
 .. class:: EuclideanTransform(gamma)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.MetricTransform`
+   Bases: :py:obj:`MetricTransform`
 
    Transform a sample by moving it closer in euclidean space
 
@@ -88,7 +89,7 @@ Classes
 .. class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
+   Bases: :py:obj:`PrototypeSampler`
 
    Sample a prototype among the samples closest to the current counterfactual
 
@@ -131,7 +132,7 @@ Classes
 .. class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
+   Bases: :py:obj:`PrototypeSampler`
 
    Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler
    such that prototype samples are sampled among the nearest neighbors of the
@@ -178,7 +179,7 @@ Classes
 .. class:: MetricTransform(gamma)
 
 
-   Bases: :class:`abc.ABC`
+   Bases: :py:obj:`abc.ABC`
 
    Move a time series towards a prototype
 
@@ -207,7 +208,7 @@ Classes
 .. class:: PredictEvaluator(estimator)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.TargetEvaluator`
+   Bases: :py:obj:`TargetEvaluator`
 
    Evaluate if a counterfactual is predicted as y
 
@@ -220,7 +221,7 @@ Classes
 .. class:: ProbabilityEvaluator(estimator, probability=0.5)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.TargetEvaluator`
+   Bases: :py:obj:`TargetEvaluator`
 
    Evaluate if the probability of a counterfactual is at least a given constant
 
@@ -235,7 +236,7 @@ Classes
 .. class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
 
 
-   Bases: :class:`wildboar.explain.counterfactual.base.BaseCounterfactual`
+   Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
    Model agnostic approach for constructing counterfactual explanations
 
@@ -347,7 +348,7 @@ Classes
 .. class:: PrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
 
-   Bases: :class:`abc.ABC`
+   Bases: :py:obj:`abc.ABC`
 
    Helper class that provides a standard way to create an ABC using
    inheritance.
@@ -405,7 +406,7 @@ Classes
 .. class:: ShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
+   Bases: :py:obj:`PrototypeSampler`
 
    Sample shapelet prototypes
 
@@ -464,7 +465,7 @@ Classes
 .. class:: TargetEvaluator(estimator)
 
 
-   Bases: :class:`abc.ABC`
+   Bases: :py:obj:`abc.ABC`
 
    Evaluate if a sample is a counterfactual
 
@@ -490,7 +491,7 @@ Classes
 .. class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
 
-   Bases: :class:`wildboar.explain.counterfactual._proto.PrototypeSampler`
+   Bases: :py:obj:`PrototypeSampler`
 
    Sample a prototype uniformly at random from the initial prototype sample
 

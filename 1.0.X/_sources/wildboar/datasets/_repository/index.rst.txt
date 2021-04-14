@@ -23,6 +23,15 @@ Classes
 
 
 
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets._repository.DEFAULT_TAG
+
+
 .. data:: DEFAULT_TAG
    :annotation: = default
 
@@ -31,7 +40,7 @@ Classes
 .. class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
 
 
-   Bases: :class:`wildboar.datasets._repository.Bundle`
+   Bases: :py:obj:`Bundle`
 
    bundle of .arff-files
 
@@ -119,7 +128,7 @@ Classes
 .. class:: JSONRepository(url)
 
 
-   Bases: :class:`wildboar.datasets._repository.Repository`
+   Bases: :py:obj:`Repository`
 
    A repository is a collection of bundles
 
@@ -176,7 +185,7 @@ Classes
 .. class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
 
 
-   Bases: :class:`wildboar.datasets._repository.Bundle`
+   Bases: :py:obj:`Bundle`
 
    bundle of numpy binary files
 
