@@ -2,6 +2,24 @@
 Embeddings
 ==========
 
+Rocket embedding
+================
+
+This example shows how PCA can be used to plot the resulting embedding
+
+.. literalinclude:: code/rocket_embedding_pca.py
+
+.. figure:: fig/rocket_pca.png
+
+Random Shapelet Embedding
+=========================
+
+This example shows how PCA can be used to plot the resulting embedding
+
+.. literalinclude:: code/random_shapelet_embedding_pca.py
+
+.. figure:: fig/rse_pca.png
+
 Shapelet forest embedding with LR
 =================================
 
