@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="wildboar" href="../wildboar/index.html" /><link rel="prev" title="Counterfactuals" href="counterfactuals.html" />
 
     <meta name="generator" content="sphinx-3.5.4, furo 2021.04.11.beta34"/>
-        <title>Embeddings - Wildboar 1.0.9.dev39+g1f3b134 documentation</title>
+        <title>Embeddings - Wildboar 1.1.0rc1 documentation</title>
       <link rel="stylesheet" href="../_static/styles/furo.css?digest=59ab60ac09ea94ccfe6deddff6d715cce948a6fc">
     <link rel="stylesheet" href="../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../_static/pygments_dark.css">
@@ -102,7 +102,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.0.9.dev39+g1f3b134 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc1 documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -117,7 +117,7 @@
     
     
     <span class="sidebar-brand-text">Wildboar
-        <small>1.0.9</small></span>
+        <small>1.1.0rc1</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../search.html">
   <input class="sidebar-search" placeholder=Search name="q">
@@ -184,7 +184,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><span class="reference internal">1.0.9</span></li>
+                <li class="toctree-l2"><span class="reference internal">1.1.0rc1</span></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../1.0.X/examples/embeddings.html">1.0.9</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../1.1.X/examples/embeddings.html">1.1.X</a></li>
             </ul>
@@ -203,6 +203,77 @@
         </label>
         <div class="section" id="embeddings">
 <h1>Embeddings<a class="headerlink" href="#embeddings" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="rocket-embedding">
+<h2>Rocket embedding<a class="headerlink" href="#rocket-embedding" title="Permalink to this headline">¶</a></h2>
+<p>This example shows how PCA can be used to plot the resulting embedding</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+
+<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">wildboar.embed</span> <span class="kn">import</span> <span class="n">RocketEmbedding</span>
+
+<span class="n">random_state</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"CBF"</span><span class="p">)</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+    <span class="n">RocketEmbedding</span><span class="p">(</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+
+<span class="n">labels</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">rainbow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Component 1 (</span><span class="si">%.2f</span><span class="s2"> variance explained)"</span> <span class="o">%</span> <span class="n">var</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Component 2 (</span><span class="si">%.2f</span><span class="s2"> variance explained)"</span> <span class="o">%</span> <span class="n">var</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"../fig/rocket_pca.png"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/rocket_pca.png" src="../_images/rocket_pca.png"/>
+</div>
+</div>
+<div class="section" id="random-shapelet-embedding">
+<h2>Random Shapelet Embedding<a class="headerlink" href="#random-shapelet-embedding" title="Permalink to this headline">¶</a></h2>
+<p>This example shows how PCA can be used to plot the resulting embedding</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+
+<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">wildboar.embed</span> <span class="kn">import</span> <span class="n">RandomShapeletEmbedding</span>
+
+<span class="n">random_state</span> <span class="o">=</span> <span class="mi">1234</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"CBF"</span><span class="p">)</span>
+
+<span class="n">pca</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+    <span class="n">RandomShapeletEmbedding</span><span class="p">(</span>
+        <span class="n">metric</span><span class="o">=</span><span class="s2">"scaled_euclidean"</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">steps</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+
+<span class="n">labels</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">rainbow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">p</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">p</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Component 1 (</span><span class="si">%.2f</span><span class="s2"> variance explained)"</span> <span class="o">%</span> <span class="n">var</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Component 2 (</span><span class="si">%.2f</span><span class="s2"> variance explained)"</span> <span class="o">%</span> <span class="n">var</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"../fig/rse_pca.png"</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/rse_pca.png" src="../_images/rse_pca.png"/>
+</div>
+</div>
 <div class="section" id="shapelet-forest-embedding-with-lr">
 <h2>Shapelet forest embedding with LR<a class="headerlink" href="#shapelet-forest-embedding-with-lr" title="Permalink to this headline">¶</a></h2>
 <p>This example shows how to compute a shapelet forest embedding for
@@ -338,6 +409,8 @@ to classify new samples</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Embeddings</a><ul>
+<li><a class="reference internal" href="#rocket-embedding">Rocket embedding</a></li>
+<li><a class="reference internal" href="#random-shapelet-embedding">Random Shapelet Embedding</a></li>
 <li><a class="reference internal" href="#shapelet-forest-embedding-with-lr">Shapelet forest embedding with LR</a></li>
 <li><a class="reference internal" href="#shapelet-forest-embedding-with-pca">Shapelet forest embedding with PCA</a></li>
 </ul>

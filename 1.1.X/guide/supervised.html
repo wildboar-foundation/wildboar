@@ -174,7 +174,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../master/guide/supervised.html">1.0.9</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../master/guide/supervised.html">1.1.0rc1</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../1.0.X/guide/supervised.html">1.0.9</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.1.X</span></li>
             </ul>
@@ -193,29 +193,28 @@
         </label>
         <div class="section" id="supervised-learning">
 <h1>Supervised learning<a class="headerlink" href="#supervised-learning" title="Permalink to this headline">¶</a></h1>
+<p>In supervised learning, we are given a collection of labeled time series and
+the goal is to produce an estimator that as accurately as possible can map
+previously unseen time series to the correct label.</p>
 <div class="section" id="shapelet-trees">
 <h2>Shapelet trees<a class="headerlink" href="#shapelet-trees" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="classification">
-<h3>Classification<a class="headerlink" href="#classification" title="Permalink to this headline">¶</a></h3>
+<p>For classification, wildboar includes two types of shapelet trees. Both trees are based
+on randomly sampling shapelets. <code class="docutils literal notranslate"><span class="pre">ShapeletTreeClassifier</span></code> samples shapelets
+randomly and <code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreeClassifier</span></code> also sample the distance threshold randomly.
+Both <code class="docutils literal notranslate"><span class="pre">ShapeletTreeRegressor</span></code> and <code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreeRegressor</span></code> are available.</p>
 </div>
-<div class="section" id="regression">
-<h3>Regression<a class="headerlink" href="#regression" title="Permalink to this headline">¶</a></h3>
-</div>
-</div>
-<div class="section" id="ensemble-methods">
-<h2>Ensemble methods<a class="headerlink" href="#ensemble-methods" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="shapelet-forest">
-<h3>Shapelet forest<a class="headerlink" href="#shapelet-forest" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="id1">
-<h4>Classification<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h2>Shapelet forest<a class="headerlink" href="#shapelet-forest" title="Permalink to this headline">¶</a></h2>
+<p>Shapelet forests, implemented in <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">ShapeletForestRegressor</span></code>,
+construct ensembles of shapelet tree classifiers or regressors respectively. For a large
+variety of tasks, these estimators are excellent baseline methods.</p>
 </div>
-<div class="section" id="id2">
-<h4>Regression<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
-</div>
-</div>
-<div class="section" id="extremely-randomized-shapelet-trees">
-<h3>Extremely randomized shapelet trees<a class="headerlink" href="#extremely-randomized-shapelet-trees" title="Permalink to this headline">¶</a></h3>
-</div>
+<div class="section" id="embedding-methods">
+<h2>Embedding methods<a class="headerlink" href="#embedding-methods" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">RocketClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">RocketRegressor</span></code> uses a random convolutional embdding
+to represent time series and fit a ridge regression model to the representation. For
+benchmark tasks, this embedding and estimator configuration often give state-of-the-art
+predictive performance.</p>
 </div>
 </div>
 
@@ -274,20 +273,9 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Supervised learning</a><ul>
-<li><a class="reference internal" href="#shapelet-trees">Shapelet trees</a><ul>
-<li><a class="reference internal" href="#classification">Classification</a></li>
-<li><a class="reference internal" href="#regression">Regression</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#ensemble-methods">Ensemble methods</a><ul>
-<li><a class="reference internal" href="#shapelet-forest">Shapelet forest</a><ul>
-<li><a class="reference internal" href="#id1">Classification</a></li>
-<li><a class="reference internal" href="#id2">Regression</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#extremely-randomized-shapelet-trees">Extremely randomized shapelet trees</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#shapelet-trees">Shapelet trees</a></li>
+<li><a class="reference internal" href="#shapelet-forest">Shapelet forest</a></li>
+<li><a class="reference internal" href="#embedding-methods">Embedding methods</a></li>
 </ul>
 </li>
 </ul>
