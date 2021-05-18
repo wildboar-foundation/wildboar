@@ -21,10 +21,9 @@ import re
 import numpy as np
 
 from ._repository import (
-    ArffBundle,
     Bundle,
     JSONRepository,
-    NpyBundle,
+    NpBundle,
     Repository,
     RepositoryCollection,
 )
@@ -35,8 +34,7 @@ __all__ = [
     "Repository",
     "JSONRepository",
     "Bundle",
-    "ArffBundle",
-    "NpyBundle",
+    "NpBundle",
     "set_cache_dir",
     "get_repository",
     "clear_cache",
@@ -271,7 +269,8 @@ def load_dataset(
     cache_dir=None,
     create_cache_dir=True,
     progress=True,
-    force=False
+    force=False,
+    return_extras=False
 ):
     """Load a dataset from a repository
 
@@ -361,7 +360,7 @@ def load_dataset(
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
     ret_val = []
-    x, y, n_train_samples = repository.load_dataset(
+    x, y, n_train_samples, extras = repository.load_dataset(
         bundle_name,
         name,
         version=bundle_version,
@@ -397,9 +396,16 @@ def load_dataset(
         else:
             ret_val.append(None)
             ret_val.append(None)
+    if return_extras:
+        ret_val.append(extras)
 
     if contiguous:
-        return [np.ascontiguousarray(x) for x in ret_val]
+        return [
+            np.ascontiguousarray(x)
+            if isinstance(x, np.ndarray)
+            else {k: np.ascontiguousarray(v) for k, v in extras.items()}
+            for x in ret_val
+        ]
     else:
         return ret_val
 

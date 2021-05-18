@@ -346,7 +346,7 @@ class Repository(metaclass=ABCMeta):
             progress=progress,
             force=force,
         ) as archive:
-            return bundle.load(dataset, archive, dtype=dtype)
+            return bundle.load(dataset, archive)
 
     def list_datasets(
         self,
@@ -489,16 +489,16 @@ class JSONRepository(Repository):
             name = bundle_json.get("name")
             if name is None:
                 raise ValueError("Bundle name is required (%s)" % key)
-            label_index = bundle_json.get("label_index")
+            arrays = bundle_json.get("arrays")
             description = bundle_json.get("description")
             collections = bundle_json.get("collections")
-            bundles[bundle_json["key"]] = NpyBundle(
+            bundles[bundle_json["key"]] = NpBundle(
                 key=key,
                 version=version,
                 name=name,
                 description=description,
                 collections=collections,
-                label_index=label_index,
+                arrays=arrays,
             )
 
         self._bundles = bundles
@@ -548,9 +548,9 @@ class Bundle(metaclass=ABCMeta):
         key,
         version,
         name,
+        arrays,
         description=None,
         collections=None,
-        label_index=-1,
     ):
         """Construct a bundle
 
@@ -568,15 +568,15 @@ class Bundle(metaclass=ABCMeta):
         description : str
             Description of the bundle
 
-        label_index : int or array-like
-            Index of the class label(s)
+        arrays : list
+            The arrays of the dataset
         """
         self.key = key
         self.version = version
         self.name = name
         self.description = description
         self.collections = collections
-        self.label_index = label_index
+        self.arrays = arrays
 
     def get_filename(self, version=None, tag=None, ext=None):
         filename = "%s-v%s" % (self.key, version or self.version)
@@ -630,8 +630,6 @@ class Bundle(metaclass=ABCMeta):
         self,
         name,
         archive,
-        *,
-        dtype=None,
     ):
         """Load a dataset from the bundle
 
@@ -643,9 +641,6 @@ class Bundle(metaclass=ABCMeta):
         archive : ZipFile
             The zip-file bundle
 
-        dtype : object, optional
-            Cast the data and label matrix to a specific type
-
         Returns
         -------
         x : ndarray
@@ -656,9 +651,12 @@ class Bundle(metaclass=ABCMeta):
 
         n_training_samples : int
             Number of samples that are for training. The value is <= x.shape[0]
+
+        extras : dict, optional
+            Extra numpy arrays
         """
-        dtype = dtype or np.float64
         datasets = []
+        arrays = self.arrays or ["x", "y"]
         for dataset in map(_Dataset, archive.filelist):
             if dataset.filename == name and self._is_dataset(dataset.path, dataset.ext):
                 datasets.append(dataset)
@@ -676,19 +674,39 @@ class Bundle(metaclass=ABCMeta):
             if dataset.part == "test"
         ]
 
-        data = np.vstack(train_parts)
-        n_train_samples = data.shape[0]
-        if test_parts:
-            test = np.vstack(test_parts)
-            data = np.vstack([data, test])
+        if isinstance(train_parts, list):
+            train_parts = [
+                {"x": train_part[:, :-1], "y": train_part[:, -1]}
+                for train_part in train_parts
+            ]
 
-        if self.label_index is not None:
-            y = data[:, self.label_index].astype(dtype)
-            x = np.delete(data, self.label_index, axis=1).astype(dtype)
-        else:
-            x = data.astype(dtype)
-            y = None
-        return x, y, n_train_samples
+        if isinstance(test_parts, list):
+            test_parts = [
+                {"x": test_part[:, :-1], "y": test_part[:, -1]}
+                for test_part in test_parts
+            ]
+
+        data = {}
+        for array in arrays:
+            data[array] = np.concatenate(
+                [train_part[array] for train_part in train_parts], axis=0
+            )
+
+        sizes = [data[array].shape[0] for array in arrays]
+        if max(sizes) != min(sizes):
+            raise ValueError("all arrays must have the same number of samples")
+
+        n_train_samples = sizes[0]
+        if test_parts:
+            for array in arrays:
+                full_data = [data[array]]
+                for test_part in test_parts:
+                    full_data.append(test_part[array])
+                data[array] = np.concatenate(full_data, axis=0)
+
+        x = data.pop("x")
+        y = data.pop("y")
+        return x, y, n_train_samples, data
 
     @abstractmethod
     def _is_dataset(self, file_name, ext):
@@ -735,45 +753,11 @@ class Bundle(metaclass=ABCMeta):
         pass
 
 
-class ArffBundle(Bundle):
-    """bundle of .arff-files"""
-
-    def __init__(
-        self,
-        *,
-        key,
-        version,
-        name,
-        description=None,
-        collections=None,
-        label_index=-1,
-        encoding="utf-8",
-    ):
-        super().__init__(
-            key=key,
-            version=version,
-            name=name,
-            description=description,
-            collections=collections,
-            label_index=label_index,
-        )
-        self.encoding = encoding
-
-    def _is_dataset(self, file_name, ext):
-        return ext == ".arff"
-
-    def _load_array(self, archive, file):
-        with io.TextIOWrapper(archive.open(file), encoding=self.encoding) as io_wrapper:
-            arff, _metadata = loadarff(io_wrapper)
-            arr = np.array(arff.tolist())
-            return arr
-
-
-class NpyBundle(Bundle):
+class NpBundle(Bundle):
     """bundle of numpy binary files"""
 
     def _is_dataset(self, file_name, ext):
-        return ext == ".npy"
+        return ext in [".npy", ".npz"]
 
     def _load_array(self, archive, file):
         return np.load(archive.open(file))
