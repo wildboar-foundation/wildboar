@@ -35,8 +35,8 @@ cdef class Tree:
     cdef Py_ssize_t _n_labels  # 1 for regression
 
     cdef Py_ssize_t _node_count
-    cdef int *_left
-    cdef int *_right
+    cdef Py_ssize_t *_left
+    cdef Py_ssize_t *_right
     cdef TSCopy ** _shapelets
     cdef double *_thresholds
     cdef double *_impurity
@@ -44,13 +44,13 @@ cdef class Tree:
     cdef double *_n_weighted_node_samples
     cdef Py_ssize_t *_n_node_samples
 
-    cdef int _increase_capacity(self) nogil except -1
+    cdef Py_ssize_t _increase_capacity(self) nogil except -1
 
-    cdef int add_leaf_node(self, int parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples) nogil
+    cdef Py_ssize_t add_leaf_node(self, Py_ssize_t parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples) nogil
 
     cdef void set_leaf_value(self, Py_ssize_t node_id, Py_ssize_t out_label, double out_value) nogil
 
-    cdef int add_branch_node(self, int parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples,
+    cdef Py_ssize_t add_branch_node(self, Py_ssize_t parent, bint is_left, Py_ssize_t n_node_samples, double n_weighted_node_samples,
                              TSCopy *shapelet, double threshold, double impurity) nogil
 
     cpdef np.ndarray predict(self, object X)
