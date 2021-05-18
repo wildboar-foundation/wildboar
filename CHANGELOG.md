@@ -1,6 +1,11 @@
 # Changelog
 
-## [Unreleased]
+## [v1.0.10]
+
+* Fix a serious issue in `tree._tree_builder.Tree` where platform dependent 
+  integer sizes were used (see #22).
+
+## [v1.0.9]
 
 ### Added
 
