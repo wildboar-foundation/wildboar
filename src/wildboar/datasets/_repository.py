@@ -548,7 +548,7 @@ class Bundle(metaclass=ABCMeta):
         key,
         version,
         name,
-        arrays,
+        arrays=None,
         description=None,
         collections=None,
     ):
@@ -576,7 +576,7 @@ class Bundle(metaclass=ABCMeta):
         self.name = name
         self.description = description
         self.collections = collections
-        self.arrays = arrays
+        self.arrays = arrays or ["x", "y"]
 
     def get_filename(self, version=None, tag=None, ext=None):
         filename = "%s-v%s" % (self.key, version or self.version)
@@ -656,7 +656,6 @@ class Bundle(metaclass=ABCMeta):
             Extra numpy arrays
         """
         datasets = []
-        arrays = self.arrays or ["x", "y"]
         for dataset in map(_Dataset, archive.filelist):
             if dataset.filename == name and self._is_dataset(dataset.path, dataset.ext):
                 datasets.append(dataset)
@@ -673,18 +672,6 @@ class Bundle(metaclass=ABCMeta):
             for dataset in datasets
             if dataset.part == "test"
         ]
-
-        if isinstance(train_parts, list):
-            train_parts = [
-                {"x": train_part[:, :-1], "y": train_part[:, -1]}
-                for train_part in train_parts
-            ]
-
-        if isinstance(test_parts, list):
-            test_parts = [
-                {"x": test_part[:, :-1], "y": test_part[:, -1]}
-                for test_part in test_parts
-            ]
 
         data = {}
         for array in arrays:
@@ -760,7 +747,17 @@ class NpBundle(Bundle):
         return ext in [".npy", ".npz"]
 
     def _load_array(self, archive, file):
-        return np.load(archive.open(file))
+        data = np.load(archive.open(file))
+
+        if isinstance(data, np.ndarray):
+            if "x" in self.arrays and "y" in self.arrays:
+                return {"x": data[:, :-1], "y": data[:, -1]}
+            elif "x" in self.arrays:
+                return {"x": data}
+            else:
+                raise ValueError("Can't infer arrays to export")
+        else:
+            return data
 
 
 class _Dataset:
