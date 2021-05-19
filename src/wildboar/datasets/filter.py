@@ -73,7 +73,7 @@ def make_filter(filter):
     if isinstance(filter, list):
         return make_list_filter(filter)
     elif isinstance(filter, dict):
-        return make_dict_filter(dict)
+        return make_dict_filter(filter)
     elif isinstance(filter, str):
         return make_str_filter(filter)
     else:
