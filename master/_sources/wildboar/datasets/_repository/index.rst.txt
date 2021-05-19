@@ -14,10 +14,9 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.datasets._repository.ArffBundle
    wildboar.datasets._repository.Bundle
    wildboar.datasets._repository.JSONRepository
-   wildboar.datasets._repository.NpyBundle
+   wildboar.datasets._repository.NpBundle
    wildboar.datasets._repository.Repository
    wildboar.datasets._repository.RepositoryCollection
 
@@ -37,28 +36,7 @@ Attributes
 
    
 
-.. class:: ArffBundle(*, key, version, name, description=None, collections=None, label_index=-1, encoding='utf-8')
-
-
-   Bases: :py:obj:`Bundle`
-
-   bundle of .arff-files
-
-   Construct a bundle
-
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param label_index: Index of the class label(s)
-   :type label_index: int or array-like
-
-
-.. class:: Bundle(*, key, version, name, description=None, collections=None, label_index=-1)
+.. class:: Bundle(*, key, version, name, arrays=None, description=None, collections=None)
 
 
    Base class for handling dataset bundles
@@ -91,8 +69,8 @@ Attributes
    :type name: str
    :param description: Description of the bundle
    :type description: str
-   :param label_index: Index of the class label(s)
-   :type label_index: int or array-like
+   :param arrays: The arrays of the dataset
+   :type arrays: list
 
    .. method:: get_collection(self, collection)
 
@@ -113,7 +91,7 @@ Attributes
       :rtype: list
 
 
-   .. method:: load(self, name, archive, *, dtype=None)
+   .. method:: load(self, name, archive)
 
       Load a dataset from the bundle
 
@@ -121,12 +99,11 @@ Attributes
       :type name: str
       :param archive: The zip-file bundle
       :type archive: ZipFile
-      :param dtype: Cast the data and label matrix to a specific type
-      :type dtype: object, optional
 
       :returns: * **x** (*ndarray*) -- Data samples
                 * **y** (*ndarray*) -- Data labels
                 * **n_training_samples** (*int*) -- Number of samples that are for training. The value is <= x.shape[0]
+                * **extras** (*dict, optional*) -- Extra numpy arrays
 
 
 
@@ -192,7 +169,7 @@ Attributes
 
 
 
-.. class:: NpyBundle(*, key, version, name, description=None, collections=None, label_index=-1)
+.. class:: NpBundle(*, key, version, name, arrays=None, description=None, collections=None)
 
 
    Bases: :py:obj:`Bundle`
@@ -209,8 +186,8 @@ Attributes
    :type name: str
    :param description: Description of the bundle
    :type description: str
-   :param label_index: Index of the class label(s)
-   :type label_index: int or array-like
+   :param arrays: The arrays of the dataset
+   :type arrays: list
 
 
 .. class:: Repository

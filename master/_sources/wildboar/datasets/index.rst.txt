@@ -23,10 +23,9 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.datasets.ArffBundle
    wildboar.datasets.Bundle
    wildboar.datasets.JSONRepository
-   wildboar.datasets.NpyBundle
+   wildboar.datasets.NpBundle
    wildboar.datasets.Repository
 
 
@@ -53,28 +52,7 @@ Functions
 
 
 
-.. class:: ArffBundle(*, key, version, name, description=None, collections=None, label_index=-1, encoding='utf-8')
-
-
-   Bases: :py:obj:`Bundle`
-
-   bundle of .arff-files
-
-   Construct a bundle
-
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param label_index: Index of the class label(s)
-   :type label_index: int or array-like
-
-
-.. class:: Bundle(*, key, version, name, description=None, collections=None, label_index=-1)
+.. class:: Bundle(*, key, version, name, arrays=None, description=None, collections=None)
 
 
    Base class for handling dataset bundles
@@ -107,8 +85,8 @@ Functions
    :type name: str
    :param description: Description of the bundle
    :type description: str
-   :param label_index: Index of the class label(s)
-   :type label_index: int or array-like
+   :param arrays: The arrays of the dataset
+   :type arrays: list
 
    .. method:: get_collection(self, collection)
 
@@ -129,7 +107,7 @@ Functions
       :rtype: list
 
 
-   .. method:: load(self, name, archive, *, dtype=None)
+   .. method:: load(self, name, archive)
 
       Load a dataset from the bundle
 
@@ -137,12 +115,11 @@ Functions
       :type name: str
       :param archive: The zip-file bundle
       :type archive: ZipFile
-      :param dtype: Cast the data and label matrix to a specific type
-      :type dtype: object, optional
 
       :returns: * **x** (*ndarray*) -- Data samples
                 * **y** (*ndarray*) -- Data labels
                 * **n_training_samples** (*int*) -- Number of samples that are for training. The value is <= x.shape[0]
+                * **extras** (*dict, optional*) -- Extra numpy arrays
 
 
 
@@ -208,7 +185,7 @@ Functions
 
 
 
-.. class:: NpyBundle(*, key, version, name, description=None, collections=None, label_index=-1)
+.. class:: NpBundle(*, key, version, name, arrays=None, description=None, collections=None)
 
 
    Bases: :py:obj:`Bundle`
@@ -225,8 +202,8 @@ Functions
    :type name: str
    :param description: Description of the bundle
    :type description: str
-   :param label_index: Index of the class label(s)
-   :type label_index: int or array-like
+   :param arrays: The arrays of the dataset
+   :type arrays: list
 
 
 .. class:: Repository
@@ -400,7 +377,7 @@ Functions
    List the key of all installed repositories
 
 
-.. function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, force=False)
+.. function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, force=False, return_extras=False)
 
    Load a dataset from a repository
 
