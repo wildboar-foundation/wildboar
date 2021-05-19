@@ -172,7 +172,7 @@ cdef class Tree:
 
     @property
     def n_node_samples(self):
-        cdef np.ndarray arr = np.zeros(self._node_count, dtype=int)
+        cdef np.ndarray arr = np.zeros(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._n_node_samples[i]
@@ -188,7 +188,7 @@ cdef class Tree:
 
     @property
     def left(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=int)
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._left[i]
@@ -196,7 +196,7 @@ cdef class Tree:
 
     @property
     def right(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=int)
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._right[i]
@@ -231,10 +231,10 @@ cdef class Tree:
 
         cdef TSDatabase ts = ts_database_new(X)
         cdef np.ndarray[np.npy_intp] out = np.zeros((ts.n_samples,), dtype=np.intp)
-        cdef long *out_data = <long*> out.data
+        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
         cdef Feature *feature
         cdef double threshold, feature_value
-        cdef int node_index
+        cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         with nogil:
             for i in range(ts.n_samples):
@@ -249,7 +249,7 @@ cdef class Tree:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
-                out_data[i] = <long> node_index
+                out_data[i] = <Py_ssize_t> node_index
         return out
 
     cpdef np.ndarray decision_path(self, object X):
@@ -258,7 +258,7 @@ cdef class Tree:
         cdef TSDatabase ts = ts_database_new(X)
         cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
 
-        cdef long *out_data = <long*> out.data
+        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
         cdef Py_ssize_t i_stride = <Py_ssize_t> out.strides[0] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t n_stride = <Py_ssize_t> out.strides[1] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t node_index
@@ -554,7 +554,7 @@ cdef class TreeBuilder:
     def tree_(self):
         return self.tree
 
-    cpdef int build_tree(self):
+    cpdef Py_ssize_t build_tree(self):
         cdef Py_ssize_t root_node_id
         cdef Py_ssize_t max_depth = 0
         with nogil:
@@ -566,7 +566,7 @@ cdef class TreeBuilder:
         self,
         Py_ssize_t start,
         Py_ssize_t end,
-        int parent,
+        Py_ssize_t parent,
         bint is_left,
     ) nogil:
         pass
@@ -577,7 +577,7 @@ cdef class TreeBuilder:
         Py_ssize_t end,
         SplitPoint sp,
         Feature *persistent_feature,
-        int parent,
+        Py_ssize_t parent,
         bint is_left,
     ) nogil:
         cdef Py_ssize_t node_id
@@ -616,7 +616,7 @@ cdef class TreeBuilder:
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t depth,
-        int parent,
+        Py_ssize_t parent,
         bint is_left,
         Py_ssize_t *max_depth,
     ) nogil:
@@ -837,7 +837,7 @@ cdef class ClassificationTreeBuilder(TreeBuilder):
         self,
         Py_ssize_t start,
         Py_ssize_t end,
-        int parent,
+        Py_ssize_t parent,
         bint is_left,
     ) nogil:
         cdef Py_ssize_t node_id
@@ -1009,7 +1009,7 @@ cdef class RegressionTreeBuilder(TreeBuilder):
         self,
         Py_ssize_t start,
         Py_ssize_t end,
-        int parent,
+        Py_ssize_t parent,
         bint is_left,
     ) nogil:
         cdef double leaf_sum = 0
