@@ -24,7 +24,6 @@ __all__ = [
     "make_str_filter",
     "make_list_filter",
     "make_filter",
-    "named_filter",
 ]
 
 
@@ -56,20 +55,6 @@ def __new_composite_filter(filters):
         return True
 
     return f
-
-
-__BAKE_OFF = {"GunPoint"}  # TODO: add rest
-
-
-def _bake_off_filter(dataset, x, y):
-    return dataset in __BAKE_OFF
-
-
-__NAMED_FILTERS = {"bake-off": _bake_off_filter}
-
-
-def named_filter(name):
-    return __NAMED_FILTERS[name]
 
 
 def make_filter(filter):
