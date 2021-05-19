@@ -674,18 +674,18 @@ class Bundle(metaclass=ABCMeta):
         ]
 
         data = {}
-        for array in arrays:
+        for array in self.arrays:
             data[array] = np.concatenate(
                 [train_part[array] for train_part in train_parts], axis=0
             )
 
-        sizes = [data[array].shape[0] for array in arrays]
+        sizes = [data[array].shape[0] for array in self.arrays]
         if max(sizes) != min(sizes):
             raise ValueError("all arrays must have the same number of samples")
 
         n_train_samples = sizes[0]
         if test_parts:
-            for array in arrays:
+            for array in self.arrays:
                 full_data = [data[array]]
                 for test_part in test_parts:
                     full_data.append(test_part[array])
