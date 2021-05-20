@@ -119,7 +119,7 @@ class RocketClassifier(EmbeddingRidgeClassifierCV):
 class RocketRegressor(EmbeddingRidgeCV):
     def __init__(
         self,
-        n_kernels=None,
+        n_kernels=10000,
         *,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
