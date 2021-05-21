@@ -38,6 +38,164 @@ from .._utils cimport (
 )
 from ..embed._feature cimport Feature, FeatureEngineer
 
+cdef double FEATURE_THRESHOLD = 1e-7
+
+cdef class Criterion:
+
+    cdef void init(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t *samples,
+        double *sample_weights,
+    ) nogil:
+        pass
+
+    cdef void update(
+        self,
+        Py_ssize_t pos,
+        Py_ssize_t new_pos,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t *samples,
+        double *sample_weights,
+    ) nogil:
+        pass
+
+    cdef double proxy_impurity(self) nogil:
+        pass
+
+    cdef double impurity(self) nogil:
+        pass
+
+    cdef void child_impurity(
+        self,
+        Py_ssize_t pos,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        double* left,
+        double *right
+    ) nogil:
+        pass
+
+cdef class RegressionCriterion(Criterion):
+    cdef double sum_left
+    cdef double sum_right
+    cdef double sum_total
+    cdef double sum_sq_total
+    cdef double weighted_n_left
+    cdef double weighted_n_right
+    cdef double weighted_n_total
+    cdef double *labels
+    cdef Py_ssize_t label_stride
+
+    def __cinit__(self, np.ndarray y):
+        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
+        self.labels = <double*> y.data
+
+        self.sum_left = 0
+        self.sum_right = 0
+        self.sum_total = 0
+        self.sum_sq_total = 0
+        self.weighted_n_left = 0
+        self.weighted_n_right = 0
+        self.weighted_n_total = 0
+
+    cdef void init(
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t *samples,
+        double *sample_weights,
+    ) nogil:
+        self.sum_left = 0
+        self.sum_right = 0
+        self.sum_total = 0
+        self.sum_sq_total = 0
+        self.weighted_n_left = 0
+        self.weighted_n_right = 0
+        self.weighted_n_total = 0
+
+        cdef Py_ssize_t i, j, p
+        cdef double x
+        cdef double w = 1.0
+
+        for i in range(start, end):
+            j = samples[i]
+            p = j * self.label_stride
+            if sample_weights != NULL:
+                w = sample_weights[j]
+
+            x = w * self.labels[p]
+            self.sum_total += x
+            self.sum_sq_total += x * x
+            self.weighted_n_total += w
+
+        self.weighted_n_right = self.weighted_n_total
+
+    cdef void update(
+        self,
+        Py_ssize_t pos,
+        Py_ssize_t new_pos,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t *samples,
+        double *sample_weights,
+    ) nogil:
+        cdef Py_ssize_t i
+        cdef Py_ssize_t j
+        cdef Py_ssize_t p
+        cdef double w = 1.0
+        for i in range(pos, new_pos):
+            j = samples[i]
+            p = j * self.label_stride
+
+            if sample_weights != NULL:
+                w = sample_weights[j]
+
+            self.sum_left += w * self.labels[p]
+            self.weighted_n_left += w
+
+        self.weighted_n_right = self.weighted_n_total - self.weighted_n_left
+        self.sum_right = self.sum_total - self.sum_left
+
+    cdef double proxy_impurity(self) nogil:
+        pass
+
+    cdef double impurity(self) nogil:
+        pass
+
+    cdef void child_impurity(
+        self,
+        Py_ssize_t pos,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        double* left,
+        double *right
+    ) nogil:
+        pass
+
+cdef class MSECriterion(RegressionCriterion):
+
+    cdef double proxy_impurity(self) nogil:
+        cdef double proxy_impurity_left = self.sum_left * self.sum_left
+        cdef double proxy_impurity_right = self.sum_right * self.sum_right
+        return -(proxy_impurity_left / self.weighted_n_left +
+                 proxy_impurity_right / self.weighted_n_right)
+
+    cdef double impurity(self) nogil:
+        return (self.sum_sq_total / self.weighted_n_total -
+                (self.sum_total / self.weighted_n_total) ** 2)
+
+    cdef void child_impurity(
+        self,
+        Py_ssize_t pos,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        double* left,
+        double *right
+    ) nogil:
+        pass
 
 cpdef Tree _make_tree(
     FeatureEngineer feature_engineer,
@@ -677,8 +835,7 @@ cdef class TreeBuilder:
             )
             return current_node_id
         else:
-            with gil:
-                print("warn: split point outside allowed range. This is a bug. Please report me.")
+            # Only constant features
             return self.new_leaf_node(start, end, parent, is_left)
 
     cdef SplitPoint _split(self, Py_ssize_t start, Py_ssize_t end) nogil:
@@ -726,8 +883,12 @@ cdef class TreeBuilder:
                 self.feature_buffer + start,
             )
             argsort(self.feature_buffer + start, self.samples + start, n_samples)
-            self._partition_feature_buffer(
-                start, end, &split_point, &threshold, &impurity)
+
+            # Constant feature
+            if self.feature_buffer[end - 1] <= self.feature_buffer[start] + FEATURE_THRESHOLD:
+                continue
+
+            self._partition_feature_buffer(start, end, &split_point, &threshold, &impurity)
             if impurity < best_impurity:
                 # store the order of samples in `sample_buffer`
                 memcpy(
@@ -969,8 +1130,13 @@ cdef class ClassificationTreeBuilder(TreeBuilder):
 cdef class RegressionTreeBuilder(TreeBuilder):
     # the (strided) array of labels
     cdef double *labels
-    cdef RollingVariance right
-    cdef RollingVariance left
+    cdef double sum_left
+    cdef double sum_right
+    cdef double sum_total
+    cdef double sum_sq_total
+    cdef double weighted_n_left
+    cdef double weighted_n_right
+    cdef Criterion criterion
 
     def __cinit__(
         self,
@@ -983,10 +1149,9 @@ cdef class RegressionTreeBuilder(TreeBuilder):
         *args,
         **kwargs,
     ):
+        self.criterion = MSECriterion(y)
         self.labels = <double*> y.data
         self.tree = Tree(self.feature_engineer, 1) # TODO
-        self.left = RollingVariance()
-        self.right = RollingVariance()
 
     cdef bint _is_pre_pruned(self, Py_ssize_t start, Py_ssize_t end) nogil:
         cdef Py_ssize_t j
@@ -1034,87 +1199,59 @@ cdef class RegressionTreeBuilder(TreeBuilder):
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *split_point,
-        double *threshold,
-        double *impurity,
+        double *best_threshold,
+        double *best_impurity,
     ) nogil:
-        """Partitions the feature buffer into two binary partitions
-        such that the sum of label variance in the two partitions is
-        minimized.
-       
-        The implementation uses an efficient one-pass algorithm [1]
-        for computing the variance of the two partitions and finding
-        the optimal split point
-        
-        References
-        ----------
-        West, D. H. D. (1979). 
-            Updating Mean and Variance Estimates: An Improved Method
-        """
         cdef Py_ssize_t i  # real index of samples (in `range(start, end)`)
         cdef Py_ssize_t j  # sample index (in `samples`)
         cdef Py_ssize_t p  # label index (in `labels`)
+        cdef Py_ssize_t pos
+        cdef Py_ssize_t new_pos
+        cdef double impurity
 
-        cdef double prev_feature
 
-        cdef double current_sample_weight
-        cdef double current_feature
-        cdef double current_impurity
-        cdef double current_val
+        self.criterion.init(
+            start,
+            end,
+            self.samples,
+            self.sample_weights,
+        )
 
-        j = self.samples[start]
-        p = j * self.label_stride
+        pos = start
+        i = start
+        while i < end:
+            while i + 1 < end and (
+                self.feature_buffer[i + 1]
+                <= self.feature_buffer[i] + FEATURE_THRESHOLD
+            ):
+                i += 1
 
-        prev_feature = self.feature_buffer[start]
-        current_val = self.labels[p]
+            i += 1
+            if i < end:
+                new_pos = i
+                self.criterion.update(
+                    pos,
+                    new_pos,
+                    start,
+                    end,
+                    self.samples,
+                    self.sample_weights,
+                )
+                pos = new_pos
+                impurity = self.criterion.proxy_impurity()
+                if impurity <= best_impurity[0]:
+                    best_impurity[0] = impurity
+                    best_threshold[0] = (
+                        self.feature_buffer[i - 1] / 2.0 + self.feature_buffer[i] / 2.0
+                    )
+                    split_point[0] = pos
 
-        if self.sample_weights != NULL:
-            current_sample_weight = self.sample_weights[j]
-        else:
-            current_sample_weight = 1.0
-
-        self.left._reset()
-        self.right._reset()
-        self.left._add(current_sample_weight, current_val)
-
-        for i in range(start + 1, end):
-            j = self.samples[i]
-            p = j * self.label_stride
-            if self.sample_weights != NULL:
-                current_sample_weight = self.sample_weights[j]
-            else:
-                current_sample_weight = 1.0
-
-            current_val = self.labels[p]
-            self.right._add(current_sample_weight, current_val)
-
-        impurity[0] = self.left._variance() + self.right._variance()
-        threshold[0] = prev_feature
-        split_point[0] = start + 1  # The split point indicates a <=-relation
-
-        for i in range(start + 1, end - 1):
-            j = self.samples[i]
-            p = j * self.label_stride
-
-            current_feature = self.feature_buffer[i]
-
-            if self.sample_weights != NULL:
-                current_sample_weight = self.sample_weights[j]
-            else:
-                current_sample_weight = 1.0
-
-            # Move variance from the right-hand side to the left-hand
-            # and reevaluate the impurity
-            current_val = self.labels[p]
-            self.right._remove(current_sample_weight, current_val)
-            self.left._add(current_sample_weight, current_val)
-
-            current_impurity = self.left._variance() + self.right._variance()
-            if current_impurity <= impurity[0]:
-                impurity[0] = current_impurity
-                threshold[0] = (current_feature + prev_feature) / 2
-                split_point[0] = i
-
-            prev_feature = current_feature
+                    if (
+                        best_threshold[0] == self.feature_buffer[i]
+                        or best_threshold[0] == INFINITY
+                        or best_threshold[0] == -INFINITY
+                    ):
+                        best_threshold[0] = self.feature_buffer[i - 1]
 
 
 cdef class ExtraRegressionTreeBuilder(RegressionTreeBuilder):
@@ -1124,8 +1261,8 @@ cdef class ExtraRegressionTreeBuilder(RegressionTreeBuilder):
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *split_point,
-        double *threshold,
-        double *impurity,
+        double *best_threshold,
+        double *best_impurity,
     ) nogil:
         # The smallest feature is always 0
         cdef double min_feature = self.feature_buffer[start + 1]
@@ -1140,9 +1277,9 @@ cdef class ExtraRegressionTreeBuilder(RegressionTreeBuilder):
                 split_point[0] = i
             else:
                 break
-        threshold[0] = rand_threshold
+        best_threshold[0] = rand_threshold
         # TODO: compute impurity scoring
-        impurity[0] = 0
+        best_impurity[0] = 0
 
 
 cdef class ExtraClassificationTreeBuilder(ClassificationTreeBuilder):
