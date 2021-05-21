@@ -244,6 +244,9 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
 class Repository(metaclass=ABCMeta):
     """A repository is a collection of bundles"""
 
+    def __init__(self):
+        self._active = False
+
     @property
     @abstractmethod
     def name(self):
@@ -297,6 +300,10 @@ class Repository(metaclass=ABCMeta):
         dict : a dictionary of key and bundle
         """
         pass
+
+    @property
+    def active(self):
+        return self._active
 
     def get_bundle(self, key):
         """Get a bundle with the specified key
@@ -400,8 +407,16 @@ class Repository(metaclass=ABCMeta):
             ):
                 os.remove(full_path)
 
-    def refresh(self):
+    def refresh(self, timeout=None):
         """Refresh the repository"""
+        try:
+            self._refresh(timeout)
+            self._active = True
+        except:
+            self._active = False
+
+    @abstractmethod
+    def _refresh(self, timeout):
         pass
 
 
@@ -443,8 +458,8 @@ class JSONRepository(Repository):
     supported_version = "1.1"
 
     def __init__(self, url):
+        super().__init__()
         self.repo_url = url
-        self.__refresh()
 
     @property
     def wildboar_requires(self):
@@ -465,11 +480,8 @@ class JSONRepository(Repository):
     def get_bundles(self):
         return self._bundles
 
-    def refresh(self):
-        self.__refresh()
-
-    def __refresh(self):
-        json = requests.get(self.repo_url).json()
+    def _refresh(self, timeout):
+        json = requests.get(self.repo_url, timeout=timeout).json()
         self._wildboar_requires = json["wildboar_requires"]
         self._name = _validate_repository_name(json["name"])
         self._version = _validate_version(
@@ -506,24 +518,69 @@ class JSONRepository(Repository):
 
 class RepositoryCollection:
     def __init__(self):
+        self.pending_repositories = []
         self.repositories = []
 
-    def __getitem__(self, item):
-        return next(
-            (repository for repository in self.repositories if repository.name == item),
+    def __getitem__(self, key):
+        repository = next(
+            (repository for repository in self.repositories if repository.name == key),
             None,
         )
 
+        if repository is None:
+            if self.pending_repositories:
+                raise ValueError(
+                    "repository (%s) does not exist, but %d repositories have not been refreshed yet."
+                    % (key, len(self.pending_repositories))
+                )
+            else:
+                raise ValueError("repository (%s) does not exist" % key)
+
+        return repository
+
+    def __delitem__(self, key):
+        self.repositories = [
+            repository for repository in self.repositories if repository.name != key
+        ]
+
     def __contains__(self, item):
-        return any(r for r in self.repositories if r.name == item)
+        return any(
+            repository for repository in self.repositories if repository.name == item
+        )
 
     def __iter__(self):
         return iter(self.repositories)
 
-    def append(self, item):
-        if self[item]:
-            raise ValueError("cannot overwrite repository, %s" % item.name)
-        self.repositories.append(item)
+    def __len__(self):
+        return len(self.repositories)
+
+    def refresh(self, repository=None, timeout=None):
+        if repository is None:
+            for repository in self.repositories:
+                repository.refresh(timeout)
+
+            for repository in self.pending_repositories:
+                repository.refresh(timeout)
+                if repository.active:
+                    self.repositories.append(repository)
+
+            self.pending_repositories = [
+                repository
+                for repository in self.pending_repositories
+                if not repository.active
+            ]
+        else:
+            repository = self[repository]
+            repository.refresh(timeout)
+
+    def append(self, repository, refresh=True, timeout=None):
+        if refresh:
+            repository.refresh(timeout)
+
+        if repository.active:
+            self.repositories.append(repository)
+        else:
+            self.pending_repositories.append(repository)
 
 
 class Bundle(metaclass=ABCMeta):

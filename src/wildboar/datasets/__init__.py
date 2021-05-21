@@ -39,6 +39,7 @@ __all__ = [
     "get_repository",
     "clear_cache",
     "list_repositories",
+    "refresh_repositories",
     "list_bundles",
     "get_bundles",
     "install_repository",
@@ -507,23 +508,31 @@ def get_repository(repository):
     repository : Repository
         A repository
     """
-    if repository in _REPOSITORIES:
-        return _REPOSITORIES[repository]
-    else:
-        raise ValueError("repository (%s) does not exist" % repository)
+    return _REPOSITORIES[repository]
 
 
-def install_repository(repository):
+def install_repository(repository, refresh=True, timeout=None):
     """Install repository
 
     Parameters
     ----------
     repository : str or Repository
         A repository
+
+    refresh : bool, optional
+        Refresh the repository
+
+    timeout : float, optional
+        Timeout for json request
     """
     if isinstance(repository, str):
         repository = JSONRepository(repository)
-    _REPOSITORIES.append(repository)
+    _REPOSITORIES.append(repository, refresh=refresh, timeout=timeout)
+
+
+def refresh_repositories(repository=None, timeout=None):
+    """Refresh the installed repositories=None"""
+    _REPOSITORIES.refresh(repository=repository, timeout=timeout)
 
 
 def get_bundles(repository):
@@ -604,5 +613,8 @@ def _get_dataset_version():
 
 install_repository(
     "https://isaksamsten.github.io/wildboar-datasets/%s/repo.json"
-    % _get_dataset_version()
+    % _get_dataset_version(),
+    refresh=False,
 )
+
+refresh_repositories(timeout=1)
