@@ -236,7 +236,11 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         if rand_uniform(0, 1, seed) < self.bias_prob:
             rocket.bias = rand_uniform(-1, 1, seed)
 
-        transient.dim = 1
+        if td.n_dims > 1:
+            transient.dim = rand_int(0, td.n_dims, seed)
+        else:
+            transient.dim = 1
+
         transient.feature = rocket
         return 0
 
