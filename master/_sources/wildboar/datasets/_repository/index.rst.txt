@@ -145,11 +145,6 @@ Attributes
       :rtype: the name of the repository
 
 
-   .. method:: refresh(self)
-
-      Refresh the repository
-
-
    .. method:: version(self)
       :property:
 
@@ -192,7 +187,12 @@ Attributes
 
 .. class:: Repository
 
+
    A repository is a collection of bundles
+
+   .. method:: active(self)
+      :property:
+
 
    .. method:: clear_cache(self, cache_dir, keep_last_version=True)
 
@@ -241,7 +241,7 @@ Attributes
       :rtype: the name of the repository
 
 
-   .. method:: refresh(self)
+   .. method:: refresh(self, timeout=None)
 
       Refresh the repository
 
@@ -271,13 +271,22 @@ Attributes
    .. method:: __contains__(self, item)
 
 
-   .. method:: __getitem__(self, item)
+   .. method:: __delitem__(self, key)
+
+
+   .. method:: __getitem__(self, key)
 
 
    .. method:: __iter__(self)
 
 
-   .. method:: append(self, item)
+   .. method:: __len__(self)
+
+
+   .. method:: append(self, repository, refresh=True, timeout=None)
+
+
+   .. method:: refresh(self, repository=None, timeout=None)
 
 
 

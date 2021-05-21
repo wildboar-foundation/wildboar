@@ -28,7 +28,7 @@ Classes
    Mixin class for all classifiers in scikit-learn.
 
 
-.. class:: RocketRegressor(n_kernels=None, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
+.. class:: RocketRegressor(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
 
 
    Bases: :py:obj:`wildboar.linear_model._embed.EmbeddingRidgeCV`

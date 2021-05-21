@@ -17,7 +17,6 @@ Functions
    wildboar.datasets.filter.make_filter
    wildboar.datasets.filter.make_list_filter
    wildboar.datasets.filter.make_str_filter
-   wildboar.datasets.filter.named_filter
 
 
 
@@ -63,8 +62,5 @@ Functions
 
    :returns: The filter function
    :rtype: function
-
-
-.. function:: named_filter(name)
 
 

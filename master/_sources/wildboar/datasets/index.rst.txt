@@ -48,6 +48,7 @@ Functions
    wildboar.datasets.load_gun_point
    wildboar.datasets.load_synthetic_control
    wildboar.datasets.load_two_lead_ecg
+   wildboar.datasets.refresh_repositories
    wildboar.datasets.set_cache_dir
 
 
@@ -161,11 +162,6 @@ Functions
       :rtype: the name of the repository
 
 
-   .. method:: refresh(self)
-
-      Refresh the repository
-
-
    .. method:: version(self)
       :property:
 
@@ -208,7 +204,12 @@ Functions
 
 .. class:: Repository
 
+
    A repository is a collection of bundles
+
+   .. method:: active(self)
+      :property:
+
 
    .. method:: clear_cache(self, cache_dir, keep_last_version=True)
 
@@ -257,7 +258,7 @@ Functions
       :rtype: the name of the repository
 
 
-   .. method:: refresh(self)
+   .. method:: refresh(self, timeout=None)
 
       Refresh the repository
 
@@ -317,12 +318,16 @@ Functions
    :rtype: Repository
 
 
-.. function:: install_repository(repository)
+.. function:: install_repository(repository, refresh=True, timeout=None)
 
    Install repository
 
    :param repository: A repository
    :type repository: str or Repository
+   :param refresh: Refresh the repository
+   :type refresh: bool, optional
+   :param timeout: Timeout for json request
+   :type timeout: float, optional
 
 
 .. function:: list_bundles(repository)
@@ -511,6 +516,11 @@ Functions
 
       :obj:`load_dataset`
           load a named dataset
+
+
+.. function:: refresh_repositories(repository=None, timeout=None)
+
+   Refresh the installed repositories=None
 
 
 .. function:: set_cache_dir(cache_dir)
