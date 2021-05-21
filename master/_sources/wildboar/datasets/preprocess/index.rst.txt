@@ -26,9 +26,9 @@ Functions
    Standardize x (along the time dimension) to have zero mean and unit standard deviation
 
    :param x: The dataset
-   :type x: ndarray of shape (n_samples, n_timestep)
+   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
 
    :returns: **x** -- The standardized dataset
-   :rtype: ndarray of shape (n_samples, n_timestep)
+   :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
 
 
