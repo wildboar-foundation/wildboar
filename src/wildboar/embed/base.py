@@ -14,6 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+import numpy as np
 from abc import ABCMeta, abstractmethod
 
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -88,7 +89,9 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
             The embedding.
         """
         check_is_fitted(self, attributes="embedding_")
-        x = check_array(x)
+        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
+        if x.ndim < 2 or x.ndim > 3:
+            raise ValueError("illegal input dimensions")
         return feature_embedding_transform(self.embedding_, x, self.n_jobs)
 
     def fit_transform(self, x, y=None):
@@ -107,7 +110,10 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         x_embedding : ndarray of shape [n_samples, n_outputs]
             The embedding.
         """
-        x = check_array(x)
+        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
+        if x.ndim < 2 or x.ndim > 3:
+            raise ValueError("illegal input dimensions")
+
         random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
         embedding, x_out = feature_embedding_fit_transform(
