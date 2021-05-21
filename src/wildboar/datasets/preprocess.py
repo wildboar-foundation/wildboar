@@ -29,12 +29,12 @@ def standardize(x):
 
     Parameters
     ----------
-    x : ndarray of shape (n_samples, n_timestep)
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The dataset
 
     Returns
     -------
-    x : ndarray of shape (n_samples, n_timestep)
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The standardized dataset
     """
-    return (x - np.mean(x, axis=1, keepdims=True)) / np.std(x, axis=1, keepdims=True)
+    return (x - np.mean(x, axis=-1, keepdims=True)) / np.std(x, axis=-1, keepdims=True)
