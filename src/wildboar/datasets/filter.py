@@ -28,10 +28,8 @@ __all__ = [
 
 
 def __n_dims_filter(verb, dataset, x, y):
-    if x.ndims < 3:
-        return True
-    else:
-        return __verb_compare(verb, x.shape[1])
+    n_dims = x.shape[1] if x.ndim > 2 else 1
+    return __verb_compare(verb, n_dims)
 
 
 def __casting_op(op, lhs, rhs):
