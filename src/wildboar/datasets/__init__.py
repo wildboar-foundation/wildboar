@@ -176,7 +176,7 @@ def load_datasets(
     progress=True,
     force=False,
     filter=None,
-    **kwargs
+    **kwargs,
 ):
     """Load all datasets as a generator
 
@@ -200,18 +200,34 @@ def load_datasets(
     force : bool, optional
         Force re-download of cached repository
 
-    filter: dict or callable, optional
+    filter: str, dict, list or callable, optional
         Filter the datasets
 
         - if callable, only yield those datasets for which the callable returns True.
           ``f(dataset, x, y) -> bool``
 
-        - if dict, filter based on the keys and values
-            - "dataset": regex matching dataset name
-            - "n_samples": comparison spec
-            - "n_timestep": comparison spec
+        - if dict, filter based on the keys and values, where keys are attributes and
+          values comparison specs
+
+        - if list, filter based on conjunction of attribute comparisons
+
+        - if str, filter based on attribute comparison
+
+        Attribute comparison
+        --------------------
+
+            The format of attribute comparisons are ``[attribute][comparison spec].
+
+            Valid attributes are``
+            - ``dataset``
+            - ``n_samples``
+            - ``n_timestep``
+            - ``n_dims``
+            - ``n_labels``
+
 
         Comparison spec
+        ---------------
             str of two parts, comparison operator (<, <=, >, >= or =) and a number,
             e.g., "<100", "<= 200", or ">300"
 
@@ -237,6 +253,11 @@ def load_datasets(
 
     >>> for dataset, (x, y) in load_datasets(
     ...    repository='wildboar/ucr', filter={"n_samples": ">200"}
+    ... ):
+    >>>     print(dataset)
+
+    >>> for dataset, (x, y) in load_datasets(
+    ...    repository='wildboar/ucr', filter="n_samples>200"
     ... ):
     >>>     print(dataset)
     """
@@ -270,8 +291,10 @@ def load_dataset(
     cache_dir=None,
     create_cache_dir=True,
     progress=True,
+    return_extras=False,
     force=False,
-    return_extras=False
+    refresh=False,
+    timeout=None,
 ):
     """Load a dataset from a repository
 
@@ -307,17 +330,32 @@ def load_dataset(
     create_cache_dir: bool, optional
         Create cache directory if missing (default=True)
 
+    return_extras : bool, optional
+        Return optional extras
+
+        ..versionadded :: 1.1
+
     force : bool, optional
         Force re-download of already cached bundle
 
         ..versionadded :: 1.0.4
 
+    refresh : bool, optional
+        Refresh the repository
+
+        ..versionadded :: 1.1
+
+    timeout : float, optional
+        Timeout for json request
+
+        ..versionadded :: 1.1
+
     Returns
     -------
     x : ndarray
-        The data samples
+        The data samples, optional
 
-    y : ndarray
+    y : ndarray, optional
         The labels
 
     x_train : ndarray, optional
@@ -331,6 +369,9 @@ def load_dataset(
 
     y_test : ndarray, optional
         The testing labels if ``merge_train_test=False``
+
+    extras : dict, optional
+        The optional extras if ``return_extras=True``
 
     Examples
     --------
@@ -360,6 +401,10 @@ def load_dataset(
     dtype = dtype or np.float64
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
+
+    if refresh:
+        repository.refresh(timeout)
+
     ret_val = []
     x, y, n_train_samples, extras = repository.load_dataset(
         bundle_name,
@@ -418,7 +463,9 @@ def list_datasets(
     cache_dir=None,
     create_cache_dir=True,
     progress=True,
-    force=False
+    force=False,
+    refresh=False,
+    timeout=None,
 ):
     """List the datasets in the repository
 
@@ -444,6 +491,16 @@ def list_datasets(
     force : bool, optional
         Force re-download of cached bundle
 
+    refresh : bool, optional
+        Refresh the repository
+
+        ..versionadded :: 1.1
+
+    timeout : float, optional
+        Timeout for json request
+
+        ..versionadded :: 1.1
+
     Returns
     -------
         dataset : set
@@ -457,6 +514,8 @@ def list_datasets(
     ) = _split_repo_bundle(repository)
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
+    if refresh:
+        repository.refresh(timeout)
     return repository.list_datasets(
         bundle_name,
         collection=collection,
@@ -511,7 +570,7 @@ def get_repository(repository):
     return _REPOSITORIES[repository]
 
 
-def install_repository(repository, refresh=True, timeout=None):
+def install_repository(repository, *, refresh=True, timeout=None):
     """Install repository
 
     Parameters
@@ -522,20 +581,24 @@ def install_repository(repository, refresh=True, timeout=None):
     refresh : bool, optional
         Refresh the repository
 
+        ..versionadded :: 1.1
+
     timeout : float, optional
         Timeout for json request
+
+        ..versionadded :: 1.1
     """
     if isinstance(repository, str):
         repository = JSONRepository(repository)
     _REPOSITORIES.append(repository, refresh=refresh, timeout=timeout)
 
 
-def refresh_repositories(repository=None, timeout=None):
+def refresh_repositories(repository=None, *, timeout=None):
     """Refresh the installed repositories=None"""
     _REPOSITORIES.refresh(repository=repository, timeout=timeout)
 
 
-def get_bundles(repository):
+def get_bundles(repository, *, refresh=False, timeout=None):
     """Get all bundles in the repository
 
     Parameters
@@ -543,17 +606,26 @@ def get_bundles(repository):
     repository : str
         Name of the repository
 
+    refresh : bool, optional
+        Refresh the repository
+
+        ..versionadded :: 1.1
+
+    timeout : float, optional
+        Timeout for json request
+
     Returns
     -------
     dict : A dict of key Bundle pairs
     """
-    if repository in _REPOSITORIES:
-        return _REPOSITORIES[repository].get_bundles()
-    else:
-        raise ValueError("repository (%s) does not exist.")
+    repository = _REPOSITORIES[repository]
+    if refresh:
+        repository.refresh(timeout)
+
+    return repository.get_bundles()
 
 
-def list_bundles(repository):
+def list_bundles(repository, *, refresh=False, timeout=None):
     """Get a list of all bundle names in the specified repository.
 
     Parameters
@@ -561,12 +633,25 @@ def list_bundles(repository):
     repository : str
         The name of the repository
 
+    refresh : bool, optional
+        Refresh the repository
+
+        ..versionadded :: 1.1
+
+    timeout : float, optional
+        Timeout for json request
+
     Returns
     -------
     bundle : str
         The name of the bundle
     """
-    return [key for key, bundle in get_bundles(repository).items()]
+    return [
+        key
+        for key, bundle in get_bundles(
+            repository, refresh=refresh, timeout=timeout
+        ).items()
+    ]
 
 
 def list_collections(repository):
@@ -594,8 +679,21 @@ def list_collections(repository):
     return list(collections.keys()) if collections is not None else []
 
 
-def list_repositories():
-    """List the key of all installed repositories"""
+def list_repositories(*, refresh=False, timeout=None):
+    """List the key of all installed repositories
+
+    refresh : bool, optional
+        Refresh all repositories
+
+        ..versionadded :: 1.1
+
+    timeout : float, optional
+        Timeout for json request
+
+        ..versionadded :: 1.1
+    """
+    if refresh:
+        refresh_repositories(timeout=timeout)
     return [repo.name for repo in _REPOSITORIES]
 
 
