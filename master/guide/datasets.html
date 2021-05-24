@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supervised learning" href="supervised.html" /><link rel="prev" title="User guide" href="../guide.html" />
 
     <meta name="generator" content="sphinx-3.5.4, furo 2021.04.11.beta34"/>
-        <title>Datasets - Wildboar 1.1.0rc2.dev13+ged286e4 documentation</title>
+        <title>Datasets - Wildboar 1.1.0rc2.dev15+gd08796f documentation</title>
       <link rel="stylesheet" href="../_static/styles/furo.css?digest=59ab60ac09ea94ccfe6deddff6d715cce948a6fc">
     <link rel="stylesheet" href="../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../_static/pygments_dark.css">
@@ -102,7 +102,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc2.dev13+ged286e4 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc2.dev15+gd08796f documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -289,6 +289,10 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">"example"</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">"example/example"</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="section" id="updating-repositories">
+<h3>Updating repositories<a class="headerlink" href="#updating-repositories" title="Permalink to this headline">¶</a></h3>
+<p>Repositories can be refreshed using <code class="docutils literal notranslate"><span class="pre">datasets.refresh_repositories()</span></code>.</p>
+</div>
 <div class="section" id="repository-json-specification">
 <h3>Repository JSON specification<a class="headerlink" href="#repository-json-specification" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code> expects a JSON-file following the specification below.</p>
@@ -303,7 +307,7 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
         <span class="s2">"version"</span><span class="o">:</span> <span class="s2">"1.0"</span><span class="p">,</span>
         <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"UCR Time series repository"</span><span class="p">,</span>
         <span class="s2">"description"</span><span class="o">:</span> <span class="s2">"Example dataset"</span><span class="p">,</span>
-        <span class="s2">"class_index"</span><span class="o">:</span> <span class="o">-</span><span class="mf">1</span>
+        <span class="s2">"arrays"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">]</span>
       <span class="p">},</span>
     <span class="p">]</span>
 <span class="p">}</span>
@@ -371,6 +375,7 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 <li><a class="reference internal" href="#what-is-a-repository">What is a repository?</a></li>
 <li><a class="reference internal" href="#how-to-use-a-repository">How to use a repository?</a></li>
 <li><a class="reference internal" href="#installing-repositories">Installing repositories</a><ul>
+<li><a class="reference internal" href="#updating-repositories">Updating repositories</a></li>
 <li><a class="reference internal" href="#repository-json-specification">Repository JSON specification</a></li>
 </ul>
 </li>

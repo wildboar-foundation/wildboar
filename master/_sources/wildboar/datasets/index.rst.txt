@@ -296,12 +296,18 @@ Functions
    :type keep_last_version: bool, optional
 
 
-.. function:: get_bundles(repository)
+.. function:: get_bundles(repository, *, refresh=False, timeout=None)
 
    Get all bundles in the repository
 
    :param repository: Name of the repository
    :type repository: str
+   :param refresh: Refresh the repository
+
+                   ..versionadded :: 1.1
+   :type refresh: bool, optional
+   :param timeout: Timeout for json request
+   :type timeout: float, optional
 
    :returns: **dict**
    :rtype: A dict of key Bundle pairs
@@ -318,24 +324,34 @@ Functions
    :rtype: Repository
 
 
-.. function:: install_repository(repository, refresh=True, timeout=None)
+.. function:: install_repository(repository, *, refresh=True, timeout=None)
 
    Install repository
 
    :param repository: A repository
    :type repository: str or Repository
    :param refresh: Refresh the repository
+
+                   ..versionadded :: 1.1
    :type refresh: bool, optional
    :param timeout: Timeout for json request
+
+                   ..versionadded :: 1.1
    :type timeout: float, optional
 
 
-.. function:: list_bundles(repository)
+.. function:: list_bundles(repository, *, refresh=False, timeout=None)
 
    Get a list of all bundle names in the specified repository.
 
    :param repository: The name of the repository
    :type repository: str
+   :param refresh: Refresh the repository
+
+                   ..versionadded :: 1.1
+   :type refresh: bool, optional
+   :param timeout: Timeout for json request
+   :type timeout: float, optional
 
    :returns: **bundle** -- The name of the bundle
    :rtype: str
@@ -354,7 +370,7 @@ Functions
    :rtype: a list of collections
 
 
-.. function:: list_datasets(repository='wildboar/ucr', *, collection=None, cache_dir=None, create_cache_dir=True, progress=True, force=False)
+.. function:: list_datasets(repository='wildboar/ucr', *, collection=None, cache_dir=None, create_cache_dir=True, progress=True, force=False, refresh=False, timeout=None)
 
    List the datasets in the repository
 
@@ -372,17 +388,35 @@ Functions
    :type create_cache_dir: bool, optional
    :param force: Force re-download of cached bundle
    :type force: bool, optional
+   :param refresh: Refresh the repository
+
+                   ..versionadded :: 1.1
+   :type refresh: bool, optional
+   :param timeout: Timeout for json request
+
+                   ..versionadded :: 1.1
+   :type timeout: float, optional
 
    :returns: **dataset** -- A set of dataset names
    :rtype: set
 
 
-.. function:: list_repositories()
+.. function:: list_repositories(*, refresh=False, timeout=None)
 
    List the key of all installed repositories
 
+   refresh : bool, optional
+       Refresh all repositories
 
-.. function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, force=False, return_extras=False)
+       ..versionadded :: 1.1
+
+   timeout : float, optional
+       Timeout for json request
+
+       ..versionadded :: 1.1
+
+
+.. function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, return_extras=False, force=False, refresh=False, timeout=None)
 
    Load a dataset from a repository
 
@@ -407,17 +441,30 @@ Functions
    :type cache_dir: str, optional
    :param create_cache_dir: Create cache directory if missing (default=True)
    :type create_cache_dir: bool, optional
+   :param return_extras: Return optional extras
+
+                         ..versionadded :: 1.1
+   :type return_extras: bool, optional
    :param force: Force re-download of already cached bundle
 
                  ..versionadded :: 1.0.4
    :type force: bool, optional
+   :param refresh: Refresh the repository
 
-   :returns: * **x** (*ndarray*) -- The data samples
-             * **y** (*ndarray*) -- The labels
+                   ..versionadded :: 1.1
+   :type refresh: bool, optional
+   :param timeout: Timeout for json request
+
+                   ..versionadded :: 1.1
+   :type timeout: float, optional
+
+   :returns: * **x** (*ndarray*) -- The data samples, optional
+             * **y** (*ndarray, optional*) -- The labels
              * **x_train** (*ndarray, optional*) -- The training samples if ``merge_train_test=False``
              * **x_test** (*ndarray, optional*) -- The testing samples if ``merge_train_test=False``
              * **y_train** (*ndarray, optional*) -- The training labels if ``merge_train_test=False``
              * **y_test** (*ndarray, optional*) -- The testing labels if ``merge_train_test=False``
+             * **extras** (*dict, optional*) -- The optional extras if ``return_extras=True``
 
    .. rubric:: Examples
 
@@ -459,17 +506,33 @@ Functions
                   - if callable, only yield those datasets for which the callable returns True.
                     ``f(dataset, x, y) -> bool``
 
-                  - if dict, filter based on the keys and values
-                      - "dataset": regex matching dataset name
-                      - "n_samples": comparison spec
-                      - "n_timestep": comparison spec
+                  - if dict, filter based on the keys and values, where keys are attributes and
+                    values comparison specs
 
-                  Comparison spec
-                      str of two parts, comparison operator (<, <=, >, >= or =) and a number,
-                      e.g., "<100", "<= 200", or ">300"
-   :type filter: dict or callable, optional
-   :param kwargs: Optional arguments to ``load_dataset``
-   :type kwargs: dict
+                  - if list, filter based on conjunction of attribute comparisons
+
+                  - if str, filter based on attribute comparison
+
+                  Attribute comparison
+                  --------------------
+
+                      The format of attribute comparisons are ``[attribute][comparison spec].
+
+                      Valid attributes are``
+                      - ``dataset``
+                      - ``n_samples``
+                      - ``n_timestep``
+                      - ``n_dims``
+                      - ``n_labels``
+   :type filter: str, dict, list or callable, optional
+
+       Comparison spec
+       ---------------
+           str of two parts, comparison operator (<, <=, >, >= or =) and a number,
+           e.g., "<100", "<= 200", or ">300"
+
+   kwargs : dict
+       Optional arguments to ``load_dataset``
 
    :Yields: * **x** (*array-like*) -- Data samples
             * **y** (*array-like*) -- Data labels
@@ -484,6 +547,11 @@ Functions
 
    >>> for dataset, (x, y) in load_datasets(
    ...    repository='wildboar/ucr', filter={"n_samples": ">200"}
+   ... ):
+   >>>     print(dataset)
+
+   >>> for dataset, (x, y) in load_datasets(
+   ...    repository='wildboar/ucr', filter="n_samples>200"
    ... ):
    >>>     print(dataset)
 
@@ -518,7 +586,7 @@ Functions
           load a named dataset
 
 
-.. function:: refresh_repositories(repository=None, timeout=None)
+.. function:: refresh_repositories(repository=None, *, timeout=None)
 
    Refresh the installed repositories=None
 

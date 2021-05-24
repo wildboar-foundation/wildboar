@@ -98,6 +98,11 @@ either an url to a JSON-file or an instance of a ``Repository``.
     >>> list_repositories("example")
     >>> load_dataset("example", repository="example/example")
 
+Updating repositories
+---------------------
+
+Repositories can be refreshed using ``datasets.refresh_repositories()``.
+
 Repository JSON specification
 -----------------------------
 
@@ -116,7 +121,7 @@ The ``JSONRepository`` expects a JSON-file following the specification below.
             "version": "1.0",
             "name": "UCR Time series repository",
             "description": "Example dataset",
-            "class_index": -1
+            "arrays": ["x", "y"]
           },
         ]
     }
