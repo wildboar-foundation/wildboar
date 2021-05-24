@@ -21,7 +21,7 @@ def named_preprocess(name):
     if name == "standardize":
         return standardize
     else:
-        raise ValueError("%s does not exists" % name)
+        raise ValueError("preprocess (%s) does not exists" % name)
 
 
 def standardize(x):
