@@ -20,7 +20,7 @@ Classes
 
 
 
-.. class:: ExtraShapeletTreeClassifier(max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+.. class:: ExtraShapeletTreeClassifier(*, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
 
 
    Bases: :py:obj:`ShapeletTreeClassifier`
@@ -40,18 +40,22 @@ Classes
 
    :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
                      leaves are pure or until all leaves contain less than `min_samples_split`
-                      samples
+                     samples
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
-   :param n_shapelets: The number of shapelets to sample at each node.
-   :type n_shapelets: int, optional
-   :param min_shapelet_size:
-                             The minimum length of a sampled shapelet expressed as a fraction,
-                              computed as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"entropy", "gini"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
    :type min_shapelet_size: float, optional
-   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction,
-                             computed as `ceil(X.shape[-1] * max_shapelet_size)`.
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as `ceil(X.shape[-1] * max_shapelet_size)`.
    :type max_shapelet_size: float, optional
    :param metric: Distance metric used to identify the best shapelet.
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
@@ -60,17 +64,24 @@ Classes
    :param force_dim: Force the number of dimensions.
 
                      - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-                       or interoperability with `sklearn`.
+                       for interoperability with `sklearn`.
    :type force_dim: int, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator;
                         - If `RandomState` instance, `random_state` is the random number generator;
-                        - If `None`, the random number generator is the `RandomState` instance
-                          used by `np.random`.
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
    :type random_state: int or RandomState
 
 
-.. class:: ExtraShapeletTreeRegressor(*, max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+.. class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
 
 
    Bases: :py:obj:`ShapeletTreeRegressor`
@@ -94,10 +105,17 @@ Classes
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"mse"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
    :param n_shapelets: The number of shapelets to sample at each node.
    :type n_shapelets: int, optional
    :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
-                             as`min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+                             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
    :type min_shapelet_size: float, optional
    :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
                              as `ceil(X.shape[-1] * max_shapelet_size)`.
@@ -119,7 +137,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. class:: ShapeletTreeClassifier(max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+.. class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
 
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseShapeletTree`
@@ -160,6 +178,13 @@ Classes
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"entropy", "gini"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
    :param n_shapelets: The number of shapelets to sample at each node.
    :type n_shapelets: int, optional
    :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
@@ -177,6 +202,13 @@ Classes
                      - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
                        for interoperability with `sklearn`.
    :type force_dim: int, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator;
                         - If `RandomState` instance, `random_state` is the random number generator;
@@ -185,7 +217,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+.. class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
 
 
    Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseShapeletTree`
@@ -206,6 +238,13 @@ Classes
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to split an internal node
    :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"mse"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
    :param n_shapelets: The number of shapelets to sample at each node.
    :type n_shapelets: int, optional
    :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed

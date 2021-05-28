@@ -22,7 +22,7 @@ Classes
 
 
 
-.. class:: ExtraShapeletTreesClassifier(*, n_estimators=100, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. class:: ExtraShapeletTreesClassifier(*, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
    Bases: :py:obj:`BaseShapeletForestClassifier`
@@ -52,6 +52,13 @@ Classes
    :type max_shapelet_size: float, optional
    :param min_samples_split: The minimum samples required to split the decision trees
    :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"entropy", "gini"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
    :param warm_start: When set to True, reuse the solution of the previous call to fit
                       and add more estimators to the ensemble, otherwise, just fit
                       a whole new ensemble.
@@ -60,13 +67,20 @@ Classes
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
    :param metric_params: Parameters passed to the metric construction
    :type metric_params: dict, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
    :param random_state: Controls the random resampling of the original dataset and the construction
                         of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 
 
-.. class:: ExtraShapeletTreesRegressor(*, n_estimators=100, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. class:: ExtraShapeletTreesRegressor(*, n_estimators=100, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='mse', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
@@ -237,7 +251,7 @@ Classes
 
 
 
-.. class:: ShapeletForestClassifier(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. class:: ShapeletForestClassifier(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
    Bases: :py:obj:`BaseShapeletForestClassifier`
@@ -269,6 +283,13 @@ Classes
    :type max_shapelet_size: float, optional
    :param min_samples_split: The minimum samples required to split the decision trees
    :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"entropy", "gini"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
    :param warm_start: When set to True, reuse the solution of the previous call to fit
                       and add more estimators to the ensemble, otherwise, just fit
                       a whole new ensemble.
@@ -279,13 +300,20 @@ Classes
    :type metric_params: dict, optional
    :param oob_score: Compute out-of-bag estimates of the ensembles performance.
    :type oob_score: bool, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
    :param random_state: Controls the random resampling of the original dataset and the construction
                         of the base estimators. Pass an int for reproducible output across multiple
                         function calls.
    :type random_state: int or RandomState, optional
 
 
-.. class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
+.. class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
 
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
@@ -341,7 +369,7 @@ Classes
 
 
 
-.. class:: ShapeletForestRegressor(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. class:: ShapeletForestRegressor(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
