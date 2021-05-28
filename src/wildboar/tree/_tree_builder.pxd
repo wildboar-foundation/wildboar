@@ -26,6 +26,9 @@ from ..embed._feature cimport Feature, FeatureEngineer
 cdef struct SplitPoint:
     Py_ssize_t split_point
     double threshold
+    double impurity_improvement
+    double impurity_left
+    double impurity_right
     Feature feature
 
 cdef class Tree:
@@ -78,11 +81,3 @@ cdef class Tree:
     cpdef np.ndarray apply(self, object X)
 
     cpdef np.ndarray decision_path(self, object X)
-
-cdef double entropy(
-    double left_sum,
-    double* left_count,
-    double right_sum,
-    double* right_count,
-    Py_ssize_t n_labels
-) nogil

@@ -25,7 +25,7 @@ from sklearn.ensemble import BaggingClassifier, BaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging
 from sklearn.metrics import precision_recall_curve, roc_curve
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.utils import check_array, check_random_state
+from sklearn.utils import check_array, check_random_state, compute_sample_weight
 from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
@@ -105,14 +105,18 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
         n_estimators=100,
         max_depth=None,
         min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
         n_shapelets=10,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
+        criterion="entropy",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,
+        class_weight=None,
         random_state=None,
     ):
         super().__init__(
@@ -133,6 +137,10 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
+        self.criterion = criterion
+        self.min_samples_leaf = min_samples_leaf
+        self.min_impurity_decrease = min_impurity_decrease
+        self.class_weight = class_weight
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")
@@ -173,6 +181,13 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
         if not y.flags.c_contiguous:
             y = np.ascontiguousarray(y, dtype=np.intp)
 
+        if self.class_weight is not None:
+            class_weight = compute_sample_weight(self.class_weight, y)
+            if sample_weight is not None:
+                sample_weight = sample_weight * class_weight
+            else:
+                sample_weight = class_weight
+
         x = x.reshape(n_samples, n_dims * self.n_timestep)
         super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
         return self
@@ -205,13 +220,17 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         n_shapelets=10,
         max_depth=None,
         min_samples_split=2,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
+        criterion="entropy",
         oob_score=False,
         bootstrap=True,
         warm_start=False,
+        class_weight=None,
         n_jobs=None,
         random_state=None,
     ):
@@ -240,6 +259,16 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
 
+        min_samples_leaf : int, optional
+            The minimum number of samples in a leaf
+
+        criterion : {"entropy", "gini"}, optional
+            The criterion used to evaluate the utility of a split
+
+        min_impurity_decrease : float, optional
+            A split will be introduced only if the impurity decrease is larger than or
+            equal to this value
+
         warm_start : bool, optional
             When set to True, reuse the solution of the previous call to fit
             and add more estimators to the ensemble, otherwise, just fit
@@ -254,6 +283,14 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         oob_score : bool, optional
             Compute out-of-bag estimates of the ensembles performance.
 
+        class_weight : dict or "balanced", optional
+            Weights associated with the labels
+
+            - if dict, weights on the form {label: weight}
+            - if "balanced" each class weight inversely proportional to the class
+              frequency
+            - if None, each class has equal weight
+
         random_state : int or RandomState, optional
             Controls the random resampling of the original dataset and the construction
             of the base estimators. Pass an int for reproducible output across multiple
@@ -265,22 +302,29 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
                 "max_depth",
                 "n_shapelets",
                 "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
                 "min_shapelet_size",
                 "max_shapelet_size",
                 "metric",
                 "metric_params",
+                "criterion",
             ),
             n_shapelets=n_shapelets,
             n_estimators=n_estimators,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
+            criterion=criterion,
             oob_score=oob_score,
             bootstrap=bootstrap,
             warm_start=warm_start,
+            class_weight=class_weight,
             n_jobs=n_jobs,
             random_state=random_state,
         )
@@ -307,13 +351,17 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         n_estimators=100,
         max_depth=None,
         min_samples_split=2,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
+        criterion="entropy",
         oob_score=False,
         bootstrap=True,
         warm_start=False,
+        class_weight=None,
         n_jobs=None,
         random_state=None,
     ):
@@ -339,6 +387,16 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
 
+        min_samples_leaf : int, optional
+            The minimum number of samples in a leaf
+
+        criterion : {"entropy", "gini"}, optional
+            The criterion used to evaluate the utility of a split
+
+        min_impurity_decrease : float, optional
+            A split will be introduced only if the impurity decrease is larger than or
+            equal to this value
+
         warm_start : bool, optional
             When set to True, reuse the solution of the previous call to fit
             and add more estimators to the ensemble, otherwise, just fit
@@ -349,6 +407,14 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 
         metric_params : dict, optional
             Parameters passed to the metric construction
+
+        class_weight : dict or "balanced", optional
+            Weights associated with the labels
+
+            - if dict, weights on the form {label: weight}
+            - if "balanced" each class weight inversely proportional to the class
+              frequency
+            - if None, each class has equal weight
 
         random_state : int or RandomState, optional
             Controls the random resampling of the original dataset and the construction
@@ -364,18 +430,23 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
                 "max_shapelet_size",
                 "metric",
                 "metric_params",
+                "criterion",
             ),
             n_shapelets=1,
             n_estimators=n_estimators,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
+            criterion=criterion,
             oob_score=oob_score,
             bootstrap=bootstrap,
             warm_start=warm_start,
+            class_weight=class_weight,
             n_jobs=n_jobs,
             random_state=random_state,
         )
@@ -400,11 +471,14 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
         n_estimators=100,
         max_depth=None,
         min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
         n_shapelets=10,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
+        criterion="mse",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,
@@ -428,6 +502,9 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
+        self.criterion = criterion
+        self.min_samples_leaf = min_samples_leaf
+        self.min_impurity_decrease = min_impurity_decrease
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")
@@ -494,10 +571,13 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         n_shapelets=10,
         max_depth=None,
         min_samples_split=2,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
+        criterion="mse",
         oob_score=False,
         bootstrap=True,
         warm_start=False,
@@ -554,19 +634,25 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
                 "max_depth",
                 "n_shapelets",
                 "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
                 "min_shapelet_size",
                 "max_shapelet_size",
                 "metric",
                 "metric_params",
+                "criterion",
             ),
             n_shapelets=n_shapelets,
             n_estimators=n_estimators,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
+            criterion=criterion,
             oob_score=oob_score,
             bootstrap=bootstrap,
             warm_start=warm_start,
@@ -600,6 +686,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         max_shapelet_size=1,
         metric="euclidean",
         metric_params=None,
+        criterion="mse",
         oob_score=False,
         bootstrap=True,
         warm_start=False,
@@ -653,6 +740,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
                 "max_shapelet_size",
                 "metric",
                 "metric_params",
+                "criterion",
             ),
             n_shapelets=1,
             n_estimators=n_estimators,
@@ -662,6 +750,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
+            criterion=criterion,
             oob_score=oob_score,
             bootstrap=bootstrap,
             warm_start=warm_start,
@@ -693,6 +782,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         max_shapelet_size=1,
         metric="euclidean",
         metric_params=None,
+        criterion="mse",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,
@@ -751,6 +841,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
                 "max_shapelet_size",
                 "metric",
                 "metric_params",
+                "criterion",
             ),
             n_shapelets=n_shapelets,
             n_estimators=n_estimators,
@@ -760,6 +851,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
+            criterion=criterion,
             oob_score=False,
             bootstrap=bootstrap,
             warm_start=warm_start,

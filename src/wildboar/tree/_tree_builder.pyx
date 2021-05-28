@@ -23,8 +23,8 @@
 import numpy as np
 
 cimport numpy as np
-from libc.math cimport INFINITY, NAN, fabs, log2
-from libc.stdlib cimport free, malloc
+from libc.math cimport INFINITY, NAN, log2
+from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
 from .._data cimport TSDatabase, ts_database_new
@@ -38,9 +38,18 @@ from .._utils cimport (
 )
 from ..embed._feature cimport Feature, FeatureEngineer
 
+
 cdef double FEATURE_THRESHOLD = 1e-7
 
 cdef class Criterion:
+
+    cdef double weighted_n_left
+    cdef double weighted_n_right
+    cdef double weighted_n_total
+    cdef Py_ssize_t start
+    cdef Py_ssize_t end
+    cdef Py_ssize_t *samples
+    cdef double *sample_weight
 
     cdef void init(
         self,
@@ -49,45 +58,195 @@ cdef class Criterion:
         Py_ssize_t *samples,
         double *sample_weights,
     ) nogil:
+        self.start = start
+        self.end = end
+        self.samples = samples
+        self.sample_weight = sample_weights
+
+    cdef void reset(self) nogil:
         pass
 
-    cdef void update(
+    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
+        pass
+
+    cdef double proxy_impurity(self) nogil:
+        cdef double left_impurity
+        cdef double right_impurity
+        self.child_impurity(&left_impurity, &right_impurity)
+        return -self.weighted_n_right * right_impurity - self.weighted_n_left * left_impurity
+
+    cdef double impurity(self) nogil:
+        pass
+
+    cdef void child_impurity(self, double *left, double *right) nogil:
+        pass
+
+    cdef double impurity_improvement(
         self,
-        Py_ssize_t pos,
-        Py_ssize_t new_pos,
+        double impurity_parent,
+        double impurity_left,
+        double impurity_right,
+        double weighted_n_samples,
+    ) nogil:
+        return ((self.weighted_n_total / weighted_n_samples) *
+                (impurity_parent - (self.weighted_n_right / self.weighted_n_total * impurity_right)
+                                 - (self.weighted_n_left / self.weighted_n_total * impurity_left)))
+
+    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) nogil:
+        pass
+
+cdef class ClassificationCriterion(Criterion):
+
+    cdef Py_ssize_t *labels
+    cdef Py_ssize_t label_stride
+    cdef Py_ssize_t n_labels
+    cdef double *sum_left
+    cdef double *sum_right
+    cdef double *sum_total
+
+    def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
+        self.labels = <Py_ssize_t*> y.data
+        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
+        self.n_labels = n_labels
+        self.sum_left = <double*> calloc(n_labels, sizeof(double))
+        self.sum_right = <double*> calloc(n_labels, sizeof(double))
+        self.sum_total = <double*> calloc(n_labels, sizeof(double))
+
+    def __dealloc__(self):
+        free(self.sum_total)
+        free(self.sum_left)
+        free(self.sum_right)
+
+    cdef void init(
+        self,
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
         double *sample_weights,
     ) nogil:
-        pass
+        Criterion.init(self, start, end, samples, sample_weights)
+        self.weighted_n_total = 0
 
-    cdef double proxy_impurity(self) nogil:
-        pass
+        memset(self.sum_total, 0, self.n_labels * sizeof(double))
+
+        cdef Py_ssize_t i, j, p
+        cdef double w = 1.0
+        for i in range(start, end):
+            j = samples[i]
+            p = j * self.label_stride
+
+            if sample_weights != NULL:
+                w = sample_weights[j]
+
+            self.sum_total[self.labels[p]] += w
+            self.weighted_n_total += w
+
+        self.reset()
+
+    cdef void reset(self) nogil:
+        self.weighted_n_left = 0
+        self.weighted_n_right = self.weighted_n_total
+        memset(self.sum_left, 0, self.n_labels * sizeof(double))
+        memcpy(self.sum_right, self.sum_total, self.n_labels * sizeof(double))
+
+    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
+        cdef Py_ssize_t i, j, p
+        cdef double w = 1.0
+
+        for i in range(pos, new_pos):
+            j = self.samples[i]
+            p = j * self.label_stride
+
+            if self.sample_weight != NULL:
+                w = self.sample_weight[j]
+
+            self.sum_left[self.labels[p]] += w
+            self.weighted_n_left += w
+
+        self.weighted_n_right = self.weighted_n_total - self.weighted_n_left
+        for i in range(self.n_labels):
+            self.sum_right[i] = self.sum_total[i] - self.sum_left[i]
 
     cdef double impurity(self) nogil:
         pass
 
-    cdef void child_impurity(
-        self,
-        Py_ssize_t pos,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        double* left,
-        double *right
-    ) nogil:
+    cdef void child_impurity(self, double* left, double *right) nogil:
         pass
+
+    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) nogil:
+        cdef Py_ssize_t i
+        cdef double prob
+        for i in range(self.n_labels):
+            prob = self.sum_total[i] / self.weighted_n_total
+            tree.set_leaf_value(node_id, i, prob)
+
+cdef class GiniCriterion(ClassificationCriterion):
+
+    cdef double impurity(self) nogil:
+        cdef double gini = 0.0
+        cdef double c
+        cdef Py_ssize_t i
+        for i in range(self.n_labels):
+            c = self.sum_total[i]
+            gini += 1.0 - (c * c) / (self.weighted_n_total * self.weighted_n_total)
+
+        return gini
+
+    cdef void child_impurity(self, double *left, double *right) nogil:
+        cdef double sq_left = 0
+        cdef double sq_right = 0
+        cdef double v
+        cdef Py_ssize_t i
+
+        for i in range(self.n_labels):
+            v = self.sum_left[i]
+            sq_left += v * v
+
+            v = self.sum_right[i]
+            sq_right += v * v
+
+        left[0] = 1 - sq_left / (self.weighted_n_left * self.weighted_n_left)
+        right[0] = 1 - sq_right / (self.weighted_n_right * self.weighted_n_right)
+
+cdef class EntropyCriterion(ClassificationCriterion):
+
+    cdef double impurity(self) nogil:
+        cdef double c
+        cdef double entropy = 0
+        cdef Py_ssize_t i
+        for i in range(self.n_labels):
+            c = self.sum_total[i]
+            if c > 0:
+                c /= self.weighted_n_total
+                entropy -= c * log2(c)
+
+        return entropy
+
+    cdef void child_impurity(self, double *left, double *right) nogil:
+        left[0] = 0
+        right[0] = 0
+        cdef double v
+        cdef Py_ssize_t i
+
+        for i in range(self.n_labels):
+            v = self.sum_left[i]
+            if v > 0:
+                v /= self.weighted_n_left
+                left[0] -= v * log2(v)
+
+            v = self.sum_right[i]
+            if v > 0:
+                v /= self.weighted_n_right
+                right[0] -= v * log2(v)
 
 cdef class RegressionCriterion(Criterion):
     cdef double sum_left
     cdef double sum_right
     cdef double sum_total
     cdef double sum_sq_total
-    cdef double weighted_n_left
-    cdef double weighted_n_right
-    cdef double weighted_n_total
     cdef double *labels
     cdef Py_ssize_t label_stride
+    cdef Py_ssize_t pos
 
     def __cinit__(self, np.ndarray y):
         self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
@@ -97,9 +256,6 @@ cdef class RegressionCriterion(Criterion):
         self.sum_right = 0
         self.sum_total = 0
         self.sum_sq_total = 0
-        self.weighted_n_left = 0
-        self.weighted_n_right = 0
-        self.weighted_n_total = 0
 
     cdef void init(
         self,
@@ -108,12 +264,9 @@ cdef class RegressionCriterion(Criterion):
         Py_ssize_t *samples,
         double *sample_weights,
     ) nogil:
-        self.sum_left = 0
-        self.sum_right = 0
+        Criterion.init(self, start, end, samples, sample_weights)
         self.sum_total = 0
         self.sum_sq_total = 0
-        self.weighted_n_left = 0
-        self.weighted_n_right = 0
         self.weighted_n_total = 0
 
         cdef Py_ssize_t i, j, p
@@ -131,71 +284,73 @@ cdef class RegressionCriterion(Criterion):
             self.sum_sq_total += x * x
             self.weighted_n_total += w
 
-        self.weighted_n_right = self.weighted_n_total
+        self.reset()
+        self.start = start
 
-    cdef void update(
-        self,
-        Py_ssize_t pos,
-        Py_ssize_t new_pos,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        Py_ssize_t *samples,
-        double *sample_weights,
-    ) nogil:
+    cdef void reset(self) nogil:
+        self.weighted_n_left = 0
+        self.weighted_n_right = self.weighted_n_total
+        self.sum_left = 0
+        self.sum_right = self.sum_total
+        self.pos = 0
+
+    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t j
         cdef Py_ssize_t p
         cdef double w = 1.0
         for i in range(pos, new_pos):
-            j = samples[i]
+            j = self.samples[i]
             p = j * self.label_stride
 
-            if sample_weights != NULL:
-                w = sample_weights[j]
+            if self.sample_weight != NULL:
+                w = self.sample_weight[j]
 
             self.sum_left += w * self.labels[p]
             self.weighted_n_left += w
 
         self.weighted_n_right = self.weighted_n_total - self.weighted_n_left
         self.sum_right = self.sum_total - self.sum_left
+        self.pos = new_pos
 
-    cdef double proxy_impurity(self) nogil:
-        pass
-
-    cdef double impurity(self) nogil:
-        pass
-
-    cdef void child_impurity(
-        self,
-        Py_ssize_t pos,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        double* left,
-        double *right
-    ) nogil:
-        pass
+    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) nogil:
+        tree.set_leaf_value(node_id, 0, self.sum_total / self.weighted_n_total)
 
 cdef class MSECriterion(RegressionCriterion):
 
     cdef double proxy_impurity(self) nogil:
         cdef double proxy_impurity_left = self.sum_left * self.sum_left
         cdef double proxy_impurity_right = self.sum_right * self.sum_right
-        return -(proxy_impurity_left / self.weighted_n_left +
-                 proxy_impurity_right / self.weighted_n_right)
+        return proxy_impurity_left / self.weighted_n_left + proxy_impurity_right / self.weighted_n_right
 
     cdef double impurity(self) nogil:
-        return (self.sum_sq_total / self.weighted_n_total -
-                (self.sum_total / self.weighted_n_total) ** 2)
+        cdef double impurity
+        impurity = self.sum_sq_total / self.weighted_n_total
+        impurity -= (self.sum_total / self.weighted_n_total) ** 2
+        return impurity
 
-    cdef void child_impurity(
-        self,
-        Py_ssize_t pos,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        double* left,
-        double *right
-    ) nogil:
-        pass
+    cdef void child_impurity(self, double* left, double *right) nogil:
+        cdef double left_sq_sum = 0
+        cdef double right_sq_sum = 0
+        cdef double w = 1.0
+        cdef double y
+        cdef Py_ssize_t i, j, p
+
+        for i in range(self.start, self.pos):
+            j = self.samples[i]
+            p = self.label_stride * j
+
+            if self.sample_weight != NULL:
+                w = self.sample_weight[j]
+
+            y = self.labels[p]
+            left_sq_sum += w * y * y
+        right_sq_sum = self.sum_sq_total - left_sq_sum
+
+        left[0] = left_sq_sum / self.weighted_n_left
+        left[0] -= (self.sum_left / self.weighted_n_left) ** 2
+        right[0] = right_sq_sum / self.weighted_n_right
+        right[0] -= (self.sum_right / self.weighted_n_right) ** 2
 
 cpdef Tree _make_tree(
     FeatureEngineer feature_engineer,
@@ -543,84 +698,15 @@ cdef class Tree:
 
         return 0
 
-
-cdef inline SplitPoint new_split_point(
-    Py_ssize_t split_point,
-    double threshold,
-    Feature feature,
-) nogil:
-    cdef SplitPoint s
-    s.split_point = split_point
-    s.threshold = threshold
-    s.feature = feature
-    return s
-
-
-cdef inline Py_ssize_t label_distribution(
-    const Py_ssize_t *samples,
-    const double *sample_weights,
-    Py_ssize_t start,
-    Py_ssize_t end,
-    const Py_ssize_t *labels,
-    Py_ssize_t label_stride,
-    Py_ssize_t n_labels,
-    double *n_weighted_samples,
-    double *label_dist,
-) nogil:
-    cdef double sample_weight
-    cdef Py_ssize_t i, j, p, n_pos
-
-    n_pos = 0
-    n_weighted_samples[0] = 0
-    for i in range(start, end):
-        j = samples[i]
-        p = j * label_stride
-
-        if sample_weights != NULL:
-            sample_weight = sample_weights[j]
-        else:
-            sample_weight = 1.0
-
-        label_dist[labels[p]] += sample_weight
-        n_weighted_samples[0] += sample_weight
-
-    for i in range(n_labels):
-        if label_dist[i] > 0:
-            n_pos += 1
-
-    return n_pos
-
-
-cdef inline double entropy(
-    double  left_sum,
-    double *left_count,
-    double  right_sum,
-    double *right_count,
-    Py_ssize_t  n_labels
-) nogil:
-    cdef double n_samples = left_sum + right_sum
-    cdef double x_sum = 0
-    cdef double y_sum = 0
-    cdef double xv, yv
-    cdef Py_ssize_t i
-    for i in range(n_labels):
-        xv = left_count[i] / n_samples
-        yv = right_count[i] / n_samples
-        if xv > 0:
-            x_sum += xv * log2(xv)
-        if yv > 0:
-            y_sum += yv * log2(yv)
-
-    return fabs(
-        (left_sum / n_samples) * -x_sum +
-        (right_sum / n_samples) * -y_sum
-    )
-
-
 cdef class TreeBuilder:
 
+    # hyper-parameters
     cdef Py_ssize_t max_depth
     cdef Py_ssize_t min_sample_split
+    cdef Py_ssize_t min_sample_leaf
+    cdef double min_impurity_decrease
+
+    # the id (in Tree) of the current node
     cdef Py_ssize_t current_node_id
 
     # the stride of the label array
@@ -634,6 +720,7 @@ cdef class TreeBuilder:
 
     # the number of samples with non-zero weight
     cdef Py_ssize_t n_samples
+    cdef double n_weighted_samples
 
     # buffer of samples from 0, ..., n_samples
     cdef Py_ssize_t *samples
@@ -641,42 +728,40 @@ cdef class TreeBuilder:
     # temporary buffer of samples from 0, ..., n_samples
     cdef Py_ssize_t *samples_buffer
 
-    # the sum of samples_weights
-    cdef double n_weighted_samples
-
     # temporary buffer for feature computations
     cdef double *feature_buffer
 
-    # the feature measure implementation
     cdef FeatureEngineer feature_engineer
-
-    # the tree structure representation
+    cdef Criterion criterion
     cdef Tree tree
-
     cdef size_t random_seed
 
     def __cinit__(
         self,
-        Py_ssize_t max_depth,
-        Py_ssize_t min_sample_split,
         np.ndarray X,
-        np.ndarray y,
         np.ndarray sample_weights,
         FeatureEngineer feature_engineer,
+        Criterion criterion,
+        Tree tree,
         object random_state,
-        *args,
-        **kwargs
+        Py_ssize_t max_depth=2**16,
+        Py_ssize_t min_sample_split=2,
+        Py_ssize_t min_sample_leaf=1,
+        double min_impurity_decrease=0.0,
     ):
         self.max_depth = max_depth
         self.min_sample_split = min_sample_split
-        self.current_node_id = 0
+        self.min_sample_leaf = min_sample_leaf
+        self.min_impurity_decrease = min_impurity_decrease
         self.random_seed = random_state.randint(0, RAND_R_MAX)
 
         self.td = ts_database_new(X)
         self.feature_engineer = feature_engineer
-        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
+        self.criterion = criterion
+        self.tree = tree
 
-        self.n_samples = X.shape[0]
+        self.current_node_id = 0
+        self.n_samples = self.td.n_samples
         self.samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.n_samples)
         self.samples_buffer = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.n_samples)
         self.feature_buffer = <double*> malloc(sizeof(double) * self.n_samples)
@@ -690,13 +775,17 @@ cdef class TreeBuilder:
 
         cdef Py_ssize_t i
         cdef Py_ssize_t j = 0
+        self.n_weighted_samples = 0.0
         for i in range(self.n_samples):
             if sample_weights is None or sample_weights[i] != 0.0:
                 self.samples[j] = i
                 j += 1
+                if sample_weights is not None:
+                    self.n_weighted_samples += sample_weights[i]
+                else:
+                    self.n_weighted_samples += 1.0
 
         self.n_samples = j
-        self.n_weighted_samples = 0
 
         if sample_weights is None:
             self.sample_weights = NULL
@@ -716,7 +805,15 @@ cdef class TreeBuilder:
         cdef Py_ssize_t root_node_id
         cdef Py_ssize_t max_depth = 0
         with nogil:
-            root_node_id = self._build_tree(0, self.n_samples, 0, -1, False, &max_depth)
+            root_node_id = self._build_tree(
+                0,
+                self.n_samples,
+                0,
+                -1,
+                False,
+                NAN,
+                &max_depth
+            )
         self.tree._max_depth = max_depth
         return root_node_id
 
@@ -727,7 +824,11 @@ cdef class TreeBuilder:
         Py_ssize_t parent,
         bint is_left,
     ) nogil:
-        pass
+        cdef Py_ssize_t node_id = self.tree.add_leaf_node(
+            parent, is_left, end - start, self.criterion.weighted_n_total
+        )
+        self.criterion.leaf_value(self.tree, node_id)
+        return node_id
 
     cdef Py_ssize_t new_branch_node(
         self,
@@ -743,31 +844,12 @@ cdef class TreeBuilder:
             parent,
             is_left,
             end - start,
-            self.n_weighted_samples,
+            self.criterion.weighted_n_total,
             persistent_feature,
-            sp.threshold, 
-            -1,
+            sp.threshold,
+            sp.impurity_improvement,
         )
         return node_id
-
-
-    cdef bint _is_pre_pruned(self, Py_ssize_t start, Py_ssize_t end) nogil:
-        """Check if the tree should be pruned based on the samples in the
-        region indicated by `start` and `end`
-
-        Implementation detail: For optimization, subclasses *must* set
-        the variable `self.n_weighted_samples` to the number of samples
-        reaching this node in this method.
-       
-        Parameters
-        ----------
-        start : int
-            The start position in samples
-            
-        end : int
-            The end position in samples
-        """
-        pass
 
     cdef Py_ssize_t _build_tree(
         self,
@@ -776,6 +858,7 @@ cdef class TreeBuilder:
         Py_ssize_t depth,
         Py_ssize_t parent,
         bint is_left,
+        double impurity,
         Py_ssize_t *max_depth,
     ) nogil:
         """Recursive function for building the tree
@@ -807,19 +890,35 @@ cdef class TreeBuilder:
         if depth > max_depth[0]:
             max_depth[0] = depth
 
-        if self._is_pre_pruned(start, end) or depth >= self.max_depth:
+        self.criterion.init(start, end, self.samples, self.sample_weights)
+        cdef Py_ssize_t n_node_samples = end - start
+        cdef bint is_leaf = (
+            depth >= self.max_depth
+            or n_node_samples < self.min_sample_split
+            or n_node_samples < 2 * self.min_sample_leaf
+        )
+        if is_leaf:
             return self.new_leaf_node(start, end, parent, is_left)
 
-        cdef SplitPoint split = self._split(start, end)
-        
+        if parent < 0:
+            impurity = self.criterion.impurity()
+
+        cdef SplitPoint split = self._split(start, end, impurity)
+
         cdef Feature *persistent_feature
-        cdef Py_ssize_t current_node_id, left_node_id, right_node_id
+        cdef Py_ssize_t current_node_id
         cdef Py_ssize_t err
-        if split.split_point > start and end - split.split_point > 0:
+        is_leaf = (
+            split.split_point <= start
+            or split.split_point >= end
+            or split.impurity_improvement <= self.min_impurity_decrease
+        )
+        if not is_leaf:
             # The persistent feature is freed by the Tree
             persistent_feature = <Feature*> malloc(sizeof(Feature))
             err = self.feature_engineer.init_persistent_feature(
-                &self.td, &split.feature, persistent_feature)
+                &self.td, &split.feature, persistent_feature
+            )
             self.feature_engineer.free_transient_feature(&split.feature)
             if err == -1:
                 return -1
@@ -827,56 +926,56 @@ cdef class TreeBuilder:
             current_node_id = self.new_branch_node(
                 start, end, split, persistent_feature, parent, is_left
             )
-            left_node_id = self._build_tree(
-                start, split.split_point, depth + 1, current_node_id, True, max_depth
+            self._build_tree(
+                start,
+                split.split_point,
+                depth + 1,
+                current_node_id,
+                True,
+                split.impurity_left,
+                max_depth,
             )
-            right_node_id = self._build_tree(
-                split.split_point, end, depth + 1, current_node_id, False, max_depth
+            self._build_tree(
+                split.split_point,
+                end,
+                depth + 1,
+                current_node_id,
+                False,
+                split.impurity_right,
+                max_depth,
             )
             return current_node_id
         else:
-            # Only constant features
             return self.new_leaf_node(start, end, parent, is_left)
 
-    cdef SplitPoint _split(self, Py_ssize_t start, Py_ssize_t end) nogil:
-        """Split the `sample` array indicated by the region specified by
-        `start` and `end` by minimizing an impurity measure
-
-        Parameters
-        ----------
-        start : int
-            The start position in samples
-            
-        end : int
-            The end position in samples
-            
-        Notes
-        -----
-         - `self._partition_feature_buffer`: implements the decision 
-            to determine the split quality minimizing `impurity`
-        """
-        cdef Py_ssize_t split_point, best_split_point
-        cdef double threshold, best_threshold
-        cdef double impurity
-        cdef double best_impurity
-        cdef Feature feature
-        cdef Feature best_feature
+    cdef SplitPoint _split(self, Py_ssize_t start, Py_ssize_t end, double parent_impurity) nogil:
         cdef Py_ssize_t i, n_samples
-
-        feature.feature = NULL
-        best_feature.feature = NULL
+        cdef Py_ssize_t current_split_point
+        cdef double current_threshold
+        cdef double current_impurity
+        cdef double best_impurity
+        cdef Feature current_feature
 
         n_samples = end - start
-        best_impurity = INFINITY
-        best_threshold = NAN
-        best_split_point = 0
-        split_point = 0
+
+        best_impurity = -INFINITY
+
+        current_feature.feature = NULL
+        current_impurity = -INFINITY
+        current_threshold = NAN
+        current_split_point = 0
+
+        cdef SplitPoint best
+        best.threshold = NAN
+        best.split_point = 0
+        best.feature.feature = NULL
+
         for i in range(self.feature_engineer.get_n_features(&self.td)):
             self.feature_engineer.next_feature(
-                i, &self.td, self.samples + start, n_samples, &feature, &self.random_seed)
+                i, &self.td, self.samples + start, n_samples, &current_feature, &self.random_seed)
             
             self.feature_engineer.transient_feature_values(
-                &feature,
+                &current_feature,
                 &self.td,
                 self.samples + start,
                 end - start,
@@ -884,25 +983,29 @@ cdef class TreeBuilder:
             )
             argsort(self.feature_buffer + start, self.samples + start, n_samples)
 
-            # Constant feature
+            # All feature values are constant
             if self.feature_buffer[end - 1] <= self.feature_buffer[start] + FEATURE_THRESHOLD:
                 continue
 
-            self._partition_feature_buffer(start, end, &split_point, &threshold, &impurity)
-            if impurity < best_impurity:
+            self._partition_feature_buffer(
+                start, end, &current_split_point, &current_threshold, &current_impurity
+            )
+            if current_impurity > best_impurity:
                 # store the order of samples in `sample_buffer`
                 memcpy(
                     self.samples_buffer,
                     self.samples + start,
                     sizeof(Py_ssize_t) * n_samples,
                 )
-                best_impurity = impurity
-                best_split_point = split_point
-                best_threshold = threshold
-                self.feature_engineer.free_transient_feature(&best_feature)
-                best_feature = feature
+                best_impurity = current_impurity
+
+                best.split_point = current_split_point
+                best.threshold = current_threshold
+                if best.feature.feature != NULL:
+                    self.feature_engineer.free_transient_feature(&best.feature)
+                best.feature = current_feature
             else:
-                self.feature_engineer.free_transient_feature(&feature)
+                self.feature_engineer.free_transient_feature(&current_feature)
 
         # restore the best order to `samples`
         memcpy(
@@ -910,295 +1013,23 @@ cdef class TreeBuilder:
             self.samples_buffer,
             sizeof(Py_ssize_t) * n_samples,
         )
-        return new_split_point(best_split_point, best_threshold, best_feature)
+
+        self.criterion.reset()
+        self.criterion.update(start, best.split_point)
+        self.criterion.child_impurity(&best.impurity_left, &best.impurity_right)
+        best.impurity_improvement = self.criterion.impurity_improvement(
+            parent_impurity,
+            best.impurity_left,
+            best.impurity_right,
+            self.n_weighted_samples,
+        )
+        return best
 
     cdef void _partition_feature_buffer(
         self,
         Py_ssize_t start,
         Py_ssize_t end,
-        Py_ssize_t *split_point,
-        double *threshold,
-        double *impurity,
-    ) nogil:
-        """ Partition the feature buffer such that an impurity measure is
-        minimized
-        
-        Parameters
-        ----------
-        start : int
-            The start position in samples
-            
-        end : int
-            The end position in samples
-            
-        split_point : int (out) 
-            The split point: an index in `range(start, end)` minimizing impurity
-
-        threshold : float (out) 
-            The threshold value
-
-        impurity : float (in, out) 
-            - The initial impurity (in) 
-            - The optimal impurity (out)
-            
-        Warnings
-        --------
-        - Must be implemented by subclasses
-        """
-        with gil:
-            raise NotImplementedError()
-
-
-cdef class ClassificationTreeBuilder(TreeBuilder):
-    # the number of labels
-    cdef Py_ssize_t n_labels
-
-    # temporary buffer with sample distributions per label
-    cdef double *label_buffer
-
-    # temporary buffer with the left split sample distributions
-    cdef double *left_label_buffer
-
-    # temporary buffer with the right split sample distribution
-    cdef double *right_label_buffer
-
-    # the (strided) array of labels
-    cdef Py_ssize_t *labels
-
-    def __cinit__(
-        self,
-        Py_ssize_t max_depth,
-        Py_ssize_t min_sample_split,
-        np.ndarray X,
-        np.ndarray y,
-        np.ndarray sample_weights,
-        FeatureEngineer feature_engineer,
-        object random_state,
-        Py_ssize_t n_labels,
-        *args,
-        **kwargs,
-    ):
-        self.labels = <Py_ssize_t*> y.data
-        self.n_labels = n_labels
-        self.tree = Tree(self.feature_engineer, n_labels) # TODO
-        self.label_buffer = <double*> malloc(sizeof(double) * n_labels)
-        self.left_label_buffer = <double*> malloc(sizeof(double) * n_labels)
-        self.right_label_buffer = <double*> malloc(sizeof(double) * n_labels)
-        if (self.left_label_buffer == NULL or
-                self.right_label_buffer == NULL or
-                self.label_buffer == NULL):
-            raise MemoryError()
-
-    def __dealloc__(self):
-        free(self.label_buffer)
-        free(self.left_label_buffer)
-        free(self.right_label_buffer)
-
-    cdef Py_ssize_t new_leaf_node(
-        self,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        Py_ssize_t parent,
-        bint is_left,
-    ) nogil:
-        cdef Py_ssize_t node_id
-        cdef Py_ssize_t i
-        cdef double prob
-
-        node_id = self.tree.add_leaf_node(
-            parent, is_left, end - start, self.n_weighted_samples
-        )
-        for i in range(self.n_labels):
-            prob = self.label_buffer[i] / self.n_weighted_samples
-            self.tree.set_leaf_value(node_id, i, prob)
-        return node_id
-
-    cdef bint _is_pre_pruned(self, Py_ssize_t start, Py_ssize_t end) nogil:
-        # reinitialize the `label_buffer` to the sample distribution
-        # in the current sample region.
-        memset(self.label_buffer, 0, sizeof(double) * self.n_labels)
-        cdef Py_ssize_t n_positive = label_distribution(
-            self.samples,
-            self.sample_weights,
-            start,
-            end,
-            self.labels,
-            self.label_stride,
-            self.n_labels,
-            &self.n_weighted_samples,  # out param
-            self.label_buffer,  # out param
-        )
-
-        if end - start <= self.min_sample_split or n_positive < 2:
-            return True
-        return False
-
-    cdef void _partition_feature_buffer(
-        self,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        Py_ssize_t *split_point,
-        double *threshold,
-        double *impurity,
-    ) nogil:
-        memset(self.left_label_buffer, 0, sizeof(double) * self.n_labels)
-
-        # store the label buffer temporarily in `right_label_buffer`,
-        # since all samples fall on the right hand side of the threshold
-        memcpy(self.right_label_buffer, self.label_buffer,
-               sizeof(double) * self.n_labels)
-
-        cdef Py_ssize_t i  # real index of samples (in `range(start, end)`)
-        cdef Py_ssize_t j  # sample index (in `samples`)
-        cdef Py_ssize_t p  # label index (in `label_buffer`)
-
-        cdef double right_sum
-        cdef double left_sum
-
-        cdef double prev_feature
-        cdef Py_ssize_t prev_label
-
-        cdef double current_sample_weight
-        cdef double current_feature
-        cdef double current_impurity
-        cdef Py_ssize_t current_label
-
-        j = self.samples[start]
-        p = j * self.label_stride
-
-        prev_feature = self.feature_buffer[start]
-        prev_label = self.labels[p]
-
-        if self.sample_weights != NULL:
-            current_sample_weight = self.sample_weights[j]
-        else:
-            current_sample_weight = 1.0
-
-        left_sum = current_sample_weight
-        right_sum = self.n_weighted_samples - current_sample_weight
-
-        self.left_label_buffer[prev_label] += current_sample_weight
-        self.right_label_buffer[prev_label] -= current_sample_weight
-
-        impurity[0] = entropy(
-            left_sum,
-            self.left_label_buffer,
-            right_sum,
-            self.right_label_buffer,
-            self.n_labels
-        )
-
-        threshold[0] = prev_feature
-        # The split point indicates a <=-relation
-        split_point[0] = start + 1
-
-        for i in range(start + 1, end - 1):
-            j = self.samples[i]
-            current_feature = self.feature_buffer[i]
-
-            p = j * self.label_stride
-            current_label = self.labels[p]
-
-            if not current_label == prev_label:
-                current_impurity = entropy(
-                    left_sum,
-                    self.left_label_buffer,
-                    right_sum,
-                    self.right_label_buffer,
-                    self.n_labels,
-                )
-
-                if current_impurity <= impurity[0]:
-                    impurity[0] = current_impurity
-                    threshold[0] = (current_feature + prev_feature) / 2
-                    split_point[0] = i
-
-            if self.sample_weights != NULL:
-                current_sample_weight = self.sample_weights[j]
-            else:
-                current_sample_weight = 1.0
-
-            left_sum += current_sample_weight
-            right_sum -= current_sample_weight
-            self.left_label_buffer[current_label] += current_sample_weight
-            self.right_label_buffer[current_label] -= current_sample_weight
-
-            prev_label = current_label
-            prev_feature = current_feature
-
-
-cdef class RegressionTreeBuilder(TreeBuilder):
-    # the (strided) array of labels
-    cdef double *labels
-    cdef double sum_left
-    cdef double sum_right
-    cdef double sum_total
-    cdef double sum_sq_total
-    cdef double weighted_n_left
-    cdef double weighted_n_right
-    cdef Criterion criterion
-
-    def __cinit__(
-        self,
-        Py_ssize_t max_depth,
-        Py_ssize_t min_sample_split,
-        np.ndarray X,
-        np.ndarray y,
-        np.ndarray sample_weights,
-        FeatureEngineer feature_engineer,
-        *args,
-        **kwargs,
-    ):
-        self.criterion = MSECriterion(y)
-        self.labels = <double*> y.data
-        self.tree = Tree(self.feature_engineer, 1) # TODO
-
-    cdef bint _is_pre_pruned(self, Py_ssize_t start, Py_ssize_t end) nogil:
-        cdef Py_ssize_t j
-        cdef double sample_weight
-        self.n_weighted_samples = 0
-        for i in range(start, end):
-            j = self.samples[i]
-            if self.sample_weights != NULL:
-                sample_weight = self.sample_weights[j]
-            else:
-                sample_weight = 1.0
-
-            self.n_weighted_samples += sample_weight
-
-        if end - start <= self.min_sample_split:
-            return True
-        return False
-
-    cdef Py_ssize_t new_leaf_node(
-        self,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        Py_ssize_t parent,
-        bint is_left,
-    ) nogil:
-        cdef double leaf_sum = 0
-        cdef double current_sample_weight = 0
-        cdef Py_ssize_t j
-        cdef Py_ssize_t node_id
-        for i in range(start, end):
-            j = self.samples[i]
-            p = j * self.label_stride
-            if self.sample_weights != NULL:
-                current_sample_weight = self.sample_weights[j]
-            else:
-                current_sample_weight = 1.0
-            leaf_sum += self.labels[p] * current_sample_weight
-
-        node_id = self.tree.add_leaf_node(parent, is_left, end - start, self.n_weighted_samples)
-        self.tree.set_leaf_value(node_id, 0, leaf_sum / self.n_weighted_samples)
-        return node_id
-
-    cdef void _partition_feature_buffer(
-        self,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        Py_ssize_t *split_point,
+        Py_ssize_t *best_split_point,
         double *best_threshold,
         double *best_impurity,
     ) nogil:
@@ -1209,17 +1040,14 @@ cdef class RegressionTreeBuilder(TreeBuilder):
         cdef Py_ssize_t new_pos
         cdef double impurity
 
-
-        self.criterion.init(
-            start,
-            end,
-            self.samples,
-            self.sample_weights,
-        )
+        best_impurity[0] = -INFINITY
+        best_threshold[0] = NAN
+        best_split_point[0] = 0
 
         pos = start
         i = start
         while i < end:
+            # Ignore split points with almost equal feature value
             while i + 1 < end and (
                 self.feature_buffer[i + 1]
                 <= self.feature_buffer[i] + FEATURE_THRESHOLD
@@ -1229,22 +1057,15 @@ cdef class RegressionTreeBuilder(TreeBuilder):
             i += 1
             if i < end:
                 new_pos = i
-                self.criterion.update(
-                    pos,
-                    new_pos,
-                    start,
-                    end,
-                    self.samples,
-                    self.sample_weights,
-                )
+                self.criterion.update(pos, new_pos)
                 pos = new_pos
                 impurity = self.criterion.proxy_impurity()
-                if impurity <= best_impurity[0]:
+                if impurity > best_impurity[0]:
                     best_impurity[0] = impurity
                     best_threshold[0] = (
                         self.feature_buffer[i - 1] / 2.0 + self.feature_buffer[i] / 2.0
                     )
-                    split_point[0] = pos
+                    best_split_point[0] = pos
 
                     if (
                         best_threshold[0] == self.feature_buffer[i]
@@ -1253,36 +1074,7 @@ cdef class RegressionTreeBuilder(TreeBuilder):
                     ):
                         best_threshold[0] = self.feature_buffer[i - 1]
 
-
-cdef class ExtraRegressionTreeBuilder(RegressionTreeBuilder):
-
-    cdef void _partition_feature_buffer(
-        self,
-        Py_ssize_t start,
-        Py_ssize_t end,
-        Py_ssize_t *split_point,
-        double *best_threshold,
-        double *best_impurity,
-    ) nogil:
-        # The smallest feature is always 0
-        cdef double min_feature = self.feature_buffer[start + 1]
-        cdef double max_feature = self.feature_buffer[end - 1]
-        cdef double rand_threshold = rand_uniform(
-            min_feature, max_feature, &self.random_seed
-        )
-        cdef Py_ssize_t i
-        split_point[0] = start + 1
-        for i in range(start + 1, end - 1):
-            if self.feature_buffer[i] <= rand_threshold:
-                split_point[0] = i
-            else:
-                break
-        best_threshold[0] = rand_threshold
-        # TODO: compute impurity scoring
-        best_impurity[0] = 0
-
-
-cdef class ExtraClassificationTreeBuilder(ClassificationTreeBuilder):
+cdef class ExtraTreeBuilder(TreeBuilder):
 
     cdef void _partition_feature_buffer(
         self,
@@ -1292,8 +1084,6 @@ cdef class ExtraClassificationTreeBuilder(ClassificationTreeBuilder):
         double *threshold,
         double *impurity,
     ) nogil:
-        # TODO: is this still true?
-        # The smallest feature is always 0
         cdef double min_feature = self.feature_buffer[start + 1]
         cdef double max_feature = self.feature_buffer[end - 1]
         cdef double rand_threshold = rand_uniform(
@@ -1301,12 +1091,11 @@ cdef class ExtraClassificationTreeBuilder(ClassificationTreeBuilder):
         )
         cdef Py_ssize_t i
 
-        split_point[0] = start + 1
+        split_point[0] = start
         for i in range(start + 1, end - 1):
             if self.feature_buffer[i] <= rand_threshold:
                 split_point[0] = i
             else:
                 break
         threshold[0] = rand_threshold
-        # TODO: compute impurity scoring
         impurity[0] = -INFINITY

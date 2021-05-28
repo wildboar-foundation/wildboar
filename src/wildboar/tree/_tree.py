@@ -15,33 +15,52 @@
 #
 # Authors: Isak Samsten
 
+import sys
+import warnings
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
-from sklearn.utils import check_random_state
-from sklearn.utils.validation import check_array, check_is_fitted
+from sklearn.utils import check_random_state, compute_sample_weight
+from sklearn.utils.validation import _check_sample_weight, check_array, check_is_fitted
 
 from ..embed._rocket import RocketFeatureEngineer
 from ..embed._shapelet import RandomShapeletFeatureEngineer
 from ._tree_builder import (
-    ClassificationTreeBuilder,
-    ExtraClassificationTreeBuilder,
-    ExtraRegressionTreeBuilder,
-    RegressionTreeBuilder,
+    EntropyCriterion,
+    ExtraTreeBuilder,
+    GiniCriterion,
+    MSECriterion,
+    Tree,
+    TreeBuilder,
 )
+
+CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}
+REG_CRITERION = {"mse": MSECriterion}
 
 
 class BaseTree(BaseEstimator, metaclass=ABCMeta):
-    def __init__(self, *, max_depth=None, min_samples_split=2):
+    def __init__(
+        self,
+        *,
+        force_dim=None,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+    ):
+        self.force_dim = force_dim
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
+        self.min_samples_leaf = min_samples_leaf
+        self.min_impurity_decrease = min_impurity_decrease
 
     def _validate_x_predict(self, x, check_input):
         if x.ndim < 2 or x.ndim > 3:
             raise ValueError("illegal input dimensions X.ndim ({})".format(x.ndim))
         if isinstance(self.force_dim, int):
             x = np.reshape(x, [x.shape[0], self.force_dim, -1])
+
         if x.shape[-1] != self.n_timestep_:
             raise ValueError(
                 "illegal input shape ({} != {})".format(x.shape[-1], self.n_timestep_)
@@ -72,13 +91,33 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def _get_tree_builder(self, x, y, sample_weights, feature_engineer, random_state):
+    def _get_tree_builder(
+        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+    ):
         pass
 
     def _fit(self, x, y, sample_weights, random_state):
+        max_depth = (
+            sys.getrecursionlimit() if self.max_depth is None else self.max_depth
+        )
+        if self.min_impurity_decrease < 0.0:
+            raise ValueError(
+                "min_impurity_decrease must be larger than or equal to 0.0"
+            )
+
+        if max_depth <= 0:
+            raise ValueError("max_depth must be larger than 0")
+        elif max_depth > sys.getrecursionlimit():
+            warnings.warn("max_depth exceeds the maximum recursion limit.")
+
         feature_engineer = self._get_feature_engineer()
         tree_builder = self._get_tree_builder(
-            x, y, sample_weights, feature_engineer, random_state
+            x,
+            y,
+            sample_weights,
+            feature_engineer,
+            random_state,
+            max_depth,
         )
         tree_builder.build_tree()
         self.tree_ = tree_builder.tree_
@@ -144,6 +183,10 @@ class RegressorTreeMixin:
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
         random_state = check_random_state(self.random_state)
+
+        if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, X, np.float64)
+
         self._fit(X, y, sample_weight, random_state)
         return self
 
@@ -169,15 +212,25 @@ class RegressorTreeMixin:
         x = self._validate_x_predict(x, check_input)
         return self.tree_.predict(x)
 
-    def _get_tree_builder(self, x, y, sample_weights, feature_engineer, random_state):
-        return RegressionTreeBuilder(
-            self.max_depth or 2 ** 31,
-            self.min_samples_split,
+    def _get_tree_builder(
+        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+    ):
+        if self.criterion not in REG_CRITERION:
+            raise ValueError("criterion (%s) is not supported" % self.criterion)
+
+        criterion = REG_CRITERION[self.criterion](y)
+        tree = Tree(feature_engineer, 1)
+        return TreeBuilder(
             x,
-            y,
             sample_weights,
             feature_engineer,
+            criterion,
+            tree,
             random_state,
+            max_depth=max_depth,
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
         )
 
 
@@ -226,6 +279,11 @@ class ClassifierTreeMixin:
         else:
             n_dims = 1
 
+        if self.class_weight is not None:
+            class_weight = compute_sample_weight(self.class_weight, y)
+        else:
+            class_weight = None
+
         if y.ndim == 1:
             self.classes_, y = np.unique(y, return_inverse=True)
         else:
@@ -250,6 +308,16 @@ class ClassifierTreeMixin:
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
         random_state = check_random_state(self.random_state)
+
+        if sample_weight is not None:
+            sample_weight = _check_sample_weight(sample_weight, x, np.float64)
+
+        if class_weight is not None:
+            if sample_weight is not None:
+                sample_weight = sample_weight * class_weight
+            else:
+                sample_weight = class_weight
+
         self._fit(x, y, sample_weight, random_state)
         return self
 
@@ -299,16 +367,25 @@ class ClassifierTreeMixin:
         x = self._validate_x_predict(x, check_input)
         return self.tree_.predict(x)
 
-    def _get_tree_builder(self, x, y, sample_weights, feature_engineer, random_state):
-        return ClassificationTreeBuilder(
-            self.max_depth or 2 ** 31,
-            self.min_samples_split,
+    def _get_tree_builder(
+        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+    ):
+        if self.criterion not in CLF_CRITERION:
+            raise ValueError("criterion (%s) is not supported" % self.criterion)
+
+        criterion = CLF_CRITERION[self.criterion](y, self.n_classes_)
+        tree = Tree(feature_engineer, self.n_classes_)
+        return TreeBuilder(
             x,
-            y,
             sample_weights,
             feature_engineer,
+            criterion,
+            tree,
             random_state,
-            self.n_classes_,
+            max_depth=max_depth,
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
         )
 
 
@@ -318,34 +395,45 @@ class BaseShapeletTree(BaseTree):
         *,
         max_depth=None,
         min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
         n_shapelets=10,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
         force_dim=None,
         random_state=None,
     ):
-        super().__init__(max_depth=max_depth, min_samples_split=min_samples_split)
-        if min_shapelet_size < 0 or min_shapelet_size > max_shapelet_size:
-            raise ValueError(
-                "`min_shapelet_size` {0} <= 0 or {0} > {1}".format(
-                    min_shapelet_size, max_shapelet_size
-                )
-            )
-        if max_shapelet_size > 1:
-            raise ValueError("`max_shapelet_size` {0} > 1".format(max_shapelet_size))
+        super().__init__(
+            force_dim=force_dim,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+        )
         self.random_state = check_random_state(random_state)
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
-        self.force_dim = force_dim
         self.n_timestep_ = None
         self.n_dims_ = None
 
     def _get_feature_engineer(self):
+        if (
+            self.min_shapelet_size < 0
+            or self.min_shapelet_size > self.max_shapelet_size
+        ):
+            raise ValueError(
+                "min_shapelet_size {0} <= 0 or {0} > {1}".format(
+                    self.min_shapelet_size, self.max_shapelet_size
+                )
+            )
+        if self.max_shapelet_size > 1:
+            raise ValueError("max_shapelet_size %d > 1" % self.max_shapelet_size)
+
         max_shapelet_size = int(self.n_timestep_ * self.max_shapelet_size)
         min_shapelet_size = int(self.n_timestep_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
@@ -375,12 +463,15 @@ class ShapeletTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseShapeletTree
         *,
         max_depth=None,
         min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
         n_shapelets=10,
         min_shapelet_size=0,
         max_shapelet_size=1,
         metric="euclidean",
         metric_params=None,
         force_dim=None,
+        criterion="mse",
         random_state=None,
     ):
         """Construct a shapelet tree regressor
@@ -394,6 +485,16 @@ class ShapeletTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseShapeletTree
 
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
+
+        min_samples_leaf : int, optional
+            The minimum number of samples in a leaf
+
+        criterion : {"mse"}, optional
+            The criterion used to evaluate the utility of a split
+
+        min_impurity_decrease : float, optional
+            A split will be introduced only if the impurity decrease is larger than or
+            equal to this value
 
         n_shapelets : int, optional
             The number of shapelets to sample at each node.
@@ -426,6 +527,8 @@ class ShapeletTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseShapeletTree
         """
         super(ShapeletTreeRegressor, self).__init__(
             max_depth=max_depth,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
             min_samples_split=min_samples_split,
             n_shapelets=n_shapelets,
             min_shapelet_size=min_shapelet_size,
@@ -435,6 +538,7 @@ class ShapeletTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseShapeletTree
             force_dim=force_dim,
             random_state=random_state,
         )
+        self.criterion = criterion
 
 
 class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
@@ -452,14 +556,17 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     def __init__(
         self,
         *,
-        max_depth=None,
         n_shapelets=1,
+        max_depth=None,
         min_samples_split=2,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
         force_dim=None,
+        criterion="mse",
         random_state=None,
     ):
         """Construct a extra shapelet tree regressor
@@ -474,103 +581,15 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
 
-        n_shapelets : int, optional
-            The number of shapelets to sample at each node.
+        min_samples_leaf : int, optional
+            The minimum number of samples in a leaf
 
-        min_shapelet_size : float, optional
-            The minimum length of a sampled shapelet expressed as a fraction, computed
-            as`min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+        criterion : {"mse"}, optional
+            The criterion used to evaluate the utility of a split
 
-        max_shapelet_size : float, optional
-            The maximum length of a sampled shapelet, expressed as a fraction, computed
-            as `ceil(X.shape[-1] * max_shapelet_size)`.
-
-        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
-            Distance metric used to identify the best shapelet.
-
-        metric_params : dict, optional
-            Parameters for the distance measure
-
-        force_dim : int, optional
-            Force the number of dimensions.
-
-            - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-              for interoperability with `sklearn`.
-
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator;
-            - If `RandomState` instance, `random_state` is the random number generator;
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
-        super(ExtraShapeletTreeRegressor, self).__init__(
-            max_depth=max_depth,
-            min_samples_split=min_samples_split,
-            n_shapelets=n_shapelets,
-            min_shapelet_size=min_shapelet_size,
-            max_shapelet_size=max_shapelet_size,
-            metric=metric,
-            metric_params=metric_params,
-            force_dim=force_dim,
-            random_state=random_state,
-        )
-
-    def _get_tree_builder(self, x, y, sample_weights, feature_engineer, random_state):
-        return ExtraRegressionTreeBuilder(
-            self.max_depth or 2 ** 31,
-            self.min_samples_split,
-            x,
-            y,
-            sample_weights,
-            feature_engineer,
-            random_state,
-        )
-
-
-class ShapeletTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseShapeletTree):
-    """A shapelet tree classifier.
-
-    Attributes
-    ----------
-
-    tree_ : Tree
-        The tree data structure used internally
-
-    classes_ : ndarray of shape (n_classes,)
-        The class labels
-
-    n_classes_ : int
-        The number of class labels
-
-    See Also
-    --------
-    ShapeletTreeRegressor : A shapelet tree regressor.
-    ExtraShapeletTreeClassifier : An extra random shapelet tree classifier.
-    """
-
-    def __init__(
-        self,
-        max_depth=None,
-        min_samples_split=2,
-        n_shapelets=10,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
-        metric="euclidean",
-        metric_params=None,
-        force_dim=None,
-        random_state=None,
-    ):
-        """Construct a shapelet tree classifier
-
-        Parameters
-        ----------
-        max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all
-            leaves are pure or until all leaves contain less than `min_samples_split`
-            samples
-
-        min_samples_split : int, optional
-            The minimum number of samples to split an internal node
+        min_impurity_decrease : float, optional
+            A split will be introduced only if the impurity decrease is larger than or
+            equal to this value
 
         n_shapelets : int, optional
             The number of shapelets to sample at each node.
@@ -601,9 +620,145 @@ class ShapeletTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseShapeletT
             - If `None`, the random number generator is the `RandomState` instance used
               by `np.random`.
         """
+        super(ExtraShapeletTreeRegressor, self).__init__(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            n_shapelets=n_shapelets,
+            min_shapelet_size=min_shapelet_size,
+            max_shapelet_size=max_shapelet_size,
+            metric=metric,
+            metric_params=metric_params,
+            criterion=criterion,
+            force_dim=force_dim,
+            random_state=random_state,
+        )
+
+    def _get_tree_builder(
+        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+    ):
+        if self.criterion not in CLF_CRITERION:
+            raise ValueError("criterion (%s) is not supported" % self.criterion)
+
+        criterion = REG_CRITERION[self.criterion](y)
+        tree = Tree(feature_engineer, 1)
+        return TreeBuilder(
+            x,
+            sample_weights,
+            feature_engineer,
+            criterion,
+            tree,
+            random_state,
+            max_depth=max_depth,
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
+        )
+
+
+class ShapeletTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseShapeletTree):
+    """A shapelet tree classifier.
+
+    Attributes
+    ----------
+
+    tree_ : Tree
+        The tree data structure used internally
+
+    classes_ : ndarray of shape (n_classes,)
+        The class labels
+
+    n_classes_ : int
+        The number of class labels
+
+    See Also
+    --------
+    ShapeletTreeRegressor : A shapelet tree regressor.
+    ExtraShapeletTreeClassifier : An extra random shapelet tree classifier.
+    """
+
+    def __init__(
+        self,
+        *,
+        n_shapelets=10,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
+        metric="euclidean",
+        metric_params=None,
+        criterion="entropy",
+        force_dim=None,
+        class_weight=None,
+        random_state=None,
+    ):
+        """Construct a shapelet tree classifier
+
+        Parameters
+        ----------
+        max_depth : int, optional
+            The maximum depth of the tree. If `None` the tree is expanded until all
+            leaves are pure or until all leaves contain less than `min_samples_split`
+            samples
+
+        min_samples_split : int, optional
+            The minimum number of samples to split an internal node
+
+        min_samples_leaf : int, optional
+            The minimum number of samples in a leaf
+
+        criterion : {"entropy", "gini"}, optional
+            The criterion used to evaluate the utility of a split
+
+        min_impurity_decrease : float, optional
+            A split will be introduced only if the impurity decrease is larger than or
+            equal to this value
+
+        n_shapelets : int, optional
+            The number of shapelets to sample at each node.
+
+        min_shapelet_size : float, optional
+            The minimum length of a sampled shapelet expressed as a fraction, computed
+            as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+
+        max_shapelet_size : float, optional
+            The maximum length of a sampled shapelet, expressed as a fraction, computed
+            as `ceil(X.shape[-1] * max_shapelet_size)`.
+
+        metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+            Distance metric used to identify the best shapelet.
+
+        metric_params : dict, optional
+            Parameters for the distance measure
+
+        force_dim : int, optional
+            Force the number of dimensions.
+
+            - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
+              for interoperability with `sklearn`.
+
+        class_weight : dict or "balanced", optional
+            Weights associated with the labels
+
+            - if dict, weights on the form {label: weight}
+            - if "balanced" each class weight inversely proportional to the class
+              frequency
+            - if None, each class has equal weight
+
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator;
+            - If `RandomState` instance, `random_state` is the random number generator;
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
+        """
         super(ShapeletTreeClassifier, self).__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
             n_shapelets=n_shapelets,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
@@ -613,6 +768,8 @@ class ShapeletTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseShapeletT
             random_state=random_state,
         )
         self.n_classes_ = None
+        self.criterion = criterion
+        self.class_weight = class_weight
 
 
 class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
@@ -629,14 +786,18 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
 
     def __init__(
         self,
+        *,
         max_depth=None,
-        n_shapelets=1,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
         min_samples_split=2,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
+        criterion="entropy",
         force_dim=None,
+        class_weight=None,
         random_state=None,
     ):
         """Construct a extra shapelet tree regressor
@@ -646,21 +807,28 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
-             samples
+            samples
 
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
 
-        n_shapelets : int, optional
-            The number of shapelets to sample at each node.
+        min_samples_leaf : int, optional
+            The minimum number of samples in a leaf
+
+        criterion : {"entropy", "gini"}, optional
+            The criterion used to evaluate the utility of a split
+
+        min_impurity_decrease : float, optional
+            A split will be introduced only if the impurity decrease is larger than or
+            equal to this value
 
         min_shapelet_size : float, optional
-            The minimum length of a sampled shapelet expressed as a fraction,
-             computed as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+            The minimum length of a sampled shapelet expressed as a fraction, computed
+            as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
 
         max_shapelet_size : float, optional
-            The maximum length of a sampled shapelet, expressed as a fraction,
-            computed as `ceil(X.shape[-1] * max_shapelet_size)`.
+            The maximum length of a sampled shapelet, expressed as a fraction, computed
+            as `ceil(X.shape[-1] * max_shapelet_size)`.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
@@ -672,37 +840,58 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             Force the number of dimensions.
 
             - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-              or interoperability with `sklearn`.
+              for interoperability with `sklearn`.
+
+        class_weight : dict or "balanced", optional
+            Weights associated with the labels
+
+            - if dict, weights on the form {label: weight}
+            - if "balanced" each class weight inversely proportional to the class
+              frequency
+            - if None, each class has equal weight
 
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
-            - If `None`, the random number generator is the `RandomState` instance
-              used by `np.random`.
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super(ShapeletTreeClassifier, self).__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
-            n_shapelets=n_shapelets,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            n_shapelets=1,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
+            criterion=criterion,
             force_dim=force_dim,
+            class_weight=class_weight,
             random_state=random_state,
         )
         self.n_classes_ = None
 
-    def _get_tree_builder(self, x, y, sample_weights, feature_engineer, random_state):
-        return ExtraClassificationTreeBuilder(
-            self.max_depth or 2 ** 31,
-            self.min_samples_split,
+    def _get_tree_builder(
+        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+    ):
+        if self.criterion not in CLF_CRITERION:
+            raise ValueError("criterion (%s) is not supported" % self.criterion)
+
+        criterion = CLF_CRITERION[self.criterion](y, self.n_classes_)
+        tree = Tree(feature_engineer, self.n_classes_)
+        return ExtraTreeBuilder(
             x,
-            y,
             sample_weights,
             feature_engineer,
+            criterion,
+            tree,
             random_state,
-            self.n_classes_,
+            max_depth=max_depth,
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
         )
 
 
@@ -711,9 +900,9 @@ class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseTree):
         self,
         *,
         n_kernels=10,
-        precompute_kernels=None,
         max_depth=None,
         min_samples_split=2,
+        criterion="entropy",
         force_dim=None,
         random_state=None,
     ):
@@ -722,11 +911,6 @@ class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseTree):
         ----------
         n_kernels : int, optional
             The number of kernels to inspect at each node.
-
-        precompute_kernels : int, optional
-
-            - if int, precompute n kernels to sample from
-            - if None, randomly sample at each node
 
         max_depth : int, optional
             The maxium depth.
@@ -742,13 +926,14 @@ class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseTree):
         """
         super().__init__(max_depth=max_depth, min_samples_split=min_samples_split)
         self.n_kernels = n_kernels
-        self.precompute_kernels = precompute_kernels
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
+        self.criterion = criterion
         self.force_dim = force_dim
         self.random_state = random_state
 
     def _get_feature_engineer(self):
+        # TODO: sampler etc...
         return RocketFeatureEngineer(self.n_kernels)
 
 
@@ -757,9 +942,9 @@ class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseTree):
         self,
         *,
         n_kernels=10,
-        precompute_kernels=None,
         max_depth=None,
         min_samples_split=2,
+        criterion="mse",
         force_dim=None,
         random_state=None,
     ):
@@ -768,11 +953,6 @@ class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseTree):
         ----------
         n_kernels : int, optional
             The number of kernels to inspect at each node.
-
-        precompute_kernels : int, optional
-
-            - if int, precompute n kernels to sample from
-            - if None, randomly sample at each node
 
         max_depth : int, optional
             The maxium depth.
@@ -788,11 +968,12 @@ class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseTree):
         """
         super().__init__(max_depth=max_depth, min_samples_split=min_samples_split)
         self.n_kernels = n_kernels
-        self.precompute_kernels = precompute_kernels
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
+        self.criterion = criterion
         self.force_dim = force_dim
         self.random_state = random_state
 
     def _get_feature_engineer(self):
+        # TODO
         return RocketFeatureEngineer(self.n_kernels)
