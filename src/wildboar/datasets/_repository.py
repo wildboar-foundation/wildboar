@@ -16,17 +16,16 @@
 # Authors: Isak Samsten
 
 import hashlib
-import io
 import os
 import re
 import sys
+import warnings
 import zipfile
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
 import requests
 from pkg_resources import parse_version
-from scipy.io.arff import loadarff
 
 from wildboar import __version__ as wildboar_version
 
@@ -338,7 +337,7 @@ class Repository(metaclass=ABCMeta):
     ):
         bundle = self.get_bundle(bundle)
         version = version or bundle.version
-        tag = tag or DEFAULT_TAG
+        tag = tag or bundle.tag
 
         cache_dir = os.path.join(cache_dir, self.name)
         download_url = _replace_placeholders(
@@ -369,7 +368,7 @@ class Repository(metaclass=ABCMeta):
     ):
         bundle = self.get_bundle(bundle)
         version = version or bundle.version
-        tag = tag or DEFAULT_TAG
+        tag = tag or bundle.tag
 
         cache_dir = os.path.join(cache_dir, self.name)
         download_url = _replace_placeholders(
@@ -393,7 +392,7 @@ class Repository(metaclass=ABCMeta):
         keep = []
         if keep_last_version:
             keep = [
-                bundle.get_filename(tag=DEFAULT_TAG)
+                bundle.get_filename(tag=bundle.tag)
                 for _, bundle in self.get_bundles().items()
             ]
 
@@ -412,7 +411,7 @@ class Repository(metaclass=ABCMeta):
         try:
             self._refresh(timeout)
             self._active = True
-        except:
+        except requests.Timeout:
             self._active = False
 
     @abstractmethod
@@ -451,6 +450,22 @@ def _validate_version(str, *, max_version=None):
         return str
     else:
         raise ValueError("version (%s) is not valid" % str)
+
+
+def _validate_collections(collections):
+    if not isinstance(collections, dict):
+        raise ValueError(
+            "value (%r) is not supported for attribute 'collections'" % collections
+        )
+    else:
+        for key, values in collections.items():
+            if not isinstance(values, list):
+                raise ValueError(
+                    "value (%r) is not supported as 'collections.value'" % values
+                )
+            if not isinstance(key, str):
+                raise ValueError("value (%r) is not supported as 'collections.key' ")
+    return collections
 
 
 class JSONRepository(Repository):
@@ -497,16 +512,41 @@ class JSONRepository(Repository):
         bundles = {}
         for bundle_json in json["bundles"]:
             key = _validate_bundle_key(bundle_json["key"])
+            if key in bundles:
+                warnings.warn("duplicate dataset, %s (ignoring)" % key)
+
             version = _validate_version(bundle_json["version"])
+            tag = bundle_json.get("tag")
+            if tag is not None:
+                tag = _validate_bundle_key(tag)
+
             name = bundle_json.get("name")
             if name is None:
-                raise ValueError("Bundle name is required (%s)" % key)
+                raise ValueError("bundle name is required (%s)" % key)
             arrays = bundle_json.get("arrays")
+            if arrays is not None:
+                if not isinstance(arrays, list):
+                    warnings.warn(
+                        "value (%r) is not supported for attribute 'arrays'" % arrays
+                    )
+                    arrays = None
             description = bundle_json.get("description")
+            if description is not None:
+                if not isinstance(description, str):
+                    warnings.warn(
+                        "value (%r) is not supported for attribute 'description'"
+                        % description
+                    )
+                    description = None
+
             collections = bundle_json.get("collections")
+            if collections is not None:
+                collections = _validate_collections(collections)
+
             bundles[bundle_json["key"]] = NpBundle(
                 key=key,
                 version=version,
+                tag=tag,
                 name=name,
                 description=description,
                 collections=collections,
@@ -530,8 +570,8 @@ class RepositoryCollection:
         if repository is None:
             if self.pending_repositories:
                 raise ValueError(
-                    "repository (%s) does not exist, but %d repositories have not been refreshed yet."
-                    % (key, len(self.pending_repositories))
+                    "repository (%s) does not exist, but %d repositories have not been "
+                    "refreshed yet." % (key, len(self.pending_repositories))
                 )
             else:
                 raise ValueError("repository (%s) does not exist" % key)
@@ -605,6 +645,7 @@ class Bundle(metaclass=ABCMeta):
         key,
         version,
         name,
+        tag=None,
         arrays=None,
         description=None,
         collections=None,
@@ -633,6 +674,7 @@ class Bundle(metaclass=ABCMeta):
         self.name = name
         self.description = description
         self.collections = collections
+        self.tag = tag or DEFAULT_TAG
         self.arrays = arrays or ["x", "y"]
 
     def get_filename(self, version=None, tag=None, ext=None):
@@ -645,11 +687,11 @@ class Bundle(metaclass=ABCMeta):
 
     def get_collection(self, collection):
         if self.collections is None:
-            raise ValueError("collection (%s) found" % collection)
+            raise ValueError("collection (%s) not found" % collection)
         else:
             c = self.collections.get(collection)
             if c is None:
-                raise ValueError("collection (%s) found" % collection)
+                raise ValueError("collection (%s) not found" % collection)
             return c
 
     def list(self, archive, collection=None):
