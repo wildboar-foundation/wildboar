@@ -36,7 +36,7 @@ Attributes
 
    
 
-.. class:: Bundle(*, key, version, name, arrays=None, description=None, collections=None)
+.. class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
 
    Base class for handling dataset bundles
@@ -164,7 +164,7 @@ Attributes
 
 
 
-.. class:: NpBundle(*, key, version, name, arrays=None, description=None, collections=None)
+.. class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
 
    Bases: :py:obj:`Bundle`
