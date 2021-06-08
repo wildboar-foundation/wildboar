@@ -218,13 +218,12 @@ def load_datasets(
 
             The format of attribute comparisons are ``[attribute][comparison spec].
 
-            Valid attributes are``
+            Valid attributes are
             - ``dataset``
             - ``n_samples``
             - ``n_timestep``
             - ``n_dims``
             - ``n_labels``
-
 
         Comparison spec
         ---------------
@@ -315,8 +314,9 @@ def load_dataset(
     preprocess : str or callable, optional
         Preprocess the dataset
 
-        - if str, "standardize"
-        - if callable, function taking a dataset and returning the preprocessed dataset
+        - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
+          for valid keys)
+        - if callable, function taking a np.ndarray and returns the preprocessed dataset
 
     merge_train_test : bool, optional
         Merge the existing training and testing partitions.
@@ -614,6 +614,8 @@ def get_bundles(repository, *, refresh=False, timeout=None):
     timeout : float, optional
         Timeout for json request
 
+        ..versionadded :: 1.1
+
     Returns
     -------
     dict : A dict of key Bundle pairs
@@ -640,6 +642,8 @@ def list_bundles(repository, *, refresh=False, timeout=None):
 
     timeout : float, optional
         Timeout for json request
+
+        ..versionadded :: 1.1
 
     Returns
     -------
@@ -699,8 +703,9 @@ def list_repositories(*, refresh=False, timeout=None):
 
 # Install the default 'wildboar' repository
 def _get_dataset_version():
-    from wildboar import __version__
     from pkg_resources import parse_version
+
+    from wildboar import __version__
 
     v = parse_version(__version__)
     if v.is_prerelease:

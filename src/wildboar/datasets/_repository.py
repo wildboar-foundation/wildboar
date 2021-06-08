@@ -523,6 +523,7 @@ class JSONRepository(Repository):
             name = bundle_json.get("name")
             if name is None:
                 raise ValueError("bundle name is required (%s)" % key)
+
             arrays = bundle_json.get("arrays")
             if arrays is not None:
                 if not isinstance(arrays, list):
@@ -530,6 +531,7 @@ class JSONRepository(Repository):
                         "value (%r) is not supported for attribute 'arrays'" % arrays
                     )
                     arrays = None
+
             description = bundle_json.get("description")
             if description is not None:
                 if not isinstance(description, str):
