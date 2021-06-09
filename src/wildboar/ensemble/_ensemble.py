@@ -15,7 +15,6 @@
 #
 # Authors: Isak Samsten
 import numbers
-from abc import abstractmethod
 
 import numpy as np
 from joblib import Parallel, delayed
@@ -36,20 +35,21 @@ from ..tree import (
     ShapeletTreeClassifier,
     ShapeletTreeRegressor,
 )
+from ..tree._tree import RocketTreeClassifier, RocketTreeRegressor
 
 
-class ShapeletForestMixin:
+class ForestMixin:
     def apply(self, x):
         x = self._validate_x_predict(x, check_input=True)
         results = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
-            **self._parallel_args(),
+            **_joblib_parallel_args(prefer="threads"),
         )(delayed(tree.apply)(x, check_input=False) for tree in self.estimators_)
 
         return np.array(results).T
 
-    def decision_function(self, x):
+    def decision_path(self, x):
         x = self._validate_x_predict(x, check_input=True)
         indicators = Parallel(
             n_jobs=self.n_jobs,
@@ -69,25 +69,116 @@ class ShapeletForestMixin:
     def _validate_x_predict(self, x, check_input):
         if x.ndim < 2 or x.ndim > 3:
             raise ValueError("illegal input dimensions X.ndim ({})".format(x.ndim))
-        if self.n_dims > 1 and x.ndim != 3:
+        if self.n_dims_ > 1 and x.ndim != 3:
             raise ValueError("illegal input dimensions X.ndim != 3")
-        if x.shape[-1] != self.n_timestep:
+        if x.shape[-1] != self.n_timestep_:
             raise ValueError(
                 "illegal input shape ({} != {})".format(x.shape[-1], self.n_timestep)
             )
-        if x.ndim > 2 and x.shape[1] != self.n_dims:
+        if x.ndim > 2 and x.shape[1] != self.n_dims_:
             raise ValueError(
-                "illegal input shape ({} != {}".format(x.shape[1], self.n_dims)
+                "illegal input shape ({} != {}".format(x.shape[1], self.n_dims_)
             )
         if check_input:
             x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
         if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
-        x = x.reshape(x.shape[0], self.n_dims * self.n_timestep)
+        x = x.reshape(x.shape[0], self.n_dims_ * self.n_timestep_)
         return x
 
 
-class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
+class BaseForestClassifier(ForestMixin, BaggingClassifier):
+    def __init__(
+        self,
+        *,
+        base_estimator,
+        estimator_params=tuple(),
+        oob_score=False,
+        n_estimators=100,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="entropy",
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        class_weight=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=base_estimator,
+            n_estimators=n_estimators,
+            bootstrap=bootstrap,
+            bootstrap_features=False,
+            n_jobs=n_jobs,
+            warm_start=warm_start,
+            random_state=random_state,
+            oob_score=oob_score,
+            class_weight=class_weight,
+        )
+        self.estimator_params = estimator_params
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.criterion = criterion
+        self.min_samples_leaf = min_samples_leaf
+        self.min_impurity_decrease = min_impurity_decrease
+        self.class_weight = class_weight
+
+    def predict(self, x, check_input=True):
+        x = self._validate_x_predict(x, check_input)
+        return super().predict(x)
+
+    def predict_proba(self, x, check_input=True):
+        x = self._validate_x_predict(x, check_input)
+        return super().predict_proba(x)
+
+    def predict_log_proba(self, x, check_input=True):
+        x = self._validate_x_predict(x, check_input)
+        return super().predict_log_proba(x)
+
+    def fit(self, x, y, sample_weight=None, check_input=True):
+        if check_input:
+            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
+            y = check_array(y, ensure_2d=False, order="C")
+
+        if x.ndim < 2 or x.ndim > 3:
+            raise ValueError("illegal input dimension")
+
+        n_samples = x.shape[0]
+        self.n_timestep_ = x.shape[-1]
+        if x.ndim > 2:
+            n_dims = x.shape[1]
+        else:
+            n_dims = 1
+
+        self.n_dims_ = n_dims
+
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
+            x = np.ascontiguousarray(x, dtype=np.float64)
+
+        if not y.flags.c_contiguous:
+            y = np.ascontiguousarray(y, dtype=np.intp)
+
+        if self.class_weight is not None:
+            class_weight = compute_sample_weight(self.class_weight, y)
+            if sample_weight is not None:
+                sample_weight = sample_weight * class_weight
+            else:
+                sample_weight = class_weight
+
+        x = x.reshape(n_samples, n_dims * self.n_timestep_)
+        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
+        return self
+
+    def _make_estimator(self, append=True, random_state=None):
+        estimator = super()._make_estimator(append, random_state)
+        if self.n_dims_ > 1:
+            estimator.force_dim = self.n_dims_
+        return estimator
+
+
+class BaseShapeletForestClassifier(BaseForestClassifier):
     """Base class for shapelet forest classifiers.
 
     Warnings
@@ -98,8 +189,8 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
 
     def __init__(
         self,
-        base_estimator,
         *,
+        base_estimator,
         estimator_params=tuple(),
         oob_score=False,
         n_estimators=100,
@@ -121,82 +212,29 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
     ):
         super().__init__(
             base_estimator=base_estimator,
+            estimator_params=estimator_params,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            class_weight=class_weight,
             n_estimators=n_estimators,
             bootstrap=bootstrap,
-            bootstrap_features=False,
             n_jobs=n_jobs,
             warm_start=warm_start,
             random_state=random_state,
             oob_score=oob_score,
         )
-        self.estimator_params = estimator_params
-        self.max_depth = max_depth
-        self.min_samples_split = min_samples_split
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
-        self.criterion = criterion
-        self.min_samples_leaf = min_samples_leaf
-        self.min_impurity_decrease = min_impurity_decrease
         self.class_weight = class_weight
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")
-
-    def predict(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict(x)
-
-    def predict_proba(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict_proba(x)
-
-    def predict_log_proba(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict_log_proba(x)
-
-    def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a random shapelet forest classifier"""
-        if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-            y = check_array(y, ensure_2d=False)
-
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimension")
-
-        n_samples = x.shape[0]
-        self.n_timestep = x.shape[-1]
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
-        self.n_dims = n_dims
-
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
-
-        if not y.flags.c_contiguous:
-            y = np.ascontiguousarray(y, dtype=np.intp)
-
-        if self.class_weight is not None:
-            class_weight = compute_sample_weight(self.class_weight, y)
-            if sample_weight is not None:
-                sample_weight = sample_weight * class_weight
-            else:
-                sample_weight = class_weight
-
-        x = x.reshape(n_samples, n_dims * self.n_timestep)
-        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
-        return self
-
-    def _make_estimator(self, append=True, random_state=None):
-        estimator = super()._make_estimator(append, random_state)
-        if self.n_dims > 1:
-            estimator.force_dim = self.n_dims
-        return estimator
 
 
 class ShapeletForestClassifier(BaseShapeletForestClassifier):
@@ -215,8 +253,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
 
     def __init__(
         self,
-        *,
         n_estimators=100,
+        *,
         n_shapelets=10,
         max_depth=None,
         min_samples_split=2,
@@ -347,8 +385,8 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 
     def __init__(
         self,
-        *,
         n_estimators=100,
+        *,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -452,8 +490,81 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         )
 
 
-class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
-    """Base class for shapelet forest regressors.
+class BaseForestRegressor(ForestMixin, BaggingRegressor):
+    def __init__(
+        self,
+        *,
+        base_estimator,
+        estimator_params=tuple(),
+        oob_score=False,
+        n_estimators=100,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="mse",
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=base_estimator,
+            n_estimators=n_estimators,
+            bootstrap=bootstrap,
+            bootstrap_features=False,
+            n_jobs=n_jobs,
+            warm_start=warm_start,
+            random_state=random_state,
+            oob_score=oob_score,
+        )
+        self.estimator_params = estimator_params
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.criterion = criterion
+        self.min_samples_leaf = min_samples_leaf
+        self.min_impurity_decrease = min_impurity_decrease
+
+    def predict(self, x, check_input=True):
+        x = self._validate_x_predict(x, check_input)
+        return super().predict(x)
+
+    def fit(self, x, y, sample_weight=None, check_input=True):
+        if check_input:
+            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
+            y = check_array(y, ensure_2d=False, order="C")
+
+        if x.ndim < 2 or x.ndim > 3:
+            raise ValueError("illegal input dimension")
+
+        n_samples = x.shape[0]
+        self.n_timestep_ = x.shape[-1]
+        if x.ndim > 2:
+            n_dims = x.shape[1]
+        else:
+            n_dims = 1
+
+        self.n_dims_ = n_dims
+
+        if x.dtype != np.float64 or not x.flags.c_contiguous:
+            x = np.ascontiguousarray(x, dtype=np.float64)
+
+        if not y.flags.c_contiguous:
+            y = np.ascontiguousarray(y, dtype=np.intp)
+
+        x = x.reshape(n_samples, n_dims * self.n_timestep_)
+        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
+        return self
+
+    def _make_estimator(self, append=True, random_state=None):
+        estimator = super()._make_estimator(append, random_state)
+        if self.n_dims_ > 1:
+            estimator.force_dim = self.n_dims_
+        return estimator
+
+
+class BaseShapeletForestRegressor(BaseForestRegressor):
+    """Base class for shapelet forest classifiers.
 
     Warnings
     --------
@@ -461,11 +572,10 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
     instead.
     """
 
-    @abstractmethod
     def __init__(
         self,
-        base_estimator,
         *,
+        base_estimator,
         estimator_params=tuple(),
         oob_score=False,
         n_estimators=100,
@@ -486,68 +596,27 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
     ):
         super().__init__(
             base_estimator=base_estimator,
+            estimator_params=estimator_params,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
             n_estimators=n_estimators,
             bootstrap=bootstrap,
-            bootstrap_features=False,
             n_jobs=n_jobs,
             warm_start=warm_start,
             random_state=random_state,
             oob_score=oob_score,
         )
-        self.estimator_params = estimator_params
-        self.max_depth = max_depth
-        self.min_samples_split = min_samples_split
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
-        self.criterion = criterion
-        self.min_samples_leaf = min_samples_leaf
-        self.min_impurity_decrease = min_impurity_decrease
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")
-
-    def predict(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict(x)
-
-    def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a random shapelet forest regressor"""
-        if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-            y = check_array(y, dtype=np.float64, ensure_2d=False, order="C")
-
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimension")
-
-        n_samples = x.shape[0]
-        self.n_timestep = x.shape[-1]
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
-        self.n_dims = n_dims
-
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
-
-        if y.dtype != np.float64 or not y.flags.c_contiguous:
-            y = np.ascontiguousarray(y, dtype=np.float64)
-
-        x = x.reshape(n_samples, n_dims * self.n_timestep)
-        super()._fit(
-            x, y, self.max_samples, self.max_depth, sample_weight=sample_weight
-        )
-        return self
-
-    def _make_estimator(self, append=True, random_state=None):
-        estimator = super()._make_estimator(append, random_state)
-        if self.n_dims > 1:
-            estimator.force_dim = self.n_dims
-        return estimator
 
 
 class ShapeletForestRegressor(BaseShapeletForestRegressor):
@@ -566,8 +635,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
 
     def __init__(
         self,
-        *,
         n_estimators=100,
+        *,
         n_shapelets=10,
         max_depth=None,
         min_samples_split=2,
@@ -678,8 +747,8 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
 
     def __init__(
         self,
-        *,
         n_estimators=100,
+        *,
         max_depth=None,
         min_samples_split=2,
         min_shapelet_size=0,
@@ -778,8 +847,10 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         n_shapelets=1,
         max_depth=5,
         min_samples_split=2,
-        min_shapelet_size=0,
-        max_shapelet_size=1,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
         criterion="mse",
@@ -837,6 +908,8 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
                 "n_shapelets",
                 "max_depth",
                 "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
                 "min_shapelet_size",
                 "max_shapelet_size",
                 "metric",
@@ -847,6 +920,8 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
             n_estimators=n_estimators,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -876,13 +951,13 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
             raise ValueError("illegal input dimension")
 
         n_samples = x.shape[0]
-        self.n_timestep = x.shape[-1]
+        self.n_timestep_ = x.shape[-1]
         if x.ndim > 2:
             n_dims = x.shape[1]
         else:
             n_dims = 1
 
-        self.n_dims = n_dims
+        self.n_dims_ = n_dims
 
         if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
@@ -890,7 +965,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         if n_dims > 1:
             self.base_estimator_.force_dim = n_dims
 
-        x = x.reshape(n_samples, n_dims * self.n_timestep)
+        x = x.reshape(n_samples, n_dims * self.n_timestep_)
         y = random_state.uniform(size=x.shape[0])
         super().fit(x, y, sample_weight=sample_weight)
         self.one_hot_encoder_ = OneHotEncoder(
@@ -903,7 +978,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         return self.one_hot_encoder_.transform(self.apply(x))
 
 
-class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
+class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
     """A isolation shapelet forest.
 
     .. versionadded:: 0.3.5
@@ -918,9 +993,9 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
     >>> from wildboar.ensemble import IsolationShapeletForest
     >>> from wildboar.datasets import load_two_lead_ecg
-    >>> from model_selection.outlier import train_test_split
+    >>> from wildboar.model_selection.outlier import train_test_split
     >>> from sklearn.metrics import balanced_accuracy_score
-    >>> x, y = load_two_lead_ecg("two_lead_ecg")
+    >>> x, y = load_two_lead_ecg()
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...    x, y, 1, test_size=0.2, anomalies_train_size=0.05
     ... )
@@ -935,10 +1010,10 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 
     >>> from wildboar.ensemble import IsolationShapeletForest
     >>> from wildboar.datasets import load_two_lead_ecg
-    >>> from model_selection.outlier import train_test_split
+    >>> from wildboar.model_selection.outlier import train_test_split
     >>> from sklearn.metrics import balanced_accuracy_score
     >>> f = IsolationShapeletForest()
-    >>> x, y = load_two_lead_ecg("two_lead_ecg")
+    >>> x, y = load_two_lead_ecg()
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
     ... )
@@ -1052,8 +1127,6 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
         self.contamination = contamination
         self.contamination_set = contamination_set
         self.max_samples = max_samples
-        self.n_dims = None
-        self.n_timestep = None
 
     def _set_oob_score(self, x, y):
         raise NotImplementedError("OOB score not supported")
@@ -1070,13 +1143,13 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             raise ValueError("illegal input dimension")
 
         n_samples = x.shape[0]
-        self.n_timestep = x.shape[-1]
+        self.n_timestep_ = x.shape[-1]
         if x.ndim > 2:
             n_dims = x.shape[1]
         else:
             n_dims = 1
 
-        self.n_dims = n_dims
+        self.n_dims_ = n_dims
 
         if x.dtype != np.float64 or not x.flags.c_contiguous:
             x = np.ascontiguousarray(x, dtype=np.float64)
@@ -1084,7 +1157,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
         if n_dims > 1:
             self.base_estimator_.force_dim = n_dims
 
-        x = x.reshape(n_samples, n_dims * self.n_timestep)
+        x = x.reshape(n_samples, n_dims * self.n_timestep_)
         rnd_y = random_state.uniform(size=x.shape[0])
         if isinstance(self.max_samples, str):
             if self.max_samples == "auto":
@@ -1196,7 +1269,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
                 if i not in samples:
                     estimators.append(estimator)
             score_samples[i] = _score_samples(
-                x[i].reshape((1, self.n_dims, self.n_timestep)),
+                x[i].reshape((1, self.n_dims_, self.n_timestep_)),
                 estimators,
                 self.max_samples_,
             )
@@ -1206,7 +1279,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
 def _score_samples(x, estimators, max_samples):
     # From: https://github.com/scikit-learn/scikit-learn/blob/
     # 0fb307bf39bbdacd6ed713c00724f8f871d60370/sklearn/ensemble/_iforest.py#L411
-    depths = np.zeros(x.shape[0], order="f")
+    depths = np.zeros(x.shape[0], order="F")
 
     for tree in estimators:
         leaves_index = tree.apply(x)
@@ -1243,3 +1316,131 @@ def _average_path_length(n_samples_leaf):
     )
 
     return average_path_length.reshape(n_samples_leaf_shape)
+
+
+class RockestRegressor(BaseForestRegressor):
+    def __init__(
+        self,
+        n_estimators=100,
+        *,
+        n_kernels=10,
+        oob_score=False,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        sampling="auto",
+        sampling_params=None,
+        kernel_size=None,
+        bias_prob=1.0,
+        normalize_prob=1.0,
+        padding_prob=0.5,
+        criterion="mse",
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=RocketTreeRegressor(),
+            estimator_params=(
+                "n_kernels",
+                "max_depth",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "kernel_size",
+                "sampling",
+                "sampling_params",
+                "bias_prob",
+                "normalize_prob",
+                "padding_prob",
+                "criterion",
+            ),
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            n_estimators=n_estimators,
+            bootstrap=bootstrap,
+            n_jobs=n_jobs,
+            warm_start=warm_start,
+            random_state=random_state,
+            oob_score=oob_score,
+        )
+        self.n_kernels = n_kernels
+        self.sampling = sampling
+        self.sampling_params = sampling_params
+        self.kernel_size = kernel_size
+        self.bias_prob = bias_prob
+        self.normalize_prob = normalize_prob
+        self.padding_prob = padding_prob
+
+    def _parallel_args(self):
+        return _joblib_parallel_args(prefer="threads")
+
+
+class RockestClassifier(BaseForestClassifier):
+    def __init__(
+        self,
+        n_estimators=100,
+        *,
+        n_kernels=10,
+        oob_score=False,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        sampling="auto",
+        sampling_params=None,
+        kernel_size=None,
+        bias_prob=1.0,
+        normalize_prob=1.0,
+        padding_prob=0.5,
+        criterion="entropy",
+        bootstrap=True,
+        warm_start=False,
+        class_weight=None,
+        n_jobs=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=RocketTreeClassifier(),
+            estimator_params=(
+                "n_kernels",
+                "max_depth",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "kernel_size",
+                "sampling",
+                "sampling_params",
+                "bias_prob",
+                "normalize_prob",
+                "padding_prob",
+                "criterion",
+            ),
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            n_estimators=n_estimators,
+            bootstrap=bootstrap,
+            n_jobs=n_jobs,
+            warm_start=warm_start,
+            random_state=random_state,
+            oob_score=oob_score,
+            class_weight=class_weight,
+        )
+        self.n_kernels = n_kernels
+        self.sampling = sampling
+        self.sampling_params = sampling_params
+        self.kernel_size = kernel_size
+        self.bias_prob = bias_prob
+        self.normalize_prob = normalize_prob
+        self.padding_prob = padding_prob
+
+    def _parallel_args(self):
+        return _joblib_parallel_args(prefer="threads")

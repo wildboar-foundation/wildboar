@@ -24,7 +24,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.validation import _check_sample_weight, check_array, check_is_fitted
 
-from ..embed._rocket import RocketFeatureEngineer
+from ..embed._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
 from ..embed._shapelet import RandomShapeletFeatureEngineer
 from ._tree_builder import (
     EntropyCriterion,
@@ -895,14 +895,22 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         )
 
 
-class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseTree):
+class BaseRocketTree(BaseTree, metaclass=ABCMeta):
     def __init__(
         self,
-        *,
         n_kernels=10,
+        *,
         max_depth=None,
         min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
         criterion="entropy",
+        sampling="auto",
+        sampling_params=None,
+        kernel_size=None,
+        bias_prob=1.0,
+        normalize_prob=1.0,
+        padding_prob=0.5,
         force_dim=None,
         random_state=None,
     ):
@@ -924,27 +932,75 @@ class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseTree):
         random_state : int or RandomState, optional
             The psudo-random number generator.
         """
-        super().__init__(max_depth=max_depth, min_samples_split=min_samples_split)
+        super().__init__(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            force_dim=force_dim,
+        )
         self.n_kernels = n_kernels
-        self.max_depth = max_depth
-        self.min_samples_split = min_samples_split
         self.criterion = criterion
-        self.force_dim = force_dim
+        self.sampling = sampling
+        self.sampling_params = sampling_params
+        self.kernels_size = kernel_size
+        self.bias_prob = bias_prob
+        self.normalize_prob = normalize_prob
+        self.padding_prob = padding_prob
         self.random_state = random_state
 
     def _get_feature_engineer(self):
-        # TODO: sampler etc...
-        return RocketFeatureEngineer(self.n_kernels)
+        if self.kernel_size is None:
+            kernel_size = [7, 11, 13]
+        elif isinstance(self.kernel_size, tuple) and len(self.kernel_size) == 2:
+            min_size, max_size = self.kernel_size
+            if min_size < 0 or min_size > max_size:
+                raise ValueError(
+                    "`min_size` {0} <= 0 or {0} > {1}".format(min_size, max_size)
+                )
+            if max_size > 1:
+                raise ValueError("`max_size` {0} > 1".format(max_size))
+            max_size = int(self.n_timestep_ * max_size)
+            min_size = int(self.n_timestep_ * min_size)
+            if min_size < 2:
+                min_size = 2
+            kernel_size = np.arange(min_size, max_size)
+        else:
+            kernel_size = self.kernel_size
+
+        if self.sampling in _SAMPLING_METHOD:
+            sampling_params = (
+                {} if self.sampling_params is None else self.sampling_params
+            )
+            weight_sampler = _SAMPLING_METHOD[self.sampling](**sampling_params)
+        else:
+            raise ValueError("sampling (%r) is not supported." % self.sampling)
+        return RocketFeatureEngineer(
+            int(self.n_kernels),
+            weight_sampler,
+            np.array(kernel_size, dtype=int),
+            float(self.bias_prob),
+            float(self.padding_prob),
+            float(self.normalize_prob),
+        )
 
 
-class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseTree):
+class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseRocketTree):
     def __init__(
         self,
-        *,
         n_kernels=10,
+        *,
         max_depth=None,
         min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
         criterion="mse",
+        sampling="auto",
+        sampling_params=None,
+        kernel_size=None,
+        bias_prob=1.0,
+        normalize_prob=1.0,
+        padding_prob=0.5,
         force_dim=None,
         random_state=None,
     ):
@@ -966,14 +1022,76 @@ class RocketTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseTree):
         random_state : int or RandomState, optional
             The psudo-random number generator.
         """
-        super().__init__(max_depth=max_depth, min_samples_split=min_samples_split)
+        super().__init__(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            force_dim=force_dim,
+        )
         self.n_kernels = n_kernels
-        self.max_depth = max_depth
-        self.min_samples_split = min_samples_split
         self.criterion = criterion
-        self.force_dim = force_dim
+        self.sampling = sampling
+        self.sampling_params = sampling_params
+        self.kernel_size = kernel_size
+        self.bias_prob = bias_prob
+        self.normalize_prob = normalize_prob
+        self.padding_prob = padding_prob
         self.random_state = random_state
 
-    def _get_feature_engineer(self):
-        # TODO
-        return RocketFeatureEngineer(self.n_kernels)
+
+class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseRocketTree):
+    def __init__(
+        self,
+        n_kernels=10,
+        *,
+        max_depth=None,
+        min_samples_split=2,
+        min_sample_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="entropy",
+        sampling="auto",
+        sampling_params=None,
+        kernel_size=None,
+        bias_prob=1.0,
+        normalize_prob=1.0,
+        padding_prob=0.5,
+        force_dim=None,
+        class_weight=None,
+        random_state=None,
+    ):
+        """
+        Parameters
+        ----------
+        n_kernels : int, optional
+            The number of kernels to inspect at each node.
+
+        max_depth : int, optional
+            The maxium depth.
+
+        min_samples_split : int, optional
+            The minimum number of samples required to split.
+
+        force_dim : int, optional
+            Force reshaping of input data.
+
+        random_state : int or RandomState, optional
+            The psudo-random number generator.
+        """
+        super().__init__(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_sample_leaf=min_sample_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            force_dim=force_dim,
+        )
+        self.n_kernels = n_kernels
+        self.criterion = criterion
+        self.sampling = sampling
+        self.sampling_params = sampling_params
+        self.kernel_size = kernel_size
+        self.bias_prob = bias_prob
+        self.normalize_prob = normalize_prob
+        self.padding_prob = padding_prob
+        self.random_state = random_state
+        self.class_weight = class_weight

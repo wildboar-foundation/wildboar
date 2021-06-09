@@ -19,8 +19,8 @@ It is currently maintained by Isak Samsten
 |                                                                                   | ``ExtraShapeletTreesClassifier`` | ``ExtraShapeletTreesRegressor`` | ``KNearestCounterfactual``       |            | ``RandomShapeletEmbedding`` |                             |
 |                                                                                   | ``RocketTreeClassifier``         | ``RocketRegressor``             | ``PrototypeCounterfactual``      |            | ``RocketEmbedding``         |                             |
 |                                                                                   | ``RocketClassifier``             | ``RandomShapeletRegressor``     |                                  |            |                             |                             |
-|                                                                                   | ``RandomShapeletClassifier``     |                                 |                                  |            |                             |                             |
-
+|                                                                                   | ``RandomShapeletClassifier``     | ``RocketTreeRegressor``         |                                  |            |                             |                             |
+|                                                                                   | ``RockestClassifier``            | ``RockestRegressor``            |                                  |            |                             |                             |
 ## Installation
 
 ### Dependencies
@@ -94,13 +94,17 @@ citations to the paper:
  Knowledge Discovery Journal
   - `ShapeletForestClassifier`
 
-- Isak Samsten, 2020. isaksamsten/wildboar: wildboar (Version 1.0.3). Zenodo. doi:10.5281/zenodo.4264063
+- Isak Samsten, 2020. isaksamsten/wildboar: wildboar. Zenodo. doi:10.5281/zenodo.4264063
   - `ShapeletForestRegressor`
   - `ExtraShapeletForestClassifier`
   - `ExtraShapeletForestRegressor`
   - `IsolationShapeletForest`
   - `ShapeletForestEmbedding`
-  - `PrototypeCounterfactual`  
+  - `PrototypeCounterfactual` 
+  - `RocketTreeClassifier`
+  - `RocketTreeRegressor`
+  - `RockestClassifier`
+  - `RockestRegressor`
     
 - Karlsson, I., Rebane, J., Papapetrou, P. et al. 
   Locally and globally explainable time series tweaking. 
