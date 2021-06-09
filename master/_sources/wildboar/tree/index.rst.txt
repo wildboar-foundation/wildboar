@@ -14,6 +14,8 @@ Classes
 
    wildboar.tree.ExtraShapeletTreeClassifier
    wildboar.tree.ExtraShapeletTreeRegressor
+   wildboar.tree.RocketTreeClassifier
+   wildboar.tree.RocketTreeRegressor
    wildboar.tree.ShapeletTreeClassifier
    wildboar.tree.ShapeletTreeRegressor
 
@@ -135,6 +137,44 @@ Classes
                         - If `None`, the random number generator is the `RandomState` instance used
                           by `np.random`.
    :type random_state: int or RandomState
+
+
+.. class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, class_weight=None, random_state=None)
+
+
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseRocketTree`
+
+   Mixin class for all classifiers in scikit-learn.
+
+   :param n_kernels: The number of kernels to inspect at each node.
+   :type n_kernels: int, optional
+   :param max_depth: The maxium depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples required to split.
+   :type min_samples_split: int, optional
+   :param force_dim: Force reshaping of input data.
+   :type force_dim: int, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+
+.. class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
+
+
+   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseRocketTree`
+
+   Mixin class for all regression estimators in scikit-learn.
+
+   :param n_kernels: The number of kernels to inspect at each node.
+   :type n_kernels: int, optional
+   :param max_depth: The maxium depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples required to split.
+   :type min_samples_split: int, optional
+   :param force_dim: Force reshaping of input data.
+   :type force_dim: int, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
 
 
 .. class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
