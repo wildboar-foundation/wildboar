@@ -19,6 +19,8 @@ from ._ensemble import (
     ExtraShapeletTreesClassifier,
     ExtraShapeletTreesRegressor,
     IsolationShapeletForest,
+    RockestClassifier,
+    RockestRegressor,
     ShapeletForestClassifier,
     ShapeletForestEmbedding,
     ShapeletForestRegressor,
@@ -31,4 +33,6 @@ __all__ = [
     "ExtraShapeletTreesRegressor",
     "IsolationShapeletForest",
     "ShapeletForestEmbedding",
+    "RockestRegressor",
+    "RockestClassifier",
 ]
