@@ -3,13 +3,23 @@
 ## [Unreleased]
 
 ### Added
+* Support for different default dataset tags 
+* Filter datasets based on n_dims
+* Support multivariate time series in all embedding estimators
+* Add parameters `refresh` and `timeout` to dataset operations
+* Add parameter `criterion` to all tree based estimators
+* Add parameter `min_samples_leaf` to all tree based estimators
+* Add parameter `min_impurity_decrease` to all tree based estimators
+* Add `RocketTreeClassifier` and `RocketTreeRegressor`
+* Add `RockestClassifier` and `RockestRegressor`
 * Add parameter `collection` to `datasets.load_datasets` and `list_datasets`
 * Add parameter `preprocess` to `datasets.load_dataset`
 * Add `datasets.preprocess`
 * Add `datasets.list_collections`
 * Add `model_selection.outlier.RepeatedOutlierSplit` to cross-validate
   outlier detection algorithms
-* Add `liner_model.RocketClassifier
+* Add `linear_model.RocketClassifier`
+* Add `linear_model.RandomShapeletClassifier`
 * Add `wildboar.embed` with `RandomShapeletEmbedding` and `RocketEmbedding`
 * Add `tree.RocketTreeClassifier`
 * For implementors:
@@ -18,7 +28,8 @@
   * Add `_utils.random_normal`
 
 ### Fixed
-
+* Support multivarite dataset preprocessing
+* Fix bug where `install_repository` would stop responding
 * Fix bug in `filter` of `datasets.load_datasets`
 * Fix the number of outliers when setting `n_outliers` to `None` for
   `KMeansLabeler`
@@ -26,7 +37,6 @@
   `MinorityLabeler`
 
 ### Changed
-
 * Rename `datasets._filter` to `datasets.filter`
 * Parameter `shapelets` of `Tree` is changed to `features`
 * For implementors
