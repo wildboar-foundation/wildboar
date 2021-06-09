@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.datasets.filter" href="filter/index.html" /><link rel="prev" title="wildboar" href="../index.html" />
 
     <meta name="generator" content="sphinx-3.5.4, furo 2021.04.11.beta34"/>
-        <title>wildboar.datasets - Wildboar 1.1.0rc2.dev18+g9f0ef74 documentation</title>
+        <title>wildboar.datasets - Wildboar 1.1.0rc2.dev21+g98a10fe documentation</title>
       <link rel="stylesheet" href="../../_static/styles/furo.css?digest=59ab60ac09ea94ccfe6deddff6d715cce948a6fc">
     <link rel="stylesheet" href="../../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../_static/pygments_dark.css">
@@ -102,7 +102,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc2.dev18+g9f0ef74 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc2.dev21+g98a10fe documentation</div></a>
     </div>
     <div class="header-right">
       <label class="toc-overlay-icon toc-header-icon" for="__toc">
@@ -618,7 +618,9 @@
 <li><p><strong>refresh</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>Refresh the repository</p>
 <p>..versionadded :: 1.1</p>
 </p></li>
-<li><p><strong>timeout</strong> (<em>float</em><em>, </em><em>optional</em>) – Timeout for json request</p></li>
+<li><p><strong>timeout</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>Timeout for json request</p>
+<p>..versionadded :: 1.1</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -674,7 +676,9 @@
 <li><p><strong>refresh</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>Refresh the repository</p>
 <p>..versionadded :: 1.1</p>
 </p></li>
-<li><p><strong>timeout</strong> (<em>float</em><em>, </em><em>optional</em>) – Timeout for json request</p></li>
+<li><p><strong>timeout</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>Timeout for json request</p>
+<p>..versionadded :: 1.1</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -764,8 +768,9 @@
 <li><p><strong>contiguous</strong> (<em>bool</em><em>, </em><em>optional</em>) – Ensure that the returned dataset is memory contiguous.</p></li>
 <li><p><strong>preprocess</strong> (<em>str</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – <p>Preprocess the dataset</p>
 <ul>
-<li><p>if str, “standardize”</p></li>
-<li><p>if callable, function taking a dataset and returning the preprocessed dataset</p></li>
+<li><p>if str, use named preprocess function (see <code class="docutils literal notranslate"><span class="pre">preprocess._PREPROCESS.keys()</span></code>
+for valid keys)</p></li>
+<li><p>if callable, function taking a np.ndarray and returns the preprocessed dataset</p></li>
 </ul>
 </p></li>
 <li><p><strong>merge_train_test</strong> (<em>bool</em><em>, </em><em>optional</em>) – Merge the existing training and testing partitions.</p></li>
@@ -830,7 +835,7 @@
 <li><p><strong>cache_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – The cache directory for downloaded dataset repositories.</p></li>
 <li><p><strong>create_cache_dir</strong> (<em>bool</em><em>, </em><em>optional</em>) – Create the cache directory if it does not exist.</p></li>
 <li><p><strong>force</strong> (<em>bool</em><em>, </em><em>optional</em>) – Force re-download of cached repository</p></li>
-<li><p><strong>filter</strong> – <p>Filter the datasets</p>
+<li><p><strong>filter</strong> (<em>str</em><em>, </em><em>dict</em><em>, </em><em>list</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – <p>Filter the datasets</p>
 <ul>
 <li><p>if callable, only yield those datasets for which the callable returns True.
 <code class="docutils literal notranslate"><span class="pre">f(dataset,</span> <span class="pre">x,</span> <span class="pre">y)</span> <span class="pre">-&gt;</span> <span class="pre">bool</span></code></p></li>
@@ -841,24 +846,23 @@ values comparison specs</p></li>
 </ul>
 <blockquote>
 <div><p>The format of attribute comparisons are <a href="#id1"><span class="problematic" id="id2">``</span></a>[attribute][comparison spec].</p>
-<p>Valid attributes are``
+<p>Valid attributes are
 - <code class="docutils literal notranslate"><span class="pre">dataset</span></code>
 - <code class="docutils literal notranslate"><span class="pre">n_samples</span></code>
 - <code class="docutils literal notranslate"><span class="pre">n_timestep</span></code>
 - <code class="docutils literal notranslate"><span class="pre">n_dims</span></code>
 - <code class="docutils literal notranslate"><span class="pre">n_labels</span></code></p>
 </div></blockquote>
+<blockquote>
+<div><p>str of two parts, comparison operator (&lt;, &lt;=, &gt;, &gt;= or =) and a number,
+e.g., “&lt;100”, “&lt;= 200”, or “&gt;300”</p>
+</div></blockquote>
 </p></li>
+<li><p><strong>kwargs</strong> (<em>dict</em>) – Optional arguments to <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code></p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>kwargs<span class="classifier">dict</span></dt><dd><p>Optional arguments to <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code></p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Yields</dt>
-<dd class="field-odd"><ul class="simple">
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><ul class="simple">
 <li><p><strong>x</strong> (<em>array-like</em>) – Data samples</p></li>
 <li><p><strong>y</strong> (<em>array-like</em>) – Data labels</p></li>
 </ul>

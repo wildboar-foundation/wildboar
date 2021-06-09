@@ -13,9 +13,56 @@ Functions
 
 .. autoapisummary::
 
+   wildboar.datasets.preprocess.maxabs_scale
+   wildboar.datasets.preprocess.minmax_scale
    wildboar.datasets.preprocess.named_preprocess
    wildboar.datasets.preprocess.standardize
 
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets.preprocess.__doc__
+   wildboar.datasets.preprocess.normalize
+
+
+.. data:: __doc__
+   
+
+   
+
+.. data:: normalize
+   
+
+   
+
+.. function:: maxabs_scale(x)
+
+   Scale each time series by its maximum absolute value.
+
+   :param x: The dataset
+   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+
+   :returns: **x** -- The transformed dataset
+   :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+
+
+.. function:: minmax_scale(x, min=0, max=1)
+
+   Scale x along the time dimension so that each value is between min and max
+
+   :param x: The dataset
+   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+   :param min: The minimum value
+   :type min: float, optional
+   :param max: The maximum value
+   :type max: float, optional
+
+   :returns: **x** -- The transformed dataset
+   :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
 
 
 .. function:: named_preprocess(name)
@@ -23,7 +70,7 @@ Functions
 
 .. function:: standardize(x)
 
-   Standardize x (along the time dimension) to have zero mean and unit standard deviation
+   Scale x along the time dimension to have zero mean and unit standard deviation
 
    :param x: The dataset
    :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)

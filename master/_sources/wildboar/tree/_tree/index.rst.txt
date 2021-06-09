@@ -14,6 +14,7 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.tree._tree.BaseRocketTree
    wildboar.tree._tree.BaseShapeletTree
    wildboar.tree._tree.BaseTree
    wildboar.tree._tree.ClassifierTreeMixin
@@ -46,6 +47,31 @@ Attributes
    
 
    
+
+.. class:: BaseRocketTree(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
+
+
+   Bases: :py:obj:`BaseTree`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   :param n_kernels: The number of kernels to inspect at each node.
+   :type n_kernels: int, optional
+   :param max_depth: The maxium depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples required to split.
+   :type min_samples_split: int, optional
+   :param force_dim: Force reshaping of input data.
+   :type force_dim: int, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
+
 
 .. class:: BaseShapeletTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
@@ -291,10 +317,10 @@ Attributes
 
 
 
-.. class:: RocketTreeClassifier(*, n_kernels=10, max_depth=None, min_samples_split=2, criterion='entropy', force_dim=None, random_state=None)
+.. class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, class_weight=None, random_state=None)
 
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseTree`
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseRocketTree`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -310,10 +336,10 @@ Attributes
    :type random_state: int or RandomState, optional
 
 
-.. class:: RocketTreeRegressor(*, n_kernels=10, max_depth=None, min_samples_split=2, criterion='mse', force_dim=None, random_state=None)
+.. class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
 
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseTree`
+   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseRocketTree`
 
    Mixin class for all regression estimators in scikit-learn.
 

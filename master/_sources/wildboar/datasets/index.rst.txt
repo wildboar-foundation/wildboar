@@ -307,6 +307,8 @@ Functions
                    ..versionadded :: 1.1
    :type refresh: bool, optional
    :param timeout: Timeout for json request
+
+                   ..versionadded :: 1.1
    :type timeout: float, optional
 
    :returns: **dict**
@@ -351,6 +353,8 @@ Functions
                    ..versionadded :: 1.1
    :type refresh: bool, optional
    :param timeout: Timeout for json request
+
+                   ..versionadded :: 1.1
    :type timeout: float, optional
 
    :returns: **bundle** -- The name of the bundle
@@ -430,8 +434,9 @@ Functions
    :type contiguous: bool, optional
    :param preprocess: Preprocess the dataset
 
-                      - if str, "standardize"
-                      - if callable, function taking a dataset and returning the preprocessed dataset
+                      - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
+                        for valid keys)
+                      - if callable, function taking a np.ndarray and returns the preprocessed dataset
    :type preprocess: str or callable, optional
    :param merge_train_test: Merge the existing training and testing partitions.
    :type merge_train_test: bool, optional
@@ -518,21 +523,20 @@ Functions
 
                       The format of attribute comparisons are ``[attribute][comparison spec].
 
-                      Valid attributes are``
+                      Valid attributes are
                       - ``dataset``
                       - ``n_samples``
                       - ``n_timestep``
                       - ``n_dims``
                       - ``n_labels``
+
+                  Comparison spec
+                  ---------------
+                      str of two parts, comparison operator (<, <=, >, >= or =) and a number,
+                      e.g., "<100", "<= 200", or ">300"
    :type filter: str, dict, list or callable, optional
-
-       Comparison spec
-       ---------------
-           str of two parts, comparison operator (<, <=, >, >= or =) and a number,
-           e.g., "<100", "<= 200", or ">300"
-
-   kwargs : dict
-       Optional arguments to ``load_dataset``
+   :param kwargs: Optional arguments to ``load_dataset``
+   :type kwargs: dict
 
    :Yields: * **x** (*array-like*) -- Data samples
             * **y** (*array-like*) -- Data labels
