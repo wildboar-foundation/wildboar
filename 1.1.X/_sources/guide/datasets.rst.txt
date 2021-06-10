@@ -98,25 +98,74 @@ either an url to a JSON-file or an instance of a ``Repository``.
     >>> list_repositories("example")
     >>> load_dataset("example", repository="example/example")
 
-Repository JSON specification
------------------------------
+Updating repositories
+---------------------
+
+Repositories can be refreshed using ``datasets.refresh_repositories()``.
+
+Implementation details
+----------------------
+
+JSON-repository specification
+.............................
 
 The ``JSONRepository`` expects a JSON-file following the specification below.
 
 .. code-block:: javascript
 
     {
-        "name": "example",
-        "version": "1.0",
-        "wildboar_requires": "1.0.4",
-        "bundle_url": "https://example.org/download/{key}-v{version}.zip",
-        "bundles": [
+        "name": "example", // required
+        "version": "1.0",  // required
+        "wildboar_requires": "1.0.4", // required, the minimum required wildboar version
+        "bundle_url": "https://example.org/download/{key}/{tag}-v{version}", // required, the data endpoint
+        "bundles": [ // required
           {
-            "key": "example",
-            "version": "1.0",
-            "name": "UCR Time series repository",
-            "description": "Example dataset",
-            "class_index": -1
+            "key": "example", // required, unique key of the bundle
+            "version": "1.0", // required, the default version of dataset
+            "tag": "default"  // optional, the default tag
+            "name": "UCR Time series repository", // required
+            "description": "Example dataset", // optional
+            "arrays": ["x", "y"] // optional
+            "collections": {"key": ["example1", "example"]} // optional
           },
         ]
     }
+
+- Attributes ``{key}``, ``{version}`` and ``{tag}`` in the ``bundle_url`` value
+  are replaced with the bundle-key, bundle-version and bundle tag. All attribute
+  are required in the url.
+- ``arrays`` is optional. If not present, the dataset is assumed to be a single
+  numpy array where the last column contains the class label or a numpy-dict with
+  both ``x``, and ``y``
+
+  - if any other value except ``x`` and/or ``y`` is present in the ``arrays``-list,
+    it will be loaded as an ``extras``-dictionary
+  - if ``y`` is not present in arrays ``load_dataset`` return ``None`` for ``y``
+
+- ``bundles/version`` is the default version of the bundle which is used unless
+  the user specifies an alternative version
+- ``bundles/tag`` is the default tag of the bundle which is used unless the user
+  specifies an alternative bundle. (default: default)
+- ``bundles/collections`` is a dict of named collections of datasets which can
+  be specified when using ``load_datasets(..., collection="key")``
+
+The ``bundle_url`` points to a remote location that contains two files with
+extensions .zip and .sha respectively.
+
+.. note::
+
+    In the example, ``bundle_url`` should contain the two files
+    ``example/default-v1.0.zip`` and ``example/default-v1.0.sha``
+
+The .sha-file should contain the sha1-hash of the .zip-file to ensure
+the integrity of the downloaded file. The zip-file should contain the datasets.
+
+Dataset bundles
+...............
+
+Out of the box, wildboar supports dataset bundles formatted as zip-files with npy
+or npz files, i.e., as created by ``numpy.save`` and ``numpy.savez``. The dataset files
+in the zip-file must be named according to ``{dataset_name}(_TRAIN|_TEST)?.(npy|npz)``.
+Multiple datasets with the same name will be merged. If both _TRAIN and _TEST files are
+present, ``load_dataset`` can return these train and test samples separately by
+setting ``merge_train_test=True``.

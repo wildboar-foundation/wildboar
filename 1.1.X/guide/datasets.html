@@ -279,25 +279,72 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">"example"</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">"example/example"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="section" id="repository-json-specification">
-<h3>Repository JSON specification<a class="headerlink" href="#repository-json-specification" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="updating-repositories">
+<h3>Updating repositories<a class="headerlink" href="#updating-repositories" title="Permalink to this headline">¶</a></h3>
+<p>Repositories can be refreshed using <code class="docutils literal notranslate"><span class="pre">datasets.refresh_repositories()</span></code>.</p>
+</div>
+<div class="section" id="implementation-details">
+<h3>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="json-repository-specification">
+<h4>JSON-repository specification<a class="headerlink" href="#json-repository-specification" title="Permalink to this headline">¶</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code> expects a JSON-file following the specification below.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"example"</span><span class="p">,</span>
-    <span class="s2">"version"</span><span class="o">:</span> <span class="s2">"1.0"</span><span class="p">,</span>
-    <span class="s2">"wildboar_requires"</span><span class="o">:</span> <span class="s2">"1.0.4"</span><span class="p">,</span>
-    <span class="s2">"bundle_url"</span><span class="o">:</span> <span class="s2">"https://example.org/download/{key}-v{version}.zip"</span><span class="p">,</span>
-    <span class="s2">"bundles"</span><span class="o">:</span> <span class="p">[</span>
+    <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"example"</span><span class="p">,</span> <span class="c1">// required</span>
+    <span class="s2">"version"</span><span class="o">:</span> <span class="s2">"1.0"</span><span class="p">,</span>  <span class="c1">// required</span>
+    <span class="s2">"wildboar_requires"</span><span class="o">:</span> <span class="s2">"1.0.4"</span><span class="p">,</span> <span class="c1">// required, the minimum required wildboar version</span>
+    <span class="s2">"bundle_url"</span><span class="o">:</span> <span class="s2">"https://example.org/download/{key}/{tag}-v{version}"</span><span class="p">,</span> <span class="c1">// required, the data endpoint</span>
+    <span class="s2">"bundles"</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// required</span>
       <span class="p">{</span>
-        <span class="s2">"key"</span><span class="o">:</span> <span class="s2">"example"</span><span class="p">,</span>
-        <span class="s2">"version"</span><span class="o">:</span> <span class="s2">"1.0"</span><span class="p">,</span>
-        <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"UCR Time series repository"</span><span class="p">,</span>
-        <span class="s2">"description"</span><span class="o">:</span> <span class="s2">"Example dataset"</span><span class="p">,</span>
-        <span class="s2">"class_index"</span><span class="o">:</span> <span class="o">-</span><span class="mf">1</span>
+        <span class="s2">"key"</span><span class="o">:</span> <span class="s2">"example"</span><span class="p">,</span> <span class="c1">// required, unique key of the bundle</span>
+        <span class="s2">"version"</span><span class="o">:</span> <span class="s2">"1.0"</span><span class="p">,</span> <span class="c1">// required, the default version of dataset</span>
+        <span class="s2">"tag"</span><span class="o">:</span> <span class="s2">"default"</span>  <span class="c1">// optional, the default tag</span>
+        <span class="s2">"name"</span><span class="o">:</span> <span class="s2">"UCR Time series repository"</span><span class="p">,</span> <span class="c1">// required</span>
+        <span class="s2">"description"</span><span class="o">:</span> <span class="s2">"Example dataset"</span><span class="p">,</span> <span class="c1">// optional</span>
+        <span class="s2">"arrays"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">]</span> <span class="c1">// optional</span>
+        <span class="s2">"collections"</span><span class="o">:</span> <span class="p">{</span><span class="s2">"key"</span><span class="o">:</span> <span class="p">[</span><span class="s2">"example1"</span><span class="p">,</span> <span class="s2">"example"</span><span class="p">]}</span> <span class="c1">// optional</span>
       <span class="p">},</span>
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+<ul class="simple">
+<li><p>Attributes <code class="docutils literal notranslate"><span class="pre">{key}</span></code>, <code class="docutils literal notranslate"><span class="pre">{version}</span></code> and <code class="docutils literal notranslate"><span class="pre">{tag}</span></code> in the <code class="docutils literal notranslate"><span class="pre">bundle_url</span></code> value
+are replaced with the bundle-key, bundle-version and bundle tag. All attribute
+are required in the url.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">arrays</span></code> is optional. If not present, the dataset is assumed to be a single
+numpy array where the last column contains the class label or a numpy-dict with
+both <code class="docutils literal notranslate"><span class="pre">x</span></code>, and <code class="docutils literal notranslate"><span class="pre">y</span></code></p>
+<ul>
+<li><p>if any other value except <code class="docutils literal notranslate"><span class="pre">x</span></code> and/or <code class="docutils literal notranslate"><span class="pre">y</span></code> is present in the <code class="docutils literal notranslate"><span class="pre">arrays</span></code>-list,
+it will be loaded as an <code class="docutils literal notranslate"><span class="pre">extras</span></code>-dictionary</p></li>
+<li><p>if <code class="docutils literal notranslate"><span class="pre">y</span></code> is not present in arrays <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> return <code class="docutils literal notranslate"><span class="pre">None</span></code> for <code class="docutils literal notranslate"><span class="pre">y</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bundles/version</span></code> is the default version of the bundle which is used unless
+the user specifies an alternative version</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bundles/tag</span></code> is the default tag of the bundle which is used unless the user
+specifies an alternative bundle. (default: default)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bundles/collections</span></code> is a dict of named collections of datasets which can
+be specified when using <code class="docutils literal notranslate"><span class="pre">load_datasets(...,</span> <span class="pre">collection="key")</span></code></p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">bundle_url</span></code> points to a remote location that contains two files with
+extensions .zip and .sha respectively.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the example, <code class="docutils literal notranslate"><span class="pre">bundle_url</span></code> should contain the two files
+<code class="docutils literal notranslate"><span class="pre">example/default-v1.0.zip</span></code> and <code class="docutils literal notranslate"><span class="pre">example/default-v1.0.sha</span></code></p>
+</div>
+<p>The .sha-file should contain the sha1-hash of the .zip-file to ensure
+the integrity of the downloaded file. The zip-file should contain the datasets.</p>
+</div>
+<div class="section" id="dataset-bundles">
+<h4>Dataset bundles<a class="headerlink" href="#dataset-bundles" title="Permalink to this headline">¶</a></h4>
+<p>Out of the box, wildboar supports dataset bundles formatted as zip-files with npy
+or npz files, i.e., as created by <code class="docutils literal notranslate"><span class="pre">numpy.save</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy.savez</span></code>. The dataset files
+in the zip-file must be named according to <code class="docutils literal notranslate"><span class="pre">{dataset_name}(_TRAIN|_TEST)?.(npy|npz)</span></code>.
+Multiple datasets with the same name will be merged. If both _TRAIN and _TEST files are
+present, <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> can return these train and test samples separately by
+setting <code class="docutils literal notranslate"><span class="pre">merge_train_test=True</span></code>.</p>
 </div>
 </div>
 </div>
@@ -361,7 +408,12 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 <li><a class="reference internal" href="#what-is-a-repository">What is a repository?</a></li>
 <li><a class="reference internal" href="#how-to-use-a-repository">How to use a repository?</a></li>
 <li><a class="reference internal" href="#installing-repositories">Installing repositories</a><ul>
-<li><a class="reference internal" href="#repository-json-specification">Repository JSON specification</a></li>
+<li><a class="reference internal" href="#updating-repositories">Updating repositories</a></li>
+<li><a class="reference internal" href="#implementation-details">Implementation details</a><ul>
+<li><a class="reference internal" href="#json-repository-specification">JSON-repository specification</a></li>
+<li><a class="reference internal" href="#dataset-bundles">Dataset bundles</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
