@@ -56,9 +56,9 @@ class PrototypeCounterfactual(BaseCounterfactual):
 
     def __init__(
         self,
+        *,
         background_x,
         background_y,
-        *,
         metric="euclidean",
         metric_params=None,
         max_iter=100,
