@@ -115,7 +115,6 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier):
             warm_start=warm_start,
             random_state=random_state,
             oob_score=oob_score,
-            class_weight=class_weight,
         )
         self.estimator_params = estimator_params
         self.max_depth = max_depth
@@ -231,7 +230,6 @@ class BaseShapeletForestClassifier(BaseForestClassifier):
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
-        self.class_weight = class_weight
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")
