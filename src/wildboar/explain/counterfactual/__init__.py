@@ -79,7 +79,7 @@ def score(x_true, x_counterfactuals, metric="euclidean", success=None):
         - if list compute all metrics and return a dict where the key is
           the name of the metric and the value an ndarray of scores
         - if dict compute all metrics and return a dict where the key is
-          the key and the value an ndarry of scores
+          the key and the value an ndarray of scores
         - if callable
 
     success : ndarray of shape (n_samples)
@@ -175,7 +175,7 @@ def counterfactuals(
             if not ("background_x" in kwargs or "background_y" in kwargs):
                 raise ValueError("background_x and background_y are required")
     else:
-        Explainer = _COUNTERFACTUAL_EXPLAINER[method]
+        Explainer = _COUNTERFACTUAL_EXPLAINER.get(method)
 
     if Explainer is None:
         raise ValueError("no counterfactual explainer for '%r'" % method)
@@ -185,7 +185,7 @@ def counterfactuals(
     explainer.set_params(random_state=random_state)
     explainer.fit(estimator)
     x_counterfactuals, success = explainer.transform(x, y)
-    if scoring:
+    if scoring is not None:
         sc = score(
             x,
             x_counterfactuals,
