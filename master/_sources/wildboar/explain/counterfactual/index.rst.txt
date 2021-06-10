@@ -82,7 +82,7 @@ Functions
 
 
 
-.. class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
+.. class:: PrototypeCounterfactual(*, background_x, background_y, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
 
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
@@ -310,7 +310,7 @@ Functions
                   - if list compute all metrics and return a dict where the key is
                     the name of the metric and the value an ndarray of scores
                   - if dict compute all metrics and return a dict where the key is
-                    the key and the value an ndarry of scores
+                    the key and the value an ndarray of scores
                   - if callable
    :type metric: str, callable, list or dict, optional
    :param success: Indicator matrix of successful counterfactual transformations
