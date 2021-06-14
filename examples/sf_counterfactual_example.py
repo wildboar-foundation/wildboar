@@ -9,7 +9,9 @@ x_train, x_test, y_train, y_test = load_dataset(
     "TwoLeadECG", repository="wildboar/ucr", merge_train_test=False
 )
 
-clf = ShapeletForestClassifier(metric="euclidean", random_state=1, n_estimators=100)
+clf = ShapeletForestClassifier(
+    metric="euclidean", random_state=1, n_jobs=-1, n_estimators=100
+)
 clf.fit(x_train, y_train)
 
 y_pred = clf.predict(x_test)
