@@ -2,10 +2,10 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Examples" href="../examples.html" /><link rel="prev" title="Distance metrics" href="metrics.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Explainability" href="explain.html" /><link rel="prev" title="Unsupervised learning" href="unsupervised.html" />
 
     <meta name="generator" content="sphinx-3.5.4, furo 2021.04.11.beta34"/>
-        <title>Explainability - Wildboar 1.1.0rc3.dev8+g33296b51 documentation</title>
+        <title>Distance metrics - Wildboar 1.1.0rc3.dev8+g33296b51 documentation</title>
       <link rel="stylesheet" href="../_static/styles/furo.css?digest=59ab60ac09ea94ccfe6deddff6d715cce948a6fc">
     <link rel="stylesheet" href="../_static/pygments.css">
     <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../_static/pygments_dark.css">
@@ -50,7 +50,7 @@
         
         You're reading the documentation for a development version.
         For the latest released version, please have a look at <a
-            href="../../1.1.X/guide/explain.html">1.1.X</a>.
+            href="../../1.1.X/index.html">1.1.X</a>.
         
     </aside>
 </div>
@@ -105,7 +105,7 @@
       <a href="../index.html"><div class="brand">Wildboar 1.1.0rc3.dev8+g33296b51 documentation</div></a>
     </div>
     <div class="header-right">
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
     </div>
@@ -131,8 +131,8 @@
 <li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="supervised.html">Supervised learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="unsupervised.html">Unsupervised learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="metrics.html">Distance metrics</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Explainability</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Distance metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explain.html">Explainability</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label for="toctree-checkbox-2"><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -186,8 +186,8 @@
                     </svg></i></label>
             <ul>
                 <li class="toctree-l2"><span class="reference internal">1.1.0rc3</span></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../1.0.X/guide/explain.html">1.0.10</a></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../1.1.X/guide/explain.html">1.1.X</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../1.0.X/index.html">1.0.10</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../1.1.X/index.html">1.1.X</a></li>
             </ul>
         </li>
     </ul>
@@ -199,126 +199,34 @@
   <main class="main">
     <div class="content">
       <article role="main">
-        <label class="toc-overlay-icon toc-content-icon" for="__toc">
+        <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
           <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
         </label>
-        <div class="section" id="explainability">
-<h1>Explainability<a class="headerlink" href="#explainability" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="counterfactual-explanations">
-<h2>Counterfactual explanations<a class="headerlink" href="#counterfactual-explanations" title="Permalink to this headline">¶</a></h2>
-<p>wildboar can explain predictions of nearest neighbors classifiers and shapelet forest classifiers
-using counterfactual samples. In this scenario, counterfactuals are samples that
-are transformed such that the labeling of the sample changes. For instance,
-we might want to explain what changes are required to transforms a sample
-labeled as <cite>abnormal</cite> to <cite>normal</cite>. In this scenario, the normal sample would
-be the counterfactual sample.</p>
-<p>In wildboar, counterfactual explainers are in the module <code class="docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code>.
-The easiest way to generate counterfactuals is to use the function <code class="docutils literal notranslate"><span class="pre">counterfactuals</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactual</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Currently, the classifiers that supports counterfactual explanations
-are <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">KNearestNeighborsClassifier</span></code>
-from wildboar and scikit-learn respectively. Model agnostic counterfactual
-explanations can be provided for other estimators.</p>
-</div>
-<p>To have more control over the generation of counterfactual samples, the classes
-<code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual</span></code> and <code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactuals</span></code> can be used.
-They implement the interface of <code class="docutils literal notranslate"><span class="pre">BaseCounterfactuals</span></code> which exposes two
-methods <code class="docutils literal notranslate"><span class="pre">fit(estimator)</span></code> and <code class="docutils literal notranslate"><span class="pre">transform(x,</span> <span class="pre">y)</span></code>, where the former fits
-a counterfactual explainer to an estimator and the latter transform the i:th sample
-of <cite>x</cite> to a sample labeled as the i:th label in <cite>y</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">KNeighborsCounterfactuals</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">'euclidean'</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">KNeighborsCounterfactuals</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">counterfactual</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_desired</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">counterfactual</span><span class="p">[</span><span class="n">success</span><span class="p">]</span> <span class="c1"># only successful transformations</span>
-</pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactuals</span></code> only supports <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code> fit
-with the Euclidean distance.</p>
-</div>
-<div class="section" id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
-<p>In the following example, we explain the a nearest neighbors classifier and
-a shapelet forest classifier for the datasets <cite>TwoLeadECG</cite> and explaining samples
-classified as <cite>2.0</cite> if they instead where classified as <cite>1.0</cite> (in the legend
-denoted as <cite>abnormal</cite> and <cite>normal</cite> respectively).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
-<span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
-<span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactuals</span>
-
-<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
-<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
-
-<span class="c1"># Change estimator to `KNeighborsClassifier(metric='euclidean')`</span>
-<span class="c1"># to generate k-nearest counterfactuals instead</span>
-<span class="n">estimator</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">)</span>
-
-<span class="c1"># fit the estimator to the training data</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-
-<span class="c1"># only consider samples predicted as 2</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">==</span> <span class="mf">2.0</span><span class="p">]</span>
-
-<span class="c1"># generate counterfactuals for the samples classified as 2, instead labeled as 1</span>
-<span class="n">x_counterfactuals</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">counterfactuals</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
-
-<span class="c1"># only consider the successful counterfactuals</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">success</span><span class="p">]</span>
-<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">success</span><span class="p">]</span>
-<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="n">success</span><span class="p">])[:</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
-</pre></div>
-</div>
-<p>Plotting the first two counterfactual samples with the lowest score yields the following
-figure for the <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code>:</p>
-<div class="figure align-default">
-<a class="reference internal image-reference" href="../_images/counterfactuals_nn.png"><img alt="../_images/counterfactuals_nn.png" src="../_images/counterfactuals_nn.png" style="width: 390.0px; height: 162.5px;"/></a>
-</div>
-<p>and for the <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code>:</p>
-<div class="figure align-default">
-<a class="reference internal image-reference" href="../_images/counterfactuals_sf.png"><img alt="../_images/counterfactuals_sf.png" src="../_images/counterfactuals_sf.png" style="width: 390.0px; height: 162.5px;"/></a>
-</div>
-<p>We can observe that the counterfactual explainer for nearest neighbors classifier
-tend to change larger parts of the time series, while the shapelet forest counterfactuals
-tend to have fewer and smaller changes.</p>
-</div>
-</div>
+        <div class="section" id="distance-metrics">
+<h1>Distance metrics<a class="headerlink" href="#distance-metrics" title="Permalink to this headline">¶</a></h1>
 </div>
 
       </article>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../examples.html">
+          <a class="next-page" href="explain.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Examples</div>
+                <div class="title">Explainability</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="metrics.html">
+          <a class="prev-page" href="unsupervised.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Distance metrics</div>
+                <div class="title">Unsupervised learning</div>
                 
               </div>
             </a>
@@ -332,7 +240,7 @@ tend to have fewer and smaller changes.</p>
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
               <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
             |
-            <a class="muted-link" href="../_sources/guide/explain.rst.txt"
+            <a class="muted-link" href="../_sources/guide/metrics.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -340,30 +248,8 @@ tend to have fewer and smaller changes.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Explainability</a><ul>
-<li><a class="reference internal" href="#counterfactual-explanations">Counterfactual explanations</a><ul>
-<li><a class="reference internal" href="#example">Example</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
