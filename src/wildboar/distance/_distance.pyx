@@ -454,8 +454,6 @@ def _validate_data(data):
     if x.ndim == 1:
         x = x.reshape(-1, x.shape[0])
 
-    if not x.flags.c_contiguous:
-        x = np.ascontiguousarray(x, dtype=np.float64)
     return x
 
 
@@ -465,7 +463,7 @@ def _check_sample(sample, n_samples):
 
 
 def _check_dim(dim, ndims):
-    if dim < 0 or dim >= ndims:
+    if dim < 0 or dim > ndims:
         raise ValueError("illegal dimension {}".format(dim))
 
 
