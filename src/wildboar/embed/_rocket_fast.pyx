@@ -239,7 +239,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         if td.n_dims > 1:
             transient.dim = rand_int(0, td.n_dims, seed)
         else:
-            transient.dim = 1
+            transient.dim = 0
 
         transient.feature = rocket
         return 0

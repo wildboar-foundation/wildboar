@@ -202,7 +202,7 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
         if td.n_dims > 1:
             shapelet_dim = rand_int(0, td.n_dims, random_seed)
         else:
-            shapelet_dim = 1
+            shapelet_dim = 0
 
         transient.dim = shapelet_dim
         self._distance_measure.init_ts_view(
