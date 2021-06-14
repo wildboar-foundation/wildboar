@@ -51,18 +51,18 @@ class PredictionPaths:
         left = tree.left
         right = tree.right
         threshold = tree.threshold
-        shapelet = tree.shapelet
+        shapelet = tree.features
         value = tree.value
 
         def recurse(node_id, path):
             if left[node_id] != -1:
                 left_path = path.copy()
-                (dim, data) = shapelet[node_id]
-                left_path.append((-1, (dim - 1, data), threshold[node_id]))
+                (dim, (dim_, data)) = shapelet[node_id]
+                left_path.append((-1, (dim, data), threshold[node_id]))
                 recurse(left[node_id], left_path)
 
                 right_path = path.copy()
-                right_path.append((1, (dim - 1, data), threshold[node_id]))
+                right_path.append((1, (dim, data), threshold[node_id]))
                 recurse(right[node_id], right_path)
             else:
                 self._paths[self.classes[np.argmax(value[node_id])]].append(path)
