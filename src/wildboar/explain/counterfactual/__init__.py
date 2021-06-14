@@ -90,7 +90,7 @@ def score(x_true, x_counterfactuals, metric="euclidean", success=None):
     score : ndarray or dict
         The scores
     """
-    if success:
+    if success is not None:
         x_true = x_true[success]
         x_counterfactuals = x_counterfactuals[success]
 
