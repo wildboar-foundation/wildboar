@@ -70,9 +70,52 @@ jobs:
         with:
           path: dist/*.tar.gz
 
+  build_docs:
+    name: Build and deploy documentation
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fetch all branches
+        run: |
+          git fetch --prune --unshallow
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
+      - name: List tags
+        run: git tag
+
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: '3.8'
+
+      - name: Install requirements
+        run: |
+          sudo apt-get install graphviz
+          python -m pip install --upgrade pip
+          python -m pip install -r docs/requirements.txt
+
+      - name: Install latest version
+        run: pip install .
+
+      - name: Build docmentation
+        run: |
+          mkdir html
+          touch html/.nojekyll
+          cd
+          cp docs/assets/index.html html/index.html
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
+
   upload_pypi:
     name: Upload artifacts to PyPI
-    needs: [build_wheels, build_sdist]
+    needs: [build_docs]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:

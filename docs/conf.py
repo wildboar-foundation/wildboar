@@ -98,13 +98,8 @@ def setup(app):
     logger = getLogger(__name__)
 
     def is_tag_for(gitref, major, minor):
-        match = re.match(SEM_VER_REGEX, gitref.name)
-        return (
-            gitref.source == "tags"
-            and match
-            and match.group(1) == major
-            and match.group(2) == minor
-        )
+        p = parse_version(gitref.name)
+        return gitref.source == "tags" and p.major == major and p.minor == minor
 
     # Build the local version of wildboar into a temporary directory
     def build_local_version(app):
@@ -176,10 +171,10 @@ def setup(app):
         gitrefs = list(git.get_all_refs(gitroot))
         latest_version_tags = {}
         for ver, metadata in config.smv_metadata.items():
-            current_version = re.match("(\d)\.(\d)(?:.X)?", ver)
+            current_version = re.match(r"(\d)\.(\d)(?:.X)?", ver)
             if current_version:
-                major = current_version.group(1)
-                minor = current_version.group(2)
+                major = int(current_version.group(1))
+                minor = int(current_version.group(2))
                 matching_tags = [
                     re.sub("^v", "", gitref.name)
                     for gitref in gitrefs
@@ -212,6 +207,7 @@ def setup(app):
             config.smv_metadata.keys(),
             key=lambda x: parse_version(re.sub(".X$", "", x)),
         )
+        # TODO: exclude pre-releases?
         config.smv_latest_stable = version_sorted[-1] if version_sorted else "master"
 
         logger.info("[DOCS] latest stable version is %s", config.smv_latest_stable)
