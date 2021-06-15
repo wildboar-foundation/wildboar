@@ -104,7 +104,7 @@ jobs:
         run: |
           mkdir html
           touch html/.nojekyll
-          cd
+          python -I -m sphinx_multiversion docs html -D "autoapi_root=\${sourcedir}" -D "autoapi_dirs=\${sourcedir}/../src"
           cp docs/assets/index.html html/index.html
 
       - name: Deploy documentation
