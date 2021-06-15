@@ -13,14 +13,14 @@ y_test_original = y_test
 
 # clf = KNeighborsClassifier(n_neighbors=5, metric="euclidean")
 clf = ShapeletForestClassifier(
-    n_estimators=100, metric="scaled_euclidean", random_state=10
+    n_estimators=100, metric="scaled_euclidean", random_state=10, n_jobs=-1
 )
 # clf = RandomForestClassifier()
 clf.fit(x_train, y_train)
 
 cf = PrototypeCounterfactual(
-    x_train,
-    y_train,
+    background_x=x_train,
+    background_y=y_train,
     metric="dtw",
     metric_params={"r": 0.1},
     method="nearest_shapelet",
@@ -49,12 +49,13 @@ x_counterfactual, success = cf.transform(
 
 print(clf.predict_proba(x_counterfactual))
 print(y_test)
+print(np.sum(success) / x_test.shape[0])
 x_test = x_test[success]
 x_counterfactual = x_counterfactual[success]
 
 fig, ax = plt.subplots(nrows=3)
-ax[0].plot(x_counterfactual[4], c="red")
-ax[0].plot(x_test[4], c="blue")
+ax[0].plot(x_counterfactual[0], c="red")
+ax[0].plot(x_test[0], c="blue")
 ax[1].plot(x_counterfactual[1], c="red")
 ax[1].plot(x_test[1], c="blue")
 ax[1].legend(["x'", "x"])
