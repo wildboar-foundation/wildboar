@@ -1,5 +1,5 @@
-:mod:`wildboar.explain.counterfactual.base`
-===========================================
+:py:mod:`wildboar.explain.counterfactual.base`
+==============================================
 
 .. py:module:: wildboar.explain.counterfactual.base
 
@@ -17,13 +17,13 @@ Classes
 
 
 
-.. class:: BaseCounterfactual
+.. py:class:: BaseCounterfactual
 
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
    Base estimator for counterfactual explanations
 
-   .. method:: fit(self, estimator)
+   .. py:method:: fit(self, estimator)
       :abstractmethod:
 
       Fit the counterfactual to a given estimator
@@ -35,7 +35,7 @@ Classes
       :rtype: self
 
 
-   .. method:: transform(self, x, y)
+   .. py:method:: transform(self, x, y)
       :abstractmethod:
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th label in y

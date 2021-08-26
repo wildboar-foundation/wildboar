@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`wildboar.linear_model._embed`
-===================================
+:py:mod:`wildboar.linear_model._embed`
+======================================
 
 .. py:module:: wildboar.linear_model._embed
 
@@ -23,8 +23,7 @@ Classes
 
 
 
-.. class:: BaseEmbeddingEstimator(*, random_state=None, n_jobs=None)
-
+.. py:class:: BaseEmbeddingEstimator(*, random_state=None, n_jobs=None)
 
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
@@ -36,44 +35,42 @@ Classes
    at the class level in their ``__init__`` as explicit keyword
    arguments (no ``*args`` or ``**kwargs``).
 
-   .. method:: fit(self, x, y, sample_weight=None)
+   .. py:method:: fit(self, x, y, sample_weight=None)
 
 
 
-.. class:: EmbeddingClassifierMixin
+.. py:class:: EmbeddingClassifierMixin
 
-   .. method:: decision_function(self, x)
-
-
-   .. method:: predict(self, x)
+   .. py:method:: decision_function(self, x)
 
 
-   .. method:: predict_log_proba(self, x)
+   .. py:method:: predict(self, x)
 
 
-   .. method:: predict_proba(self, x)
+   .. py:method:: predict_log_proba(self, x)
 
 
-
-.. class:: EmbeddingRegressorMixin
-
-   .. method:: decision_function(self, x)
-
-
-   .. method:: predict(self, x)
+   .. py:method:: predict_proba(self, x)
 
 
 
-.. class:: EmbeddingRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
+.. py:class:: EmbeddingRegressorMixin
 
+   .. py:method:: decision_function(self, x)
+
+
+   .. py:method:: predict(self, x)
+
+
+
+.. py:class:: EmbeddingRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`EmbeddingRegressorMixin`, :py:obj:`BaseEmbeddingEstimator`
 
    Mixin class for all regression estimators in scikit-learn.
 
 
-.. class:: EmbeddingRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
-
+.. py:class:: EmbeddingRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`EmbeddingClassifierMixin`, :py:obj:`BaseEmbeddingEstimator`
 

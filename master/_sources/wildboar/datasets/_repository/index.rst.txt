@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`wildboar.datasets._repository`
-====================================
+:py:mod:`wildboar.datasets._repository`
+=======================================
 
 .. py:module:: wildboar.datasets._repository
 
@@ -31,13 +31,12 @@ Attributes
    wildboar.datasets._repository.DEFAULT_TAG
 
 
-.. data:: DEFAULT_TAG
+.. py:data:: DEFAULT_TAG
    :annotation: = default
 
    
 
-.. class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
-
+.. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
    Base class for handling dataset bundles
 
@@ -59,26 +58,77 @@ Attributes
 
       :type: int or array-like
 
-   Construct a bundle
-
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param arrays: The arrays of the dataset
-   :type arrays: list
-
-   .. method:: get_collection(self, collection)
+   .. attribute:: Construct a bundle
 
 
-   .. method:: get_filename(self, version=None, tag=None, ext=None)
+
+   .. attribute::
 
 
-   .. method:: list(self, archive, collection=None)
+
+      :type: param key: A unique key of the bundle
+
+   .. attribute::
+
+
+
+      :type: type key: str
+
+   .. attribute::
+
+
+
+      :type: param version: The version of the bundle
+
+   .. attribute::
+
+
+
+      :type: type version: str
+
+   .. attribute::
+
+
+
+      :type: param name: Human-readable name of the bundle
+
+   .. attribute::
+
+
+
+      :type: type name: str
+
+   .. attribute::
+
+
+
+      :type: param description: Description of the bundle
+
+   .. attribute::
+
+
+
+      :type: type description: str
+
+   .. attribute::
+
+
+
+      :type: param arrays: The arrays of the dataset
+
+   .. attribute::
+
+
+
+      :type: type arrays: list
+
+   .. py:method:: get_collection(self, collection)
+
+
+   .. py:method:: get_filename(self, version=None, tag=None, ext=None)
+
+
+   .. py:method:: list(self, archive, collection=None)
 
       List all datasets in this bundle
 
@@ -91,7 +141,7 @@ Attributes
       :rtype: list
 
 
-   .. method:: load(self, name, archive)
+   .. py:method:: load(self, name, archive)
 
       Load a dataset from the bundle
 
@@ -107,19 +157,18 @@ Attributes
 
 
 
-.. class:: JSONRepository(url)
-
+.. py:class:: JSONRepository(url)
 
    Bases: :py:obj:`Repository`
 
    A repository is a collection of bundles
 
-   .. attribute:: supported_version
+   .. py:attribute:: supported_version
       :annotation: = 1.1
 
       
 
-   .. method:: download_url(self)
+   .. py:method:: download_url(self)
       :property:
 
       The url template for downloading bundles
@@ -128,7 +177,7 @@ Attributes
       :rtype: the download url
 
 
-   .. method:: get_bundles(self)
+   .. py:method:: get_bundles(self)
 
       Get all bundles
 
@@ -136,7 +185,7 @@ Attributes
       :rtype: a dictionary of key and bundle
 
 
-   .. method:: name(self)
+   .. py:method:: name(self)
       :property:
 
       Name of the repository
@@ -145,7 +194,7 @@ Attributes
       :rtype: the name of the repository
 
 
-   .. method:: version(self)
+   .. py:method:: version(self)
       :property:
 
       The repository version
@@ -154,7 +203,7 @@ Attributes
       :rtype: the version of the repository
 
 
-   .. method:: wildboar_requires(self)
+   .. py:method:: wildboar_requires(self)
       :property:
 
       The minimum required wildboar version
@@ -164,8 +213,7 @@ Attributes
 
 
 
-.. class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
-
+.. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
    Bases: :py:obj:`Bundle`
 
@@ -185,19 +233,18 @@ Attributes
    :type arrays: list
 
 
-.. class:: Repository
-
+.. py:class:: Repository
 
    A repository is a collection of bundles
 
-   .. method:: active(self)
+   .. py:method:: active(self)
       :property:
 
 
-   .. method:: clear_cache(self, cache_dir, keep_last_version=True)
+   .. py:method:: clear_cache(self, cache_dir, keep_last_version=True)
 
 
-   .. method:: download_url(self)
+   .. py:method:: download_url(self)
       :property:
 
       The url template for downloading bundles
@@ -206,7 +253,7 @@ Attributes
       :rtype: the download url
 
 
-   .. method:: get_bundle(self, key)
+   .. py:method:: get_bundle(self, key)
 
       Get a bundle with the specified key
 
@@ -217,7 +264,7 @@ Attributes
       :rtype: Bundle, optional
 
 
-   .. method:: get_bundles(self)
+   .. py:method:: get_bundles(self)
       :abstractmethod:
 
       Get all bundles
@@ -226,13 +273,13 @@ Attributes
       :rtype: a dictionary of key and bundle
 
 
-   .. method:: list_datasets(self, bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+   .. py:method:: list_datasets(self, bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
-   .. method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
+   .. py:method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
 
 
-   .. method:: name(self)
+   .. py:method:: name(self)
       :property:
 
       Name of the repository
@@ -241,12 +288,12 @@ Attributes
       :rtype: the name of the repository
 
 
-   .. method:: refresh(self, timeout=None)
+   .. py:method:: refresh(self, timeout=None)
 
       Refresh the repository
 
 
-   .. method:: version(self)
+   .. py:method:: version(self)
       :property:
 
       The repository version
@@ -255,7 +302,7 @@ Attributes
       :rtype: the version of the repository
 
 
-   .. method:: wildboar_requires(self)
+   .. py:method:: wildboar_requires(self)
       :property:
 
       The minimum required wildboar version
@@ -265,28 +312,27 @@ Attributes
 
 
 
-.. class:: RepositoryCollection
+.. py:class:: RepositoryCollection
+
+   .. py:method:: __contains__(self, item)
 
 
-   .. method:: __contains__(self, item)
+   .. py:method:: __delitem__(self, key)
 
 
-   .. method:: __delitem__(self, key)
+   .. py:method:: __getitem__(self, key)
 
 
-   .. method:: __getitem__(self, key)
+   .. py:method:: __iter__(self)
 
 
-   .. method:: __iter__(self)
+   .. py:method:: __len__(self)
 
 
-   .. method:: __len__(self)
+   .. py:method:: append(self, repository, refresh=True, timeout=None)
 
 
-   .. method:: append(self, repository, refresh=True, timeout=None)
-
-
-   .. method:: refresh(self, repository=None, timeout=None)
+   .. py:method:: refresh(self, repository=None, timeout=None)
 
 
 

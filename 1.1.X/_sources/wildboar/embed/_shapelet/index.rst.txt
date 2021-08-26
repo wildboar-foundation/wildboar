@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`wildboar.embed._shapelet`
-===============================
+:py:mod:`wildboar.embed._shapelet`
+==================================
 
 .. py:module:: wildboar.embed._shapelet
 
@@ -19,8 +19,7 @@ Classes
 
 
 
-.. class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
-
+.. py:class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
 

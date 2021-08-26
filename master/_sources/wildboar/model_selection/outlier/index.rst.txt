@@ -1,5 +1,5 @@
-:mod:`wildboar.model_selection.outlier`
-=======================================
+:py:mod:`wildboar.model_selection.outlier`
+==========================================
 
 .. py:module:: wildboar.model_selection.outlier
 
@@ -26,8 +26,7 @@ Functions
 
 
 
-.. class:: RepeatedOutlierSplit(n_splits=None, *, test_size=0.2, n_outlier=0.05, shuffle=True, random_state=None)
-
+.. py:class:: RepeatedOutlierSplit(n_splits=None, *, test_size=0.2, n_outlier=0.05, shuffle=True, random_state=None)
 
    Repeated random outlier cross-validator
 
@@ -40,30 +39,30 @@ Functions
       Instead, the inlier samples are shuffled and new outlier samples
       are inserted in the training and test sets repeatedly.
 
-   Construct a new cross-validator
+      Construct a new cross-validator
 
-   :param n_splits: The maximum number of splits.
+      :param n_splits: The maximum number of splits.
 
-                    - if None, the number of splits is determined by the number of
-                      outliers as, `total_n_outliers/(n_inliers * n_outliers)`
+                       - if None, the number of splits is determined by the number of
+                         outliers as, `total_n_outliers/(n_inliers * n_outliers)`
 
-                    - if int, the number of splits is an upper-bound
-   :type n_splits: int, optional
-   :param test_size: The size of the test set.
-   :type test_size: float, optional
-   :param n_outlier: The fraction of outliers in the training and test sets.
-   :type n_outlier: float, optional
-   :param shuffle: Shuffle the training indicies in each iteration.
-   :type shuffle: bool, optional
-   :param random_state: The psudo-random number generator
-   :type random_state: int or RandomState, optional
+                       - if int, the number of splits is an upper-bound
+      :type n_splits: int, optional
+      :param test_size: The size of the test set.
+      :type test_size: float, optional
+      :param n_outlier: The fraction of outliers in the training and test sets.
+      :type n_outlier: float, optional
+      :param shuffle: Shuffle the training indicies in each iteration.
+      :type shuffle: bool, optional
+      :param random_state: The psudo-random number generator
+      :type random_state: int or RandomState, optional
 
-   .. method:: __repr__(self)
+   .. py:method:: __repr__(self)
 
       Return repr(self).
 
 
-   .. method:: get_n_splits(self, X, y, groups=None)
+   .. py:method:: get_n_splits(self, X, y, groups=None)
 
       Returns the number of splitting iterations in the cross-validator
       :param X: The samples
@@ -77,7 +76,7 @@ Functions
       :rtype: int
 
 
-   .. method:: split(self, x, y, groups=None)
+   .. py:method:: split(self, x, y, groups=None)
 
       Return training and test indicies
 
@@ -92,7 +91,7 @@ Functions
 
 
 
-.. function:: threshold_score(y_true, score, score_f)
+.. py:function:: threshold_score(y_true, score, score_f)
 
    Compute the performance of using the i:th score
 
@@ -129,7 +128,7 @@ Functions
    >>> f.offset_ = score[np.argmax(perf)]
 
 
-.. function:: train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None)
+.. py:function:: train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None)
 
    Training and testing split from classification dataset
 

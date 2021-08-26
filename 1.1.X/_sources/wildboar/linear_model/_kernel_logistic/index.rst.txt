@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`wildboar.linear_model._kernel_logistic`
-=============================================
+:py:mod:`wildboar.linear_model._kernel_logistic`
+================================================
 
 .. py:module:: wildboar.linear_model._kernel_logistic
 
@@ -19,8 +19,7 @@ Classes
 
 
 
-.. class:: KernelLogisticRegression(kernel=None, *, kernel_params=None, n_components=100, penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver='lbfgs', max_iter=100, multi_class='auto', verbose=0, warm_start=False, n_jobs=None, l1_ratio=None)
-
+.. py:class:: KernelLogisticRegression(kernel=None, *, kernel_params=None, n_components=100, penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver='lbfgs', max_iter=100, multi_class='auto', verbose=0, warm_start=False, n_jobs=None, l1_ratio=None)
 
    Bases: :py:obj:`sklearn.linear_model.LogisticRegression`
 
@@ -30,20 +29,19 @@ Classes
 
    .. seealso::
 
-      :obj:`wildboar.datasets.outlier.EmmottLabeler`
-          Synthetic outlier dataset construction
+      wildboar.datasets.outlier.EmmottLabeler : Synthetic outlier dataset construction
 
-   Create a new kernel logistic regression
+      Create a new kernel logistic regression
 
-   :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric` for kernels. The default kernel
-                  is 'rbf'.
-   :type kernel: str, optional
-   :param kernel_params: Parameters to the kernel function.
-   :type kernel_params: dict, optional
-   :param n_components: Number of features to construct
-   :type n_components: int, optional
+      :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric` for kernels. The default kernel
+                     is 'rbf'.
+      :type kernel: str, optional
+      :param kernel_params: Parameters to the kernel function.
+      :type kernel_params: dict, optional
+      :param n_components: Number of features to construct
+      :type n_components: int, optional
 
-   .. method:: decision_function(self, x)
+   .. py:method:: decision_function(self, x)
 
       Predict confidence scores for samples.
 
@@ -59,7 +57,7 @@ Classes
       :rtype: array, shape=(n_samples,) if n_classes == 2 else (n_samples, n_classes)
 
 
-   .. method:: fit(self, x, y, sample_weight=None)
+   .. py:method:: fit(self, x, y, sample_weight=None)
 
       Fit the model according to the given training data.
 

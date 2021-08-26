@@ -1,5 +1,5 @@
-:mod:`wildboar.embed.base`
-==========================
+:py:mod:`wildboar.embed.base`
+=============================
 
 .. py:module:: wildboar.embed.base
 
@@ -17,8 +17,7 @@ Classes
 
 
 
-.. class:: BaseEmbedding(*, random_state=None, n_jobs=None)
-
+.. py:class:: BaseEmbedding(*, random_state=None, n_jobs=None)
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`sklearn.base.BaseEstimator`
 
@@ -30,11 +29,19 @@ Classes
 
       :type: Embedding
 
-   :param n_jobs: The number of jobs to run in parallel. None means 1 and
-                  -1 means using all processors.
-   :type n_jobs: int, optional
+   .. attribute::
 
-   .. method:: fit(self, x, y=None)
+      -1 means using all processors.
+
+      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
+
+   .. attribute::
+
+
+
+      :type: type n_jobs: int, optional
+
+   .. py:method:: fit(self, x, y=None)
 
       Fit the embedding.
 
@@ -47,7 +54,7 @@ Classes
       :rtype: self
 
 
-   .. method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(self, x, y=None)
 
       Fit the embedding and return the transform of x.
 
@@ -60,7 +67,7 @@ Classes
       :rtype: ndarray of shape [n_samples, n_outputs]
 
 
-   .. method:: transform(self, x)
+   .. py:method:: transform(self, x)
 
       Transform the dataset.
 

@@ -1,5 +1,5 @@
-:mod:`wildboar.datasets.filter`
-===============================
+:py:mod:`wildboar.datasets.filter`
+==================================
 
 .. py:module:: wildboar.datasets.filter
 
@@ -20,7 +20,7 @@ Functions
 
 
 
-.. function:: make_dict_filter(filter)
+.. py:function:: make_dict_filter(filter)
 
    Make a new filter
 
@@ -31,7 +31,7 @@ Functions
    :rtype: function
 
 
-.. function:: make_filter(filter)
+.. py:function:: make_filter(filter)
 
    Create a new filter
 
@@ -42,7 +42,7 @@ Functions
    :rtype: function
 
 
-.. function:: make_list_filter(filter)
+.. py:function:: make_list_filter(filter)
 
    Make a new filter based on a list of filter strings
 
@@ -53,7 +53,7 @@ Functions
    :rtype: function
 
 
-.. function:: make_str_filter(filter)
+.. py:function:: make_str_filter(filter)
 
    Make a new filter
 

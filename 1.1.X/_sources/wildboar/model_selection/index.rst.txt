@@ -1,5 +1,5 @@
-:mod:`wildboar.model_selection`
-===============================
+:py:mod:`wildboar.model_selection`
+==================================
 
 .. py:module:: wildboar.model_selection
 

@@ -1,5 +1,5 @@
-:mod:`wildboar.distance`
-========================
+:py:mod:`wildboar.distance`
+===========================
 
 .. py:module:: wildboar.distance
 
@@ -27,7 +27,7 @@ Functions
 
 
 
-.. function:: distance(x, y, *, dim=0, sample=None, metric='euclidean', metric_params=None, subsequence_distance=True, return_index=False)
+.. py:function:: distance(x, y, *, dim=0, sample=None, metric='euclidean', metric_params=None, subsequence_distance=True, return_index=False)
 
    Computes the distance between x and the samples of y
 
@@ -87,7 +87,7 @@ Functions
    [10 29  9 72 20 30]
 
 
-.. function:: matches(x, y, threshold, *, dim=0, sample=None, metric='euclidean', metric_params=None, return_distance=False)
+.. py:function:: matches(x, y, threshold, *, dim=0, sample=None, metric='euclidean', metric_params=None, return_distance=False)
 
    Return the positions in `x` (one list per `sample`) where `x` is closer than
    `threshold`.

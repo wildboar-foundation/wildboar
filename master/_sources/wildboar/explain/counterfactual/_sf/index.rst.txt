@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`wildboar.explain.counterfactual._sf`
-==========================================
+:py:mod:`wildboar.explain.counterfactual._sf`
+=============================================
 
 .. py:module:: wildboar.explain.counterfactual._sf
 
@@ -29,28 +29,26 @@ Attributes
    wildboar.explain.counterfactual._sf.euclidean_distance
 
 
-.. data:: MIN_MATCHING_DISTANCE
+.. py:data:: MIN_MATCHING_DISTANCE
    :annotation: = 0.0001
 
    
 
-.. data:: euclidean_distance
+.. py:data:: euclidean_distance
    
 
    
 
-.. class:: PredictionPaths(classes)
+.. py:class:: PredictionPaths(classes)
+
+   .. py:method:: __contains__(self, item)
 
 
-   .. method:: __contains__(self, item)
-
-
-   .. method:: __getitem__(self, item)
+   .. py:method:: __getitem__(self, item)
 
 
 
-.. class:: ShapeletForestCounterfactual(*, epsilon=1.0, batch_size=1, random_state=10)
-
+.. py:class:: ShapeletForestCounterfactual(*, epsilon=1.0, batch_size=1, random_state=10)
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
@@ -91,10 +89,10 @@ Attributes
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. method:: candidates(self, x, y)
+   .. py:method:: candidates(self, x, y)
 
 
-   .. method:: fit(self, estimator)
+   .. py:method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
 
@@ -105,7 +103,7 @@ Attributes
       :rtype: self
 
 
-   .. method:: transform(self, x, y)
+   .. py:method:: transform(self, x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
 

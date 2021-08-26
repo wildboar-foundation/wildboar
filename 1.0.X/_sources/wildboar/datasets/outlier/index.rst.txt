@@ -1,5 +1,5 @@
-:mod:`wildboar.datasets.outlier`
-================================
+:py:mod:`wildboar.datasets.outlier`
+===================================
 
 .. py:module:: wildboar.datasets.outlier
 
@@ -22,8 +22,7 @@ Classes
 
 
 
-.. class:: DensityLabeler(*, estimator=None, estimator_params=None)
-
+.. py:class:: DensityLabeler(*, estimator=None, estimator_params=None)
 
    Bases: :py:obj:`OutlierLabeler`
 
@@ -31,7 +30,7 @@ Classes
 
    Labels samples as outliers if a density cluster algorithm fail to assign them to a cluster
 
-   .. method:: fit(self, x, y=None)
+   .. py:method:: fit(self, x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -41,10 +40,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(self, x, y=None)
 
 
-   .. method:: transform(self, x, y=None)
+   .. py:method:: transform(self, x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -58,8 +57,7 @@ Classes
 
 
 
-.. class:: EmmottLabeler(n_outliers=None, *, confusion_estimator=None, difficulty_estimator=None, difficulty='simplest', scale=None, variation='tight', random_state=None)
-
+.. py:class:: EmmottLabeler(n_outliers=None, *, confusion_estimator=None, difficulty_estimator=None, difficulty='simplest', scale=None, variation='tight', random_state=None)
 
    Bases: :py:obj:`OutlierLabeler`
 
@@ -147,7 +145,7 @@ Classes
    :param random_state: A pseudo-random number generator to control the randomness of the algorithm.
    :type random_state: RandomState or int, optinal
 
-   .. method:: fit(self, x, y=None)
+   .. py:method:: fit(self, x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -157,10 +155,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(self, x, y=None)
 
 
-   .. method:: transform(self, x, y=None)
+   .. py:method:: transform(self, x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -174,8 +172,7 @@ Classes
 
 
 
-.. class:: KMeansLabeler(*, n_clusters=None, n_outliers=None, random_state=None)
-
+.. py:class:: KMeansLabeler(*, n_clusters=None, n_outliers=None, random_state=None)
 
    Bases: :py:obj:`OutlierLabeler`
 
@@ -193,18 +190,20 @@ Classes
 
       :type: int
 
-   .. warning:: The implementation does not yet work as expected.
+   .. warning::
 
-   Construct a new labeler
+      The implementation does not yet work as expected.
 
-   :param n_clusters: Number of clusters to fit
-   :type n_clusters: int, optional
-   :param n_outliers: The number of outliers in the resulting dataset. This is not guaranteed.
-   :type n_outliers: int or float, optional
-   :param random_state: The pseudo random state to ensure consistent results.
-   :type random_state: RandomState or int, optional
+      Construct a new labeler
 
-   .. method:: fit(self, x, y=None)
+      :param n_clusters: Number of clusters to fit
+      :type n_clusters: int, optional
+      :param n_outliers: The number of outliers in the resulting dataset. This is not guaranteed.
+      :type n_outliers: int or float, optional
+      :param random_state: The pseudo random state to ensure consistent results.
+      :type random_state: RandomState or int, optional
+
+   .. py:method:: fit(self, x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -214,10 +213,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(self, x, y=None)
 
 
-   .. method:: transform(self, x, y=None)
+   .. py:method:: transform(self, x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -231,8 +230,7 @@ Classes
 
 
 
-.. class:: MajorityLabeler(n_outliers=None, random_state=None)
-
+.. py:class:: MajorityLabeler(n_outliers=None, random_state=None)
 
    Bases: :py:obj:`OutlierLabeler`
 
@@ -244,14 +242,35 @@ Classes
 
       :type: ndarray
 
-   Create a new majority labeler
+   .. attribute:: Create a new majority labeler
 
-   :param n_outliers: The fraction of outliers, by default None
-   :type n_outliers: float, optional
-   :param random_state: The psudo-random number generator, by default None
-   :type random_state: int or RandomState, optional
 
-   .. method:: fit(self, x, y=None)
+
+   .. attribute::
+
+
+
+      :type: param n_outliers: The fraction of outliers, by default None
+
+   .. attribute::
+
+
+
+      :type: type n_outliers: float, optional
+
+   .. attribute::
+
+
+
+      :type: param random_state: The psudo-random number generator, by default None
+
+   .. attribute::
+
+
+
+      :type: type random_state: int or RandomState, optional
+
+   .. py:method:: fit(self, x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -261,7 +280,7 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. method:: transform(self, x, y=None)
+   .. py:method:: transform(self, x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -275,8 +294,7 @@ Classes
 
 
 
-.. class:: MinorityLabeler(n_outliers=None, random_state=None)
-
+.. py:class:: MinorityLabeler(n_outliers=None, random_state=None)
 
    Bases: :py:obj:`OutlierLabeler`
 
@@ -288,7 +306,7 @@ Classes
 
       :type: object
 
-   .. method:: fit(self, x, y=None)
+   .. py:method:: fit(self, x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -298,7 +316,7 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. method:: transform(self, x, y=None)
+   .. py:method:: transform(self, x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -312,11 +330,11 @@ Classes
 
 
 
-.. class:: OutlierLabeler
+.. py:class:: OutlierLabeler
 
    Base-class for outlier labelers
 
-   .. method:: fit(self, x, y=None)
+   .. py:method:: fit(self, x, y=None)
       :abstractmethod:
 
       Fit the outlier labeler to the give samples
@@ -327,10 +345,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(self, x, y=None)
 
 
-   .. method:: transform(self, x, y=None)
+   .. py:method:: transform(self, x, y=None)
       :abstractmethod:
 
       Transform the labels of (a subset) of samples in x to inlier and outliers

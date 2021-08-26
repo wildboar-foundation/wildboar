@@ -1,5 +1,5 @@
-:mod:`wildboar.explain`
-=======================
+:py:mod:`wildboar.explain`
+==========================
 
 .. py:module:: wildboar.explain
 

@@ -1,5 +1,5 @@
-:mod:`wildboar.datasets.preprocess`
-===================================
+:py:mod:`wildboar.datasets.preprocess`
+======================================
 
 .. py:module:: wildboar.datasets.preprocess
 
@@ -29,17 +29,17 @@ Attributes
    wildboar.datasets.preprocess.normalize
 
 
-.. data:: __doc__
+.. py:data:: __doc__
    
 
    
 
-.. data:: normalize
+.. py:data:: normalize
    
 
    
 
-.. function:: maxabs_scale(x)
+.. py:function:: maxabs_scale(x)
 
    Scale each time series by its maximum absolute value.
 
@@ -50,7 +50,7 @@ Attributes
    :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
 
 
-.. function:: minmax_scale(x, min=0, max=1)
+.. py:function:: minmax_scale(x, min=0, max=1)
 
    Scale x along the time dimension so that each value is between min and max
 
@@ -65,10 +65,10 @@ Attributes
    :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
 
 
-.. function:: named_preprocess(name)
+.. py:function:: named_preprocess(name)
 
 
-.. function:: standardize(x)
+.. py:function:: standardize(x)
 
    Scale x along the time dimension to have zero mean and unit standard deviation
 

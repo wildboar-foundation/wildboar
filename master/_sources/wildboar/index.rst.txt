@@ -1,5 +1,5 @@
-:mod:`wildboar`
-===============
+:py:mod:`wildboar`
+==================
 
 .. py:module:: wildboar
 
@@ -32,7 +32,7 @@ Submodules
 Package Contents
 ----------------
 
-.. data:: __version__
+.. py:data:: __version__
    :annotation: = 99.9.99
 
    

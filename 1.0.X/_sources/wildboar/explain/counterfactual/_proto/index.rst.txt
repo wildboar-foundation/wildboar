@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`wildboar.explain.counterfactual._proto`
-=============================================
+:py:mod:`wildboar.explain.counterfactual._proto`
+================================================
 
 .. py:module:: wildboar.explain.counterfactual._proto
 
@@ -30,8 +30,7 @@ Classes
 
 
 
-.. class:: DynamicTimeWarpTransform(gamma, r=1.0)
-
+.. py:class:: DynamicTimeWarpTransform(gamma, r=1.0)
 
    Bases: :py:obj:`MetricTransform`
 
@@ -44,7 +43,7 @@ Classes
                  is moved more.
    :type gamma: float
 
-   .. method:: move(self, o, p)
+   .. py:method:: move(self, o, p)
 
       Move the sample o towards p
 
@@ -58,8 +57,7 @@ Classes
 
 
 
-.. class:: EuclideanTransform(gamma)
-
+.. py:class:: EuclideanTransform(gamma)
 
    Bases: :py:obj:`MetricTransform`
 
@@ -72,7 +70,7 @@ Classes
                  is moved more.
    :type gamma: float
 
-   .. method:: move(self, o, p)
+   .. py:method:: move(self, o, p)
 
       Move the sample o towards p
 
@@ -86,8 +84,7 @@ Classes
 
 
 
-.. class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
-
+.. py:class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -106,7 +103,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. method:: nearest_index(self, o)
+   .. py:method:: nearest_index(self, o)
 
       Return the index of the closest sample
 
@@ -117,7 +114,7 @@ Classes
       :rtype: an index
 
 
-   .. method:: sample(self, o)
+   .. py:method:: sample(self, o)
 
       Sample an example
 
@@ -129,8 +126,7 @@ Classes
 
 
 
-.. class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
-
+.. py:class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -151,7 +147,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. method:: move(self, o, p)
+   .. py:method:: move(self, o, p)
 
       Move the current counterfactual toward the prototype
 
@@ -164,7 +160,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. method:: sample(self, o)
+   .. py:method:: sample(self, o)
 
       Sample an example
 
@@ -176,8 +172,7 @@ Classes
 
 
 
-.. class:: MetricTransform(gamma)
-
+.. py:class:: MetricTransform(gamma)
 
    Bases: :py:obj:`abc.ABC`
 
@@ -190,7 +185,7 @@ Classes
                  is moved more.
    :type gamma: float
 
-   .. method:: move(self, o, p)
+   .. py:method:: move(self, o, p)
       :abstractmethod:
 
       Move the sample o towards p
@@ -205,8 +200,7 @@ Classes
 
 
 
-.. class:: PredictEvaluator(estimator)
-
+.. py:class:: PredictEvaluator(estimator)
 
    Bases: :py:obj:`TargetEvaluator`
 
@@ -218,8 +212,7 @@ Classes
    :type estimator: object
 
 
-.. class:: ProbabilityEvaluator(estimator, probability=0.5)
-
+.. py:class:: ProbabilityEvaluator(estimator, probability=0.5)
 
    Bases: :py:obj:`TargetEvaluator`
 
@@ -233,8 +226,7 @@ Classes
    :type probability: float
 
 
-.. class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
-
+.. py:class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
@@ -319,7 +311,7 @@ Classes
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. method:: fit(self, estimator)
+   .. py:method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
 
@@ -330,7 +322,7 @@ Classes
       :rtype: self
 
 
-   .. method:: transform(self, x, y)
+   .. py:method:: transform(self, x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
 
@@ -345,8 +337,7 @@ Classes
 
 
 
-.. class:: PrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
-
+.. py:class:: PrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
    Bases: :py:obj:`abc.ABC`
 
@@ -366,7 +357,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. method:: move(self, o, p)
+   .. py:method:: move(self, o, p)
 
       Move the current counterfactual toward the prototype
 
@@ -379,7 +370,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. method:: sample(self, o)
+   .. py:method:: sample(self, o)
       :abstractmethod:
 
       Sample an example
@@ -391,7 +382,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. method:: sample_move(self, o)
+   .. py:method:: sample_move(self, o)
 
       Sampla a prototype and move the counterfactual towards the prototype
 
@@ -403,8 +394,7 @@ Classes
 
 
 
-.. class:: ShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
-
+.. py:class:: ShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -425,7 +415,7 @@ Classes
    :param max_shapelet_size: The maximum shapelet size
    :type max_shapelet_size: float
 
-   .. method:: move(self, o, p)
+   .. py:method:: move(self, o, p)
 
       Move the best matching shapelet of the  counterfactual sample towards
       the shapelet prototype
@@ -439,7 +429,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. method:: sample(self, _o)
+   .. py:method:: sample(self, _o)
 
       Sample an example
 
@@ -450,7 +440,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. method:: sample_shapelet(self, p)
+   .. py:method:: sample_shapelet(self, p)
 
       Sample a shapelet from x
 
@@ -462,8 +452,7 @@ Classes
 
 
 
-.. class:: TargetEvaluator(estimator)
-
+.. py:class:: TargetEvaluator(estimator)
 
    Bases: :py:obj:`abc.ABC`
 
@@ -474,7 +463,7 @@ Classes
    :param estimator: The estimator
    :type estimator: object
 
-   .. method:: is_counterfactual(self, x, y)
+   .. py:method:: is_counterfactual(self, x, y)
 
       Return true if x is a counterfactual of label y
 
@@ -488,8 +477,7 @@ Classes
 
 
 
-.. class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
-
+.. py:class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -508,7 +496,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. method:: sample(self, _o)
+   .. py:method:: sample(self, _o)
 
       Sample an example
 

@@ -1,5 +1,5 @@
-:mod:`wildboar.distance.dtw`
-============================
+:py:mod:`wildboar.distance.dtw`
+===============================
 
 .. py:module:: wildboar.distance.dtw
 
@@ -22,7 +22,7 @@ Functions
 
 
 
-.. function:: dtw_alignment(x, y, r=1.0, out=None)
+.. py:function:: dtw_alignment(x, y, r=1.0, out=None)
 
    Compute the Dynamic time warping alignment matrix
 
@@ -51,7 +51,7 @@ Functions
           compute the dtw distance
 
 
-.. function:: dtw_distance(x, y, r=1.0, scale=False)
+.. py:function:: dtw_distance(x, y, r=1.0, scale=False)
 
    Compute the dynamic time warping distance
 
@@ -76,7 +76,7 @@ Functions
           compute the dtw alignment matrix
 
 
-.. function:: dtw_envelop(x, r=1.0)
+.. py:function:: dtw_envelop(x, r=1.0)
 
    Compute the envelop for LB_keogh
 
@@ -98,7 +98,7 @@ Functions
        In 28th International Conference on Very Large Data Bases.
 
 
-.. function:: dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0)
+.. py:function:: dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0)
 
    The LB_keogh lower bound
 
@@ -132,7 +132,7 @@ Functions
        In 28th International Conference on Very Large Data Bases.
 
 
-.. function:: dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False)
+.. py:function:: dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False)
 
    Compute the optimal warping path between two series or from a given
    alignment matrix
@@ -160,7 +160,7 @@ Functions
    - if alignment is given r is ignored
 
 
-.. function:: dtw_pairwise_distance(x, r=1.0)
+.. py:function:: dtw_pairwise_distance(x, r=1.0)
 
    Compute the distance between all pairs of rows
 

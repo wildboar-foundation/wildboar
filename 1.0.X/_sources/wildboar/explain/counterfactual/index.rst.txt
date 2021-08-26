@@ -1,5 +1,5 @@
-:mod:`wildboar.explain.counterfactual`
-======================================
+:py:mod:`wildboar.explain.counterfactual`
+=========================================
 
 .. py:module:: wildboar.explain.counterfactual
 
@@ -37,8 +37,7 @@ Functions
 
 
 
-.. class:: KNeighborsCounterfactual(random_state=None)
-
+.. py:class:: KNeighborsCounterfactual(random_state=None)
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
@@ -56,7 +55,7 @@ Functions
        Locally and globally explainable time series tweaking.
        Knowledge and Information Systems, 62(5), 1671-1700.
 
-   .. method:: fit(self, estimator)
+   .. py:method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
 
@@ -67,7 +66,7 @@ Functions
       :rtype: self
 
 
-   .. method:: transform(self, x, y)
+   .. py:method:: transform(self, x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
 
@@ -82,8 +81,7 @@ Functions
 
 
 
-.. class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
-
+.. py:class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
@@ -168,7 +166,7 @@ Functions
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. method:: fit(self, estimator)
+   .. py:method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
 
@@ -179,7 +177,7 @@ Functions
       :rtype: self
 
 
-   .. method:: transform(self, x, y)
+   .. py:method:: transform(self, x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
 
@@ -194,8 +192,7 @@ Functions
 
 
 
-.. class:: ShapeletForestCounterfactual(*, epsilon=1.0, batch_size=1, random_state=10)
-
+.. py:class:: ShapeletForestCounterfactual(*, epsilon=1.0, batch_size=1, random_state=10)
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
@@ -231,10 +228,10 @@ Functions
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. method:: candidates(self, x, y)
+   .. py:method:: candidates(self, x, y)
 
 
-   .. method:: fit(self, estimator)
+   .. py:method:: fit(self, estimator)
 
       Fit the counterfactual to a given estimator
 
@@ -245,7 +242,7 @@ Functions
       :rtype: self
 
 
-   .. method:: transform(self, x, y)
+   .. py:method:: transform(self, x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
 
@@ -260,7 +257,7 @@ Functions
 
 
 
-.. function:: counterfactuals(estimator, x, y, *, method='infer', scoring=None, valid_scoring=False, random_state=None, **kwargs)
+.. py:function:: counterfactuals(estimator, x, y, *, method='infer', scoring=None, valid_scoring=False, random_state=None, **kwargs)
 
    Compute a single counterfactual example for each sample
 
@@ -291,7 +288,7 @@ Functions
              * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Score of the counterfactual transform. Only returned if ``scoring`` is not None
 
 
-.. function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
+.. py:function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
 
    Compute the score for the counterfactuals
 

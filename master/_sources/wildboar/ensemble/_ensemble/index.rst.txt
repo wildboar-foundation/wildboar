@@ -1,7 +1,7 @@
 :orphan:
 
-:mod:`wildboar.ensemble._ensemble`
-==================================
+:py:mod:`wildboar.ensemble._ensemble`
+=====================================
 
 .. py:module:: wildboar.ensemble._ensemble
 
@@ -31,8 +31,7 @@ Classes
 
 
 
-.. class:: BaseForestClassifier(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
-
+.. py:class:: BaseForestClassifier(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`ForestMixin`, :py:obj:`sklearn.ensemble.BaggingClassifier`
 
@@ -196,7 +195,7 @@ Classes
    .. [4] G. Louppe and P. Geurts, "Ensembles on Random Patches", Machine
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
 
-   .. method:: fit(self, x, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
 
       Build a Bagging ensemble of estimators from the training
          set (X, y).
@@ -216,7 +215,7 @@ Classes
       :rtype: object
 
 
-   .. method:: predict(self, x, check_input=True)
+   .. py:method:: predict(self, x, check_input=True)
 
       Predict class for X.
 
@@ -232,7 +231,7 @@ Classes
       :rtype: ndarray of shape (n_samples,)
 
 
-   .. method:: predict_log_proba(self, x, check_input=True)
+   .. py:method:: predict_log_proba(self, x, check_input=True)
 
       Predict class log-probabilities for X.
 
@@ -249,7 +248,7 @@ Classes
       :rtype: ndarray of shape (n_samples, n_classes)
 
 
-   .. method:: predict_proba(self, x, check_input=True)
+   .. py:method:: predict_proba(self, x, check_input=True)
 
       Predict class probabilities for X.
 
@@ -270,8 +269,7 @@ Classes
 
 
 
-.. class:: BaseForestRegressor(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
+.. py:class:: BaseForestRegressor(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`ForestMixin`, :py:obj:`sklearn.ensemble.BaggingRegressor`
 
@@ -420,7 +418,7 @@ Classes
    .. [4] G. Louppe and P. Geurts, "Ensembles on Random Patches", Machine
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
 
-   .. method:: fit(self, x, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
 
       Build a Bagging ensemble of estimators from the training
          set (X, y).
@@ -440,7 +438,7 @@ Classes
       :rtype: object
 
 
-   .. method:: predict(self, x, check_input=True)
+   .. py:method:: predict(self, x, check_input=True)
 
       Predict regression target for X.
 
@@ -456,8 +454,7 @@ Classes
 
 
 
-.. class:: BaseShapeletForestClassifier(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
-
+.. py:class:: BaseShapeletForestClassifier(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`BaseForestClassifier`
 
@@ -469,8 +466,7 @@ Classes
       instead.
 
 
-.. class:: BaseShapeletForestRegressor(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
+.. py:class:: BaseShapeletForestRegressor(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestRegressor`
 
@@ -482,8 +478,7 @@ Classes
       instead.
 
 
-.. class:: ExtraShapeletTreesClassifier(n_estimators=100, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
-
+.. py:class:: ExtraShapeletTreesClassifier(n_estimators=100, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseShapeletForestClassifier`
 
@@ -540,8 +535,7 @@ Classes
    :type random_state: int or RandomState, optional
 
 
-.. class:: ExtraShapeletTreesRegressor(n_estimators=100, *, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='mse', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
+.. py:class:: ExtraShapeletTreesRegressor(n_estimators=100, *, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='mse', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
@@ -584,17 +578,16 @@ Classes
    :type random_state: int or RandomState, optional
 
 
-.. class:: ForestMixin
+.. py:class:: ForestMixin
 
-   .. method:: apply(self, x)
-
-
-   .. method:: decision_path(self, x)
+   .. py:method:: apply(self, x)
 
 
+   .. py:method:: decision_path(self, x)
 
-.. class:: IsolationShapeletForest(*, n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', contamination_set='training', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
 
+
+.. py:class:: IsolationShapeletForest(*, n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', contamination_set='training', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
 
    Bases: :py:obj:`ForestMixin`, :py:obj:`sklearn.base.OutlierMixin`, :py:obj:`sklearn.ensemble._bagging.BaseBagging`
 
@@ -690,10 +683,10 @@ Classes
                         function calls.
    :type random_state: int or RandomState, optional
 
-   .. method:: decision_function(self, x)
+   .. py:method:: decision_function(self, x)
 
 
-   .. method:: fit(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
 
       Build a Bagging ensemble of estimators from the training
          set (X, y).
@@ -713,15 +706,14 @@ Classes
       :rtype: object
 
 
-   .. method:: predict(self, x)
+   .. py:method:: predict(self, x)
 
 
-   .. method:: score_samples(self, x)
+   .. py:method:: score_samples(self, x)
 
 
 
-.. class:: RockestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
-
+.. py:class:: RockestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestClassifier`
 
@@ -886,8 +878,7 @@ Classes
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
 
 
-.. class:: RockestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
+.. py:class:: RockestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestRegressor`
 
@@ -1037,8 +1028,7 @@ Classes
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
 
 
-.. class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
-
+.. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseShapeletForestClassifier`
 
@@ -1099,8 +1089,7 @@ Classes
    :type random_state: int or RandomState, optional
 
 
-.. class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
-
+.. py:class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
@@ -1143,7 +1132,7 @@ Classes
                         function calls.
    :type random_state: int or RandomState, optional
 
-   .. method:: fit(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
 
       Build a Bagging ensemble of estimators from the training
          set (X, y).
@@ -1163,15 +1152,14 @@ Classes
       :rtype: object
 
 
-   .. method:: fit_transform(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit_transform(self, x, y=None, sample_weight=None, check_input=True)
 
 
-   .. method:: transform(self, x)
+   .. py:method:: transform(self, x)
 
 
 
-.. class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
-
+.. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
