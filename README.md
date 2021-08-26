@@ -1,8 +1,8 @@
 # wildboar
 ![Python version](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9-blue)
 ![Build, test and upload to PyPI](https://github.com/isaksamsten/wildboar/workflows/Build,%20test%20and%20upload%20to%20PyPI/badge.svg)
-[![Build and deploy documentation](https://github.com/isaksamsten/wildboar/actions/workflows/build-deply-docs.yml/badge.svg)](http://isaksamsten.github.io/wildboar/index.html)
 [![PyPI version](https://badge.fury.io/py/wildboar.svg)](https://badge.fury.io/py/wildboar)
+[![Downloads](https://static.pepy.tech/personalized-badge/wildboar?period=total&units=international_system&left_color=black&right_color=orange&left_text=downloads)](https://pepy.tech/project/wildboar)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4264063.svg)](https://doi.org/10.5281/zenodo.4264063)
 
 [wildboar](https://isaksamsten.github.io/wildboar/) is a Python module for temporal machine learning and fast
