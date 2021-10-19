@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.1.2, furo 2021.08.17.beta43"/>
+    <meta name="generator" content="sphinx-4.2.0, furo 2021.10.09"/>
         <title>wildboar.explain.counterfactual._sf - Wildboar 1.1.0rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=910ac4ccc9d7c023151c34010d7b500fb9777a51" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=0254c309f5cadf746f1a613e7677379ac9c8cdcd" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?digest=16fb25fabf47304eee183a5e9af80b1ba98259b1" />
     
@@ -36,9 +36,11 @@
   
     }
   }
-</style>
-    <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../../../_static/pygments_dark.css"></head>
+</style></head>
   <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
     
 
 
@@ -166,6 +168,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../guide/datasets.html">Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../guide/supervised.html">Supervised learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../guide/unsupervised.html">Unsupervised learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guide/metrics.html">Distance metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../../guide/explain.html">Explainability</a></li>
 </ul>
 </li>
@@ -232,7 +235,7 @@
   </aside>
   <div class="main">
     <div class="content">
-      <article role="main">
+      <div class="article-container">
         <div class="content-icon-container">
           <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
@@ -247,7 +250,8 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <section id="module-wildboar.explain.counterfactual._sf">
+        <article role="main">
+          <section id="module-wildboar.explain.counterfactual._sf">
 <span id="wildboar-explain-counterfactual-sf"></span><h1><a class="reference internal" href="#module-wildboar.explain.counterfactual._sf" title="wildboar.explain.counterfactual._sf"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual._sf</span></code></a><a class="headerlink" href="#module-wildboar.explain.counterfactual._sf" title="Permalink to this headline">¶</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
@@ -306,7 +310,7 @@
 </dd></dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">ShapeletForestCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L86-L230"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">ShapeletForestCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L86-L228"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../base/index.html#wildboar.explain.counterfactual.base.BaseCounterfactual" title="wildboar.explain.counterfactual.base.BaseCounterfactual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base.BaseCounterfactual</span></code></a></p>
 <p>Counterfactual explanations for shapelet forest classifiers</p>
 <dl class="py attribute">
@@ -349,7 +353,7 @@ all counterfactual samples.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates">
-<span class="sig-name descname"><span class="pre">candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L166-L210"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L164-L208"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.fit">
@@ -369,22 +373,23 @@ all counterfactual samples.</p></li>
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L145-L164"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th label in y</p>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L145-L162"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Transform the i:th sample in x to a sample that would be labeled as the i:th</dt><dd><p>label in y</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>)</em>) – The samples to generate counterfactual explanations for</p></li>
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>) </em><em># noqa: E501</em>) – The samples to generate counterfactual explanations for</p></li>
 <li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual sample</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>counterfactuals</strong> (<em>ndarray of same shape as x</em>) – The counterfactual for each sample. If success[i] == False, then
-the value of counterfactuals[i] is undefined.</p></li>
-<li><p><strong>success</strong> (<em>ndarray of shape (n_samples,)</em>) – Boolean vector indicating successful transformations.</p></li>
-</ul>
-</p>
+<dd class="field-even"><p><strong>counterfactuals</strong> – The counterfactual for each sample.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray of same shape as x</p>
 </dd>
 </dl>
 </dd></dl>
@@ -393,7 +398,8 @@ the value of counterfactuals[i] is undefined.</p></li>
 </section>
 </section>
 
-      </article>
+        </article>
+      </div>
       <footer>
         
         <div class="related-pages">
@@ -402,13 +408,11 @@ the value of counterfactuals[i] is undefined.</p></li>
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2020, Isak Samsten
-            |
+              Copyright &#169; 2020, Isak Samsten |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            |
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
             <a class="muted-link" href="../../../../_sources/wildboar/explain/counterfactual/_sf/index.rst.txt"
                rel="nofollow">
               Show Source

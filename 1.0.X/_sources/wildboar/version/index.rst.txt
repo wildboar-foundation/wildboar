@@ -12,3 +12,8 @@ Module Contents
 
    
 
+.. py:data:: version_tuple
+   :annotation: = [99, 9, 99]
+
+   
+

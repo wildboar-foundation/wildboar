@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.1.2, furo 2021.08.17.beta43"/>
+    <meta name="generator" content="sphinx-4.2.0, furo 2021.10.09"/>
         <title>wildboar.ensemble._ensemble - Wildboar 1.1.0rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=910ac4ccc9d7c023151c34010d7b500fb9777a51" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=0254c309f5cadf746f1a613e7677379ac9c8cdcd" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=16fb25fabf47304eee183a5e9af80b1ba98259b1" />
     
@@ -36,9 +36,11 @@
   
     }
   }
-</style>
-    <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../../_static/pygments_dark.css"></head>
+</style></head>
   <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
     
 
 
@@ -166,6 +168,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../guide/datasets.html">Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guide/supervised.html">Supervised learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guide/unsupervised.html">Unsupervised learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/metrics.html">Distance metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../guide/explain.html">Explainability</a></li>
 </ul>
 </li>
@@ -232,7 +235,7 @@
   </aside>
   <div class="main">
     <div class="content">
-      <article role="main">
+      <div class="article-container">
         <div class="content-icon-container">
           <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
@@ -247,7 +250,8 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <section id="module-wildboar.ensemble._ensemble">
+        <article role="main">
+          <section id="module-wildboar.ensemble._ensemble">
 <span id="wildboar-ensemble-ensemble"></span><h1><a class="reference internal" href="#module-wildboar.ensemble._ensemble" title="wildboar.ensemble._ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble._ensemble</span></code></a><a class="headerlink" href="#module-wildboar.ensemble._ensemble" title="Permalink to this headline">¶</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
@@ -386,9 +390,40 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestClassifier.n_features_">
 <span class="sig-name descname"><span class="pre">n_features_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_features_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of features when <a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.fit" title="wildboar.ensemble._ensemble.BaseForestClassifier.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a> is performed.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.0: </span>Attribute <cite>n_features_</cite> was deprecated in version 1.0 and will be
+removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestClassifier.n_features_in_">
+<span class="sig-name descname"><span class="pre">n_features_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_features_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of features seen during <span class="xref std std-term">fit</span>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.24.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestClassifier.feature_names_in_">
+<span class="sig-name descname"><span class="pre">feature_names_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestClassifier.feature_names_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Names of features seen during <span class="xref std std-term">fit</span>. Defined only when <cite>X</cite>
+has feature names that are all strings.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of shape (<cite>n_features_in_</cite>,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -468,18 +503,12 @@ only when <code class="docutils literal notranslate"><span class="pre">oob_score
 </dd>
 </dl>
 </dd></dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingClassifier</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-<span class="gp">... </span>                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-<span class="gp">... </span>                           <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVC</span><span class="p">(),</span>
-<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
-<span class="go">array([1])</span>
-</pre></div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaggingRegressor</span></code></dt><dd><p>A Bagging regressor.</p>
+</dd>
+</dl>
 </div>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
@@ -501,13 +530,23 @@ forests”, Pattern Analysis and Machine Intelligence, 20(8), 832-844,
 Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVC</span><span class="p">(),</span>
+<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="go">array([1])</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestClassifier.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py#L139-L171"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestClassifier.fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Build a Bagging ensemble of estimators from the training</dt><dd><p>set (X, y).</p>
-</dd>
-</dl>
+<dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -521,7 +560,7 @@ sample weighting.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>object</p>
@@ -676,9 +715,40 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestRegressor.n_features_">
 <span class="sig-name descname"><span class="pre">n_features_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestRegressor.n_features_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of features when <a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.fit" title="wildboar.ensemble._ensemble.BaseForestRegressor.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code></a> is performed.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.0: </span>Attribute <cite>n_features_</cite> was deprecated in version 1.0 and will be
+removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestRegressor.n_features_in_">
+<span class="sig-name descname"><span class="pre">n_features_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestRegressor.n_features_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of features seen during <span class="xref std std-term">fit</span>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.24.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestRegressor.feature_names_in_">
+<span class="sig-name descname"><span class="pre">feature_names_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestRegressor.feature_names_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Names of features seen during <span class="xref std std-term">fit</span>. Defined only when <cite>X</cite>
+has feature names that are all strings.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of shape (<cite>n_features_in_</cite>,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -738,18 +808,12 @@ when <code class="docutils literal notranslate"><span class="pre">oob_score</spa
 </dd>
 </dl>
 </dd></dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVR</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingRegressor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-<span class="gp">... </span>                       <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-<span class="gp">... </span>                       <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span> <span class="o">=</span> <span class="n">BaggingRegressor</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVR</span><span class="p">(),</span>
-<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
-<span class="go">array([-2.8720...])</span>
-</pre></div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaggingClassifier</span></code></dt><dd><p>A Bagging classifier.</p>
+</dd>
+</dl>
 </div>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
@@ -771,13 +835,23 @@ forests”, Pattern Analysis and Machine Intelligence, 20(8), 832-844,
 Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingRegressor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>                       <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>                       <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span> <span class="o">=</span> <span class="n">BaggingRegressor</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVR</span><span class="p">(),</span>
+<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="go">array([-2.8720...])</span>
+</pre></div>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.BaseForestRegressor.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py#L530-L555"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.BaseForestRegressor.fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Build a Bagging ensemble of estimators from the training</dt><dd><p>set (X, y).</p>
-</dd>
-</dl>
+<dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -791,7 +865,7 @@ sample weighting.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>object</p>
@@ -1035,10 +1109,7 @@ function calls.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.IsolationShapeletForest.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py#L1135-L1245"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Build a Bagging ensemble of estimators from the training</dt><dd><p>set (X, y).</p>
-</dd>
-</dl>
+<dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1052,7 +1123,7 @@ sample weighting.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>object</p>
@@ -1154,9 +1225,40 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.RockestClassifier.n_features_">
 <span class="sig-name descname"><span class="pre">n_features_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.RockestClassifier.n_features_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of features when <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> is performed.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.0: </span>Attribute <cite>n_features_</cite> was deprecated in version 1.0 and will be
+removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.RockestClassifier.n_features_in_">
+<span class="sig-name descname"><span class="pre">n_features_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.RockestClassifier.n_features_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of features seen during <span class="xref std std-term">fit</span>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.24.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.RockestClassifier.feature_names_in_">
+<span class="sig-name descname"><span class="pre">feature_names_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.RockestClassifier.feature_names_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Names of features seen during <span class="xref std std-term">fit</span>. Defined only when <cite>X</cite>
+has feature names that are all strings.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of shape (<cite>n_features_in_</cite>,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1236,18 +1338,12 @@ only when <code class="docutils literal notranslate"><span class="pre">oob_score
 </dd>
 </dl>
 </dd></dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingClassifier</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-<span class="gp">... </span>                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-<span class="gp">... </span>                           <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVC</span><span class="p">(),</span>
-<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
-<span class="go">array([1])</span>
-</pre></div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaggingRegressor</span></code></dt><dd><p>A Bagging regressor.</p>
+</dd>
+</dl>
 </div>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
@@ -1269,6 +1365,19 @@ forests”, Pattern Analysis and Machine Intelligence, 20(8), 832-844,
 Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_classification</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_classification</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_redundant</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">BaggingClassifier</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVC</span><span class="p">(),</span>
+<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="go">array([1])</span>
+</pre></div>
+</div>
 </dd></dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.RockestRegressor">
@@ -1352,9 +1461,40 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.RockestRegressor.n_features_">
 <span class="sig-name descname"><span class="pre">n_features_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.RockestRegressor.n_features_" title="Permalink to this definition">¶</a></dt>
 <dd><p>The number of features when <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> is performed.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.0: </span>Attribute <cite>n_features_</cite> was deprecated in version 1.0 and will be
+removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.RockestRegressor.n_features_in_">
+<span class="sig-name descname"><span class="pre">n_features_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.RockestRegressor.n_features_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of features seen during <span class="xref std std-term">fit</span>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.24.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.ensemble._ensemble.RockestRegressor.feature_names_in_">
+<span class="sig-name descname"><span class="pre">feature_names_in_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.RockestRegressor.feature_names_in_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Names of features seen during <span class="xref std std-term">fit</span>. Defined only when <cite>X</cite>
+has feature names that are all strings.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.</span></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>ndarray of shape (<cite>n_features_in_</cite>,)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1414,18 +1554,12 @@ when <code class="docutils literal notranslate"><span class="pre">oob_score</spa
 </dd>
 </dl>
 </dd></dl>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVR</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingRegressor</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-<span class="gp">... </span>                       <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-<span class="gp">... </span>                       <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span> <span class="o">=</span> <span class="n">BaggingRegressor</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVR</span><span class="p">(),</span>
-<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
-<span class="go">array([-2.8720...])</span>
-</pre></div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaggingClassifier</span></code></dt><dd><p>A Bagging classifier.</p>
+</dd>
+</dl>
 </div>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
@@ -1447,6 +1581,19 @@ forests”, Pattern Analysis and Machine Intelligence, 20(8), 832-844,
 Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingRegressor</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+<span class="gp">... </span>                       <span class="n">n_informative</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n_targets</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>                       <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span> <span class="o">=</span> <span class="n">BaggingRegressor</span><span class="p">(</span><span class="n">base_estimator</span><span class="o">=</span><span class="n">SVR</span><span class="p">(),</span>
+<span class="gp">... </span>                        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regr</span><span class="o">.</span><span class="n">predict</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+<span class="go">array([-2.8720...])</span>
+</pre></div>
+</div>
 </dd></dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.ShapeletForestClassifier">
@@ -1534,10 +1681,7 @@ function calls.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py#L939-L941"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="simple">
-<dt>Build a Bagging ensemble of estimators from the training</dt><dd><p>set (X, y).</p>
-</dd>
-</dl>
+<dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1551,7 +1695,7 @@ sample weighting.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>object</p>
@@ -1609,7 +1753,8 @@ function calls.</p></li>
 </section>
 </section>
 
-      </article>
+        </article>
+      </div>
       <footer>
         
         <div class="related-pages">
@@ -1618,13 +1763,11 @@ function calls.</p></li>
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2020, Isak Samsten
-            |
+              Copyright &#169; 2020, Isak Samsten |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            |
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
             <a class="muted-link" href="../../../_sources/wildboar/ensemble/_ensemble/index.rst.txt"
                rel="nofollow">
               Show Source
@@ -1651,6 +1794,8 @@ function calls.</p></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier">BaseForestClassifier</a><ul>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.base_estimator_">base_estimator_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_features_">n_features_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_features_in_">n_features_in_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.feature_names_in_">feature_names_in_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.estimators_">estimators_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.estimators_samples_">estimators_samples_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.estimators_features_">estimators_features_</a></li>
@@ -1667,6 +1812,8 @@ function calls.</p></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor">BaseForestRegressor</a><ul>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.base_estimator_">base_estimator_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.n_features_">n_features_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.n_features_in_">n_features_in_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.feature_names_in_">feature_names_in_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.estimators_">estimators_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.estimators_samples_">estimators_samples_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.estimators_features_">estimators_features_</a></li>
@@ -1696,6 +1843,8 @@ function calls.</p></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier">RockestClassifier</a><ul>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.base_estimator_">base_estimator_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.n_features_">n_features_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.n_features_in_">n_features_in_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.feature_names_in_">feature_names_in_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.estimators_">estimators_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.estimators_samples_">estimators_samples_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.estimators_features_">estimators_features_</a></li>
@@ -1708,6 +1857,8 @@ function calls.</p></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor">RockestRegressor</a><ul>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.base_estimator_">base_estimator_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.n_features_">n_features_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.n_features_in_">n_features_in_</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.feature_names_in_">feature_names_in_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.estimators_">estimators_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.estimators_samples_">estimators_samples_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.estimators_features_">estimators_features_</a></li>

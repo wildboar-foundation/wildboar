@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><link rel="next" title="wildboar.linear_model" href="../../../linear_model/index.html" /><link rel="prev" title="wildboar.explain.counterfactual" href="../index.html" />
 
-    <meta name="generator" content="sphinx-4.1.2, furo 2021.08.17.beta43"/>
+    <meta name="generator" content="sphinx-4.2.0, furo 2021.10.09"/>
         <title>wildboar.explain.counterfactual.base - Wildboar 1.0.10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=910ac4ccc9d7c023151c34010d7b500fb9777a51" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=0254c309f5cadf746f1a613e7677379ac9c8cdcd" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?digest=16fb25fabf47304eee183a5e9af80b1ba98259b1" />
     
@@ -36,9 +36,11 @@
   
     }
   }
-</style>
-    <link media="(prefers-color-scheme: dark)" rel="stylesheet" href="../../../../_static/pygments_dark.css"></head>
+</style></head>
   <body>
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
     
 
 <div class="announcement">
@@ -236,7 +238,7 @@
   </aside>
   <div class="main">
     <div class="content">
-      <article role="main">
+      <div class="article-container">
         <div class="content-icon-container">
           <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
@@ -251,7 +253,8 @@
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
-        <section id="module-wildboar.explain.counterfactual.base">
+        <article role="main">
+          <section id="module-wildboar.explain.counterfactual.base">
 <span id="wildboar-explain-counterfactual-base"></span><h1><a class="reference internal" href="#module-wildboar.explain.counterfactual.base" title="wildboar.explain.counterfactual.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></a><a class="headerlink" href="#module-wildboar.explain.counterfactual.base" title="Permalink to this headline">¶</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
@@ -270,7 +273,7 @@
 </table></div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.base.BaseCounterfactual">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.base.</span></span><span class="sig-name descname"><span class="pre">BaseCounterfactual</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/base.py#L25-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.base.</span></span><span class="sig-name descname"><span class="pre">BaseCounterfactual</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/base.py#L25-L63"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
 <p>Base estimator for counterfactual explanations</p>
 <dl class="py method">
@@ -291,7 +294,7 @@
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.base.BaseCounterfactual.transform">
-<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/base.py#L43-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">abstract</span> </em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/base.py#L43-L63"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.base.BaseCounterfactual.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th label in y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -315,7 +318,8 @@ the value of counterfactuals[i] is undefined.</p></li>
 </section>
 </section>
 
-      </article>
+        </article>
+      </div>
       <footer>
         
         <div class="related-pages">
@@ -342,13 +346,11 @@ the value of counterfactuals[i] is undefined.</p></li>
         </div>
 
         <div class="related-information">
-              Copyright &#169; 2020, Isak Samsten
-            |
+              Copyright &#169; 2020, Isak Samsten |
             Built with <a href="https://www.sphinx-doc.org/">Sphinx</a>
               and
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-              <a href="https://github.com/pradyunsg/furo">Furo theme</a>.
-            |
+              <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
             <a class="muted-link" href="../../../../_sources/wildboar/explain/counterfactual/base/index.rst.txt"
                rel="nofollow">
               Show Source

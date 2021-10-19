@@ -68,20 +68,20 @@ Functions
 
    .. py:method:: transform(self, x, y)
 
-      Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
+      Transform the i:th sample in x to a sample that would be labeled as the i:th
+       label in y
 
       :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
       :param y: The desired label of the counterfactual sample
       :type y: array-like of shape (n_samples,)
 
-      :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
-                  the value of counterfactuals[i] is undefined.
-                * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
+      :returns: **counterfactuals** -- The counterfactual for each sample.
+      :rtype: ndarray of same shape as x
 
 
 
-.. py:class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
+.. py:class:: PrototypeCounterfactual(*, train_x, train_y, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
@@ -118,10 +118,10 @@ Functions
 
    Crate a new model agnostic counterfactual explainer.
 
-   :param background_x: The background data from which prototypes are sampled
-   :type background_x: array-like of shape (n_samples, n_timestep)
-   :param background_y: The background label from which prototypes are sampled
-   :type background_y: array-like of shape (n_samples,)
+   :param train_x: The background data from which prototypes are sampled
+   :type train_x: array-like of shape (n_samples, n_timestep)
+   :param train_y: The background label from which prototypes are sampled
+   :type train_y: array-like of shape (n_samples,)
    :param metric: The metric used to move the samples
    :type metric: {'euclidean', 'dtw'}, optional
    :param metric_params: Optional parameters to the metric
@@ -179,16 +179,16 @@ Functions
 
    .. py:method:: transform(self, x, y)
 
-      Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
+      Transform the i:th sample in x to a sample that would be labeled as the i:th
+       label in y
 
       :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
       :param y: The desired label of the counterfactual sample
       :type y: array-like of shape (n_samples,)
 
-      :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
-                  the value of counterfactuals[i] is undefined.
-                * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
+      :returns: **counterfactuals** -- The counterfactual for each sample.
+      :rtype: ndarray of same shape as x
 
 
 
@@ -249,20 +249,20 @@ Functions
 
    .. py:method:: transform(self, x, y)
 
-      Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
+      Transform the i:th sample in x to a sample that would be labeled as the i:th
+       label in y
 
       :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
       :param y: The desired label of the counterfactual sample
       :type y: array-like of shape (n_samples,)
 
-      :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
-                  the value of counterfactuals[i] is undefined.
-                * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
+      :returns: **counterfactuals** -- The counterfactual for each sample.
+      :rtype: ndarray of same shape as x
 
 
 
-.. py:function:: counterfactuals(estimator, x, y, *, method='infer', scoring=None, valid_scoring=False, random_state=None, **kwargs)
+.. py:function:: counterfactuals(estimator, x, y, *, method='best', scoring=None, valid_scoring=False, random_state=None, method_args=None)
 
    Compute a single counterfactual example for each sample
 
@@ -274,23 +274,29 @@ Functions
    :type y: array-like broadcast to shape (n_samples,)
    :param method: The method to generate counterfactual explanations
 
-                  - if 'infer', infer the most appropriate counterfactual explanation method
+                  - if 'best', infer the most appropriate counterfactual explanation method
                     based on the estimator
-                  - if 'prototype', compute model agnostic counterfactual explanations using
-                    the PrototypeCounterfactual method
+                    .. versionchanged :: 1.1.0
+                    The default parameter value is changed to 'best'
+
+                  - if str, select counterfactual explainer from named collection. See
+                    ``_COUNTERFACTUALS.keys()`` for a list of valid values.
    :type method: str, optional
-   :param scoring: The scoring function to determine the goodness of
+   :param scoring: The scoring function to determine the similarity between the counterfactual
+                   sample and the original sample
    :type scoring: str, callable, list or dict, optional
    :param valid_scoring: Only compute score for successful counterfactuals
    :type valid_scoring: bool, optional
    :param random_state: The pseudo random number generator to ensure stable result
    :type random_state: RandomState or int, optional
-   :param \*\*kwargs: Optional arguments to the counterfactual explainer
-   :type \*\*kwargs: dict, optional
+   :param method_args: Optional arguments to the counterfactual explainer
+
+                       ..versionadded :: 1.1.0
+   :type method_args: dict, optional
 
    :returns: * **x_counterfactuals** (*ndarray of shape (n_samples, n_timestep)*) -- The counterfactual example.
              * **valid** (*ndarray of shape (n_samples,)*) -- Indicator matrix for valid counterfactuals
-             * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Score of the counterfactual transform. Only returned if ``scoring`` is not None
+             * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Return score of the counterfactual transform, if ``scoring`` is not None
 
 
 .. py:function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
@@ -307,7 +313,7 @@ Functions
                   - if list compute all metrics and return a dict where the key is
                     the name of the metric and the value an ndarray of scores
                   - if dict compute all metrics and return a dict where the key is
-                    the key and the value an ndarry of scores
+                    the key and the value an ndarray of scores
                   - if callable
    :type metric: str, callable, list or dict, optional
    :param success: Indicator matrix of successful counterfactual transformations

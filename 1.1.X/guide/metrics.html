@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Distance metrics" href="metrics.html" /><link rel="prev" title="Supervised learning" href="supervised.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Explainability" href="explain.html" /><link rel="prev" title="Unsupervised learning" href="unsupervised.html" />
 
     <meta name="generator" content="sphinx-4.2.0, furo 2021.10.09"/>
-        <title>Unsupervised learning - Wildboar 1.1.0rc2 documentation</title>
+        <title>Distance metrics - Wildboar 1.1.0rc2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=0254c309f5cadf746f1a613e7677379ac9c8cdcd" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -140,7 +140,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -167,8 +167,8 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../guide.html">User guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="supervised.html">Supervised learning</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Unsupervised learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="metrics.html">Distance metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unsupervised.html">Unsupervised learning</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Distance metrics</a></li>
 <li class="toctree-l2"><a class="reference internal" href="explain.html">Explainability</a></li>
 </ul>
 </li>
@@ -222,8 +222,8 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../master/guide/unsupervised.html">1.1.0rc3</a></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../1.0.X/guide/unsupervised.html">1.0.10</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../master/guide/metrics.html">1.1.0rc3</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../1.0.X/index.html">1.0.10</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.1.0rc2</span></li>
             </ul>
         </li>
@@ -245,18 +245,14 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="unsupervised-learning">
-<h1>Unsupervised learning<a class="headerlink" href="#unsupervised-learning" title="Permalink to this headline">¶</a></h1>
-<section id="outlier-detection">
-<h2>Outlier detection<a class="headerlink" href="#outlier-detection" title="Permalink to this headline">¶</a></h2>
-<p>Wildboar includes one estimator for outlier detection: the <code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest</span></code>.</p>
-</section>
+          <section id="distance-metrics">
+<h1>Distance metrics<a class="headerlink" href="#distance-metrics" title="Permalink to this headline">¶</a></h1>
 </section>
 
         </article>
@@ -264,23 +260,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="metrics.html">
+          <a class="next-page" href="explain.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Distance metrics</div>
+                <div class="title">Explainability</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="supervised.html">
+          <a class="prev-page" href="unsupervised.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Supervised learning</div>
+                <div class="title">Unsupervised learning</div>
                 
               </div>
             </a>
@@ -292,7 +288,7 @@
               and
               <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
               <a href="https://github.com/pradyunsg/furo">Furo theme</a>. |
-            <a class="muted-link" href="../_sources/guide/unsupervised.rst.txt"
+            <a class="muted-link" href="../_sources/guide/metrics.rst.txt"
                rel="nofollow">
               Show Source
             </a>
@@ -300,27 +296,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Unsupervised learning</a><ul>
-<li><a class="reference internal" href="#outlier-detection">Outlier detection</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

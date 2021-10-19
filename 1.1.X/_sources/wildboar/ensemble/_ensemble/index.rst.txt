@@ -117,7 +117,28 @@ Classes
 
       The number of features when :meth:`fit` is performed.
 
+      .. deprecated:: 1.0
+          Attribute `n_features_` was deprecated in version 1.0 and will be
+          removed in 1.2. Use `n_features_in_` instead.
+
       :type: int
+
+   .. attribute:: n_features_in_
+
+      Number of features seen during :term:`fit`.
+
+      .. versionadded:: 0.24
+
+      :type: int
+
+   .. attribute:: feature_names_in_
+
+      Names of features seen during :term:`fit`. Defined only when `X`
+      has feature names that are all strings.
+
+      .. versionadded:: 1.0
+
+      :type: ndarray of shape (`n_features_in_`,)
 
    .. attribute:: estimators_
 
@@ -167,18 +188,10 @@ Classes
 
       :type: ndarray of shape (n_samples, n_classes)
 
-   .. rubric:: Examples
+   .. seealso::
 
-   >>> from sklearn.svm import SVC
-   >>> from sklearn.ensemble import BaggingClassifier
-   >>> from sklearn.datasets import make_classification
-   >>> X, y = make_classification(n_samples=100, n_features=4,
-   ...                            n_informative=2, n_redundant=0,
-   ...                            random_state=0, shuffle=False)
-   >>> clf = BaggingClassifier(base_estimator=SVC(),
-   ...                         n_estimators=10, random_state=0).fit(X, y)
-   >>> clf.predict([[0, 0, 0, 0]])
-   array([1])
+      :obj:`BaggingRegressor`
+          A Bagging regressor.
 
    .. rubric:: References
 
@@ -195,10 +208,22 @@ Classes
    .. [4] G. Louppe and P. Geurts, "Ensembles on Random Patches", Machine
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
 
+   .. rubric:: Examples
+
+   >>> from sklearn.svm import SVC
+   >>> from sklearn.ensemble import BaggingClassifier
+   >>> from sklearn.datasets import make_classification
+   >>> X, y = make_classification(n_samples=100, n_features=4,
+   ...                            n_informative=2, n_redundant=0,
+   ...                            random_state=0, shuffle=False)
+   >>> clf = BaggingClassifier(base_estimator=SVC(),
+   ...                         n_estimators=10, random_state=0).fit(X, y)
+   >>> clf.predict([[0, 0, 0, 0]])
+   array([1])
+
    .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
 
-      Build a Bagging ensemble of estimators from the training
-         set (X, y).
+      Build a Bagging ensemble of estimators from the training set (X, y).
 
       :param X: The training input samples. Sparse matrices are accepted only if
                 they are supported by the base estimator.
@@ -211,7 +236,7 @@ Classes
                             sample weighting.
       :type sample_weight: array-like of shape (n_samples,), default=None
 
-      :returns: **self**
+      :returns: **self** -- Fitted estimator.
       :rtype: object
 
 
@@ -352,7 +377,28 @@ Classes
 
       The number of features when :meth:`fit` is performed.
 
+      .. deprecated:: 1.0
+          Attribute `n_features_` was deprecated in version 1.0 and will be
+          removed in 1.2. Use `n_features_in_` instead.
+
       :type: int
+
+   .. attribute:: n_features_in_
+
+      Number of features seen during :term:`fit`.
+
+      .. versionadded:: 0.24
+
+      :type: int
+
+   .. attribute:: feature_names_in_
+
+      Names of features seen during :term:`fit`. Defined only when `X`
+      has feature names that are all strings.
+
+      .. versionadded:: 1.0
+
+      :type: ndarray of shape (`n_features_in_`,)
 
    .. attribute:: estimators_
 
@@ -390,18 +436,10 @@ Classes
 
       :type: ndarray of shape (n_samples,)
 
-   .. rubric:: Examples
+   .. seealso::
 
-   >>> from sklearn.svm import SVR
-   >>> from sklearn.ensemble import BaggingRegressor
-   >>> from sklearn.datasets import make_regression
-   >>> X, y = make_regression(n_samples=100, n_features=4,
-   ...                        n_informative=2, n_targets=1,
-   ...                        random_state=0, shuffle=False)
-   >>> regr = BaggingRegressor(base_estimator=SVR(),
-   ...                         n_estimators=10, random_state=0).fit(X, y)
-   >>> regr.predict([[0, 0, 0, 0]])
-   array([-2.8720...])
+      :obj:`BaggingClassifier`
+          A Bagging classifier.
 
    .. rubric:: References
 
@@ -418,10 +456,22 @@ Classes
    .. [4] G. Louppe and P. Geurts, "Ensembles on Random Patches", Machine
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
 
+   .. rubric:: Examples
+
+   >>> from sklearn.svm import SVR
+   >>> from sklearn.ensemble import BaggingRegressor
+   >>> from sklearn.datasets import make_regression
+   >>> X, y = make_regression(n_samples=100, n_features=4,
+   ...                        n_informative=2, n_targets=1,
+   ...                        random_state=0, shuffle=False)
+   >>> regr = BaggingRegressor(base_estimator=SVR(),
+   ...                         n_estimators=10, random_state=0).fit(X, y)
+   >>> regr.predict([[0, 0, 0, 0]])
+   array([-2.8720...])
+
    .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
 
-      Build a Bagging ensemble of estimators from the training
-         set (X, y).
+      Build a Bagging ensemble of estimators from the training set (X, y).
 
       :param X: The training input samples. Sparse matrices are accepted only if
                 they are supported by the base estimator.
@@ -434,7 +484,7 @@ Classes
                             sample weighting.
       :type sample_weight: array-like of shape (n_samples,), default=None
 
-      :returns: **self**
+      :returns: **self** -- Fitted estimator.
       :rtype: object
 
 
@@ -688,8 +738,7 @@ Classes
 
    .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
 
-      Build a Bagging ensemble of estimators from the training
-         set (X, y).
+      Build a Bagging ensemble of estimators from the training set (X, y).
 
       :param X: The training input samples. Sparse matrices are accepted only if
                 they are supported by the base estimator.
@@ -702,7 +751,7 @@ Classes
                             sample weighting.
       :type sample_weight: array-like of shape (n_samples,), default=None
 
-      :returns: **self**
+      :returns: **self** -- Fitted estimator.
       :rtype: object
 
 
@@ -799,7 +848,28 @@ Classes
 
       The number of features when :meth:`fit` is performed.
 
+      .. deprecated:: 1.0
+          Attribute `n_features_` was deprecated in version 1.0 and will be
+          removed in 1.2. Use `n_features_in_` instead.
+
       :type: int
+
+   .. attribute:: n_features_in_
+
+      Number of features seen during :term:`fit`.
+
+      .. versionadded:: 0.24
+
+      :type: int
+
+   .. attribute:: feature_names_in_
+
+      Names of features seen during :term:`fit`. Defined only when `X`
+      has feature names that are all strings.
+
+      .. versionadded:: 1.0
+
+      :type: ndarray of shape (`n_features_in_`,)
 
    .. attribute:: estimators_
 
@@ -849,18 +919,10 @@ Classes
 
       :type: ndarray of shape (n_samples, n_classes)
 
-   .. rubric:: Examples
+   .. seealso::
 
-   >>> from sklearn.svm import SVC
-   >>> from sklearn.ensemble import BaggingClassifier
-   >>> from sklearn.datasets import make_classification
-   >>> X, y = make_classification(n_samples=100, n_features=4,
-   ...                            n_informative=2, n_redundant=0,
-   ...                            random_state=0, shuffle=False)
-   >>> clf = BaggingClassifier(base_estimator=SVC(),
-   ...                         n_estimators=10, random_state=0).fit(X, y)
-   >>> clf.predict([[0, 0, 0, 0]])
-   array([1])
+      :obj:`BaggingRegressor`
+          A Bagging regressor.
 
    .. rubric:: References
 
@@ -876,6 +938,19 @@ Classes
 
    .. [4] G. Louppe and P. Geurts, "Ensembles on Random Patches", Machine
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
+
+   .. rubric:: Examples
+
+   >>> from sklearn.svm import SVC
+   >>> from sklearn.ensemble import BaggingClassifier
+   >>> from sklearn.datasets import make_classification
+   >>> X, y = make_classification(n_samples=100, n_features=4,
+   ...                            n_informative=2, n_redundant=0,
+   ...                            random_state=0, shuffle=False)
+   >>> clf = BaggingClassifier(base_estimator=SVC(),
+   ...                         n_estimators=10, random_state=0).fit(X, y)
+   >>> clf.predict([[0, 0, 0, 0]])
+   array([1])
 
 
 .. py:class:: RockestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='mse', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
@@ -961,7 +1036,28 @@ Classes
 
       The number of features when :meth:`fit` is performed.
 
+      .. deprecated:: 1.0
+          Attribute `n_features_` was deprecated in version 1.0 and will be
+          removed in 1.2. Use `n_features_in_` instead.
+
       :type: int
+
+   .. attribute:: n_features_in_
+
+      Number of features seen during :term:`fit`.
+
+      .. versionadded:: 0.24
+
+      :type: int
+
+   .. attribute:: feature_names_in_
+
+      Names of features seen during :term:`fit`. Defined only when `X`
+      has feature names that are all strings.
+
+      .. versionadded:: 1.0
+
+      :type: ndarray of shape (`n_features_in_`,)
 
    .. attribute:: estimators_
 
@@ -999,18 +1095,10 @@ Classes
 
       :type: ndarray of shape (n_samples,)
 
-   .. rubric:: Examples
+   .. seealso::
 
-   >>> from sklearn.svm import SVR
-   >>> from sklearn.ensemble import BaggingRegressor
-   >>> from sklearn.datasets import make_regression
-   >>> X, y = make_regression(n_samples=100, n_features=4,
-   ...                        n_informative=2, n_targets=1,
-   ...                        random_state=0, shuffle=False)
-   >>> regr = BaggingRegressor(base_estimator=SVR(),
-   ...                         n_estimators=10, random_state=0).fit(X, y)
-   >>> regr.predict([[0, 0, 0, 0]])
-   array([-2.8720...])
+      :obj:`BaggingClassifier`
+          A Bagging classifier.
 
    .. rubric:: References
 
@@ -1026,6 +1114,19 @@ Classes
 
    .. [4] G. Louppe and P. Geurts, "Ensembles on Random Patches", Machine
           Learning and Knowledge Discovery in Databases, 346-361, 2012.
+
+   .. rubric:: Examples
+
+   >>> from sklearn.svm import SVR
+   >>> from sklearn.ensemble import BaggingRegressor
+   >>> from sklearn.datasets import make_regression
+   >>> X, y = make_regression(n_samples=100, n_features=4,
+   ...                        n_informative=2, n_targets=1,
+   ...                        random_state=0, shuffle=False)
+   >>> regr = BaggingRegressor(base_estimator=SVR(),
+   ...                         n_estimators=10, random_state=0).fit(X, y)
+   >>> regr.predict([[0, 0, 0, 0]])
+   array([-2.8720...])
 
 
 .. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
@@ -1134,8 +1235,7 @@ Classes
 
    .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
 
-      Build a Bagging ensemble of estimators from the training
-         set (X, y).
+      Build a Bagging ensemble of estimators from the training set (X, y).
 
       :param X: The training input samples. Sparse matrices are accepted only if
                 they are supported by the base estimator.
@@ -1148,7 +1248,7 @@ Classes
                             sample weighting.
       :type sample_weight: array-like of shape (n_samples,), default=None
 
-      :returns: **self**
+      :returns: **self** -- Fitted estimator.
       :rtype: object
 
 
