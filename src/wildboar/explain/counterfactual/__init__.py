@@ -118,7 +118,7 @@ def counterfactuals(
     scoring=None,
     valid_scoring=False,
     random_state=None,
-    **kwargs
+    method_args=None,
 ):
     """Compute a single counterfactual example for each sample
 
@@ -142,7 +142,8 @@ def counterfactuals(
           the PrototypeCounterfactual method
 
     scoring : str, callable, list or dict, optional
-        The scoring function to determine the goodness of
+        The scoring function to determine the similarity between the counterfactual
+        sample and the original sample
 
     valid_scoring : bool, optional
         Only compute score for successful counterfactuals
@@ -150,8 +151,10 @@ def counterfactuals(
     random_state : RandomState or int, optional
         The pseudo random number generator to ensure stable result
 
-    **kwargs : dict, optional
+    method_args : dict, optional
         Optional arguments to the counterfactual explainer
+
+    ..versionadded :: 1.1.0
 
     Returns
     -------
@@ -165,23 +168,32 @@ def counterfactuals(
         Score of the counterfactual transform. Only returned if ``scoring`` is not None
     """
     check_is_fitted(estimator)
+    if method_args is None:
+        method_args = {}
+
     if method == "infer":
         Explainer = _infer_counterfactual(estimator)
         if Explainer == PrototypeCounterfactual:
             warnings.warn(
                 "no specific counterfactual explanation method "
-                "is available for the given estimator."
+                "is available for the given estimator. "
+                "Using a model agnostic estimator."
             )
-            if not ("background_x" in kwargs or "background_y" in kwargs):
-                raise ValueError("background_x and background_y are required")
+    elif method == "prototype":
+        Explainer = PrototypeCounterfactual
     else:
         Explainer = _COUNTERFACTUAL_EXPLAINER.get(method)
+
+    if Explainer == PrototypeCounterfactual and not (
+        "background_x" in method_args or "background_y" in method_args
+    ):
+        raise ValueError("background_x and background_y are required")
 
     if Explainer is None:
         raise ValueError("no counterfactual explainer for '%r'" % method)
 
     y = np.broadcast_to(y, (x.shape[0],))
-    explainer = Explainer(**kwargs)
+    explainer = Explainer(**method_args)
     explainer.set_params(random_state=random_state)
     explainer.fit(estimator)
     x_counterfactuals, success = explainer.transform(x, y)
