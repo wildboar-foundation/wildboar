@@ -196,7 +196,8 @@ def counterfactuals(
     explainer = Explainer(**method_args)
     explainer.set_params(random_state=random_state)
     explainer.fit(estimator)
-    x_counterfactuals, success = explainer.transform(x, y)
+    x_counterfactuals = explainer.transform(x, y)
+    success = estimator.predict(x_counterfactuals) == y
     if scoring is not None:
         sc = score(
             x,

@@ -42,10 +42,8 @@ x_test = x_test[y_test != class_][:10]
 y_test = y_test[y_test != class_][:10]
 
 
-x_counterfactual, success = cf.transform(
-    x_test, np.broadcast_to(class_, x_test.shape[0])
-)
-
+x_counterfactual = cf.transform(x_test, np.broadcast_to(class_, x_test.shape[0]))
+success = clf.predict(x_test) == class_
 
 print(clf.predict_proba(x_counterfactual))
 print(y_test)

@@ -152,16 +152,14 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
                 "number of samples={}".format(len(y), x.shape[0])
             )
         counterfactuals = np.empty(x.shape)
-        success = np.zeros(x.shape[0], dtype=bool)
         for i in range(x.shape[0]):
             t = self.candidates(x[i, :], y[i])
             if t is not None:
                 counterfactuals[i, :] = t
-                success[i] = True
             else:
-                success[i] = False
+                counterfactuals[i, :] = x[i, :]
 
-        return counterfactuals, success
+        return counterfactuals
 
     def candidates(self, x, y):
         if x.ndim == 2 and x.shape[0] > 1:

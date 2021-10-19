@@ -205,13 +205,10 @@ class PrototypeCounterfactual(BaseCounterfactual):
             )
         n_samples = x.shape[0]
         counterfactuals = np.empty(x.shape, dtype=x.dtype)
-        success = np.ones(x.shape[0]).astype(bool)
         for i in range(n_samples):
-            counterfactual, success_i = self._transform_sample(x[i], y[i])
-            counterfactuals[i] = counterfactual
-            success[i] = success_i
+            counterfactuals[i] = self._transform_sample(x[i], y[i])
 
-        return counterfactuals, success
+        return counterfactuals
 
     def _transform_sample(self, x, y):
         sampler = self.partitions_[y]
@@ -220,7 +217,7 @@ class PrototypeCounterfactual(BaseCounterfactual):
         while not self.target_.is_counterfactual(o, y) and n_iter < self.max_iter:
             o = sampler.sample_move(o)
             n_iter += 1
-        return o, self.target_.is_counterfactual(o, y)
+        return o
 
 
 class TargetEvaluator(abc.ABC):

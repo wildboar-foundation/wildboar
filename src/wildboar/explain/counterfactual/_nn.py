@@ -85,8 +85,7 @@ class KNeighborsCounterfactual(BaseCounterfactual):
 
     def transform(self, x, y):
         check_is_fitted(self, ["explainer_"])
-        x_counter = np.empty(x.shape, dtype=x.dtype)
-        success = np.empty(x.shape[0], dtype=bool)
+        x_counter = x.copy()
         labels = np.unique(y)
         for label in labels:
             label_indices = np.where(y == label)[0]
@@ -95,7 +94,5 @@ class KNeighborsCounterfactual(BaseCounterfactual):
             if mc.shape[0] > 0:
                 closest = nn.kneighbors(x[label_indices, :], return_distance=False)
                 x_counter[label_indices, :] = mc[closest[:, 0], :]
-                success[label_indices] = True
-            else:
-                success[label_indices] = False
-        return x_counter, success
+
+        return x_counter
