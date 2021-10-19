@@ -856,7 +856,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             - If `None`, the random number generator is the `RandomState` instance used
               by `np.random`.
         """
-        super(ShapeletTreeClassifier, self).__init__(
+        super(ExtraShapeletTreeClassifier, self).__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
@@ -871,7 +871,6 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             class_weight=class_weight,
             random_state=random_state,
         )
-        self.n_classes_ = None
 
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth

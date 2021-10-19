@@ -1098,4 +1098,4 @@ cdef class ExtraTreeBuilder(TreeBuilder):
             else:
                 break
         threshold[0] = rand_threshold
-        impurity[0] = -INFINITY
+        impurity[0] = INFINITY
