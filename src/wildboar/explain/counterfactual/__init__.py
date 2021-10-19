@@ -35,12 +35,12 @@ __all__ = [
     "PrototypeCounterfactual",
 ]
 
-_COUNTERFACTUAL_EXPLAINER = {
+_COUNTERFACTUALS = {
     "prototype": PrototypeCounterfactual,
 }
 
 
-def _infer_counterfactual(estimator):
+def _best_counterfactional(estimator):
     """Infer the counterfactual explainer to use based on the estimator
 
     Parameters
@@ -114,7 +114,7 @@ def counterfactuals(
     x,
     y,
     *,
-    method="infer",
+    method="best",
     scoring=None,
     valid_scoring=False,
     random_state=None,
@@ -136,10 +136,13 @@ def counterfactuals(
     method : str, optional
         The method to generate counterfactual explanations
 
-        - if 'infer', infer the most appropriate counterfactual explanation method
+        - if 'best', infer the most appropriate counterfactual explanation method
           based on the estimator
-        - if 'prototype', compute model agnostic counterfactual explanations using
-          the PrototypeCounterfactual method
+          .. versionchanged :: 1.1.0
+          The default parameter value is changed to 'best'
+
+        - if str, select counterfactual explainer from named collection. See
+          ``_COUNTERFACTUALS.keys()`` for a list of valid values.
 
     scoring : str, callable, list or dict, optional
         The scoring function to determine the similarity between the counterfactual
@@ -154,7 +157,7 @@ def counterfactuals(
     method_args : dict, optional
         Optional arguments to the counterfactual explainer
 
-    ..versionadded :: 1.1.0
+        ..versionadded :: 1.1.0
 
     Returns
     -------
@@ -165,32 +168,37 @@ def counterfactuals(
         Indicator matrix for valid counterfactuals
 
     score : ndarray of shape (n_samples,) or dict, optional
-        Score of the counterfactual transform. Only returned if ``scoring`` is not None
+        Return score of the counterfactual transform, if ``scoring`` is not None
     """
     check_is_fitted(estimator)
     if method_args is None:
         method_args = {}
 
-    if method == "infer":
-        Explainer = _infer_counterfactual(estimator)
+    # TODO: (1.2) Remove "infer"
+    if method == "infer" or method == "best":
+        if method == "infer":
+            warnings.warn(
+                "'infer' is deprecated and should be changed "
+                "to 'best' (default). 'infer' will be disabled in 1.2.",
+                DeprecationWarning,
+            )
+        Explainer = _best_counterfactional(estimator)
         if Explainer == PrototypeCounterfactual:
             warnings.warn(
                 "no specific counterfactual explanation method "
                 "is available for the given estimator. "
                 "Using a model agnostic estimator."
             )
-    elif method == "prototype":
-        Explainer = PrototypeCounterfactual
     else:
-        Explainer = _COUNTERFACTUAL_EXPLAINER.get(method)
-
-    if Explainer == PrototypeCounterfactual and not (
-        "background_x" in method_args or "background_y" in method_args
-    ):
-        raise ValueError("background_x and background_y are required")
+        Explainer = _COUNTERFACTUALS.get(method)
 
     if Explainer is None:
         raise ValueError("no counterfactual explainer for '%r'" % method)
+
+    if Explainer == PrototypeCounterfactual and not (
+        "train_x" in method_args or "train_y" in method_args
+    ):
+        raise ValueError("train_x and train_y are required in method_args")
 
     y = np.broadcast_to(y, (x.shape[0],))
     explainer = Explainer(**method_args)

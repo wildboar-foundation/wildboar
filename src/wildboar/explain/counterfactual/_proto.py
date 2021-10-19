@@ -57,8 +57,8 @@ class PrototypeCounterfactual(BaseCounterfactual):
     def __init__(
         self,
         *,
-        background_x,
-        background_y,
+        train_x,
+        train_y,
         metric="euclidean",
         metric_params=None,
         max_iter=100,
@@ -73,10 +73,10 @@ class PrototypeCounterfactual(BaseCounterfactual):
 
         Parameters
         ----------
-        background_x : array-like of shape (n_samples, n_timestep)
+        train_x : array-like of shape (n_samples, n_timestep)
             The background data from which prototypes are sampled
 
-        background_y : array-like of shape (n_samples,)
+        train_y : array-like of shape (n_samples,)
             The background label from which prototypes are sampled
 
         metric : {'euclidean', 'dtw'}, optional
@@ -131,8 +131,8 @@ class PrototypeCounterfactual(BaseCounterfactual):
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
         """
-        self.background_x = background_x
-        self.background_y = background_y
+        self.train_x = train_x
+        self.train_y = train_y
         self.random_state = random_state
         self.metric = metric
         self.metric_params = metric_params
@@ -145,11 +145,11 @@ class PrototypeCounterfactual(BaseCounterfactual):
 
     def fit(self, estimator):
         check_is_fitted(estimator)
-        if self.background_x is None or self.background_y is None:
+        if self.train_x is None or self.train_y is None:
             raise ValueError("background data are required.")
 
-        x = check_array(self.background_x)
-        y = check_array(self.background_y, ensure_2d=False)
+        x = check_array(self.train_x)
+        y = check_array(self.train_y, ensure_2d=False)
         if len(y) != x.shape[0]:
             raise ValueError(
                 "Number of labels={} does not match "
@@ -169,7 +169,7 @@ class PrototypeCounterfactual(BaseCounterfactual):
             raise ValueError("method (%s) is not supported" % self.method)
 
         self.estimator_ = deepcopy(estimator)
-        self.classes_ = np.unique(self.background_y)
+        self.classes_ = np.unique(self.train_y)
         if self.target == "auto":
             self.target_ = PredictEvaluator(self.estimator_)
         else:

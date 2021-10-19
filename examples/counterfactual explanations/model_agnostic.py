@@ -19,8 +19,8 @@ clf = ShapeletForestClassifier(
 clf.fit(x_train, y_train)
 
 cf = PrototypeCounterfactual(
-    background_x=x_train,
-    background_y=y_train,
+    train_x=x_train,
+    train_y=y_train,
     metric="dtw",
     metric_params={"r": 0.1},
     method="nearest_shapelet",
