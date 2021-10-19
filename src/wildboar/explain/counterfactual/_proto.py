@@ -262,7 +262,7 @@ class PredictEvaluator(TargetEvaluator):
     """Evaluate if a counterfactual is predicted as y"""
 
     def _is_counterfactual(self, x, y):
-        return self.estimator.predict(x) == y
+        return self.estimator.predict(x)[0] == y
 
 
 class ProbabilityEvaluator(TargetEvaluator):
