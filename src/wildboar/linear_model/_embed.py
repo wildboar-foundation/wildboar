@@ -14,7 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
-
+import warnings
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
@@ -108,7 +108,7 @@ class EmbeddingRidgeClassifierCV(
         *,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize=False,
+        normalize="deprecated",
         scoring=None,
         cv=None,
         class_weight=None,
@@ -125,11 +125,17 @@ class EmbeddingRidgeClassifierCV(
         self.random_state = random_state
 
     def _get_estimator(self, random_state):
+        if self.normalize != "deprecated":
+            warnings.warn(
+                "normalize is deprecated since 1.1 and will be removed in 1.2",
+                DeprecationWarning,
+            )
+
         return RidgeClassifierCV(
             alphas=self.alphas,
             fit_intercept=self.fit_intercept,
-            normalize=self.normalize,
             scoring=self.scoring,
+            normalize=self.normalize,
             cv=self.cv,
             class_weight=self.class_weight,
             store_cv_values=False,

@@ -29,7 +29,7 @@ class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
         max_shapelet_size=1.0,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize=False,
+        normalize="deprecated",
         scoring=None,
         cv=None,
         class_weight=None,
