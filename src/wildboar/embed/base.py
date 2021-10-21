@@ -14,9 +14,9 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-import numpy as np
 from abc import ABCMeta, abstractmethod
 
+import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
 
@@ -71,7 +71,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
         self.embedding_ = feature_embedding_fit(
-            self._get_feature_engineer(), x, random_state, self.n_jobs
+            self._get_feature_engineer(), x, random_state
         )
         return self
 
