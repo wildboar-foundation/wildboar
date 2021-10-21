@@ -163,7 +163,11 @@ cdef inline double rand_normal(double mu, double sigma, size_t *random_state) no
     y2 = x2 * w
     return mu + _y1 * sigma
 
-
+cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, size_t *seed) nogil:
+    cdef Py_ssize_t i, j
+    for i in range(length - 1, 0, -1):
+        j = rand_int(0, i, seed)
+        values[i], values[j] = values[j], values[i]
 
 # Implementation of introsort. Inspired by sklearn.tree
 # implementation. This code is licensed under BSD3 (and not GPLv3)
@@ -353,3 +357,25 @@ cpdef check_array_fast(np.ndarray x, bint ensure_2d=False, bint allow_nd=False, 
     if not x.dtype == np.float64:
         x = x.astype(np.float64)
     return x
+
+cdef np.ndarray to_ndarray_int(Py_ssize_t *arr, Py_ssize_t n):
+    cdef Py_ssize_t i
+    cdef np.ndarray out = np.zeros(n, dtype=int)
+    for i in range(n):
+        out[i] = arr[i]
+
+    return out
+
+cdef np.ndarray to_ndarray_double(double *arr, Py_ssize_t n):
+    cdef Py_ssize_t i
+    cdef np.ndarray out = np.zeros(n, dtype=np.float32)
+    for i in range(n):
+        out[i] = arr[i]
+
+    return out
+
+cdef Py_ssize_t imin(Py_ssize_t a, Py_ssize_t b) nogil:
+    if a < b:
+        return a
+    else:
+        return b

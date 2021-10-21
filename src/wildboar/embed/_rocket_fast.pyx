@@ -29,7 +29,7 @@ from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 
 from .._data cimport TSDatabase, ts_database_new
-from .._utils cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
+from .._utils cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform, to_ndarray_int
 from ._feature cimport Feature, FeatureEngineer
 
 
@@ -40,14 +40,6 @@ cdef struct Rocket:
     bint return_mean
     double bias
     double *weight
-
-cdef np.ndarray _to_ndarray(Py_ssize_t *arr, Py_ssize_t n):
-    cdef Py_ssize_t i
-    cdef np.ndarray out = np.zeros(n, dtype=int)
-    for i in range(n):
-        out[i] = arr[i]
-
-    return out
 
 cdef class WeightSampler:
 
@@ -184,7 +176,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         return self.__class__, (
             self.n_kernels,
             self.weight_sampler,
-            _to_ndarray(self.kernel_size, self.n_kernel_size),
+            to_ndarray_int(self.kernel_size, self.n_kernel_size),
             self.bias_prob,
             self.padding_prob,
             self.normalize_prob

@@ -53,10 +53,18 @@ cdef double rand_uniform(double low, double high, size_t *random_state) nogil
 
 cdef double rand_normal(double mean, double std, size_t *random_state) nogil
 
+cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, size_t *seed) nogil
+
 cdef int realloc_array(void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap)  nogil except -1
 
 cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1
 
 cdef void fast_mean_std(Py_ssize_t offset, Py_ssize_t stride, Py_ssize_t length, double* data, double *mean, double* std) nogil
+
+cdef np.ndarray to_ndarray_int(Py_ssize_t *arr, Py_ssize_t n)
+
+cdef np.ndarray to_ndarray_double(double *arr, Py_ssize_t n)
+
+cdef Py_ssize_t imin(Py_ssize_t a, Py_ssize_t b) nogil
 
 cpdef check_array_fast(np.ndarray x, bint ensure_2d=*, bint allow_nd=*, bint c_order=*)
