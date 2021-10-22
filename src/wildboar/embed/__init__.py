@@ -15,6 +15,7 @@
 #
 # Authors: Isak Samsten
 
+from ._interval import IntervalEmbedding
 from ._rocket import RocketEmbedding
 from ._shapelet import RandomShapeletEmbedding
 from .base import BaseEmbedding
@@ -23,4 +24,5 @@ __all__ = [
     "BaseEmbedding",
     "RandomShapeletEmbedding",
     "RocketEmbedding",
+    "IntervalEmbedding",
 ]

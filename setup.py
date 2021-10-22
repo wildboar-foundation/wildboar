@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+
 from setuptools import setup
 from setuptools.extension import Extension
 
@@ -44,66 +45,89 @@ if __name__ == "__main__":
     if build_args is None:
         raise RuntimeError("%s is not a valid build type" % BUILD_TYPE)
 
-    ext_modules = [
-        Extension(
-            "wildboar._utils",
-            sources=["src/wildboar/_utils.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
-        Extension(
-            "wildboar.distance._distance",
-            sources=["src/wildboar/distance/_distance.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
-        Extension(
+    extensions = [
+        ("wildboar._utils", ["src/wildboar/_utils.pyx"]),
+        ("wildboar.distance._distance", ["src/wildboar/distance/_distance.pyx"]),
+        (
             "wildboar.distance._euclidean_distance",
-            sources=["src/wildboar/distance/_euclidean_distance.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
+            ["src/wildboar/distance/_euclidean_distance.pyx"],
         ),
-        Extension(
+        (
             "wildboar.distance._dtw_distance",
-            sources=["src/wildboar/distance/_dtw_distance.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
+            ["src/wildboar/distance/_dtw_distance.pyx"],
         ),
-        Extension(
-            "wildboar.tree._tree_builder",
-            sources=["src/wildboar/tree/_tree_builder.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
-        Extension(
-            "wildboar._data",
-            sources=["src/wildboar/_data.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
-        Extension(
-            "wildboar.embed._feature",
-            sources=["src/wildboar/embed/_feature.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
-        Extension(
-            "wildboar.embed._shapelet_fast",
-            sources=["src/wildboar/embed/_shapelet_fast.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
-        Extension(
-            "wildboar.embed._rocket_fast",
-            sources=["src/wildboar/embed/_rocket_fast.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
-        Extension(
-            "wildboar.embed._embed_fast",
-            sources=["src/wildboar/embed/_embed_fast.pyx"],
-            include_dirs=include_dirs,
-            **build_args,
-        ),
+        ("wildboar.tree._tree_builder", ["src/wildboar/tree/_tree_builder.pyx"]),
+        ("wildboar._data", ["src/wildboar/_data.pyx"]),
+        ("wildboar.embed._feature", ["src/wildboar/embed/_feature.pyx"]),
+        ("wildboar.embed._shapelet_fast", ["src/wildboar/embed/_shapelet_fast.pyx"]),
+        ("wildboar.embed._rocket_fast", ["src/wildboar/embed/_rocket_fast.pyx"]),
+        ("wildboar.embed._cinterval", ["src/wildboar/embed/_cinterval.pyx"]),
+        ("wildboar.embed._embed_fast", ["src/wildboar/embed/_embed_fast.pyx"]),
     ]
+
+    ext_modules = [
+        Extension(name, sources=sources, include_dirs=include_dirs, **build_args)
+        for name, sources in extensions
+    ]
+    #     Extension(
+    #         "wildboar._utils",
+    #         sources=["src/wildboar/_utils.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.distance._distance",
+    #         sources=["src/wildboar/distance/_distance.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.distance._euclidean_distance",
+    #         sources=["src/wildboar/distance/_euclidean_distance.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.distance._dtw_distance",
+    #         sources=["src/wildboar/distance/_dtw_distance.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.tree._tree_builder",
+    #         sources=["src/wildboar/tree/_tree_builder.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar._data",
+    #         sources=["src/wildboar/_data.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.embed._feature",
+    #         sources=["src/wildboar/embed/_feature.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.embed._shapelet_fast",
+    #         sources=["src/wildboar/embed/_shapelet_fast.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.embed._rocket_fast",
+    #         sources=["src/wildboar/embed/_rocket_fast.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    #     Extension(
+    #         "wildboar.embed._embed_fast",
+    #         sources=["src/wildboar/embed/_embed_fast.pyx"],
+    #         include_dirs=include_dirs,
+    #         **build_args,
+    #     ),
+    # ]
     setup(ext_modules=cythonize(ext_modules))
