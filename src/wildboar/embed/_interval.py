@@ -17,6 +17,7 @@
 import math
 
 from ._cinterval import (
+    Catch22Summarizer,
     IntervalFeatureEngineer,
     MeanSummarizer,
     MeanVarianceSlopeSummarizer,
@@ -33,6 +34,7 @@ _SUMMARIZER = {
     "mean": MeanSummarizer,
     "variance": VarianceSummarizer,
     "slope": SlopeSummarizer,
+    "catch22": Catch22Summarizer,
 }
 
 

@@ -22,6 +22,7 @@ from libc.stdlib cimport free, malloc
 from .._data cimport TSDatabase, ts_database_new
 from .._utils cimport RAND_R_MAX, imin, rand_int, shuffle, to_ndarray_double
 from ._feature cimport Feature, FeatureEngineer
+from .catch22._catch22 cimport _histogram_mode
 
 
 cdef struct Interval:
@@ -147,25 +148,56 @@ cdef class MultiSummarizer(Summarizer):
 
 
 cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
-
     cdef double _compute(
-        self,
-        Py_ssize_t measure,
-        Py_ssize_t stride,
-        double *x,
-        Py_ssize_t length
+            self,
+            Py_ssize_t measure,
+            Py_ssize_t stride,
+            double *x,
+            Py_ssize_t length
     ) nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t v
-        if measure == 0: # MEAN
+        if measure == 0:  # MEAN
             return _mean(stride, x, length)
-        elif measure == 1: # VAR
+        elif measure == 1:  # VAR
             return _var(stride, x, length)
-        elif measure == 2: # SLOPE
+        elif measure == 2:  # SLOPE
             return _slope(stride, x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 3
+
+
+cdef class Catch22Summarizer(MultiSummarizer):
+    cdef Py_ssize_t *bin_count
+    cdef double *bin_edges
+
+    def __cinit__(self):
+        self.bin_count = <Py_ssize_t*>malloc(sizeof(Py_ssize_t) * 10)
+        self.bin_edges = <double*>malloc(sizeof(double) * 11)
+
+    def __dealloc__(self):
+        free(self.bin_count)
+        free(self.bin_edges)
+
+    def __reduce__(self):
+        return self.__class__, ( )
+
+    cdef double _compute(
+            self,
+            Py_ssize_t measure,
+            Py_ssize_t stride,
+            double *x,
+            Py_ssize_t length
+    ) nogil:
+        if measure == 0:
+            return _histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 5)
+        elif measure == 1:
+            return _histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 10)
+
+    cdef Py_ssize_t n_outputs(self) nogil:
+        return 2
+
 
 cdef class IntervalFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_intervals
