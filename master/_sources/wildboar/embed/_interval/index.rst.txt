@@ -1,0 +1,46 @@
+:orphan:
+
+:py:mod:`wildboar.embed._interval`
+==================================
+
+.. py:module:: wildboar.embed._interval
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.embed._interval.IntervalEmbedding
+
+
+
+
+.. py:class:: IntervalEmbedding(n_interval='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
+
+   Base embedding
+
+   .. attribute:: embedding_
+
+      The underlying embedding.
+
+      :type: Embedding
+
+   .. attribute::
+
+      -1 means using all processors.
+
+      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
+
+   .. attribute::
+
+
+
+      :type: type n_jobs: int, optional
+
+

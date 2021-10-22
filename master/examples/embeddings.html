@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="wildboar" href="../wildboar/index.html" /><link rel="prev" title="Counterfactuals" href="counterfactuals.html" />
 
     <meta name="generator" content="sphinx-4.2.0, furo 2021.10.09"/>
-        <title>Embeddings - Wildboar 1.1.0rc3.dev22+gdcd4f98f documentation</title>
+        <title>Embeddings - Wildboar 1.1.0rc3.dev27+g1a821890 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=0254c309f5cadf746f1a613e7677379ac9c8cdcd" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc3.dev22+gdcd4f98f documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc3.dev27+g1a821890 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -412,6 +412,41 @@ to classify new samples</p>
 <img alt="../_images/sfe_pca.png" src="../_images/sfe_pca.png"/>
 </figure>
 </section>
+<section id="interval-embedding">
+<h2>Interval embedding<a class="headerlink" href="#interval-embedding" title="Permalink to this headline">¶</a></h2>
+<p>Perhaps the simplest embedding is to embed the time series as one (or
+more) feature for a number of intervals. We can construct such embedding
+using the <code class="docutils literal notranslate"><span class="pre">IntervalEmbedding</span></code>. The <code class="docutils literal notranslate"><span class="pre">intervals</span></code>-parameter determines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">wildboar.embed</span> <span class="kn">import</span> <span class="n">IntervalEmbedding</span>
+
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"GunPoint"</span><span class="p">)</span>
+
+<span class="n">fixed</span> <span class="o">=</span> <span class="n">IntervalEmbedding</span><span class="p">(</span><span class="n">n_interval</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">summarizer</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span> <span class="n">intervals</span><span class="o">=</span><span class="s2">"fixed"</span><span class="p">)</span>
+<span class="n">x_t</span> <span class="o">=</span> <span class="n">fixed</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"</span><span class="si">%s</span><span class="s2">"</span> <span class="o">%</span> <span class="n">start</span> <span class="k">for</span> <span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">_</span><span class="p">))</span> <span class="ow">in</span> <span class="n">fixed</span><span class="o">.</span><span class="n">embedding_</span><span class="o">.</span><span class="n">features</span><span class="p">]</span>
+<span class="n">n_features</span> <span class="o">=</span> <span class="n">x_t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"mean"</span><span class="p">:</span> <span class="n">x_t</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">n_features</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+        <span class="s2">"variance"</span><span class="p">:</span> <span class="n">x_t</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_features</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+        <span class="s2">"slope"</span><span class="p">:</span> <span class="n">x_t</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="n">n_features</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+    <span class="p">},</span>
+    <span class="n">index</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s2">"bar"</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">"../fig/interval.png"</span><span class="p">)</span>
+</pre></div>
+</div>
+<figure class="align-default">
+<img alt="../_images/interval.png" src="../_images/interval.png"/>
+</figure>
+</section>
 </section>
 
         </article>
@@ -472,6 +507,7 @@ to classify new samples</p>
 <li><a class="reference internal" href="#random-shapelet-embedding">Random Shapelet Embedding</a></li>
 <li><a class="reference internal" href="#shapelet-forest-embedding-with-lr">Shapelet forest embedding with LR</a></li>
 <li><a class="reference internal" href="#shapelet-forest-embedding-with-pca">Shapelet forest embedding with PCA</a></li>
+<li><a class="reference internal" href="#interval-embedding">Interval embedding</a></li>
 </ul>
 </li>
 </ul>

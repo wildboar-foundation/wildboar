@@ -40,3 +40,14 @@ This example shows how PCA can be used to plot the resulting embedding
 .. literalinclude:: code/shapelet_forest_embedding_pca.py
 
 .. figure:: fig/sfe_pca.png
+
+Interval embedding
+==================
+
+Perhaps the simplest embedding is to embed the time series as one (or 
+more) feature for a number of intervals. We can construct such embedding
+using the ``IntervalEmbedding``. The ``intervals``-parameter determines
+
+.. literalinclude:: code/interval_embedding.py
+
+.. figure:: fig/interval.png

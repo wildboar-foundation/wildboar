@@ -22,6 +22,7 @@ Classes
 .. autoapisummary::
 
    wildboar.embed.BaseEmbedding
+   wildboar.embed.IntervalEmbedding
    wildboar.embed.RandomShapeletEmbedding
    wildboar.embed.RocketEmbedding
 
@@ -88,6 +89,31 @@ Classes
       :returns: **x_embedding** -- The embedding.
       :rtype: ndarray of shape [n_samples, n_outputs]
 
+
+
+.. py:class:: IntervalEmbedding(n_interval='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
+
+   Base embedding
+
+   .. attribute:: embedding_
+
+      The underlying embedding.
+
+      :type: Embedding
+
+   .. attribute::
+
+      -1 means using all processors.
+
+      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
+
+   .. attribute::
+
+
+
+      :type: type n_jobs: int, optional
 
 
 .. py:class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
