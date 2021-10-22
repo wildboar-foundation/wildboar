@@ -14,11 +14,11 @@ It is currently maintained by Isak Samsten
 
 ## Features
 | **Data**                                                                          | **Classification**               | **Regression**                  | **Explainability**               | **Metric** | **Unsupervised**            | **Outlier**                 |
-|-----------------------------------------------------------------------------------|----------------------------------|---------------------------------|----------------------------------|------------|-----------------------------|-----------------------------|
+| --------------------------------------------------------------------------------- | -------------------------------- | ------------------------------- | -------------------------------- | ---------- | --------------------------- | --------------------------- |
 | [Repositories](https://isaksamsten.github.io/wildboar/master/guide/datasets.html) | ``ShapeletForestClassifier``     | ``ShapeletForestRegressor``     | ``ShapeletForestCounterfactual`` | UCR-suite  | ``ShapeletForestEmbedding`` | ``IsolationShapeletForest`` |
 |                                                                                   | ``ExtraShapeletTreesClassifier`` | ``ExtraShapeletTreesRegressor`` | ``KNearestCounterfactual``       |            | ``RandomShapeletEmbedding`` |                             |
 |                                                                                   | ``RocketTreeClassifier``         | ``RocketRegressor``             | ``PrototypeCounterfactual``      |            | ``RocketEmbedding``         |                             |
-|                                                                                   | ``RocketClassifier``             | ``RandomShapeletRegressor``     |                                  |            |                             |                             |
+|                                                                                   | ``RocketClassifier``             | ``RandomShapeletRegressor``     |                                  |            | ``IntervalEmbedding``       |                             |
 |                                                                                   | ``RandomShapeletClassifier``     | ``RocketTreeRegressor``         |                                  |            |                             |                             |
 |                                                                                   | ``RockestClassifier``            | ``RockestRegressor``            |                                  |            |                             |                             |
 ## Installation
