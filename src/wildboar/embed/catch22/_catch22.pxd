@@ -17,7 +17,7 @@
 #
 # Authors: Isak Samsten
 
-cdef double _histogram_mode(
+cdef double histogram_mode(
     Py_ssize_t stride,
     double *x,
     Py_ssize_t length,
@@ -26,4 +26,14 @@ cdef double _histogram_mode(
     Py_ssize_t n_bins,
 ) nogil
 
-cdef double _f1ecac(double *x, Py_ssize_t n, double* buffer) nogil
+cdef double f1ecac(double *ac, Py_ssize_t n) nogil
+
+cdef double first_min(double *ac, Py_ssize_t n) nogil
+
+cdef double trev_1_num(Py_ssize_t stride, double *x, Py_ssize_t n) nogil
+
+cdef double local_mean_std(Py_ssize_t stride, double *x, Py_ssize_t n, Py_ssize_t lag) nogil
+
+cdef double hrv_classic_pnn(Py_ssize_t stride, double *x, Py_ssize_t n, double pnn) nogil
+
+cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil

@@ -21,7 +21,7 @@ from functools import partial
 
 from sklearn.utils import check_array
 
-from ._catch22 import histogram_mode as _histogram_mode
+from . import _catch22
 
 __all__ = ["histogram_mode", "histogram_mode5", "histogram_mode10"]
 
@@ -46,7 +46,7 @@ def histogram_mode(x, n_bins=5):
         raise ValueError("1d required")
 
     x = check_array(x, ensure_2d=False, order="c")
-    return _histogram_mode(x, n_bins)
+    return _catch22.histogram_mode(x, n_bins)
 
 
 histogram_mode5 = partial(histogram_mode, n_bins=5)

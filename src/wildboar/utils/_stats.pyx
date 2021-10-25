@@ -17,6 +17,55 @@
 
 # Authors: Isak Samsten
 
+from libc.stdlib cimport free, malloc
+
+from ._fft cimport _pocketfft
+
+
+cdef void inc_stats_init(IncStats *self) nogil:
+    self._m = 0.0
+    self._n_samples = 0.0
+    self._s = 0.0
+    self._sum = 0.0
+
+cdef void inc_stats_add(IncStats *self, double weight, double value) nogil:
+    cdef double next_m
+    self._n_samples += weight
+    next_m = self._m + (value - self._m) / self._n_samples
+    self._s += (value - self._m) * (value - next_m)
+    self._m = next_m
+    self._sum += weight * value
+
+cdef void inc_stats_remove(IncStats *self, double weight, double value) nogil:
+    cdef double old_m
+    if self._n_samples == 1.0:
+        self._n_samples = 0.0
+        self._m = 0.0
+        self._s = 0.0
+    else:
+        old_m = (self._n_samples * self._m - value) / (self._n_samples - weight)
+        self._s -= (value - self._m) * (value - old_m)
+        self._m = old_m
+        self._n_samples -= weight
+    self._sum -= weight * value
+
+cdef double inc_stats_n_samples(IncStats *self) nogil:
+    return self._n_samples
+
+cdef double inc_stats_sum(IncStats *self) nogil:
+    return self._sum
+
+cdef double inc_stats_mean(IncStats *self) nogil:
+    return self._m
+
+cdef double inc_stats_variance(IncStats *self, bint sample=True) nogil:
+    cdef double n_samples
+    if sample:
+        n_samples = self._n_samples - 1
+    else:
+        n_samples = self._n_samples
+    return 0.0 if n_samples <= 1 else self._s / n_samples
+
 cdef double mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
     cdef double v
     cdef Py_ssize_t i
@@ -50,3 +99,27 @@ cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
     mean_y_sqr /= length
     x_mean /= length
     return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
+
+cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil:
+    cdef double avg = mean(1, x, n)
+    cdef Py_ssize_t fft_length = n * 2 - 1
+    cdef Py_ssize_t i
+    for i in range(n):
+        fft[i] = x[i] - avg
+    for i in range(n, fft_length):
+        fft[i] = 0.0
+
+    _pocketfft.fft(fft, fft_length, 1.0)
+    for i in range(fft_length):
+        fft[i] = fft[i] * fft[i].conjugate()
+
+    _pocketfft.ifft(fft, fft_length, 1.0)
+    cdef complex first = fft[0]
+    for i in range(n):
+        out[i] = (fft[i] / first).real
+
+cdef void auto_correlation(double *x, Py_ssize_t n, double *out) nogil:
+    cdef Py_ssize_t fft_length = n * 2 - 1
+    cdef complex *fft = <complex *> malloc(sizeof(complex) * fft_length)
+    _auto_correlation(x, n, out, fft)
+    free(fft)

@@ -17,8 +17,32 @@
 
 # Authors: Isak Samsten
 
+cdef struct IncStats:
+    double _n_samples
+    double _m
+    double _s
+    double _sum
+
+cdef void inc_stats_init(IncStats *inc_stats) nogil
+
+cdef void inc_stats_add(IncStats *inc_stats, double weight, double value) nogil
+
+cdef void inc_stats_remove(IncStats *inc_stats, double weight, double value) nogil
+
+cdef double inc_stats_mean(IncStats *inc_stats) nogil
+
+cdef double inc_stats_variance(IncStats *inc_stats, bint sample=*) nogil
+
+cdef double inc_stats_n_samples(IncStats *inc_stats) nogil
+
+cdef double inc_stats_sum(IncStats *inc_stats) nogil
+
 cdef double mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
 
 cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
 
 cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
+
+cdef void auto_correlation(double *x, Py_ssize_t n, double *out) nogil
+
+cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil

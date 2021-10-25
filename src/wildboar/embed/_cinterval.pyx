@@ -143,7 +143,7 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
         return 3
 
 
-cdef class Catch22Summarizer(MultiSummarizer):
+cdef class Catch22Summarizer(Summarizer):
     cdef Py_ssize_t *bin_count
     cdef double *bin_edges
     cdef double *x_buffer
@@ -159,32 +159,49 @@ cdef class Catch22Summarizer(MultiSummarizer):
     def __reduce__(self):
         return self.__class__, ( )
 
-    cdef double _compute(
+    cdef void summarize(
             self,
-            Py_ssize_t measure,
-            Py_ssize_t stride,
+            Py_ssize_t x_stride,
             double *x,
-            Py_ssize_t length
+            Py_ssize_t length,
+            Py_ssize_t out_stride,
+            double *out
     ) nogil:
-        cdef double v = 0.0
-        cdef double *x_buffer = NULL
+        cdef double *x_buffer
+        if x_stride > 1:
+            x_buffer = <double *> malloc(sizeof(double) * length)
+            strided_copy(x_stride, x, x_buffer, length)
+            x_stride = 1
+            x = x_buffer
+        else:
+            x_buffer = NULL
 
-        if measure == 0:
-            v = _catch22._histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 5)
-        elif measure == 1:
-            v = _catch22._histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 10)
-        elif measure == 2:
-            if stride > 1:
-                strided_copy(stride, x, x_buffer, length)
-                v = _catch22._f1ecac(x_buffer, length, NULL)
-            else:
-                v = _catch22._f1ecac(x, length, NULL)
+        # DN
+        out[0 * out_stride] = _catch22.histogram_mode(
+            x_stride, x, length, self.bin_count, self.bin_edges, 5
+        )
+        out[1 * out_stride] = _catch22.histogram_mode(
+            x_stride, x, length, self.bin_count, self.bin_edges, 10
+        )
+
+        # CO
+        cdef double *ac = <double*> malloc(sizeof(double) * length)
+        _stats.auto_correlation(x, length, ac)
+
+        out[2 * out_stride] = _catch22.f1ecac(ac, length)
+        out[3 * out_stride] = _catch22.first_min(ac, length)
+        out[4 * out_stride] = _catch22.trev_1_num(x_stride, x, length)
+        out[5 * out_stride] = 0.0 #_catch22.CO_HistogramAMI_even_2_5
+        out[6 * out_stride] =  _catch22.local_mean_std(x_stride, x, length, 3)
+        out[7 * out_stride] = _catch22.hrv_classic_pnn(x_stride, x, length, 40)
+        out[8 * out_stride] = _catch22.above_mean_stretch(x_stride, x, length)
 
         if x_buffer != NULL:
-            free(x_buffer)
-        return v
+            free(x)
+        free(ac)
+
     cdef Py_ssize_t n_outputs(self) nogil:
-        return 3
+        return 9
 
 
 cdef class IntervalFeatureEngineer(FeatureEngineer):
