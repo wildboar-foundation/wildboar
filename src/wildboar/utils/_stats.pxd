@@ -14,16 +14,11 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
+
 # Authors: Isak Samsten
 
-cdef double _histogram_mode(
-    Py_ssize_t stride,
-    double *x,
-    Py_ssize_t length,
-    Py_ssize_t *bin_count,
-    double *bin_edges,
-    Py_ssize_t n_bins,
-) nogil
+cdef double mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
 
-cdef double _f1ecac(double *x, Py_ssize_t n, double* buffer) nogil
+cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
+
+cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil

@@ -43,6 +43,8 @@ cdef void print_c_array_d(object name, double *arr, Py_ssize_t length)
 
 cdef void print_c_array_i(object name, Py_ssize_t *arr, Py_ssize_t length)
 
+cdef void strided_copy(Py_ssize_t stride, double* f, double* t, Py_ssize_t length) nogil
+
 cdef void argsort(double *values, Py_ssize_t *order, Py_ssize_t length) nogil
 
 cdef size_t rand_r(size_t *seed) nogil

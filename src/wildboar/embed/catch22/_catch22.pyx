@@ -18,9 +18,12 @@
 # Authors: Isak Samsten
 
 cimport numpy as np
-from libc.math cimport INFINITY
+from libc.math cimport INFINITY, exp
 from libc.stdlib cimport free, malloc
 from libc.string cimport memset
+
+from wildboar.utils cimport _stats
+from wildboar.utils._fft cimport _pocketfft
 
 
 # Inspired by: https://github.com/chlubba/catch22/blob/master/C/histcounts.c
@@ -90,6 +93,47 @@ cdef double _histogram_mode(
             value += (bin_edges[i] + bin_edges[i + 1]) / 2.0
 
     return value / num_max
+
+
+cdef void _auto_correlation(double *x, Py_ssize_t n, double* out) nogil:
+    cdef double mean = _stats.mean(1, x, n)
+    cdef Py_ssize_t fft_length = n * 2 - 1
+    cdef Py_ssize_t i
+    cdef complex *fft = <complex *> malloc(sizeof(complex) * fft_length)
+    for i in range(n):
+        fft[i] = x[i] - mean
+    for i in range(n, fft_length):
+        fft[i] = 0.0
+
+    _pocketfft.fft(fft, fft_length, 1.0)
+    for i in range(fft_length):
+        fft[i] = fft[i] * fft[i].conjugate()
+
+    _pocketfft.ifft(fft, fft_length, 1.0)
+    cdef complex first = fft[0]
+    for i in range(n):
+        out[i] = (fft[i] / first).real
+
+
+cdef double _f1ecac(double *x, Py_ssize_t n, double* buffer) nogil:
+    cdef double *ac
+    cdef Py_ssize_t i
+    if buffer == NULL:
+        ac = <double*> malloc(sizeof(double) * n)
+    else:
+        ac = buffer
+
+    _auto_correlation(x, n, ac)
+
+    cdef double threshold = 1.0 / exp(1.0)
+    for i in range(n - 1):
+        if (ac[i] - threshold) * (ac[i + 1] - threshold) < 0:
+            if buffer == NULL:
+                 free(ac)
+            return i + 1
+    if buffer == NULL:
+         free(ac)
+    return n
 
 
 def histogram_mode(np.ndarray x, n_bins):

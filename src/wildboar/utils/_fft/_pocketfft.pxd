@@ -14,16 +14,10 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
+
 # Authors: Isak Samsten
+cdef void fft(complex *x, Py_ssize_t n, double fct) nogil
+cdef void ifft(complex *x, Py_ssize_t n, double fct) nogil
 
-cdef double _histogram_mode(
-    Py_ssize_t stride,
-    double *x,
-    Py_ssize_t length,
-    Py_ssize_t *bin_count,
-    double *bin_edges,
-    Py_ssize_t n_bins,
-) nogil
-
-cdef double _f1ecac(double *x, Py_ssize_t n, double* buffer) nogil
+cdef void rfft(double *x, Py_ssize_t n, double fct) nogil
+cdef void irfft(double *x, Py_ssize_t n, double fct) nogil

@@ -20,9 +20,17 @@
 from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase, ts_database_new
-from .._utils cimport RAND_R_MAX, imin, rand_int, shuffle, to_ndarray_double
+from .._utils cimport (
+    RAND_R_MAX,
+    imin,
+    rand_int,
+    shuffle,
+    strided_copy,
+    to_ndarray_double,
+)
+from ..utils cimport _stats
 from ._feature cimport Feature, FeatureEngineer
-from .catch22._catch22 cimport _histogram_mode
+from .catch22 cimport _catch22
 
 
 cdef struct Interval:
@@ -30,39 +38,6 @@ cdef struct Interval:
     Py_ssize_t length
     Py_ssize_t random_output
 
-cdef double _mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
-    cdef double v
-    cdef Py_ssize_t i
-    for i in range(length):
-        v += x[i * stride]
-    return v / length
-
-cdef double _var(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
-    cdef double mean = _mean(stride, x, length)
-    cdef double sum = 0
-    cdef double v
-    cdef Py_ssize_t i
-    for i in range(length):
-        v = x[i * stride] - mean
-        sum += v * v
-    return sum / length
-
-cdef double _slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
-    cdef double y_mean = (length + 1) / 2.0
-    cdef double x_mean = 0
-    cdef double mean_diff = 0
-    cdef double mean_y_sqr = 0
-    cdef Py_ssize_t i, j
-
-    for i in range(length):
-        j = i + 1
-        mean_diff += x[stride * i] * j
-        x_mean += x[stride * i]
-        mean_y_sqr += j * j
-    mean_diff /= length
-    mean_y_sqr /= length
-    x_mean /= length
-    return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
 
 cdef class Summarizer:
     cdef void summarize(
@@ -87,7 +62,7 @@ cdef class MeanSummarizer(Summarizer):
             Py_ssize_t out_stride,
             double *out
     ) nogil:
-        out[0] = _mean(x_stride, x, length)
+        out[0] = _stats.mean(x_stride, x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -102,7 +77,7 @@ cdef class VarianceSummarizer(Summarizer):
             Py_ssize_t out_stride,
             double *out
     ) nogil:
-        out[0] = _slope(x_stride, x, length)
+        out[0] = _stats.variance(x_stride, x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -117,7 +92,7 @@ cdef class SlopeSummarizer(Summarizer):
             Py_ssize_t out_stride,
             double *out
     ) nogil:
-        out[0] = _slope(x_stride, x, length)
+        out[0] = _stats.slope(x_stride, x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -158,11 +133,11 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
         cdef Py_ssize_t i
         cdef Py_ssize_t v
         if measure == 0:  # MEAN
-            return _mean(stride, x, length)
+            return _stats.mean(stride, x, length)
         elif measure == 1:  # VAR
-            return _var(stride, x, length)
+            return _stats.variance(stride, x, length)
         elif measure == 2:  # SLOPE
-            return _slope(stride, x, length)
+            return _stats.slope(stride, x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 3
@@ -171,6 +146,7 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
 cdef class Catch22Summarizer(MultiSummarizer):
     cdef Py_ssize_t *bin_count
     cdef double *bin_edges
+    cdef double *x_buffer
 
     def __cinit__(self):
         self.bin_count = <Py_ssize_t*>malloc(sizeof(Py_ssize_t) * 10)
@@ -190,13 +166,25 @@ cdef class Catch22Summarizer(MultiSummarizer):
             double *x,
             Py_ssize_t length
     ) nogil:
-        if measure == 0:
-            return _histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 5)
-        elif measure == 1:
-            return _histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 10)
+        cdef double v = 0.0
+        cdef double *x_buffer = NULL
 
+        if measure == 0:
+            v = _catch22._histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 5)
+        elif measure == 1:
+            v = _catch22._histogram_mode(stride, x, length, self.bin_count, self.bin_edges, 10)
+        elif measure == 2:
+            if stride > 1:
+                strided_copy(stride, x, x_buffer, length)
+                v = _catch22._f1ecac(x_buffer, length, NULL)
+            else:
+                v = _catch22._f1ecac(x, length, NULL)
+
+        if x_buffer != NULL:
+            free(x_buffer)
+        return v
     cdef Py_ssize_t n_outputs(self) nogil:
-        return 2
+        return 3
 
 
 cdef class IntervalFeatureEngineer(FeatureEngineer):

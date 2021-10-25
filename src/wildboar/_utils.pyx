@@ -123,6 +123,12 @@ cdef void print_c_array_i(object name, Py_ssize_t *arr, Py_ssize_t length):
         print(arr[i], end=" ")
     print()
 
+cdef void strided_copy(Py_ssize_t stride, double *f, double *t, Py_ssize_t length) nogil:
+    cdef Py_ssize_t i
+    for i in range(length):
+        t[i] = f[i * stride]
+
+
 cdef inline size_t rand_r(size_t *seed) nogil:
     """Returns a pesudo-random number based on the seed.
 
