@@ -47,6 +47,7 @@ Interval embedding
 Perhaps the simplest embedding is to embed the time series as one (or 
 more) feature for a number of intervals. We can construct such embedding
 using the ``IntervalEmbedding``. The ``intervals``-parameter determines
+how intervals are constructed.
 
 .. literalinclude:: code/interval_embedding.py
 
