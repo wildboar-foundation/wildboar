@@ -16,7 +16,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-
+cimport numpy as np
+import numpy as np
 from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase, ts_database_new
@@ -74,6 +75,9 @@ cdef class Summarizer:
     ) nogil:
         pass
 
+    cdef void init(self, TSDatabase *td) nogil:
+        pass
+
     cdef Py_ssize_t n_outputs(self) nogil:
         return -1
 
@@ -123,7 +127,6 @@ cdef class SlopeSummarizer(Summarizer):
 
 
 cdef class MultiSummarizer(Summarizer):
-
     cdef void summarize(
             self,
             Py_ssize_t x_stride,
@@ -167,6 +170,45 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
     cdef Py_ssize_t n_outputs(self) nogil:
         return 3
 
+cdef class PyFuncSummarizer(Summarizer):
+    cdef list func
+    cdef np.ndarray x_buffer
+
+    def __cinit__(self, func):
+        self.func = func
+        self.x_buffer = None
+
+    def __reduce__(self):
+        return self.__class__, (self.func, )
+
+    cdef void init(self, TSDatabase *td) nogil:
+        with gil:
+            self.x_buffer = np.ndarray(td.n_timestep)
+
+    cdef void summarize(
+            self,
+            Py_ssize_t x_stride,
+            double *x,
+            Py_ssize_t length,
+            Py_ssize_t out_stride,
+            double *out
+    ) nogil:
+        cdef double value
+        cdef Py_ssize_t i
+        with gil:
+            for i in range(length):
+                self.x_buffer[i] = x[x_stride * i]
+
+        for i in range(self.n_outputs()):
+            with gil:
+                value = self.func[i](self.x_buffer[0:length])
+            out[i * out_stride] = value
+
+    cdef Py_ssize_t n_outputs(self) nogil:
+        with gil:
+            return len(self.func)
+
+
 cdef class IntervalFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_intervals
     cdef Summarizer summarizer
@@ -184,6 +226,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         return self.__class__, (self.n_intervals, self.summarizer)
 
     cdef Py_ssize_t init(self, TSDatabase *td) nogil:
+        self.summarizer.init(td)
         return 0
 
     cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:

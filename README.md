@@ -19,7 +19,7 @@ It is currently maintained by Isak Samsten
 |                                                                                   | ``ExtraShapeletTreesClassifier`` | ``ExtraShapeletTreesRegressor`` | ``KNearestCounterfactual``       |            | ``RandomShapeletEmbedding`` |                             |
 |                                                                                   | ``RocketTreeClassifier``         | ``RocketRegressor``             | ``PrototypeCounterfactual``      |            | ``RocketEmbedding``         |                             |
 |                                                                                   | ``RocketClassifier``             | ``RandomShapeletRegressor``     |                                  |            | ``IntervalEmbedding``       |                             |
-|                                                                                   | ``RandomShapeletClassifier``     | ``RocketTreeRegressor``         |                                  |            |                             |                             |
+|                                                                                   | ``RandomShapeletClassifier``     | ``RocketTreeRegressor``         |                                  |            | ``FeatureEmbedding``        |                             |
 |                                                                                   | ``RockestClassifier``            | ``RockestRegressor``            |                                  |            |                             |                             |
 ## Installation
 

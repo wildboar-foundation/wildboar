@@ -83,6 +83,7 @@ cdef class BatchTransform(Batch):
     def __call__(self, Py_ssize_t job_id, Py_ssize_t feature_offset, Py_ssize_t batch_size):
         cdef Py_ssize_t i, j
         cdef FeatureEngineer feature_engineer = self.feature_engineers[job_id]
+        feature_engineer.init(self.x_in)
         with nogil:
             for i in range(self.x_in.n_samples):
                 for j in range(batch_size):
@@ -100,6 +101,7 @@ cdef class BatchFitTransform(Batch):
     def __call__(self, Py_ssize_t job_id, Py_ssize_t feature_offset, Py_ssize_t batch_size, size_t seed):
         cdef Py_ssize_t i, j
         cdef FeatureEngineer feature_engineer = self.feature_engineers[job_id]
+        feature_engineer.init(self.x_in)
         cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.x_in.n_samples)
         cdef Feature transient_feature
         cdef Feature *persistent_feature
@@ -194,6 +196,7 @@ def feature_embedding_fit(FeatureEngineer feature_engineer, np.ndarray x, object
     cdef Feature transient_feature
     cdef Feature *persistent_feature
     cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * td.n_samples)
+    feature_engineer.init(&td)
     cdef FeatureEmbedding embedding = FeatureEmbedding(
         feature_engineer, feature_engineer.get_n_features(&td),
     )
