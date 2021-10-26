@@ -1276,6 +1276,12 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
             )
         return score_samples
 
+    def _make_estimator(self, append=True, random_state=None):
+        estimator = super()._make_estimator(append, random_state)
+        if self.n_dims_ > 1:
+            estimator.force_dim = self.n_dims_
+        return estimator
+
 
 def _score_samples(x, estimators, max_samples):
     # From: https://github.com/scikit-learn/scikit-learn/blob/
