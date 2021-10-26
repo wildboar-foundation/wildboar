@@ -14,33 +14,89 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.embed._interval.FeatureEmbedding
    wildboar.embed._interval.IntervalEmbedding
 
 
+
+
+.. py:class:: FeatureEmbedding(*, summarizer='auto', n_jobs=None)
+
+   Bases: :py:obj:`IntervalEmbedding`
+
+   Embed a time series as a number of features
+
+   :param summarizer: The method to summarize each interval.
+
+                      - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+                      - if list, the summarizer is a list of functions f(x) -> float, where
+                        x is a numpy array.
+
+                      The default summarizer summarizes each interval as its mean, standard
+                      deviation and slope.
+   :type summarizer: str or list, optional
+   :param n_jobs: The number of cores to use on multi-core.
+   :type n_jobs: int, optional
 
 
 .. py:class:: IntervalEmbedding(n_interval='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', n_jobs=None, random_state=None)
 
    Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
 
-   Base embedding
+   Embed a time series as a collection of features per interval.
 
-   .. attribute:: embedding_
+   .. rubric:: Examples
 
-      The underlying embedding.
+   >>> from wildboar.datasets import load_dataset
+   >>> x, y = load_dataset("GunPoint")
+   >>> embedding = IntervalEmbedding(n_interval=10, summarizer="mean")
+   >>> embedding.fit_transform(x)
 
-      :type: Embedding
+   Each interval (15 timepoints) are embedded as its mean.
 
-   .. attribute::
+   >>> embedding = IntervalEmbedding(n_interval="sqrt", summarizer=[np.mean, np.std])
+   >>> embedding.fit_transform(x)
 
-      -1 means using all processors.
+   Each interval (150 // 12 timepoints) are embedded as two features. The mean
+   and the standard deviation.
 
-      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
+   :param n_interval: The number of intervals to use for the embedding.
 
-   .. attribute::
+                      - if float, a fraction of n_timestep
+                      - if int, a fixed number of intervals
+                      - if "sqrt", sqrt(n_timestep)
+                      - if "log", log2(n_timestep)
+   :type n_interval: str, int or float, optional
+   :param intervals: The method for selecting intervals
 
+                     - if "fixed", intervals are distributed evenly over the time series
+                       without overlaps
 
+                     - if "sample", a sample of non-overlapping intervals as selected
+                       by fixed are selected. The size of the sample is determined by
+                       `sample_size`.
 
-      :type: type n_jobs: int, optional
+                     - if "random", a sample of possibly overlapping intervals. The size of
+                       the interval is determined by `min_size` and `max_size`
+   :type intervals: str, optional
+   :param sample_size: The sample size of fixed intervals if `intervals="sample"`
+   :type sample_size: float, optional
+   :param min_size: The minimum interval size if `intervals="random"`
+   :type min_size: float, optional
+   :param max_size: The maximum interval size if `intervals="random"`
+   :type max_size: float, optional
+   :param summarizer: The method to summarize each interval.
+
+                      - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+                      - if list, the summarizer is a list of functions f(x) -> float, where
+                        x is a numpy array.
+
+                      The default summarizer summarizes each interval as its mean, standard
+                      deviation and slope.
+   :type summarizer: str or list, optional
+   :param n_jobs: The number of cores to use on multi-core.
+   :type n_jobs: int, optional
+   :param random_state: The pseudo-random number generator used to ensure consistent results.
+   :type random_state: int or np.RandomState
 
 
