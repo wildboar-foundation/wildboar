@@ -43,6 +43,8 @@ cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
 
 cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
 
+cdef double covariance(double *x, double *y, Py_ssize_t length) nogil
+
 cdef void auto_correlation(double *x, Py_ssize_t n, double *out) nogil
 
 cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil

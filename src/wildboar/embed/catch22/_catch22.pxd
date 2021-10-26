@@ -37,3 +37,7 @@ cdef double local_mean_std(Py_ssize_t stride, double *x, Py_ssize_t n, Py_ssize_
 cdef double hrv_classic_pnn(Py_ssize_t stride, double *x, Py_ssize_t n, double pnn) nogil
 
 cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil
+
+cdef double transition_matrix_3ac_sumdiagcov(double *x, double *ac, Py_ssize_t n) nogil
+
+cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t lag) nogil

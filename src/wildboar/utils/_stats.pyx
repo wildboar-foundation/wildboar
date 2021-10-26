@@ -74,6 +74,9 @@ cdef double mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
     return v / length
 
 cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
+    if length == 1:
+        return 0.0
+
     cdef double avg = mean(stride, x, length)
     cdef double sum = 0
     cdef double v
@@ -84,6 +87,8 @@ cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
     return sum / length
 
 cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
+    if length == 1:
+        return 0.0
     cdef double y_mean = (length + 1) / 2.0
     cdef double x_mean = 0
     cdef double mean_diff = 0
@@ -99,6 +104,32 @@ cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
     mean_y_sqr /= length
     x_mean /= length
     return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
+
+cdef double covariance(double *x, double *y, Py_ssize_t length) nogil:
+    cdef:
+        double sum_x = 0.0
+        double sum_y = 0.0
+        double sum_xy = 0.0
+        double k = 0.0
+        double mean_x = 0.0
+        double mean_y = 0.0
+        double tmp_mean_x, tmp_mean_y, diff_x, diff_y
+        Py_ssize_t i
+
+    for i in range(length):
+        tmp_mean_x = mean_x
+        tmp_mean_y = mean_y
+        diff_x = x[i] - tmp_mean_x
+        diff_y = y[i] - tmp_mean_y
+        k += 1
+        sum_x += x[i]
+        sum_y += y[i]
+        sum_xy += diff_x * diff_y - diff_x * diff_y / k
+        mean_x = sum_x / k
+        mean_y = sum_y / k
+    return sum_xy / k
+
+
 
 cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil:
     cdef double avg = mean(1, x, n)

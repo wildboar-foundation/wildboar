@@ -138,7 +138,7 @@ cdef double local_mean_std(Py_ssize_t stride, double *x, Py_ssize_t n, Py_ssize_
 
 cdef double hrv_classic_pnn(Py_ssize_t stride, double *x, Py_ssize_t n, double pnn) nogil:
     cdef Py_ssize_t i
-    cdef double value
+    cdef double value = 0
 
     for i in range(1, n):
         if fabs(x[stride * i] - x[stride * (i - 1)]) * 1000 > pnn:
@@ -178,7 +178,7 @@ cdef double _find_quantile(double *x, Py_ssize_t n, double quant) nogil:
     cdef Py_ssize_t left, right
     if quant < limit:
         return x[0]
-    elif quant > limit:
+    elif quant > 1 - limit:
         return x[n - 1]
     else:
         index = n * quant - 0.5
@@ -191,7 +191,7 @@ cdef void sb_coarse(double *x, Py_ssize_t n, Py_ssize_t ng, Py_ssize_t *labels) 
     cdef double *tmp = <double*> malloc(sizeof(double) * n)
     memcpy(tmp, x, sizeof(double) * n)
     qsort(tmp, n, sizeof(double), &vcmp)
-    cdef double step_size = 1 / (ng - 1);
+    cdef double step_size = 1 / ng;
     cdef double step_value = 0
     cdef double *quantile = <double*> malloc(sizeof(double) * ng + 1)
     cdef Py_ssize_t i, j
@@ -199,14 +199,14 @@ cdef void sb_coarse(double *x, Py_ssize_t n, Py_ssize_t ng, Py_ssize_t *labels) 
         quantile[i] = _find_quantile(tmp, n, step_value)
         step_value += step_size
 
-    quantile[0] -= 1
+    labels[0] = 0
+    labels[n - 1] = ng - 1
     for i in range(ng):
-        for j in range(n):
-            if quantile[i] < x[j] <= quantile[i + j]:
+        for j in range(1, n - 1):
+            if quantile[i] <= x[j] <= quantile[i + 1]:
                 labels[j] = i
     free(tmp)
     free(quantile)
-
 
 cdef double transition_matrix_3ac_sumdiagcov(double *x, double *ac, Py_ssize_t n) nogil:
     cdef Py_ssize_t tau = 0
@@ -214,44 +214,74 @@ cdef double transition_matrix_3ac_sumdiagcov(double *x, double *ac, Py_ssize_t n
     # find the index of the first negative auto correlation
     while ac[tau] > 0 and tau < n:
         tau += 1
-
     cdef Py_ssize_t n_neg = (n - 1) // tau + 1
+
     cdef Py_ssize_t i, j
     cdef double *neg = <double*> malloc(sizeof(double) * n_neg)
     for i in range(n_neg):
         neg[i] = x[i * tau]
 
     cdef Py_ssize_t *labels = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * n_neg)
-    sb_coarse(x, n, 3, labels)
+    memset(labels, 0, sizeof(Py_ssize_t) * n_neg)
+    sb_coarse(neg, n_neg, 3, labels)
 
     cdef double T[3][3]
-    memset(&T, 0, sizeof(double) * 3 * 3)
+    for i in range(3):
+        for j in range(3):
+            T[i][j] = 0
 
     for j in range(n_neg - 1):
-        T[labels[j]][labels[j + 1]] += 1
+        T[labels[j]][labels[j + 1]] += 1 / (n_neg - 1)
+
+    cdef:
+        double col1[3]
+        double col2[3]
+        double col3[3]
+
+    for i in range(3):
+        col1[i] = T[i][0]
+        col2[i] = T[i][1]
+        col3[i] = T[i][2]
+
+    cdef double sum_diag = 0
+    sum_diag += _stats.covariance(<double *> col1, <double *> col1, 3)
+    sum_diag += _stats.covariance(<double *> col2, <double *> col2, 3)
+    sum_diag += _stats.covariance(<double *> col3, <double *> col3, 3)
+
+    free(neg)
+    free(labels)
+    return sum_diag
 
 
+cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t lag) nogil:
+    if n <= lag:
+        return 0.0
+    cdef:
+        Py_ssize_t i
+        Py_ssize_t j
+        double lag_sum
+        Py_ssize_t lag_out, out
+        double *lag_ac
 
+    lag_ac = <double*> malloc(sizeof(double) * n - lag)
+    for i in range(n - lag):
+        lag_sum = 0
+        for j in range(lag):
+            lag_sum += x[i + j]
 
-# def histogram_mode(np.ndarray x, n_bins):
-#     cdef Py_ssize_t *bin_count
-#     cdef double *bin_edges
-#     cdef double result
-#     bin_count = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * n_bins)
-#     bin_edges = <double*> malloc(sizeof(double) * (n_bins + 1))
-#     result = histogram_mode(
-#         <Py_ssize_t> (x.strides[0] / <Py_ssize_t> x.itemsize),
-#         <double*> x.data,
-#         x.shape[0],
-#         bin_count,
-#         bin_edges,
-#         n_bins
-#     )
-#     free(bin_count)
-#     free(bin_edges)
-#     return result
+        lag_ac[i] = x[i + lag] - lag_sum / lag
 
+    lag_out = 0
+    _stats.auto_correlation(lag_ac, n - lag, lag_ac)
+    while lag_ac[lag_out] > 0 and lag_out < n - lag:
+        lag_out += 1
+    free(lag_ac)
 
+    out = 0
+    while ac[out] > 0 and out < n:
+        out += 1
+
+    return <double> lag_out / <double> out
 
 
 

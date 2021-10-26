@@ -17,6 +17,7 @@
 #
 # Authors: Isak Samsten
 
+from libc.math cimport FP_INFINITE, fpclassify
 from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase, ts_database_new
@@ -195,13 +196,15 @@ cdef class Catch22Summarizer(Summarizer):
         out[6 * out_stride] =  _catch22.local_mean_std(x_stride, x, length, 3)
         out[7 * out_stride] = _catch22.hrv_classic_pnn(x_stride, x, length, 40)
         out[8 * out_stride] = _catch22.above_mean_stretch(x_stride, x, length)
+        out[9 * out_stride] = _catch22.transition_matrix_3ac_sumdiagcov(x, ac, length)
+        out[10 * out_stride] = _catch22.local_mean_tauresrat(x, ac, length, 1)
 
         if x_buffer != NULL:
             free(x)
         free(ac)
 
     cdef Py_ssize_t n_outputs(self) nogil:
-        return 9
+        return 11
 
 
 cdef class IntervalFeatureEngineer(FeatureEngineer):
@@ -330,6 +333,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
                 out_sample * td_out.sample_stride +
                 out_feature * n_summarizers * td_out.timestep_stride
         )
+        #with gil: print("out offset", out_offset, "offset", offset)
         self.summarizer.summarize(
             td.timestep_stride,
             td.data + offset,
