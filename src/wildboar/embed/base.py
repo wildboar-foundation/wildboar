@@ -20,11 +20,7 @@ import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
 
-from ._embed_fast import (
-    feature_embedding_fit,
-    feature_embedding_fit_transform,
-    feature_embedding_transform,
-)
+from ._embed_fast import feature_embedding_fit, feature_embedding_transform
 
 __all__ = [
     "BaseEmbedding",
@@ -110,17 +106,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         x_embedding : ndarray of shape [n_samples, n_outputs]
             The embedding.
         """
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
-
-        random_state = check_random_state(self.random_state)
-        self.n_timestep_ = x.shape[-1]
-        embedding, x_out = feature_embedding_fit_transform(
-            self._get_feature_engineer(), x, random_state, self.n_jobs
-        )
-        self.embedding_ = embedding
-        return x_out
+        return self.fit(x, y).transform(x)
 
     @abstractmethod
     def _get_feature_engineer(self):
