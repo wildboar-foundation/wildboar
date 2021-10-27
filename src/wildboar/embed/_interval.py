@@ -21,6 +21,7 @@ from ._cinterval import (
     IntervalFeatureEngineer,
     MeanSummarizer,
     MeanVarianceSlopeSummarizer,
+    PyFuncSummarizer,
     RandomFixedIntervalFeatureEngineer,
     RandomIntervalFeatureEngineer,
     SlopeSummarizer,
@@ -39,6 +40,26 @@ _SUMMARIZER = {
 
 
 class IntervalEmbedding(BaseEmbedding):
+    """Embed a time series as a collection of features per interval.
+
+    Examples
+    ========
+
+    >>> from wildboar.datasets import load_dataset
+    >>> x, y = load_dataset("GunPoint")
+    >>> embedding = IntervalEmbedding(n_interval=10, summarizer="mean")
+    >>> embedding.fit_transform(x)
+
+    Each interval (15 timepoints) are embedded as its mean.
+
+    >>> embedding = IntervalEmbedding(n_interval="sqrt", summarizer=[np.mean, np.std])
+    >>> embedding.fit_transform(x)
+
+    Each interval (150 // 12 timepoints) are embedded as two features. The mean
+    and the standard deviation.
+
+    """
+
     def __init__(
         self,
         n_interval="sqrt",
@@ -51,6 +72,56 @@ class IntervalEmbedding(BaseEmbedding):
         n_jobs=None,
         random_state=None,
     ):
+        """
+
+        Parameters
+        ----------
+        n_interval : str, int or float, optional
+            The number of intervals to use for the embedding.
+
+            - if float, a fraction of n_timestep
+            - if int, a fixed number of intervals
+            - if "sqrt", sqrt(n_timestep)
+            - if "log", log2(n_timestep)
+
+        intervals : str, optional
+            The method for selecting intervals
+
+            - if "fixed", intervals are distributed evenly over the time series
+              without overlaps
+
+            - if "sample", a sample of non-overlapping intervals as selected
+              by fixed are selected. The size of the sample is determined by
+              `sample_size`.
+
+            - if "random", a sample of possibly overlapping intervals. The size of
+              the interval is determined by `min_size` and `max_size`
+
+        sample_size : float, optional
+            The sample size of fixed intervals if `intervals="sample"`
+
+        min_size : float, optional
+            The minimum interval size if `intervals="random"`
+
+        max_size : float, optional
+            The maximum interval size if `intervals="random"`
+
+        summarizer : str or list, optional
+            The method to summarize each interval.
+
+            - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+            - if list, the summarizer is a list of functions f(x) -> float, where
+              x is a numpy array.
+
+            The default summarizer summarizes each interval as its mean, standard
+            deviation and slope.
+
+        n_jobs : int, optional
+            The number of cores to use on multi-core.
+
+        random_state : int or np.RandomState
+            The pseudo-random number generator used to ensure consistent results.
+        """
         super().__init__(n_jobs=n_jobs, random_state=random_state)
         self.n_interval = n_interval
         self.summarizer = summarizer
@@ -60,9 +131,14 @@ class IntervalEmbedding(BaseEmbedding):
         self.max_size = max_size
 
     def _get_feature_engineer(self):
-        summarizer = _SUMMARIZER.get(self.summarizer)()
-        if summarizer is None:
-            raise ValueError("summarizer (%r) is not supported." % self.summarizer)
+        if isinstance(self.summarizer, list):
+            if not all(hasattr(func, "__call__") for func in self.summarizer):
+                raise ValueError("summarizer (%r) is not supported")
+            summarizer = PyFuncSummarizer(self.summarizer)
+        else:
+            summarizer = _SUMMARIZER.get(self.summarizer)()
+            if summarizer is None:
+                raise ValueError("summarizer (%r) is not supported." % self.summarizer)
 
         if self.n_interval == "sqrt":
             n_interval = math.ceil(math.sqrt(self.n_timestep_))
@@ -104,3 +180,33 @@ class IntervalEmbedding(BaseEmbedding):
             )
         else:
             raise ValueError("intervals (%r) is unsupported." % self.intervals)
+
+
+class FeatureEmbedding(IntervalEmbedding):
+    """Embed a time series as a number of features"""
+
+    def __init__(
+        self,
+        *,
+        summarizer="auto",
+        n_jobs=None,
+    ):
+        """
+        Parameters
+        ----------
+        summarizer : str or list, optional
+            The method to summarize each interval.
+
+            - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+            - if list, the summarizer is a list of functions f(x) -> float, where
+              x is a numpy array.
+
+            The default summarizer summarizes each interval as its mean, standard
+            deviation and slope.
+
+        n_jobs : int, optional
+            The number of cores to use on multi-core.
+        """
+        super(FeatureEmbedding).__init__(
+            self, n_interval=1, summarizer=summarizer, n_jobs=n_jobs
+        )

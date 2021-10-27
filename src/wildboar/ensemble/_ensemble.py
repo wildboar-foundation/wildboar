@@ -167,6 +167,7 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier):
                 sample_weight = class_weight
 
         x = x.reshape(n_samples, n_dims * self.n_timestep_)
+        self.n_features_in_ = x.shape[1]
         super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
         return self
 
@@ -551,6 +552,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
             y = np.ascontiguousarray(y, dtype=np.intp)
 
         x = x.reshape(n_samples, n_dims * self.n_timestep_)
+        self.n_features_in_ = x.shape[1]
         super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
         return self
 
@@ -1156,6 +1158,7 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
             self.base_estimator_.force_dim = n_dims
 
         x = x.reshape(n_samples, n_dims * self.n_timestep_)
+        self.n_features_in_ = x.shape[1]
         rnd_y = random_state.uniform(size=x.shape[0])
         if isinstance(self.max_samples, str):
             if self.max_samples == "auto":
@@ -1272,6 +1275,12 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
                 self.max_samples_,
             )
         return score_samples
+
+    def _make_estimator(self, append=True, random_state=None):
+        estimator = super()._make_estimator(append, random_state)
+        if self.n_dims_ > 1:
+            estimator.force_dim = self.n_dims_
+        return estimator
 
 
 def _score_samples(x, estimators, max_samples):
