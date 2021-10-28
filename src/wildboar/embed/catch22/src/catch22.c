@@ -881,8 +881,8 @@ double periodicity_wang_th0_01(double *x, size_t length) {
     return out;
 }
 
-double embed2_dist_tau_d_expfit_meandiff(double *x, size_t length) {
-    int tau = _co_firstzero(x, length, length);
+double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, size_t length) {
+    int tau = _co_firstzero(ac, length, length);
 
     double max_tau = (double)length / 10;
     if (tau > max_tau) {
@@ -945,4 +945,206 @@ double embed2_dist_tau_d_expfit_meandiff(double *x, size_t length) {
     free(bin_count);
 
     return out;
+}
+
+double _corr(double *x, double *y, size_t length) {
+    double nom = 0;
+    double denomX = 0;
+    double denomY = 0;
+
+    double meanX = _mean(x, length);
+    double meanY = _mean(y, length);
+
+    for (int i = 0; i < length; i++) {
+        nom += (x[i] - meanX) * (y[i] - meanY);
+        denomX += (x[i] - meanX) * (x[i] - meanX);
+        denomY += (y[i] - meanY) * (y[i] - meanY);
+    }
+
+    return denomX * denomY > 0 ? nom / sqrt(denomX * denomY) : 0;
+}
+
+double _autocorr_lag(double *x, size_t size, size_t lag) {
+    return _corr(x, &(x[lag]), size - lag);
+}
+
+double auto_mutual_info_stats_gaussian_fmmi(double *x, size_t length, size_t tau) {
+    if (tau > ceil((double)length / 2)) {
+        tau = ceil((double)length / 2);
+    }
+
+    // compute autocorrelations and compute automutual information
+    double *ami = malloc(length * sizeof(double));
+    for (int i = 0; i < tau; i++) {
+        double ac = _autocorr_lag(x, length, i + 1);
+        ami[i] = -0.5 * log(1 - ac * ac);
+    }
+
+    // find first minimum of automutual information
+    double fmmi = tau;
+    for (int i = 1; i < tau - 1; i++) {
+        if (ami[i] < ami[i - 1] & ami[i] < ami[i + 1]) {
+            fmmi = i;
+            break;
+        }
+    }
+
+    free(ami);
+
+    return fmmi;
+}
+
+double _median(const double a[], const int size) {
+    double m;
+    double *b = malloc(size * sizeof *b);
+    memcpy(b, a, size * sizeof *b);
+    _sort_double(b, size);
+    if (size % 2 == 1) {
+        m = b[size / 2];
+    } else {
+        int m1 = size / 2;
+        int m2 = m1 - 1;
+        m = (b[m1] + b[m2]) / (double)2.0;
+    }
+    free(b);
+    return m;
+}
+
+double outlier_include_np_mdrmd(double *x, size_t length, int sign, double inc) {
+    size_t n_signed = 0;
+    double *x_work = malloc(length * sizeof(double));
+
+    // apply sign and check constant time series
+    int constantFlag = 1;
+    for (int i = 0; i < length; i++) {
+        if (x[i] != x[0]) {
+            constantFlag = 0;
+        }
+
+        // apply sign, save in new variable
+        x_work[i] = sign * x[i];
+
+        // count pos/ negs
+        if (x_work[i] >= 0) {
+            n_signed += 1;
+        }
+    }
+    if (constantFlag) return 0;
+
+    double maxVal = -INFINITY;
+    for (int i = 0; i < length; i++)
+        if (x_work[i] > maxVal) maxVal = x_work[i];
+
+    // maximum value too small? return 0
+    if (maxVal < inc) {
+        return 0;
+    }
+
+    int threshold = maxVal / inc + 1;
+
+    // save the indices where y > threshold
+    double *r = malloc(length * sizeof(double));
+
+    // save the median over indices with absolute value > threshold
+    double *msDti1 = malloc(threshold * sizeof(double));
+    double *msDti3 = malloc(threshold * sizeof(double));
+    double *msDti4 = malloc(threshold * sizeof(double));
+    double *Dt_exc = malloc(threshold * sizeof(double));
+    for (int j = 0; j < threshold; j++) {
+        int highSize = 0;
+        for (int i = 0; i < length; i++) {
+            if (x_work[i] >= j * inc) {
+                r[highSize] = i + 1;
+                highSize += 1;
+            }
+        }
+
+        for (int i = 0; i < highSize - 1; i++) {
+            Dt_exc[i] = r[i + 1] - r[i];
+        }
+
+        msDti1[j] = _mean(Dt_exc, highSize - 1);
+        msDti3[j] = (highSize - 1) * 100.0 / n_signed;
+        msDti4[j] = _median(r, highSize) / ((double)length / 2) - 1;
+    }
+    free(Dt_exc);
+
+    int trimthr = 2;
+    int mj = 0;
+    int fbi = threshold - 1;
+    for (int i = 0; i < threshold; i++) {
+        if (msDti3[i] > trimthr) {
+            mj = i;
+        }
+        if (isnan(msDti1[threshold - 1 - i])) {
+            fbi = threshold - 1 - i;
+        }
+    }
+
+    int trimLimit = mj < fbi ? mj : fbi;
+    double outputScalar = _median(msDti4, trimLimit + 1);
+
+    free(r);
+    free(x_work);
+    free(msDti1);
+    free(msDti3);
+    free(msDti4);
+
+    return outputScalar;
+}
+
+void _cumsum(const double a[], const int size, double b[]) {
+    b[0] = a[0];
+    for (int i = 1; i < size; i++) {
+        b[i] = a[i] + b[i - 1];
+    }
+}
+
+double summaries_welch_rect(double *x, size_t length, int what, double *S, double *f,
+                            size_t n_welch) {
+    // angualr frequency and spectrum on that
+    double *w = malloc(n_welch * sizeof(double));
+    double *Sw = malloc(n_welch * sizeof(double));
+
+    double PI = 3.14159265359;
+    for (int i = 0; i < n_welch; i++) {
+        w[i] = 2 * PI * f[i];
+        Sw[i] = S[i] / (2 * PI);
+        if (isinf(Sw[i]) | isinf(-Sw[i])) {
+            return 0;
+        }
+    }
+
+    double dw = w[1] - w[0];
+
+    double *csS = malloc(n_welch * sizeof(double));
+    _cumsum(Sw, n_welch, csS);
+
+    double output = 0;
+    if (what == 0) {
+        double csSThres = csS[n_welch - 1] * 0.5;
+        double centroid = 0;
+        for (int i = 0; i < n_welch; i++) {
+            if (csS[i] > csSThres) {
+                centroid = w[i];
+                break;
+            }
+        }
+
+        output = centroid;
+
+    } else if (what == 1) {
+        double area_5_1 = 0;
+        for (int i = 0; i < n_welch / 5; i++) {
+            area_5_1 += Sw[i];
+        }
+        area_5_1 *= dw;
+
+        output = area_5_1;
+    }
+
+    free(w);
+    free(Sw);
+    free(csS);
+    return output;
 }

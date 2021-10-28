@@ -65,3 +65,13 @@ cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil
 cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t lag) nogil
 
 cdef double periodicity_wang_th0_01(double *x, size_t length) nogil
+
+cdef double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, size_t length) nogil
+
+cdef double auto_mutual_info_stats_gaussian_fmmi(double *x, size_t length, size_t tau) nogil 
+
+cdef double outlier_include_np_mdrmd(double *x, size_t length, int sign, double inc) nogil
+
+cdef double summaries_welch_rect(
+    double *x, size_t length, int what, double *S, double *f, size_t n_welch
+) nogil

@@ -48,3 +48,16 @@ cdef double covariance(double *x, double *y, Py_ssize_t length) nogil
 cdef void auto_correlation(double *x, Py_ssize_t n, double *out) nogil
 
 cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil
+
+cdef Py_ssize_t next_power_of_2(Py_ssize_t n) nogil
+
+cdef int welch(
+    double *x, 
+    Py_ssize_t size, 
+    int NFFT, 
+    double Fs, 
+    double *window, 
+    int windowWidth,
+    double *Pxx, 
+    double *f,
+) nogil

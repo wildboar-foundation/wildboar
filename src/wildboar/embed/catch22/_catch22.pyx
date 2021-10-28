@@ -31,7 +31,9 @@ cdef extern from "catch22.h":
         double *x, size_t length, size_t *hist_counts, double *bin_edges, size_t n_bins
     ) nogil
 
-    cdef double histogram_ami_even(double *x, size_t length, size_t tau, size_t n_bins) nogil
+    cdef double histogram_ami_even(
+        double *x, size_t length, size_t tau, size_t n_bins
+    ) nogil
 
     cdef double transition_matrix_ac_sumdiagcov(
             double *x, double *ac, size_t length, size_t n_groups
@@ -39,12 +41,31 @@ cdef extern from "catch22.h":
 
     cdef double periodicity_wang_th0_01(double *x, size_t length) nogil
 
+    cdef double embed2_dist_tau_d_expfit_meandiff(
+        double *x, double *ac, size_t length
+    ) nogil
+
+    cdef double auto_mutual_info_stats_gaussian_fmmi(
+        double *x, size_t length, size_t tau
+    ) nogil
+
+    cdef double outlier_include_np_mdrmd(
+        double *x, size_t length, int sign, double inc
+    ) nogil
+
+    cdef double summaries_welch_rect(
+        double *x, size_t length, int what, double *S, double *f, size_t n_welch
+    ) nogil
+
 cdef double transition_matrix_3ac_sumdiagcov(
     double *x,
     double *ac,
     Py_ssize_t length,
 ) nogil:
     return transition_matrix_ac_sumdiagcov(x, ac, length, 3)
+
+#cdef double auto_mutual_info_stats_40_gaussian_fmmi(double *x, size_t length) nogil:
+#    return auto_mutual_info_stats_gaussian_fmmi(x, length, 40)
 
 cdef double _histogram_ami_even(
     double *x,

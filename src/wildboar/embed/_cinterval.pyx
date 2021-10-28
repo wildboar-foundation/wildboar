@@ -195,14 +195,17 @@ cdef class Catch22Summarizer(Summarizer):
         # CO
         cdef double *ac = <double*> malloc(sizeof(double) * length)
         _stats.auto_correlation(x, length, ac)
-        # with gil:
-        #     for i in range(length):
-        #         print("ac[", i, "]", ac[i])
-        # with gil:
-        #     print("self", self)
-        # cdef int i
-        # for i in range(length):
-        #     printf("ac[%d]=%f\n", i, ac[i])
+        cdef Py_ssize_t next_power_of_2 = _stats.next_power_of_2(length)
+        cdef double *welch_s = <double*> malloc(sizeof(double) * next_power_of_2)
+        cdef double *welch_f = <double*> malloc(sizeof(double) * next_power_of_2)
+        cdef double *window = <double*>malloc(sizeof(double) * length);
+        cdef Py_ssize_t i
+        for i in range(length):
+            window[i] = 1.0
+
+        cdef int n_welch = _stats.welch(
+            x, length, next_power_of_2, 1.0, window, length, welch_s, welch_f
+        )
 
         out[2 * out_stride] = _catch22.f1ecac(ac, length)
         out[3 * out_stride] = _catch22.first_min(ac, length)
@@ -212,12 +215,12 @@ cdef class Catch22Summarizer(Summarizer):
         out[7 * out_stride] = _catch22.above_mean_stretch(x_stride, x, length)
         out[8 * out_stride] = _catch22.transition_matrix_3ac_sumdiagcov(x, ac, length)# _catch22.local_mean_std(x_stride, x, length, 3)
         out[9 * out_stride] = _catch22.periodicity_wang_th0_01(x, length)
-        out[10 * out_stride] = _catch22.local_mean_tauresrat(x, ac, length, 1)
-        out[11 * out_stride] = 0.0
-        out[12 * out_stride] = 0.0
-        out[13 * out_stride] = 0.0
-        out[14 * out_stride] = 0.0
-        out[15 * out_stride] = 0.0
+        out[10 * out_stride] = _catch22.embed2_dist_tau_d_expfit_meandiff(x, ac, length)
+        out[11 * out_stride] = _catch22.auto_mutual_info_stats_gaussian_fmmi(x, length, 40)
+        out[12 * out_stride] = _catch22.local_mean_tauresrat(x, ac, length, 1)
+        out[13 * out_stride] = _catch22.outlier_include_np_mdrmd(x, length, 1, 0.01)
+        out[14 * out_stride] = _catch22.outlier_include_np_mdrmd(x, length, -1, 0.01)
+        out[15 * out_stride] = _catch22.summaries_welch_rect(x, length, 1, welch_s, welch_f, n_welch)
         out[16 * out_stride] = 0.0
         out[17 * out_stride] = 0.0
         out[18 * out_stride] = 0.0
@@ -228,6 +231,9 @@ cdef class Catch22Summarizer(Summarizer):
         if x_buffer != NULL:
             free(x)
         free(ac)
+        free(welch_f)
+        free(welch_s)
+        free(window)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 22

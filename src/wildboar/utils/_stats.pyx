@@ -17,7 +17,10 @@
 
 # Authors: Isak Samsten
 
+from libc.math cimport floor
 from libc.stdlib cimport free, malloc
+from libc.string cimport memset
+from sklearn.utils._cython_blas cimport _nrm2
 
 from ._fft cimport _pocketfft
 
@@ -154,3 +157,60 @@ cdef void auto_correlation(double *x, Py_ssize_t n, double *out) nogil:
     cdef complex *fft = <complex *> malloc(sizeof(complex) * fft_length)
     _auto_correlation(x, n, out, fft)
     free(fft)
+
+cdef Py_ssize_t next_power_of_2(Py_ssize_t n) nogil:
+    n = n - 1
+    while n & n - 1:
+        n = n & n - 1
+    return n << 1
+
+cdef int welch(
+    double *x, 
+    Py_ssize_t size, 
+    int NFFT, 
+    double Fs, 
+    double *window, 
+    int windowWidth,
+    double *Pxx, 
+    double *f,
+) nogil:
+    cdef double dt = 1.0 / Fs
+    cdef double df = 1.0 / next_power_of_2(windowWidth) / dt
+    cdef double m = mean(1, x, size)
+    cdef int k = <int>floor(<double>size/(<double>windowWidth/2.0))-1;
+   
+    cdef double w_norm = _nrm2(windowWidth, window, 1)
+    cdef double KMU = k * w_norm * w_norm
+
+    cdef double *P = <double*> malloc(sizeof(double) * NFFT)
+    cdef complex *F = <complex*> malloc(sizeof(complex) * NFFT)
+    cdef double pi
+    cdef Py_ssize_t i, j, i_win
+
+    for i in range(NFFT):
+        P[i] = 0.0
+
+    for i in range(k):
+        i_win = <int>(i * <double>windowWidth/2.0)
+        for j in range(windowWidth):
+            F[j] = (window[j] * x[j + i_win]) - m
+
+        for j in range(windowWidth, NFFT):
+            F[j] = 0.0
+
+        _pocketfft.fft(F, NFFT, 1.0)
+
+        for j in range(NFFT):
+            pi = abs(F[j])
+            P[j] += pi * pi
+    
+    cdef Py_ssize_t n_out = NFFT // 2 + 1
+    for i in range(n_out):
+        Pxx[i] = P[i] / KMU * dt
+        if i > 0 and i < n_out - 1:
+            Pxx[i] *= 2
+        f[i] = i * df
+
+    free(P)
+    free(F)
+    return n_out
