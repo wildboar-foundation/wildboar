@@ -1,25 +1,62 @@
-from sklearn.linear_model import RidgeClassifierCV
-from sklearn.pipeline import make_pipeline
+import catch22
+import pandas as pd
 
 from wildboar.datasets import load_dataset
 from wildboar.embed import IntervalEmbedding
 
 x_train, x_test, y_train, y_test = load_dataset("GunPoint", merge_train_test=False)
 
+
+def wrap(f):
+    def w(x):
+        return f(list(x))
+
+    return w
+
+
+summarizers = [
+    wrap(f)
+    for f in catch22.__dict__.values()
+    if callable(f) and f.__name__ != "catch22_all"
+]
+
+names = [
+    f.__name__
+    for f in catch22.__dict__.values()
+    if callable(f) and f.__name__ != "catch22_all"
+]
+
 i = IntervalEmbedding(
-    n_interval="sqrt",
-    intervals="random",
-    min_size=0.0,
-    max_size=0.3,
-    summarizer="auto",
+    n_interval=1,
+    summarizer=summarizers,
     random_state=123,
 )
-i.fit(x_train)
-print([(a, b) for _, (a, b, c) in i.embedding_.features])
+x_t = i.fit_transform(x_train[[0, 1, 13]])
+df_expected = pd.DataFrame(x_t, columns=names)
 
-
-pipe = make_pipeline(
-    IntervalEmbedding(n_interval=50, summarizer="auto"), RidgeClassifierCV()
+i = IntervalEmbedding(
+    n_interval=1,
+    summarizer="catch22",
+    random_state=123,
 )
-pipe.fit(x_train, y_train)
-print(pipe.score(x_test, y_test))
+x_t = i.fit_transform(x_train[[0, 1, 13]])
+df_actual = pd.DataFrame(x_t, columns=names)
+
+with pd.option_context(
+    "display.max_rows", None, "display.max_columns", None, "display.width", None
+):
+    print(df_expected[names[0:22]])
+    print(df_actual[names[0:22]])
+
+
+#
+# pipe = make_pipeline(
+#     IntervalEmbedding(
+#         n_interval=1,
+#         intervals="fixed",
+#         summarizer=summarizers,
+#     ),
+#     RandomForestClassifier(),
+# )
+# pipe.fit(x_train, y_train)
+# print(pipe.score(x_test, y_test))

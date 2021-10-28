@@ -23,76 +23,135 @@ from libc.stdlib cimport free, malloc, qsort
 from libc.string cimport memcpy, memset
 
 from wildboar.utils cimport _stats
-from wildboar.utils._fft cimport _pocketfft
 
 
-# Inspired by: https://github.com/chlubba/catch22/blob/master/C/histcounts.c
-cdef void histcount(
-    Py_ssize_t stride,
+cdef extern from "catch22.h":
+
+    cdef double histogram_mode(
+        double *x, size_t length, size_t *hist_counts, double *bin_edges, size_t n_bins
+    ) nogil
+
+    cdef double histogram_ami_even(double *x, size_t length, size_t tau, size_t n_bins) nogil
+
+    cdef double transition_matrix_ac_sumdiagcov(
+            double *x, double *ac, size_t length, size_t n_groups
+    ) nogil
+
+    cdef double periodicity_wang_th0_01(double *x, size_t length) nogil
+
+cdef double transition_matrix_3ac_sumdiagcov(
+    double *x,
+    double *ac,
+    Py_ssize_t length,
+) nogil:
+    return transition_matrix_ac_sumdiagcov(x, ac, length, 3)
+
+cdef double _histogram_ami_even(
     double *x,
     Py_ssize_t length,
-    Py_ssize_t *bin_count,
-    double *bin_edges,
-    Py_ssize_t n_bins,
+    size_t tau,
+    size_t n_bins,
 ) nogil:
-    cdef double min_val = INFINITY
-    cdef double max_val = -INFINITY
-    cdef Py_ssize_t i
-    cdef int bin
-    cdef double v, bin_width
+    return histogram_ami_even(x, length, tau, n_bins)
 
-    for i in range(length):
-        v = x[i * stride]
-        if v < min_val:
-            min_val = v
-        if v > max_val:
-            max_val = v
+cdef double histogram_ami_even_2_5(double *x, Py_ssize_t length) nogil:
+    return _histogram_ami_even(x, length, 2, 5)
 
-    memset(bin_count, 0, sizeof(Py_ssize_t) * n_bins)
-    if min_val == max_val:
-        bin_count[0] = length
-    else:
-        bin_width = (max_val - min_val) / n_bins
-        for i in range(length):
-            bin = <int>((x[i * stride] - min_val) / bin_width)
-            if bin < 0:
-                bin = 0
-            if bin >= n_bins:
-                bin = n_bins - 1
-            bin_count[bin] += 1
-
-    if bin_edges != NULL:
-        i = 0
-        for i in range(n_bins + 1):
-            bin_edges[i] = i * bin_width + min_val
-
-
-# Inspired by: https://github.com/chlubba/catch22/blob/master/C/DN_HistogramMode_5.c
-cdef double histogram_mode(
-    Py_ssize_t stride,
+cdef double _histogram_mode(
     double *x,
     Py_ssize_t length,
-    Py_ssize_t *bin_count,
+    size_t *bin_count,
     double *bin_edges,
-    Py_ssize_t n_bins,
+    size_t n_bins,
 ) nogil:
-    histcount(stride, x, length, bin_count, bin_edges, n_bins)
+    return histogram_mode(x, <size_t>length, bin_count, bin_edges, n_bins)
 
-    cdef Py_ssize_t i
-    cdef double max_bin = 0
-    cdef double num_max = 1
-    cdef double value = 0
+cdef double histogram_mode10(
+        double *x,
+        Py_ssize_t length,
+        size_t *bin_count,
+        double *bin_edges
+) nogil:
+    return _histogram_mode(x, length, bin_count, bin_edges, 10)
 
-    for i in range(n_bins):
-        if bin_count[i] > max_bin:
-            max_bin = bin_count[i]
-            num_max = 1
-            value = (bin_edges[i] + bin_edges[i + 1]) / 2.0
-        elif bin_count[i] == max_bin:
-            num_max += 1
-            value += (bin_edges[i] + bin_edges[i + 1]) / 2.0
+cdef double histogram_mode5(
+        double *x,
+        Py_ssize_t length,
+        size_t *bin_count,
+        double *bin_edges
+) nogil:
+    return _histogram_mode(x, length, bin_count, bin_edges, 5)
 
-    return value / num_max
+#
+#
+#
+# # Inspired by: https://github.com/chlubba/catch22/blob/master/C/histcounts.c
+# cdef void histcount(
+#     Py_ssize_t stride,
+#     double *x,
+#     Py_ssize_t length,
+#     Py_ssize_t *bin_count,
+#     double *bin_edges,
+#     Py_ssize_t n_bins,
+# ) nogil:
+#     cdef double min_val = INFINITY
+#     cdef double max_val = -INFINITY
+#     cdef Py_ssize_t i
+#     cdef int bin
+#     cdef double v, bin_width
+#
+#     for i in range(length):
+#         v = x[i * stride]
+#         if v < min_val:
+#             min_val = v
+#         if v > max_val:
+#             max_val = v
+#
+#     memset(bin_count, 0, sizeof(Py_ssize_t) * n_bins)
+#     if min_val == max_val:
+#         bin_count[0] = length
+#     else:
+#         bin_width = (max_val - min_val) / n_bins
+#         for i in range(length):
+#             bin = <int>((x[i * stride] - min_val) / bin_width)
+#             if bin < 0:
+#                 bin = 0
+#             if bin >= n_bins:
+#                 bin = n_bins - 1
+#             bin_count[bin] += 1
+#
+#     if bin_edges != NULL:
+#         i = 0
+#         for i in range(n_bins + 1):
+#             bin_edges[i] = i * bin_width + min_val
+#
+#
+# # Inspired by: https://github.com/chlubba/catch22/blob/master/C/DN_HistogramMode_5.c
+# cdef double histogram_mode(
+#     Py_ssize_t stride,
+#     double *x,
+#     Py_ssize_t length,
+#     Py_ssize_t *bin_count,
+#     double *bin_edges,
+#     Py_ssize_t n_bins,
+# ) nogil:
+#     histcount(stride, x, length, bin_count, bin_edges, n_bins)
+#
+#     cdef Py_ssize_t i
+#     cdef double max_bin = 0
+#     cdef double num_max = 1
+#     cdef double value = 0
+#
+#     for i in range(n_bins):
+#         if bin_count[i] > max_bin:
+#             max_bin = bin_count[i]
+#             num_max = 1
+#             value = (bin_edges[i] + bin_edges[i + 1]) / 2.0
+#         elif bin_count[i] == max_bin:
+#             num_max += 1
+#             value += (bin_edges[i] + bin_edges[i + 1]) / 2.0
+#
+#     return value / num_max
 
 
 cdef double f1ecac(double *ac, Py_ssize_t n) nogil:
@@ -154,9 +213,9 @@ cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil
 
     for i in range(1, n):
         if x[i * stride] - mean <= 0 and x[(i - 1) * stride] - mean <= 0:
-            if stretch > longest:
+            if stretch >= longest:
                 longest = stretch
-            stretch = 1
+            stretch = 0
         else:
             stretch += 1
 
@@ -164,93 +223,6 @@ cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil
         return stretch
     else:
         return longest
-
-
-cdef int vcmp(void *a , void *b) nogil:
-    cdef double a_v = (<double*> a)[0]
-    cdef double b_v = (<double*> b)[0]
-    return <int>(a_v - b_v)
-
-
-cdef double _find_quantile(double *x, Py_ssize_t n, double quant) nogil:
-    cdef double limit = 0.5 / n
-    cdef double index
-    cdef Py_ssize_t left, right
-    if quant < limit:
-        return x[0]
-    elif quant > 1 - limit:
-        return x[n - 1]
-    else:
-        index = n * quant - 0.5
-        left = <Py_ssize_t> floor(index)
-        right = <Py_ssize_t> ceil(index)
-        return x[left] + (left + right) * (x[right] - x[left]) / (right - left)
-
-
-cdef void sb_coarse(double *x, Py_ssize_t n, Py_ssize_t ng, Py_ssize_t *labels) nogil:
-    cdef double *tmp = <double*> malloc(sizeof(double) * n)
-    memcpy(tmp, x, sizeof(double) * n)
-    qsort(tmp, n, sizeof(double), &vcmp)
-    cdef double step_size = 1 / ng;
-    cdef double step_value = 0
-    cdef double *quantile = <double*> malloc(sizeof(double) * ng + 1)
-    cdef Py_ssize_t i, j
-    for i in range(ng + 1):
-        quantile[i] = _find_quantile(tmp, n, step_value)
-        step_value += step_size
-
-    labels[0] = 0
-    labels[n - 1] = ng - 1
-    for i in range(ng):
-        for j in range(1, n - 1):
-            if quantile[i] <= x[j] <= quantile[i + 1]:
-                labels[j] = i
-    free(tmp)
-    free(quantile)
-
-cdef double transition_matrix_3ac_sumdiagcov(double *x, double *ac, Py_ssize_t n) nogil:
-    cdef Py_ssize_t tau = 0
-
-    # find the index of the first negative auto correlation
-    while ac[tau] > 0 and tau < n:
-        tau += 1
-    cdef Py_ssize_t n_neg = (n - 1) // tau + 1
-
-    cdef Py_ssize_t i, j
-    cdef double *neg = <double*> malloc(sizeof(double) * n_neg)
-    for i in range(n_neg):
-        neg[i] = x[i * tau]
-
-    cdef Py_ssize_t *labels = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * n_neg)
-    memset(labels, 0, sizeof(Py_ssize_t) * n_neg)
-    sb_coarse(neg, n_neg, 3, labels)
-
-    cdef double T[3][3]
-    for i in range(3):
-        for j in range(3):
-            T[i][j] = 0
-
-    for j in range(n_neg - 1):
-        T[labels[j]][labels[j + 1]] += 1 / (n_neg - 1)
-
-    cdef:
-        double col1[3]
-        double col2[3]
-        double col3[3]
-
-    for i in range(3):
-        col1[i] = T[i][0]
-        col2[i] = T[i][1]
-        col3[i] = T[i][2]
-
-    cdef double sum_diag = 0
-    sum_diag += _stats.covariance(<double *> col1, <double *> col1, 3)
-    sum_diag += _stats.covariance(<double *> col2, <double *> col2, 3)
-    sum_diag += _stats.covariance(<double *> col3, <double *> col3, 3)
-
-    free(neg)
-    free(labels)
-    return sum_diag
 
 
 cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t lag) nogil:

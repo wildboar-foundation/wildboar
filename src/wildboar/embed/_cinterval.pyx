@@ -16,8 +16,12 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+cimport numpy as np
+
+import numpy as np
 
 from libc.math cimport FP_INFINITE, fpclassify
+from libc.stdio cimport printf
 from libc.stdlib cimport free, malloc
 
 from .._data cimport TSDatabase, ts_database_new
@@ -49,6 +53,9 @@ cdef class Summarizer:
             Py_ssize_t out_stride,
             double *out
     ) nogil:
+        pass
+
+    cdef void init(self, TSDatabase *td) nogil:
         pass
 
     cdef Py_ssize_t n_outputs(self) nogil:
@@ -145,12 +152,12 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
 
 
 cdef class Catch22Summarizer(Summarizer):
-    cdef Py_ssize_t *bin_count
+    cdef size_t *bin_count
     cdef double *bin_edges
     cdef double *x_buffer
 
     def __cinit__(self):
-        self.bin_count = <Py_ssize_t*>malloc(sizeof(Py_ssize_t) * 10)
+        self.bin_count = <size_t*>malloc(sizeof(size_t) * 10)
         self.bin_edges = <double*>malloc(sizeof(double) * 11)
 
     def __dealloc__(self):
@@ -170,7 +177,7 @@ cdef class Catch22Summarizer(Summarizer):
     ) nogil:
         cdef double *x_buffer
         if x_stride > 1:
-            x_buffer = <double *> malloc(sizeof(double) * length)
+            x_buffer = <double*> malloc(sizeof(double) * length)
             strided_copy(x_stride, x, x_buffer, length)
             x_stride = 1
             x = x_buffer
@@ -178,33 +185,90 @@ cdef class Catch22Summarizer(Summarizer):
             x_buffer = NULL
 
         # DN
-        out[0 * out_stride] = _catch22.histogram_mode(
-            x_stride, x, length, self.bin_count, self.bin_edges, 5
+        out[0 * out_stride] = _catch22.histogram_mode5(
+            x, length, self.bin_count, self.bin_edges
         )
-        out[1 * out_stride] = _catch22.histogram_mode(
-            x_stride, x, length, self.bin_count, self.bin_edges, 10
+        out[1 * out_stride] = _catch22.histogram_mode10(
+            x, length, self.bin_count, self.bin_edges
         )
 
         # CO
         cdef double *ac = <double*> malloc(sizeof(double) * length)
         _stats.auto_correlation(x, length, ac)
+        # with gil:
+        #     for i in range(length):
+        #         print("ac[", i, "]", ac[i])
+        # with gil:
+        #     print("self", self)
+        # cdef int i
+        # for i in range(length):
+        #     printf("ac[%d]=%f\n", i, ac[i])
 
         out[2 * out_stride] = _catch22.f1ecac(ac, length)
         out[3 * out_stride] = _catch22.first_min(ac, length)
-        out[4 * out_stride] = _catch22.trev_1_num(x_stride, x, length)
-        out[5 * out_stride] = 0.0 #_catch22.CO_HistogramAMI_even_2_5
-        out[6 * out_stride] =  _catch22.local_mean_std(x_stride, x, length, 3)
-        out[7 * out_stride] = _catch22.hrv_classic_pnn(x_stride, x, length, 40)
-        out[8 * out_stride] = _catch22.above_mean_stretch(x_stride, x, length)
-        out[9 * out_stride] = _catch22.transition_matrix_3ac_sumdiagcov(x, ac, length)
+        out[4 * out_stride] = _catch22.histogram_ami_even_2_5(x, length)
+        out[5 * out_stride] = _catch22.trev_1_num(x_stride, x, length)
+        out[6 * out_stride] = _catch22.hrv_classic_pnn(x_stride, x, length, 40)
+        out[7 * out_stride] = _catch22.above_mean_stretch(x_stride, x, length)
+        out[8 * out_stride] = _catch22.transition_matrix_3ac_sumdiagcov(x, ac, length)# _catch22.local_mean_std(x_stride, x, length, 3)
+        out[9 * out_stride] = _catch22.periodicity_wang_th0_01(x, length)
         out[10 * out_stride] = _catch22.local_mean_tauresrat(x, ac, length, 1)
+        out[11 * out_stride] = 0.0
+        out[12 * out_stride] = 0.0
+        out[13 * out_stride] = 0.0
+        out[14 * out_stride] = 0.0
+        out[15 * out_stride] = 0.0
+        out[16 * out_stride] = 0.0
+        out[17 * out_stride] = 0.0
+        out[18 * out_stride] = 0.0
+        out[19 * out_stride] = 0.0
+        out[20 * out_stride] = 0.0
+        out[21 * out_stride] = 0.0
 
         if x_buffer != NULL:
             free(x)
         free(ac)
 
     cdef Py_ssize_t n_outputs(self) nogil:
-        return 11
+        return 22
+
+cdef class PyFuncSummarizer(Summarizer):
+    cdef list func
+    cdef np.ndarray x_buffer
+
+    def __cinit__(self, func):
+        self.func = func
+        self.x_buffer = None
+
+    def __reduce__(self):
+        return self.__class__, (self.func, )
+
+    cdef void init(self, TSDatabase *td) nogil:
+        with gil:
+            self.x_buffer = np.ndarray(td.n_timestep)
+
+    cdef void summarize(
+            self,
+            Py_ssize_t x_stride,
+            double *x,
+            Py_ssize_t length,
+            Py_ssize_t out_stride,
+            double *out
+    ) nogil:
+        cdef double value
+        cdef Py_ssize_t i
+        with gil:
+            for i in range(length):
+                self.x_buffer[i] = x[x_stride * i]
+
+        for i in range(self.n_outputs()):
+            with gil:
+                value = self.func[i](self.x_buffer[0:length])
+            out[i * out_stride] = value
+
+    cdef Py_ssize_t n_outputs(self) nogil:
+        with gil:
+            return len(self.func)
 
 
 cdef class IntervalFeatureEngineer(FeatureEngineer):
@@ -224,6 +288,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         return self.__class__, (self.n_intervals, self.summarizer)
 
     cdef Py_ssize_t init(self, TSDatabase *td) nogil:
+        self.summarizer.init(td)
         return 0
 
     cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:

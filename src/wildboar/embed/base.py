@@ -63,7 +63,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         -------
         embedding : self
         """
-        x = check_array(x)
+        x = check_array(x, allow_nd=True, order="C")
         random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
         self.embedding_ = feature_embedding_fit(

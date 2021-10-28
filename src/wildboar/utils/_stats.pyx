@@ -67,7 +67,7 @@ cdef double inc_stats_variance(IncStats *self, bint sample=True) nogil:
     return 0.0 if n_samples <= 1 else self._s / n_samples
 
 cdef double mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
-    cdef double v
+    cdef double v = 0.0
     cdef Py_ssize_t i
     for i in range(length):
         v += x[i * stride]
@@ -79,7 +79,7 @@ cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
 
     cdef double avg = mean(stride, x, length)
     cdef double sum = 0
-    cdef double v
+    cdef double v = 0.0
     cdef Py_ssize_t i
     for i in range(length):
         v = x[i * stride] - avg

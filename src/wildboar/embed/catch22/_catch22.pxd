@@ -17,14 +17,38 @@
 #
 # Authors: Isak Samsten
 
-cdef double histogram_mode(
-    Py_ssize_t stride,
+cdef double _histogram_mode(
     double *x,
     Py_ssize_t length,
-    Py_ssize_t *bin_count,
+    size_t *bin_count,
     double *bin_edges,
-    Py_ssize_t n_bins,
+    size_t n_bins,
 ) nogil
+
+cdef double histogram_mode10(
+        double *x,
+        Py_ssize_t length,
+        size_t *bin_count,
+        double *bin_edges
+) nogil
+
+cdef double histogram_mode5(
+        double *x,
+        Py_ssize_t length,
+        size_t *bin_count,
+        double *bin_edges
+) nogil
+
+cdef double _histogram_ami_even(
+    double *x,
+    Py_ssize_t length,
+    size_t tau,
+    size_t n_bins,
+) nogil
+
+cdef double histogram_ami_even_2_5(double *x, Py_ssize_t length) nogil
+
+cdef double transition_matrix_3ac_sumdiagcov(double *x, double *ac, Py_ssize_t n) nogil
 
 cdef double f1ecac(double *ac, Py_ssize_t n) nogil
 
@@ -38,6 +62,6 @@ cdef double hrv_classic_pnn(Py_ssize_t stride, double *x, Py_ssize_t n, double p
 
 cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil
 
-cdef double transition_matrix_3ac_sumdiagcov(double *x, double *ac, Py_ssize_t n) nogil
-
 cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t lag) nogil
+
+cdef double periodicity_wang_th0_01(double *x, size_t length) nogil
