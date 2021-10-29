@@ -69,27 +69,27 @@ cdef double inc_stats_variance(IncStats *self, bint sample=True) nogil:
         n_samples = self._n_samples
     return 0.0 if n_samples <= 1 else self._s / n_samples
 
-cdef double mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
+cdef double mean(double *x, Py_ssize_t length) nogil:
     cdef double v = 0.0
     cdef Py_ssize_t i
     for i in range(length):
-        v += x[i * stride]
+        v += x[i]
     return v / length
 
-cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
+cdef double variance(double *x, Py_ssize_t length) nogil:
     if length == 1:
         return 0.0
 
-    cdef double avg = mean(stride, x, length)
+    cdef double avg = mean(x, length)
     cdef double sum = 0
     cdef double v = 0.0
     cdef Py_ssize_t i
     for i in range(length):
-        v = x[i * stride] - avg
+        v = x[i] - avg
         sum += v * v
     return sum / length
 
-cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
+cdef double slope(double *x, Py_ssize_t length) nogil:
     if length == 1:
         return 0.0
     cdef double y_mean = (length + 1) / 2.0
@@ -100,8 +100,8 @@ cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil:
 
     for i in range(length):
         j = i + 1
-        mean_diff += x[stride * i] * j
-        x_mean += x[stride * i]
+        mean_diff += x[i] * j
+        x_mean += x[i]
         mean_y_sqr += j * j
     mean_diff /= length
     mean_y_sqr /= length
@@ -135,7 +135,7 @@ cdef double covariance(double *x, double *y, Py_ssize_t length) nogil:
 
 
 cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil:
-    cdef double avg = mean(1, x, n)
+    cdef double avg = mean(x, n)
     cdef Py_ssize_t fft_length = n * 2 - 1
     cdef Py_ssize_t i
     for i in range(n):
@@ -176,7 +176,7 @@ cdef int welch(
 ) nogil:
     cdef double dt = 1.0 / Fs
     cdef double df = 1.0 / next_power_of_2(windowWidth) / dt
-    cdef double m = mean(1, x, size)
+    cdef double m = mean(x, size)
     cdef int k = <int>floor(<double>size/(<double>windowWidth/2.0))-1;
    
     cdef double w_norm = _nrm2(windowWidth, window, 1)

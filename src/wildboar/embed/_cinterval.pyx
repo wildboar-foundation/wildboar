@@ -47,10 +47,8 @@ cdef struct Interval:
 cdef class Summarizer:
     cdef void summarize(
             self,
-            Py_ssize_t x_stride,
             double *x,
-            Py_ssize_t x_length,
-            Py_ssize_t out_stride,
+            Py_ssize_t length,
             double *out
     ) nogil:
         pass
@@ -64,13 +62,11 @@ cdef class Summarizer:
 cdef class MeanSummarizer(Summarizer):
     cdef void summarize(
             self,
-            Py_ssize_t x_stride,
             double *x,
             Py_ssize_t length,
-            Py_ssize_t out_stride,
             double *out
     ) nogil:
-        out[0] = _stats.mean(x_stride, x, length)
+        out[0] = _stats.mean(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -79,13 +75,11 @@ cdef class MeanSummarizer(Summarizer):
 cdef class VarianceSummarizer(Summarizer):
     cdef void summarize(
             self,
-            Py_ssize_t x_stride,
             double *x,
             Py_ssize_t length,
-            Py_ssize_t out_stride,
             double *out
     ) nogil:
-        out[0] = _stats.variance(x_stride, x, length)
+        out[0] = _stats.variance(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -94,13 +88,11 @@ cdef class VarianceSummarizer(Summarizer):
 cdef class SlopeSummarizer(Summarizer):
     cdef void summarize(
             self,
-            Py_ssize_t x_stride,
             double *x,
             Py_ssize_t length,
-            Py_ssize_t out_stride,
             double *out
     ) nogil:
-        out[0] = _stats.slope(x_stride, x, length)
+        out[0] = _stats.slope(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -110,20 +102,17 @@ cdef class MultiSummarizer(Summarizer):
 
     cdef void summarize(
             self,
-            Py_ssize_t x_stride,
             double *x,
             Py_ssize_t length,
-            Py_ssize_t out_stride,
             double *out
     ) nogil:
         cdef Py_ssize_t i
         for i in range(self.n_outputs()):
-            out[i * out_stride] = self._compute(i, x_stride, x, length)
+            out[i] = self._compute(i, x, length)
 
     cdef double _compute(
         self,
         Py_ssize_t measure,
-        Py_ssize_t stride,
         double *x,
         Py_ssize_t length
     ) nogil:
@@ -134,18 +123,17 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
     cdef double _compute(
             self,
             Py_ssize_t measure,
-            Py_ssize_t stride,
             double *x,
             Py_ssize_t length
     ) nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t v
-        if measure == 0:  # MEAN
-            return _stats.mean(stride, x, length)
-        elif measure == 1:  # VAR
-            return _stats.variance(stride, x, length)
-        elif measure == 2:  # SLOPE
-            return _stats.slope(stride, x, length)
+        if measure == 0:
+            return _stats.mean(x, length)
+        elif measure == 1:
+            return _stats.variance(x, length)
+        elif measure == 2:
+            return _stats.slope(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 3
@@ -154,86 +142,100 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
 cdef class Catch22Summarizer(Summarizer):
     cdef int *bin_count
     cdef double *bin_edges
-    cdef double *x_buffer
+    cdef double *ac
+    cdef double *welch_f
+    cdef double *welch_s
+    cdef double *window
 
     def __cinit__(self):
         self.bin_count = <int*>malloc(sizeof(int) * 10)
         self.bin_edges = <double*>malloc(sizeof(double) * 11)
+        self.ac = NULL 
+        self.welch_f = NULL 
+        self.welch_s = NULL
+        self.window = NULL
+        if self.bin_count == NULL or self.bin_edges == NULL:
+            raise MemoryError()
+
+    cdef void init(self, TSDatabase *td) nogil:
+        cdef Py_ssize_t n_timestep = td.n_timestep
+        cdef Py_ssize_t welch_length = _stats.next_power_of_2(n_timestep)
+        self.ac = <double*> malloc(sizeof(double) * n_timestep)
+        self.window = <double*> malloc(sizeof(double)* n_timestep);
+        self.welch_f = <double*> malloc(sizeof(double) * welch_length )
+        self.welch_s = <double*> malloc(sizeof(double) * welch_length )
+
+        if (
+            self.ac == NULL or
+            self.welch_s == NULL or
+            self.welch_f == NULL or
+            self.window == NULL
+        ):
+            raise MemoryError()
+
+        cdef Py_ssize_t i
+        for i in range(n_timestep):
+            self.window[i] = 1.0
 
     def __dealloc__(self):
         free(self.bin_count)
         free(self.bin_edges)
+        if self.ac != NULL:
+            free(self.ac)
+
+        if self.welch_f != NULL:
+            free(self.welch_f)
+
+        if self.welch_s != NULL:
+            free(self.welch_s)
+
+        if self.window != NULL:
+            free(self.window)
 
     def __reduce__(self):
         return self.__class__, ( )
 
     cdef void summarize(
             self,
-            Py_ssize_t x_stride,
             double *x,
             Py_ssize_t length,
-            Py_ssize_t out_stride,
             double *out
     ) nogil:
-        cdef double *x_buffer
-        if x_stride > 1:
-            x_buffer = <double*> malloc(sizeof(double) * length)
-            strided_copy(x_stride, x, x_buffer, length)
-            x_stride = 1
-            x = x_buffer
-        else:
-            x_buffer = NULL
-
-        # DN
-        out[0 * out_stride] = _catch22.histogram_mode5(
-            x, length, self.bin_count, self.bin_edges
-        )
-        out[1 * out_stride] = _catch22.histogram_mode10(
-            x, length, self.bin_count, self.bin_edges
-        )
-
-        # CO
-        cdef double *ac = <double*> malloc(sizeof(double) * length)
-        _stats.auto_correlation(x, length, ac)
-        cdef Py_ssize_t next_power_of_2 = _stats.next_power_of_2(length)
-        cdef double *welch_s = <double*> malloc(sizeof(double) * next_power_of_2)
-        cdef double *welch_f = <double*> malloc(sizeof(double) * next_power_of_2)
-        cdef double *window = <double*>malloc(sizeof(double) * length);
-        cdef Py_ssize_t i
-        for i in range(length):
-            window[i] = 1.0
-
+        cdef Py_ssize_t welch_length = _stats.next_power_of_2(length)
         cdef int n_welch = _stats.welch(
-            x, length, next_power_of_2, 1.0, window, length, welch_s, welch_f
+            x, 
+            length, 
+            welch_length, 
+            1.0, 
+            self.window, 
+            length, 
+            self.welch_s, 
+            self.welch_f
         )
+        _stats.auto_correlation(x, length, self.ac)
 
-        out[2 * out_stride] = _catch22.f1ecac(ac, length)
-        out[3 * out_stride] = _catch22.first_min(ac, length)
-        out[4 * out_stride] = _catch22.histogram_ami_even_2_5(x, length)
-        out[5 * out_stride] = _catch22.trev_1_num(x_stride, x, length)
-        out[6 * out_stride] = _catch22.hrv_classic_pnn(x_stride, x, length, 40)
-        out[7 * out_stride] = _catch22.above_mean_stretch(x_stride, x, length)
-        out[8 * out_stride] = _catch22.transition_matrix_3ac_sumdiagcov(x, ac, length)
-        out[9 * out_stride] = _catch22.periodicity_wang_th0_01(x, length)
-        out[10 * out_stride] = _catch22.embed2_dist_tau_d_expfit_meandiff(x, ac, length)
-        out[11 * out_stride] = _catch22.auto_mutual_info_stats_gaussian_fmmi(x, length, 40)
-        out[12 * out_stride] = _catch22.local_mean_tauresrat(x, ac, length, 1)
-        out[13 * out_stride] = _catch22.outlier_include_np_mdrmd(x, length, 1, 0.01)
-        out[14 * out_stride] = _catch22.outlier_include_np_mdrmd(x, length, -1, 0.01)
-        out[15 * out_stride] = _catch22.summaries_welch_rect(x, length, 1, welch_s, welch_f, n_welch)
-        out[16 * out_stride] = _catch22.below_diff_stretch(x, length)
-        out[17 * out_stride] = _catch22.motif_three_quantile_hh(x, length)
-        out[18 * out_stride] = _catch22.fluct_anal_2_50_1_logi_prop_r1(x, length, 1, 0)
-        out[19 * out_stride] = _catch22.fluct_anal_2_50_1_logi_prop_r1(x, length, 2, 1)
-        out[20 * out_stride] = _catch22.summaries_welch_rect(x, length, 0, welch_s, welch_f, n_welch)
-        out[21 * out_stride] = _catch22.local_mean_std(x_stride, x, length, 3)
-
-        if x_buffer != NULL:
-            free(x)
-        free(ac)
-        free(welch_f)
-        free(welch_s)
-        free(window)
+        out[0] = _catch22.histogram_mode5(x, length, self.bin_count, self.bin_edges)
+        out[1] = _catch22.histogram_mode10(x, length, self.bin_count, self.bin_edges)
+        out[2] = _catch22.f1ecac(self.ac, length)
+        out[3] = _catch22.first_min(self.ac, length)
+        out[4] = _catch22.histogram_ami_even_2_5(x, length)
+        out[5] = _catch22.trev_1_num(x, length)
+        out[6] = _catch22.hrv_classic_pnn(x, length, 40)
+        out[7] = _catch22.above_mean_stretch(x, length)
+        out[8] = _catch22.transition_matrix_3ac_sumdiagcov(x, self.ac, length)
+        out[9] = _catch22.periodicity_wang_th0_01(x, length)
+        out[10] = _catch22.embed2_dist_tau_d_expfit_meandiff(x, self.ac, length)
+        out[11] = _catch22.auto_mutual_info_stats_gaussian_fmmi(x, length, 40)
+        out[12] = _catch22.local_mean_tauresrat(x, self.ac, length, 1)
+        out[13] = _catch22.outlier_include_np_mdrmd(x, length, 1, 0.01)
+        out[14] = _catch22.outlier_include_np_mdrmd(x, length, -1, 0.01)
+        out[15] = _catch22.summaries_welch_rect(x, length, 1, self.welch_s, self.welch_f, n_welch)
+        out[16] = _catch22.below_diff_stretch(x, length)
+        out[17] = _catch22.motif_three_quantile_hh(x, length)
+        out[18] = _catch22.fluct_anal_2_50_1_logi_prop_r1(x, length, 1, 0)
+        out[19] = _catch22.fluct_anal_2_50_1_logi_prop_r1(x, length, 2, 1)
+        out[20] = _catch22.summaries_welch_rect(x, length, 0, self.welch_s, self.welch_f, n_welch)
+        out[21] = _catch22.local_mean_std(x, length, 3)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 22
@@ -255,22 +257,20 @@ cdef class PyFuncSummarizer(Summarizer):
 
     cdef void summarize(
             self,
-            Py_ssize_t x_stride,
             double *x,
             Py_ssize_t length,
-            Py_ssize_t out_stride,
             double *out
     ) nogil:
         cdef double value
         cdef Py_ssize_t i
         with gil:
             for i in range(length):
-                self.x_buffer[i] = x[x_stride * i]
+                self.x_buffer[i] = x[i]
 
         for i in range(self.n_outputs()):
             with gil:
                 value = self.func[i](self.x_buffer[0:length])
-            out[i * out_stride] = value
+            out[i] = value
 
     cdef Py_ssize_t n_outputs(self) nogil:
         with gil:
@@ -368,10 +368,8 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         )
 
         self.summarizer.summarize(
-            td.timestep_stride,
             td.data + offset,
             interval.length,
-            1,
             self.out_buffer,
         )
         return self.out_buffer[interval.random_output]
@@ -404,12 +402,10 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
                 out_sample * td_out.sample_stride +
                 out_feature * n_summarizers * td_out.timestep_stride
         )
-        #with gil: print("out offset", out_offset, "offset", offset)
+
         self.summarizer.summarize(
-            td.timestep_stride,
             td.data + offset,
             interval.length,
-            td_out.timestep_stride,
             td_out.data + out_offset,
         )
         return 0

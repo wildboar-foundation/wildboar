@@ -37,11 +37,11 @@ cdef double inc_stats_n_samples(IncStats *inc_stats) nogil
 
 cdef double inc_stats_sum(IncStats *inc_stats) nogil
 
-cdef double mean(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
+cdef double mean(double *x, Py_ssize_t length) nogil
 
-cdef double variance(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
+cdef double variance(double *x, Py_ssize_t length) nogil
 
-cdef double slope(Py_ssize_t stride, double *x, Py_ssize_t length) nogil
+cdef double slope(double *x, Py_ssize_t length) nogil
 
 cdef double covariance(double *x, double *y, Py_ssize_t length) nogil
 

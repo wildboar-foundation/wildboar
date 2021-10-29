@@ -59,7 +59,9 @@ cdef extern from "catch22.h":
 
     cdef double motif_three_quantile_hh(double *x, int length) nogil
 
-    cdef double fluct_anal_2_50_1_logi_prop_r1(double *y, int length, int lag, int how) nogil
+    cdef double fluct_anal_2_50_1_logi_prop_r1(
+        double *y, int length, int lag, int how
+    ) nogil
 
 
 cdef double transition_matrix_3ac_sumdiagcov(
@@ -114,7 +116,7 @@ cdef double first_min(double *ac, Py_ssize_t n) nogil:
     return n
 
 
-cdef double trev_1_num(Py_ssize_t stride, double *x, Py_ssize_t n) nogil:
+cdef double trev_1_num(double *x, Py_ssize_t n) nogil:
     if n <= 1:
         return 0.0
 
@@ -125,7 +127,7 @@ cdef double trev_1_num(Py_ssize_t stride, double *x, Py_ssize_t n) nogil:
     return sum / (n - 1)
 
 
-cdef double local_mean_std(Py_ssize_t stride, double *x, Py_ssize_t n, Py_ssize_t lag) nogil:
+cdef double local_mean_std(double *x, Py_ssize_t n, Py_ssize_t lag) nogil:
     if n <= lag:
         return 0.0
 
@@ -136,16 +138,16 @@ cdef double local_mean_std(Py_ssize_t stride, double *x, Py_ssize_t n, Py_ssize_
     for i in range(n - lag):
         lag_sum = 0.0
         for j in range(lag):
-            lag_sum += x[i * stride + j * stride]
+            lag_sum += x[i + j]
 
         _stats.inc_stats_add(
-            &inc_stats, 1.0, x[i * stride + lag * stride] - lag_sum / lag
+            &inc_stats, 1.0, x[i + lag] - lag_sum / lag
         )
 
     return sqrt(_stats.inc_stats_variance(&inc_stats))
 
 
-cdef double hrv_classic_pnn(Py_ssize_t stride, double *x, Py_ssize_t n, double pnn) nogil:
+cdef double hrv_classic_pnn(double *x, Py_ssize_t n, double pnn) nogil:
     if n <= 1:
         return 0.0
     
@@ -153,20 +155,20 @@ cdef double hrv_classic_pnn(Py_ssize_t stride, double *x, Py_ssize_t n, double p
     cdef double value = 0
 
     for i in range(1, n):
-        if fabs(x[stride * i] - x[stride * (i - 1)]) * 1000 > pnn:
+        if fabs(x[i] - x[(i - 1)]) * 1000 > pnn:
             value += 1
 
     return value / (n - 1)
 
 
-cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil:
-    cdef double mean = _stats.mean(stride, x, n)
+cdef double above_mean_stretch(double *x, Py_ssize_t n) nogil:
+    cdef double mean = _stats.mean(x, n)
     cdef double stretch = 0
     cdef double longest = 0
     cdef Py_ssize_t i
 
     for i in range(n):
-        if x[i * stride] - mean <= 0: # and x[(i - 1) * stride] - mean <= 0:
+        if x[i] - mean <= 0:
             if stretch >= longest:
                 longest = stretch
             stretch = 1

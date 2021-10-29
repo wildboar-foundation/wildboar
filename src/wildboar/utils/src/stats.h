@@ -18,12 +18,12 @@ void fast_stats_remove(FastStats *fs, double weight, double value);
 
 double fast_stats_variance(FastStats *self, int sample);
 
-double mean(double *x, size_t length);
+double mean(double *x, int length);
 
-double variance(double *x, size_t length);
+double variance(double *x, int length);
 
-double slope(double *x, size_t length);
+double slope(double *x, int length);
 
-double covariance(double *x, double *y, size_t length);
+double covariance(double *x, double *y, int length);
 
 #endif

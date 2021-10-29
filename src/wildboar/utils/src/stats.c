@@ -38,7 +38,7 @@ double fast_stats_variance(FastStats *self, int sample) {
     return n_samples <= 1 ? 0.0 : self->s / n_samples;
 }
 
-double covariance(double *x, double *y, size_t length) {
+double covariance(double *x, double *y, int length) {
     double sum_x = 0.0;
     double sum_y = 0.0;
     double sum_xy = 0.0;
@@ -62,7 +62,7 @@ double covariance(double *x, double *y, size_t length) {
     return sum_xy / (k - 1);
 }
 
-double mean(double *x, size_t length) {
+double mean(double *x, int length) {
     double v = 0;
     for (int i = 0; i < length; i++) {
         v += x[i];
@@ -70,7 +70,7 @@ double mean(double *x, size_t length) {
     return v / length;
 }
 
-double variance(double *x, size_t length) {
+double variance(double *x, int length) {
     if (length == 1) return 0.0;
 
     double avg = mean(x, length);
@@ -83,7 +83,7 @@ double variance(double *x, size_t length) {
     return sum / length;
 }
 
-double slope(double *x, size_t length) {
+double slope(double *x, int length) {
     if (length == 1) return 0.0;
     double y_mean = (length + 1) / 2.0;
     double x_mean = 0;
