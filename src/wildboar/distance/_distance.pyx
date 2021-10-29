@@ -28,7 +28,8 @@ from libc.stdlib cimport free, malloc
 
 from . import _dtw_distance, _euclidean_distance
 
-from .._data cimport TSDatabase, ts_database_new
+from wildboar.utils.data cimport TSDatabase, ts_database_new
+
 from ._distance cimport DistanceMeasure, TSCopy
 
 from sklearn.utils import check_array

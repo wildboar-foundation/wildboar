@@ -21,19 +21,13 @@ cimport numpy as np
 import numpy as np
 
 from libc.math cimport FP_INFINITE, fpclassify
-from libc.stdio cimport printf
 from libc.stdlib cimport free, malloc
 
-from .._data cimport TSDatabase, ts_database_new
-from .._utils cimport (
-    RAND_R_MAX,
-    imin,
-    rand_int,
-    shuffle,
-    strided_copy,
-    to_ndarray_double,
-)
-from ..utils cimport _stats
+from wildboar.utils cimport stats
+from wildboar.utils._utils cimport to_ndarray_double
+from wildboar.utils.data cimport TSDatabase, ts_database_new
+from wildboar.utils.rand cimport RAND_R_MAX, rand_int, shuffle
+
 from ._feature cimport Feature, FeatureEngineer
 from .catch22 cimport _catch22
 
@@ -66,7 +60,7 @@ cdef class MeanSummarizer(Summarizer):
             Py_ssize_t length,
             double *out
     ) nogil:
-        out[0] = _stats.mean(x, length)
+        out[0] = stats.mean(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -79,7 +73,7 @@ cdef class VarianceSummarizer(Summarizer):
             Py_ssize_t length,
             double *out
     ) nogil:
-        out[0] = _stats.variance(x, length)
+        out[0] = stats.variance(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -92,7 +86,7 @@ cdef class SlopeSummarizer(Summarizer):
             Py_ssize_t length,
             double *out
     ) nogil:
-        out[0] = _stats.slope(x, length)
+        out[0] = stats.slope(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -129,11 +123,11 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
         cdef Py_ssize_t i
         cdef Py_ssize_t v
         if measure == 0:
-            return _stats.mean(x, length)
+            return stats.mean(x, length)
         elif measure == 1:
-            return _stats.variance(x, length)
+            return stats.variance(x, length)
         elif measure == 2:
-            return _stats.slope(x, length)
+            return stats.slope(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 3
@@ -159,7 +153,7 @@ cdef class Catch22Summarizer(Summarizer):
 
     cdef void init(self, TSDatabase *td) nogil:
         cdef Py_ssize_t n_timestep = td.n_timestep
-        cdef Py_ssize_t welch_length = _stats.next_power_of_2(n_timestep)
+        cdef Py_ssize_t welch_length = stats.next_power_of_2(n_timestep)
         self.ac = <double*> malloc(sizeof(double) * n_timestep)
         self.window = <double*> malloc(sizeof(double)* n_timestep);
         self.welch_f = <double*> malloc(sizeof(double) * welch_length )
@@ -201,8 +195,8 @@ cdef class Catch22Summarizer(Summarizer):
             Py_ssize_t length,
             double *out
     ) nogil:
-        cdef Py_ssize_t welch_length = _stats.next_power_of_2(length)
-        cdef int n_welch = _stats.welch(
+        cdef Py_ssize_t welch_length = stats.next_power_of_2(length)
+        cdef int n_welch = stats.welch(
             x, 
             length, 
             welch_length, 
@@ -212,7 +206,7 @@ cdef class Catch22Summarizer(Summarizer):
             self.welch_s, 
             self.welch_f
         )
-        _stats.auto_correlation(x, length, self.ac)
+        stats.auto_correlation(x, length, self.ac)
 
         out[0] = _catch22.histogram_mode5(x, length, self.bin_count, self.bin_edges)
         out[1] = _catch22.histogram_mode10(x, length, self.bin_count, self.bin_edges)
@@ -277,6 +271,10 @@ cdef class PyFuncSummarizer(Summarizer):
             return len(self.func)
 
 
+cdef inline Py_ssize_t _imin(Py_ssize_t a, Py_ssize_t b) nogil:
+    return a if a < b else b
+
+
 cdef class IntervalFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_intervals
     cdef Summarizer summarizer
@@ -314,7 +312,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     ) nogil:
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
         interval.length = td.n_timestep // self.n_intervals
-        interval.start = (feature_id % self.n_intervals) * interval.length + imin(
+        interval.start = (feature_id % self.n_intervals) * interval.length + _imin(
             feature_id % self.n_intervals, td.n_timestep % self.n_intervals
         )
 

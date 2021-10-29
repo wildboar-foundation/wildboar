@@ -19,22 +19,17 @@
 
 cimport numpy as np
 
-from ._utils import check_array_fast
+import warnings
 
+import numpy as np
 
-def ts_database_dims(np.ndarray x):
-    n_samples = x.shape[0]
-    n_timestep = x.shape[x.ndim - 1]
-    n_dims = 1
-    if x.ndim == 3:
-        n_dims = x.shape[1]
-    return n_samples, n_dims, n_timestep
 
 cdef TSDatabase ts_database_new(np.ndarray data):
     """Construct a new time series database from a ndarray """
-    data = check_array_fast(data, allow_nd=True)
     if data.ndim < 2 or data.ndim > 3:
         raise ValueError("ndim {0} < 2 or {0} > 3".format(data.ndim))
+    
+    data = np.ascontiguousarray(data, dtype=np.float64)
 
     cdef TSDatabase sd
     sd.n_samples = <Py_ssize_t> data.shape[0]
@@ -42,6 +37,11 @@ cdef TSDatabase ts_database_new(np.ndarray data):
     sd.data = <double*> data.data
     sd.sample_stride = <Py_ssize_t> (data.strides[0] / <Py_ssize_t> data.itemsize)
     sd.timestep_stride = <Py_ssize_t> (data.strides[data.ndim - 1] / <Py_ssize_t> data.itemsize)
+    if sd.timestep_stride != 1:
+        warnings.warn(
+            "timestep_stride (%d) detected. Please report bug." % sd.timestep_stride, 
+            UserWarning,
+        )
 
     if data.ndim == 3:
         sd.n_dims = <Py_ssize_t> data.shape[data.ndim - 2]

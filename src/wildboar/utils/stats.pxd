@@ -61,3 +61,11 @@ cdef int welch(
     double *Pxx, 
     double *f,
 ) nogil
+
+
+cdef void fast_mean_std(
+    double* data,
+    Py_ssize_t length,
+    double *mean,
+    double* std,
+) nogil

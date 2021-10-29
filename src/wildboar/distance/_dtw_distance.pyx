@@ -35,11 +35,12 @@ import numpy as np
 from libc.math cimport INFINITY, floor, sqrt
 from libc.stdlib cimport free, malloc
 
-from .._data cimport TSDatabase
-from .._utils cimport fast_mean_std
+from wildboar.utils cimport stats
+from wildboar.utils.data cimport TSDatabase
+
 from ._distance cimport DistanceMeasure, ScaledDistanceMeasure, TSCopy, TSView
 
-from .._utils import check_array_fast
+from wildboar.utils._utils import check_array_fast
 
 
 cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
@@ -1196,11 +1197,9 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
                     raise MemoryError()
 
         cdef double t_mean, t_std
-        fast_mean_std(
-            sample_offset,
-            td.timestep_stride,
+        stats.fast_mean_std(
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             &t_mean,
             &t_std,
         )

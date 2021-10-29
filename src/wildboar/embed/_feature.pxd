@@ -17,7 +17,7 @@
 #
 # Authors: Isak Samsten
 
-from .._data cimport TSDatabase
+from wildboar.utils.data cimport TSDatabase
 
 
 cdef struct Feature:

@@ -26,8 +26,9 @@ cimport numpy as np
 from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
-from .._data cimport TSDatabase
-from .._utils cimport realloc_array
+from wildboar.utils._utils cimport realloc_array
+from wildboar.utils.data cimport TSDatabase
+
 from ._distance cimport DistanceMeasure, ScaledDistanceMeasure, TSCopy, TSView
 
 

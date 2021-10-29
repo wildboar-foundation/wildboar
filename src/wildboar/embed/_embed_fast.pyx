@@ -19,16 +19,16 @@
 cimport numpy as np
 from libc.stdlib cimport free, malloc
 
-from .._data cimport TSDatabase, ts_database_new
-from .._utils cimport RAND_R_MAX, safe_realloc
+from wildboar.utils._utils cimport safe_realloc
+from wildboar.utils.data cimport TSDatabase, ts_database_new
+from wildboar.utils.rand cimport RAND_R_MAX
+
 from ._feature cimport Feature, FeatureEngineer
 
 from copy import deepcopy
 
 import numpy as np
 from joblib import Parallel, delayed, effective_n_jobs
-
-from .._data import ts_database_dims
 
 
 def clone_embedding(FeatureEngineer feature_engineer, features):

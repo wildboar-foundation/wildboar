@@ -47,8 +47,8 @@ if __name__ == "__main__":
         raise RuntimeError("%s is not a valid build type" % BUILD_TYPE)
 
     extensions = {
-        "wildboar._utils": {
-            "sources": ["src/wildboar/_utils.pyx"],
+        "wildboar.utils._utils": {
+            "sources": ["src/wildboar/utils/_utils.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.distance._distance": {
@@ -65,10 +65,6 @@ if __name__ == "__main__":
         },
         "wildboar.tree._tree_builder": {
             "sources": ["src/wildboar/tree/_tree_builder.pyx"],
-            "include_dirs": include_dirs(),
-        },
-        "wildboar._data": {
-            "sources": ["src/wildboar/_data.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.embed._feature": {
@@ -105,12 +101,17 @@ if __name__ == "__main__":
             ],
             "include_dirs": include_dirs("src/wildboar/utils/_fft/src/"),
         },
-        "wildboar.utils._stats": {
-            "sources": [
-                "src/wildboar/utils/_stats.pyx",
-                "src/wildboar/utils/src/stats.c",
-            ],
-            "include_dirs": include_dirs("src/wildboar/utils/src/"),
+        "wildboar.utils.stats": {
+            "sources": ["src/wildboar/utils/stats.pyx"],
+            "include_dirs": include_dirs(),
+        },
+        "wildboar.utils.rand": {
+            "sources": ["src/wildboar/utils/rand.pyx"],
+            "include_dirs": include_dirs(),
+        },
+        "wildboar.utils.data": {
+            "sources": ["src/wildboar/utils/data.pyx"],
+            "include_dirs": include_dirs(),
         },
     }
     ext_modules = [

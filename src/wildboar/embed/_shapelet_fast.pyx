@@ -17,8 +17,9 @@
 
 from libc.stdlib cimport free, malloc
 
-from .._data cimport TSDatabase
-from .._utils cimport RAND_R_MAX, rand_int
+from wildboar.utils.data cimport TSDatabase
+from wildboar.utils.rand cimport RAND_R_MAX, rand_int
+
 from ..distance._distance cimport (
     DistanceMeasure,
     TSCopy,

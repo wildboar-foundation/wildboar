@@ -17,12 +17,35 @@
 
 # Authors: Isak Samsten
 
-from libc.math cimport floor
+from libc.math cimport floor, sqrt
 from libc.stdlib cimport free, malloc
 from libc.string cimport memset
 from sklearn.utils._cython_blas cimport _nrm2
 
 from ._fft cimport _pocketfft
+
+
+cdef void fast_mean_std(
+    double* data,
+    Py_ssize_t length,
+    double *mean,
+    double* std,
+) nogil:
+    """Update the mean and standard deviation"""
+    cdef double ex = 0
+    cdef double ex2 = 0
+    cdef Py_ssize_t i
+    for i in range(length):
+        current_value = data[i]
+        ex += current_value
+        ex2 += current_value ** 2
+
+    mean[0] = ex / length
+    ex2 = ex2 / length - mean[0] * mean[0]
+    if ex2 > 0:
+        std[0] = sqrt(ex2)
+    else:
+        std[0] = 0.0
 
 
 cdef void inc_stats_init(IncStats *self) nogil:

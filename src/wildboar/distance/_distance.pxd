@@ -19,7 +19,7 @@
 
 cimport numpy as np
 
-from .._data cimport TSDatabase
+from wildboar.utils.data cimport TSDatabase
 
 
 cdef struct TSView:

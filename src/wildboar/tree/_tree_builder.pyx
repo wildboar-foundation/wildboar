@@ -27,16 +27,10 @@ from libc.math cimport INFINITY, NAN, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
-from .._data cimport TSDatabase, ts_database_new
-from .._utils cimport (
-    RAND_R_MAX,
-    RollingVariance,
-    argsort,
-    rand_int,
-    rand_uniform,
-    safe_realloc,
-)
-from ..embed._feature cimport Feature, FeatureEngineer
+from wildboar.embed._feature cimport Feature, FeatureEngineer
+from wildboar.utils._utils cimport argsort, safe_realloc
+from wildboar.utils.data cimport TSDatabase, ts_database_new
+from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
 cdef double FEATURE_THRESHOLD = 1e-7
