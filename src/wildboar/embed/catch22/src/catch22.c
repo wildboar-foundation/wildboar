@@ -1,9 +1,20 @@
+/**
+ * This file is part of wildboar.
+ *
+ * This is a modified implementation of a subset of catch22. The original
+ * code is licensed with GPLv3. This file retain GPLv3 license.
+ *
+ * Original author: Carl Henning Lubba
+ *
+ * Author: Isak Samsten
+ */
+
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-double _covariance(double *x, double *y, size_t length) {
+double _covariance(double *x, double *y, int length) {
     double sum_x = 0.0;
     double sum_y = 0.0;
     double sum_xy = 0.0;
@@ -27,7 +38,7 @@ double _covariance(double *x, double *y, size_t length) {
     return sum_xy / (k - 1);
 }
 
-double _mean(double *x, size_t length) {
+double _mean(double *x, int length) {
     double v = 0;
     for (int i = 0; i < length; i++) {
         v += x[i];
@@ -49,7 +60,7 @@ void _sort_double(double *x, int length) {
     qsort(x, length, sizeof(double), _double_compare);
 }
 
-double _quantile(double *x_sorted, size_t length, double quant) {
+double _quantile(double *x_sorted, int length, double quant) {
     double quant_idx, q, value;
     int idx_left, idx_right;
 
@@ -71,13 +82,12 @@ double _quantile(double *x_sorted, size_t length, double quant) {
     return value;
 }
 
-void histcount(double *x, size_t size, size_t n_bins, size_t *bin_count,
-               double *bin_edges) {
+void histcount(double *x, int size, int n_bins, int *bin_count, double *bin_edges) {
     double min_val = INFINITY;
     double max_val = -INFINITY;
-    memset(bin_count, 0, sizeof(size_t) * n_bins);
+    memset(bin_count, 0, sizeof(int) * n_bins);
 
-    for (size_t i = 0; i < size; i++) {
+    for (int i = 0; i < size; i++) {
         if (x[i] < min_val) {
             min_val = x[i];
         }
@@ -87,8 +97,8 @@ void histcount(double *x, size_t size, size_t n_bins, size_t *bin_count,
     }
 
     double bin_step = (max_val - min_val) / n_bins;
-    for (size_t i = 0; i < size; i++) {
-        size_t bin = (size_t)((x[i] - min_val) / bin_step);
+    for (int i = 0; i < size; i++) {
+        int bin = (int)((x[i] - min_val) / bin_step);
         if (bin < 0) {
             bin = 0;
         }
@@ -98,19 +108,19 @@ void histcount(double *x, size_t size, size_t n_bins, size_t *bin_count,
         bin_count[bin] += 1;
     }
 
-    for (size_t i = 0; i < n_bins + 1; i++) {
+    for (int i = 0; i < n_bins + 1; i++) {
         bin_edges[i] = i * bin_step + min_val;
     }
 }
 
-double histogram_mode(double *x, size_t length, size_t *hist_counts, double *bin_edges,
-                      size_t n_bins) {
+double histogram_mode(double *x, int length, int *hist_counts, double *bin_edges,
+                      int n_bins) {
     histcount(x, length, n_bins, hist_counts, bin_edges);
 
-    size_t max_count = 0;
-    size_t n_max_value = 1;
+    int max_count = 0;
+    int n_max_value = 1;
     double out = 0;
-    for (size_t i = 0; i < n_bins; i++) {
+    for (int i = 0; i < n_bins; i++) {
         if (hist_counts[i] > max_count) {
             max_count = hist_counts[i];
             n_max_value = 1;
@@ -124,8 +134,8 @@ double histogram_mode(double *x, size_t length, size_t *hist_counts, double *bin
     return out;
 }
 
-void histbinassign(double *x, const size_t length, double *bin_edges, size_t n_edges,
-                   size_t *bin) {
+void histbinassign(double *x, const int length, double *bin_edges, int n_edges,
+                   int *bin) {
     for (int i = 0; i < length; i++) {
         bin[i] = 0;
         for (int j = 0; j < n_edges; j++) {
@@ -136,9 +146,9 @@ void histbinassign(double *x, const size_t length, double *bin_edges, size_t n_e
         }
     }
 }
-void histcount_edges(double *x, size_t length, double *bin_edges, size_t n_edges,
-                     size_t *histcounts) {
-    memset(histcounts, 0, sizeof(size_t) * n_edges);
+void histcount_edges(double *x, int length, double *bin_edges, int n_edges,
+                     int *histcounts) {
+    memset(histcounts, 0, sizeof(int) * n_edges);
     for (int i = 0; i < length; i++) {
         for (int j = 0; j < n_edges; j++) {
             if (x[i] <= bin_edges[j]) {
@@ -149,7 +159,7 @@ void histcount_edges(double *x, size_t length, double *bin_edges, size_t n_edges
     }
 }
 
-double histogram_ami_even(double *x, size_t length, size_t tau, size_t n_bins) {
+double histogram_ami_even(double *x, int length, int tau, int n_bins) {
     double *x_lag = malloc((length - tau) * sizeof(double));
     double *x_pad = malloc((length - tau) * sizeof(double));
 
@@ -161,7 +171,7 @@ double histogram_ami_even(double *x, size_t length, size_t tau, size_t n_bins) {
     double min_val = INFINITY;
     double max_val = -INFINITY;
 
-    for (size_t i = 0; i < length; i++) {
+    for (int i = 0; i < length; i++) {
         if (x[i] < min_val) {
             min_val = x[i];
         }
@@ -176,8 +186,8 @@ double histogram_ami_even(double *x, size_t length, size_t tau, size_t n_bins) {
         bin_edges[i] = min_val + step_value * i - 0.1;
     }
 
-    size_t *lag_bins = (size_t *)malloc(sizeof(size_t) * length - tau);
-    size_t *pad_bins = (size_t *)malloc(sizeof(size_t) * length - tau);
+    int *lag_bins = (int *)malloc(sizeof(int) * length - tau);
+    int *pad_bins = (int *)malloc(sizeof(int) * length - tau);
     histbinassign(x_lag, length - tau, bin_edges, n_bins + 1, lag_bins);
     histbinassign(x_pad, length - tau, bin_edges, n_bins + 1, pad_bins);
 
@@ -191,8 +201,7 @@ double histogram_ami_even(double *x, size_t length, size_t tau, size_t n_bins) {
         merge_bin_edges[i] = i + 1;
     }
 
-    size_t *joint_hist_count =
-        (size_t *)malloc(sizeof(size_t) * (n_bins + 1) * (n_bins + 1));
+    int *joint_hist_count = (int *)malloc(sizeof(int) * (n_bins + 1) * (n_bins + 1));
     histcount_edges(merge_bins, length - tau, merge_bin_edges,
                     (n_bins + 1) * (n_bins + 1), joint_hist_count);
 
@@ -248,8 +257,8 @@ double histogram_ami_even(double *x, size_t length, size_t tau, size_t n_bins) {
     return ami;
 }
 
-int _is_constant(double *x, size_t length) {
-    for (size_t i = 0; i < length; i++) {
+int _is_constant(double *x, int length) {
+    for (int i = 0; i < length; i++) {
         if (x[i] != x[0]) {
             return 0;
         }
@@ -265,8 +274,7 @@ int _co_firstzero(double *ac, const int length, const int max_tau) {
     return ind;
 }
 
-void _sb_coarsegrain(double *x, size_t length, const size_t num_groups,
-                     size_t *labels) {
+void _sb_coarsegrain(double *x, int length, const int num_groups, int *labels) {
     double *x_sorted = malloc(length * sizeof(double));
     memcpy(x_sorted, x, length * sizeof(double));
     _sort_double(x_sorted, length);
@@ -293,8 +301,8 @@ void _sb_coarsegrain(double *x, size_t length, const size_t num_groups,
     free(quantile_threshold);
 }
 
-double transition_matrix_ac_sumdiagcov(double *x, double *ac, size_t length,
-                                       size_t n_groups) {
+double transition_matrix_ac_sumdiagcov(double *x, double *ac, int length,
+                                       int n_groups) {
     if (_is_constant(x, length)) {
         return NAN;
     }
@@ -308,7 +316,7 @@ double transition_matrix_ac_sumdiagcov(double *x, double *ac, size_t length,
         x_down[i] = x[i * tau];
     }
 
-    size_t *labels = malloc(n_down * sizeof(size_t));
+    int *labels = malloc(n_down * sizeof(int));
     _sb_coarsegrain(x_down, n_down, n_groups, labels);
 
     double T[3][3];
@@ -774,7 +782,7 @@ int splinefit(const double *y, const int size, double *yOut) {
     return 0;
 }
 
-double periodicity_wang_th0_01(double *x, size_t length) {
+double periodicity_wang_th0_01(double *x, int length) {
     const double th = 0.01;
 
     double *y_spline = malloc(length * sizeof(double));
@@ -815,11 +823,11 @@ double periodicity_wang_th0_01(double *x, size_t length) {
         slopeIn = acf[i] - acf[i - 1];
         slopeOut = acf[i + 1] - acf[i];
 
-        if (slopeIn<0 & slopeOut> 0) {
+        if (slopeIn < 0 && slopeOut > 0) {
             // printf("trough at %i\n", i);
             troughs[nTroughs] = i;
             nTroughs += 1;
-        } else if (slopeIn > 0 & slopeOut < 0) {
+        } else if (slopeIn > 0 && slopeOut < 0) {
             // printf("peak at %i\n", i);
             peaks[nPeaks] = i;
             nPeaks += 1;
@@ -881,7 +889,7 @@ double periodicity_wang_th0_01(double *x, size_t length) {
     return out;
 }
 
-double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, size_t length) {
+double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, int length) {
     int tau = _co_firstzero(ac, length, length);
 
     double max_tau = (double)length / 10;
@@ -890,7 +898,7 @@ double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, size_t length) {
     }
 
     double *x_lag = malloc((length - tau) * sizeof(double));
-    size_t x_lag_length = length - tau - 1;
+    int x_lag_length = length - tau - 1;
     for (int i = 0; i < x_lag_length; i++) {
         x_lag[i] = sqrt((x[i + 1] - x[i]) * (x[i + 1] - x[i]) +
                         (x[i + tau] - x[i + tau + 1]) * (x[i + tau] - x[i + tau + 1]));
@@ -916,10 +924,10 @@ double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, size_t length) {
     if (x_lag_std < 0.001) {
         return 0;
     }
-    size_t n_bins =
+    int n_bins =
         ceil((x_lag_max - x_lag_min) / (3.5 * x_lag_std / pow(x_lag_length, 1 / 3.)));
 
-    size_t *bin_count = malloc(n_bins * sizeof(size_t));
+    int *bin_count = malloc(n_bins * sizeof(int));
     double *bin_edges = malloc((n_bins + 1) * sizeof(double));
     histcount(x_lag, x_lag_length, n_bins, bin_count, bin_edges);
     double *bin_count_norm = malloc(n_bins * sizeof(double));
@@ -947,7 +955,7 @@ double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, size_t length) {
     return out;
 }
 
-double _corr(double *x, double *y, size_t length) {
+double _corr(double *x, double *y, int length) {
     double nom = 0;
     double denomX = 0;
     double denomY = 0;
@@ -964,11 +972,11 @@ double _corr(double *x, double *y, size_t length) {
     return denomX * denomY > 0 ? nom / sqrt(denomX * denomY) : 0;
 }
 
-double _autocorr_lag(double *x, size_t size, size_t lag) {
+double _autocorr_lag(double *x, int size, int lag) {
     return _corr(x, &(x[lag]), size - lag);
 }
 
-double auto_mutual_info_stats_gaussian_fmmi(double *x, size_t length, size_t tau) {
+double auto_mutual_info_stats_gaussian_fmmi(double *x, int length, int tau) {
     if (tau > ceil((double)length / 2)) {
         tau = ceil((double)length / 2);
     }
@@ -983,7 +991,7 @@ double auto_mutual_info_stats_gaussian_fmmi(double *x, size_t length, size_t tau
     // find first minimum of automutual information
     double fmmi = tau;
     for (int i = 1; i < tau - 1; i++) {
-        if (ami[i] < ami[i - 1] & ami[i] < ami[i + 1]) {
+        if (ami[i] < ami[i - 1] && ami[i] < ami[i + 1]) {
             fmmi = i;
             break;
         }
@@ -1010,8 +1018,8 @@ double _median(const double a[], const int size) {
     return m;
 }
 
-double outlier_include_np_mdrmd(double *x, size_t length, int sign, double inc) {
-    size_t n_signed = 0;
+double outlier_include_np_mdrmd(double *x, int length, int sign, double inc) {
+    int n_signed = 0;
     double *x_work = malloc(length * sizeof(double));
 
     // apply sign and check constant time series
@@ -1049,7 +1057,7 @@ double outlier_include_np_mdrmd(double *x, size_t length, int sign, double inc) 
     double *msDti1 = malloc(threshold * sizeof(double));
     double *msDti3 = malloc(threshold * sizeof(double));
     double *msDti4 = malloc(threshold * sizeof(double));
-    double *Dt_exc = malloc(threshold * sizeof(double));
+    double *Dt_exc = malloc(length * sizeof(double));
     for (int j = 0; j < threshold; j++) {
         int highSize = 0;
         for (int i = 0; i < length; i++) {
@@ -1093,15 +1101,15 @@ double outlier_include_np_mdrmd(double *x, size_t length, int sign, double inc) 
     return outputScalar;
 }
 
-void _cumsum(const double a[], const int size, double b[]) {
-    b[0] = a[0];
+void _cumsum(double *x, int size, double *out) {
+    out[0] = x[0];
     for (int i = 1; i < size; i++) {
-        b[i] = a[i] + b[i - 1];
+        out[i] = x[i] + out[i - 1];
     }
 }
 
-double summaries_welch_rect(double *x, size_t length, int what, double *S, double *f,
-                            size_t n_welch) {
+double summaries_welch_rect(double *x, int length, int what, double *S, double *f,
+                            int n_welch) {
     // angualr frequency and spectrum on that
     double *w = malloc(n_welch * sizeof(double));
     double *Sw = malloc(n_welch * sizeof(double));
@@ -1147,4 +1155,327 @@ double summaries_welch_rect(double *x, size_t length, int what, double *S, doubl
     free(Sw);
     free(csS);
     return output;
+}
+
+double _f_entropy(double *x, int length) {
+    double f = 0.0;
+    for (int i = 0; i < length; i++) {
+        if (x[i] > 0) {
+            f += x[i] * log(x[i]);
+        }
+    }
+    return -1 * f;
+}
+
+void _subset(int *x, int *y, int start, int end) {
+    int j = 0;
+    for (int i = start; i < end; i++) {
+        y[j++] = x[i];
+    }
+    return;
+}
+
+double motif_three_quantile_hh(double *x, int size) {
+    int tmp_idx, r_idx;
+    int dynamic_idx;
+    int alphabet_size = 3;
+    int array_size;
+    int *yt = malloc(size * sizeof(int));
+    double hh;
+    double *out = malloc(124 * sizeof(double));
+
+    _sb_coarsegrain(x, size, 3, yt);
+
+    // words of length 1
+    array_size = alphabet_size;
+    int **r1 = malloc(array_size * sizeof(*r1));
+    int *sizes_r1 = malloc(array_size * sizeof(sizes_r1));
+    double *out1 = malloc(array_size * sizeof(out1));
+    for (int i = 0; i < alphabet_size; i++) {
+        r1[i] = malloc(size * sizeof(r1[i]));
+        r_idx = 0;
+        sizes_r1[i] = 0;
+        for (int j = 0; j < size; j++) {
+            if (yt[j] == i + 1) {
+                r1[i][r_idx++] = j;
+                sizes_r1[i]++;
+            }
+        }
+    }
+
+    // words of length 2
+    array_size *= alphabet_size;
+
+    for (int i = 0; i < alphabet_size; i++) {
+        if (sizes_r1[i] != 0 && r1[i][sizes_r1[i] - 1] == size - 1) {
+            // int * tmp_ar = malloc((sizes_r1[i] - 1) * sizeof(tmp_ar));
+            int *tmp_ar = malloc(sizes_r1[i] * sizeof(tmp_ar));
+            _subset(r1[i], tmp_ar, 0, sizes_r1[i]);
+            memcpy(r1[i], tmp_ar, (sizes_r1[i] - 1) * sizeof(tmp_ar));
+            sizes_r1[i]--;
+            free(tmp_ar);
+        }
+    }
+
+    int ***r2 = malloc(alphabet_size * sizeof(**r2));
+    int **sizes_r2 = malloc(alphabet_size * sizeof(*sizes_r2));
+    double **out2 = malloc(alphabet_size * sizeof(*out2));
+
+    // allocate separately
+    for (int i = 0; i < alphabet_size; i++) {
+        r2[i] = malloc(alphabet_size * sizeof(*r2[i]));
+        sizes_r2[i] = malloc(alphabet_size * sizeof(*sizes_r2[i]));
+        // out2[i] = malloc(alphabet_size * sizeof(out2[i]));
+        out2[i] = malloc(alphabet_size * sizeof(**out2));
+        for (int j = 0; j < alphabet_size; j++) {
+            r2[i][j] = malloc(size * sizeof(*r2[i][j]));
+        }
+    }
+
+    // fill separately
+    for (int i = 0; i < alphabet_size; i++) {
+        // for (int i = 0; i < array_size; i++) {
+        // r2[i] = malloc(alphabet_size * sizeof(r2[i]));
+        // sizes_r2[i] = malloc(alphabet_size * sizeof(sizes_r2[i]));
+        // out2[i] = malloc(alphabet_size * sizeof(out2[i]));
+        for (int j = 0; j < alphabet_size; j++) {
+            // r2[i][j] = malloc(size * sizeof(r2[i][j]));
+            sizes_r2[i][j] = 0;
+            dynamic_idx = 0;  // workaround as you can't just add elements to array
+            // like in python (list.append()) for example, so since for some k there
+            // will be no adding, you need to keep track of the idx at which elements
+            // will be inserted
+            for (int k = 0; k < sizes_r1[i]; k++) {
+                tmp_idx = yt[r1[i][k] + 1];
+                if (tmp_idx == (j + 1)) {
+                    r2[i][j][dynamic_idx++] = r1[i][k];
+                    sizes_r2[i][j]++;
+                    // printf("dynamic_idx=%i, size = %i\n", dynamic_idx, size);
+                }
+            }
+            double tmp = (double)sizes_r2[i][j] / ((double)(size) - (double)(1.0));
+            out2[i][j] = tmp;
+        }
+    }
+
+    hh = 0.0;
+    for (int i = 0; i < alphabet_size; i++) {
+        hh += _f_entropy(out2[i], alphabet_size);
+    }
+
+    free(yt);
+    free(out);
+
+    free(sizes_r1);
+
+    // free nested array
+    for (int i = 0; i < alphabet_size; i++) {
+        free(r1[i]);
+    }
+    free(r1);
+    // free(sizes_r1);
+
+    for (int i = 0; i < alphabet_size; i++) {
+        // for (int i = alphabet_size - 1; i >= 0; i--) {
+
+        free(sizes_r2[i]);
+        free(out2[i]);
+    }
+
+    // for (int i = alphabet_size-1; i >= 0 ; i--) {
+    for (int i = 0; i < alphabet_size; i++) {
+        for (int j = 0; j < alphabet_size; j++) {
+            free(r2[i][j]);
+        }
+        free(r2[i]);
+    }
+
+    free(r2);
+    free(sizes_r2);
+    free(out2);
+
+    return hh;
+}
+
+int _linreg(int n, double *x, double *y, double *m, double *b) {
+    double sumx = 0.0;  /* sum of x     */
+    double sumx2 = 0.0; /* sum of x**2  */
+    double sumxy = 0.0; /* sum of x * y */
+    double sumy = 0.0;  /* sum of y     */
+    double sumy2 = 0.0; /* sum of y**2  */
+
+    for (int i = 0; i < n; i++) {
+        sumx += x[i];
+        sumx2 += x[i] * x[i];
+        sumxy += x[i] * y[i];
+        sumy += y[i];
+        sumy2 += y[i] * y[i];
+    }
+
+    double denom = (n * sumx2 - sumx * sumx);
+    if (denom == 0) {
+        *m = 0;
+        *b = 0;
+        return 1;
+    }
+
+    *m = (n * sumxy - sumx * sumy) / denom;
+    *b = (sumy * sumx2 - sumx * sumxy) / denom;
+
+    return 0;
+}
+
+double _norm(double *x, int length) {
+    double out = 0.0;
+    for (int i = 0; i < length; i++) {
+        out += x[i] * x[i];
+    }
+    return sqrt(out);
+}
+
+double fluct_anal_2_50_1_logi_prop_r1(double *y, int size, int lag, int how) {
+    // generate log spaced tau vector
+    double linLow = log(5);
+    double linHigh = log(size / 2);
+
+    int nTauSteps = 50;
+    double tauStep = (linHigh - linLow) / (nTauSteps - 1);
+
+    int tau[50];
+    for (int i = 0; i < nTauSteps; i++) {
+        tau[i] = round(exp(linLow + i * tauStep));
+    }
+
+    // check for uniqueness, use ascending order
+    int nTau = nTauSteps;
+    for (int i = 0; i < nTauSteps - 1; i++) {
+        while (tau[i] == tau[i + 1] && i < nTau - 1) {
+            for (int j = i + 1; j < nTauSteps - 1; j++) {
+                tau[j] = tau[j + 1];
+            }
+            // lost one
+            nTau -= 1;
+        }
+    }
+
+    // fewer than 12 points -> leave.
+    if (nTau < 12) {
+        return 0;
+    }
+
+    int sizeCS = size / lag;
+    double *yCS = malloc(sizeCS * sizeof(double));
+
+    // transform input vector to cumsum
+    yCS[0] = y[0];
+    for (int i = 0; i < sizeCS - 1; i++) {
+        yCS[i + 1] = yCS[i] + y[(i + 1) * lag];
+    }
+
+    // for each value of tau, cut signal into snippets of length tau, detrend and
+    // first generate a support for regression (detrending)
+    double *xReg = malloc(tau[nTau - 1] * sizeof *xReg);
+    for (int i = 0; i < tau[nTau - 1]; i++) {
+        xReg[i] = i + 1;
+    }
+
+    // iterate over taus, cut signal, detrend and save amplitude of remaining signal
+    double *F = malloc(nTau * sizeof *F);
+    for (int i = 0; i < nTau; i++) {
+        int nBuffer = sizeCS / tau[i];
+        double *buffer = malloc(tau[i] * sizeof *buffer);
+        double m = 0.0, b = 0.0;
+
+        F[i] = 0;
+        for (int j = 0; j < nBuffer; j++) {
+            _linreg(tau[i], xReg, yCS + j * tau[i], &m, &b);
+            for (int k = 0; k < tau[i]; k++) {
+                buffer[k] = yCS[j * tau[i] + k] - (m * (k + 1) + b);
+            }
+
+            if (how == 0) {
+                double max_val = -INFINITY;
+                double min_val = INFINITY;
+                for (int k = 0; k < tau[i]; k++) {
+                    if (buffer[k] > max_val) max_val = buffer[k];
+                    if (buffer[k] < min_val) min_val = buffer[k];
+                }
+                double diff = max_val - min_val;
+                F[i] += diff * diff;
+            } else if (how == 1) {
+                for (int k = 0; k < tau[i]; k++) {
+                    F[i] += buffer[k] * buffer[k];
+                }
+            } else {
+                return 0.0;
+            }
+        }
+
+        if (how == 0) {
+            F[i] = sqrt(F[i] / nBuffer);
+        } else if (how == 1) {
+            F[i] = sqrt(F[i] / (nBuffer * tau[i]));
+        }
+
+        free(buffer);
+    }
+
+    double *logtt = malloc(nTau * sizeof *logtt);
+    double *logFF = malloc(nTau * sizeof *logFF);
+    int ntt = nTau;
+
+    for (int i = 0; i < nTau; i++) {
+        logtt[i] = log(tau[i]);
+        logFF[i] = log(F[i]);
+    }
+
+    int minPoints = 6;
+    int nsserr = (ntt - 2 * minPoints + 1);
+    double *sserr = malloc(nsserr * sizeof *sserr);
+    double *buffer = malloc((ntt - minPoints + 1) * sizeof *buffer);
+    for (int i = minPoints; i < ntt - minPoints + 1; i++) {
+        double m1 = 0.0, b1 = 0.0;
+        double m2 = 0.0, b2 = 0.0;
+
+        sserr[i - minPoints] = 0.0;
+
+        _linreg(i, logtt, logFF, &m1, &b1);
+        _linreg(ntt - i + 1, logtt + i - 1, logFF + i - 1, &m2, &b2);
+
+        for (int j = 0; j < i; j++) {
+            buffer[j] = logtt[j] * m1 + b1 - logFF[j];
+        }
+
+        sserr[i - minPoints] += _norm(buffer, i);
+
+        for (int j = 0; j < ntt - i + 1; j++) {
+            buffer[j] = logtt[j + i - 1] * m2 + b2 - logFF[j + i - 1];
+        }
+
+        sserr[i - minPoints] += _norm(buffer, ntt - i + 1);
+    }
+
+    double firstMinInd = 0.0;
+    double minimum = INFINITY;
+    for (int i = 0; i < nsserr; i++) {
+        if (sserr[i] < minimum) minimum = sserr[i];
+    }
+
+    for (int i = 0; i < nsserr; i++) {
+        if (sserr[i] == minimum) {
+            firstMinInd = i + minPoints - 1;
+            break;
+        }
+    }
+
+    free(yCS);  // new
+
+    free(xReg);
+    free(F);
+    free(logtt);
+    free(logFF);
+    free(sserr);
+    free(buffer);
+
+    return (firstMinInd + 1) / ntt;
 }

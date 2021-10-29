@@ -17,34 +17,20 @@
 #
 # Authors: Isak Samsten
 
-cdef double _histogram_mode(
-    double *x,
-    Py_ssize_t length,
-    size_t *bin_count,
-    double *bin_edges,
-    size_t n_bins,
-) nogil
-
 cdef double histogram_mode10(
         double *x,
         Py_ssize_t length,
-        size_t *bin_count,
+        int *bin_count,
         double *bin_edges
 ) nogil
 
 cdef double histogram_mode5(
         double *x,
         Py_ssize_t length,
-        size_t *bin_count,
+        int *bin_count,
         double *bin_edges
 ) nogil
 
-cdef double _histogram_ami_even(
-    double *x,
-    Py_ssize_t length,
-    size_t tau,
-    size_t n_bins,
-) nogil
 
 cdef double histogram_ami_even_2_5(double *x, Py_ssize_t length) nogil
 
@@ -62,16 +48,22 @@ cdef double hrv_classic_pnn(Py_ssize_t stride, double *x, Py_ssize_t n, double p
 
 cdef double above_mean_stretch(Py_ssize_t stride, double *x, Py_ssize_t n) nogil
 
+cdef double below_diff_stretch(double *x, Py_ssize_t n) nogil
+
 cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t lag) nogil
 
-cdef double periodicity_wang_th0_01(double *x, size_t length) nogil
+cdef double periodicity_wang_th0_01(double *x, int length) nogil
 
-cdef double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, size_t length) nogil
+cdef double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, int length) nogil
 
-cdef double auto_mutual_info_stats_gaussian_fmmi(double *x, size_t length, size_t tau) nogil 
+cdef double auto_mutual_info_stats_gaussian_fmmi(double *x, int length, int tau) nogil 
 
-cdef double outlier_include_np_mdrmd(double *x, size_t length, int sign, double inc) nogil
+cdef double outlier_include_np_mdrmd(double *x, int length, int sign, double inc) nogil
 
 cdef double summaries_welch_rect(
-    double *x, size_t length, int what, double *S, double *f, size_t n_welch
+    double *x, int length, int what, double *S, double *f, int n_welch
 ) nogil
+
+cdef double motif_three_quantile_hh(double *x, int length) nogil
+
+cdef double fluct_anal_2_50_1_logi_prop_r1(double *x, int length, int lag, int how) nogil

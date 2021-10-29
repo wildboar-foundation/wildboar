@@ -152,12 +152,12 @@ cdef class MeanVarianceSlopeSummarizer(MultiSummarizer):
 
 
 cdef class Catch22Summarizer(Summarizer):
-    cdef size_t *bin_count
+    cdef int *bin_count
     cdef double *bin_edges
     cdef double *x_buffer
 
     def __cinit__(self):
-        self.bin_count = <size_t*>malloc(sizeof(size_t) * 10)
+        self.bin_count = <int*>malloc(sizeof(int) * 10)
         self.bin_edges = <double*>malloc(sizeof(double) * 11)
 
     def __dealloc__(self):
@@ -213,7 +213,7 @@ cdef class Catch22Summarizer(Summarizer):
         out[5 * out_stride] = _catch22.trev_1_num(x_stride, x, length)
         out[6 * out_stride] = _catch22.hrv_classic_pnn(x_stride, x, length, 40)
         out[7 * out_stride] = _catch22.above_mean_stretch(x_stride, x, length)
-        out[8 * out_stride] = _catch22.transition_matrix_3ac_sumdiagcov(x, ac, length)# _catch22.local_mean_std(x_stride, x, length, 3)
+        out[8 * out_stride] = _catch22.transition_matrix_3ac_sumdiagcov(x, ac, length)
         out[9 * out_stride] = _catch22.periodicity_wang_th0_01(x, length)
         out[10 * out_stride] = _catch22.embed2_dist_tau_d_expfit_meandiff(x, ac, length)
         out[11 * out_stride] = _catch22.auto_mutual_info_stats_gaussian_fmmi(x, length, 40)
@@ -221,12 +221,12 @@ cdef class Catch22Summarizer(Summarizer):
         out[13 * out_stride] = _catch22.outlier_include_np_mdrmd(x, length, 1, 0.01)
         out[14 * out_stride] = _catch22.outlier_include_np_mdrmd(x, length, -1, 0.01)
         out[15 * out_stride] = _catch22.summaries_welch_rect(x, length, 1, welch_s, welch_f, n_welch)
-        out[16 * out_stride] = 0.0
-        out[17 * out_stride] = 0.0
-        out[18 * out_stride] = 0.0
-        out[19 * out_stride] = 0.0
-        out[20 * out_stride] = 0.0
-        out[21 * out_stride] = 0.0
+        out[16 * out_stride] = _catch22.below_diff_stretch(x, length)
+        out[17 * out_stride] = _catch22.motif_three_quantile_hh(x, length)
+        out[18 * out_stride] = _catch22.fluct_anal_2_50_1_logi_prop_r1(x, length, 1, 0)
+        out[19 * out_stride] = _catch22.fluct_anal_2_50_1_logi_prop_r1(x, length, 2, 1)
+        out[20 * out_stride] = _catch22.summaries_welch_rect(x, length, 0, welch_s, welch_f, n_welch)
+        out[21 * out_stride] = _catch22.local_mean_std(x_stride, x, length, 3)
 
         if x_buffer != NULL:
             free(x)
