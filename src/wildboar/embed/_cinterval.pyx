@@ -25,7 +25,7 @@ from libc.stdlib cimport free, malloc
 
 from wildboar.utils cimport stats
 from wildboar.utils._utils cimport to_ndarray_double
-from wildboar.utils.data cimport TSDatabase, ts_database_new
+from wildboar.utils.data cimport Dataset, dataset_new
 from wildboar.utils.rand cimport RAND_R_MAX, rand_int, shuffle
 
 from ._feature cimport Feature, FeatureEngineer
@@ -47,7 +47,7 @@ cdef class Summarizer:
     ) nogil:
         pass
 
-    cdef void init(self, TSDatabase *td) nogil:
+    cdef void init(self, Dataset *td) nogil:
         pass
 
     cdef Py_ssize_t n_outputs(self) nogil:
@@ -151,7 +151,7 @@ cdef class Catch22Summarizer(Summarizer):
         if self.bin_count == NULL or self.bin_edges == NULL:
             raise MemoryError()
 
-    cdef void init(self, TSDatabase *td) nogil:
+    cdef void init(self, Dataset *td) nogil:
         cdef Py_ssize_t n_timestep = td.n_timestep
         cdef Py_ssize_t welch_length = stats.next_power_of_2(n_timestep)
         self.ac = <double*> malloc(sizeof(double) * n_timestep)
@@ -245,7 +245,7 @@ cdef class PyFuncSummarizer(Summarizer):
     def __reduce__(self):
         return self.__class__, (self.func, )
 
-    cdef void init(self, TSDatabase *td) nogil:
+    cdef void init(self, Dataset *td) nogil:
         with gil:
             self.x_buffer = np.ndarray(td.n_timestep)
 
@@ -291,20 +291,20 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.n_intervals, self.summarizer)
 
-    cdef Py_ssize_t init(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t init(self, Dataset *td) nogil:
         self.summarizer.init(td)
         return 0
 
-    cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t get_n_features(self, Dataset *td) nogil:
         return td.n_dims * self.n_intervals
 
-    cdef Py_ssize_t get_n_outputs(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t get_n_outputs(self, Dataset *td) nogil:
         return self.get_n_features(td) * self.summarizer.n_outputs()
 
     cdef Py_ssize_t next_feature(
             self,
             Py_ssize_t feature_id,
-            TSDatabase *td,
+            Dataset *td,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,
@@ -339,7 +339,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
 
     cdef Py_ssize_t init_persistent_feature(
             self,
-            TSDatabase *td,
+            Dataset *td,
             Feature *transient,
             Feature *persistent
     ) nogil:
@@ -355,7 +355,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     cdef double transient_feature_value(
             self,
             Feature *feature,
-            TSDatabase *td,
+            Dataset *td,
             Py_ssize_t sample
     ) nogil:
         cdef Interval *interval = <Interval*> feature.feature
@@ -375,7 +375,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     cdef double persistent_feature_value(
             self,
             Feature *feature,
-            TSDatabase *td,
+            Dataset *td,
             Py_ssize_t sample
     ) nogil:
         return self.transient_feature_value(feature, td, sample)
@@ -383,9 +383,9 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t transient_feature_fill(
             self,
             Feature *feature,
-            TSDatabase *td,
+            Dataset *td,
             Py_ssize_t sample,
-            TSDatabase *td_out,
+            Dataset *td_out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
     ) nogil:
@@ -411,9 +411,9 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t persistent_feature_fill(
             self,
             Feature *feature,
-            TSDatabase *td,
+            Dataset *td,
             Py_ssize_t sample,
-            TSDatabase *td_out,
+            Dataset *td_out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
     ) nogil:
@@ -454,13 +454,13 @@ cdef class RandomFixedIntervalFeatureEngineer(IntervalFeatureEngineer):
         for i in range(n_intervals):
             self.random_feature_id[i] = i
 
-    cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t get_n_features(self, Dataset *td) nogil:
         return td.n_dims * self.n_random_interval
 
     cdef Py_ssize_t next_feature(
             self,
             Py_ssize_t feature_id,
-            TSDatabase *td,
+            Dataset *td,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,
@@ -509,13 +509,13 @@ cdef class RandomIntervalFeatureEngineer(IntervalFeatureEngineer):
             self.max_length,
         )
 
-    cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t get_n_features(self, Dataset *td) nogil:
         return self.n_intervals
 
     cdef Py_ssize_t next_feature(
             self,
             Py_ssize_t feature_id,
-            TSDatabase *td,
+            Dataset *td,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,

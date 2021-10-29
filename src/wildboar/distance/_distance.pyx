@@ -28,7 +28,7 @@ from libc.stdlib cimport free, malloc
 
 from . import _dtw_distance, _euclidean_distance
 
-from wildboar.utils.data cimport TSDatabase, ts_database_new
+from wildboar.utils.data cimport Dataset, dataset_new
 
 from ._distance cimport DistanceMeasure, TSCopy
 
@@ -87,7 +87,7 @@ cdef void ts_view_free(TSView *ts_view) nogil:
         ts_view.extra = NULL
 
 
-cdef int _ts_view_update_statistics(TSView *ts_view, const TSDatabase *td) nogil:
+cdef int _ts_view_update_statistics(TSView *ts_view, const Dataset *td) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef Py_ssize_t shapelet_offset = (
             ts_view.index * td.sample_stride +
@@ -123,14 +123,14 @@ cdef class DistanceMeasure:
         return self.__class__, (self.n_timestep,)
 
 
-    cdef int init(self, TSDatabase *td) nogil:
+    cdef int init(self, Dataset *td) nogil:
         return 0
 
 
     cdef void ts_view_sub_distances(
         self,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t *samples,
         double *distances,
         Py_ssize_t n_samples,
@@ -154,7 +154,7 @@ cdef class DistanceMeasure:
 
     cdef int init_ts_view(
         self,
-        TSDatabase *_td,
+        Dataset *_td,
         TSView *ts_view,
         Py_ssize_t index,
         Py_ssize_t start,
@@ -218,7 +218,7 @@ cdef class DistanceMeasure:
         self,
         TSCopy *ts_copy,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
     ) nogil:
         ts_copy_init(ts_copy, ts_view.dim, ts_view.length, ts_view.mean, ts_view.std)
         ts_copy.ts_start = ts_view.start
@@ -242,7 +242,7 @@ cdef class DistanceMeasure:
     cdef double ts_view_sub_distance(
         self,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
     ) nogil:
         """Return the minimum distance
@@ -266,7 +266,7 @@ cdef class DistanceMeasure:
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -288,7 +288,7 @@ cdef class DistanceMeasure:
     cdef int ts_copy_sub_matches(
         self,
         TSCopy *s_ptr,
-        TSDatabase *td_ptr,
+        Dataset *td_ptr,
         Py_ssize_t t_index,
         double threshold,
         Py_ssize_t** matches,
@@ -325,7 +325,7 @@ cdef class DistanceMeasure:
             raise NotImplementedError()
 
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+    cdef double ts_copy_distance(self, TSCopy *s, Dataset *td, Py_ssize_t t_index) nogil:
         return self.ts_copy_sub_distance(s, td, t_index)
 
 
@@ -356,7 +356,7 @@ cdef class ScaledDistanceMeasure(DistanceMeasure):
 
     cdef int init_ts_view(
         self,
-        TSDatabase *td,
+        Dataset *td,
         TSView *ts_view,
         Py_ssize_t index,
         Py_ssize_t start,
@@ -389,7 +389,7 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -409,7 +409,7 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
     cdef double ts_view_sub_distance(
         self,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
     ) nogil:
         cdef Py_ssize_t i
@@ -429,7 +429,7 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
     cdef double ts_copy_distance(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
     ) nogil:
         return self.ts_copy_sub_distance(ts_copy, td, t_index)
@@ -501,7 +501,7 @@ cpdef DistanceMeasure get_distance_measure(
     metric : str or callable
         A metric name or callable
 
-    td : TSDatabase
+    td : Dataset
         Number of maximum number of timesteps in the database
 
     metric_params : dict, optional
@@ -535,7 +535,7 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
             sample = 0
         else:
             sample = np.arange(x.shape[0])
-    cdef TSDatabase sd = ts_database_new(x)
+    cdef Dataset sd = dataset_new(x)
 
     _check_dim(dim, sd.n_dims)
     cdef double min_dist
@@ -614,7 +614,7 @@ def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metr
         else:
             sample = np.arange(x.shape[0])
 
-    cdef TSDatabase sd = ts_database_new(x)
+    cdef Dataset sd = dataset_new(x)
 
     cdef Py_ssize_t *matches
     cdef double *distances

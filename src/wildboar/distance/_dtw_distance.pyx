@@ -36,11 +36,9 @@ from libc.math cimport INFINITY, floor, sqrt
 from libc.stdlib cimport free, malloc
 
 from wildboar.utils cimport stats
-from wildboar.utils.data cimport TSDatabase
+from wildboar.utils.data cimport Dataset
 
 from ._distance cimport DistanceMeasure, ScaledDistanceMeasure, TSCopy, TSView
-
-from wildboar.utils._utils import check_array_fast
 
 
 cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
@@ -711,8 +709,6 @@ def _dtw_alignment(np.ndarray x, np.ndarray y, Py_ssize_t r, np.ndarray out=None
     """
     if not 0 < r < max(x.shape[0], y.shape[0]):
         raise ValueError("invalid r")
-    x = check_array_fast(x, c_order=False)
-    y = check_array_fast(y, c_order=False)
     cdef Py_ssize_t x_size = x.shape[0]
     cdef Py_ssize_t y_size = y.shape[0]
     if out is None:
@@ -753,13 +749,13 @@ def _dtw_distance(np.ndarray x, np.ndarray y, Py_ssize_t r, bint scale=False):
     """
     if not 0 < r < max(x.shape[0], y.shape[0]):
         raise ValueError("invalid r")
-    x = check_array_fast(x)
-    y = check_array_fast(y)
+
+    if not x.ndim == 1 and y.ndim == 1:
+        raise ValueError("invalid array. expect 1d.")
+
     cdef Py_ssize_t x_length = <Py_ssize_t> x.shape[0]
-    cdef Py_ssize_t x_stride = <Py_ssize_t> x.strides[0] / <Py_ssize_t> x.itemsize
     cdef double *x_data = <double*> x.data
     cdef Py_ssize_t y_length = <Py_ssize_t> y.shape[0]
-    cdef Py_ssize_t y_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
     cdef double *y_data = <double*> y.data
     cdef double x_mean = 0
     cdef double x_std = 1
@@ -878,8 +874,8 @@ def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r
     if not 0 < r < x.shape[0]:
         raise ValueError("invalid r")
     x = np.ascontiguousarray(x, dtype=np.float64)
-    lower = check_array_fast(lower)
-    upper = check_array_fast(upper)
+    lower = np.ascontiguousarray(lower, dtype=np.float64)
+    upper = np.ascontiguousarray(upper, dtype=np.float64)
     cdef Py_ssize_t i
     cdef Py_ssize_t length = x.shape[0]
     cdef double *data = <double*> x.data
@@ -998,14 +994,14 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
     cdef int init_ts_view(
         self,
-        TSDatabase *td_ptr,
+        Dataset *td_ptr,
         TSView *ts_view,
         Py_ssize_t index,
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
     ) nogil:
-        cdef TSDatabase td = td_ptr[0]
+        cdef Dataset td = td_ptr[0]
         ScaledDistanceMeasure.init_ts_view(
             self, td_ptr, ts_view, index, start, length, dim
         )
@@ -1034,14 +1030,14 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         return 0
 
 
-    cdef int init_ts_copy(self, TSCopy *shapelet, TSView *tv_ptr, TSDatabase *td_ptr) nogil:
+    cdef int init_ts_copy(self, TSCopy *shapelet, TSView *tv_ptr, Dataset *td_ptr) nogil:
         cdef int err = ScaledDistanceMeasure.init_ts_copy(
             self, shapelet, tv_ptr, td_ptr
         )
         if err == -1:
             return -1
 
-        cdef TSDatabase td = td_ptr[0]
+        cdef Dataset td = td_ptr[0]
         cdef TSView shapelet_info = tv_ptr[0]
 
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
@@ -1092,7 +1088,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *s,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -1157,7 +1153,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         return distance
 
 
-    cdef double ts_view_sub_distance(self, TSView *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+    cdef double ts_view_sub_distance(self, TSView *s, Dataset *td, Py_ssize_t t_index) nogil:
         cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
         cdef Py_ssize_t shapelet_offset = (
             s.index * td.sample_stride +
@@ -1199,7 +1195,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         )
 
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+    cdef double ts_copy_distance(self, TSCopy *s, Dataset *td, Py_ssize_t t_index) nogil:
         cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
         cdef Py_ssize_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
 
@@ -1274,7 +1270,7 @@ cdef class DtwDistance(DistanceMeasure):
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *s,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index = NULL,
     ) nogil:
@@ -1294,8 +1290,8 @@ cdef class DtwDistance(DistanceMeasure):
 
 
     cdef double ts_view_sub_distance(
-            self, TSView *ts_ptr, TSDatabase *td_ptr, Py_ssize_t t_index) nogil:
-        cdef TSDatabase td = td_ptr[0]
+            self, TSView *ts_ptr, Dataset *td_ptr, Py_ssize_t t_index) nogil:
+        cdef Dataset td = td_ptr[0]
         cdef TSView s = ts_ptr[0]
         cdef Py_ssize_t sample_offset = (
             t_index * td.sample_stride +
@@ -1321,7 +1317,7 @@ cdef class DtwDistance(DistanceMeasure):
     cdef int ts_copy_matches(
         self,
         TSCopy *s,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         double threshold,
         Py_ssize_t** matches,
@@ -1331,7 +1327,7 @@ cdef class DtwDistance(DistanceMeasure):
         with gil:
             raise NotImplemented()
 
-    cdef double ts_copy_distance(self, TSCopy *s, TSDatabase *td, Py_ssize_t t_index) nogil:
+    cdef double ts_copy_distance(self, TSCopy *s, Dataset *td, Py_ssize_t t_index) nogil:
         cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
         cdef Py_ssize_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
         cdef Py_ssize_t max_length = max(s.length, td.n_timestep)

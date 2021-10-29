@@ -29,7 +29,7 @@ from libc.string cimport memcpy, memset
 
 from wildboar.embed._feature cimport Feature, FeatureEngineer
 from wildboar.utils._utils cimport argsort, safe_realloc
-from wildboar.utils.data cimport TSDatabase, ts_database_new
+from wildboar.utils.data cimport Dataset, dataset_new
 from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
@@ -536,7 +536,7 @@ cdef class Tree:
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
 
-        cdef TSDatabase ts = ts_database_new(X)
+        cdef Dataset ts = dataset_new(X)
         cdef np.ndarray[np.npy_intp] out = np.zeros((ts.n_samples,), dtype=np.intp)
         cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
         cdef Feature *feature
@@ -562,7 +562,7 @@ cdef class Tree:
     cpdef np.ndarray decision_path(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
-        cdef TSDatabase ts = ts_database_new(X)
+        cdef Dataset ts = dataset_new(X)
         cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
 
         cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
@@ -710,7 +710,7 @@ cdef class TreeBuilder:
     cdef double *sample_weights
 
     # the dataset of time series
-    cdef TSDatabase td
+    cdef Dataset td
 
     # the number of samples with non-zero weight
     cdef Py_ssize_t n_samples
@@ -749,7 +749,7 @@ cdef class TreeBuilder:
         self.min_impurity_decrease = min_impurity_decrease
         self.random_seed = random_state.randint(0, RAND_R_MAX)
 
-        self.td = ts_database_new(X)
+        self.td = dataset_new(X)
         self.feature_engineer = feature_engineer
         self.criterion = criterion
         self.tree = tree

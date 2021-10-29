@@ -31,5 +31,3 @@ cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1
 cdef np.ndarray to_ndarray_int(Py_ssize_t *arr, Py_ssize_t n)
 
 cdef np.ndarray to_ndarray_double(double *arr, Py_ssize_t n)
-
-cpdef check_array_fast(np.ndarray x, bint ensure_2d=*, bint allow_nd=*, bint c_order=*)

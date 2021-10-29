@@ -20,7 +20,7 @@
 cimport numpy as np
 
 
-cdef struct TSDatabase:
+cdef struct Dataset:
     Py_ssize_t n_samples  # the number of samples
     Py_ssize_t n_timestep  # the number of timesteps
     Py_ssize_t n_dims
@@ -30,4 +30,4 @@ cdef struct TSDatabase:
     Py_ssize_t dim_stride  # the dimension stride
 
 
-cdef TSDatabase ts_database_new(np.ndarray X)
+cdef Dataset dataset_new(np.ndarray X)

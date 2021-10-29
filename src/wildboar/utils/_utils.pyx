@@ -150,42 +150,6 @@ cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1:
     ptr[0] = tmp
     return 0
 
-
-cpdef check_array_fast(np.ndarray x, bint ensure_2d=False, bint allow_nd=False, bint c_order=True):
-    """Ensure that the array is valid and with dtype=np.float64.
-
-    Parameters
-    ----------
-    x : ndarray
-        The array to validate.
-
-    ensure_2d : bool, optional
-        Ensure that the array has 2 dimensions.
-
-    allow_nd : bool, optional
-        Allow more than 2 dimensions. Only valid if ensure_2d=False.
-
-    c_order : bool, optional
-        Ensure that the returned array is in row-major order.
-
-    Returns
-    -------
-    x : ndarray
-        Either a copy or the original array validated.
-    """
-    if ensure_2d:
-        if x.ndim != 2:
-            raise ValueError("not 2d, got %rd" % x.ndim)
-    else:
-        if not allow_nd and x.ndim > 1:
-            raise ValueError("not 1d, got %rd" % x.ndim)
-
-    if not x.flags.c_contiguous and c_order:
-        x = np.ascontiguousarray(x, dtype=np.float64)
-    if not x.dtype == np.float64:
-        x = x.astype(np.float64)
-    return x
-
 cdef np.ndarray to_ndarray_int(Py_ssize_t *arr, Py_ssize_t n):
     cdef Py_ssize_t i
     cdef np.ndarray out = np.zeros(n, dtype=int)

@@ -19,7 +19,7 @@
 
 cimport numpy as np
 
-from wildboar.utils.data cimport TSDatabase
+from wildboar.utils.data cimport Dataset
 
 
 cdef struct TSView:
@@ -46,11 +46,11 @@ cdef struct TSCopy:
 cdef class DistanceMeasure:
     cdef Py_ssize_t n_timestep
 
-    cdef int init(self, TSDatabase *td) nogil
+    cdef int init(self, Dataset *td) nogil
 
     cdef int init_ts_view(
         self,
-        TSDatabase *td,
+        Dataset *td,
         TSView *ts_view,
         Py_ssize_t index,
         Py_ssize_t start,
@@ -73,13 +73,13 @@ cdef class DistanceMeasure:
         self,
         TSCopy *ts_copy,
         TSView *s,
-        TSDatabase *td,
+        Dataset *td,
     ) nogil
 
     cdef int ts_copy_sub_matches(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         double threshold,
         Py_ssize_t** matches,
@@ -90,7 +90,7 @@ cdef class DistanceMeasure:
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index= *,
     ) nogil
@@ -98,14 +98,14 @@ cdef class DistanceMeasure:
     cdef double ts_view_sub_distance(
         self,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
     ) nogil
 
     cdef void ts_view_sub_distances(
         self,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t *samples,
         double *distances,
         Py_ssize_t n_samples,
@@ -114,7 +114,7 @@ cdef class DistanceMeasure:
     cdef double ts_copy_distance(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
     ) nogil
 

@@ -27,7 +27,7 @@ from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
 from wildboar.utils._utils cimport realloc_array
-from wildboar.utils.data cimport TSDatabase
+from wildboar.utils.data cimport Dataset
 
 from ._distance cimport DistanceMeasure, ScaledDistanceMeasure, TSCopy, TSView
 
@@ -44,7 +44,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index = NULL,
     ) nogil:
@@ -71,7 +71,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     cdef double ts_view_sub_distance(
         self,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
     ) nogil:
         cdef Py_ssize_t sample_offset = (
@@ -97,7 +97,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
     cdef int ts_copy_matches(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         double threshold,
         Py_ssize_t** matches,
@@ -128,7 +128,7 @@ cdef class EuclideanDistance(DistanceMeasure):
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index = NULL,
     ) nogil:
@@ -148,7 +148,7 @@ cdef class EuclideanDistance(DistanceMeasure):
     cdef double ts_view_sub_distance(
         self,
         TSView *ts_view,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
     ) nogil:
         cdef Py_ssize_t sample_offset = (
@@ -171,7 +171,7 @@ cdef class EuclideanDistance(DistanceMeasure):
     cdef int ts_copy_matches(
         self,
         TSCopy *ts_copy,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t t_index,
         double threshold,
         Py_ssize_t** matches,

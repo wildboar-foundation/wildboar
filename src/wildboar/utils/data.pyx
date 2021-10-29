@@ -24,14 +24,27 @@ import warnings
 import numpy as np
 
 
-cdef TSDatabase ts_database_new(np.ndarray data):
-    """Construct a new time series database from a ndarray """
+cdef Dataset dataset_new(np.ndarray data):
+    """Construct a new time series dataset from a ndarray
+    
+    Parameters
+    ==========
+
+    data : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep)
+        The data array to use as dataset
+
+    Returns
+    =======
+
+    dataset : Dataset 
+        A dataset with c-contigous data
+    """
     if data.ndim < 2 or data.ndim > 3:
         raise ValueError("ndim {0} < 2 or {0} > 3".format(data.ndim))
     
     data = np.ascontiguousarray(data, dtype=np.float64)
 
-    cdef TSDatabase sd
+    cdef Dataset sd
     sd.n_samples = <Py_ssize_t> data.shape[0]
     sd.n_timestep = <Py_ssize_t> data.shape[data.ndim - 1]
     sd.data = <double*> data.data

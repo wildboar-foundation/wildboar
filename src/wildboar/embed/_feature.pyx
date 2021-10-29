@@ -19,24 +19,24 @@
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils.data cimport TSDatabase
+from wildboar.utils.data cimport Dataset
 
 
 cdef class FeatureEngineer:
 
-    cdef Py_ssize_t init(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t init(self, Dataset *td) nogil:
         return 0
 
-    cdef Py_ssize_t get_n_features(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t get_n_features(self, Dataset *td) nogil:
         return -1
 
-    cdef Py_ssize_t get_n_outputs(self, TSDatabase *td) nogil:
+    cdef Py_ssize_t get_n_outputs(self, Dataset *td) nogil:
         return self.get_n_features(td)
 
     cdef Py_ssize_t next_feature(
         self,
         Py_ssize_t feature_id,
-        TSDatabase *td, 
+        Dataset *td, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
@@ -52,7 +52,7 @@ cdef class FeatureEngineer:
 
     cdef Py_ssize_t init_persistent_feature(
         self, 
-        TSDatabase *td,
+        Dataset *td,
         Feature *transient, 
         Feature *persistent
     ) nogil:
@@ -61,7 +61,7 @@ cdef class FeatureEngineer:
     cdef double transient_feature_value(
         self,
         Feature *feature,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t sample
     ) nogil:
         return NAN
@@ -69,7 +69,7 @@ cdef class FeatureEngineer:
     cdef double persistent_feature_value(
         self,
         Feature *feature,
-        TSDatabase *td,
+        Dataset *td,
         Py_ssize_t sample
     ) nogil:
         return NAN
@@ -77,9 +77,9 @@ cdef class FeatureEngineer:
     cdef Py_ssize_t transient_feature_fill(
         self, 
         Feature *feature, 
-        TSDatabase *td, 
+        Dataset *td, 
         Py_ssize_t sample,
-        TSDatabase *td_out,
+        Dataset *td_out,
         Py_ssize_t out_sample,
         Py_ssize_t out_feature,
     ) nogil:
@@ -88,9 +88,9 @@ cdef class FeatureEngineer:
     cdef Py_ssize_t persistent_feature_fill(
         self, 
         Feature *feature, 
-        TSDatabase *td, 
+        Dataset *td, 
         Py_ssize_t sample,
-        TSDatabase *td_out,
+        Dataset *td_out,
         Py_ssize_t out_sample,
         Py_ssize_t out_feature,
     ) nogil:
@@ -105,7 +105,7 @@ cdef class FeatureEngineer:
     cdef void transient_feature_values(
         self, 
         Feature *feature, 
-        TSDatabase *td, 
+        Dataset *td, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
@@ -117,7 +117,7 @@ cdef class FeatureEngineer:
     cdef void persistent_feature_values(
         self, 
         Feature *feature, 
-        TSDatabase *td, 
+        Dataset *td, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
