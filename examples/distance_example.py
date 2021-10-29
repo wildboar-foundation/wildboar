@@ -10,7 +10,7 @@ check_array_fast(np.array([1, 2, 3, 2]).reshape(2, 2), ensure_2d=False, allow_nd
 x, y = load_dataset("GunPoint")
 
 l, u = dtw_envelop(x[-1], r=10)
-lu = dtw_lb_keogh(x[-1], x[0], r=10)
+min_dist, lu = dtw_lb_keogh(x[-1], x[0], r=10)
 plt.plot(x[-1])
 plt.plot(x[0])
 plt.plot(l, "b--")

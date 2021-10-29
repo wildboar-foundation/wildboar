@@ -27,7 +27,6 @@ cdef struct TSDatabase:
 
     double *data  # the data
     Py_ssize_t sample_stride  # the stride for samples
-    Py_ssize_t timestep_stride  # the `feature` stride MUST BE 1
     Py_ssize_t dim_stride  # the dimension stride
 
 

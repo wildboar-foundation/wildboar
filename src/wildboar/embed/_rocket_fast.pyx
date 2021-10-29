@@ -133,12 +133,12 @@ cdef class ShapeletWeightSampler(WeightSampler):
 
         offset = (
             index * td.sample_stride +
-            start * td.timestep_stride +
-            dim * td.dim_stride
+            dim * td.dim_stride +
+            start
         )
         mean[0] = 0
         for i in range(length):
-            weights[i] = td.data[offset + i * td.timestep_stride]
+            weights[i] = td.data[offset + i]
             mean[0] += weights[i]
         mean[0] /= length
 
@@ -286,17 +286,13 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         )
         cdef Rocket* rocket = <Rocket*> feature.feature
         apply_convolution(
-            rocket.length,
             rocket.dilation,
             rocket.padding,
             rocket.bias,
-            0,
-            1,
             rocket.weight,
-            sample_offset, 
-            td.timestep_stride,
+            rocket.length,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             &mean_val,
             &max_val,
         )
@@ -328,24 +324,20 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         )
         cdef Rocket* rocket = <Rocket*> feature.feature
         apply_convolution(
-            rocket.length,
             rocket.dilation,
             rocket.padding,
             rocket.bias,
-            0,
-            1,
             rocket.weight,
-            sample_offset,
-            td.timestep_stride,
+            rocket.length,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             &mean_val,
             &max_val,
         )
-        cdef Py_ssize_t feature_offset = feature_id * 2 * td_out.timestep_stride
+        cdef Py_ssize_t feature_offset = feature_id * 2
         cdef Py_ssize_t out_sample_offset = out_sample * td_out.sample_stride
         td_out.data[out_sample_offset + feature_offset] = mean_val
-        td_out.data[out_sample_offset + feature_offset + td_out.timestep_stride] = max_val
+        td_out.data[out_sample_offset + feature_offset + 1] = max_val
         return 0
 
     cdef Py_ssize_t persistent_feature_fill(
@@ -398,17 +390,13 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         return 0
 
 cdef void apply_convolution(
-    Py_ssize_t length,
     Py_ssize_t dilation,
     Py_ssize_t padding,
     double bias,
-    Py_ssize_t w_offset,
-    Py_ssize_t w_stride,
     double *weight,
-    Py_ssize_t x_offset,
-    Py_ssize_t x_stride,
-    Py_ssize_t x_length,
+    Py_ssize_t length,
     double* x,
+    Py_ssize_t x_length,
     double* mean_val,
     double* max_val
 ) nogil:
@@ -427,7 +415,7 @@ cdef void apply_convolution(
         k = i
         for j in range(length):
             if -1 < k < x_length:
-                inner_prod += weight[w_offset + w_stride * j] * x[x_offset + x_stride * k]
+                inner_prod += weight[j] * x[k]
             k += dilation
         if inner_prod > max_val[0]:
             max_val[0] = inner_prod

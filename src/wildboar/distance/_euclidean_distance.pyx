@@ -53,16 +53,12 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
         )
 
         return scaled_euclidean_distance(
-            0,
-            1,
+            ts_copy.data,
             ts_copy.length,
             ts_copy.mean,
             ts_copy.std,
-            ts_copy.data,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             self.X_buffer,
             return_index,
         )
@@ -84,19 +80,15 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
         cdef Py_ssize_t shapelet_offset = (
             ts_view.index * td.sample_stride +
             ts_view.dim * td.dim_stride +
-            ts_view.start * td.timestep_stride
+            ts_view.start
         )
         return scaled_euclidean_distance(
-            shapelet_offset,
-            td.timestep_stride,
+            td.data + shapelet_offset,
             ts_view.length,
             ts_view.mean,
             ts_view.std,
-            td.data,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             self.X_buffer,
             NULL,
         )
@@ -117,16 +109,12 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
         )
 
         return scaled_euclidean_distance_matches(
-            0,
-            1,
+            ts_copy.data,
             ts_copy.length,
             ts_copy.mean,
             ts_copy.std,
-            ts_copy.data,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             self.X_buffer,
             threshold,
             distances,
@@ -149,14 +137,10 @@ cdef class EuclideanDistance(DistanceMeasure):
         )
 
         return euclidean_distance(
-            0,
-            1,
-            ts_copy.length,
             ts_copy.data,
-            sample_offset,
-            td.timestep_stride,
+            ts_copy.length,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             return_index,
         )
 
@@ -173,17 +157,13 @@ cdef class EuclideanDistance(DistanceMeasure):
         cdef Py_ssize_t shapelet_offset = (
             ts_view.index * td.sample_stride +
             ts_view.dim * td.dim_stride +
-            ts_view.start * td.timestep_stride
+            ts_view.start
         )
         return euclidean_distance(
-            shapelet_offset,
-            td.timestep_stride,
+            td.data + shapelet_offset,
             ts_view.length,
-            td.data,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             NULL,
         )
 
@@ -202,14 +182,10 @@ cdef class EuclideanDistance(DistanceMeasure):
             t_index * td.sample_stride + ts_copy.dim * td.dim_stride
         )
         return euclidean_distance_matches(
-            0,
-            1,
-            ts_copy.length,
             ts_copy.data,
-            sample_offset,
-            td.timestep_stride,
+            ts_copy.length,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             threshold,
             distances,
             matches,
@@ -218,16 +194,12 @@ cdef class EuclideanDistance(DistanceMeasure):
 
 
 cdef double scaled_euclidean_distance(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
+    double *S,
     Py_ssize_t s_length,
     double s_mean,
     double s_std,
-    double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
-    Py_ssize_t t_length,
     double *T,
+    Py_ssize_t t_length,
     double *X_buffer,
     Py_ssize_t *index,
 ) nogil:
@@ -246,7 +218,7 @@ cdef double scaled_euclidean_distance(
     cdef Py_ssize_t buffer_pos
 
     for i in range(t_length):
-        current_value = T[t_offset + t_stride * i]
+        current_value = T[i]
         ex += current_value
         ex2 += current_value * current_value
 
@@ -261,9 +233,17 @@ cdef double scaled_euclidean_distance(
                 std = sqrt(tmp)
             else:
                 std = 1.0
-            dist = inner_scaled_euclidean_distance(s_offset, s_length, s_mean, s_std,
-                                                   j, mean, std, S, s_stride,
-                                                   X_buffer, min_dist)
+            dist = inner_scaled_euclidean_distance(
+                s_length, 
+                s_mean, 
+                s_std,
+                j, 
+                mean,
+                std, 
+                S, 
+                X_buffer, 
+                min_dist,
+            )
 
             if dist < min_dist:
                 min_dist = dist
@@ -278,7 +258,6 @@ cdef double scaled_euclidean_distance(
 
 
 cdef double inner_scaled_euclidean_distance(
-    Py_ssize_t offset,
     Py_ssize_t length,
     double s_mean,
     double s_std,
@@ -286,7 +265,6 @@ cdef double inner_scaled_euclidean_distance(
     double mean,
     double std,
     double *X,
-    Py_ssize_t timestep_stride,
     double *X_buffer,
     double min_dist,
 ) nogil:
@@ -301,7 +279,7 @@ cdef double inner_scaled_euclidean_distance(
     for i in range(length):
         if dist >= min_dist:
             break
-        x = (X[offset + timestep_stride * i] - s_mean) / s_std
+        x = (X[i] - s_mean) / s_std
         x -= (X_buffer[i + j] - mean) / std
         dist += x * x
 
@@ -309,14 +287,10 @@ cdef double inner_scaled_euclidean_distance(
 
 
 cdef double euclidean_distance(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
-    Py_ssize_t s_length,
     double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
-    Py_ssize_t t_length,
+    Py_ssize_t s_length,
     double *T,
+    Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil:
     cdef double dist = 0
@@ -331,8 +305,8 @@ cdef double euclidean_distance(
             if dist >= min_dist:
                 break
 
-            x = T[t_offset + t_stride * i + j]
-            x -= S[s_offset + s_stride * j]
+            x = T[i + j]
+            x -= S[j]
             dist += x * x
 
         if dist < min_dist:
@@ -344,14 +318,10 @@ cdef double euclidean_distance(
 
 
 cdef int euclidean_distance_matches(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
-    Py_ssize_t s_length,
     double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
-    Py_ssize_t t_length,
+    Py_ssize_t s_length,
     double *T,
+    Py_ssize_t t_length,
     double threshold,
     double **distances,
     Py_ssize_t **matches,
@@ -375,8 +345,8 @@ cdef int euclidean_distance_matches(
             if dist > threshold:
                 break
 
-            x = T[t_offset + t_stride * i + j]
-            x -= S[s_offset + s_stride * j]
+            x = T[i + j]
+            x -= S[j]
             dist += x * x
         if dist <= threshold:
             tmp_capacity = capacity
@@ -390,16 +360,12 @@ cdef int euclidean_distance_matches(
 
 
 cdef int scaled_euclidean_distance_matches(
-   Py_ssize_t s_offset,
-   Py_ssize_t s_stride,
+   double *S,
    Py_ssize_t s_length,
    double s_mean,
    double s_std,
-   double *S,
-   Py_ssize_t t_offset,
-   Py_ssize_t t_stride,
-   Py_ssize_t t_length,
    double *T,
+   Py_ssize_t t_length,
    double *X_buffer,
    double threshold,
    double** distances,
@@ -427,7 +393,7 @@ cdef int scaled_euclidean_distance_matches(
     threshold = threshold * threshold
 
     for i in range(t_length):
-        current_value = T[t_offset + t_stride * i]
+        current_value = T[i]
         ex += current_value
         ex2 += current_value * current_value
 
@@ -443,8 +409,16 @@ cdef int scaled_euclidean_distance_matches(
             else:
                 std = 1.0
             dist = inner_scaled_euclidean_distance(
-                s_offset, s_length, s_mean, s_std, j, mean, std, S, s_stride,
-                X_buffer, threshold)
+                s_length,
+                s_mean, 
+                s_std, 
+                j, 
+                mean, 
+                std, 
+                S, 
+                X_buffer,
+                threshold,
+            )
 
             if dist <= threshold:
                 tmp_capacity = capacity

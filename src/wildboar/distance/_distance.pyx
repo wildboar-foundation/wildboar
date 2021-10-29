@@ -34,8 +34,6 @@ from ._distance cimport DistanceMeasure, TSCopy
 
 from sklearn.utils import check_array
 
-from .._utils import check_array_fast
-
 _DISTANCE_MEASURE = {
     'euclidean': _euclidean_distance.EuclideanDistance,
     'dtw': _dtw_distance.DtwDistance,
@@ -94,13 +92,13 @@ cdef int _ts_view_update_statistics(TSView *ts_view, const TSDatabase *td) nogil
     cdef Py_ssize_t shapelet_offset = (
             ts_view.index * td.sample_stride +
             ts_view.dim * td.dim_stride +
-            ts_view.start * td.timestep_stride
+            ts_view.start
     )
     cdef double ex = 0
     cdef double ex2 = 0
     cdef Py_ssize_t i
     for i in range(ts_view.length):
-        current_value = td.data[shapelet_offset + i * td.timestep_stride]
+        current_value = td.data[shapelet_offset + i]
         ex += current_value
         ex2 += current_value ** 2
 
@@ -228,16 +226,15 @@ cdef class DistanceMeasure:
         cdef double *data = ts_copy.data
         cdef Py_ssize_t tc_offset = (
             ts_view.index * td.sample_stride +
-            ts_view.start * td.timestep_stride +
-            ts_view.dim * td.dim_stride
+            ts_view.dim * td.dim_stride +
+            ts_view.start
         )
 
         cdef Py_ssize_t i
         cdef Py_ssize_t p
 
         for i in range(ts_view.length):
-            p = tc_offset + td.timestep_stride * i
-            data[i] = td.data[p]
+            data[i] = td.data[tc_offset + i]
 
         return 0
 
@@ -397,12 +394,15 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cdef Py_ssize_t i
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + ts_copy.dim * td.dim_stride)
+        cdef Py_ssize_t sample_offset = (
+            t_index * td.sample_stride + 
+            ts_copy.dim * td.dim_stride
+        )
         with gil:
             for i in range(td.n_timestep):
                 if i < ts_copy.length:
                     self.x_buffer[i] = ts_copy.data[i]
-                self.y_buffer[i] = td.data[sample_offset + td.timestep_stride * i]
+                self.y_buffer[i] = td.data[sample_offset + i]
 
             return self.func(self.x_buffer[:ts_copy.length], self.y_buffer)
 
@@ -417,12 +417,12 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
                                          ts_view.dim * td.dim_stride)
         cdef Py_ssize_t shapelet_offset = (ts_view.index * td.sample_stride +
                                            ts_view.dim * td.dim_stride +
-                                           ts_view.start * td.timestep_stride)
+                                           ts_view.start)
         with gil:
             for i in range(td.n_timestep):
                 if i < ts_view.length:
-                    self.x_buffer[i] = td.data[shapelet_offset + td.timestep_stride * i]
-                self.y_buffer[i] = td.data[sample_offset + td.timestep_stride * i]
+                    self.x_buffer[i] = td.data[shapelet_offset + i]
+                self.y_buffer[i] = td.data[sample_offset + i]
 
             return self.func(self.x_buffer[:ts_view.length], self.y_buffer)
 

@@ -36,10 +36,10 @@ cdef TSDatabase ts_database_new(np.ndarray data):
     sd.n_timestep = <Py_ssize_t> data.shape[data.ndim - 1]
     sd.data = <double*> data.data
     sd.sample_stride = <Py_ssize_t> (data.strides[0] / <Py_ssize_t> data.itemsize)
-    sd.timestep_stride = <Py_ssize_t> (data.strides[data.ndim - 1] / <Py_ssize_t> data.itemsize)
-    if sd.timestep_stride != 1:
+    cdef Py_ssize_t timestep_stride = <Py_ssize_t> (data.strides[data.ndim - 1] / <Py_ssize_t> data.itemsize)
+    if timestep_stride != 1:
         warnings.warn(
-            "timestep_stride (%d) detected. Please report bug." % sd.timestep_stride, 
+            "timestep_stride (%d) detected. Please report bug." % timestep_stride, 
             UserWarning,
         )
 

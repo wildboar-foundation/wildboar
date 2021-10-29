@@ -19,29 +19,21 @@
 
 
 cdef double scaled_euclidean_distance(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
+    double *S,
     Py_ssize_t s_length,
     double s_mean,
     double s_std,
-    double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
-    Py_ssize_t t_length,
     double *T,
+    Py_ssize_t t_length,
     double *X_buffer,
     Py_ssize_t *index,
 ) nogil
 
 
 cdef double euclidean_distance(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
-    Py_ssize_t s_length,
     double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
-    Py_ssize_t t_length,
+    Py_ssize_t s_length,
     double *T,
+    Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil

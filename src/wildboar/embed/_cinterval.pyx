@@ -362,7 +362,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         cdef Py_ssize_t offset = (
                 sample * td.sample_stride +
                 feature.dim * td.dim_stride +
-                interval.start * td.timestep_stride
+                interval.start
         )
 
         self.summarizer.summarize(
@@ -394,11 +394,11 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         cdef Py_ssize_t offset = (
                 sample * td.sample_stride +
                 feature.dim * td.dim_stride +
-                interval.start * td.timestep_stride
+                interval.start
         )
         cdef Py_ssize_t out_offset = (
                 out_sample * td_out.sample_stride +
-                out_feature * n_summarizers * td_out.timestep_stride
+                out_feature * n_summarizers
         )
 
         self.summarizer.summarize(

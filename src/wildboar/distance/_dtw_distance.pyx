@@ -103,10 +103,8 @@ cdef Py_ssize_t deque_size(Deque *c) nogil:
 
 
 cdef void find_min_max(
-    Py_ssize_t offset,
-    Py_ssize_t stride,
-    Py_ssize_t length,
     double *T,
+    Py_ssize_t length,
     Py_ssize_t r,
     double *lower,
     double *upper,
@@ -127,20 +125,18 @@ cdef void find_min_max(
     for i in range(1, length):
         if i > r:
             k = i - r - 1
-            upper[k] = T[offset + stride * deque_front(du)]
-            lower[k] = T[offset + stride * deque_front(dl)]
+            upper[k] = T[deque_front(du)]
+            lower[k] = T[deque_front(dl)]
 
-        current = T[offset + stride * i]
-        prev = T[offset + stride * (i - 1)]
+        current = T[i]
+        prev = T[(i - 1)]
         if current > prev:
             deque_pop_back(du)
-            while (not deque_empty(du) and
-                   current > T[offset + stride * deque_back(du)]):
+            while (not deque_empty(du) and current > T[deque_back(du)]):
                 deque_pop_back(du)
         else:
             deque_pop_back(dl)
-            while (not deque_empty(dl) and
-                   current < T[offset + stride * deque_back(dl)]):
+            while (not deque_empty(dl) and current < T[deque_back(dl)]):
                 deque_pop_back(dl)
 
         deque_push_back(du, i)
@@ -152,8 +148,8 @@ cdef void find_min_max(
             deque_pop_front(dl)
 
     for i in range(length, length + r + 1):
-        upper[i - r - 1] = T[offset + stride * deque_front(du)]
-        lower[i - r - 1] = T[offset + stride * deque_front(dl)]
+        upper[i - r - 1] = T[deque_front(du)]
+        lower[i - r - 1] = T[deque_front(dl)]
 
         if i - deque_front(du) >= 2 * r + 1:
             deque_pop_front(du)
@@ -167,13 +163,9 @@ cdef inline double dist(double x, double y) nogil:
 
 
 cdef double constant_lower_bound(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
     double *S,
     double s_mean,
     double s_std,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
     double *T,
     double t_mean,
     double t_std,
@@ -187,19 +179,19 @@ cdef double constant_lower_bound(
     if t_std == 0:
         return 0
     # first and last in T
-    t_x0 = (T[t_offset] - t_mean) / t_std
-    t_y0 = (T[t_offset + t_stride * (length - 1)] - t_mean) / t_std
+    t_x0 = (T[0] - t_mean) / t_std
+    t_y0 = (T[(length - 1)] - t_mean) / t_std
 
     # first and last in S
-    s_x0 = (S[s_offset] - s_mean) / s_std
-    s_y0 = (S[s_offset + s_stride * (length - 1)] - s_mean) / s_std
+    s_x0 = (S[0] - s_mean) / s_std
+    s_y0 = (S[(length - 1)] - s_mean) / s_std
 
     min_dist = dist(t_x0, s_x0) + dist(t_y0, s_y0)
     if min_dist >= best_dist:
         return min_dist
 
-    t_x1 = (T[t_offset + t_stride * 1] - t_mean) / t_std
-    s_x1 = (S[s_offset + s_stride * 1] - s_mean) / s_std
+    t_x1 = (T[1] - t_mean) / t_std
+    s_x1 = (S[1] - s_mean) / s_std
     min_dist += min(
         min(dist(t_x1, s_x0), dist(t_x0, s_x1)),
         dist(t_x1, s_x1))
@@ -207,8 +199,8 @@ cdef double constant_lower_bound(
     if min_dist >= best_dist:
         return min_dist
 
-    t_y1 = (T[t_offset + t_stride * (length - 2)] - t_mean) / t_std
-    s_y1 = (S[s_offset + s_stride * (length - 2)] - s_mean) / s_std
+    t_y1 = (T[(length - 2)] - t_mean) / t_std
+    s_y1 = (S[(length - 2)] - s_mean) / s_std
     min_dist += min(
         min(dist(t_y1, s_y1), dist(t_y0, s_y1)),
         dist(t_y1, s_y1))
@@ -216,8 +208,8 @@ cdef double constant_lower_bound(
     if min_dist >= best_dist:
         return min_dist
 
-    t_x2 = (T[t_offset + t_stride * 2] - t_mean) / t_std
-    s_x2 = (S[s_offset + s_stride * 2] - s_mean) / s_std
+    t_x2 = (T[2] - t_mean) / t_std
+    s_x2 = (S[2] - s_mean) / s_std
     min_dist += min(min(dist(t_x0, s_x2),
                         min(dist(t_x1, s_x2),
                             dist(t_x2, s_x2)),
@@ -227,8 +219,8 @@ cdef double constant_lower_bound(
     if min_dist >= best_dist:
         return min_dist
 
-    t_y2 = (T[t_offset + t_stride * (length - 3)] - t_mean) / t_std
-    s_y2 = (S[s_offset + s_stride * (length - 3)] - s_mean) / s_std
+    t_y2 = (T[(length - 3)] - t_mean) / t_std
+    s_y2 = (S[(length - 3)] - s_mean) / s_std
 
     min_dist += min(min(dist(t_y0, s_y2),
                         min(dist(t_y1, s_y2),
@@ -240,12 +232,10 @@ cdef double constant_lower_bound(
 
 
 cdef double cumulative_bound(
-    Py_ssize_t offset,
-    Py_ssize_t stride,
+    double *T,
     Py_ssize_t length,
     double mean,
     double std,
-    double *T,
     double lu_mean,
     double lu_std,
     double *lower,
@@ -261,7 +251,7 @@ cdef double cumulative_bound(
         if min_dist >= best_so_far:
             break
 
-        x = (T[offset + stride * i] - mean) / std
+        x = (T[i] - mean) / std
         us = (upper[i] - lu_mean) / lu_std
         ls = (lower[i] - lu_mean) / lu_std
         if x > us:
@@ -277,16 +267,13 @@ cdef double cumulative_bound(
 
 
 cdef inline double inner_scaled_dtw(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
+    double *S,
     int s_length,
     double s_mean,
     double s_std,
-    double *S,
+    double *X_buffer,
     double mean,
     double std,
-    Py_ssize_t x_offset,
-    double *X_buffer,
     int r,
     double *cb,
     double *cost,
@@ -319,12 +306,12 @@ cdef inline double inner_scaled_dtw(
         for j in range(max(0, i - r), min(s_length, i + r + 1)):
             if i == 0 and j == 0:
                 if not s_std_zero:
-                    v = (S[s_offset] - s_mean) / s_std
+                    v = (S[0] - s_mean) / s_std
                 else:
                     v = 0
 
                 if not std_zero:
-                    v -= (X_buffer[x_offset] - mean) / std
+                    v -= (X_buffer[0] - mean) / std
                 cost[k] = v * v
             else:
                 if j - 1 < 0 or k - 1 < 0:
@@ -342,9 +329,9 @@ cdef inline double inner_scaled_dtw(
                 else:
                     z = cost_prev[k]
 
-                v = (S[s_offset + s_stride * i] - s_mean) / s_std
+                v = (S[i] - s_mean) / s_std
                 if not std_zero:
-                    v -= (X_buffer[x_offset + j] - mean) / std
+                    v -= (X_buffer[j] - mean) / std
 
                 distance = v * v
                 cost[k] = min(min(x, y), z) + distance
@@ -364,16 +351,12 @@ cdef inline double inner_scaled_dtw(
 
 
 cdef double scaled_dtw_distance(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
+    double *S,
     Py_ssize_t s_length,
     double s_mean,
     double s_std,
-    double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
-    Py_ssize_t t_length,
     double *T,
+    Py_ssize_t t_length,
     Py_ssize_t r,
     double *X_buffer,
     double *cost,
@@ -408,7 +391,7 @@ cdef double scaled_dtw_distance(
     cdef Py_ssize_t buffer_pos
 
     for i in range(t_length):
-        current_value = T[t_offset + t_stride * i]
+        current_value = T[i]
         ex += current_value
         ex2 += current_value * current_value
 
@@ -425,18 +408,43 @@ cdef double scaled_dtw_distance(
                 std = sqrt(tmp)
             else:
                 std = 1.0
-            lb_kim = constant_lower_bound(s_offset, s_stride, S,
-                                          s_mean, s_std, j, 1, X_buffer,
-                                          mean, std, s_length, min_dist)
+            lb_kim = constant_lower_bound(
+                S,
+                s_mean, 
+                s_std, 
+                X_buffer + j,
+                mean, 
+                std, 
+                s_length, 
+                min_dist,
+            )
 
             if lb_kim < min_dist:
-                lb_k = cumulative_bound(j, 1, s_length, mean, std, X_buffer,
-                                        s_mean, s_std, s_lower, s_upper,
-                                        cb_1, min_dist)
+                lb_k = cumulative_bound(
+                    X_buffer + j,
+                    s_length, 
+                    mean, 
+                    std, 
+                    s_mean, 
+                    s_std, 
+                    s_lower,
+                    s_upper,
+                    cb_1, 
+                    min_dist,
+                )
                 if lb_k < min_dist:
                     lb_k2 = cumulative_bound(
-                        s_offset, s_stride, s_length, s_mean, s_std, S,
-                        mean, std, t_lower + I, t_upper + I, cb_2, min_dist)
+                        S,
+                        s_length, 
+                        s_mean, 
+                        s_std, 
+                        mean, 
+                        std, 
+                        t_lower + I, 
+                        t_upper + I, 
+                        cb_2, 
+                        min_dist,
+                    )
 
                     if lb_k2 < min_dist:
                         if lb_k > lb_k2:
@@ -448,9 +456,19 @@ cdef double scaled_dtw_distance(
                             for k in range(s_length - 2, -1, -1):
                                 cb[k] = cb[k + 1] + cb_2[k]
                         dist = inner_scaled_dtw(
-                            s_offset, s_stride, s_length, s_mean,
-                            s_std, S, mean, std, j, X_buffer, r, cb,
-                            cost, cost_prev, min_dist)
+                            S, 
+                            s_length, 
+                            s_mean,
+                            s_std, 
+                            X_buffer + j, 
+                            mean, 
+                            std, 
+                            r, 
+                            cb,
+                            cost, 
+                            cost_prev,
+                            min_dist,
+                        )
 
                         if dist < min_dist:
                             if index != NULL:
@@ -464,13 +482,9 @@ cdef double scaled_dtw_distance(
     return sqrt(min_dist)
 
 
-cdef inline double inner_dtw(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
-    int s_length,
+cdef double inner_dtw(
     double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
+    int s_length,
     double *T,
     int r,
     double *cost,
@@ -496,7 +510,7 @@ cdef inline double inner_dtw(
         k = max(0, r - i)
         for j in range(max(0, i - r), min(s_length, i + r + 1)):
             if i == 0 and j == 0:
-                v = T[t_offset] - S[s_offset]
+                v = T[0] - S[0]
                 cost[k] = v * v
             else:
                 if j - 1 < 0 or k - 1 < 0:
@@ -514,7 +528,7 @@ cdef inline double inner_dtw(
                 else:
                     z = cost_prev[k]
 
-                v = T[t_offset + t_stride * i] - S[s_offset + s_stride * j]
+                v = T[i] - S[j]
                 cost[k] = min(min(x, y), z) + v * v
 
             k += 1
@@ -525,14 +539,10 @@ cdef inline double inner_dtw(
 
 
 cdef double dtw_distance(
-    Py_ssize_t s_offset,
-    Py_ssize_t s_stride,
-    Py_ssize_t s_length,
     double *S,
-    Py_ssize_t t_offset,
-    Py_ssize_t t_stride,
-    Py_ssize_t t_length,
+    Py_ssize_t s_length,
     double *T,
+    Py_ssize_t t_length,
     Py_ssize_t r,
     double *cost,
     double *cost_prev,
@@ -543,9 +553,15 @@ cdef double dtw_distance(
 
     cdef Py_ssize_t i
     for i in range(t_length - s_length + 1):
-        dist = inner_dtw(s_offset, s_stride, s_length, S,
-                         t_offset + t_stride * i, t_stride, T,
-                         r, cost, cost_prev, min_dist)
+        dist = inner_dtw(
+            S,
+            s_length, 
+            T + i,
+            r, 
+            cost, 
+            cost_prev, 
+            min_dist,
+        )
         if dist < min_dist:
             if index != NULL:
                 index[0] = i
@@ -555,16 +571,12 @@ cdef double dtw_distance(
 
 
 cdef double _dtw(
-    Py_ssize_t x_offset,
-    Py_ssize_t x_stride,
-    Py_ssize_t x_length,
     double *X,
+    Py_ssize_t x_length,
     double x_mean,
     double x_std,
-    Py_ssize_t y_offset,
-    Py_ssize_t y_stride,
-    Py_ssize_t y_length,
     double *Y,
+    Py_ssize_t y_length,
     double y_mean,
     double y_std,
     Py_ssize_t r,
@@ -575,16 +587,12 @@ cdef double _dtw(
     
     Parameters
     ----------
-    x_offset : offset of x
-    x_stride : stride of x
-    x_length : length of x
     X : data of x
+    x_length : length of x
     x_mean : mean of array in x (if 0 ignored)
     x_std : std of array in x (or 1)
-    y_offset : offset of y
-    y_stride : stride of y
-    y_length : length of y
     Y : data of y
+    y_length : length of y
     y_mean : mean of array in y (if 0 ignored)
     y_std : std of array in y (or 1)
     r : the warp window
@@ -604,13 +612,13 @@ cdef double _dtw(
     cdef double z
     cdef double v
 
-    v = (X[x_offset] - x_mean) / x_std
-    v -= (Y[y_offset] - y_mean) / y_std
+    v = (X[0] - x_mean) / x_std
+    v -= (Y[0] - y_mean) / y_std
 
     cost_prev[0] = v * v
     for i in range(1, min(y_length, max(0, y_length - x_length) + r)):
-        v = (X[x_offset] - x_mean) / x_std
-        v -= (Y[y_offset + y_stride * i] - y_mean) / y_std
+        v = (X[0] - x_mean) / x_std
+        v -= (Y[i] - y_mean) / y_std
         cost_prev[i] = cost_prev[i - 1] + v * v
 
     if max(0, y_length - x_length) + r < y_length:
@@ -629,8 +637,8 @@ cdef double _dtw(
             else:
                 y = INFINITY
                 z = INFINITY
-            v = (X[x_offset + x_stride * i] - x_mean) / x_std
-            v -= (Y[y_offset + y_stride * j] - y_mean) / y_std
+            v = (X[i] - x_mean) / x_std
+            v -= (Y[j] - y_mean) / y_std
             cost[j] = min(min(x, y), z) + v * v
 
         if j_stop < y_length:
@@ -770,9 +778,19 @@ def _dtw_distance(np.ndarray x, np.ndarray y, Py_ssize_t r, bint scale=False):
 
     cdef double *cost = <double*> malloc(sizeof(double) * max(x_length, y_length))
     cdef double *cost_prev = <double*> malloc(sizeof(double) * max(x_length, y_length))
-    cdef dist = _dtw(0, x_stride, x_length, x_data, x_mean, x_std,
-                     0, y_stride, y_length, y_data, y_mean, y_std,
-                     r, cost, cost_prev)
+    cdef dist = _dtw(
+        x_data, 
+        x_length, 
+        x_mean, 
+        x_std,
+        y_data,
+        y_length,
+        y_mean,
+        y_std, 
+        r,
+        cost, 
+        cost_prev,
+    )
     free(cost)
     free(cost_prev)
     return sqrt(dist)
@@ -796,13 +814,12 @@ def _dtw_pairwise_distance(np.ndarray x, Py_ssize_t r):
     """
     if not 0 < r < x.shape[1]:
         raise ValueError("invalid r")
-    x = check_array_fast(x, ensure_2d=True)
+    x = np.ascontiguousarray(x, dtype=np.float64)
     cdef Py_ssize_t length = x.shape[1]
     cdef np.ndarray dists = np.empty((x.shape[0], x.shape[0]), dtype=np.float64)
     cdef Py_ssize_t i, j
     cdef Py_ssize_t i_offset, j_offset
     cdef Py_ssize_t sample_stride = <Py_ssize_t> x.strides[0] / <Py_ssize_t> x.itemsize
-    cdef Py_ssize_t timestep_stride = <Py_ssize_t> x.strides[1] / <Py_ssize_t> x.itemsize
     cdef double *data = <double*> x.data
     cdef double *cost = <double*> malloc(sizeof(double) * length)
     cdef double *cost_prev = <double*> malloc(sizeof(double) * length)
@@ -812,9 +829,19 @@ def _dtw_pairwise_distance(np.ndarray x, Py_ssize_t r):
         dists[i, i] = 0
         for j in range(i + 1, x.shape[0]):
             j_offset = j * sample_stride
-            dist = sqrt(_dtw(i_offset, timestep_stride, length, data, 0, 1,
-                             j_offset, timestep_stride, length, data, 0, 1,
-                             r, cost, cost_prev))
+            dist = sqrt(_dtw(
+                data + i_offset,
+                length, 
+                0, 
+                1, 
+                data + j_offset, 
+                length, 
+                0, 
+                1, 
+                r, 
+                cost, 
+                cost_prev,
+            ))
             dists[i, j] = dist
             dists[j, i] = dist
 
@@ -826,12 +853,12 @@ def _dtw_pairwise_distance(np.ndarray x, Py_ssize_t r):
 def _dtw_envelop(np.ndarray x, Py_ssize_t r):
     if not 0 < r < x.shape[0]:
         raise ValueError("invalid r")
-    x = check_array_fast(x)
+
+    x = np.ascontiguousarray(x, dtype=np.float64)
 
     cdef Deque du
     cdef Deque dl
     cdef Py_ssize_t length = x.shape[0]
-    cdef Py_ssize_t stride = x.strides[0] / <Py_ssize_t> x.itemsize
     cdef double *data = <double*> x.data
     cdef np.ndarray lower = np.empty(length, dtype=np.float64)
     cdef np.ndarray upper = np.empty(length, dtype=np.float64)
@@ -840,7 +867,7 @@ def _dtw_envelop(np.ndarray x, Py_ssize_t r):
 
     deque_init(&dl, 2 * r + 2)
     deque_init(&du, 2 * r + 2)
-    find_min_max(0, stride, length, data, r, lower_data, upper_data, &dl, &du)
+    find_min_max(data, length, r, lower_data, upper_data, &dl, &du)
 
     deque_destroy(&dl)
     deque_destroy(&du)
@@ -850,12 +877,11 @@ def _dtw_envelop(np.ndarray x, Py_ssize_t r):
 def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r):
     if not 0 < r < x.shape[0]:
         raise ValueError("invalid r")
-    x = check_array_fast(x)
+    x = np.ascontiguousarray(x, dtype=np.float64)
     lower = check_array_fast(lower)
     upper = check_array_fast(upper)
     cdef Py_ssize_t i
     cdef Py_ssize_t length = x.shape[0]
-    cdef Py_ssize_t stride = x.strides[0] / <Py_ssize_t> x.itemsize
     cdef double *data = <double*> x.data
     cdef double *lower_data
     cdef double *upper_data
@@ -875,7 +901,18 @@ def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r
     cdef np.ndarray cb = np.empty(length, dtype=np.float64)
     cdef double *cb_data = <double*> cb.data
     cdef double min_dist
-    min_dist = cumulative_bound(0, stride, length, 0, 1, data, 0, 1, lower_data, upper_data, cb_data, INFINITY)
+    min_dist = cumulative_bound(
+        data, 
+        length, 
+        0, 
+        1, 
+        0, 
+        1, 
+        lower_data, 
+        upper_data, 
+        cb_data,
+        INFINITY,
+    )
     if <double*> upper.data != upper_data:
         free(upper_data)
     if <double*> lower.data != lower_data:
@@ -979,15 +1016,13 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
         cdef Py_ssize_t shapelet_offset = (
             index * td.sample_stride +
-            start * td.timestep_stride +
-            dim * td.dim_stride
+            dim * td.dim_stride +
+            start
         )
         cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
-            shapelet_offset,
-            td.timestep_stride,
+            td.data + shapelet_offset,
             length,
-            td.data,
             warp_width,
             dtw_extra[0].lower,
             dtw_extra[0].upper,
@@ -1016,10 +1051,8 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
         cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
-            0,
-            1,
-            length,
             shapelet[0].data,
+            length,
             warp_width,
             dtw_extra[0].lower,
             dtw_extra[0].upper,
@@ -1044,10 +1077,8 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
         cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
-            0,
-            1,
-            length,
             tc[0].data,
+            length,
             warp_width,
             dtw_extra[0].lower,
             dtw_extra[0].upper,
@@ -1080,10 +1111,8 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             s_upper = <double*> malloc(sizeof(double) * s.length)
 
             find_min_max(
-                0,
-                1,
-                s.length,
                 s.data,
+                s.length,
                 warp_width,
                 s_lower,
                 s_upper,
@@ -1092,10 +1121,8 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             )
 
         find_min_max(
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             warp_width,
             self.lower,
             self.upper,
@@ -1104,16 +1131,12 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         )
 
         cdef double distance = scaled_dtw_distance(
-            0,
-            1,
+            s.data,
             s.length,
             s.mean,
             s.std,
-            s.data,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             warp_width,
             self.X_buffer,
             self.cost,
@@ -1139,16 +1162,14 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         cdef Py_ssize_t shapelet_offset = (
             s.index * td.sample_stride +
             s.dim * td.dim_stride +
-            s.start * td.timestep_stride
+            s.start
         )
 
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             warp_width,
             self.lower,
             self.upper,
@@ -1157,16 +1178,12 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         )
 
         return scaled_dtw_distance(
-            shapelet_offset,
-            td.timestep_stride,
+            td.data + shapelet_offset,
             s.length,
             s.mean,
             s.std,
-            td.data,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             warp_width,
             self.X_buffer,
             self.cost,
@@ -1207,16 +1224,12 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             t_std = 1.0
 
         cdef double dist = _dtw(
-            0,
-            1,
-            s.length,
             s.data,
+            s.length,
             s.mean, # assuming TSCopy is initialized with self
             s.std,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             t_mean,
             t_std,
             warp_width,
@@ -1269,14 +1282,10 @@ cdef class DtwDistance(DistanceMeasure):
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
         return dtw_distance(
-            0,
-            1,
-            s.length,
             s.data,
-            sample_offset,
-            td.timestep_stride,
+            s.length,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             warp_width,
             self.cost,
             self.cost_prev,
@@ -1288,21 +1297,21 @@ cdef class DtwDistance(DistanceMeasure):
             self, TSView *ts_ptr, TSDatabase *td_ptr, Py_ssize_t t_index) nogil:
         cdef TSDatabase td = td_ptr[0]
         cdef TSView s = ts_ptr[0]
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride +
-                                     s.dim * td.dim_stride)
-        cdef Py_ssize_t shapelet_offset = (s.index * td.sample_stride +
-                                       s.dim * td.dim_stride +
-                                       s.start * td.timestep_stride)
+        cdef Py_ssize_t sample_offset = (
+            t_index * td.sample_stride +
+            s.dim * td.dim_stride
+        )
+        cdef Py_ssize_t shapelet_offset = (
+            s.index * td.sample_stride +
+            s.dim * td.dim_stride +
+            s.start
+        )
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         return dtw_distance(
-            shapelet_offset,
-            td.timestep_stride,
+            td.data + shapelet_offset,
             s.length,
-            td.data,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             warp_width,
             self.cost,
             self.cost_prev,
@@ -1336,16 +1345,12 @@ cdef class DtwDistance(DistanceMeasure):
                 with gil: raise MemoryError()
 
         cdef double dist = _dtw(
-            0,
-            1,
-            s.length,
             s.data,
+            s.length,
             0,
             1,
-            sample_offset,
-            td.timestep_stride,
+            td.data + sample_offset,
             td.n_timestep,
-            td.data,
             0,
             1,
             warp_width,
