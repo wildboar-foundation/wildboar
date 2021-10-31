@@ -29,7 +29,7 @@ from libc.string cimport memcpy, memset
 
 from wildboar.embed._feature cimport Feature, FeatureEngineer
 from wildboar.utils._utils cimport argsort, safe_realloc
-from wildboar.utils.data cimport Dataset, dataset_new
+from wildboar.utils.data cimport Dataset
 from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
@@ -536,7 +536,7 @@ cdef class Tree:
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
 
-        cdef Dataset ts = dataset_new(X)
+        cdef Dataset ts = Dataset(X)
         cdef np.ndarray[np.npy_intp] out = np.zeros((ts.n_samples,), dtype=np.intp)
         cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
         cdef Feature *feature
@@ -550,7 +550,7 @@ cdef class Tree:
                     threshold = self._thresholds[node_index]
                     feature = self._features[node_index]
                     feature_value = self.feature_engineer.persistent_feature_value(
-                        feature, &ts, i
+                        feature, ts, i
                     )
                     if feature_value <= threshold:
                         node_index = self._left[node_index]
@@ -562,7 +562,7 @@ cdef class Tree:
     cpdef np.ndarray decision_path(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
-        cdef Dataset ts = dataset_new(X)
+        cdef Dataset ts = Dataset(X)
         cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
 
         cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
@@ -580,7 +580,7 @@ cdef class Tree:
                     threshold = self._thresholds[node_index]
                     feature = self._features[node_index]
                     feature_value = self.feature_engineer.persistent_feature_value(
-                        feature, &ts, i
+                        feature, ts, i
                     )
                     if feature_value <= threshold:
                         node_index = self._left[node_index]
@@ -749,7 +749,7 @@ cdef class TreeBuilder:
         self.min_impurity_decrease = min_impurity_decrease
         self.random_seed = random_state.randint(0, RAND_R_MAX)
 
-        self.td = dataset_new(X)
+        self.td = Dataset(X)
         self.feature_engineer = feature_engineer
         self.criterion = criterion
         self.tree = tree
@@ -911,7 +911,7 @@ cdef class TreeBuilder:
             # The persistent feature is freed by the Tree
             persistent_feature = <Feature*> malloc(sizeof(Feature))
             err = self.feature_engineer.init_persistent_feature(
-                &self.td, &split.feature, persistent_feature
+                self.td, &split.feature, persistent_feature
             )
             self.feature_engineer.free_transient_feature(&split.feature)
             if err == -1:
@@ -964,13 +964,13 @@ cdef class TreeBuilder:
         best.split_point = 0
         best.feature.feature = NULL
 
-        for i in range(self.feature_engineer.get_n_features(&self.td)):
+        for i in range(self.feature_engineer.get_n_features(self.td)):
             self.feature_engineer.next_feature(
-                i, &self.td, self.samples + start, n_samples, &current_feature, &self.random_seed)
+                i, self.td, self.samples + start, n_samples, &current_feature, &self.random_seed)
             
             self.feature_engineer.transient_feature_values(
                 &current_feature,
-                &self.td,
+                self.td,
                 self.samples + start,
                 end - start,
                 self.feature_buffer + start,

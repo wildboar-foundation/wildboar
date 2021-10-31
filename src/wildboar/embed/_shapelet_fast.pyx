@@ -56,7 +56,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     def distance_measure(self):
         return self._distance_measure
     
-    cdef Py_ssize_t init(self, Dataset *td) nogil:
+    cdef Py_ssize_t init(self, Dataset td) nogil:
         self._distance_measure.init(td)
         return 1
 
@@ -74,7 +74,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
 
     cdef Py_ssize_t init_persistent_feature(
         self, 
-        Dataset *td,
+        Dataset td,
         Feature *transient, 
         Feature *persistent
     ) nogil:
@@ -88,7 +88,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     cdef double transient_feature_value(
         self,
         Feature *feature,
-        Dataset *td,
+        Dataset td,
         Py_ssize_t sample
     ) nogil:
         return self._distance_measure.ts_view_sub_distance(
@@ -98,7 +98,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     cdef double persistent_feature_value(
         self,
         Feature *feature,
-        Dataset *td,
+        Dataset td,
         Py_ssize_t sample
     ) nogil:
         return self._distance_measure.ts_copy_sub_distance(
@@ -108,9 +108,9 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t transient_feature_fill(
         self, 
         Feature *feature, 
-        Dataset *td, 
+        Dataset td, 
         Py_ssize_t sample,
-        Dataset *td_out,
+        Dataset td_out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
@@ -123,9 +123,9 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t persistent_feature_fill(
         self, 
         Feature *feature, 
-        Dataset *td, 
+        Dataset td, 
         Py_ssize_t sample,
-        Dataset *td_out,
+        Dataset td_out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
@@ -168,13 +168,13 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
         )
         self.n_shapelets = n_shapelets
 
-    cdef Py_ssize_t get_n_features(self, Dataset *td) nogil:
+    cdef Py_ssize_t get_n_features(self, Dataset td) nogil:
         return self.n_shapelets
 
     cdef Py_ssize_t next_feature(
         self,
         Py_ssize_t feature_id,
-        Dataset *td, 
+        Dataset td, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,

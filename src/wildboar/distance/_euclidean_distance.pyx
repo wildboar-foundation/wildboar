@@ -43,21 +43,17 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
 
     cdef double ts_copy_sub_distance(
         self,
-        TSCopy *ts_copy,
-        Dataset *td,
-        Py_ssize_t t_index,
+        TSCopy *s,
+        Dataset td,
+        Py_ssize_t index,
         Py_ssize_t *return_index = NULL,
     ) nogil:
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride + ts_copy.dim * td.dim_stride
-        )
-
         return scaled_euclidean_distance(
-            ts_copy.data,
-            ts_copy.length,
-            ts_copy.mean,
-            ts_copy.std,
-            td.data + sample_offset,
+            s.data,
+            s.length,
+            s.mean,
+            s.std,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             self.X_buffer,
             return_index,
@@ -70,24 +66,16 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
 
     cdef double ts_view_sub_distance(
         self,
-        TSView *ts_view,
-        Dataset *td,
-        Py_ssize_t t_index,
+        TSView *s,
+        Dataset td,
+        Py_ssize_t index,
     ) nogil:
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride + ts_view.dim * td.dim_stride
-        )
-        cdef Py_ssize_t shapelet_offset = (
-            ts_view.index * td.sample_stride +
-            ts_view.dim * td.dim_stride +
-            ts_view.start
-        )
         return scaled_euclidean_distance(
-            td.data + shapelet_offset,
-            ts_view.length,
-            ts_view.mean,
-            ts_view.std,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim) + s.start,
+            s.length,
+            s.mean,
+            s.std,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             self.X_buffer,
             NULL,
@@ -96,24 +84,20 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
 
     cdef int ts_copy_matches(
         self,
-        TSCopy *ts_copy,
-        Dataset *td,
-        Py_ssize_t t_index,
+        TSCopy *s,
+        Dataset td,
+        Py_ssize_t index,
         double threshold,
         Py_ssize_t** matches,
         double** distances,
         Py_ssize_t *n_matches,
     ) nogil except -1:
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride + ts_copy.dim * td.dim_stride
-        )
-
         return scaled_euclidean_distance_matches(
-            ts_copy.data,
-            ts_copy.length,
-            ts_copy.mean,
-            ts_copy.std,
-            td.data + sample_offset,
+            s.data,
+            s.length,
+            s.mean,
+            s.std,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             self.X_buffer,
             threshold,
@@ -127,19 +111,15 @@ cdef class EuclideanDistance(DistanceMeasure):
 
     cdef double ts_copy_sub_distance(
         self,
-        TSCopy *ts_copy,
-        Dataset *td,
-        Py_ssize_t t_index,
+        TSCopy *s,
+        Dataset td,
+        Py_ssize_t index,
         Py_ssize_t *return_index = NULL,
     ) nogil:
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride + ts_copy.dim * td.dim_stride
-        )
-
         return euclidean_distance(
-            ts_copy.data,
-            ts_copy.length,
-            td.data + sample_offset,
+            s.data,
+            s.length,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             return_index,
         )
@@ -147,22 +127,14 @@ cdef class EuclideanDistance(DistanceMeasure):
 
     cdef double ts_view_sub_distance(
         self,
-        TSView *ts_view,
-        Dataset *td,
-        Py_ssize_t t_index,
+        TSView *s,
+        Dataset td,
+        Py_ssize_t index,
     ) nogil:
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride + ts_view.dim * td.dim_stride
-        )
-        cdef Py_ssize_t shapelet_offset = (
-            ts_view.index * td.sample_stride +
-            ts_view.dim * td.dim_stride +
-            ts_view.start
-        )
         return euclidean_distance(
-            td.data + shapelet_offset,
-            ts_view.length,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim) + s.start,
+            s.length,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             NULL,
         )
@@ -170,21 +142,18 @@ cdef class EuclideanDistance(DistanceMeasure):
 
     cdef int ts_copy_matches(
         self,
-        TSCopy *ts_copy,
-        Dataset *td,
-        Py_ssize_t t_index,
+        TSCopy *s,
+        Dataset td,
+        Py_ssize_t index,
         double threshold,
         Py_ssize_t** matches,
         double** distances,
         Py_ssize_t *n_matches,
     ) nogil except -1:
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride + ts_copy.dim * td.dim_stride
-        )
         return euclidean_distance_matches(
-            ts_copy.data,
-            ts_copy.length,
-            td.data + sample_offset,
+            s.data,
+            s.length,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             threshold,
             distances,

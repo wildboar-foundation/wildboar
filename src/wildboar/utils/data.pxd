@@ -20,14 +20,13 @@
 cimport numpy as np
 
 
-cdef struct Dataset:
-    Py_ssize_t n_samples  # the number of samples
-    Py_ssize_t n_timestep  # the number of timesteps
-    Py_ssize_t n_dims
+cdef class Dataset:
+    cdef readonly Py_ssize_t n_samples  # the number of samples
+    cdef readonly Py_ssize_t n_timestep  # the number of timesteps
+    cdef readonly Py_ssize_t n_dims
 
-    double *data  # the data
-    Py_ssize_t sample_stride  # the stride for samples
-    Py_ssize_t dim_stride  # the dimension stride
+    cdef double *data  # the data
+    cdef readonly Py_ssize_t sample_stride  # the stride for samples
+    cdef readonly Py_ssize_t dim_stride  # the dimension stride
 
-
-cdef Dataset dataset_new(np.ndarray X)
+    cdef double* get_sample(self, Py_ssize_t i, Py_ssize_t dim=*) nogil

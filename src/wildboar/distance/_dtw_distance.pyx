@@ -994,30 +994,23 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
     cdef int init_ts_view(
         self,
-        Dataset *td_ptr,
+        Dataset td,
         TSView *ts_view,
         Py_ssize_t index,
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
     ) nogil:
-        cdef Dataset td = td_ptr[0]
         ScaledDistanceMeasure.init_ts_view(
-            self, td_ptr, ts_view, index, start, length, dim
+            self, td, ts_view, index, start, length, dim
         )
 
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
         dtw_extra[0].lower = <double*> malloc(sizeof(double) * length)
         dtw_extra[0].upper = <double*> malloc(sizeof(double) * length)
-
-        cdef Py_ssize_t shapelet_offset = (
-            index * td.sample_stride +
-            dim * td.dim_stride +
-            start
-        )
         cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
-            td.data + shapelet_offset,
+            td.get_sample(index, dim) + start,
             length,
             warp_width,
             dtw_extra[0].lower,
@@ -1030,14 +1023,13 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         return 0
 
 
-    cdef int init_ts_copy(self, TSCopy *shapelet, TSView *tv_ptr, Dataset *td_ptr) nogil:
+    cdef int init_ts_copy(self, TSCopy *shapelet, TSView *tv_ptr, Dataset td) nogil:
         cdef int err = ScaledDistanceMeasure.init_ts_copy(
-            self, shapelet, tv_ptr, td_ptr
+            self, shapelet, tv_ptr, td
         )
         if err == -1:
             return -1
 
-        cdef Dataset td = td_ptr[0]
         cdef TSView shapelet_info = tv_ptr[0]
 
         cdef DtwExtra *dtw_extra = <DtwExtra*> malloc(sizeof(DtwExtra))
@@ -1088,11 +1080,10 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *s,
-        Dataset *td,
-        Py_ssize_t t_index,
+        Dataset td,
+        Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
         cdef double *s_lower
         cdef double *s_upper
         cdef DtwExtra *extra
@@ -1117,7 +1108,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             )
 
         find_min_max(
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             warp_width,
             self.lower,
@@ -1131,7 +1122,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             s.length,
             s.mean,
             s.std,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             warp_width,
             self.X_buffer,
@@ -1153,18 +1144,11 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         return distance
 
 
-    cdef double ts_view_sub_distance(self, TSView *s, Dataset *td, Py_ssize_t t_index) nogil:
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
-        cdef Py_ssize_t shapelet_offset = (
-            s.index * td.sample_stride +
-            s.dim * td.dim_stride +
-            s.start
-        )
-
+    cdef double ts_view_sub_distance(self, TSView *s, Dataset td, Py_ssize_t index) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             warp_width,
             self.lower,
@@ -1174,11 +1158,11 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         )
 
         return scaled_dtw_distance(
-            td.data + shapelet_offset,
+            td.get_sample(index, s.dim) + s.start,
             s.length,
             s.mean,
             s.std,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             warp_width,
             self.X_buffer,
@@ -1195,8 +1179,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         )
 
 
-    cdef double ts_copy_distance(self, TSCopy *s, Dataset *td, Py_ssize_t t_index) nogil:
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+    cdef double ts_copy_distance(self, TSCopy *s, Dataset td, Py_ssize_t index) nogil:
         cdef Py_ssize_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
 
         cdef Py_ssize_t max_length = max(s.length, td.n_timestep)
@@ -1211,7 +1194,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
 
         cdef double t_mean, t_std
         stats.fast_mean_std(
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             &t_mean,
             &t_std,
@@ -1224,7 +1207,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
             s.length,
             s.mean, # assuming TSCopy is initialized with self
             s.std,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             t_mean,
             t_std,
@@ -1270,17 +1253,16 @@ cdef class DtwDistance(DistanceMeasure):
     cdef double ts_copy_sub_distance(
         self,
         TSCopy *s,
-        Dataset *td,
-        Py_ssize_t t_index,
+        Dataset td,
+        Py_ssize_t index,
         Py_ssize_t *return_index = NULL,
     ) nogil:
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
         return dtw_distance(
             s.data,
             s.length,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             warp_width,
             self.cost,
@@ -1290,35 +1272,25 @@ cdef class DtwDistance(DistanceMeasure):
 
 
     cdef double ts_view_sub_distance(
-            self, TSView *ts_ptr, Dataset *td_ptr, Py_ssize_t t_index) nogil:
-        cdef Dataset td = td_ptr[0]
-        cdef TSView s = ts_ptr[0]
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride +
-            s.dim * td.dim_stride
-        )
-        cdef Py_ssize_t shapelet_offset = (
-            s.index * td.sample_stride +
-            s.dim * td.dim_stride +
-            s.start
-        )
+            self, TSView *s, Dataset td, Py_ssize_t index) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         return dtw_distance(
-            td.data + shapelet_offset,
+            td.get_sample(index, s.dim) + s.start,
             s.length,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             warp_width,
             self.cost,
             self.cost_prev,
-            NULL)
+            NULL
+        )
 
 
     cdef int ts_copy_matches(
         self,
         TSCopy *s,
-        Dataset *td,
-        Py_ssize_t t_index,
+        Dataset td,
+        Py_ssize_t index,
         double threshold,
         Py_ssize_t** matches,
         double** distances,
@@ -1327,8 +1299,7 @@ cdef class DtwDistance(DistanceMeasure):
         with gil:
             raise NotImplemented()
 
-    cdef double ts_copy_distance(self, TSCopy *s, Dataset *td, Py_ssize_t t_index) nogil:
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride + s.dim * td.dim_stride)
+    cdef double ts_copy_distance(self, TSCopy *s, Dataset td, Py_ssize_t index) nogil:
         cdef Py_ssize_t warp_width = max(_compute_warp_width(s.length, self.r), 1)
         cdef Py_ssize_t max_length = max(s.length, td.n_timestep)
 
@@ -1345,7 +1316,7 @@ cdef class DtwDistance(DistanceMeasure):
             s.length,
             0,
             1,
-            td.data + sample_offset,
+            td.get_sample(index, s.dim),
             td.n_timestep,
             0,
             1,
