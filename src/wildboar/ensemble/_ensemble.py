@@ -175,6 +175,7 @@ class BaseShapeletForestClassifier(ShapeletForestMixin, BaggingClassifier):
             y = np.ascontiguousarray(y, dtype=np.intp)
 
         x = x.reshape(n_samples, n_dims * self.n_timestep)
+        self.n_features_in_ = self.n_timestep
         super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
         return self
 
@@ -462,6 +463,7 @@ class BaseShapeletForestRegressor(ShapeletForestMixin, BaggingRegressor):
             y = np.ascontiguousarray(y, dtype=np.float64)
 
         x = x.reshape(n_samples, n_dims * self.n_timestep)
+        self.n_features_in_ = self.n_timestep
         super()._fit(
             x, y, self.max_samples, self.max_depth, sample_weight=sample_weight
         )
@@ -1002,6 +1004,7 @@ class IsolationShapeletForest(ShapeletForestMixin, OutlierMixin, BaseBagging):
             max_samples = int(self.max_samples * x.shape[0])
 
         max_depth = int(np.ceil(np.log2(max(max_samples, 2))))
+        self.n_features_in_ = self.n_timestep
         super(IsolationShapeletForest, self)._fit(
             x,
             rnd_y,
