@@ -188,7 +188,7 @@ class FeatureEmbedding(IntervalEmbedding):
     def __init__(
         self,
         *,
-        summarizer="auto",
+        summarizer="catch22",
         n_jobs=None,
     ):
         """
@@ -201,11 +201,17 @@ class FeatureEmbedding(IntervalEmbedding):
             - if list, the summarizer is a list of functions f(x) -> float, where
               x is a numpy array.
 
-            The default summarizer summarizes each interval as its mean, standard
-            deviation and slope.
+            The default summarizer summarizes each time series using catch22-features
 
         n_jobs : int, optional
             The number of cores to use on multi-core.
+
+        References
+        ==========
+        Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz, Ben D. Fulcher,
+        and Nick S. Jones.
+            catch22: Canonical time-series characteristics.
+            Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.
         """
         super(FeatureEmbedding).__init__(
             self, n_interval=1, summarizer=summarizer, n_jobs=n_jobs
