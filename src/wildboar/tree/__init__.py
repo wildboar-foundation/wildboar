@@ -18,6 +18,8 @@
 from ._tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
+    IntervalTreeClassifier,
+    IntervalTreeRegressor,
     RocketTreeClassifier,
     RocketTreeRegressor,
     ShapeletTreeClassifier,
@@ -31,4 +33,6 @@ __all__ = [
     "ExtraShapeletTreeRegressor",
     "RocketTreeClassifier",
     "RocketTreeRegressor",
+    "IntervalTreeClassifier",
+    "IntervalTreeRegressor",
 ]

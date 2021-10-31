@@ -8,6 +8,7 @@ from sklearn.pipeline import make_pipeline
 
 from wildboar.datasets import load_dataset
 from wildboar.embed import IntervalEmbedding
+from wildboar.tree import IntervalTreeClassifier
 
 x, y = load_dataset("GunPoint")
 x_train, x_test, y_train, y_test = load_dataset("GunPoint", merge_train_test=False)
@@ -76,5 +77,16 @@ pipe = make_pipeline(
     ),
     RidgeClassifierCV(),
 )
-pipe.fit(x_train, y_train)
-print(pipe.score(x_test, y_test))
+# pipe.fit(x_train, y_train)
+# print(pipe.score(x_test, y_test))
+
+t = IntervalTreeClassifier(
+    n_interval=100,
+    intervals="random",
+    min_size=0.3,
+    max_size=0.4,
+    summarizer="catch22",
+)
+t.fit(x_train, y_train)
+print("Fit?")
+print(t.score(x_test, y_test))

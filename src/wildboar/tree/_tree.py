@@ -15,6 +15,7 @@
 #
 # Authors: Isak Samsten
 
+import math
 import sys
 import warnings
 from abc import ABCMeta, abstractmethod
@@ -24,6 +25,13 @@ from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.validation import _check_sample_weight, check_array, check_is_fitted
 
+from ..embed._interval import (
+    _SUMMARIZER,
+    IntervalFeatureEngineer,
+    PyFuncSummarizer,
+    RandomFixedIntervalFeatureEngineer,
+    RandomIntervalFeatureEngineer,
+)
 from ..embed._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
 from ..embed._shapelet import RandomShapeletFeatureEngineer
 from ._tree_builder import (
@@ -1094,3 +1102,179 @@ class RocketTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseRocketTree)
         self.padding_prob = padding_prob
         self.random_state = random_state
         self.class_weight = class_weight
+
+
+class BaseIntervalTree(BaseTree, metaclass=ABCMeta):
+    def __init__(
+        self,
+        n_interval="sqrt",
+        *,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="entropy",
+        intervals="fixed",
+        sample_size=0.5,
+        min_size=0.0,
+        max_size=1.0,
+        summarizer="auto",
+        force_dim=None,
+        random_state=None,
+    ):
+        """
+        Parameters
+        ----------
+        n_kernels : int, optional
+            The number of kernels to inspect at each node.
+
+        max_depth : int, optional
+            The maxium depth.
+
+        min_samples_split : int, optional
+            The minimum number of samples required to split.
+
+        force_dim : int, optional
+            Force reshaping of input data.
+
+        random_state : int or RandomState, optional
+            The psudo-random number generator.
+        """
+        super().__init__(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            force_dim=force_dim,
+        )
+        self.n_interval = n_interval
+        self.criterion = criterion
+        self.intervals = intervals
+        self.sample_size = sample_size
+        self.min_size = min_size
+        self.max_size = max_size
+        self.summarizer = summarizer
+        self.random_state = random_state
+
+    def _get_feature_engineer(self):
+        if isinstance(self.summarizer, list):
+            if not all(hasattr(func, "__call__") for func in self.summarizer):
+                raise ValueError("summarizer (%r) is not supported")
+            summarizer = PyFuncSummarizer(self.summarizer)
+        else:
+            summarizer = _SUMMARIZER.get(self.summarizer)()
+            if summarizer is None:
+                raise ValueError("summarizer (%r) is not supported." % self.summarizer)
+
+        if self.n_interval == "sqrt":
+            n_interval = math.ceil(math.sqrt(self.n_timestep_))
+        elif self.n_interval == "log":
+            n_interval = math.ceil(math.log2(self.n_timestep_))
+        elif isinstance(self.n_interval, int):
+            n_interval = self.n_interval
+        elif isinstance(self.n_interval, float):
+            if not 0.0 < self.n_interval < 1.0:
+                raise ValueError("n_interval must be between 0.0 and 1.0")
+            n_interval = math.floor(self.n_interval * self.n_timestep_)
+            # TODO: ensure that no interval is smaller than 2
+        else:
+            raise ValueError("n_interval (%r) is not supported" % self.n_interval)
+
+        if self.intervals == "fixed":
+            return IntervalFeatureEngineer(n_interval, summarizer)
+        elif self.intervals == "sample":
+            if not 0.0 < self.sample_size < 1.0:
+                raise ValueError("sample_size must be between 0.0 and 1.0")
+
+            sample_size = math.floor(n_interval * self.sample_size)
+            return RandomFixedIntervalFeatureEngineer(
+                n_interval, summarizer, sample_size
+            )
+        elif self.intervals == "random":
+            if not 0.0 <= self.min_size < self.max_size:
+                raise ValueError("min_size must be between 0.0 and max_size")
+            if not self.min_size < self.max_size <= 1.0:
+                raise ValueError("max_size must be between min_size and 1.0")
+
+            min_size = int(self.min_size * self.n_timestep_)
+            max_size = int(self.max_size * self.n_timestep_)
+            if min_size < 2:
+                min_size = 2
+
+            return RandomIntervalFeatureEngineer(
+                n_interval, summarizer, min_size, max_size
+            )
+        else:
+            raise ValueError("intervals (%r) is unsupported." % self.intervals)
+
+
+class IntervalTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseIntervalTree):
+    def __init__(
+        self,
+        n_interval="sqrt",
+        *,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="entropy",
+        intervals="fixed",
+        sample_size=0.5,
+        min_size=0.0,
+        max_size=1.0,
+        summarizer="auto",
+        force_dim=None,
+        class_weight=None,
+        random_state=None,
+    ):
+        super().__init__(
+            n_interval=n_interval,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            intervals=intervals,
+            sample_size=sample_size,
+            min_size=min_size,
+            max_size=max_size,
+            summarizer=summarizer,
+            force_dim=force_dim,
+            random_state=random_state,
+        )
+        self.class_weight = class_weight
+
+
+class IntervalTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseIntervalTree):
+    def __init__(
+        self,
+        n_interval="sqrt",
+        *,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="entropy",
+        intervals="fixed",
+        sample_size=0.5,
+        min_size=0.0,
+        max_size=1.0,
+        summarizer="auto",
+        force_dim=None,
+        random_state=None,
+    ):
+        super().__init__(
+            n_interval=n_interval,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            intervals=intervals,
+            sample_size=sample_size,
+            min_size=min_size,
+            max_size=max_size,
+            summarizer=summarizer,
+            force_dim=force_dim,
+            random_state=random_state,
+        )

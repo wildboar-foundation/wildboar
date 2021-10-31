@@ -152,6 +152,18 @@ cdef class Catch22Summarizer(Summarizer):
             raise MemoryError()
 
     cdef void init(self, Dataset td) nogil:
+        if self.ac != NULL:
+            free(self.ac)
+
+        if self.welch_s != NULL:
+            free(self.welch_s)
+
+        if self.welch_f != NULL:
+            free(self.welch_f)
+
+        if self.window != NULL:
+            free(self.window)
+        
         cdef Py_ssize_t n_timestep = td.n_timestep
         cdef Py_ssize_t welch_length = stats.next_power_of_2(n_timestep)
         self.ac = <double*> malloc(sizeof(double) * n_timestep)
