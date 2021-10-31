@@ -71,7 +71,7 @@ cdef class ScaledEuclideanDistance(ScaledDistanceMeasure):
         Py_ssize_t index,
     ) nogil:
         return scaled_euclidean_distance(
-            td.get_sample(index, s.dim) + s.start,
+            td.get_sample(s.index, s.dim) + s.start,
             s.length,
             s.mean,
             s.std,
@@ -132,7 +132,7 @@ cdef class EuclideanDistance(DistanceMeasure):
         Py_ssize_t index,
     ) nogil:
         return euclidean_distance(
-            td.get_sample(index, s.dim) + s.start,
+            td.get_sample(s.index, s.dim) + s.start,
             s.length,
             td.get_sample(index, s.dim),
             td.n_timestep,

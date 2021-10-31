@@ -1158,7 +1158,7 @@ cdef class ScaledDtwDistance(ScaledDistanceMeasure):
         )
 
         return scaled_dtw_distance(
-            td.get_sample(index, s.dim) + s.start,
+            td.get_sample(s.index, s.dim) + s.start,
             s.length,
             s.mean,
             s.std,
@@ -1275,7 +1275,7 @@ cdef class DtwDistance(DistanceMeasure):
             self, TSView *s, Dataset td, Py_ssize_t index) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         return dtw_distance(
-            td.get_sample(index, s.dim) + s.start,
+            td.get_sample(s.index, s.dim) + s.start,
             s.length,
             td.get_sample(index, s.dim),
             td.n_timestep,
