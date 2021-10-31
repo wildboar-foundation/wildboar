@@ -18,6 +18,7 @@ Subpackages
    linear_model/index.rst
    model_selection/index.rst
    tree/index.rst
+   utils/index.rst
 
 
 Submodules

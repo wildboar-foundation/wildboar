@@ -4,6 +4,15 @@
 .. py:module:: wildboar.embed
 
 
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   catch22/index.rst
+
+
 Submodules
 ----------
 .. toctree::

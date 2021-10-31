@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.embed.base" href="base/index.html" /><link rel="prev" title="wildboar.distance.dtw" href="../distance/dtw/index.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.embed.catch22" href="catch22/index.html" /><link rel="prev" title="wildboar.distance.dtw" href="../distance/dtw/index.html" />
 
     <meta name="generator" content="sphinx-4.2.0, furo 2021.10.09"/>
-        <title>wildboar.embed - Wildboar 1.1.0rc3.dev32+g1731a902 documentation</title>
+        <title>wildboar.embed - Wildboar 1.1.0rc3.dev51+g69253a8b documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=0254c309f5cadf746f1a613e7677379ac9c8cdcd" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc3.dev32+g1731a902 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc3.dev51+g69253a8b documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -201,6 +201,7 @@
 </ul>
 </li>
 <li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.catch22</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
 </ul>
 </li>
@@ -218,6 +219,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
@@ -233,7 +235,7 @@
                     </svg></i></label>
             <ul>
                 <li class="toctree-l2"><span class="reference internal">1.1.0rc3</span></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../1.0.X/index.html">1.0.10</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../1.0.X/index.html">1.0.11</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../1.1.X/index.html">1.1.0rc2</a></li>
             </ul>
         </li>
@@ -263,6 +265,14 @@
         <article role="main">
           <section id="module-wildboar.embed">
 <span id="wildboar-embed"></span><h1><a class="reference internal" href="#module-wildboar.embed" title="wildboar.embed"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><a class="headerlink" href="#module-wildboar.embed" title="Permalink to this headline">¶</a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.catch22</span></code></a></li>
+</ul>
+</div>
+</section>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -367,7 +377,7 @@
 </dd></dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.embed.IntervalEmbedding">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></span><span class="sig-name descname"><span class="pre">IntervalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_interval.py#L40-L180"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.IntervalEmbedding" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">wildboar.embed.</span></span><span class="sig-name descname"><span class="pre">IntervalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_interval.py#L42-L182"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.IntervalEmbedding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="base/index.html#wildboar.embed.base.BaseEmbedding" title="wildboar.embed.base.BaseEmbedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.embed.base.BaseEmbedding</span></code></a></p>
 <p>Embed a time series as a collection of features per interval.</p>
 <p class="rubric">Examples</p>
@@ -515,12 +525,12 @@ Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="base/index.html">
+          <a class="next-page" href="catch22/index.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.catch22</span></code></div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -564,6 +574,7 @@ Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
