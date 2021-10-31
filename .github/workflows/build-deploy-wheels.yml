@@ -115,7 +115,7 @@ jobs:
 
   upload_pypi:
     name: Upload artifacts to PyPI
-    needs: [build_docs]
+    needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
