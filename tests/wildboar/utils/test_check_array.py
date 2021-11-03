@@ -8,8 +8,8 @@ def test_check_array_multivariate():
     x_checked = check_array(x, allow_multivariate=True)
     assert x.dtype == x_checked.dtype
 
-    with pytest.raises(ValueError) as e_info:
-        check_array(x, allow_multivariate=True)
+    with pytest.raises(ValueError):
+        check_array(x, allow_multivariate=False)
 
 
 def test_check_array_contiguous():
