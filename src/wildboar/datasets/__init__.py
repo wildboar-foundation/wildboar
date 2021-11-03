@@ -283,7 +283,7 @@ def load_dataset(
     name,
     *,
     repository="wildboar/ucr",
-    dtype=None,
+    dtype=float,
     preprocess=None,
     contiguous=True,
     merge_train_test=True,
@@ -306,7 +306,7 @@ def load_dataset(
         The data repository formatted as {repository}/{bundle}[:{version}][:{tag}]
 
     dtype : dtype, optional
-        The data type of the returned data
+        The data type of x (train and test)
 
     contiguous : bool, optional
         Ensure that the returned dataset is memory contiguous.
@@ -398,7 +398,6 @@ def load_dataset(
         bundle_version,
         bundle_tag,
     ) = _split_repo_bundle(repository)
-    dtype = dtype or np.float64
     cache_dir = cache_dir or _default_cache_dir()
     repository = get_repository(repository_name)
 
@@ -411,7 +410,6 @@ def load_dataset(
         name,
         version=bundle_version,
         tag=bundle_tag,
-        dtype=dtype,
         cache_dir=cache_dir,
         force=force,
         create_cache_dir=create_cache_dir,
@@ -421,6 +419,9 @@ def load_dataset(
 
         def preprocess(identity):
             return identity
+
+    if dtype:
+        x = x.astype(dtype)
 
     elif isinstance(preprocess, str):
         preprocess = named_preprocess(preprocess)

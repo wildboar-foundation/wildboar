@@ -19,11 +19,12 @@ from copy import deepcopy
 from functools import partial
 
 import numpy as np
-from sklearn.utils.validation import check_array, check_is_fitted
+from sklearn.utils.validation import check_is_fitted
 
 from wildboar.distance import distance
 from wildboar.ensemble._ensemble import BaseShapeletForestClassifier
 from wildboar.explain.counterfactual.base import BaseCounterfactual
+from wildboar.utils import check_array
 
 MIN_MATCHING_DISTANCE = 0.0001
 
@@ -144,8 +145,8 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
 
     def transform(self, x, y):
         check_is_fitted(self, "paths_")
-        y = check_array(y, ensure_2d=False)
         x = check_array(x)
+        y = check_array(y, ensure_2d=False)
         if len(y) != x.shape[0]:
             raise ValueError(
                 "Number of labels={} does not match "

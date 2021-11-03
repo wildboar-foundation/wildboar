@@ -21,7 +21,8 @@ import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 from sklearn.pipeline import Pipeline
-from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
+from sklearn.utils.validation import check_is_fitted, check_random_state
+from wildboar.utils import check_array
 
 
 class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
@@ -30,11 +31,8 @@ class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
         self.n_jobs = n_jobs
 
     def fit(self, x, y, sample_weight=None):
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
-
-        y = check_array(y, ensure_2d=False, order="C")
+        x = check_array(x, allow_multivariate=True)
+        y = check_array(y, ensure_2d=False)
         random_state = check_random_state(self.random_state)
         self.pipe_ = Pipeline(
             [
@@ -57,46 +55,34 @@ class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
 class EmbeddingClassifierMixin:
     def predict(self, x):
         check_is_fitted(self)
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+        x = check_array(x, allow_multivariate=True)
         return self.pipe_.predict(x)
 
     def predict_proba(self, x):
         check_is_fitted(self)
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+        x = check_array(x, allow_multivariate=True)
         return self.pipe_.predict_proba(x)
 
     def predict_log_proba(self, x):
         check_is_fitted(self)
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+        x = check_array(x, allow_multivariate=True)
         return self.pipe_.predict_log_proba(x)
 
     def decision_function(self, x):
         check_is_fitted(self)
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+        x = check_array(x, allow_multivariate=True)
         return self.pipe_.decision_function(x)
 
 
 class EmbeddingRegressorMixin:
     def predict(self, x):
         check_is_fitted(self)
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+        x = check_array(x, allow_multivariate=True)
         return self.pipe_.predict(x)
 
     def decision_function(self, x):
         check_is_fitted(self)
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+        x = check_array(x, allow_multivariate=True)
         return self.pipe_.decision_function(x)
 
 

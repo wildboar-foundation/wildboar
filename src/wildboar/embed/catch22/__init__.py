@@ -16,22 +16,23 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-
+import numpy as np
 from functools import partial
-
-from sklearn.utils import check_array
+from wildboar.utils.decorators import array_or_scalar
+from wildboar.utils import check_array
 
 from . import _catch22
 
 __all__ = ["histogram_mode", "histogram_mode5", "histogram_mode10"]
 
 
+@array_or_scalar
 def histogram_mode(x, n_bins=5):
     """Compute the histogram mode
 
     Parameters
     ----------
-    x : ndarray of shape (n_timestep, )
+    x : ndarray of shape (n_samples, n_timestep) or (n_timestep, )
        The input array
 
     n_bins : int, optional
@@ -39,17 +40,16 @@ def histogram_mode(x, n_bins=5):
 
     Returns
     -------
-    mode : float
+    mode : array or float
        The histogram mode
     """
-    if x.ndim != 1:
-        raise ValueError("1d required")
-
-    x = check_array(x, ensure_2d=False, order="c")
-    return _catch22.histogram_mode(x, n_bins)
+    x = check_array(x, allow_multivariate=True)
+    return _catch22.histogram_mode_(x, n_bins)
 
 
 histogram_mode5 = partial(histogram_mode, n_bins=5)
+histogram_mode5.__doc__ = histogram_mode.__doc__
 
 
 histogram_mode10 = partial(histogram_mode, n_bins=10)
+histogram_mode5.__doc__ = histogram_mode.__doc__

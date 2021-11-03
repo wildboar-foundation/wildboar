@@ -27,7 +27,7 @@ classifiers = {
 
 repository = "wildboar/ucr-tiny"
 datasets = list_datasets(repository)
-df = pd.DataFrame(columns=classifiers.keys(), index=datasets, dtype=np.float)
+df = pd.DataFrame(columns=classifiers.keys(), index=datasets, dtype=float)
 for dataset in datasets:
     print(dataset)
     x, y = load_dataset(dataset, repository=repository)

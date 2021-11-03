@@ -32,7 +32,7 @@ from wildboar.utils.data cimport Dataset
 
 from ._distance cimport DistanceMeasure, TSCopy
 
-from sklearn.utils import check_array
+from wildboar.utils import check_array, check_dataset
 
 _DISTANCE_MEASURE = {
     'euclidean': _euclidean_distance.EuclideanDistance,
@@ -207,7 +207,7 @@ cdef class DistanceMeasure:
         TSCopy *ts_copy
     ):
         cdef Py_ssize_t j
-        arr = np.empty(ts_copy[0].length, dtype=np.float64)
+        arr = np.empty(ts_copy[0].length, dtype=float)
         for j in range(ts_copy[0].length):
             arr[j] = ts_copy[0].data[j]
 
@@ -377,8 +377,8 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
     def __cinit__(self, Py_ssize_t n_timestep, object func, bint support_unaligned=False):
         self.n_timestep = n_timestep
         self.func = func
-        self.x_buffer = np.empty(n_timestep, dtype=np.float64)
-        self.y_buffer = np.empty(n_timestep, dtype=np.float64)
+        self.x_buffer = np.empty(n_timestep, dtype=float)
+        self.y_buffer = np.empty(n_timestep, dtype=float)
         self._support_unaligned = support_unaligned
 
 
@@ -439,23 +439,12 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
 
 
 def _validate_shapelet(shapelet):
-    cdef np.ndarray s = check_array(
-        shapelet, ensure_2d=False, dtype=np.float64, order="c")
-    if s.ndim > 1:
-        raise ValueError("only 1d shapelets allowed")
-
-    if not s.flags.c_contiguous:
-        s = np.ascontiguousarray(s, dtype=np.float64)
-    return s
+    return check_array(shapelet, ensure_2d=False, dtype=np.float32)
 
 
 def _validate_data(data):
-    cdef np.ndarray x = check_array(
-        data, ensure_2d=False, allow_nd=True, dtype=np.float64, order="c")
-    if x.ndim == 1:
-        x = x.reshape(-1, x.shape[0])
-
-    return x
+    data = check_array(data, ensure_2d=False, allow_nd=True, dtype=np.float32)
+    return check_dataset(data)
 
 
 def _check_sample(sample, n_samples):
@@ -481,7 +470,7 @@ cdef np.ndarray _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
 cdef np.ndarray _new_distance_array(
         double *distances, Py_ssize_t n_matches):
     if n_matches > 0:
-        dist_array = np.empty(n_matches, dtype=np.float64)
+        dist_array = np.empty(n_matches, dtype=float)
         for i in range(n_matches):
             dist_array[i] = distances[i]
         return dist_array

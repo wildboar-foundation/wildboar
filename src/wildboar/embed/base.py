@@ -18,7 +18,9 @@ from abc import ABCMeta, abstractmethod
 
 import numpy as np
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils.validation import check_array, check_is_fitted, check_random_state
+from sklearn.utils.validation import check_is_fitted, check_random_state
+
+from wildboar.utils import check_array
 
 from ._embed_fast import feature_embedding_fit, feature_embedding_transform
 
@@ -63,7 +65,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         -------
         embedding : self
         """
-        x = check_array(x, allow_nd=True, order="C")
+        x = check_array(x, allow_multivariate=True)
         random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
         self.embedding_ = feature_embedding_fit(
@@ -85,9 +87,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
             The embedding.
         """
         check_is_fitted(self, attributes="embedding_")
-        x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+        x = check_array(x, allow_multivariate=True)
         return feature_embedding_transform(self.embedding_, x, self.n_jobs)
 
     def fit_transform(self, x, y=None):

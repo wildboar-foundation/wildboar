@@ -332,7 +332,6 @@ class Repository(metaclass=ABCMeta):
         tag=None,
         create_cache_dir=True,
         progress=True,
-        dtype=None,
         force=False,
     ):
         bundle = self.get_bundle(bundle)

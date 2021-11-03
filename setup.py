@@ -113,6 +113,10 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/utils/data.pyx"],
             "include_dirs": include_dirs(),
         },
+        "wildboar.utils.parallel": {
+            "sources": ["src/wildboar/utils/parallel.pyx"],
+            "include_dirs": include_dirs(),
+        },
     }
     ext_modules = [
         Extension(name, **options, **build_args) for name, options in extensions.items()

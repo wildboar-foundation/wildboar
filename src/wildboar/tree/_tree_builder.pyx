@@ -28,6 +28,7 @@ from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
 from wildboar.embed._feature cimport Feature, FeatureEngineer
+from wildboar.utils import check_dataset
 from wildboar.utils._utils cimport argsort, safe_realloc
 from wildboar.utils.data cimport Dataset
 from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
@@ -99,6 +100,11 @@ cdef class ClassificationCriterion(Criterion):
     cdef double *sum_total
 
     def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
+        if y.dtype != int:
+            raise ValueError("unexpected dtype (%r != int)" % y.dtype)
+
+        if y.ndim != 1:
+            raise ValueError("unexpected dim (%r != 1)" % y.ndim)
         self.labels = <Py_ssize_t*> y.data
         self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
         self.n_labels = n_labels
@@ -243,6 +249,12 @@ cdef class RegressionCriterion(Criterion):
     cdef Py_ssize_t pos
 
     def __cinit__(self, np.ndarray y):
+        if y.dtype != float:
+            raise ValueError("unexpected dtype (%r != float)" % y.dtype)
+
+        if y.ndim != 1:
+            raise ValueError("unexpected dim (%r != 1)" % y.ndim)        
+
         self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
         self.labels = <double*> y.data
 
@@ -456,7 +468,7 @@ cdef class Tree:
 
     @property
     def value(self):
-        cdef np.ndarray arr = np.empty(self._node_count * self._n_labels, dtype=np.float64)
+        cdef np.ndarray arr = np.empty(self._node_count * self._n_labels, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._n_labels * self._node_count):
             arr[i] = self._values[i]
@@ -487,7 +499,7 @@ cdef class Tree:
 
     @property
     def n_weighted_node_samples(self):
-        cdef np.ndarray arr = np.zeros(self._node_count, dtype=np.float64)
+        cdef np.ndarray arr = np.zeros(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._n_weighted_node_samples[i]
@@ -511,7 +523,7 @@ cdef class Tree:
 
     @property
     def threshold(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.float64)
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._thresholds[i]
@@ -519,7 +531,7 @@ cdef class Tree:
 
     @property
     def impurity(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.float64)
+        cdef np.ndarray arr = np.empty(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._impurity[i]
@@ -535,7 +547,7 @@ cdef class Tree:
     cpdef np.ndarray apply(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
-
+        X = check_dataset(X)
         cdef Dataset ts = Dataset(X)
         cdef np.ndarray[np.npy_intp] out = np.zeros((ts.n_samples,), dtype=np.intp)
         cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
@@ -563,6 +575,7 @@ cdef class Tree:
     cpdef np.ndarray decision_path(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
+        check_dataset(X)
         cdef Dataset ts = Dataset(X)
         cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
 
@@ -786,6 +799,13 @@ cdef class TreeBuilder:
         if sample_weights is None:
             self.sample_weights = NULL
         else:
+            if sample_weights.dtype != float:
+                raise ValueError("unexpected dtype (%r != int)" % sample_weights.dtype)
+            if sample_weights.ndim != 1:
+                raise ValueError("unexpected dim (%r != 1)" % sample_weights.ndim)
+            if sample_weights.strides[0] // sample_weights.itemsize != 1:
+                raise ValueError("unexpected stride")
+
             self.sample_weights = <double*> sample_weights.data
 
     def __dealloc__(self):

@@ -810,9 +810,9 @@ def _dtw_pairwise_distance(np.ndarray x, Py_ssize_t r):
     """
     if not 0 < r < x.shape[1]:
         raise ValueError("invalid r")
-    x = np.ascontiguousarray(x, dtype=np.float64)
+    x = np.ascontiguousarray(x, dtype=float)
     cdef Py_ssize_t length = x.shape[1]
-    cdef np.ndarray dists = np.empty((x.shape[0], x.shape[0]), dtype=np.float64)
+    cdef np.ndarray dists = np.empty((x.shape[0], x.shape[0]), dtype=float)
     cdef Py_ssize_t i, j
     cdef Py_ssize_t i_offset, j_offset
     cdef Py_ssize_t sample_stride = <Py_ssize_t> x.strides[0] / <Py_ssize_t> x.itemsize
@@ -850,14 +850,14 @@ def _dtw_envelop(np.ndarray x, Py_ssize_t r):
     if not 0 < r < x.shape[0]:
         raise ValueError("invalid r")
 
-    x = np.ascontiguousarray(x, dtype=np.float64)
+    x = np.ascontiguousarray(x, dtype=float)
 
     cdef Deque du
     cdef Deque dl
     cdef Py_ssize_t length = x.shape[0]
     cdef double *data = <double*> x.data
-    cdef np.ndarray lower = np.empty(length, dtype=np.float64)
-    cdef np.ndarray upper = np.empty(length, dtype=np.float64)
+    cdef np.ndarray lower = np.empty(length, dtype=float)
+    cdef np.ndarray upper = np.empty(length, dtype=float)
     cdef double *lower_data = <double*> lower.data
     cdef double *upper_data = <double*> upper.data
 
@@ -873,9 +873,9 @@ def _dtw_envelop(np.ndarray x, Py_ssize_t r):
 def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r):
     if not 0 < r < x.shape[0]:
         raise ValueError("invalid r")
-    x = np.ascontiguousarray(x, dtype=np.float64)
-    lower = np.ascontiguousarray(lower, dtype=np.float64)
-    upper = np.ascontiguousarray(upper, dtype=np.float64)
+    x = np.ascontiguousarray(x, dtype=float)
+    lower = np.ascontiguousarray(lower, dtype=float)
+    upper = np.ascontiguousarray(upper, dtype=float)
     cdef Py_ssize_t i
     cdef Py_ssize_t length = x.shape[0]
     cdef double *data = <double*> x.data
@@ -894,7 +894,7 @@ def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r
         upper_data = <double*> malloc(sizeof(double) * length)
         for i in range(length):
             upper_data[i] = upper[i]
-    cdef np.ndarray cb = np.empty(length, dtype=np.float64)
+    cdef np.ndarray cb = np.empty(length, dtype=float)
     cdef double *cb_data = <double*> cb.data
     cdef double min_dist
     min_dist = cumulative_bound(

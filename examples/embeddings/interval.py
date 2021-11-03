@@ -9,9 +9,17 @@ from sklearn.pipeline import make_pipeline
 from wildboar.datasets import load_dataset
 from wildboar.embed import IntervalEmbedding
 from wildboar.tree import IntervalTreeClassifier
+from wildboar.embed.catch22 import histogram_mode
 
 x, y = load_dataset("GunPoint")
 x_train, x_test, y_train, y_test = load_dataset("GunPoint", merge_train_test=False)
+
+# x = np.vstack([x, x, x, x, x, x, x, x, x, x, x])
+x = np.hstack([x, x, x]).reshape(-1, 3, 150)
+# x = x.reshape(-1, 150)
+start = timer()
+histogram_mode(x, 10)
+print(timer() - start)
 
 
 def wrap(f):
@@ -38,55 +46,56 @@ i = IntervalEmbedding(
     n_interval=1,
     summarizer=summarizers,
     random_state=123,
+    n_jobs=2,
 )
 
 
 start = timer()
-x_t = i.fit_transform(x[selection])
+# x_t = i.fit_transform(x[selection])
 end = timer()
 print("non-native: ", end - start)
 
-df_expected = pd.DataFrame(x_t, columns=names)
+# df_expected = pd.DataFrame(x_t, columns=names)
 
-i = IntervalEmbedding(
-    n_interval=1,
-    summarizer="catch22",
-    random_state=123,
-)
-start = timer()
-x_t = i.fit_transform(x[selection])
-end = timer()
-print("native: ", end - start)
-df_actual = pd.DataFrame(x_t, columns=names)
+# i = IntervalEmbedding(
+#     n_interval=1,
+#     summarizer="catch22",
+#     random_state=123,
+# )
+# start = timer()
+# x_t = i.fit_transform(x[selection])
+# end = timer()
+# print("native: ", end - start)
+# df_actual = pd.DataFrame(x_t, columns=names)
 
-# df_expected["SB_BinaryStats_mean_longstretch1"] += 1
-pd.testing.assert_frame_equal(df_expected, df_actual)
-# with pd.option_context(
-#     "display.max_rows", None, "display.max_columns", None, "display.width", None
-# ):
-#     #print(df_expected - df_actual)
+# # df_expected["SB_BinaryStats_mean_longstretch1"] += 1
+# pd.testing.assert_frame_equal(df_expected, df_actual)
+# # with pd.option_context(
+# #     "display.max_rows", None, "display.max_columns", None, "display.width", None
+# # ):
+# #     #print(df_expected - df_actual)
 
-pipe = make_pipeline(
-    IntervalEmbedding(
-        n_interval=1000,
-        intervals="random",
-        summarizer="catch22",
-        min_size=0.1,
-        max_size=0.2,
-        n_jobs=-1,
-    ),
-    RidgeClassifierCV(),
-)
-# pipe.fit(x_train, y_train)
-# print(pipe.score(x_test, y_test))
+# pipe = make_pipeline(
+#     IntervalEmbedding(
+#         n_interval=1000,
+#         intervals="random",
+#         summarizer="catch22",
+#         min_size=0.1,
+#         max_size=0.2,
+#         n_jobs=-1,
+#     ),
+#     RidgeClassifierCV(),
+# )
+# # pipe.fit(x_train, y_train)
+# # print(pipe.score(x_test, y_test))
 
-t = IntervalTreeClassifier(
-    n_interval=100,
-    intervals="random",
-    min_size=0.3,
-    max_size=0.4,
-    summarizer="catch22",
-)
-t.fit(x_train, y_train)
-print("Fit?")
-print(t.score(x_test, y_test))
+# t = IntervalTreeClassifier(
+#     n_interval=100,
+#     intervals="random",
+#     min_size=0.3,
+#     max_size=0.4,
+#     summarizer="catch22",
+# )
+# t.fit(x_train, y_train)
+# print("Fit?")
+# print(t.score(x_test, y_test))

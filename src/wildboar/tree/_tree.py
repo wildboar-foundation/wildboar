@@ -23,7 +23,9 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
-from sklearn.utils.validation import _check_sample_weight, check_array, check_is_fitted
+from sklearn.utils.validation import _check_sample_weight, check_is_fitted
+
+from wildboar.utils import check_array, check_dataset
 
 from ..embed._interval import (
     _SUMMARIZER,
@@ -64,8 +66,9 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         self.min_impurity_decrease = min_impurity_decrease
 
     def _validate_x_predict(self, x, check_input):
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions X.ndim ({})".format(x.ndim))
+        if check_input:
+            x = check_array(x, allow_multivariate=True)
+
         if isinstance(self.force_dim, int):
             x = np.reshape(x, [x.shape[0], self.force_dim, -1])
 
@@ -77,11 +80,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
             raise ValueError(
                 "illegal input shape ({} != {}".format(x.shape[1], self.n_dims_)
             )
-        if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
 
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
         return x
 
     def decision_path(self, x, check_input=True):
@@ -119,6 +118,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
             warnings.warn("max_depth exceeds the maximum recursion limit.")
 
         feature_engineer = self._get_feature_engineer()
+        x = check_dataset(x)
         tree_builder = self._get_tree_builder(
             x,
             y,
@@ -159,11 +159,8 @@ class RegressorTreeMixin:
         self: object
         """
         if check_input:
-            X = check_array(X, dtype=np.float64, allow_nd=True, order="C")
-            y = check_array(y, dtype=np.float64, ensure_2d=False)
-
-        if X.ndim < 2 or X.ndim > 3:
-            raise ValueError("illegal input dimensions")
+            X = check_array(X, allow_multivariate=True, dtype=float)
+            y = check_array(y, ensure_2d=False, dtype=float)
 
         n_samples = X.shape[0]
         if isinstance(self.force_dim, int):
@@ -182,18 +179,12 @@ class RegressorTreeMixin:
                 "number of samples={}".format(len(y), n_samples)
             )
 
-        if X.dtype != np.float64 or not X.flags.c_contiguous:
-            X = np.ascontiguousarray(X, dtype=np.float64)
-
-        if y.dtype != np.float64 or not y.flags.c_contiguous:
-            y = np.ascontiguousarray(y, dtype=np.float64)
-
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
         random_state = check_random_state(self.random_state)
 
         if sample_weight is not None:
-            sample_weight = _check_sample_weight(sample_weight, X, np.float64)
+            sample_weight = _check_sample_weight(sample_weight, X, dtype=float)
 
         self._fit(X, y, sample_weight, random_state)
         return self
@@ -270,11 +261,8 @@ class ClassifierTreeMixin:
         self: object
         """
         if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-            y = check_array(y, ensure_2d=False)
-
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
+            x = check_array(x, allow_multivariate=True, dtype=float)
+            y = check_array(y, ensure_2d=False, dtype=int)
 
         n_samples = x.shape[0]
         if isinstance(self.force_dim, int):
@@ -306,19 +294,13 @@ class ClassifierTreeMixin:
                 "number of samples={}".format(len(y), n_samples)
             )
 
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
-
-        if not y.flags.c_contiguous:
-            y = np.ascontiguousarray(y, dtype=np.intp)
-
         self.n_classes_ = len(self.classes_)
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
         random_state = check_random_state(self.random_state)
 
         if sample_weight is not None:
-            sample_weight = _check_sample_weight(sample_weight, x, np.float64)
+            sample_weight = _check_sample_weight(sample_weight, x, dtype=float)
 
         if class_weight is not None:
             if sample_weight is not None:

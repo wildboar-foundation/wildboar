@@ -27,7 +27,7 @@ x = [
 
 # `x` is an array of shape `[5, 2, 5]`, i.e., 5 examples with 2
 # dimensions each consisting of 5 time steps
-x = np.array(x, dtype=np.float64)
+x = np.array(x, dtype=float)
 n_samples, n_dimensions, n_timesteps = x.shape
 
 # `y` is the output target

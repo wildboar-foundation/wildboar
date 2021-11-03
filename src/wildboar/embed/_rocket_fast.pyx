@@ -351,7 +351,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         cdef Py_ssize_t j
         cdef Rocket *rocket = <Rocket*> feature.feature
 
-        weights = np.empty(rocket.length, dtype=np.float64)
+        weights = np.empty(rocket.length, dtype=float)
         for j in range(rocket.length):
             weights[j] = rocket.weight[j]
 

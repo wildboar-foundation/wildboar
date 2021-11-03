@@ -18,12 +18,17 @@
 # Authors: Isak Samsten
 
 cimport numpy as np
+import numpy as np
 from libc.math cimport INFINITY, ceil, exp, fabs, floor, pow, sqrt
 from libc.stdlib cimport free, malloc, qsort
 from libc.string cimport memcpy, memset
 
 from wildboar.utils cimport stats
+from wildboar.utils.data cimport Dataset
+from wildboar.utils.parallel cimport MapSample
+from wildboar.utils.parallel import run_in_parallel
 
+from wildboar.utils import check_dataset
 
 cdef extern from "catch22.h":
 
@@ -204,7 +209,7 @@ cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t
         Py_ssize_t i
         Py_ssize_t j
         double lag_sum
-        Py_ssize_t lag_out, out
+        Py_ssize_t lag_out, x_out
         double *lag_ac
 
     lag_ac = <double*> malloc(sizeof(double) * n - lag)
@@ -221,11 +226,41 @@ cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t
         lag_out += 1
     free(lag_ac)
 
-    out = 0
-    while ac[out] > 0 and out < n:
-        out += 1
+    x_out = 0
+    while ac[x_out] > 0 and x_out < n:
+        x_out += 1
 
-    return <double> lag_out / <double> out
+    return <double> lag_out / <double> x_out
+
+
+
+
+# TODO: add functions availiable to python
+
+def histogram_mode_(np.ndarray x, int n_bins):
+    x = check_dataset(x)
+    cdef Dataset x_in = Dataset(x)
+    
+    cdef np.ndarray x_out = np.zeros((x_in.n_samples, x_in.n_dims))
+    cdef Py_ssize_t sample, dim
+    cdef double[:, :] x_out_view = x_out
+    cdef double *bin_edges = <double*> malloc(sizeof(double) * (n_bins + 1))
+    cdef int *bin_count = <int*> malloc(sizeof(int) * n_bins)
+    if bin_edges == NULL or bin_count == NULL:
+        raise MemoryError()
+
+    with nogil:
+        for sample in range(x_in.n_samples):
+            for dim in range(x_in.n_dims):
+                x_out_view[sample, dim] = histogram_mode(
+                    x_in.get_sample(sample, dim=dim),
+                    x_in.n_timestep, 
+                    bin_count,
+                    bin_edges, 
+                    n_bins,
+                )
+
+    return x_out if x_in.n_dims > 1 else x_out.reshape(-1)
 
 
 

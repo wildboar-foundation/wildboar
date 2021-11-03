@@ -152,8 +152,8 @@ def threshold_score(y_true, score, score_f):
     >>> perf = threshold_score(y_train, scores, balanced_accuracy_score)
     >>> f.offset_ = score[np.argmax(perf)]
     """
-    ba_score = np.empty(score.shape[0], dtype=np.float)
-    score_copy = np.empty(score.shape[0], dtype=np.float)
+    ba_score = np.empty(score.shape[0], dtype=float)
+    score_copy = np.empty(score.shape[0], dtype=float)
     is_inlier = np.ones(score.shape[0])
     for i in range(score.shape[0]):
         score_copy[:] = score

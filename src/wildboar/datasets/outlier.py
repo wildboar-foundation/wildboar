@@ -26,10 +26,11 @@ from sklearn.cluster import DBSCAN, OPTICS, KMeans
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, pairwise_distances
 from sklearn.neighbors import NearestNeighbors
-from sklearn.utils import check_array, check_random_state
+from sklearn.utils import check_random_state
 from sklearn.utils.validation import check_is_fitted
 
 from wildboar.linear_model import KernelLogisticRegression
+from wildboar.utils import check_array
 
 __all__ = [
     "OutlierLabeler",
@@ -258,7 +259,7 @@ class MajorityLabeler(OutlierLabeler):
         self.random_state = random_state
 
     def fit(self, x, y=None):
-        x = check_array(x)
+        x = check_array(x, allow_multivariate=True)
         y = check_array(y, ensure_2d=False)
         labels, counts = np.unique(y, return_counts=True)
         max_label = np.argmax(counts)

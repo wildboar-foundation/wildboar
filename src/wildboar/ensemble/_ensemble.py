@@ -24,18 +24,19 @@ from sklearn.ensemble import BaggingClassifier, BaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging
 from sklearn.metrics import precision_recall_curve, roc_curve
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.utils import check_array, check_random_state, compute_sample_weight
+from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
-from ..model_selection.outlier import threshold_score
-from ..tree import (
+from wildboar.utils import check_array
+from wildboar.model_selection.outlier import threshold_score
+from wildboar.tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
     ShapeletTreeClassifier,
     ShapeletTreeRegressor,
 )
-from ..tree._tree import RocketTreeClassifier, RocketTreeRegressor
+from wildboar.tree._tree import RocketTreeClassifier, RocketTreeRegressor
 
 
 class ForestMixin:
@@ -67,10 +68,12 @@ class ForestMixin:
         return sparse.hstack(indicators).tocsr(), n_nodes_ptr
 
     def _validate_x_predict(self, x, check_input):
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions X.ndim ({})".format(x.ndim))
+        if check_input:
+            x = check_array(x, allow_multivariate=True)
+
         if self.n_dims_ > 1 and x.ndim != 3:
             raise ValueError("illegal input dimensions X.ndim != 3")
+
         if x.shape[-1] != self.n_timestep_:
             raise ValueError(
                 "illegal input shape ({} != {})".format(x.shape[-1], self.n_timestep)
@@ -79,10 +82,7 @@ class ForestMixin:
             raise ValueError(
                 "illegal input shape ({} != {}".format(x.shape[1], self.n_dims_)
             )
-        if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
+
         x = x.reshape(x.shape[0], self.n_dims_ * self.n_timestep_)
         return x
 
@@ -138,11 +138,8 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier):
 
     def fit(self, x, y, sample_weight=None, check_input=True):
         if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-            y = check_array(y, ensure_2d=False, order="C")
-
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimension")
+            x = check_array(x, allow_multivariate=True, dtype=float)
+            y = check_array(y, ensure_2d=False, dtype=int)
 
         n_samples = x.shape[0]
         self.n_timestep_ = x.shape[-1]
@@ -152,12 +149,6 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier):
             n_dims = 1
 
         self.n_dims_ = n_dims
-
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
-
-        if not y.flags.c_contiguous:
-            y = np.ascontiguousarray(y, dtype=np.intp)
 
         if self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
@@ -530,11 +521,8 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
 
     def fit(self, x, y, sample_weight=None, check_input=True):
         if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-            y = check_array(y, ensure_2d=False, order="C")
-
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimension")
+            x = check_array(x, allow_multivariate=True, dtype=float)
+            y = check_array(y, ensure_2d=False, dtype=int)
 
         n_samples = x.shape[0]
         self.n_timestep_ = x.shape[-1]
@@ -544,12 +532,6 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
             n_dims = 1
 
         self.n_dims_ = n_dims
-
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
-
-        if not y.flags.c_contiguous:
-            y = np.ascontiguousarray(y, dtype=np.intp)
 
         x = x.reshape(n_samples, n_dims * self.n_timestep_)
         self.n_features_in_ = x.shape[1]
@@ -945,10 +927,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     def fit_transform(self, x, y=None, sample_weight=None, check_input=True):
         random_state = check_random_state(self.random_state)
         if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimension")
+            x = check_array(x, allow_multivariate=True)
 
         n_samples = x.shape[0]
         self.n_timestep_ = x.shape[-1]
@@ -958,9 +937,6 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
             n_dims = 1
 
         self.n_dims_ = n_dims
-
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
 
         if n_dims > 1:
             self.base_estimator_.force_dim = n_dims
@@ -1137,10 +1113,7 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
     def fit(self, x, y=None, sample_weight=None, check_input=True):
         random_state = check_random_state(self.random_state)
         if check_input:
-            x = check_array(x, dtype=np.float64, allow_nd=True, order="C")
-
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimension")
+            x = check_array(x, allow_multivariate=True)  # TODO
 
         n_samples = x.shape[0]
         self.n_timestep_ = x.shape[-1]
@@ -1150,9 +1123,6 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
             n_dims = 1
 
         self.n_dims_ = n_dims
-
-        if x.dtype != np.float64 or not x.flags.c_contiguous:
-            x = np.ascontiguousarray(x, dtype=np.float64)
 
         if n_dims > 1:
             self.base_estimator_.force_dim = n_dims
