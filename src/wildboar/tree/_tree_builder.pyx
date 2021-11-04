@@ -92,7 +92,7 @@ cdef class Criterion:
 
 cdef class ClassificationCriterion(Criterion):
 
-    cdef Py_ssize_t *labels
+    cdef int *labels
     cdef Py_ssize_t label_stride
     cdef Py_ssize_t n_labels
     cdef double *sum_left
@@ -100,12 +100,12 @@ cdef class ClassificationCriterion(Criterion):
     cdef double *sum_total
 
     def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
-        if y.dtype != int:
-            raise ValueError("unexpected dtype (%r != int)" % y.dtype)
+        if y.dtype != np.intc:
+            raise ValueError("unexpected dtype (%r != np.intc)" % y.dtype)
 
         if y.ndim != 1:
             raise ValueError("unexpected dim (%r != 1)" % y.ndim)
-        self.labels = <Py_ssize_t*> y.data
+        self.labels = <int*> y.data
         self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
         self.n_labels = n_labels
         self.sum_left = <double*> calloc(n_labels, sizeof(double))
@@ -249,8 +249,8 @@ cdef class RegressionCriterion(Criterion):
     cdef Py_ssize_t pos
 
     def __cinit__(self, np.ndarray y):
-        if y.dtype != float:
-            raise ValueError("unexpected dtype (%r != float)" % y.dtype)
+        if y.dtype != np.double:
+            raise ValueError("unexpected dtype (%r != np.double)" % y.dtype)
 
         if y.ndim != 1:
             raise ValueError("unexpected dim (%r != 1)" % y.ndim)        
@@ -556,7 +556,7 @@ cdef class Tree:
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         with nogil:
-            #self.feature_engineer.init(ts)
+            self.feature_engineer.init(ts)
             for i in range(ts.n_samples):
                 node_index = 0
                 while self._left[node_index] != -1:
@@ -587,7 +587,7 @@ cdef class Tree:
         cdef Feature *feature
         cdef double threshold, feature_value
         with nogil:
-            #self.feature_engineer.init(ts)
+            self.feature_engineer.init(ts)
             for i in range(ts.n_samples):
                 node_index = 0
                 while self._left[node_index] != -1:
@@ -799,8 +799,8 @@ cdef class TreeBuilder:
         if sample_weights is None:
             self.sample_weights = NULL
         else:
-            if sample_weights.dtype != float:
-                raise ValueError("unexpected dtype (%r != int)" % sample_weights.dtype)
+            if sample_weights.dtype != np.double:
+                raise ValueError("unexpected dtype (%r != np.double)" % sample_weights.dtype)
             if sample_weights.ndim != 1:
                 raise ValueError("unexpected dim (%r != 1)" % sample_weights.ndim)
             if sample_weights.strides[0] // sample_weights.itemsize != 1:

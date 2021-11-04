@@ -262,7 +262,7 @@ class ClassifierTreeMixin:
         """
         if check_input:
             x = check_array(x, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False, dtype=int)
+            y = check_array(y, ensure_2d=False, dtype=np.intc)
 
         n_samples = x.shape[0]
         if isinstance(self.force_dim, int):

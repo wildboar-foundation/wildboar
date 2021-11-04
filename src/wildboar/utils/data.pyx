@@ -101,9 +101,9 @@ cdef class Dataset:
             raise ValueError(
                 "timestep_stride is invalid (%d != 1)" % timestep_stride,
             )
-        if data.dtype != float:
+        if data.dtype != np.double:
             raise ValueError(
-                "undexpected dtype (%r, require %r)" % (data.dtype, float)
+                "undexpected dtype (%r, require %r)" % (data.dtype, np.double)
             )
 
         if data.ndim == 3:
