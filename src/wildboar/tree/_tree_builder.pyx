@@ -101,7 +101,7 @@ cdef class ClassificationCriterion(Criterion):
 
     def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
         if y.dtype != np.int_:
-            raise ValueError("unexpected dtype (%r != np.intc)" % y.dtype)
+            raise ValueError("unexpected dtype (%r != %r)" % (y.dtype, np.int_))
 
         if y.ndim != 1:
             raise ValueError("unexpected dim (%r != 1)" % y.ndim)
