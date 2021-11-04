@@ -14,10 +14,14 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+import numpy as np
+
+from wildboar.utils import check_array
+from wildboar.utils.decorators import array_or_scalar
 
 from . import _distance, dtw
 
-__all__ = ["distance", "matches", "dtw"]
+__all__ = ["distance", "matches", "shapelet_distance", "dtw"]
 
 
 def paired_distance(
@@ -29,6 +33,52 @@ def paired_distance(
     subsequence_distance=True,
 ):
     raise NotImplementedError()
+
+
+@array_or_scalar(squeeze=True)
+def shapelet_distance(
+    y,
+    x,
+    *,
+    dim=0,
+    sample=None,
+    metric="euclidean",
+    metric_params=None,
+    return_index=False,
+    n_jobs=None,
+):
+    if isinstance(y, np.ndarray):
+        y = np.squeeze(y)
+        if y.ndim == 1:
+            y = [y.astype(np.double)]
+        elif y.ndim == 2:
+            y = list(y.astype(np.double))
+        else:
+            raise ValueError("require 1d-array or 2d-array")
+    else:
+        if all(isinstance(e, (int, float)) for e in y):
+            y = [np.array(y, dtype=np.double)]
+        else:
+            y = [np.array(e, dtype=np.double) for e in y]
+
+    x = check_array(x, allow_multivariate=True)
+    if sample is None:
+        sample = np.arange(x.shape[0], dtype=np.intp)
+    else:
+        sample = np.atleast_1d(sample).astype(np.intp)
+    min_dist, min_ind = _distance._shapelet_distance(
+        y,
+        x,
+        dim,
+        np.ravel(sample),
+        metric=metric,
+        metric_params=metric_params,
+        n_jobs=n_jobs,
+    )
+    if return_index:
+        return min_dist, min_ind
+    else:
+        return min_dist
 
 
 def distance(

@@ -26,6 +26,8 @@ cimport numpy as np
 from libc.math cimport NAN, sqrt
 from libc.stdlib cimport free, malloc
 
+from copy import deepcopy
+
 from . import _dtw_distance, _euclidean_distance
 
 from wildboar.utils.data cimport Dataset
@@ -33,6 +35,7 @@ from wildboar.utils.data cimport Dataset
 from ._distance cimport DistanceMeasure, TSCopy
 
 from wildboar.utils import check_array, check_dataset
+from wildboar.utils.parallel import run_in_parallel
 
 _DISTANCE_MEASURE = {
     'euclidean': _euclidean_distance.EuclideanDistance,
@@ -439,11 +442,11 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
 
 
 def _validate_shapelet(shapelet):
-    return check_array(shapelet, ensure_2d=False, dtype=np.float32)
+    return check_array(shapelet, ensure_2d=False, dtype=np.double)
 
 
 def _validate_data(data):
-    data = check_array(data, ensure_2d=False, allow_nd=True, dtype=np.float32)
+    data = check_array(data, ensure_2d=False, allow_nd=True, dtype=np.double)
     return check_dataset(data)
 
 
@@ -516,6 +519,100 @@ cpdef DistanceMeasure get_distance_measure(
     return distance_measure
 
 
+cdef class _ShapeletDistanceBatch:
+
+    cdef Dataset dataset
+    cdef Py_ssize_t[:] samples
+    cdef Py_ssize_t[:, :] min_indices
+    cdef double[:, :] distances,
+    cdef TSCopy **shapelets
+    cdef Py_ssize_t n_shapelets
+    cdef DistanceMeasure distance_measure
+
+    def __cinit__(
+        self, 
+        Py_ssize_t[:] samples,
+        double[:, :] distances,
+        Py_ssize_t[:, :] min_indices,
+        Dataset dataset, 
+        DistanceMeasure distance_measure
+    ):
+        self.dataset = dataset
+        self.samples = samples
+        self.distances = distances
+        self.min_indices = min_indices
+        self.distance_measure = distance_measure
+        self.shapelets = NULL
+        self.n_shapelets = 0
+
+    def __dealloc__(self):
+        if self.shapelets != NULL:
+            for i in range(self.n_shapelets):
+                ts_copy_free(self.shapelets[i])
+                free(self.shapelets[i])
+            free(self.shapelets)
+
+    cdef void set_shapelets(self, list shapelets, Py_ssize_t dim):
+        cdef Py_ssize_t i
+        self.n_shapelets = len(shapelets)
+        self.shapelets = <TSCopy**> malloc(sizeof(TSCopy*) *self. n_shapelets)
+        cdef TSCopy *ts_copy
+        for i in range(self.n_shapelets):
+            ts_copy = <TSCopy*> malloc(sizeof(TSCopy))
+            self.distance_measure.init_ts_copy_from_obj(ts_copy, (dim, shapelets[i]))
+            self.shapelets[i] = ts_copy
+
+    @property
+    def n_work(self):
+        return self.samples.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef Py_ssize_t i, j, min_index
+        cdef TSCopy *ts_copy
+        cdef double distance
+        cdef DistanceMeasure distance_measure = deepcopy(self.distance_measure)
+        distance_measure.init(self.dataset)
+        with nogil:
+            for i in range(offset, offset + batch_size):
+                for j in range(self.n_shapelets):
+                    ts_copy = self.shapelets[j]
+                    distance = distance_measure.ts_copy_sub_distance(
+                        ts_copy, self.dataset, self.samples[i], &min_index
+                    )
+                    self.distances[i, j] = distance
+                    self.min_indices[i, j] = min_index
+
+
+def _shapelet_distance(
+    list shapelets, 
+    np.ndarray x, 
+    int dim, 
+    np.ndarray samples,
+    metric,
+    metric_params,
+    n_jobs,
+):
+    if samples.dtype != np.intp:
+        raise ValueError("unsupported type, expect np.intp (got, %r)" % samples.dtype)
+    
+    x = check_dataset(x)
+    dataset = Dataset(x)
+    distances = np.empty((samples.shape[0], len(shapelets)), dtype=np.double)
+    min_indicies = np.empty((samples.shape[0], len(shapelets)), dtype=np.intp)
+    dist_func = _ShapeletDistanceBatch(
+        samples,
+        distances,
+        min_indicies,
+        dataset,
+        get_distance_measure(dataset.n_timestep, metric, metric_params),
+    )
+    dist_func.set_shapelets(shapelets, dim)
+    run_in_parallel(dist_func, n_jobs=n_jobs, prefer="threads")
+    return distances, min_indicies
+
+                
+
+
 def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_params=None, subsequence_distance=True, return_index=False):
     cdef np.ndarray s = _validate_shapelet(shapelet)
     cdef np.ndarray x = _validate_data(data)
@@ -569,7 +666,9 @@ def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_para
         else:
             return min_dist
     else:  # assume an `array_like` object for `samples`
-        samples = check_array(sample, ensure_2d=False, dtype=int)
+        samples = np.array(sample, dtype=int)
+        if samples.ndim != 1:
+            raise ValueError("invalid samples (%r)" % samples)
         dist = []
         ind = []
         # TODO: add n_jobs

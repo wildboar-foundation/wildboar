@@ -2,11 +2,11 @@ import matplotlib.pylab as plt
 import numpy as np
 
 from wildboar.datasets import load_dataset
-from wildboar.distance import distance
+from wildboar.distance import distance, shapelet_distance
 from wildboar.distance.dtw import dtw_envelop, dtw_lb_keogh, dtw_pairwise_distance
 
 x, y = load_dataset("GunPoint")
-
+min_dist = shapelet_distance(x[[2, 3], 0:20], x, n_jobs=1, metric="euclidean")
 l, u = dtw_envelop(x[-1], r=10)
 min_dist, lu = dtw_lb_keogh(x[-1], x[0], r=10)
 plt.plot(x[-1])
