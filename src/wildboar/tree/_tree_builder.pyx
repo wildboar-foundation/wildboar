@@ -92,7 +92,7 @@ cdef class Criterion:
 
 cdef class ClassificationCriterion(Criterion):
 
-    cdef int *labels
+    cdef long *labels
     cdef Py_ssize_t label_stride
     cdef Py_ssize_t n_labels
     cdef double *sum_left
@@ -100,12 +100,12 @@ cdef class ClassificationCriterion(Criterion):
     cdef double *sum_total
 
     def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
-        if y.dtype != np.intc:
+        if y.dtype != np.int_:
             raise ValueError("unexpected dtype (%r != np.intc)" % y.dtype)
 
         if y.ndim != 1:
             raise ValueError("unexpected dim (%r != 1)" % y.ndim)
-        self.labels = <int*> y.data
+        self.labels = <long*> y.data
         self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
         self.n_labels = n_labels
         self.sum_left = <double*> calloc(n_labels, sizeof(double))
@@ -549,8 +549,8 @@ cdef class Tree:
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
         X = check_dataset(X)
         cdef Dataset ts = Dataset(X)
-        cdef np.ndarray[np.npy_intp] out = np.zeros((ts.n_samples,), dtype=np.intp)
-        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
+        cdef np.ndarray out = np.zeros((ts.n_samples,), dtype=int)
+        cdef long *out_data = <long*> out.data
         cdef Feature *feature
         cdef double threshold, feature_value
         cdef Py_ssize_t node_index
@@ -577,9 +577,9 @@ cdef class Tree:
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
         check_dataset(X)
         cdef Dataset ts = Dataset(X)
-        cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
+        cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=int)
 
-        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
+        cdef long *out_data = <long*> out.data
         cdef Py_ssize_t i_stride = <Py_ssize_t> out.strides[0] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t n_stride = <Py_ssize_t> out.strides[1] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t node_index
