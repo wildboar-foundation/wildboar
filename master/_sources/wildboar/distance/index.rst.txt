@@ -24,6 +24,7 @@ Functions
 
    wildboar.distance.distance
    wildboar.distance.matches
+   wildboar.distance.shapelet_distance
 
 
 
@@ -121,5 +122,8 @@ Functions
              * **matches** (*list*) -- The start position of the matches in each time series
 
    .. warning:: 'scaled_dtw' is not supported.
+
+
+.. py:function:: shapelet_distance(y, x, *, dim=0, sample=None, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)
 
 
