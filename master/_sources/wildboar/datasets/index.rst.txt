@@ -293,7 +293,7 @@ Functions
    .. py:method:: list_datasets(self, bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
-   .. py:method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
+   .. py:method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
    .. py:method:: name(self)
@@ -467,7 +467,7 @@ Functions
        ..versionadded :: 1.1
 
 
-.. py:function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, return_extras=False, force=False, refresh=False, timeout=None)
+.. py:function:: load_dataset(name, *, repository='wildboar/ucr', dtype=float, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, return_extras=False, force=False, refresh=False, timeout=None)
 
    Load a dataset from a repository
 
@@ -475,7 +475,7 @@ Functions
    :type name: str
    :param repository: The data repository formatted as {repository}/{bundle}[:{version}][:{tag}]
    :type repository: str, optional
-   :param dtype: The data type of the returned data
+   :param dtype: The data type of x (train and test)
    :type dtype: dtype, optional
    :param contiguous: Ensure that the returned dataset is memory contiguous.
    :type contiguous: bool, optional

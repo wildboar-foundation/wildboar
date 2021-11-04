@@ -4,3 +4,42 @@
 .. py:module:: wildboar.utils
 
 
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   decorators/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.check_array
+
+
+
+.. py:function:: check_array(x, allow_multivariate=False, contiguous=True, **kwargs)
+
+   Wrapper to check array
+
+   :param x: The array to check
+   :type x: ndarray
+   :param allow_multivariate: If 3d arrays are allowed, by default False
+   :type allow_multivariate: bool, optional
+   :param contiguous: Ensure that the array is in c-order.
+   :type contiguous: bool, optional
+   :param kwargs: Additional arguments passed to `sklearn.utils.check_array`
+   :type kwargs: dict
+
+   :returns: The checked array
+   :rtype: ndarray
+
+

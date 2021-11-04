@@ -41,11 +41,11 @@ Attributes
    Compute the histogram mode
 
    :param x: The input array
-   :type x: ndarray of shape (n_timestep, )
+   :type x: ndarray of shape (n_samples, n_timestep) or (n_timestep, )
    :param n_bins: The number of bins
    :type n_bins: int, optional
 
    :returns: **mode** -- The histogram mode
-   :rtype: float
+   :rtype: array or float
 
 
