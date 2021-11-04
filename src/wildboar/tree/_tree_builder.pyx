@@ -27,6 +27,8 @@ from libc.math cimport INFINITY, NAN, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
+from scipy.sparse import csr_matrix
+
 from wildboar.embed._feature cimport Feature, FeatureEngineer
 from wildboar.utils import check_dataset
 from wildboar.utils._utils cimport argsort, safe_realloc
@@ -537,14 +539,14 @@ cdef class Tree:
             arr[i] = self._impurity[i]
         return arr
 
-    cpdef np.ndarray predict(self, object X):
+    def predict(self, object X):
         cdef np.ndarray apply = self.apply(X)
         cdef np.ndarray predict = np.take(self.value, apply, axis=0, mode="clip")
         if self._n_labels == 1:
             predict = predict.reshape(X.shape[0])
         return predict
 
-    cpdef np.ndarray apply(self, object X):
+    def apply(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
         X = check_dataset(X)
@@ -572,14 +574,14 @@ cdef class Tree:
                 out_data[i] = <Py_ssize_t> node_index
         return out
 
-    cpdef np.ndarray decision_path(self, object X):
+    def decision_path(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
-        check_dataset(X)
+        X = check_dataset(X)
         cdef Dataset ts = Dataset(X)
-        cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intp)
+        cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intc)
 
-        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
+        cdef int *out_data = <int*> out.data
         cdef Py_ssize_t i_stride = <Py_ssize_t> out.strides[0] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t n_stride = <Py_ssize_t> out.strides[1] / <Py_ssize_t> out.itemsize
         cdef Py_ssize_t node_index
@@ -601,7 +603,7 @@ cdef class Tree:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
-        return out
+        return csr_matrix(out, dtype=bool)
 
     @property
     def node_count(self):

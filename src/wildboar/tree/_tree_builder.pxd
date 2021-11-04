@@ -75,9 +75,3 @@ cdef class Tree:
         double threshold,
         double impurity,
     ) nogil
-
-    cpdef np.ndarray predict(self, object X)
-
-    cpdef np.ndarray apply(self, object X)
-
-    cpdef np.ndarray decision_path(self, object X)

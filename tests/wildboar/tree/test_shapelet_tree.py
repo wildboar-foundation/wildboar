@@ -76,7 +76,7 @@ def test_apply():
         ],
         dtype=int,
     )
-    assert actual_apply.dtype == np.int_
+    assert actual_apply.dtype == np.intp
     assert_array_equal(actual_apply, expected_apply)
 
 
@@ -1939,7 +1939,7 @@ def test_decision_path():
                 0,
             ],
         ],
-        dtype=int,
+        dtype=bool,
     )
-    assert actual_decision_path.dtype == np.int_
-    assert_array_equal(actual_decision_path, expected_decision_path)
+    assert actual_decision_path.dtype == np.bool_
+    assert_array_equal(actual_decision_path.toarray(), expected_decision_path)
