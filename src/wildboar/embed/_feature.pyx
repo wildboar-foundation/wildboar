@@ -24,7 +24,7 @@ from wildboar.utils.data cimport Dataset
 
 cdef class FeatureEngineer:
 
-    cdef Py_ssize_t init(self, Dataset td) nogil:
+    cdef Py_ssize_t reset(self, Dataset td) nogil:
         return 0
 
     cdef Py_ssize_t get_n_features(self, Dataset td) nogil:

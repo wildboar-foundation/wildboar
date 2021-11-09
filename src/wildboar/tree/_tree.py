@@ -25,17 +25,18 @@ from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
-from wildboar.utils import check_array, check_dataset
-
-from ..embed._interval import (
+from wildboar.distance import _SUBSEQUENCE_DISTANCE_MEASURE
+from wildboar.embed._interval import (
     _SUMMARIZER,
     IntervalFeatureEngineer,
     PyFuncSummarizer,
     RandomFixedIntervalFeatureEngineer,
     RandomIntervalFeatureEngineer,
 )
-from ..embed._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
-from ..embed._shapelet import RandomShapeletFeatureEngineer
+from wildboar.embed._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
+from wildboar.embed._shapelet import RandomShapeletFeatureEngineer
+from wildboar.utils import check_array, check_dataset
+
 from ._tree_builder import (
     EntropyCriterion,
     ExtraTreeBuilder,
@@ -429,10 +430,13 @@ class BaseShapeletTree(BaseTree):
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
+        distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(self.metric, None)
+        if distance_measure is None:
+            raise ValueError("invalid distance measure (%r)" % self.metric)
+        metric_params = self.metric_params or {}
+
         return RandomShapeletFeatureEngineer(
-            self.n_timestep_,
-            self.metric,
-            self.metric_params,
+            distance_measure(**metric_params),
             min_shapelet_size,
             max_shapelet_size,
             self.n_shapelets,

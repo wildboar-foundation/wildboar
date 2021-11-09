@@ -26,352 +26,226 @@ cimport numpy as np
 from libc.math cimport NAN, sqrt
 from libc.stdlib cimport free, malloc
 
+from wildboar.utils cimport stats
+
 from copy import deepcopy
 
 from . import _dtw_distance, _euclidean_distance
 
 from wildboar.utils.data cimport Dataset
 
-from ._distance cimport DistanceMeasure, TSCopy
-
 from wildboar.utils import check_array, check_dataset
 from wildboar.utils.parallel import run_in_parallel
 
-_DISTANCE_MEASURE = {
-    'euclidean': _euclidean_distance.EuclideanDistance,
-    'dtw': _dtw_distance.DtwDistance,
-    'scaled_euclidean': _euclidean_distance.ScaledEuclideanDistance,
-    'scaled_dtw': _dtw_distance.ScaledDtwDistance,
-}
 
-
-cdef int ts_copy_init(
-    TSCopy *ts_copy,
-    Py_ssize_t dim,
-    Py_ssize_t length,
-    double mean,
-    double std,
-) nogil:
-    ts_copy.dim = dim
-    ts_copy.length = length
-    ts_copy.mean = mean
-    ts_copy.std = std
-    ts_copy.data = <double*> malloc(sizeof(double) * length)
-    ts_copy.extra = NULL
-    if ts_copy.data == NULL:
-        return -1
-
-
-cdef void ts_copy_free(TSCopy *ts_copy) nogil:
-    if ts_copy.data != NULL:
-        free(ts_copy[0].data)
-        ts_copy[0].data = NULL
-
-    if ts_copy.extra != NULL:
-        free(ts_copy[0].extra)
-        ts_copy[0].extra = NULL
-
-
-cdef void ts_view_init(TSView *ts_view) nogil:
-    """Initialize  a shapelet info struct """
-    ts_view.start = 0
-    ts_view.length = 0
-    ts_view.dim = 0
-    ts_view.mean = NAN
-    ts_view.std = NAN
-    ts_view.index = 0
-    ts_view.extra = NULL
-
-
-cdef void ts_view_free(TSView *ts_view) nogil:
-    """Free the `extra` payload of a shapelet info if needed """
-    if ts_view.extra != NULL:
-        free(ts_view.extra)
-        ts_view.extra = NULL
-
-
-cdef int _ts_view_update_statistics(TSView *ts_view, Dataset td) nogil:
+cdef int _ts_view_update_statistics(SubsequenceView *v, Dataset td) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef Py_ssize_t shapelet_offset = (
-            ts_view.index * td.sample_stride +
-            ts_view.dim * td.dim_stride +
-            ts_view.start
+            v.index * td.sample_stride +
+            v.dim * td.dim_stride +
+            v.start
     )
     cdef double ex = 0
     cdef double ex2 = 0
     cdef Py_ssize_t i
-    for i in range(ts_view.length):
+    for i in range(v.length):
         current_value = td.data[shapelet_offset + i]
         ex += current_value
         ex2 += current_value ** 2
 
-    ts_view.mean = ex / ts_view.length
-    ex2 = ex2 / ts_view.length - ts_view.mean * ts_view.mean
+    v.mean = ex / v.length
+    ex2 = ex2 / v.length - v.mean * v.mean
     if ex2 > 0:
-        ts_view.std = sqrt(ex2)
+        v.std = sqrt(ex2)
     else:
-        ts_view.std = 1.0
+        v.std = 1.0
     return 0
 
 
-cdef class DistanceMeasure:
-    """A distance measure can compute the distance between time series and
-    shapelets """
+cdef class SubsequenceDistanceMeasure:
 
-    def __cinit__(self, Py_ssize_t n_timestep, *args, **kvargs):
-        self.n_timestep = n_timestep
+    cdef int reset(self, Dataset dataset) nogil:
+        pass
 
-
-    def __reduce__(self):
-        return self.__class__, (self.n_timestep,)
-
-
-    cdef int init(self, Dataset td) nogil:
-        return 0
-
-
-    cdef void ts_view_sub_distances(
+    cdef int init_transient(
         self,
-        TSView *ts_view,
         Dataset td,
-        Py_ssize_t *samples,
-        double *distances,
-        Py_ssize_t n_samples,
-    ) nogil:
-        """ Compute the distance between the shapelet all samples in `samples`
-
-        :param ts_view: information about the shapelet
-        :param td: the time series database
-        :param samples: array of length `n_samples` samples to compute
-        the distance to
-        :param distances: array to store the distances. The the length
-        of distances >= `n_samples`, the `i = 0,...,n_samples`
-        position stores the distance between the i:th sample (in
-        `samples`) and `s` [out param]
-        :param n_samples: the number of samples 
-        """
-        cdef Py_ssize_t p
-        for p in range(n_samples):
-            distances[p] = self.ts_view_sub_distance(ts_view, td, samples[p])
-
-
-    cdef int init_ts_view(
-        self,
-        Dataset _td,
-        TSView *ts_view,
+        SubsequenceView *v,
         Py_ssize_t index,
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
     ) nogil:
-        """Set the parameters of the view
-
-        :param _td: shapelet database
-        :param ts_view: [out param] 
-        :param index: the index of the sample in `td`
-        :param start: the start position of the subsequence
-        :param length: the length of the subsequence
-        :param dim: the dimension of the subsequence
-        :return non-negative on success
-        """
-        ts_view.index = index
-        ts_view.dim = dim
-        ts_view.start = start
-        ts_view.length = length
-        ts_view.mean = NAN
-        ts_view.std = NAN
-        ts_view.extra = NULL
+        v.index = index
+        v.dim = dim
+        v.start = start
+        v.length = length
+        v.mean = NAN
+        v.std = NAN
+        v.extra = NULL
         return 0
 
-
-    cdef int init_ts_copy_from_obj(
+    cdef int init_persistent(
         self,
-        TSCopy *ts_copy,
+        Dataset dataset,
+        SubsequenceView* v,
+        Subsequence* s,
+    ) nogil:
+        s.dim = v.dim
+        s.length = v.length
+        s.mean = v.mean
+        s.std = v.std
+        s.ts_start = v.start
+        s.ts_index = v.index
+        s.extra = NULL
+        s.data = <double*> malloc(sizeof(double) * v.length)
+        if s.data == NULL:
+            return -1        
+
+        cdef double *sample = dataset.get_sample(v.index, dim=v.dim) + v.start
+        cdef Py_ssize_t i
+        for i in range(v.length):
+            s.data[i] = sample[i]
+        return 0
+
+    cdef int free_transient(self, SubsequenceView *v) nogil:
+        # EXTRA is NULL
+        return 0
+
+    cdef int free_persistent(self, Subsequence *v) nogil:
+        if v.data != NULL:
+            free(v.data)
+            v.data = NULL
+        return 0
+
+    cdef int from_array(
+        self,
+        Subsequence *v,
         object obj,
     ):
         dim, arr = obj
-        ts_copy.dim = dim
-        ts_copy.length = arr.shape[0]
-        ts_copy.mean = NAN
-        ts_copy.std = NAN
-        ts_copy.data = <double*> malloc(ts_copy.length * sizeof(double))
-        ts_copy.extra = NULL
-        if ts_copy.data == NULL:
+        v.dim = dim
+        v.length = arr.shape[0]
+        v.mean = NAN
+        v.std = NAN
+        v.data = <double*> malloc(v.length * sizeof(double))
+        v.extra = NULL
+        if v.data == NULL:
             return -1
 
         cdef Py_ssize_t i
-        for i in range(ts_copy[0].length):
-            ts_copy[0].data[i] = arr[i]
-        return 0
+        for i in range(v.length):
+            v.data[i] = arr[i]
+        return 0 
 
-
-    cdef object object_from_ts_copy(
+    cdef object to_array(
         self, 
-        TSCopy *ts_copy
+        Subsequence *s
     ):
         cdef Py_ssize_t j
-        arr = np.empty(ts_copy[0].length, dtype=float)
-        for j in range(ts_copy[0].length):
-            arr[j] = ts_copy[0].data[j]
+        arr = np.empty(s.length, dtype=float)
+        for j in range(s.length):
+            arr[j] = s.data[j]
 
-        return (ts_copy.dim, arr)
+        return (s.dim, arr)
 
-
-    cdef int init_ts_copy(
+    cdef double transient_distance(
         self,
-        TSCopy *ts_copy,
-        TSView *ts_view,
+        SubsequenceView *v,
         Dataset td,
-    ) nogil:
-        ts_copy_init(ts_copy, ts_view.dim, ts_view.length, ts_view.mean, ts_view.std)
-        ts_copy.ts_start = ts_view.start
-        ts_copy.ts_index = ts_view.index
-        cdef double *data = ts_copy.data
-        cdef Py_ssize_t tc_offset = (
-            ts_view.index * td.sample_stride +
-            ts_view.dim * td.dim_stride +
-            ts_view.start
-        )
-
-        cdef Py_ssize_t i
-        cdef Py_ssize_t p
-
-        for i in range(ts_view.length):
-            data[i] = td.data[tc_offset + i]
-
-        return 0
-
-
-    cdef double ts_view_sub_distance(
-        self,
-        TSView *ts_view,
-        Dataset td,
-        Py_ssize_t t_index,
-    ) nogil:
-        """Return the minimum distance
-        
-        Parameters
-        ----------
-        ts_view : the subsequence
-         
-        td : time series database
-        
-        t_index : sample to compare
-
-        Returns
-        -------
-        distance : the distance
-        """
-        with gil:
-            raise NotImplementedError()
-
-
-    cdef double ts_copy_sub_distance(
-        self,
-        TSCopy *ts_view,
-        Dataset td,
-        Py_ssize_t t_index,
+        Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
-        """Return the distance between `s` and the sample specified by
-        `t_index` in `td` setting the index of the best matching
-        position to `return_index` unless `return_index == NULL`
+        return NAN
 
-        :param ts_view: the shapelet
-
-        :param td: the time series database
-
-        :param t_index: the sample index
-
-        :param return_index: (out) the index of the best matching position
-        """
-        with gil:
-            raise NotImplementedError()
-
-    cdef int ts_copy_sub_matches(
+    cdef double presistent_distance(
         self,
-        TSCopy *s_ptr,
+        Subsequence *s,
         Dataset td,
-        Py_ssize_t t_index,
-        double threshold,
-        Py_ssize_t** matches,
-        double** distances,
-        Py_ssize_t *n_matches,
-    ) nogil except -1:
-        """Compute the matches for `s` in the sample `t_index` in `td` where
-        the distance threshold is below `threshold`, storing the
-        matching starting positions in `matches` and distance (<
-        `threshold`) in `distances` with `n_matches` storing the
-        number of successful matches.
-
-        Note:
-
-        - `matches` will be allocated and must be freed by the caller
-        - `distances` will be allocated and must be freed by the caller
-
-        :param s_ptr: the shapelet
-
-        :param td: the time series database
-
-        :param t_index: the sample
-
-        :param threshold: the minimum distance to consider a match
-
-        :param matches: (out) array of matching locations
-
-        :param distances: (out) array of distance at the matching
-        location (< `threshold`)
-
-        :param n_matches: (out) the number of matches
-        """
-        with gil:
-            raise NotImplementedError()
-
-
-    cdef double ts_copy_distance(self, TSCopy *s, Dataset td, Py_ssize_t t_index) nogil:
-        return self.ts_copy_sub_distance(s, td, t_index)
-
-
-    cdef bint support_unaligned(self) nogil:
-        return 0
-
-
-cdef class ScaledDistanceMeasure(DistanceMeasure):
-    """Distance measure that uses computes the distance on mean and
-    variance standardized shapelets"""
-
-    cdef int init_ts_copy_from_obj(
-        self,
-        TSCopy *ts_copy,
-        object obj,
-    ):
-        cdef int err = DistanceMeasure.init_ts_copy_from_obj(
-            self, ts_copy, obj
-        )
-        if err == -1:
-            return -1
-        dim, arr = obj
-        ts_copy.mean = np.mean(arr)
-        ts_copy.std = np.std(arr)
-        if ts_copy.std == 0.0:
-            ts_copy.std = 1.0
-        return 0
-
-    cdef int init_ts_view(
-        self,
-        Dataset td,
-        TSView *ts_view,
         Py_ssize_t index,
-        Py_ssize_t start,
-        Py_ssize_t length,
-        Py_ssize_t dim,
+        Py_ssize_t *return_index=NULL,
     ) nogil:
-        DistanceMeasure.init_ts_view(self, td, ts_view, index, start, length, dim)
-        _ts_view_update_statistics(ts_view, td)
+        return NAN
+
+    cdef Py_ssize_t transient_matches(
+        self,
+        SubsequenceView *v,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        return -1
+
+    cdef Py_ssize_t persistent_matches(
+        self,
+        Subsequence *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
         return -1
 
 
-cdef class FuncDistanceMeasure(DistanceMeasure):
+cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+
+    cdef int init_transient(
+        self,
+        Dataset dataset,
+        SubsequenceView *v,
+        Py_ssize_t index,
+        Py_ssize_t start,
+        Py_ssize_t length,
+        Py_ssize_t dim,
+    ) nogil:
+        cdef int err = SubsequenceDistanceMeasure.init_transient(
+            self, dataset, v, index, start, length, dim
+        )
+        if err < 0:
+            return err
+        _ts_view_update_statistics(v, dataset)
+
+    cdef int from_array(
+        self,
+        Subsequence *v,
+        object obj,
+    ):
+        cdef int err = SubsequenceDistanceMeasure.from_array(self, v, obj)
+        if err == -1:
+            return -1
+
+        dim, arr = obj
+        v.mean = np.mean(arr)
+        v.std = np.std(arr)
+        if v.std == 0.0:
+            v.std = 1.0
+        return 0
+
+
+cdef class DistanceMeasure:
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        return 0
+
+    cdef double distance(
+        self,
+        Dataset x,
+        Py_ssize_t x_index,
+        Dataset y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+    ) nogil:
+        return NAN
+
+    @property
+    def is_elastic(self):
+        return False
+
+
+cdef class FuncDistanceMeasure:
     cdef object func
     cdef np.ndarray x_buffer
     cdef np.ndarray y_buffer
@@ -391,7 +265,7 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
 
     cdef double ts_copy_sub_distance(
         self,
-        TSCopy *ts_copy,
+        Subsequence *s,
         Dataset td,
         Py_ssize_t t_index,
         Py_ssize_t *return_index=NULL,
@@ -399,65 +273,47 @@ cdef class FuncDistanceMeasure(DistanceMeasure):
         cdef Py_ssize_t i
         cdef Py_ssize_t sample_offset = (
             t_index * td.sample_stride + 
-            ts_copy.dim * td.dim_stride
+            s.dim * td.dim_stride
         )
         with gil:
             for i in range(td.n_timestep):
-                if i < ts_copy.length:
-                    self.x_buffer[i] = ts_copy.data[i]
+                if i < s.length:
+                    self.x_buffer[i] = s.data[i]
                 self.y_buffer[i] = td.data[sample_offset + i]
 
-            return self.func(self.x_buffer[:ts_copy.length], self.y_buffer)
+            return self.func(self.x_buffer[:s.length], self.y_buffer)
 
     cdef double ts_view_sub_distance(
         self,
-        TSView *ts_view,
+        SubsequenceView *v,
         Dataset td,
         Py_ssize_t t_index,
     ) nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t sample_offset = (t_index * td.sample_stride +
-                                         ts_view.dim * td.dim_stride)
-        cdef Py_ssize_t shapelet_offset = (ts_view.index * td.sample_stride +
-                                           ts_view.dim * td.dim_stride +
-                                           ts_view.start)
+                                         v.dim * td.dim_stride)
+        cdef Py_ssize_t shapelet_offset = (v.index * td.sample_stride +
+                                           v.dim * td.dim_stride +
+                                           v.start)
         with gil:
             for i in range(td.n_timestep):
-                if i < ts_view.length:
+                if i < v.length:
                     self.x_buffer[i] = td.data[shapelet_offset + i]
                 self.y_buffer[i] = td.data[sample_offset + i]
 
-            return self.func(self.x_buffer[:ts_view.length], self.y_buffer)
+            return self.func(self.x_buffer[:v.length], self.y_buffer)
 
     cdef double ts_copy_distance(
         self,
-        TSCopy *ts_copy,
+        Subsequence *s,
         Dataset td,
         Py_ssize_t t_index,
     ) nogil:
-        return self.ts_copy_sub_distance(ts_copy, td, t_index)
+        return self.ts_copy_sub_distance(s, td, t_index)
 
     cdef bint support_unaligned(self) nogil:
         return self._support_unaligned
 
-
-def _validate_shapelet(shapelet):
-    return check_array(shapelet, ensure_2d=False, dtype=np.double)
-
-
-def _validate_data(data):
-    data = check_array(data, ensure_2d=False, allow_nd=True, dtype=np.double)
-    return check_dataset(data)
-
-
-def _check_sample(sample, n_samples):
-    if sample < 0 or sample >= n_samples:
-        raise ValueError("illegal sample {}".format(sample))
-
-
-def _check_dim(dim, ndims):
-    if dim < 0 or dim > ndims:
-        raise ValueError("illegal dimension {}".format(dim))
 
 
 cdef np.ndarray _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
@@ -481,64 +337,23 @@ cdef np.ndarray _new_distance_array(
         return None
 
 
-cpdef DistanceMeasure get_distance_measure(
-    Py_ssize_t n_timestep,
-    object metric,
-    dict metric_params=None,
-):
-    """Create a new distance measure
-
-    Parameters
-    ----------
-    metric : str or callable
-        A metric name or callable
-
-    td : Dataset
-        Number of maximum number of timesteps in the database
-
-    metric_params : dict, optional
-        Parameters to the metric
-
-    Returns
-    -------
-    distance_measure : a distance measure instance
-    """
-    cdef DistanceMeasure distance_measure
-    metric_params = metric_params or {}
-    if isinstance(metric, str):
-        if metric in _DISTANCE_MEASURE:
-            distance_measure = _DISTANCE_MEASURE[metric](n_timestep, **metric_params)
-        else:
-            raise ValueError("metric (%s) is not supported" % metric)
-    elif hasattr(metric, "__call__"):
-        distance_measure = FuncDistanceMeasure(n_timestep, metric)
-    elif isinstance(metric, DistanceMeasure):
-        return metric # TODO: check n_timestep
-    else:
-        raise ValueError("unknown metric, got %r" % metric)
-    return distance_measure
-
-
-cdef class _ShapeletDistanceBatch:
+cdef class _PairwiseSubsequenceDistance:
 
     cdef Dataset dataset
-    cdef Py_ssize_t[:] samples
     cdef Py_ssize_t[:, :] min_indices
     cdef double[:, :] distances,
-    cdef TSCopy **shapelets
+    cdef Subsequence **shapelets
     cdef Py_ssize_t n_shapelets
-    cdef DistanceMeasure distance_measure
+    cdef SubsequenceDistanceMeasure distance_measure
 
     def __cinit__(
         self, 
-        Py_ssize_t[:] samples,
         double[:, :] distances,
         Py_ssize_t[:, :] min_indices,
         Dataset dataset, 
-        DistanceMeasure distance_measure
+        SubsequenceDistanceMeasure distance_measure
     ):
         self.dataset = dataset
-        self.samples = samples
         self.distances = distances
         self.min_indices = min_indices
         self.distance_measure = distance_measure
@@ -548,201 +363,334 @@ cdef class _ShapeletDistanceBatch:
     def __dealloc__(self):
         if self.shapelets != NULL:
             for i in range(self.n_shapelets):
-                ts_copy_free(self.shapelets[i])
+                self.distance_measure.free_persistent(self.shapelets[i])
                 free(self.shapelets[i])
             free(self.shapelets)
+            self.shapelets = NULL
 
     cdef void set_shapelets(self, list shapelets, Py_ssize_t dim):
         cdef Py_ssize_t i
         self.n_shapelets = len(shapelets)
-        self.shapelets = <TSCopy**> malloc(sizeof(TSCopy*) *self. n_shapelets)
-        cdef TSCopy *ts_copy
+        self.shapelets = <Subsequence**> malloc(sizeof(Subsequence*) *self. n_shapelets)
+        cdef Subsequence *s
         for i in range(self.n_shapelets):
-            ts_copy = <TSCopy*> malloc(sizeof(TSCopy))
-            self.distance_measure.init_ts_copy_from_obj(ts_copy, (dim, shapelets[i]))
-            self.shapelets[i] = ts_copy
+            s = <Subsequence*> malloc(sizeof(Subsequence))
+            self.distance_measure.from_array(s, (dim, shapelets[i]))
+            self.shapelets[i] = s
 
     @property
     def n_work(self):
-        return self.samples.shape[0]
+        return self.dataset.n_samples
 
     def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
         cdef Py_ssize_t i, j, min_index
-        cdef TSCopy *ts_copy
+        cdef Subsequence *s
         cdef double distance
-        cdef DistanceMeasure distance_measure = deepcopy(self.distance_measure)
-        distance_measure.init(self.dataset)
+        cdef SubsequenceDistanceMeasure distance_measure = deepcopy(self.distance_measure)
         with nogil:
+            distance_measure.reset(self.dataset)
             for i in range(offset, offset + batch_size):
                 for j in range(self.n_shapelets):
-                    ts_copy = self.shapelets[j]
-                    distance = distance_measure.ts_copy_sub_distance(
-                        ts_copy, self.dataset, self.samples[i], &min_index
+                    s = self.shapelets[j]
+                    distance = distance_measure.presistent_distance(
+                        s, self.dataset, i, &min_index
                     )
                     self.distances[i, j] = distance
                     self.min_indices[i, j] = min_index
 
 
-def _shapelet_distance(
+def _pairwise_subsequence_distance(
     list shapelets, 
     np.ndarray x, 
     int dim, 
-    np.ndarray samples,
-    metric,
-    metric_params,
+    SubsequenceDistanceMeasure distance_measure,
     n_jobs,
 ):
-    if samples.dtype != np.intp:
-        raise ValueError("unsupported type, expect np.intp (got, %r)" % samples.dtype)
-    
     x = check_dataset(x)
     dataset = Dataset(x)
-    distances = np.empty((samples.shape[0], len(shapelets)), dtype=np.double)
-    min_indicies = np.empty((samples.shape[0], len(shapelets)), dtype=np.intp)
-    dist_func = _ShapeletDistanceBatch(
-        samples,
+    distances = np.empty((dataset.n_samples, len(shapelets)), dtype=np.double)
+    min_indicies = np.empty((dataset.n_samples, len(shapelets)), dtype=np.intp)
+    subsequence_distance = _PairwiseSubsequenceDistance(
         distances,
         min_indicies,
         dataset,
-        get_distance_measure(dataset.n_timestep, metric, metric_params),
+        distance_measure,
     )
-    dist_func.set_shapelets(shapelets, dim)
-    run_in_parallel(dist_func, n_jobs=n_jobs, prefer="threads")
+    distance_measure.reset(dataset)
+    subsequence_distance.set_shapelets(shapelets, dim)
+    run_in_parallel(subsequence_distance, n_jobs=n_jobs, prefer="threads")
     return distances, min_indicies
 
-                
+
+def _subsequence_match(
+    np.ndarray y,
+    np.ndarray x,
+    double threshold,
+    int dim,
+    SubsequenceDistanceMeasure distance_measure,
+    n_jobs,
+):
+    x = check_dataset(x)
+    cdef Dataset dataset = Dataset(x)
+    cdef double *distances 
+    cdef Py_ssize_t *indicies
+    cdef Py_ssize_t i, n_matches
+
+    cdef list distances_list = []
+    cdef list indicies_list = []
+
+    cdef Subsequence subsequence
+    distance_measure.reset(dataset)
+    distance_measure.from_array(&subsequence, (dim, y))
+    for i in range(dataset.n_samples):
+        n_matches = distance_measure.persistent_matches(
+            &subsequence,
+            dataset,
+            i,
+            threshold,
+            &distances,
+            &indicies,
+        )
+        indicies_list.append(_new_match_array(indicies, n_matches))
+        distances_list.append(_new_distance_array(distances, n_matches))
+        free(distances)
+        free(indicies)
+    distance_measure.free_persistent(&subsequence)
+    return indicies_list, distances_list
 
 
+def _paired_subsequence_match(
+    list y,
+    np.ndarray x,
+    double threshold,
+    int dim,
+    SubsequenceDistanceMeasure distance_measure,
+    n_jobs,
+):
+    x = check_dataset(x)
+    cdef Dataset dataset = Dataset(x)
+    cdef double *distances 
+    cdef Py_ssize_t *indicies
+    cdef Py_ssize_t i, n_matches
+
+    cdef list distances_list = []
+    cdef list indicies_list = []
+
+    cdef Subsequence subsequence
+    distance_measure.reset(dataset)
+    for i in range(dataset.n_samples):
+        distance_measure.from_array(&subsequence, (dim, y[i]))
+        n_matches = distance_measure.persistent_matches(
+            &subsequence,
+            dataset,
+            i,
+            threshold,
+            &distances,
+            &indicies,
+        )
+        indicies_list.append(_new_match_array(indicies, n_matches))
+        distances_list.append(_new_distance_array(distances, n_matches))
+        free(distances)
+        free(indicies)
+        distance_measure.free_persistent(&subsequence)
+
+    return indicies_list, distances_list
+
+
+def _pairwise_distance(
+    np.ndarray y,
+    np.ndarray x,
+    Py_ssize_t dim,
+    DistanceMeasure distance_measure,
+    n_jobs,
+):
+    y = check_dataset(y, allow_1d=True)
+    x = check_dataset(x, allow_1d=True)
+    cdef Dataset y_dataset = Dataset(y)
+    cdef Dataset x_dataset = Dataset(x)
+    cdef np.ndarray out = np.empty((y_dataset.n_samples, x_dataset.n_samples), dtype=np.double)
+    cdef double[:, :] out_view = out
+    cdef Py_ssize_t i, j
+    cdef double dist
+
+    with nogil:
+        distance_measure.reset(y_dataset, x_dataset)
+        for i in range(y_dataset.n_samples):
+            for j in range(x_dataset.n_samples):
+                dist = distance_measure.distance(y_dataset, i, x_dataset, j, dim)
+                out_view[i, j] = dist
+
+    return out
+
+
+def _singleton_pairwise_distance(
+    np.ndarray x, 
+    Py_ssize_t dim, 
+    DistanceMeasure distance_measure, 
+    n_jobs
+):
+    return None
+
+
+def _paired_distance(
+    np.ndarray y,
+    np.ndarray x,
+    Py_ssize_t dim,
+    DistanceMeasure distance_measure,
+    n_jobs,
+):
+    y = check_dataset(y, allow_1d=True)
+    x = check_dataset(x, allow_1d=True)
+    cdef Dataset y_dataset = Dataset(y)
+    cdef Dataset x_dataset = Dataset(x)
+    cdef np.ndarray out = np.empty(y_dataset.n_samples, dtype=np.double)
+    cdef double[:] out_view = out
+    cdef Py_ssize_t i
+
+    with nogil:
+        distance_measure.reset(y_dataset, x_dataset)
+        for i in range(y_dataset.n_samples):
+            dist = distance_measure.distance(y_dataset, i, x_dataset, i, dim)
+            out_view[i] = dist
+
+    return out    
+
+
+
+
+# This is equivivalent to _pairwise_subsequence_distance exept for sample
 def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_params=None, subsequence_distance=True, return_index=False):
-    cdef np.ndarray s = _validate_shapelet(shapelet)
-    cdef np.ndarray x = _validate_data(data)
-    if sample is None:
-        if x.shape[0] == 1:
-            sample = 0
-        else:
-            sample = np.arange(x.shape[0])
-    cdef Dataset sd = Dataset(x)
+    pass
+    # cdef np.ndarray s = _validate_shapelet(shapelet)
+    # cdef np.ndarray x = _validate_data(data)
+    # if sample is None:
+    #     if x.shape[0] == 1:
+    #         sample = 0
+    #     else:
+    #         sample = np.arange(x.shape[0])
+    # cdef Dataset sd = Dataset(x)
 
-    _check_dim(dim, sd.n_dims)
-    cdef double min_dist
-    cdef Py_ssize_t min_index
+    # _check_dim(dim, sd.n_dims)
+    # cdef double min_dist
+    # cdef Py_ssize_t min_index
 
-    cdef double mean = 0
-    cdef double std = 0
+    # cdef double mean = 0
+    # cdef double std = 0
 
-    cdef DistanceMeasure distance_measure = get_distance_measure(
-        sd.n_timestep, metric, metric_params
-    )
+    # cdef DistanceMeasure distance_measure = get_distance_measure(
+    #     sd.n_timestep, metric, metric_params
+    # )
 
-    if (
-            not subsequence_distance and
-            not distance_measure.support_unaligned() and
-            s.shape[0] != sd.n_timestep
-    ):
-        raise ValueError(
-            "x.shape[0] != y.shape[-1], got %r, %r" % (s.shape[0], sd.n_timestep)
-        )
+    # if (
+    #         not subsequence_distance and
+    #         not distance_measure.support_unaligned() and
+    #         s.shape[0] != sd.n_timestep
+    # ):
+    #     raise ValueError(
+    #         "x.shape[0] != y.shape[-1], got %r, %r" % (s.shape[0], sd.n_timestep)
+    #     )
 
-    if not distance_measure.support_unaligned() and s.shape[0] > sd.n_timestep:
-        raise ValueError(
-            "x.shape[0] > y.shape[-1], got %r, %r" % (s.shape[0], sd.n_timestep)
-        )
+    # if not distance_measure.support_unaligned() and s.shape[0] > sd.n_timestep:
+    #     raise ValueError(
+    #         "x.shape[0] > y.shape[-1], got %r, %r" % (s.shape[0], sd.n_timestep)
+    #     )
 
 
-    cdef TSCopy shape # TODO: free me
-    distance_measure.init_ts_copy_from_obj(&shape, (dim, s))
-    if isinstance(sample, int):
-        if subsequence_distance:
-            min_dist = distance_measure.ts_copy_sub_distance(
-                &shape, sd, sample, &min_index)
-        else:
-            min_dist = distance_measure.ts_copy_distance(
-                &shape, sd, sample
-            )
-            min_index = 0
+    # cdef Subsequence shape # TODO: free me
+    # distance_measure.init_ts_copy_from_obj(&shape, (dim, s))
+    # if isinstance(sample, int):
+    #     if subsequence_distance:
+    #         min_dist = distance_measure.ts_copy_sub_distance(
+    #             &shape, sd, sample, &min_index)
+    #     else:
+    #         min_dist = distance_measure.ts_copy_distance(
+    #             &shape, sd, sample
+    #         )
+    #         min_index = 0
 
-        if return_index:
-            return min_dist, min_index
-        else:
-            return min_dist
-    else:  # assume an `array_like` object for `samples`
-        samples = np.array(sample, dtype=int)
-        if samples.ndim != 1:
-            raise ValueError("invalid samples (%r)" % samples)
-        dist = []
-        ind = []
-        # TODO: add n_jobs
-        for i in samples:
-            if subsequence_distance:
-                min_dist = distance_measure.ts_copy_sub_distance(
-                    &shape, sd, i, &min_index
-                )
-            else:
-                min_dist = distance_measure.ts_copy_distance(
-                    &shape, sd, i
-                )
-                min_index = 0
+    #     if return_index:
+    #         return min_dist, min_index
+    #     else:
+    #         return min_dist
+    # else:  # assume an `array_like` object for `samples`
+    #     samples = np.array(sample, dtype=int)
+    #     if samples.ndim != 1:
+    #         raise ValueError("invalid samples (%r)" % samples)
+    #     dist = []
+    #     ind = []
+    #     # TODO: add n_jobs
+    #     for i in samples:
+    #         if subsequence_distance:
+    #             min_dist = distance_measure.ts_copy_sub_distance(
+    #                 &shape, sd, i, &min_index
+    #             )
+    #         else:
+    #             min_dist = distance_measure.ts_copy_distance(
+    #                 &shape, sd, i
+    #             )
+    #             min_index = 0
 
-            dist.append(min_dist)
-            ind.append(min_index)
+    #         dist.append(min_dist)
+    #         ind.append(min_index)
 
-        if return_index:
-            return np.array(dist), np.array(ind)
-        else:
-            return np.array(dist)
+    #     if return_index:
+    #         return np.array(dist), np.array(ind)
+    #     else:
+    #         return np.array(dist)
 
 
 def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metric_params=None, return_distance=False):
-    cdef np.ndarray s = _validate_shapelet(shapelet)
-    cdef np.ndarray x = _validate_data(X)
-    _check_dim(dim, x.ndim)
-    if sample is None:
-        if x.shape[0] == 1:
-            sample = 0
-        else:
-            sample = np.arange(x.shape[0])
+    pass
+    # cdef np.ndarray s = _validate_shapelet(shapelet)
+    # cdef np.ndarray x = _validate_data(X)
+    # _check_dim(dim, x.ndim)
+    # if sample is None:
+    #     if x.shape[0] == 1:
+    #         sample = 0
+    #     else:
+    #         sample = np.arange(x.shape[0])
 
-    cdef Dataset sd = Dataset(x)
+    # cdef Dataset sd = Dataset(x)
 
-    cdef Py_ssize_t *matches
-    cdef double *distances
-    cdef Py_ssize_t n_matches
+    # cdef Py_ssize_t *matches
+    # cdef double *distances
+    # cdef Py_ssize_t n_matches
 
-    cdef DistanceMeasure distance_measure = get_distance_measure(
-        sd.n_timestep, metric, metric_params
-    )
-    cdef TSCopy shape
-    distance_measure.init_ts_copy_from_obj(&shape, (dim, s))
-    cdef Py_ssize_t i
-    if isinstance(sample, int):
-        _check_sample(sample, sd.n_samples)
-        distance_measure.ts_copy_sub_matches(
-            &shape, sd, sample, threshold, &matches, &distances, &n_matches)
+    # cdef DistanceMeasure distance_measure = get_distance_measure(
+    #     sd.n_timestep, metric, metric_params
+    # )
+    # cdef Subsequence shape
+    # distance_measure.init_ts_copy_from_obj(&shape, (dim, s))
+    # cdef Py_ssize_t i
+    # if isinstance(sample, int):
+    #     _check_sample(sample, sd.n_samples)
+    #     distance_measure.ts_copy_sub_matches(
+    #         &shape, sd, sample, threshold, &matches, &distances, &n_matches)
 
-        match_array = _new_match_array(matches, n_matches)
-        distance_array = _new_distance_array(distances, n_matches)
-        free(distances)
-        free(matches)
+    #     match_array = _new_match_array(matches, n_matches)
+    #     distance_array = _new_distance_array(distances, n_matches)
+    #     free(distances)
+    #     free(matches)
 
-        if return_distance:
-            return distance_array, match_array
-        else:
-            return match_array
-    else:
-        samples = check_array(sample, ensure_2d=False, dtype=int)
-        match_list = []
-        distance_list = []
-        for i in samples:
-            _check_sample(i, sd.n_samples)
-            distance_measure.ts_copy_sub_matches(&shape, sd, i, threshold, &matches, &distances, &n_matches)
-            match_array = _new_match_array(matches, n_matches)
-            distance_array = _new_distance_array(distances, n_matches)
-            match_list.append(match_array)
-            distance_list.append(distance_array)
-            free(matches)
-            free(distances)
+    #     if return_distance:
+    #         return distance_array, match_array
+    #     else:
+    #         return match_array
+    # else:
+    #     samples = check_array(sample, ensure_2d=False, dtype=int)
+    #     match_list = []
+    #     distance_list = []
+    #     for i in samples:
+    #         _check_sample(i, sd.n_samples)
+    #         distance_measure.ts_copy_sub_matches(&shape, sd, i, threshold, &matches, &distances, &n_matches)
+    #         match_array = _new_match_array(matches, n_matches)
+    #         distance_array = _new_distance_array(distances, n_matches)
+    #         match_list.append(match_array)
+    #         distance_list.append(distance_array)
+    #         free(matches)
+    #         free(distances)
 
-        if return_distance:
-            return distance_list, match_list
-        else:
-            return match_list
+    #     if return_distance:
+    #         return distance_list, match_list
+    #     else:
+    #         return match_list

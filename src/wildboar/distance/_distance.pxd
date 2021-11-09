@@ -22,7 +22,7 @@ cimport numpy as np
 from wildboar.utils.data cimport Dataset
 
 
-cdef struct TSView:
+cdef struct SubsequenceView:
     Py_ssize_t index  # the index of the shapelet sample
     Py_ssize_t start  # the start position
     Py_ssize_t length  # the length of the shapelet
@@ -32,7 +32,7 @@ cdef struct TSView:
     void *extra
 
 
-cdef struct TSCopy:
+cdef struct Subsequence:
     Py_ssize_t length
     Py_ssize_t dim
     double mean
@@ -42,109 +42,91 @@ cdef struct TSCopy:
     double *data
     void *extra
 
+cdef class SubsequenceDistanceMeasure:
 
-cdef class DistanceMeasure:
-    cdef Py_ssize_t n_timestep
+    cdef int reset(self, Dataset dataset) nogil
 
-    cdef int init(self, Dataset td) nogil
-
-    cdef int init_ts_view(
+    cdef int init_transient(
         self,
         Dataset td,
-        TSView *ts_view,
+        SubsequenceView *v,
         Py_ssize_t index,
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
     ) nogil
 
-    cdef int init_ts_copy_from_obj(
+    cdef int init_persistent(
         self,
-        TSCopy *ts_copy,
+        Dataset dataset,
+        SubsequenceView* v,
+        Subsequence* s,
+    ) nogil
+
+    cdef int free_transient(self, SubsequenceView *t) nogil
+
+    cdef int free_persistent(self, Subsequence *t) nogil
+
+    cdef int from_array(
+        self,
+        Subsequence *s,
         object obj,
     )
 
-    cdef object object_from_ts_copy(
+    cdef object to_array(
         self, 
-        TSCopy *ts_copy
+        Subsequence *s
     )
 
-    cdef int init_ts_copy(
+    cdef double transient_distance(
         self,
-        TSCopy *ts_copy,
-        TSView *s,
+        SubsequenceView *v,
         Dataset td,
+        Py_ssize_t index,
+        Py_ssize_t *return_index=*,
     ) nogil
 
-    cdef int ts_copy_sub_matches(
+    cdef double presistent_distance(
         self,
-        TSCopy *ts_copy,
+        Subsequence *s,
         Dataset td,
-        Py_ssize_t t_index,
+        Py_ssize_t index,
+        Py_ssize_t *return_index=*,
+    ) nogil
+
+    cdef Py_ssize_t transient_matches(
+        self,
+        SubsequenceView *v,
+        Dataset dataset,
+        Py_ssize_t index,
         double threshold,
-        Py_ssize_t** matches,
-        double** distances,
-        Py_ssize_t *n_matches,
-    ) nogil except -1
-
-    cdef double ts_copy_sub_distance(
-        self,
-        TSCopy *ts_copy,
-        Dataset td,
-        Py_ssize_t t_index,
-        Py_ssize_t *return_index= *,
+        double **distances,
+        Py_ssize_t **indicies,
     ) nogil
 
-    cdef double ts_view_sub_distance(
+    cdef Py_ssize_t persistent_matches(
         self,
-        TSView *ts_view,
-        Dataset td,
-        Py_ssize_t t_index,
+        Subsequence *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
     ) nogil
 
-    cdef void ts_view_sub_distances(
-        self,
-        TSView *ts_view,
-        Dataset td,
-        Py_ssize_t *samples,
-        double *distances,
-        Py_ssize_t n_samples,
-    ) nogil
-
-    cdef double ts_copy_distance(
-        self,
-        TSCopy *ts_copy,
-        Dataset td,
-        Py_ssize_t t_index,
-    ) nogil
-
-    cdef bint support_unaligned(self) nogil
-
-
-cdef class ScaledDistanceMeasure(DistanceMeasure):
+cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     pass
 
 
-cdef void ts_view_init(TSView *s) nogil
+cdef class DistanceMeasure:
 
+    cdef int reset(self, Dataset x, Dataset y) nogil
 
-cdef void ts_view_free(TSView *shapelet_info) nogil
-
-
-cdef int ts_copy_init(
-    TSCopy *ts_copy,
-    Py_ssize_t dim,
-    Py_ssize_t length,
-    double mean,
-    double std,
-) nogil
-
-
-cdef void ts_copy_free(TSCopy *shapelet) nogil
-
-
-cpdef DistanceMeasure get_distance_measure(
-    Py_ssize_t n_timestep,
-    object metric,
-    dict metric_params=*,
-)
+    cdef double distance(
+        self,
+        Dataset x,
+        Py_ssize_t x_index,
+        Dataset y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+    ) nogil

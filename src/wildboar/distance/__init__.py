@@ -19,66 +19,294 @@ import numpy as np
 from wildboar.utils import check_array
 from wildboar.utils.decorators import array_or_scalar
 
-from . import _distance, dtw
+from . import _distance, _dtw_distance, _euclidean_distance
 
-__all__ = ["distance", "matches", "shapelet_distance", "dtw"]
+__all__ = [
+    "distance",
+    "matches",
+    "pairwise_subsequence_distance",
+    "paired_subsequence_distance",
+    "pairwise_subsequence_match",
+    "paired_subsequence_match",
+    "pairwise_distance",
+    "paired_distance",
+]
+
+_SUBSEQUENCE_DISTANCE_MEASURE = {
+    "euclidean": _euclidean_distance.EuclideanSubsequenceDistanceMeasure,
+    "scaled_euclidean": _euclidean_distance.ScaledEuclideanSubsequenceDistanceMeasure,
+    "dtw": _dtw_distance.DtwSubsequenceDistanceMeasure,
+    "scaled_dtw": _dtw_distance.ScaledDtwSubsequenceDistanceMeasure,
+}
+
+_DISTANCE_MEASURE = {
+    "euclidean": _euclidean_distance.EuclideanDistanceMeasure,
+    "dtw": _dtw_distance.DtwDistanceMeasure,
+}
 
 
-def paired_distance(
-    x,
-    y,
-    *,
-    metric="euclidean",
-    metric_params=None,
-    subsequence_distance=True,
-):
-    raise NotImplementedError()
-
-
-@array_or_scalar(squeeze=True)
-def shapelet_distance(
-    y,
-    x,
-    *,
-    dim=0,
-    sample=None,
-    metric="euclidean",
-    metric_params=None,
-    return_index=False,
-    n_jobs=None,
-):
+def _validate_subsequence(y):
     if isinstance(y, np.ndarray):
-        y = np.squeeze(y)
         if y.ndim == 1:
-            y = [y.astype(np.double)]
+            raise ValueError(
+                "Expected 2D array, got 1D array instead:\narray={}.\n"
+                "Reshape your data either using array.reshape(-1, 1) if "
+                "your data has a single timestep or array.reshape(1, -1) "
+                "if it contains a single sample.".format(y)
+            )
         elif y.ndim == 2:
             y = list(y.astype(np.double))
         else:
-            raise ValueError("require 1d-array or 2d-array")
+            raise ValueError(
+                "Expected 2D array, got {}D array instead:\narray={}.\n".format(
+                    y.ndim, y
+                )
+            )
     else:
         if all(isinstance(e, (int, float)) for e in y):
             y = [np.array(y, dtype=np.double)]
         else:
             y = [np.array(e, dtype=np.double) for e in y]
 
-    x = check_array(x, allow_multivariate=True)
-    if sample is None:
-        sample = np.arange(x.shape[0], dtype=np.intp)
-    else:
-        sample = np.atleast_1d(sample).astype(np.intp)
-    min_dist, min_ind = _distance._shapelet_distance(
+    return y
+
+
+@array_or_scalar(squeeze=True)
+def pairwise_subsequence_distance(
+    y,
+    x,
+    *,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    return_index=False,
+    n_jobs=None,
+):
+    """Compute the minimum sliding distance between shapelets and time series
+
+    Parameters
+    ----------
+    y : list or ndarray of shape (n_samples, n_timestep)
+        Input time series.
+
+        - if list, a list of array-like of shape (n_timestep, )
+
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The input data
+
+    dim : int, optional
+        The dim to search for shapelets
+
+     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+        The distance metric
+
+        - if str use optimized implementations of the named distance measure
+        - if callable a function taking two arrays as input
+
+    metric_params: dict, optional
+        Parameters to the metric
+
+        - 'euclidean' and 'scaled_euclidean' take no parameters
+        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+          is interpreted as a fraction of the time series length. If > 1 it
+          is interpreted as an exact time warping window. Use 'r' == 0 for
+          a widow size of exactly 1.
+
+    subsequence_distance: bool, optional
+        - if True, compute the minimum subsequence distance
+        - if False, compute the distance between two arrays of the same length
+          unless the specified metric support unaligned arrays
+
+    return_index : bool, optional
+        - if True return the index of the best match. If there are many equally good
+          matches, the first match is returned.
+
+    Returns
+    -------
+    dist : float, ndarray
+        The smallest distance to each time series
+
+    indices : int, ndarray
+        The start position of the best match in each time series
+        [description], by default None
+    """
+    y = _validate_subsequence(y)
+    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError()
+
+    metric_params = metric_params or {}
+    min_dist, min_ind = _distance._pairwise_subsequence_distance(
         y,
         x,
         dim,
-        np.ravel(sample),
-        metric=metric,
-        metric_params=metric_params,
-        n_jobs=n_jobs,
+        distance_measure(**metric_params),
+        n_jobs,
     )
     if return_index:
         return min_dist, min_ind
     else:
         return min_dist
+
+
+def paired_subsequence_distance(
+    y,
+    x,
+    *,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    n_jobs=None,
+):
+    raise NotImplementedError()
+
+
+def subsequence_match(
+    y,
+    x,
+    threshold,
+    *,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    return_distance=False,
+    n_jobs=None,
+):
+    y = _validate_subsequence(y)
+    if len(y) > 1:
+        raise ValueError("....")
+    y = y[0]
+    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError()
+    metric_params = metric_params if metric_params is not None else {}
+    indicies, distances = _distance._subsequence_match(
+        y,
+        x,
+        threshold,
+        dim,
+        distance_measure(**metric_params),
+        n_jobs,
+    )
+    if return_distance:
+        return indicies, distances
+    else:
+        return indicies
+
+
+def paired_subsequence_match(
+    y,
+    x,
+    threshold,
+    *,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    return_distance=False,
+    n_jobs=None,
+):
+    y = _validate_subsequence(y)
+    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    if len(y) != x.shape[0]:
+        raise ValueError("n_samples")
+
+    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError()
+    metric_params = metric_params if metric_params is not None else {}
+    indicies, distances = _distance._paired_subsequence_match(
+        y,
+        x,
+        threshold,
+        dim,
+        distance_measure(**metric_params),
+        n_jobs,
+    )
+    if return_distance:
+        return indicies, distances
+    else:
+        return indicies
+
+
+def paired_distance(
+    x,
+    y,
+    *,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    n_jobs=None,
+):
+    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    y = check_array(y, allow_multivariate=True, dtype=np.double)
+    if x.ndim != y.ndim:
+        raise ValueError("dim")
+    if x.shape[0] != y.shape[0]:
+        raise ValueError("n_samples")
+
+    distance_measure = _DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError()
+
+    metric_params = metric_params or {}
+    distance_measure = distance_measure(**metric_params)
+    if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not distance_measure.is_elastic:
+        raise ValueError()
+
+    return _distance._paired_distance(
+        x,
+        y,
+        dim,
+        distance_measure,
+        n_jobs,
+    )
+
+
+def pairwise_distance(
+    x,
+    y,
+    *,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    n_jobs=None,
+):
+    distance_measure = _DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError()
+
+    metric_params = metric_params or {}
+    distance_measure = distance_measure(**metric_params)
+    if x is y:
+        x = check_array(x, allow_multivariate=True, dtype=np.double)
+        if not 0 >= dim < x.ndim:
+            raise ValueError()
+
+        return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
+    else:
+        x = check_array(x, allow_multivariate=True, dtype=np.double)
+        y = check_array(y, allow_multivariate=True, dtype=np.double)
+        if x.ndim != y.ndim:
+            raise ValueError("dim")
+
+        if not 0 >= dim < x.ndim:
+            raise ValueError()
+
+        if (
+            x.shape[x.ndim - 1] != y.shape[y.ndim - 1]
+            and not distance_measure.is_elastic
+        ):
+            raise ValueError("timestep")
+
+        return _distance._pairwise_distance(
+            x,
+            y,
+            dim,
+            distance_measure,
+            n_jobs,
+        )
 
 
 def distance(

@@ -17,12 +17,14 @@
 
 from numpy.testing import assert_almost_equal, assert_equal
 
-from wildboar import datasets
+from wildboar.datasets import load_dataset
 from wildboar.ensemble import ShapeletForestClassifier
 
 
 def test_shapelet_forest_classifier():
-    x_test, x_train, y_test, y_train = load_dataset("GunPoint")
+    x_train, x_test, y_train, y_test = load_dataset(
+        "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=False
+    )
     clf = ShapeletForestClassifier(n_estimators=10, n_shapelets=10, random_state=1)
     clf.fit(x_train, y_train)
     branches = [
@@ -288,14 +290,3 @@ def test_shapelet_forest_classifier():
         assert_almost_equal(
             right_threshold, estimator.tree_.threshold[estimator.tree_.right > 0]
         )
-
-
-def load_dataset(name):
-    x_train, x_test, y_train, y_test = datasets.load_dataset(
-        name,
-        repository="wildboar/ucr-tiny",
-        cache_dir="wildboar_datasets_cache",
-        create_cache_dir=True,
-        merge_train_test=False,
-    )
-    return x_test, x_train, y_test, y_train

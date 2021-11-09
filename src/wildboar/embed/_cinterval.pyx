@@ -47,7 +47,7 @@ cdef class Summarizer:
     ) nogil:
         pass
 
-    cdef void init(self, Dataset td) nogil:
+    cdef void reset(self, Dataset td) nogil:
         pass
 
     cdef Py_ssize_t n_outputs(self) nogil:
@@ -151,7 +151,7 @@ cdef class Catch22Summarizer(Summarizer):
         if self.bin_count == NULL or self.bin_edges == NULL:
             raise MemoryError()
 
-    cdef void init(self, Dataset td) nogil:
+    cdef void reset(self, Dataset td) nogil:
         if self.ac != NULL:
             free(self.ac)
 
@@ -257,7 +257,7 @@ cdef class PyFuncSummarizer(Summarizer):
     def __reduce__(self):
         return self.__class__, (self.func, )
 
-    cdef void init(self, Dataset td) nogil:
+    cdef void reset(self, Dataset td) nogil:
         with gil:
             self.x_buffer = np.ndarray(td.n_timestep)
 
@@ -303,8 +303,8 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.n_intervals, self.summarizer)
 
-    cdef Py_ssize_t init(self, Dataset td) nogil:
-        self.summarizer.init(td)
+    cdef Py_ssize_t reset(self, Dataset td) nogil:
+        self.summarizer.reset(td)
         return 0
 
     cdef Py_ssize_t get_n_features(self, Dataset td) nogil:

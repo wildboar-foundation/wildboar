@@ -15,6 +15,7 @@
 #
 # Authors: Isak Samsten
 
+from ..distance import _SUBSEQUENCE_DISTANCE_MEASURE
 from ._shapelet_fast import RandomShapeletFeatureEngineer
 from .base import BaseEmbedding
 
@@ -105,10 +106,13 @@ class RandomShapeletEmbedding(BaseEmbedding):
         min_shapelet_size = int(self.n_timestep_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
             min_shapelet_size = 2
+
+        distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(self.metric, None)
+        if distance_measure is None:
+            raise ValueError("invalid distance measure (%r)" % self.metric)
+        metric_params = self.metric_params or {}
         return RandomShapeletFeatureEngineer(
-            self.n_timestep_,
-            self.metric,
-            self.metric_params,
+            distance_measure(**metric_params),
             min_shapelet_size,
             max_shapelet_size,
             self.n_shapelets,

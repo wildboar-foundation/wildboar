@@ -1,26 +1,17 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 
-from wildboar import datasets
+from wildboar.datasets import load_dataset
 from wildboar.tree import ShapeletTreeClassifier
 
 
-def load_dataset(name):
-    x_train, x_test, y_train, y_test = datasets.load_dataset(
-        name,
-        repository="wildboar/ucr-tiny",
-        cache_dir="wildboar_datasets_cache",
-        create_cache_dir=True,
-        merge_train_test=False,
-    )
-    return x_test, x_train, y_test, y_train
-
-
 def test_apply():
-    x_train, x_test, y_train, y_test = load_dataset("GunPoint")
+    x_train, x_test, y_train, y_test = load_dataset(
+        "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=False
+    )
     f = ShapeletTreeClassifier(random_state=123)
-    f.fit(x_train, y_train)
-    actual_apply = f.apply(x_test)
+    f.fit(x_test, y_test)
+    actual_apply = f.apply(x_train)
     expected_apply = np.array(
         [
             29,
@@ -81,10 +72,12 @@ def test_apply():
 
 
 def test_decision_path():
-    x_train, x_test, y_train, y_test = load_dataset("GunPoint")
+    x_train, x_test, y_train, y_test = load_dataset(
+        "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=False
+    )
     f = ShapeletTreeClassifier(random_state=123)
-    f.fit(x_train, y_train)
-    actual_decision_path = f.decision_path(x_test)
+    f.fit(x_test, y_test)
+    actual_decision_path = f.decision_path(x_train)
 
     expected_decision_path = np.array(
         [

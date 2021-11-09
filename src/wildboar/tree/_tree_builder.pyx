@@ -558,7 +558,7 @@ cdef class Tree:
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         with nogil:
-            self.feature_engineer.init(ts)
+            self.feature_engineer.reset(ts)
             for i in range(ts.n_samples):
                 node_index = 0
                 while self._left[node_index] != -1:
@@ -589,7 +589,7 @@ cdef class Tree:
         cdef Feature *feature
         cdef double threshold, feature_value
         with nogil:
-            self.feature_engineer.init(ts)
+            self.feature_engineer.reset(ts)
             for i in range(ts.n_samples):
                 node_index = 0
                 while self._left[node_index] != -1:
@@ -823,7 +823,7 @@ cdef class TreeBuilder:
         cdef Py_ssize_t root_node_id
         cdef Py_ssize_t max_depth = 0
         with nogil:
-            #self.feature_engineer.init(self.td)
+            self.feature_engineer.reset(self.td)
             root_node_id = self._build_tree(
                 0,
                 self.n_samples,

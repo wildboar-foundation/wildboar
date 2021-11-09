@@ -1,5 +1,5 @@
-import numpy as np
 from sklearn.utils.validation import check_array as sklearn_check_array
+
 from wildboar.utils.data import check_dataset
 
 __all__ = [
@@ -39,12 +39,12 @@ def check_array(
         kwargs["order"] = "C"
 
     if allow_multivariate:
-        if kwargs.pop("ensure_2d", False) == True:
+        if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
             raise ValueError(
                 "ensure_2d=True and allow_multivariate=True are incompatible"
             )
 
-        if kwargs.pop("allow_nd", True) == False:
+        if "allow_nd" in kwargs and not kwargs.pop("allow_nd"):
             raise ValueError(
                 "allow_nd=False and allow_multivaraite=True are incompatible"
             )
@@ -53,14 +53,14 @@ def check_array(
             raise ValueError(
                 "Expected 2D or 3D array, got scalar array instead:\narray={}.\n"
                 "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single feature or array.reshape(1, -1) "
+                "your data has a single timestep or array.reshape(1, -1) "
                 "if it contains a single sample.".format(x)
             )
         if x.ndim == 1:
             raise ValueError(
                 "Expected 2D or 3D array, got 1D array instead:\narray={}.\n"
                 "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single feature or array.reshape(1, -1) "
+                "your data has a single timestep or array.reshape(1, -1) "
                 "if it contains a single sample.".format(x)
             )
         if x.ndim > 3:

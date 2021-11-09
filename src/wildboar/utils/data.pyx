@@ -63,13 +63,11 @@ def check_dataset(np.ndarray x, allow_1d=False, allow_2d=True, allow_3d=True):
 
     if x.ndim == 3 and x.shape[1] == 1:
         x = x.reshape(x.shape[0], x.shape[x.ndim - 1])
-   
-    x = x.astype(float, copy=False, order="C")
     last_stride = x.strides[x.ndim - 1] // x.itemsize
     if (x.ndim > 1 and last_stride != 1) or not x.flags.carray:
         x = np.ascontiguousarray(x)
 
-    return x
+    return x.astype(np.double, copy=False)
 
 
 cdef class Dataset:

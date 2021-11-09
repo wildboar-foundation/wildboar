@@ -45,7 +45,7 @@ cdef void fast_mean_std(
     if ex2 > 0:
         std[0] = sqrt(ex2)
     else:
-        std[0] = 0.0
+        std[0] = 1.0
 
 
 cdef void inc_stats_init(IncStats *self) nogil:
