@@ -283,7 +283,6 @@ def pairwise_distance(
         x = check_array(x, allow_multivariate=True, dtype=np.double)
         if not 0 >= dim < x.ndim:
             raise ValueError()
-
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
     else:
         x = check_array(x, allow_multivariate=True, dtype=np.double)

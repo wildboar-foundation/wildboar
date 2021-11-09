@@ -529,7 +529,22 @@ def _singleton_pairwise_distance(
     DistanceMeasure distance_measure, 
     n_jobs
 ):
-    return None
+    x = check_dataset(x)
+    cdef Dataset dataset = Dataset(x)
+    cdef np.ndarray out = np.zeros((dataset.n_samples, dataset.n_samples), dtype=np.double)
+    cdef double[:, :] out_view = out
+    cdef Py_ssize_t i, j
+    cdef double dist
+
+    with nogil:
+        distance_measure.reset(dataset, dataset)
+        for i in range(dataset.n_samples):
+            for j in range(i + 1, dataset.n_samples):
+                dist = distance_measure.distance(dataset, i, dataset, j, dim)
+                out_view[i, j] = dist
+                out_view[j, i] = dist
+
+    return out
 
 
 def _paired_distance(
@@ -553,10 +568,7 @@ def _paired_distance(
             dist = distance_measure.distance(y_dataset, i, x_dataset, i, dim)
             out_view[i] = dist
 
-    return out    
-
-
-
+    return out
 
 # This is equivivalent to _pairwise_subsequence_distance exept for sample
 def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_params=None, subsequence_distance=True, return_index=False):
