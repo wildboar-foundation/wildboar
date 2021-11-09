@@ -132,9 +132,10 @@ def pairwise_subsequence_distance(
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_multivariate=True, dtype=np.double)
+    # TODO: ensure y.length < x.shape[-1]
     distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
-        raise ValueError()
+        raise ValueError("unsupported metric (%r)" % metric)
 
     metric_params = metric_params or {}
     min_dist, min_ind = _distance._pairwise_subsequence_distance(
@@ -175,12 +176,12 @@ def subsequence_match(
 ):
     y = _validate_subsequence(y)
     if len(y) > 1:
-        raise ValueError("....")
+        raise ValueError("a single sample expected")
     y = y[0]
     x = check_array(x, allow_multivariate=True, dtype=np.double)
     distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
-        raise ValueError()
+        raise ValueError("unsupported metric (%r)" % metric)
     metric_params = metric_params if metric_params is not None else {}
     indicies, distances = _distance._subsequence_match(
         y,
@@ -210,11 +211,11 @@ def paired_subsequence_match(
     y = _validate_subsequence(y)
     x = check_array(x, allow_multivariate=True, dtype=np.double)
     if len(y) != x.shape[0]:
-        raise ValueError("n_samples")
+        raise ValueError("x and y must have the same number of samples")
 
     distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
-        raise ValueError()
+        raise ValueError("unsupported metric (%r)" % metric)
     metric_params = metric_params if metric_params is not None else {}
     indicies, distances = _distance._paired_subsequence_match(
         y,
@@ -242,18 +243,23 @@ def paired_distance(
     x = check_array(x, allow_multivariate=True, dtype=np.double)
     y = check_array(y, allow_multivariate=True, dtype=np.double)
     if x.ndim != y.ndim:
-        raise ValueError("dim")
+        raise ValueError(
+            "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
+        )
     if x.shape[0] != y.shape[0]:
-        raise ValueError("n_samples")
+        raise ValueError("x and y must have the same number of samples")
 
     distance_measure = _DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
-        raise ValueError()
+        raise ValueError("unsupported metric (%r)" % metric)
 
     metric_params = metric_params or {}
     distance_measure = distance_measure(**metric_params)
     if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not distance_measure.is_elastic:
-        raise ValueError()
+        raise ValueError(
+            "illegal n_timestep (%r != %r) for non-elastic distance measure"
+            % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
+        )
 
     return _distance._paired_distance(
         x,
@@ -275,29 +281,34 @@ def pairwise_distance(
 ):
     distance_measure = _DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
-        raise ValueError()
+        raise ValueError("unsupported metric (%r)" % metric)
 
     metric_params = metric_params or {}
     distance_measure = distance_measure(**metric_params)
     if x is y:
         x = check_array(x, allow_multivariate=True, dtype=np.double)
         if not 0 >= dim < x.ndim:
-            raise ValueError()
+            raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
     else:
         x = check_array(x, allow_multivariate=True, dtype=np.double)
         y = check_array(y, allow_multivariate=True, dtype=np.double)
         if x.ndim != y.ndim:
-            raise ValueError("dim")
+            raise ValueError(
+                "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
+            )
 
         if not 0 >= dim < x.ndim:
-            raise ValueError()
+            raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
 
         if (
             x.shape[x.ndim - 1] != y.shape[y.ndim - 1]
             and not distance_measure.is_elastic
         ):
-            raise ValueError("timestep")
+            raise ValueError(
+                "illegal n_timestep (%r != %r) for non-elastic distance measure"
+                % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
+            )
 
         return _distance._pairwise_distance(
             x,
