@@ -86,7 +86,7 @@ cdef class SubsequenceDistanceMeasure:
         Py_ssize_t *return_index=*,
     ) nogil
 
-    cdef double presistent_distance(
+    cdef double persistent_distance(
         self,
         Subsequence *s,
         Dataset td,

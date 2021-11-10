@@ -55,7 +55,7 @@ cdef class EuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
             return_index,
         )
 
-    cdef double presistent_distance(
+    cdef double persistent_distance(
         self,
         Subsequence *s,
         Dataset dataset,
@@ -149,7 +149,7 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
             return_index,
         )
 
-    cdef double presistent_distance(
+    cdef double persistent_distance(
         self,
         Subsequence *s,
         Dataset dataset,

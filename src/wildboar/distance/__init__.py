@@ -158,9 +158,24 @@ def paired_subsequence_distance(
     dim=0,
     metric="euclidean",
     metric_params=None,
+    return_index=False,
     n_jobs=None,
 ):
-    raise NotImplementedError()
+    """Docstring."""
+    y = _validate_subsequence(y)
+    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError("unsupported metric (%r)" % metric)
+
+    metric_params = metric_params or {}
+    min_dist, min_ind = _distance._paired_subsequence_distance(
+        y, x, dim, distance_measure(**metric_params)
+    )
+    if return_index:
+        return min_dist, min_ind
+    else:
+        return min_dist
 
 
 def subsequence_match(

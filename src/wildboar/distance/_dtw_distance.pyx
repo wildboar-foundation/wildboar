@@ -1059,7 +1059,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
             return_index,
         )
 
-    cdef double presistent_distance(
+    cdef double persistent_distance(
         self,
         Subsequence *s,
         Dataset dataset,
@@ -1259,7 +1259,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     def __reduce__(self):
         return self.__class__, (self.r, )
 
-    cdef double presistent_distance(
+    cdef double persistent_distance(
         self,
         Subsequence *s,
         Dataset dataset,

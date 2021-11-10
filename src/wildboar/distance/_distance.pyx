@@ -100,7 +100,7 @@ cdef class SubsequenceDistanceMeasure:
         s.extra = NULL
         s.data = <double*> malloc(sizeof(double) * v.length)
         if s.data == NULL:
-            return -1        
+            return -1
 
         cdef double *sample = dataset.get_sample(v.index, dim=v.dim) + v.start
         cdef Py_ssize_t i
@@ -109,7 +109,6 @@ cdef class SubsequenceDistanceMeasure:
         return 0
 
     cdef int free_transient(self, SubsequenceView *v) nogil:
-        # EXTRA is NULL
         return 0
 
     cdef int free_persistent(self, Subsequence *v) nogil:
@@ -158,7 +157,7 @@ cdef class SubsequenceDistanceMeasure:
     ) nogil:
         return NAN
 
-    cdef double presistent_distance(
+    cdef double persistent_distance(
         self,
         Subsequence *s,
         Dataset td,
@@ -371,7 +370,7 @@ cdef class _PairwiseSubsequenceDistance:
     cdef void set_shapelets(self, list shapelets, Py_ssize_t dim):
         cdef Py_ssize_t i
         self.n_shapelets = len(shapelets)
-        self.shapelets = <Subsequence**> malloc(sizeof(Subsequence*) *self. n_shapelets)
+        self.shapelets = <Subsequence**> malloc(sizeof(Subsequence*) * self. n_shapelets)
         cdef Subsequence *s
         for i in range(self.n_shapelets):
             s = <Subsequence*> malloc(sizeof(Subsequence))
@@ -392,7 +391,7 @@ cdef class _PairwiseSubsequenceDistance:
             for i in range(offset, offset + batch_size):
                 for j in range(self.n_shapelets):
                     s = self.shapelets[j]
-                    distance = distance_measure.presistent_distance(
+                    distance = distance_measure.persistent_distance(
                         s, self.dataset, i, &min_index
                     )
                     self.distances[i, j] = distance
@@ -419,6 +418,31 @@ def _pairwise_subsequence_distance(
     distance_measure.reset(dataset)
     subsequence_distance.set_shapelets(shapelets, dim)
     run_in_parallel(subsequence_distance, n_jobs=n_jobs, prefer="threads")
+    return distances, min_indicies
+
+
+def _paired_subsequence_distance(
+    list shapelets,
+    np.ndarray x,
+    int dim,
+    SubsequenceDistanceMeasure distance_measure
+):
+    x = check_dataset(x)
+    cdef Dataset dataset = Dataset(x)
+    cdef np.ndarray distances = np.empty(dataset.n_samples, dtype=np.double)
+    cdef np.ndarray min_indicies = np.empty(dataset.n_samples, dtype=np.intp)
+    cdef Py_ssize_t i, min_index
+    cdef double dist
+    cdef Subsequence subsequence
+    distance_measure.reset(dataset)
+    for i in range(dataset.n_samples):
+        distance_measure.from_array(&subsequence, (dim, shapelets[i]))
+        with nogil:
+            dist = distance_measure.persistent_distance(&subsequence, dataset, i, &min_index)
+        distance_measure.free_persistent(&subsequence)
+        distances[i] = dist
+        min_indicies[i] = min_index
+
     return distances, min_indicies
 
 

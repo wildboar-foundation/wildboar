@@ -84,7 +84,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Dataset dataset,
         Py_ssize_t sample
     ) nogil:
-        return self.distance_measure.presistent_distance(
+        return self.distance_measure.persistent_distance(
             <Subsequence*> feature.feature, dataset, sample
         )
 
@@ -113,7 +113,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Py_ssize_t feature_id,
     ) nogil:
         cdef Py_ssize_t offset = td_out.sample_stride * out_sample + feature_id
-        td_out.data[offset] = self.distance_measure.presistent_distance(
+        td_out.data[offset] = self.distance_measure.persistent_distance(
             <Subsequence*> feature.feature, dataset, sample
         )
         return 0

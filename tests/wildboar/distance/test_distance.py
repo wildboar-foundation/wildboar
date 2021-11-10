@@ -4,6 +4,7 @@ from numpy.testing import assert_almost_equal, assert_equal
 from wildboar.datasets import load_dataset
 from wildboar.distance import (
     paired_distance,
+    paired_subsequence_distance,
     pairwise_distance,
     pairwise_subsequence_distance,
 )
@@ -169,6 +170,54 @@ def test_pairwise_subsequence_distance(
     min_dist, min_ind = pairwise_subsequence_distance(
         x[[2, 3], 0:20],
         x[40:45],
+        metric=metric,
+        metric_params=metric_params,
+        return_index=True,
+    )
+    assert_almost_equal(min_dist, expected_min_dist)
+    assert_equal(min_ind, expected_min_ind)
+
+
+@pytest.mark.parametrize(
+    "metric, metric_params, expected_min_dist, expected_min_ind",
+    [
+        pytest.param(
+            "euclidean",
+            None,
+            [0.23195688803926817, 0.15871494464186847, 0.22996935251290676],
+            [108, 22, 126],
+            id="euclidean",
+        ),
+        pytest.param(
+            "scaled_euclidean",
+            None,
+            [2.7386455797485416, 2.809961030159136, 2.127943475506045],
+            [123, 19, 0],
+            id="scaled_euclidean",
+        ),
+        pytest.param(
+            "dtw",
+            {"r": 1.0},
+            [0.22001506436908683, 0.1561472638854919, 0.16706575311794378],
+            [107, 22, 130],
+            id="dtw",
+        ),
+        pytest.param(
+            "scaled_dtw",
+            {"r": 1.0},
+            [1.3321568849328171, 1.8913769290869902, 1.506334150321518],
+            [126, 21, 0],
+            id="scaled_dtw",
+        ),
+    ],
+)
+def test_paired_subsequence_distance(
+    metric, metric_params, expected_min_dist, expected_min_ind
+):
+    x, y = load_dataset("GunPoint", repository="wildboar/ucr-tiny")
+    min_dist, min_ind = paired_subsequence_distance(
+        x[[2, 3, 8], 0:20],
+        x[40:43],
         metric=metric,
         metric_params=metric_params,
         return_index=True,
