@@ -22,6 +22,7 @@ It is currently maintained by Isak Samsten
 |                                                                                   | ``RandomShapeletClassifier``     | ``RocketTreeRegressor``         |                                  |            | ``FeatureEmbedding``        |                             |
 |                                                                                   | ``RockestClassifier``            | ``RockestRegressor``            |                                  |            |                             |                             |
 |                                                                                   | ``IntervalTreeClassifier``       | ``IntervalTreeRegressor``       |                                  |            |                             |                             |
+|                                                                                   | ``IntervalForestClassifier``     | ``IntervalForestRegressor``     |                                  |            |                             |                             |
 ## Installation
 
 ### Dependencies
@@ -68,8 +69,8 @@ formatted using [Black](https://black.readthedocs.io).
 
 ```python
 from wildboar.ensemble import ShapeletForestClassifier
-from wildboar.datasets import load_two_lead_ecg
-x_train, x_test, y_train, y_test = load_two_lead_ecg(merge_train_test=False)
+from wildboar.datasets import load_dataset
+x_train, x_test, y_train, y_test = load_dataset("GunPoint", merge_train_test=False)
 c = ShapeletForestClassifier()
 c.fit(x_train, y_train)
 c.score(x_test, y_test)
@@ -96,16 +97,6 @@ citations to the paper:
   - `ShapeletForestClassifier`
 
 - Isak Samsten, 2020. isaksamsten/wildboar: wildboar. Zenodo. doi:10.5281/zenodo.4264063
-  - `ShapeletForestRegressor`
-  - `ExtraShapeletForestClassifier`
-  - `ExtraShapeletForestRegressor`
-  - `IsolationShapeletForest`
-  - `ShapeletForestEmbedding`
-  - `PrototypeCounterfactual` 
-  - `RocketTreeClassifier`
-  - `RocketTreeRegressor`
-  - `RockestClassifier`
-  - `RockestRegressor`
     
 - Karlsson, I., Rebane, J., Papapetrou, P. et al. 
   Locally and globally explainable time series tweaking. 

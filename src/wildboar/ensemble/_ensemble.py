@@ -28,15 +28,17 @@ from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
-from wildboar.utils import check_array
 from wildboar.model_selection.outlier import threshold_score
 from wildboar.tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
+    IntervalTreeClassifier,
+    IntervalTreeRegressor,
     ShapeletTreeClassifier,
     ShapeletTreeRegressor,
 )
 from wildboar.tree._tree import RocketTreeClassifier, RocketTreeRegressor
+from wildboar.utils import check_array
 
 
 class ForestMixin:
@@ -1418,6 +1420,128 @@ class RockestClassifier(BaseForestClassifier):
         self.bias_prob = bias_prob
         self.normalize_prob = normalize_prob
         self.padding_prob = padding_prob
+
+    def _parallel_args(self):
+        return _joblib_parallel_args(prefer="threads")
+
+
+class IntervalForestClassifier(BaseForestClassifier):
+    def __init__(
+        self,
+        n_estimators=100,
+        *,
+        n_interval="sqrt",
+        intervals="fixed",
+        summarizer="auto",
+        sample_size=0.5,
+        min_size=0.0,
+        max_size=1.0,
+        oob_score=False,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0,
+        criterion="entropy",
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        class_weight=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=IntervalTreeClassifier(),
+            estimator_params=(
+                "n_interval",
+                "intervals",
+                "summarizer",
+                "sample_size",
+                "min_size",
+                "max_size",
+                "max_depth",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "criterion",
+            ),
+            oob_score=oob_score,
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            bootstrap=bootstrap,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            class_weight=class_weight,
+            random_state=random_state,
+        )
+        self.n_interval = n_interval
+        self.intervals = intervals
+        self.summarizer = summarizer
+        self.sample_size = sample_size
+        self.min_size = min_size
+        self.max_size = max_size
+
+    def _parallel_args(self):
+        return _joblib_parallel_args(prefer="threads")
+
+
+class IntervalForestRegressor(BaseForestRegressor):
+    def __init__(
+        self,
+        n_estimators=100,
+        *,
+        n_interval="sqrt",
+        intervals="fixed",
+        summarizer="auto",
+        sample_size=0.5,
+        min_size=0.0,
+        max_size=1.0,
+        oob_score=False,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0,
+        criterion="mse",
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=IntervalTreeRegressor(),
+            estimator_params=(
+                "n_interval",
+                "intervals",
+                "summarizer",
+                "sample_size",
+                "min_size",
+                "max_size",
+                "max_depth",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "criterion",
+            ),
+            oob_score=oob_score,
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            bootstrap=bootstrap,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            random_state=random_state,
+        )
+        self.n_interval = n_interval
+        self.intervals = intervals
+        self.summarizer = summarizer
+        self.sample_size = sample_size
+        self.min_size = min_size
+        self.max_size = max_size
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")

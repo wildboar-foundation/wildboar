@@ -18,6 +18,8 @@
 from ._ensemble import (
     ExtraShapeletTreesClassifier,
     ExtraShapeletTreesRegressor,
+    IntervalForestClassifier,
+    IntervalForestRegressor,
     IsolationShapeletForest,
     RockestClassifier,
     RockestRegressor,
@@ -35,4 +37,6 @@ __all__ = [
     "ShapeletForestEmbedding",
     "RockestRegressor",
     "RockestClassifier",
+    "IntervalForestClassifier",
+    "IntervalForestRegressor",
 ]
