@@ -131,7 +131,9 @@ Functions
 .. py:function:: paired_distance(x, y, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)
 
 
-.. py:function:: paired_subsequence_distance(y, x, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)
+.. py:function:: paired_subsequence_distance(y, x, *, dim=0, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)
+
+   Docstring.
 
 
 .. py:function:: paired_subsequence_match(y, x, threshold, *, dim=0, metric='euclidean', metric_params=None, return_distance=False, n_jobs=None)
