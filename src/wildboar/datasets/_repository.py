@@ -52,7 +52,7 @@ def _replace_placeholders(url, **kwargs):
     return url
 
 
-def _check_integrity(bundle_file, hash_file):
+def _check_integrity(bundle_file, hash_file, throws=True):
     """Check the integrity of the downloaded or cached file
 
     Parameters
@@ -62,6 +62,9 @@ def _check_integrity(bundle_file, hash_file):
 
     hash_file : str, bytes or PathLike
         Path to the hash file
+
+    throws : bool
+        Throw an exception on hash missmatch
 
     Returns
     -------
@@ -73,9 +76,13 @@ def _check_integrity(bundle_file, hash_file):
     if hash is not None:
         actual_hash = _sha1(bundle_file)
         if hash != actual_hash:
-            raise ValueError(
-                "integrity check failed, expected '%s', got '%s'" % (hash, actual_hash)
-            )
+            if throws:
+                raise ValueError(
+                    "integrity check failed, expected '%s', got '%s'"
+                    % (hash, actual_hash)
+                )
+            else:
+                return False
     return True
 
 
@@ -152,7 +159,9 @@ def _load_archive(
     if not os.path.exists(cached_hash) or not _sha1_is_sane(cached_hash):
         _download_hash_file(cached_hash, "%s.sha1" % download_url, bundle_name)
 
-    if os.path.exists(cached_bundle) and _check_integrity(cached_bundle, cached_hash):
+    if os.path.exists(cached_bundle) and _check_integrity(
+        cached_bundle, cached_hash, throws=False
+    ):
         try:
             return zipfile.ZipFile(open(cached_bundle, "rb"))
         except zipfile.BadZipFile:
