@@ -22,7 +22,9 @@ Functions
 
 .. autoapisummary::
 
+   wildboar.utils._soft_dependency_error
    wildboar.utils.check_array
+
 
 
 
