@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.signal import bspline
 
 from wildboar.datasets import load_dataset
 from wildboar.ensemble import IntervalForestClassifier
@@ -11,8 +10,15 @@ f = IntervalForestClassifier(
     n_estimators=100,
     intervals="random",
     summarizer=[
-        np.linalg.norm,
-        lambda s: bspline(s, 2)[0],
+        np.sum,
+        np.mean,
+        np.median,
+        np.std,
+        np.var,
+        np.max,
+        np.min,
+        np.argmax,
+        np.argmin,
     ],
     min_size=0.1,
     max_size=0.2,
