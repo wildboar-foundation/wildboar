@@ -899,6 +899,9 @@ double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, int length) {
 
     double *x_lag = malloc((length - tau) * sizeof(double));
     int x_lag_length = length - tau - 1;
+    if (x_lag_length - 1 == 0) {
+        return 0;
+    }
     for (int i = 0; i < x_lag_length; i++) {
         x_lag[i] = sqrt((x[i + 1] - x[i]) * (x[i + 1] - x[i]) +
                         (x[i + tau] - x[i + tau + 1]) * (x[i + tau] - x[i + tau + 1]));
@@ -919,6 +922,7 @@ double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, int length) {
         if (v > x_lag_max) x_lag_max = v;
         if (v < x_lag_min) x_lag_min = v;
     }
+
     x_lag_std = sqrt(x_lag_std / (x_lag_length - 1));
 
     if (x_lag_std < 0.001) {
