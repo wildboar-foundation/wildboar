@@ -1,3 +1,5 @@
+import warnings
+
 from sklearn.utils.validation import check_array as sklearn_check_array
 
 from wildboar.utils.data import check_dataset
@@ -5,6 +7,7 @@ from wildboar.utils.data import check_dataset
 __all__ = [
     "check_array",
     "check_dataset",
+    "_soft_dependency_error",
 ]
 
 
@@ -72,3 +75,25 @@ def check_array(
         return x
     else:
         return sklearn_check_array(x, **kwargs)
+
+
+def _soft_dependency_error(e, package=None, context=None, warning=False):
+    if context is None:
+        import inspect
+
+        frm = inspect.stack()[1]
+        if frm.function == "<module>":
+            context = inspect.getmodule(frm.frame).__name__
+        else:
+            context = frm.function
+
+    package = package or e.name
+    msg = (
+        f"'{package}' is required for '{context}', but not included in the default "
+        f"wildboar installation. Please run: `pip install {package}` to install the "
+        f"required package."
+    )
+    if warning:
+        warnings.warn(msg)
+    else:
+        raise ModuleNotFoundError(msg) from e

@@ -24,10 +24,17 @@ import zipfile
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-import requests
 from pkg_resources import parse_version
 
 from wildboar import __version__ as wildboar_version
+
+try:
+    import requests
+except ModuleNotFoundError as e:
+    from wildboar.utils import _soft_dependency_error
+
+    _soft_dependency_error(e, context="wildboar.datasets")
+
 
 DEFAULT_TAG = "default"
 

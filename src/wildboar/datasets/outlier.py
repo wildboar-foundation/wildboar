@@ -353,8 +353,12 @@ def _variation_dispersed(x, n_outliers, random_state):
         n_outliers = min(x.shape[0], n_outliers)
         f = KMedoids(n_clusters=n_outliers, random_state=random_state).fit(x)
         return f.medoid_indices_
-    except ImportError:
-        raise ValueError("variation (tight) require scikit-learn-extra.")
+    except ModuleNotFoundError as e:
+        from wildboar.utils import _soft_dependency_error
+
+        _soft_dependency_error(
+            e, package="scikit-learn-extra", context="variation='dispersed'"
+        )
 
 
 def _variation_tight(x, n_outliers, random_state):
