@@ -18,7 +18,9 @@
 # Authors: Isak Samsten
 
 cimport numpy as np
+
 import numpy as np
+
 from libc.math cimport INFINITY, ceil, exp, fabs, floor, pow, sqrt
 from libc.stdlib cimport free, malloc, qsort
 from libc.string cimport memcpy, memset
@@ -26,9 +28,10 @@ from libc.string cimport memcpy, memset
 from wildboar.utils cimport stats
 from wildboar.utils.data cimport Dataset
 from wildboar.utils.parallel cimport MapSample
-from wildboar.utils.parallel import run_in_parallel
 
 from wildboar.utils import check_dataset
+from wildboar.utils.parallel import run_in_parallel
+
 
 cdef extern from "catch22.h":
 
@@ -203,7 +206,7 @@ cdef double below_diff_stretch(double *x, Py_ssize_t n) nogil:
 
 
 cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t lag) nogil:
-    if n <= lag:
+    if n <= lag or lag == 0:
         return 0.0
     cdef:
         Py_ssize_t i
@@ -211,7 +214,7 @@ cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t
         double lag_sum
         Py_ssize_t lag_out, x_out
         double *lag_ac
-
+    
     lag_ac = <double*> malloc(sizeof(double) * n - lag)
     for i in range(n - lag):
         lag_sum = 0
@@ -230,6 +233,8 @@ cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t
     while ac[x_out] > 0 and x_out < n:
         x_out += 1
 
+    if x_out == 0:
+        x_out = 1
     return <double> lag_out / <double> x_out
 
 
