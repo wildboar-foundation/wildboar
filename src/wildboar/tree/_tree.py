@@ -632,7 +632,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        if self.criterion not in CLF_CRITERION:
+        if self.criterion not in REG_CRITERION:
             raise ValueError("criterion (%s) is not supported" % self.criterion)
 
         criterion = REG_CRITERION[self.criterion](y)
