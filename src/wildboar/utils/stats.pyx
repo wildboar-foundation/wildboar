@@ -172,6 +172,9 @@ cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) 
 
     _pocketfft.ifft(fft, fft_length, 1.0)
     cdef complex first = fft[0]
+    if first == 0j:
+        first = 1j
+    
     for i in range(n):
         out[i] = (fft[i] / first).real
 
