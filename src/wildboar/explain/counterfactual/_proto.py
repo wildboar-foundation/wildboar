@@ -23,9 +23,10 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
-from wildboar.distance import distance
+from wildboar.distance import pairwise_subsequence_distance
 from wildboar.distance.dtw import dtw_distance, dtw_mapping
 from wildboar.utils import check_array
+
 from .base import BaseCounterfactual
 
 
@@ -536,8 +537,12 @@ class ShapeletPrototypeSampler(PrototypeSampler):
             raise ValueError("unsupported metric")
 
         # Find the best matching position in
-        min_dist, best_match = distance(
-            p, o, metric=metric, metric_params=metric_params, return_index=True
+        min_dist, best_match = pairwise_subsequence_distance(
+            p.reshape(1, -1),
+            o.reshape(1, -1),
+            metric=metric,
+            metric_params=metric_params,
+            return_index=True,
         )
         o[best_match : best_match + p.shape[0]] = self.metric_transform.move(
             o[best_match : best_match + p.shape[0]], p

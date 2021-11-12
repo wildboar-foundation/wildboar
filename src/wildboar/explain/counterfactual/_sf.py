@@ -16,19 +16,26 @@
 # Authors: Isak Samsten
 import math
 from copy import deepcopy
-from functools import partial
 
 import numpy as np
 from sklearn.utils.validation import check_is_fitted
 
-from wildboar.distance import distance
+from wildboar.distance import pairwise_subsequence_distance
 from wildboar.ensemble._ensemble import BaseShapeletForestClassifier
 from wildboar.explain.counterfactual.base import BaseCounterfactual
 from wildboar.utils import check_array
 
 MIN_MATCHING_DISTANCE = 0.0001
 
-euclidean_distance = partial(distance, metric="euclidean", return_index=True)
+
+def _euclidean_distance(shapelet, x, *, dim):
+    return pairwise_subsequence_distance(
+        shapelet.reshape(1, -1),
+        x.reshape(1, -1),
+        dim=dim,
+        metric="euclidean",
+        return_index=True,
+    )
 
 
 def _shapelet_transform(shapelet, x, start_index, theta):
@@ -210,7 +217,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
 
     def _path_transform(self, x, path):
         for direction, (dim, shapelet), threshold in path:
-            dist, location = euclidean_distance(shapelet, x, dim=dim)
+            dist, location = _euclidean_distance(shapelet, x, dim=dim)
             if direction < 0:
                 if dist > threshold:
                     impute_shape = _shapelet_transform(
@@ -223,7 +230,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
                         shapelet, x, location, threshold + self.epsilon
                     )
                     x[location : location + len(shapelet)] = impute_shape
-                    dist, location = euclidean_distance(shapelet, x, dim=dim)
+                    dist, location = _euclidean_distance(shapelet, x, dim=dim)
             else:
                 raise ValueError("invalid path")
         return x

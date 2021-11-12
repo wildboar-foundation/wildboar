@@ -14,7 +14,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+import warnings
+
 import numpy as np
+from sklearn.utils.deprecation import deprecated
 
 from wildboar.utils import check_array
 from wildboar.utils.decorators import array_or_scalar
@@ -82,7 +85,93 @@ def pairwise_subsequence_distance(
     return_index=False,
     n_jobs=None,
 ):
-    """Compute the minimum sliding distance between shapelets and time series
+    """Compute the minimum subsequence distance between subsequences and time series
+
+    Parameters
+    ----------
+    y : list or ndarray of shape (n_subsequences, n_timestep)
+        Input time series.
+
+        - if list, a list of array-like of shape (n_timestep, )
+
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The input data
+
+    dim : int, optional
+        The dim to search for shapelets
+
+     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+        The distance metric
+
+        - if str use optimized implementations of the named distance measure
+        - if callable a function taking two arrays as input
+
+    metric_params: dict, optional
+        Parameters to the metric
+
+        - 'euclidean' and 'scaled_euclidean' take no parameters
+        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+          is interpreted as a fraction of the time series length. If > 1 it
+          is interpreted as an exact time warping window. Use 'r' == 0 for
+          a widow size of exactly 1.
+
+    subsequence_distance: bool, optional
+        - if True, compute the minimum subsequence distance
+        - if False, compute the distance between two arrays of the same length
+          unless the specified metric support unaligned arrays
+
+    return_index : bool, optional
+        - if True return the index of the best match. If there are many equally good
+          matches, the first match is returned.
+
+    Returns
+    -------
+    dist : float, ndarray
+        An array of shape (n_subsequences, n_samples) with the minumum distance between
+        each subsequence and each sample.
+
+    indices : int, ndarray
+        An array of shape (n_subsequences, n_samples) with the start position of the
+        best match between each subsequence and time series
+    """
+    y = _validate_subsequence(y)
+    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    for s in y:
+        if s.shape[0] > x.shape[-1]:
+            raise ValueError(
+                "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
+            )
+
+    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError("unsupported metric (%r)" % metric)
+
+    metric_params = metric_params or {}
+    min_dist, min_ind = _distance._pairwise_subsequence_distance(
+        y,
+        x,
+        dim,
+        distance_measure(**metric_params),
+        n_jobs,
+    )
+    if return_index:
+        return min_dist, min_ind
+    else:
+        return min_dist
+
+
+def paired_subsequence_distance(
+    y,
+    x,
+    *,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    return_index=False,
+    n_jobs=None,
+):
+    """Compute the minimum subsequence distance between the i:th subsequence and time
+    series
 
     Parameters
     ----------
@@ -121,52 +210,32 @@ def pairwise_subsequence_distance(
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
 
+    n_jobs : int, optional
+        The number of parallel jobs to run. Ignored
+
     Returns
     -------
     dist : float, ndarray
-        The smallest distance to each time series
+        An array of shape (n_samples, ) with the minumum distance between the i:th
+        subsequence and the i:th sample
 
     indices : int, ndarray
-        The start position of the best match in each time series
-        [description], by default None
+        An array of shape (n_samples, ) with the index of the best matching position
+        of the i:th subsequence and the i:th sample
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_multivariate=True, dtype=np.double)
-    # TODO: ensure y.length < x.shape[-1]
+    for s in y:
+        if s.shape[0] > x.shape[-1]:
+            raise ValueError(
+                "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
+            )
     distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
         raise ValueError("unsupported metric (%r)" % metric)
 
-    metric_params = metric_params or {}
-    min_dist, min_ind = _distance._pairwise_subsequence_distance(
-        y,
-        x,
-        dim,
-        distance_measure(**metric_params),
-        n_jobs,
-    )
-    if return_index:
-        return min_dist, min_ind
-    else:
-        return min_dist
-
-
-def paired_subsequence_distance(
-    y,
-    x,
-    *,
-    dim=0,
-    metric="euclidean",
-    metric_params=None,
-    return_index=False,
-    n_jobs=None,
-):
-    """Docstring."""
-    y = _validate_subsequence(y)
-    x = check_array(x, allow_multivariate=True, dtype=np.double)
-    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
+    if n_jobs is not None:
+        warnings.warn("n_jobs is not yet supported.", UserWarning)
 
     metric_params = metric_params or {}
     min_dist, min_ind = _distance._paired_subsequence_distance(
@@ -189,15 +258,75 @@ def subsequence_match(
     return_distance=False,
     n_jobs=None,
 ):
+    """Find the positions where the distance is less than the threshold between the
+    subsequence and all time series.
+
+    Parameters
+    ----------
+    y : array-like of shape (n_timestep, )
+        The subsequence
+
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The input data
+
+    threshold : float
+        The distance threshold used to consider a subsequence matching
+
+    dim : int, optional
+        The dim to search for shapelets
+
+     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+        The distance metric
+
+        - if str use optimized implementations of the named distance measure
+        - if callable a function taking two arrays as input
+
+    metric_params: dict, optional
+        Parameters to the metric
+
+        - 'euclidean' and 'scaled_euclidean' take no parameters
+        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+          is interpreted as a fraction of the time series length. If > 1 it
+          is interpreted as an exact time warping window. Use 'r' == 0 for
+          a widow size of exactly 1.
+
+    subsequence_distance: bool, optional
+        - if True, compute the minimum subsequence distance
+        - if False, compute the distance between two arrays of the same length
+          unless the specified metric support unaligned arrays
+
+    return_distance : bool, optional
+        - if True, return the distance of the match
+
+    n_jobs : int, optional
+        The number of parallel jobs to run. Ignored
+
+    Returns
+    -------
+    indicies : list
+        A list of shape (n_samples, ) of ndarray with start index of matching
+        subsequences
+
+    distance : list
+        A list of shape (n_samples, ) of ndarray with distance at the matching position.
+    """
     y = _validate_subsequence(y)
     if len(y) > 1:
         raise ValueError("a single sample expected")
     y = y[0]
     x = check_array(x, allow_multivariate=True, dtype=np.double)
+    if y.shape[0] > x.shape[-1]:
+        raise ValueError(
+            "invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
+        )
     distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
         raise ValueError("unsupported metric (%r)" % metric)
     metric_params = metric_params if metric_params is not None else {}
+
+    if n_jobs is not None:
+        warnings.warn("n_jobs is not yet supported.", UserWarning)
+
     indicies, distances = _distance._subsequence_match(
         y,
         x,
@@ -223,10 +352,73 @@ def paired_subsequence_match(
     return_distance=False,
     n_jobs=None,
 ):
+    """Compute the minimum subsequence distance between the i:th subsequence and time
+    series
+
+    Parameters
+    ----------
+    y : list or ndarray of shape (n_samples, n_timestep)
+        Input time series.
+
+        - if list, a list of array-like of shape (n_timestep, )
+
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The input data
+
+    threshold : float
+        The distance threshold used to consider a subsequence matching
+
+    dim : int, optional
+        The dim to search for shapelets
+
+     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+        The distance metric
+
+        - if str use optimized implementations of the named distance measure
+        - if callable a function taking two arrays as input
+
+    metric_params: dict, optional
+        Parameters to the metric
+
+        - 'euclidean' and 'scaled_euclidean' take no parameters
+        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+          is interpreted as a fraction of the time series length. If > 1 it
+          is interpreted as an exact time warping window. Use 'r' == 0 for
+          a widow size of exactly 1.
+
+    subsequence_distance: bool, optional
+        - if True, compute the minimum subsequence distance
+        - if False, compute the distance between two arrays of the same length
+          unless the specified metric support unaligned arrays
+
+    return_distance : bool, optional
+        - if True, return the distance of the match
+
+    n_jobs : int, optional
+        The number of parallel jobs to run. Ignored
+
+    Returns
+    -------
+    indicies : list
+        A list of shape (n_samples, ) of ndarray with start index of matching
+        subsequences
+
+    distance : list
+        A list of shape (n_samples, ) of ndarray with distance at the matching position.
+    """
     y = _validate_subsequence(y)
     x = check_array(x, allow_multivariate=True, dtype=np.double)
     if len(y) != x.shape[0]:
         raise ValueError("x and y must have the same number of samples")
+
+    for s in y:
+        if s.shape[0] > x.shape[-1]:
+            raise ValueError(
+                "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
+            )
+
+    if n_jobs is not None:
+        warnings.warn("n_jobs is not yet supported.", UserWarning)
 
     distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
@@ -255,6 +447,42 @@ def paired_distance(
     metric_params=None,
     n_jobs=None,
 ):
+    """Compute the distance between the i:th time series
+
+    Parameters
+    ----------
+    y : : ndarray of shape (n_samples, n_timestep) or (y_samples, n_dims, n_timestep)
+        The input data
+
+    x : ndarray of shape (n_samples, n_timestep) or (x_samples, n_dims, n_timestep)
+        The input data
+
+    dim : int, optional
+        The dim to compute distance
+
+     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+        The distance metric
+
+        - if str use optimized implementations of the named distance measure
+        - if callable a function taking two arrays as input
+
+    metric_params: dict, optional
+        Parameters to the metric
+
+        - 'euclidean' and 'scaled_euclidean' take no parameters
+        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+          is interpreted as a fraction of the time series length. If > 1 it
+          is interpreted as an exact time warping window. Use 'r' == 0 for
+          a widow size of exactly 1.
+
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    Returns
+    -------
+    dist : float or ndarray
+        An array of shape (y_samples, )
+    """
     x = check_array(x, allow_multivariate=True, dtype=np.double)
     y = check_array(y, allow_multivariate=True, dtype=np.double)
     if x.ndim != y.ndim:
@@ -263,6 +491,9 @@ def paired_distance(
         )
     if x.shape[0] != y.shape[0]:
         raise ValueError("x and y must have the same number of samples")
+
+    if n_jobs is not None:
+        warnings.warn("n_jobs is not yet supported.", UserWarning)
 
     distance_measure = _DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
@@ -294,6 +525,42 @@ def pairwise_distance(
     metric_params=None,
     n_jobs=None,
 ):
+    """Compute the distance between subsequences and time series
+
+    Parameters
+    ----------
+    y : : ndarray of shape (y_samples, n_timestep) or (y_samples, n_dims, n_timestep)
+        The input data
+
+    x : ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep)
+        The input data
+
+    dim : int, optional
+        The dim to compute distance
+
+     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+        The distance metric
+
+        - if str use optimized implementations of the named distance measure
+        - if callable a function taking two arrays as input
+
+    metric_params: dict, optional
+        Parameters to the metric
+
+        - 'euclidean' and 'scaled_euclidean' take no parameters
+        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
+          is interpreted as a fraction of the time series length. If > 1 it
+          is interpreted as an exact time warping window. Use 'r' == 0 for
+          a widow size of exactly 1.
+
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    Returns
+    -------
+    dist : float or ndarray
+        An array of shape (y_samples, x_samples)
+    """
     distance_measure = _DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
         raise ValueError("unsupported metric (%r)" % metric)
@@ -334,9 +601,10 @@ def pairwise_distance(
         )
 
 
+@deprecated(extra="Will be removed in 1.2")
 def distance(
-    x,
     y,
+    x,
     *,
     dim=0,
     sample=None,
@@ -345,7 +613,7 @@ def distance(
     subsequence_distance=True,
     return_index=False,
 ):
-    """Computes the distance between x and the samples of y
+    """Computes the distance between y and the samples of x
 
     Parameters
     ----------
@@ -413,21 +681,32 @@ def distance(
     >>> i
     [10 29  9 72 20 30]
     """
-    return _distance.distance(
-        x,
-        y,
-        dim=dim,
-        sample=sample,
-        metric=metric,
-        metric_params=metric_params,
-        subsequence_distance=subsequence_distance,
-        return_index=return_index,
-    )
+    x = (x[sample] if x.ndim > 1 else x.reshape(1, -1),)
+    if subsequence_distance:
+        return pairwise_subsequence_distance(
+            y.reshape(1, -1),
+            x,
+            dim=dim,
+            metric=metric,
+            metric_params=metric_params,
+            return_index=return_index,
+            n_jobs=None,
+        )
+    else:
+        return pairwise_distance(
+            y.reshape(1, -1),
+            x,
+            dim=dim,
+            metric=metric,
+            metric_params=metric_params,
+            n_jobs=None,
+        )
 
 
+@deprecated(extra="Will be removed in 1.2")
 def matches(
-    x,
     y,
+    x,
     threshold,
     *,
     dim=0,
@@ -436,15 +715,14 @@ def matches(
     metric_params=None,
     return_distance=False,
 ):
-    """Return the positions in `x` (one list per `sample`) where `x` is closer than
-    `threshold`.
+    """Find matches
 
     Parameters
     ----------
-    x : array-like of shape (x_timestep, )
+    y : array-like of shape (x_timestep, )
         A 1-dimensional float array
 
-    y : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
+    x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
         The collection of samples
 
     threshold : float
@@ -484,6 +762,13 @@ def matches(
     --------
     'scaled_dtw' is not supported.
     """
-    return _distance.matches(
-        x, y, threshold, dim, sample, metric, metric_params, return_distance
+    return subsequence_match(
+        y,
+        x[sample] if x.ndim > 1 else x.reshape(1, -1),
+        threshold,
+        dim=dim,
+        metric=metric,
+        metric_params=metric_params,
+        return_distance=return_distance,
+        n_jobs=None,
     )

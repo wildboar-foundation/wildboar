@@ -328,7 +328,7 @@ cdef np.ndarray _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
 cdef np.ndarray _new_distance_array(
         double *distances, Py_ssize_t n_matches):
     if n_matches > 0:
-        dist_array = np.empty(n_matches, dtype=float)
+        dist_array = np.empty(n_matches, dtype=np.double)
         for i in range(n_matches):
             dist_array[i] = distances[i]
         return dist_array
