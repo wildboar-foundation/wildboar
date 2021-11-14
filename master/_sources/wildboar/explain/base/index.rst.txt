@@ -1,0 +1,36 @@
+:py:mod:`wildboar.explain.base`
+===============================
+
+.. py:module:: wildboar.explain.base
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain.base.BaseExplanation
+
+
+
+
+.. py:class:: BaseExplanation
+
+   Bases: :py:obj:`sklearn.base.BaseEstimator`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   .. py:method:: plot(ax=None, **kwargs)
+      :abstractmethod:
+
+
+

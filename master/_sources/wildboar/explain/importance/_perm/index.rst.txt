@@ -1,0 +1,43 @@
+:orphan:
+
+:py:mod:`wildboar.explain.importance._perm`
+===========================================
+
+.. py:module:: wildboar.explain.importance._perm
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain.importance._perm.IntervalPermutationImportance
+
+
+
+
+.. py:class:: IntervalPermutationImportance(*, scoring=None, n_repeat=5, n_interval='sqrt', verbose=False, random_state=None)
+
+   Bases: :py:obj:`wildboar.explain.importance.base.BaseImportance`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   .. py:method:: fit(self, estimator, x, y=None, sample_weight=None)
+
+
+   .. py:method:: plot(self, ax=None, **kwargs)
+
+
+   .. py:method:: score(self, timestep=None, dim=0)
+
+
+

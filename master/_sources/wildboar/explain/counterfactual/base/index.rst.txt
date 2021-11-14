@@ -19,7 +19,7 @@ Classes
 
 .. py:class:: BaseCounterfactual
 
-   Bases: :py:obj:`sklearn.base.BaseEstimator`
+   Bases: :py:obj:`wildboar.explain.base.BaseExplanation`
 
    Base estimator for counterfactual explanations
 
@@ -33,6 +33,9 @@ Classes
 
       :returns:
       :rtype: self
+
+
+   .. py:method:: plot()
 
 
    .. py:method:: transform(self, x, y)

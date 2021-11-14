@@ -11,5 +11,15 @@ Subpackages
    :maxdepth: 3
 
    counterfactual/index.rst
+   importance/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
 
 
