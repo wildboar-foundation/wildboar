@@ -17,12 +17,12 @@
 
 import abc
 
-from sklearn.base import BaseEstimator
+from wildboar.explain.base import BaseExplanation
 
 __all__ = ["BaseCounterfactual"]
 
 
-class BaseCounterfactual(BaseEstimator):
+class BaseCounterfactual(BaseExplanation):
     """Base estimator for counterfactual explanations"""
 
     @abc.abstractmethod
@@ -60,4 +60,7 @@ class BaseCounterfactual(BaseEstimator):
         counterfactuals : ndarray of same shape as x
             The counterfactual for each sample.
         """
+        pass
+
+    def plot():
         pass
