@@ -415,6 +415,7 @@ cdef Py_ssize_t scaled_euclidean_distance_matches(
 
     cdef double ex = 0
     cdef double ex2 = 0
+    cdef double tmp
 
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -440,9 +441,9 @@ cdef Py_ssize_t scaled_euclidean_distance_matches(
         if i >= s_length - 1:
             j = (i + 1) % s_length
             mean = ex / s_length
-            ex2 = ex2 / s_length - mean * mean
-            if ex2 > 0:
-                std = sqrt(ex2)
+            tmp = ex2 / s_length - mean * mean
+            if tmp > 0:
+                std = sqrt(tmp)
             else:
                 std = 1.0
             dist = inner_scaled_euclidean_distance(
