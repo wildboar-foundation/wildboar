@@ -152,7 +152,7 @@ cdef double local_mean_std(double *x, Py_ssize_t n, Py_ssize_t lag) nogil:
             &inc_stats, 1.0, x[i + lag] - lag_sum / lag
         )
 
-    return sqrt(stats.inc_stats_variance(&inc_stats))
+    return sqrt(stats.inc_stats_variance(&inc_stats, True))
 
 
 cdef double hrv_classic_pnn(double *x, Py_ssize_t n, double pnn) nogil:
