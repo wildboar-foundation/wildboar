@@ -18,10 +18,10 @@
 # Authors: Isak Samsten
 
 cdef struct IncStats:
-    double _n_samples
-    double _m
-    double _s
-    double _sum
+    double n_samples
+    double mean
+    double sum_square
+    double sum
 
 cdef void inc_stats_init(IncStats *inc_stats) nogil
 

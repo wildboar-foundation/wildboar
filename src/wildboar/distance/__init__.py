@@ -22,7 +22,7 @@ from sklearn.utils.deprecation import deprecated
 from wildboar.utils import check_array
 from wildboar.utils.decorators import array_or_scalar
 
-from . import _distance, _dtw_distance, _euclidean_distance
+from . import _distance, _dtw_distance, _euclidean_distance, _mass
 
 __all__ = [
     "distance",
@@ -40,6 +40,7 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
     "scaled_euclidean": _euclidean_distance.ScaledEuclideanSubsequenceDistanceMeasure,
     "dtw": _dtw_distance.DtwSubsequenceDistanceMeasure,
     "scaled_dtw": _dtw_distance.ScaledDtwSubsequenceDistanceMeasure,
+    "mass": _mass.ScaledMatrixProfileSubsequenceDistanceMeasure,
 }
 
 _DISTANCE_MEASURE = {

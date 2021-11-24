@@ -63,6 +63,10 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/distance/_dtw_distance.pyx"],
             "include_dirs": include_dirs(),
         },
+        "wildboar.distance._mass": {
+            "sources": ["src/wildboar/distance/_mass.pyx"],
+            "include_dirs": include_dirs(),
+        },
         "wildboar.tree._tree_builder": {
             "sources": ["src/wildboar/tree/_tree_builder.pyx"],
             "include_dirs": include_dirs(),

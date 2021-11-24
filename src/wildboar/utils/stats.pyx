@@ -49,48 +49,48 @@ cdef void fast_mean_std(
 
 
 cdef void inc_stats_init(IncStats *self) nogil:
-    self._m = 0.0
-    self._n_samples = 0.0
-    self._s = 0.0
-    self._sum = 0.0
+    self.mean = 0.0
+    self.n_samples = 0.0
+    self.sum_square = 0.0
+    self.sum = 0.0
 
 cdef void inc_stats_add(IncStats *self, double weight, double value) nogil:
     cdef double next_m
-    self._n_samples += weight
-    next_m = self._m + (value - self._m) / self._n_samples
-    self._s += (value - self._m) * (value - next_m)
-    self._m = next_m
-    self._sum += weight * value
+    self.n_samples += weight
+    next_m = self.mean + (value - self.mean) / self.n_samples
+    self.sum_square += (value - self.mean) * (value - next_m)
+    self.mean = next_m
+    self.sum += weight * value
 
 cdef void inc_stats_remove(IncStats *self, double weight, double value) nogil:
     cdef double old_m
-    if self._n_samples == 1.0:
-        self._n_samples = 0.0
-        self._m = 0.0
-        self._s = 0.0
+    if self.n_samples == 1.0:
+        self.n_samples = 0.0
+        self.mean = 0.0
+        self.sum_square = 0.0
     else:
-        old_m = (self._n_samples * self._m - value) / (self._n_samples - weight)
-        self._s -= (value - self._m) * (value - old_m)
-        self._m = old_m
-        self._n_samples -= weight
-    self._sum -= weight * value
+        old_m = (self.n_samples * self.mean - value) / (self.n_samples - weight)
+        self.sum_square -= (value - self.mean) * (value - old_m)
+        self.mean = old_m
+        self.n_samples -= weight
+    self.sum -= weight * value
 
 cdef double inc_stats_n_samples(IncStats *self) nogil:
-    return self._n_samples
+    return self.n_samples
 
 cdef double inc_stats_sum(IncStats *self) nogil:
-    return self._sum
+    return self.sum
 
 cdef double inc_stats_mean(IncStats *self) nogil:
-    return self._m
+    return self.mean
 
-cdef double inc_stats_variance(IncStats *self, bint sample=True) nogil:
+cdef double inc_stats_variance(IncStats *self, bint sample=False) nogil:
     cdef double n_samples
     if sample:
-        n_samples = self._n_samples - 1
+        n_samples = self.n_samples - 1
     else:
-        n_samples = self._n_samples
-    return 0.0 if n_samples <= 1 else self._s / n_samples
+        n_samples = self.n_samples
+    return 0.0 if n_samples <= 1 else self.sum_square / n_samples
 
 cdef double mean(double *x, Py_ssize_t length) nogil:
     cdef double v = 0.0
