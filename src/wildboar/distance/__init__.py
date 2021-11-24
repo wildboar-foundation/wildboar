@@ -40,7 +40,7 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
     "scaled_euclidean": _euclidean_distance.ScaledEuclideanSubsequenceDistanceMeasure,
     "dtw": _dtw_distance.DtwSubsequenceDistanceMeasure,
     "scaled_dtw": _dtw_distance.ScaledDtwSubsequenceDistanceMeasure,
-    "mass": _mass.ScaledMatrixProfileSubsequenceDistanceMeasure,
+    "mass": _mass.ScaledMassSubsequenceDistanceMeasure,
 }
 
 _DISTANCE_MEASURE = {

@@ -1,3 +1,22 @@
+# cython: language_level=3
+
+# This file is part of wildboar
+#
+# wildboar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Isak Samsten
+
 cimport numpy as np
 
 import numpy as np
@@ -24,7 +43,7 @@ from ._distance cimport (
 )
 
 
-cdef class ScaledMatrixProfileSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
+cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
     cdef double *mean_x
     cdef double *std_x
     cdef double *dist_buffer
@@ -338,7 +357,7 @@ cdef void _cumulative_mean_std(
 #     y = np.array([2,2,2,2,3,3,3,10,10,2], dtype=np.double)
 #     cdef Subsequence s
 #     cdef Dataset dataset = Dataset(x)
-#     cdef SubsequenceDistanceMeasure distance_measure = ScaledMatrixProfileSubsequenceDistanceMeasure()
+#     cdef SubsequenceDistanceMeasure distance_measure = ScaledMassSubsequenceDistanceMeasure()
 #     distance_measure.reset(dataset)
 #     distance_measure.from_array(&s, (0, y))
 #     cdef double *distances
