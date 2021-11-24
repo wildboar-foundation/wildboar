@@ -423,7 +423,7 @@ def load_dataset(
     if dtype:
         x = x.astype(dtype)
 
-    elif isinstance(preprocess, str):
+    if isinstance(preprocess, str):
         preprocess = named_preprocess(preprocess)
     elif not hasattr(preprocess, "__call__"):
         raise ValueError("preprocess (%r) is not supported" % preprocess)
