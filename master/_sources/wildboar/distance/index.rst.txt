@@ -24,6 +24,7 @@ Functions
 
    wildboar.distance.distance
    wildboar.distance.matches
+   wildboar.distance.matrix_profile
    wildboar.distance.paired_distance
    wildboar.distance.paired_subsequence_distance
    wildboar.distance.paired_subsequence_match
@@ -125,6 +126,60 @@ Functions
              * **matches** (*list*) -- The start position of the matches in each time series
 
    .. warning:: 'scaled_dtw' is not supported.
+
+
+.. py:function:: matrix_profile(x, y=None, *, window=5, dim=0, exclude=None, n_jobs=-1, return_index=False, random_state=None)
+
+   Compute the matrix profile.
+
+   - If only `x` is given, compute the similarity self-join of every subsequence in `x`
+     of size `window` to its nearest neighbor in `x` excluding trivial matches according
+     to the `exclude` parameter.
+   - If both `x` and `y` are given, compute the similarity join of every subsequenec in
+     `y` of size `window` to its nearest neighbor in `x` excluding matches according to
+     the `exclude` parameter.
+
+
+   :param x: The first time series
+   :type x: array-like of shape (n_timestep, ), (n_samples, xn_timestep) or (n_samples, n_dim, xn_timestep) # noqa E501
+   :param y: The optional second time series.
+   :type y: array-like of shape (n_timestep, ), (n_samples, yn_timestep) or (n_samples, n_dim, yn_timestep), optional # noqa E501
+   :param window: The subsequence size, by default 5
+
+                  - if float, a fraction of `y.shape[-1]`
+                  - if int, the exact subsequence size
+   :type window: int or float, optional
+   :param dim: The dim to compute the matrix profile for, by default 0
+   :type dim: int, optional
+   :param exclude: The size of the exclusion zone. The default exclusion zone is  0.2 for
+                   similarity self-join and 0.0 for similarity join.
+
+                   - if float, expressed as a fraction of the windows size
+                   - if int, exact size (0 >= exclude < window)
+   :type exclude: int or float, optional
+   :param n_jobs: The number of jobs to use when computing the
+   :type n_jobs: int, optional
+   :param return_index: Return the matrix profile index
+   :type return_index: bool, optional
+   :param random_state: The random state used when computing the approximate profile
+   :type random_state: int or RandomState, optional
+
+   :returns: * **mp** (*ndarray of shape (profile_size, ) or (n_samples, profile_size)*) -- The matrix profile
+             * **mpi** (*ndarray of shape (profile_size, ) or (n_samples, profile_size), optional*) -- The matrix profile index
+
+   .. rubric:: Notes
+
+   The `profile_size` depends on the input.
+
+   - If `y` is `None´, `profile_size` is  ``x.shape[-1] - window + 1``
+   - If `y` is not `None`, `profile_size` is ``y.shape[-1] - window + 1``
+
+   .. rubric:: References
+
+   Yeh, C. C. M. et al. (2016).
+       Matrix profile I: All pairs similarity joins for time series: a unifying view
+       that includes motifs, discords and shapelets. In 2016 IEEE 16th international
+       conference on data mining (ICDM)
 
 
 .. py:function:: paired_distance(x, y, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)

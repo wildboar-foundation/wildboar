@@ -11,6 +11,7 @@ Submodules
    :maxdepth: 1
 
    decorators/index.rst
+   plot/index.rst
 
 
 Package Contents

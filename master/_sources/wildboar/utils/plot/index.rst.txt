@@ -1,0 +1,119 @@
+:py:mod:`wildboar.utils.plot`
+=============================
+
+.. py:module:: wildboar.utils.plot
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.plot.MidpointNormalize
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.plot.plot_frequency_domain
+   wildboar.utils.plot.plot_time_domain
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.plot.matplotlib_missing
+
+
+.. py:data:: matplotlib_missing
+   
+
+   
+
+.. py:class:: MidpointNormalize(vmin=None, vmax=None, midpoint=None, clip=False)
+
+   Bases: :py:obj:`matplotlib.colors.Normalize`
+
+   Normalise the colorbar.
+
+   :param vmin: If *vmin* and/or *vmax* is not given, they are initialized from the
+                minimum and maximum value, respectively, of the first input
+                processed; i.e., ``__call__(A)`` calls ``autoscale_None(A)``.
+   :type vmin: float or None
+   :param vmax: If *vmin* and/or *vmax* is not given, they are initialized from the
+                minimum and maximum value, respectively, of the first input
+                processed; i.e., ``__call__(A)`` calls ``autoscale_None(A)``.
+   :type vmax: float or None
+   :param clip: If ``True`` values falling outside the range ``[vmin, vmax]``,
+                are mapped to 0 or 1, whichever is closer, and masked values are
+                set to 1.  If ``False`` masked values remain masked.
+
+                Clipping silently defeats the purpose of setting the over, under,
+                and masked colors in a colormap, so it is likely to lead to
+                surprises; therefore the default is ``clip=False``.
+   :type clip: bool, default: False
+
+   .. rubric:: Notes
+
+   Returns 0 if ``vmin == vmax``.
+
+   .. py:method:: __call__(self, value, clip=None)
+
+      Normalize *value* data in the ``[vmin, vmax]`` interval into the
+      ``[0.0, 1.0]`` interval and return it.
+
+      :param value: Data to normalize.
+      :param clip: If ``None``, defaults to ``self.clip`` (which defaults to
+                   ``False``).
+      :type clip: bool
+
+      .. rubric:: Notes
+
+      If not already initialized, ``self.vmin`` and ``self.vmax`` are
+      initialized using ``self.autoscale_None(value)``.
+
+
+
+.. py:function:: plot_frequency_domain(x, *, y=None, ax=None, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
+
+   Plot the samples in the freqency domain
+
+   :param x: The samples
+   :type x: array-like of shape (n_sample, n_timestep)
+   :param y: The labels, by default None
+   :type y: array-like of shape (n_samples, ), optional
+   :param ax: The matplotlib Axes-object, by default None
+   :type ax: Axes, optional
+   :param jitter: Add jitter to the amplitude lines, by default False
+   :type jitter: bool, optional
+   :param sample_spacing: The frequency domain sample spacing, by default 1
+   :type sample_spacing: int, optional
+   :param frequency: Show the frequency bins, by default False
+   :type frequency: bool, optional
+   :param cmap: The colormap, by default "Dark2"
+   :type cmap: str, optional
+
+
+.. py:function:: plot_time_domain(x, *, y=None, ax=None, alpha=0.5, linewidth=0.5, zorder=-1, cmap='Dark2')
+
+   Plot the samples in the time domain
+
+   :param x: The samples
+   :type x: array-like of shape (n_sample, n_timestep)
+   :param y: The labels, by default None
+   :type y: array-like of shape (n_samples, ), optional
+   :param ax: The matplotlib Axes-object, by default None
+   :type ax: Axes, optional
+   :param cmap: The colormap, by default "Dark2"
+   :type cmap: str, optional
+
+
