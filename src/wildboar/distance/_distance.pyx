@@ -38,6 +38,8 @@ from wildboar.utils import check_array, check_dataset
 from wildboar.utils.parallel import run_in_parallel
 
 
+cdef double EPSILON = 1e-13
+
 cdef int _ts_view_update_statistics(SubsequenceView *v, Dataset td) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef Py_ssize_t shapelet_offset = (
@@ -55,10 +57,10 @@ cdef int _ts_view_update_statistics(SubsequenceView *v, Dataset td) nogil:
 
     v.mean = ex / v.length
     ex2 = ex2 / v.length - v.mean * v.mean
-    if ex2 > 0:
+    if ex2 > EPSILON:
         v.std = sqrt(ex2)
     else:
-        v.std = 1.0
+        v.std = 0.0
     return 0
 
 
@@ -219,8 +221,8 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         dim, arr = obj
         v.mean = np.mean(arr)
         v.std = np.std(arr)
-        if v.std == 0.0:
-            v.std = 1.0
+        if v.std <= EPSILON:
+            v.std = 0.0
         return 0
 
 

@@ -37,6 +37,16 @@ cdef double inc_stats_n_samples(IncStats *inc_stats) nogil
 
 cdef double inc_stats_sum(IncStats *inc_stats) nogil
 
+cdef void cumulative_mean_std(
+    double *x,
+    Py_ssize_t x_length, 
+    Py_ssize_t y_length, 
+    double *x_mean, 
+    double *x_std
+) nogil
+
+cdef double find_min(double *x, Py_ssize_t n, Py_ssize_t *min_index=*) nogil
+
 cdef double mean(double *x, Py_ssize_t length) nogil
 
 cdef double variance(double *x, Py_ssize_t length) nogil

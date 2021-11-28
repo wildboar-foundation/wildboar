@@ -14,15 +14,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+import math
 import warnings
 
 import numpy as np
 from sklearn.utils.deprecation import deprecated
+from sklearn.utils.validation import check_random_state
 
 from wildboar.utils import check_array
 from wildboar.utils.decorators import array_or_scalar
 
-from . import _distance, _dtw_distance, _euclidean_distance, _mass
+from . import _distance, _dtw_distance, _euclidean_distance, _mass, _matrix_profile
 
 __all__ = [
     "distance",
@@ -33,6 +35,7 @@ __all__ = [
     "paired_subsequence_match",
     "pairwise_distance",
     "paired_distance",
+    "matrix_profile",
 ]
 
 _SUBSEQUENCE_DISTANCE_MEASURE = {
@@ -600,6 +603,144 @@ def pairwise_distance(
             distance_measure,
             n_jobs,
         )
+
+
+@array_or_scalar(squeeze=True)
+def matrix_profile(
+    x,
+    y=None,
+    *,
+    window=5,
+    dim=0,
+    exclude=None,
+    n_jobs=-1,
+    return_index=False,
+    random_state=None,
+):
+    """Compute the matrix profile.
+
+    - If only `x` is given, compute the similarity self-join of every subsequence in `x`
+      of size `window` to its nearest neighbor in `x` excluding trivial matches according
+      to the `exclude` parameter.
+    - If both `x` and `y` are given, compute the similarity join of every subsequenec in
+      `y` of size `window` to its nearest neighbor in `x` excluding matches according to
+      the `exclude` parameter.
+
+
+    Parameters
+    ----------
+    x : array-like of shape (n_timestep, ), (n_samples, xn_timestep) or (n_samples, n_dim, xn_timestep) # noqa E501
+        The first time series
+
+    y : array-like of shape (n_timestep, ), (n_samples, yn_timestep) or (n_samples, n_dim, yn_timestep), optional # noqa E501
+        The optional second time series.
+
+    window : int or float, optional
+        The subsequence size, by default 5
+
+        - if float, a fraction of `y.shape[-1]`
+        - if int, the exact subsequence size
+
+    dim : int, optional
+        The dim to compute the matrix profile for, by default 0
+
+    exclude : int or float, optional
+        The size of the exclusion zone. The default exclusion zone is  0.2 for
+        similarity self-join and 0.0 for similarity join.
+
+        - if float, expressed as a fraction of the windows size
+        - if int, exact size (0 >= exclude < window)
+
+    n_jobs : int, optional
+        The number of jobs to use when computing the
+
+    return_index : bool, optional
+        Return the matrix profile index
+
+    random_state : int or RandomState, optional
+        The random state used when computing the approximate profile
+
+    Returns
+    -------
+    mp : ndarray of shape (profile_size, ) or (n_samples, profile_size)
+        The matrix profile
+
+    mpi : ndarray of shape (profile_size, ) or (n_samples, profile_size), optional
+        The matrix profile index
+
+    Notes
+    -----
+    The `profile_size` depends on the input.
+
+    - If `y` is `None´, `profile_size` is  ``x.shape[-1] - window + 1``
+    - If `y` is not `None`, `profile_size` is ``y.shape[-1] - window + 1``
+
+    References
+    ----------
+    Yeh, C. C. M. et al. (2016).
+        Matrix profile I: All pairs similarity joins for time series: a unifying view
+        that includes motifs, discords and shapelets. In 2016 IEEE 16th international
+        conference on data mining (ICDM)
+    """
+    x = np.array(x)
+    if x.ndim == 1:
+        x = x.reshape(1, -1)
+    x = check_array(x, allow_multivariate=True)
+
+    if y is not None:
+        y = np.array(y)
+        if y.ndim == 1:
+            y = y.reshape(1, -1)
+        y = np.broadcast_to(check_array(y, allow_multivariate=True), x.shape)
+
+        if x.ndim != y.ndim:
+            raise ValueError("both x and y must have the same dimensionality")
+        if x.shape[0] != y.shape[0]:
+            raise ValueError("both x and y must have the same number of samples")
+        if x.ndim > 2 and x.shape[1] != y.shape[1]:
+            raise ValueError("both x and y must have the same number of dimensions")
+        if not y.shape[-1] <= x.shape[-1]:
+            raise ValueError(
+                "y.shape[-1] > x.shape[-1]. If you wan't to compute the matrix profile "
+                "of the similarity join of YX, swap the order of inputs."
+            )
+        exclude = exclude or 0
+    else:
+        y = x
+        exclude = exclude or 0.2
+
+    if x.ndim > 2 and not 0 <= dim < x.shape[1]:
+        raise ValueError("invalid dim (%d)" % x.shape[1])
+
+    if isinstance(exclude, float):
+        if not 0 <= exclude <= 1.0:
+            raise ValueError("invalid exclusion (%f) not in [0, 1.0[" % exclude)
+        exclude = int(window * exclude)
+    elif exclude > window or exclude < 0:
+        raise ValueError("invalid exclusion (0 >= %d < %d)" % (exclude, window))
+
+    if isinstance(window, float):
+        if not 0.0 < window <= 1.0:
+            raise ValueError("invalid window size, got %f (expected [0, 1[)")
+        window = math.ceil(window * y.shape[-1])
+    elif window > y.shape[-1] or window > x.shape[-1] or window < 1:
+        raise ValueError("invalid window size, got %r" % window)
+
+    random_state = check_random_state(random_state)
+    mp, mpi = _matrix_profile._paired_matrix_profile(
+        x,
+        y,
+        window,
+        dim,
+        exclude,
+        n_jobs,
+        random_state,
+    )
+
+    if return_index:
+        return mp, mpi
+    else:
+        return mp
 
 
 @deprecated(extra="Will be removed in 1.2")

@@ -27,7 +27,7 @@ def _array_or_scalar(x, squeeze=True):
     if not isinstance(x, np.ndarray):
         return x
 
-    if len(x) == 1:
+    if x.size == 1:
         return x.item()
     else:
         return np.squeeze(x) if squeeze else x
@@ -39,7 +39,7 @@ def array_or_scalar(squeeze=True):
         def wrap(*args, **kwargs):
             x = f(*args, **kwargs)
             if isinstance(x, tuple):
-                return tuple(_array_or_scalar(r) for r in x)
+                return tuple(_array_or_scalar(r, squeeze=squeeze) for r in x)
             elif isinstance(x, np.ndarray):
                 return _array_or_scalar(x, squeeze=squeeze)
             else:

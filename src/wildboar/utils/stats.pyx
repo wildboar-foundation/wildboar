@@ -16,14 +16,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
+import numpy as np
 
-from libc.math cimport floor, sqrt
+from libc.math cimport INFINITY, floor, sqrt
 from libc.stdlib cimport free, malloc
 from libc.string cimport memset
 from sklearn.utils._cython_blas cimport _nrm2
 
 from ._fft cimport _pocketfft
 
+
+cdef double EPSILON = 1e-13
 
 cdef void fast_mean_std(
     double* data,
@@ -42,10 +45,10 @@ cdef void fast_mean_std(
 
     mean[0] = ex / length
     ex2 = ex2 / length - mean[0] * mean[0]
-    if ex2 > 0:
+    if ex2 > EPSILON:
         std[0] = sqrt(ex2)
     else:
-        std[0] = 1.0
+        std[0] = 0.0
 
 
 cdef void inc_stats_init(IncStats *self) nogil:
@@ -85,12 +88,36 @@ cdef double inc_stats_mean(IncStats *self) nogil:
     return self.mean
 
 cdef double inc_stats_variance(IncStats *self, bint sample=False) nogil:
-    cdef double n_samples
+    cdef double n_samples, var
     if sample:
         n_samples = self.n_samples - 1
     else:
         n_samples = self.n_samples
-    return 0.0 if n_samples <= 1 else self.sum_square / n_samples
+    if n_samples <= 1:
+        return 0 
+    else:
+        var = self.sum_square / n_samples
+        if var < EPSILON:
+             var = 0.0
+        return var
+
+cdef void cumulative_mean_std(
+    double *x,
+    Py_ssize_t x_length, 
+    Py_ssize_t y_length, 
+    double *x_mean, 
+    double *x_std
+) nogil:
+    cdef Py_ssize_t i
+    cdef IncStats stats
+    inc_stats_init(&stats)
+    for i in range(x_length):
+        inc_stats_add(&stats, 1.0, x[i])
+        if i >= y_length - 1:
+            x_mean[i - (y_length - 1)] = stats.mean
+            std = sqrt(inc_stats_variance(&stats))
+            x_std[i - (y_length - 1)] = std 
+            inc_stats_remove(&stats, 1.0, x[i - (y_length - 1)])
 
 cdef double mean(double *x, Py_ssize_t length) nogil:
     cdef double v = 0.0
@@ -130,6 +157,18 @@ cdef double slope(double *x, Py_ssize_t length) nogil:
     mean_y_sqr /= length
     x_mean /= length
     return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
+
+cdef double find_min(double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) nogil:
+    cdef double min_val = INFINITY
+    cdef Py_ssize_t i
+
+    for i in range(n):
+        if x[i] < min_val:
+            if min_index != NULL:
+                min_index[0] = i
+            min_val = x[i]
+
+    return min_val
 
 cdef double covariance(double *x, double *y, Py_ssize_t length) nogil:
     cdef:

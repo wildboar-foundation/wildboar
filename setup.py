@@ -67,6 +67,10 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/distance/_mass.pyx"],
             "include_dirs": include_dirs(),
         },
+        "wildboar.distance._matrix_profile": {
+            "sources": ["src/wildboar/distance/_matrix_profile.pyx"],
+            "include_dirs": include_dirs(),
+        },
         "wildboar.tree._tree_builder": {
             "sources": ["src/wildboar/tree/_tree_builder.pyx"],
             "include_dirs": include_dirs(),
