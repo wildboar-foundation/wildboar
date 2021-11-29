@@ -76,4 +76,7 @@ Classes
 
    Mixin class for all classifiers in scikit-learn.
 
+   .. py:method:: predict_proba(self, x)
+
+
 

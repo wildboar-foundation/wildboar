@@ -35,7 +35,12 @@ Classes
       :rtype: self
 
 
-   .. py:method:: plot()
+   .. py:method:: plot(self, **kwargs)
+
+      Plot the explanation
+
+      :returns: **ax** -- The axes object
+      :rtype: Axes
 
 
    .. py:method:: transform(self, x, y)

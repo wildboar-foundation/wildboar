@@ -17,6 +17,14 @@ Submodules
 Package Contents
 ----------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.DependencyMissing
+
+
 
 Functions
 ~~~~~~~~~
@@ -25,6 +33,18 @@ Functions
 
    wildboar.utils._soft_dependency_error
    wildboar.utils.check_array
+
+
+
+.. py:class:: DependencyMissing(e=None, *, package=None, context=None)
+
+   .. py:method:: __call__(self, *args, **kwds)
+
+
+   .. py:method:: __getattr__(self, name)
+
+
+   .. py:method:: __mro_entries__(self, bases)
 
 
 
