@@ -62,5 +62,5 @@ class BaseCounterfactual(BaseExplanation):
         """
         pass
 
-    def plot():
+    def plot(self, **kwargs):
         pass

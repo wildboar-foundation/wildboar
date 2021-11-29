@@ -21,7 +21,9 @@ import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 from sklearn.pipeline import Pipeline
+from sklearn.utils.extmath import softmax
 from sklearn.utils.validation import check_is_fitted, check_random_state
+
 from wildboar.utils import check_array
 
 
@@ -126,6 +128,9 @@ class EmbeddingRidgeClassifierCV(
             class_weight=self.class_weight,
             store_cv_values=False,
         )
+
+    def predict_proba(self, x):
+        return softmax(self.decision_function(x))
 
 
 class EmbeddingRidgeCV(RegressorMixin, EmbeddingRegressorMixin, BaseEmbeddingEstimator):
