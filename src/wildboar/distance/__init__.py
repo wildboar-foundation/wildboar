@@ -19,7 +19,6 @@ import warnings
 
 import numpy as np
 from sklearn.utils.deprecation import deprecated
-from sklearn.utils.validation import check_random_state
 
 from wildboar.utils import check_array
 from wildboar.utils.decorators import array_or_scalar
@@ -615,7 +614,6 @@ def matrix_profile(
     exclude=None,
     n_jobs=-1,
     return_index=False,
-    random_state=None,
 ):
     """Compute the matrix profile.
 
@@ -633,7 +631,7 @@ def matrix_profile(
         The first time series
 
     y : array-like of shape (n_timestep, ), (n_samples, yn_timestep) or (n_samples, n_dim, yn_timestep), optional # noqa E501
-        The optional second time series.
+        The optional second time series. y is broadcast to the shape of x if possible.
 
     window : int or float, optional
         The subsequence size, by default 5
@@ -656,9 +654,6 @@ def matrix_profile(
 
     return_index : bool, optional
         Return the matrix profile index
-
-    random_state : int or RandomState, optional
-        The random state used when computing the approximate profile
 
     Returns
     -------
@@ -726,7 +721,6 @@ def matrix_profile(
     elif window > y.shape[-1] or window > x.shape[-1] or window < 1:
         raise ValueError("invalid window size, got %r" % window)
 
-    random_state = check_random_state(random_state)
     mp, mpi = _matrix_profile._paired_matrix_profile(
         x,
         y,
@@ -734,7 +728,6 @@ def matrix_profile(
         dim,
         exclude,
         n_jobs,
-        random_state,
     )
 
     if return_index:

@@ -248,7 +248,6 @@ def _paired_matrix_profile(
     Py_ssize_t dim, 
     Py_ssize_t exclude, 
     n_jobs,
-    random_state,
 ):
     x = check_dataset(x, allow_1d=True)
     y = check_dataset(y, allow_1d=True)
