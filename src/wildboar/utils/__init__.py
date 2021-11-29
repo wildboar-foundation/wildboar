@@ -8,7 +8,43 @@ __all__ = [
     "check_array",
     "check_dataset",
     "_soft_dependency_error",
+    "DependencyMissing",
 ]
+
+
+class DependencyMissing:
+    def __init__(self, e=None, *, package=None, context=None):
+        if context is None:
+            import inspect
+
+            frm = inspect.stack()[1]
+            if frm.function == "<module>":
+                frm = inspect.getmodule(frm.frame)
+                context = frm.__name__ if frm is not None else ""
+            else:
+                context = frm.function
+        self.__package = package or e.name
+        self.__context = context
+        self.__e = e
+
+    def __mro_entries__(self, bases):
+        class Mock:
+            def __init__(ignore_me, *args, **kwargs):
+                _soft_dependency_error(
+                    e=self.__e, package=self.__package, context=self.__context
+                )
+
+        return (Mock,)
+
+    def __getattr__(self, name):
+        _soft_dependency_error(
+            e=self.__e, package=self.__package, context=self.__context
+        )
+
+    def __call__(self, *args, **kwds):
+        _soft_dependency_error(
+            e=self.__e, package=self.__package, context=self.__context
+        )
 
 
 def check_array(
@@ -77,7 +113,10 @@ def check_array(
         return sklearn_check_array(x, **kwargs)
 
 
-def _soft_dependency_error(e, package=None, context=None, warning=False):
+def _soft_dependency_error(e=None, package=None, context=None, warning=False):
+    if e is None and package is None:
+        raise ValueError("both e and package cant be None")
+
     if context is None:
         import inspect
 
@@ -86,7 +125,6 @@ def _soft_dependency_error(e, package=None, context=None, warning=False):
             context = inspect.getmodule(frm.frame).__name__
         else:
             context = frm.function
-
     package = package or e.name
     msg = (
         f"'{package}' is required for '{context}', but not included in the default "
@@ -96,4 +134,7 @@ def _soft_dependency_error(e, package=None, context=None, warning=False):
     if warning:
         warnings.warn(msg)
     else:
-        raise ModuleNotFoundError(msg) from e
+        if e is not None:
+            raise ModuleNotFoundError(msg) from e
+        else:
+            raise ModuleNotFoundError(msg)
