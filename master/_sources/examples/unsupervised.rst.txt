@@ -15,4 +15,22 @@ anomalous are encircled by a black circle.
 
 .. figure:: fig/outlier_isf.png
 
+Matrix Profile
+==============
+
+The matrix profile is a data structure that annotates a time series with the distance
+of the closest matching subsequence at the i:th index. In the first example, we join
+every subsequence in the second sample with the first three samples.
+
+.. literalinclude:: code/matrix_profile_ab.py
+
+.. figure :: fig/matrix_profile_ab.png
+
+In the second example, we self-join every subsequence with its closest position.
+
+.. literalinclude:: code/matrix_profile.py
+
+.. figure :: fig/matrix_profile.png
+
+
 

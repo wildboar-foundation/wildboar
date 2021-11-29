@@ -128,7 +128,7 @@ Functions
    .. warning:: 'scaled_dtw' is not supported.
 
 
-.. py:function:: matrix_profile(x, y=None, *, window=5, dim=0, exclude=None, n_jobs=-1, return_index=False, random_state=None)
+.. py:function:: matrix_profile(x, y=None, *, window=5, dim=0, exclude=None, n_jobs=-1, return_index=False)
 
    Compute the matrix profile.
 
@@ -142,7 +142,7 @@ Functions
 
    :param x: The first time series
    :type x: array-like of shape (n_timestep, ), (n_samples, xn_timestep) or (n_samples, n_dim, xn_timestep) # noqa E501
-   :param y: The optional second time series.
+   :param y: The optional second time series. y is broadcast to the shape of x if possible.
    :type y: array-like of shape (n_timestep, ), (n_samples, yn_timestep) or (n_samples, n_dim, yn_timestep), optional # noqa E501
    :param window: The subsequence size, by default 5
 
@@ -161,8 +161,6 @@ Functions
    :type n_jobs: int, optional
    :param return_index: Return the matrix profile index
    :type return_index: bool, optional
-   :param random_state: The random state used when computing the approximate profile
-   :type random_state: int or RandomState, optional
 
    :returns: * **mp** (*ndarray of shape (profile_size, ) or (n_samples, profile_size)*) -- The matrix profile
              * **mpi** (*ndarray of shape (profile_size, ) or (n_samples, profile_size), optional*) -- The matrix profile index
@@ -188,7 +186,7 @@ Functions
 
    :param y: The input data
    :type y: : ndarray of shape (n_samples, n_timestep) or (y_samples, n_dims, n_timestep)
-   :param x: The input data
+   :param x: The input data. y will be broadcast to the shape of x if possible.
    :type x: ndarray of shape (n_samples, n_timestep) or (x_samples, n_dims, n_timestep)
    :param dim:    The dim to compute distance
 
@@ -240,11 +238,6 @@ Functions
                            is interpreted as an exact time warping window. Use 'r' == 0 for
                            a widow size of exactly 1.
    :type metric_params: dict, optional
-   :param subsequence_distance:
-                                - if True, compute the minimum subsequence distance
-                                - if False, compute the distance between two arrays of the same length
-                                  unless the specified metric support unaligned arrays
-   :type subsequence_distance: bool, optional
    :param return_index:
                         - if True return the index of the best match. If there are many equally good
                           matches, the first match is returned.
@@ -258,7 +251,7 @@ Functions
                of the i:th subsequence and the i:th sample
 
 
-.. py:function:: paired_subsequence_match(y, x, threshold, *, dim=0, metric='euclidean', metric_params=None, return_distance=False, n_jobs=None)
+.. py:function:: paired_subsequence_match(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, max_matches=None, return_distance=False, n_jobs=None)
 
    Compute the minimum subsequence distance between the i:th subsequence and time
    series
@@ -269,7 +262,8 @@ Functions
    :type y: list or ndarray of shape (n_samples, n_timestep)
    :param x: The input data
    :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-   :param threshold: The distance threshold used to consider a subsequence matching
+   :param threshold: The distance threshold used to consider a subsequence matching. If no threshold
+                     is selected, `max_matches´ default to 10.
    :type threshold: float
    :param dim:    The dim to search for shapelets
 
@@ -287,11 +281,15 @@ Functions
                            is interpreted as an exact time warping window. Use 'r' == 0 for
                            a widow size of exactly 1.
    :type metric_params: dict, optional
-   :param subsequence_distance:
-                                - if True, compute the minimum subsequence distance
-                                - if False, compute the distance between two arrays of the same length
-                                  unless the specified metric support unaligned arrays
-   :type subsequence_distance: bool, optional
+   :param max_matches: Return the top `max_matches` matches below `threshold`.
+
+                       - If a `threshold` is given, the default behaviour is to return all matching
+                         indices in the order of occurrence .
+                       - If no `threshold` is given, the default behaviour is to return the top 10
+                         matching indicies ordered by distance
+                       - If both `threshold` and `max_matches` are given the top matches are returned
+                         ordered by distance.
+   :type max_matches: int, optional
    :param return_distance:
                            - if True, return the distance of the match
    :type return_distance: bool, optional
@@ -360,11 +358,6 @@ Functions
                            is interpreted as an exact time warping window. Use 'r' == 0 for
                            a widow size of exactly 1.
    :type metric_params: dict, optional
-   :param subsequence_distance:
-                                - if True, compute the minimum subsequence distance
-                                - if False, compute the distance between two arrays of the same length
-                                  unless the specified metric support unaligned arrays
-   :type subsequence_distance: bool, optional
    :param return_index:
                         - if True return the index of the best match. If there are many equally good
                           matches, the first match is returned.
