@@ -77,6 +77,21 @@ def _validate_subsequence(y):
     return y
 
 
+def _top_k_matches(indicies, distances, max_matches):
+    indicies_tmp = []
+    distances_tmp = []
+    for index, distance in zip(indicies, distances):
+        if index is None:
+            indicies_tmp.append(None)
+            distances_tmp.append(None)
+        else:
+            idx = np.argsort(distance)[:max_matches]
+            indicies_tmp.append(index[idx])
+            distances_tmp.append(distance[idx])
+
+    return indicies_tmp, distances_tmp
+
+
 @array_or_scalar(squeeze=True)
 def pairwise_subsequence_distance(
     y,
@@ -118,11 +133,6 @@ def pairwise_subsequence_distance(
           is interpreted as an exact time warping window. Use 'r' == 0 for
           a widow size of exactly 1.
 
-    subsequence_distance: bool, optional
-        - if True, compute the minimum subsequence distance
-        - if False, compute the distance between two arrays of the same length
-          unless the specified metric support unaligned arrays
-
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
@@ -163,6 +173,7 @@ def pairwise_subsequence_distance(
         return min_dist
 
 
+@array_or_scalar(squeeze=True)
 def paired_subsequence_distance(
     y,
     x,
@@ -203,11 +214,6 @@ def paired_subsequence_distance(
           is interpreted as a fraction of the time series length. If > 1 it
           is interpreted as an exact time warping window. Use 'r' == 0 for
           a widow size of exactly 1.
-
-    subsequence_distance: bool, optional
-        - if True, compute the minimum subsequence distance
-        - if False, compute the distance between two arrays of the same length
-          unless the specified metric support unaligned arrays
 
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
@@ -253,11 +259,12 @@ def paired_subsequence_distance(
 def subsequence_match(
     y,
     x,
-    threshold,
+    threshold=None,
     *,
     dim=0,
     metric="euclidean",
     metric_params=None,
+    max_matches=None,
     return_distance=False,
     n_jobs=None,
 ):
@@ -272,8 +279,9 @@ def subsequence_match(
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data
 
-    threshold : float
-        The distance threshold used to consider a subsequence matching
+    threshold : float, optional
+        The distance threshold used to consider a subsequence matching. If no threshold
+        is selected, `max_matches´ default to 10.
 
     dim : int, optional
         The dim to search for shapelets
@@ -293,13 +301,18 @@ def subsequence_match(
           is interpreted as an exact time warping window. Use 'r' == 0 for
           a widow size of exactly 1.
 
-    subsequence_distance: bool, optional
-        - if True, compute the minimum subsequence distance
-        - if False, compute the distance between two arrays of the same length
-          unless the specified metric support unaligned arrays
-
     return_distance : bool, optional
         - if True, return the distance of the match
+
+    max_matches : int, optional
+        Return the top `max_matches` matches below `threshold`.
+
+        - If a `threshold` is given, the default behaviour is to return all matching
+          indices in the order of occurrence .
+        - If no `threshold` is given, the default behaviour is to return the top 10
+          matching indicies ordered by distance
+        - If both `threshold` and `max_matches` are given the top matches are returned
+          ordered by distance.
 
     n_jobs : int, optional
         The number of parallel jobs to run. Ignored
@@ -330,6 +343,11 @@ def subsequence_match(
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
+    if threshold is None:
+        threshold = np.inf
+        if max_matches is None:
+            max_matches = 10
+
     indicies, distances = _distance._subsequence_match(
         y,
         x,
@@ -338,6 +356,10 @@ def subsequence_match(
         distance_measure(**metric_params),
         n_jobs,
     )
+
+    if max_matches:
+        indicies, distances = _top_k_matches(indicies, distances, max_matches)
+
     if return_distance:
         return indicies, distances
     else:
@@ -347,11 +369,12 @@ def subsequence_match(
 def paired_subsequence_match(
     y,
     x,
-    threshold,
+    threshold=None,
     *,
     dim=0,
     metric="euclidean",
     metric_params=None,
+    max_matches=None,
     return_distance=False,
     n_jobs=None,
 ):
@@ -369,7 +392,8 @@ def paired_subsequence_match(
         The input data
 
     threshold : float
-        The distance threshold used to consider a subsequence matching
+        The distance threshold used to consider a subsequence matching. If no threshold
+        is selected, `max_matches´ default to 10.
 
     dim : int, optional
         The dim to search for shapelets
@@ -389,10 +413,15 @@ def paired_subsequence_match(
           is interpreted as an exact time warping window. Use 'r' == 0 for
           a widow size of exactly 1.
 
-    subsequence_distance: bool, optional
-        - if True, compute the minimum subsequence distance
-        - if False, compute the distance between two arrays of the same length
-          unless the specified metric support unaligned arrays
+    max_matches : int, optional
+        Return the top `max_matches` matches below `threshold`.
+
+        - If a `threshold` is given, the default behaviour is to return all matching
+          indices in the order of occurrence .
+        - If no `threshold` is given, the default behaviour is to return the top 10
+          matching indicies ordered by distance
+        - If both `threshold` and `max_matches` are given the top matches are returned
+          ordered by distance.
 
     return_distance : bool, optional
         - if True, return the distance of the match
@@ -423,6 +452,11 @@ def paired_subsequence_match(
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
+    if threshold is None:
+        threshold = np.inf
+        if max_matches is None:
+            max_matches = 10
+
     distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
     if distance_measure is None:
         raise ValueError("unsupported metric (%r)" % metric)
@@ -435,6 +469,10 @@ def paired_subsequence_match(
         distance_measure(**metric_params),
         n_jobs,
     )
+
+    if max_matches:
+        indicies, distances = _top_k_matches(indicies, distances, max_matches)
+
     if return_distance:
         return indicies, distances
     else:
@@ -458,7 +496,7 @@ def paired_distance(
         The input data
 
     x : ndarray of shape (n_samples, n_timestep) or (x_samples, n_dims, n_timestep)
-        The input data
+        The input data. y will be broadcast to the shape of x if possible.
 
     dim : int, optional
         The dim to compute distance
@@ -488,6 +526,7 @@ def paired_distance(
     """
     x = check_array(x, allow_multivariate=True, dtype=np.double)
     y = check_array(y, allow_multivariate=True, dtype=np.double)
+    y = np.broadcast_to(y, x.shape)
     if x.ndim != y.ndim:
         raise ValueError(
             "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
