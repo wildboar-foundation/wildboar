@@ -14,3 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
+
+from ._importance import IntervalImportance
+
+__all__ = ["IntervalImportance"]
