@@ -428,15 +428,16 @@ def load_dataset(
     elif not hasattr(preprocess, "__call__"):
         raise ValueError("preprocess (%r) is not supported" % preprocess)
 
+    x = preprocess(x)
     if merge_train_test:
-        ret_val.append(preprocess(x))
+        ret_val.append(x)
         ret_val.append(y)
     else:
         if n_train_samples == x.shape[0]:
             raise ValueError("found no test parts. Set merge_train_test=True.")
 
-        ret_val.append(preprocess(x[:n_train_samples]))
-        ret_val.append(preprocess(x[n_train_samples:]))
+        ret_val.append(x[:n_train_samples])
+        ret_val.append(x[n_train_samples:])
         if y is not None:
             ret_val.append(y[:n_train_samples])
             ret_val.append(y[n_train_samples:])
