@@ -90,9 +90,30 @@ def maxabs_scale(x):
     return x / x_max
 
 
+def truncate(x):
+    """Truncate x to the shortest sequence
+
+    Parameters
+    ----------
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The dataset
+
+    Returns
+    -------
+    x : ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
+        The truncated dataset
+    """
+    first_nan = np.nonzero(np.isnan(x))[-1]
+    if first_nan.size > 0:
+        return x[..., : np.min(first_nan)]
+    else:
+        return x
+
+
 _PREPROCESS = {
     "standardize": standardize,
-    "normalize": normalize,
+    "normalize": standardize,
     "minmax_scale": minmax_scale,
     "maxabs_scale": maxabs_scale,
+    "truncate": truncate,
 }
