@@ -43,7 +43,7 @@ from wildboar.utils import check_array
 
 class ForestMixin:
     def apply(self, x):
-        x = self._validate_x_predict(x, check_input=True)
+        x = self._validate_x_predict(x)
         results = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
@@ -53,7 +53,8 @@ class ForestMixin:
         return np.array(results).T
 
     def decision_path(self, x):
-        x = self._validate_x_predict(x, check_input=True)
+        x = self._validate_x_predict(x)
+        x = x.reshape(x.shape[0], self.n_dims_ * self.n_timestep_)
         indicators = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
@@ -69,10 +70,8 @@ class ForestMixin:
 
         return sparse.hstack(indicators).tocsr(), n_nodes_ptr
 
-    def _validate_x_predict(self, x, check_input):
-        if check_input:
-            x = check_array(x, allow_multivariate=True)
-
+    def _validate_x_predict(self, x):
+        x = check_array(x, allow_multivariate=True)
         if self.n_dims_ > 1 and x.ndim != 3:
             raise ValueError("illegal input dimensions X.ndim != 3")
 
@@ -126,17 +125,17 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier):
         self.min_impurity_decrease = min_impurity_decrease
         self.class_weight = class_weight
 
-    def predict(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict(x)
+    def predict(self, x):
+        # Calls predict_proba so no input validation is required
+        return BaggingClassifier.predict(self, x)
 
-    def predict_proba(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict_proba(x)
+    def predict_proba(self, x):
+        x = self._validate_x_predict(x)
+        return BaggingClassifier.predict_proba(self, x)
 
-    def predict_log_proba(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict_log_proba(x)
+    def predict_log_proba(self, x):
+        x = self._validate_x_predict(x)
+        return BaggingClassifier.predict_log_proba(self, x)
 
     def fit(self, x, y, sample_weight=None, check_input=True):
         if check_input:
@@ -516,10 +515,6 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
         self.criterion = criterion
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
-
-    def predict(self, x, check_input=True):
-        x = self._validate_x_predict(x, check_input)
-        return super().predict(x)
 
     def fit(self, x, y, sample_weight=None, check_input=True):
         if check_input:
@@ -1229,7 +1224,7 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
 
     def score_samples(self, x):
         check_is_fitted(self)
-        x = self._validate_x_predict(x, check_input=True)
+        x = self._validate_x_predict(x)
         return _score_samples(x, self.estimators_, self.max_samples_)
 
     def _oob_score_samples(self, x):
