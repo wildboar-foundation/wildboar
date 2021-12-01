@@ -18,6 +18,11 @@ import math
 from copy import deepcopy
 
 import numpy as np
+from sklearn.metrics.pairwise import (
+    paired_cosine_distances,
+    paired_euclidean_distances,
+    paired_manhattan_distances,
+)
 from sklearn.utils.validation import check_is_fitted
 
 from wildboar.distance import pairwise_subsequence_distance
@@ -28,11 +33,11 @@ from wildboar.utils import check_array
 MIN_MATCHING_DISTANCE = 0.0001
 
 
-def _euclidean_distance(shapelet, x, *, dim):
+def _min_euclidean_distance(shapelet, x):
     return pairwise_subsequence_distance(
         shapelet.reshape(1, -1),
         x.reshape(1, -1),
-        dim=dim,
+        dim=0,
         metric="euclidean",
         return_index=True,
     )
@@ -84,11 +89,32 @@ class PredictionPaths:
         return self._paths[item]
 
 
-def _compute_cost(a, b):
-    if a.ndim == 1 and b.ndim == 1:
-        return np.linalg.norm(a - b)
-    else:
-        return np.linalg.norm(a - b, axis=1)
+def _cost_wrapper(cost):
+    def f(x, y, aggregation=np.mean):
+        if x.ndim == 1:
+            return cost(x.reshape(1, -1), y.reshape(1, -1))
+        if x.ndim == 2:
+            return cost(x, y)
+        elif x.ndim == 3:
+            return aggregation(
+                [cost(x[:, i, :], y[:, i, :]) for i in range(x.shape[1])], axis=0
+            )
+        else:
+            raise ValueError("invalid dim")
+
+    return f
+
+
+_COST = {
+    "euclidean": _cost_wrapper(paired_euclidean_distances),
+    "cosine": _cost_wrapper(paired_cosine_distances),
+    "manhattan": _cost_wrapper(paired_manhattan_distances),
+}
+
+_AGGREGATION = {
+    "median": np.median,
+    "mean": np.mean,
+}
 
 
 class ShapeletForestCounterfactual(BaseCounterfactual):
@@ -120,39 +146,72 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
     """
 
-    def __init__(self, *, epsilon=1.0, batch_size=1, random_state=10):
+    def __init__(
+        self,
+        *,
+        cost="euclidean",
+        aggregation="mean",
+        epsilon=1.0,
+        batch_size=1,
+        verbose=False,
+        random_state=None,
+    ):
         """
 
         Parameters
         ----------
+        cost : {"euclidean", "cosine", "manhattan"}, optional
+            The cost function to determine the goodness of counterfactual
+        aggregation : callable, optional
+            The aggregation function for the cost of multivariate counterfactuals, by
         epsilon : float, optional
             Control the degree of change from the decision threshold
-
         batch_size : float, optional
             Batch size when evaluating the cost and predictions of
             counterfactual candidates. The default setting is to evaluate
             all counterfactual samples.
-
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
         """
+        self.cost = cost
+        self.aggregation = aggregation
         self.epsilon = epsilon
         self.random_state = random_state
         self.batch_size = batch_size
+        self.verbose = verbose
 
     def fit(self, estimator):
         if not isinstance(estimator, BaseShapeletForestClassifier):
             raise ValueError("unsupported estimator, got %r" % estimator)
         check_is_fitted(estimator)
+        if isinstance(self.cost, str):
+            self.cost_ = _COST.get(self.cost, None)
+            if self.cost_ is None:
+                raise ValueError("invalid cost (%r)" % self.cost)
+        elif callable(self.cost):
+            self.cost_ = _cost_wrapper(self.cost)
+        else:
+            raise ValueError("invalid cost (%r)" % self.cost)
+
+        if isinstance(self.aggregation, str):
+            self.aggregation_ = _AGGREGATION.get(self.aggregation, None)
+            if self.aggregation_ is None:
+                raise ValueError("invalid aggregation (%s)" % self.aggregation)
+        elif callable(self.aggregation):
+            self.aggregation_ = self.aggregation
+        else:
+            raise ValueError("invalid aggregation (%r)" % self.aggregation)
+
         self._estimator = deepcopy(estimator)
         self.paths_ = PredictionPaths(estimator.classes_)
+
         for base_estimator in self._estimator.estimators_:
             self.paths_._append(base_estimator.tree_)
         return self
 
     def transform(self, x, y):
         check_is_fitted(self, "paths_")
-        x = check_array(x)
+        x = check_array(x, allow_multivariate=True)
         y = check_array(y, ensure_2d=False)
         if len(y) != x.shape[0]:
             raise ValueError(
@@ -161,22 +220,20 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
             )
         counterfactuals = np.empty(x.shape)
         for i in range(x.shape[0]):
-            t = self.candidates(x[i, :], y[i])
+            if self.verbose:
+                print(
+                    f"Generating counterfactual for the {i}:th sample. "
+                    f"The target label is {y[i]}."
+                )
+            t = self.candidates(x[i], y[i])
             if t is not None:
-                counterfactuals[i, :] = t
+                counterfactuals[i] = t
             else:
-                counterfactuals[i, :] = x[i, :]
+                counterfactuals[i] = x[i]
 
         return counterfactuals
 
     def candidates(self, x, y):
-        if x.ndim == 2 and x.shape[0] > 1:
-            raise ValueError(
-                "can only compute candidates for 1 sample, got %d" % x.shape[0]
-            )
-        # elif x.ndim == 1:
-        #     x = x.reshape(1, -1)
-
         if self.epsilon < 0.0:
             raise ValueError("epsilon must be larger than 0, got %r" % self.epsilon)
 
@@ -197,40 +254,48 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         else:
             raise ValueError("unsupported batch_size, got %r" % self.batch_size)
 
-        counterfactuals = np.empty([n_counterfactuals, x.shape[0]])
+        counterfactuals = np.empty((n_counterfactuals,) + x.shape)
         for i, path in enumerate(prediction_paths):
-            counterfactuals[i, :] = self._path_transform(x.copy(), path)
+            counterfactuals[i] = self._path_transform(x.copy(), path)
 
         # Note that the cost is ordered in increasing order; hence, if a
         # conversion is successful there can exist no other successful
         # transformation with lower cost.
-        cost_sort = np.argsort(_compute_cost(counterfactuals, x))
+        x = np.broadcast_to(x, counterfactuals.shape)
+        cost_sort = np.argsort(
+            self.cost_(counterfactuals, x, aggregation=self.aggregation_)
+        )
         for i in range(0, n_counterfactuals, batch_size):
             batch_cost = cost_sort[i : min(n_counterfactuals, i + batch_size)]
-            batch_counterfactuals = counterfactuals[batch_cost, :]
+            batch_counterfactuals = counterfactuals[batch_cost]
             batch_prediction = self._estimator.predict(batch_counterfactuals)
             batch_counterfactuals = batch_counterfactuals[batch_prediction == y]
             if batch_counterfactuals.shape[0] > 0:
-                return batch_counterfactuals[0, :]
+                return batch_counterfactuals[0]
 
         return None
 
     def _path_transform(self, x, path):
         for direction, (dim, shapelet), threshold in path:
-            dist, location = _euclidean_distance(shapelet, x, dim=dim)
+            if x.ndim == 2:
+                x_dim = x[dim]
+            else:
+                x_dim = x
+
+            dist, location = _min_euclidean_distance(shapelet, x_dim)
             if direction < 0:
                 if dist > threshold:
                     impute_shape = _shapelet_transform(
-                        shapelet, x, location, threshold - self.epsilon
+                        shapelet, x_dim, location, threshold - self.epsilon
                     )
-                    x[location : location + len(shapelet)] = impute_shape
+                    x_dim[location : location + len(shapelet)] = impute_shape
             elif direction > 0:
                 while dist - threshold < 0:
                     impute_shape = _shapelet_transform(
-                        shapelet, x, location, threshold + self.epsilon
+                        shapelet, x_dim, location, threshold + self.epsilon
                     )
-                    x[location : location + len(shapelet)] = impute_shape
-                    dist, location = _euclidean_distance(shapelet, x, dim=dim)
+                    x_dim[location : location + len(shapelet)] = impute_shape
+                    dist, location = _min_euclidean_distance(shapelet, x_dim)
             else:
                 raise ValueError("invalid path")
         return x

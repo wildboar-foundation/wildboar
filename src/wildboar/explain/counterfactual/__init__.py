@@ -61,6 +61,24 @@ def _best_counterfactional(estimator):
         return PrototypeCounterfactual
 
 
+def _2d_3d_paired_distance(x, y, *, metric):
+    if x.ndim != y.ndim:
+        raise ValueError("both x and y must have the same rank")
+
+    if x.ndim == 2:
+        return paired_distances(x, y, metric=metric)
+    elif x.ndim == 3:
+        return np.mean(
+            [
+                paired_distances(x[:, i, :], y[:, i, :], metric=metric)
+                for i in range(x.shape[1])
+            ],
+            axis=0,
+        )
+    else:
+        raise ValueError("invalid rank, %d > 3" % x.ndim)
+
+
 def score(x_true, x_counterfactuals, metric="euclidean", success=None):
     """Compute the score for the counterfactuals
 
@@ -95,15 +113,19 @@ def score(x_true, x_counterfactuals, metric="euclidean", success=None):
         x_counterfactuals = x_counterfactuals[success]
 
     if isinstance(metric, str) or hasattr(metric, "__call__"):
-        return paired_distances(x_true, x_counterfactuals, metric=metric)
+        return _2d_3d_paired_distance(x_true, x_counterfactuals, metric=metric)
     else:
         sc = {}
         if isinstance(metric, dict):
             for key, value in metric.items():
-                sc[key] = paired_distances(x_true, x_counterfactuals, metric=value)
+                sc[key] = _2d_3d_paired_distance(
+                    x_true, x_counterfactuals, metric=value
+                )
         elif isinstance(metric, list):
             for item in metric:
-                sc[item] = paired_distances(x_true, x_counterfactuals, metric=item)
+                sc[item] = _2d_3d_paired_distance(
+                    x_true, x_counterfactuals, metric=item
+                )
         else:
             raise ValueError("invalid metric, got %r" % metric)
         return sc
