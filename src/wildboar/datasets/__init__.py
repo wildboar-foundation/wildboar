@@ -52,9 +52,6 @@ __all__ = [
     "load_gun_point",
 ]
 
-_CACHE_DIR = None
-_REPOSITORIES = RepositoryCollection()
-
 
 def _split_repo_bundle(repo_bundle_name):
     """Split a repository bundle string of the format {repo}/{bundle}
@@ -701,6 +698,12 @@ def list_repositories(*, refresh=False, timeout=None):
     if refresh:
         refresh_repositories(timeout=timeout)
     return [repo.name for repo in _REPOSITORIES]
+
+
+_CACHE_DIR = None
+_REPOSITORIES = RepositoryCollection(
+    os.path.join(_os_cache_path("wildboar"), "repository")
+)
 
 
 # Install the default 'wildboar' repository

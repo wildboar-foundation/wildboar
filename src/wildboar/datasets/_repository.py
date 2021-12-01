@@ -15,8 +15,10 @@
 #
 # Authors: Isak Samsten
 
+import base64
 import hashlib
 import os
+import pickle
 import re
 import sys
 import warnings
@@ -262,6 +264,19 @@ class Repository(metaclass=ABCMeta):
     def __init__(self):
         self._active = False
 
+    def __eq__(self, o):
+        if isinstance(o, Repository):
+            return self.identifier == o.identifier
+        return False
+
+    def __hash__(self) -> int:
+        return hash(self.identifier)
+
+    @property
+    @abstractmethod
+    def identifier(self):
+        pass
+
     @property
     @abstractmethod
     def name(self):
@@ -426,7 +441,7 @@ class Repository(metaclass=ABCMeta):
         try:
             self._refresh(timeout)
             self._active = True
-        except requests.Timeout:
+        except requests.ConnectionError:
             self._active = False
 
     @abstractmethod
@@ -490,6 +505,10 @@ class JSONRepository(Repository):
     def __init__(self, url):
         super().__init__()
         self.repo_url = url
+
+    @property
+    def identifier(self):
+        return base64.b64encode(self.repo_url.encode())
 
     @property
     def wildboar_requires(self):
@@ -574,9 +593,12 @@ class JSONRepository(Repository):
 
 
 class RepositoryCollection:
-    def __init__(self):
-        self.pending_repositories = []
-        self.repositories = []
+    def __init__(self, cache_dir=None):
+        self.pending_repositories = set()
+        self.repositories = set()
+        self.cache_dir = cache_dir
+        if not os.path.exists(self.cache_dir):
+            os.mkdir(self.cache_dir)
 
     def __getitem__(self, key):
         repository = next(
@@ -611,15 +633,41 @@ class RepositoryCollection:
     def __len__(self):
         return len(self.repositories)
 
+    def _load_from_cache(self, repository):
+        if self.cache_dir:
+            cached_repository = os.path.join(
+                self.cache_dir, "%s.repo" % repository.identifier
+            )
+            if os.path.exists(cached_repository):
+                with open(cached_repository, "rb") as f:
+                    return pickle.load(f)
+
+        return None
+
+    def _save_to_cache(self, repository):
+        if self.cache_dir and repository.active:
+            cached_repository = os.path.join(
+                self.cache_dir, "%s.repo" % repository.identifier
+            )
+            with open(cached_repository, "wb") as f:
+                pickle.dump(repository, f)
+
     def refresh(self, repository=None, timeout=None):
         if repository is None:
             for repository in self.repositories:
                 repository.refresh(timeout)
+                if repository.active:
+                    self._save_to_cache(repository)
 
             for repository in self.pending_repositories:
                 repository.refresh(timeout)
                 if repository.active:
-                    self.repositories.append(repository)
+                    self._save_to_cache(repository)
+                    self.repositories.add(repository)
+                else:
+                    cached_repository = self._load_from_cache(repository)
+                    if cached_repository:
+                        self.repositories.add(repository)
 
             self.pending_repositories = [
                 repository
@@ -629,15 +677,20 @@ class RepositoryCollection:
         else:
             repository = self[repository]
             repository.refresh(timeout)
+            self._save_to_cache(repository)
 
     def append(self, repository, refresh=True, timeout=None):
         if refresh:
             repository.refresh(timeout)
 
         if repository.active:
-            self.repositories.append(repository)
+            self.repositories.add(repository)
         else:
-            self.pending_repositories.append(repository)
+            cached_repository = self._load_from_cache(repository)
+            if cached_repository:
+                self.repositories.add(cached_repository)
+            else:
+                self.pending_repositories.add(repository)
 
 
 class Bundle(metaclass=ABCMeta):
@@ -802,10 +855,39 @@ class Bundle(metaclass=ABCMeta):
         n_train_samples = sizes[0]
         if test_parts:
             for array in self.arrays:
-                full_data = [data[array]]
+                train = data[array]
+                test = []
                 for test_part in test_parts:
-                    full_data.append(test_part[array])
-                data[array] = np.concatenate(full_data, axis=0)
+                    test.append(test_part[array])
+                test = np.concatenate(test, axis=0)
+
+                if test.ndim != train.ndim:
+                    raise ValueError("train and test parts have incompatible rank")
+
+                if test.ndim > 2 and train.shape[1] != test.shape[1]:
+                    raise ValueError(
+                        "train and test parts have incompatible number dimensions"
+                    )
+
+                if test.ndim == 1:
+                    data[array] = np.concatenate([train, test], axis=0)
+                else:
+                    if test.ndim == 2:
+                        shape = (
+                            train.shape[0] + test.shape[0],
+                            max(test.shape[-1], train.shape[-1]),
+                        )
+                    elif test.ndim == 3:
+                        shape = (
+                            train.shape[0] + test.shape[0],
+                            test.shape[1],
+                            max(test.shape[-1], train.shape[-1]),
+                        )
+
+                    merge = np.full(shape, fill_value=np.nan, dtype=np.double)
+                    merge[: train.shape[0], ..., : train.shape[-1]] = train
+                    merge[train.shape[0] :, ..., : test.shape[-1]] = test
+                    data[array] = merge
 
         x = data.pop("x")
         y = data.pop("y")
