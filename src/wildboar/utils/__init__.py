@@ -111,15 +111,6 @@ def check_array(
             raise ValueError("order=%r and contiguous=True are incompatible")
         kwargs["order"] = "C"
 
-    dtype = kwargs.get("dtype", None)
-    if dtype is None:
-        dtype = np.double
-    else:
-        kwargs.pop("dtype")
-
-    if not np.issubdtype(dtype, np.double):
-        raise ValueError("Invalid dtype (%r), expect np.double" % dtype)
-
     if allow_multivariate:
         if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
             raise ValueError(
@@ -135,7 +126,6 @@ def check_array(
             ensure_2d=False,
             allow_nd=True,
             force_all_finite=False,
-            dtype=dtype,
             **kwargs,
         )
         if x.ndim == 0:
@@ -159,16 +149,17 @@ def check_array(
                 )
             )
     else:
-        x = sklearn_check_array(x, force_all_finite=False, dtype=dtype, **kwargs)
+        x = sklearn_check_array(x, force_all_finite=False, **kwargs)
 
-    if not allow_eos and wb.iseos(x).any():
-        raise ValueError("Expected time series of equal length.")
+    if np.issubdtype(x.dtype, np.double):
+        if not allow_eos and wb.iseos(x).any():
+            raise ValueError("Expected time series of equal length.")
 
-    if not allow_nan and np.isnan(x).any():
-        raise ValueError("Input contains NaN.")
+        if not allow_nan and np.isnan(x).any():
+            raise ValueError("Input contains NaN.")
 
-    if np.isposinf(x).any():
-        raise ValueError("Input contains infinity.")
+        if np.isposinf(x).any():
+            raise ValueError("Input contains infinity.")
 
     return x
 
