@@ -16,10 +16,8 @@
 # Authors: Isak Samsten
 
 import re
-import warnings
 
 import numpy as np
-from sklearn.utils.deprecation import deprecated
 
 from wildboar.utils import os_cache_path
 
@@ -94,11 +92,11 @@ def _split_repo_bundle(repo_bundle_name):
         raise ValueError("repository (%s) is not supported" % repo_bundle_name)
 
 
-@deprecated
-def set_cache_dir(cache_dir):
-    """Change the global cache directory
+def set_cache_dir(cache_dir=None):
+    """Change the global cache directory. If called without arguments, the cache
+    directory is reset to the default directory.
 
-    cache_dir : str
+    cache_dir : str, optional
         The cache directory root
     """
     global _CACHE_DIR
@@ -106,8 +104,6 @@ def set_cache_dir(cache_dir):
 
 
 def _default_cache_dir():
-    if _CACHE_DIR is not None:
-        warnings.warn("Setting a custom cache directory globally has been deprectated.")
     return os_cache_path("wildboar") if not _CACHE_DIR else _CACHE_DIR
 
 
@@ -574,7 +570,7 @@ def get_repository(repository):
     return _REPOSITORIES[repository]
 
 
-def install_repository(repository, *, refresh=True, timeout=None):
+def install_repository(repository, *, refresh=True, timeout=None, cache_dir=None):
     """Install repository
 
     Parameters
@@ -591,15 +587,39 @@ def install_repository(repository, *, refresh=True, timeout=None):
         Timeout for json request
 
         ..versionadded :: 1.1
+
+    cache_dir : str, optional
+        Cache directory
+
+        ..versionadded :: 1.1
     """
     if isinstance(repository, str):
         repository = JSONRepository(repository)
-    _REPOSITORIES.append(repository, refresh=refresh, timeout=timeout)
+
+    cache_dir = cache_dir or _default_cache_dir()
+    _REPOSITORIES.install(
+        repository, refresh=refresh, timeout=timeout, cache_dir=cache_dir
+    )
 
 
-def refresh_repositories(repository=None, *, timeout=None):
-    """Refresh the installed repositories=None"""
-    _REPOSITORIES.refresh(repository=repository, timeout=timeout)
+def refresh_repositories(repository=None, *, timeout=None, cache_dir=None):
+    """Refresh the installed repositories
+
+    repository : str, optional
+        The repository. None means all repositories.
+
+    timeout : float, optional
+        Timeout for request
+
+        ..versionadded :: 1.1
+
+    cache_dir : str, optional
+        Cache directory
+
+        ..versionadded :: 1.1
+    """
+    cache_dir = cache_dir or _default_cache_dir()
+    _REPOSITORIES.refresh(repository=repository, timeout=timeout, cache_dir=cache_dir)
 
 
 def get_bundles(repository, *, refresh=False, timeout=None):
@@ -654,12 +674,7 @@ def list_bundles(repository, *, refresh=False, timeout=None):
     bundle : str
         The name of the bundle
     """
-    return [
-        key
-        for key, bundle in get_bundles(
-            repository, refresh=refresh, timeout=timeout
-        ).items()
-    ]
+    return sorted(get_bundles(repository, refresh=refresh, timeout=timeout).keys())
 
 
 def list_collections(repository):
@@ -679,15 +694,15 @@ def list_collections(repository):
     (
         repository_name,
         bundle_name,
-        bundle_version,
-        bundle_tag,
+        _,
+        _,
     ) = _split_repo_bundle(repository)
     repository = get_repository(repository_name)
     collections = repository.get_bundle(bundle_name).collections
-    return list(collections.keys()) if collections is not None else []
+    return sorted(collections.keys()) if collections is not None else []
 
 
-def list_repositories(*, refresh=False, timeout=None):
+def list_repositories(*, refresh=False, timeout=None, cache_dir=None):
     """List the key of all installed repositories
 
     refresh : bool, optional
@@ -699,14 +714,20 @@ def list_repositories(*, refresh=False, timeout=None):
         Timeout for json request
 
         ..versionadded :: 1.1
+
+    cache_dir : str, optional
+        Cache directory
+
+        ..versionadded :: 1.1
     """
     if refresh:
-        refresh_repositories(timeout=timeout)
-    return [repo.name for repo in _REPOSITORIES]
+        cache_dir = cache_dir or _default_cache_dir()
+        refresh_repositories(timeout=timeout, cache_dir=cache_dir)
+    return sorted([repo.name for repo in _REPOSITORIES])
 
 
 _CACHE_DIR = None
-_REPOSITORIES = RepositoryCollection(cache_dir=os_cache_path("wildboar"))
+_REPOSITORIES = RepositoryCollection()
 
 
 # Install the default 'wildboar' repository

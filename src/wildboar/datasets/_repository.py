@@ -594,10 +594,9 @@ class JSONRepository(Repository):
 
 
 class RepositoryCollection:
-    def __init__(self, cache_dir=None):
+    def __init__(self):
         self.pending_repositories = set()
         self.repositories = set()
-        self.cache_dir = cache_dir
 
     def __getitem__(self, key):
         repository = next(
@@ -632,9 +631,9 @@ class RepositoryCollection:
     def __len__(self):
         return len(self.repositories)
 
-    def load_repository(self, repository):
-        if self.cache_dir and not repository.active:
-            cache_dir = os.path.join(self.cache_dir, repository.identifier)
+    def load_repository(self, repository, cache_dir=None):
+        if cache_dir and not repository.active:
+            cache_dir = os.path.join(cache_dir, repository.identifier)
             if not os.path.exists(cache_dir):
                 os.makedirs(cache_dir, exist_ok=True)
             repo_path = os.path.join(cache_dir, "repo")
@@ -644,29 +643,31 @@ class RepositoryCollection:
 
         return None
 
-    def save_repository(self, repository):
-        if self.cache_dir and repository.active:
-            cache_dir = os.path.join(self.cache_dir, repository.identifier)
+    def save_repository(self, repository, cache_dir=None):
+        if cache_dir and repository.active:
+            cache_dir = os.path.join(cache_dir, repository.identifier)
             if not os.path.exists(cache_dir):
                 os.makedirs(cache_dir, exist_ok=True)
             repo_path = os.path.join(cache_dir, "repo")
             with open(repo_path, "wb") as f:
                 pickle.dump(repository, f)
 
-    def refresh(self, repository=None, timeout=None):
+    def refresh(self, repository=None, timeout=None, cache_dir=None):
         if repository is None:
             for repository in self.repositories:
                 repository.refresh(timeout)
                 if repository.active:
-                    self.save_repository(repository)
+                    self.save_repository(repository, cache_dir=cache_dir)
 
             for repository in self.pending_repositories:
                 repository.refresh(timeout)
                 if repository.active:
                     self.repositories.add(repository)
-                    self.save_repository(repository)
+                    self.save_repository(repository, cache_dir=cache_dir)
                 else:
-                    cached_repository = self.load_repository(repository)
+                    cached_repository = self.load_repository(
+                        repository, cache_dir=cache_dir
+                    )
                     if cached_repository:
                         self.repositories.add(repository)
 
@@ -679,16 +680,16 @@ class RepositoryCollection:
             repository = self[repository]
             repository.refresh(timeout)
             if repository.active:
-                self.save_repository(repository)
+                self.save_repository(repository, cache_dir=cache_dir)
 
-    def append(self, repository, refresh=True, timeout=None):
+    def install(self, repository, refresh=True, timeout=None, cache_dir=None):
         if refresh:
             repository.refresh(timeout)
 
         if repository.active:
             self.repositories.add(repository)
         else:
-            cached_repository = self.load_repository(repository)
+            cached_repository = self.load_repository(repository, cache_dir=cache_dir)
             if cached_repository:
                 self.repositories.add(cached_repository)
             else:
