@@ -16,6 +16,8 @@
 # Authors: Isak Samsten
 import numpy as np
 
+import wildboar as wb
+
 
 def named_preprocess(name):
     if name in _PREPROCESS:
@@ -91,7 +93,7 @@ def maxabs_scale(x):
 
 
 def truncate(x, n_shortest=None):
-    """Truncate x to the shortest sequence
+    """Truncate x to the shortest sequence.
 
     Parameters
     ----------
@@ -104,9 +106,9 @@ def truncate(x, n_shortest=None):
         The truncated dataset
     """
     if n_shortest is None:
-        first_nan = np.nonzero(np.isnan(x))[-1]
-        if first_nan.size > 0:
-            return x[..., : np.min(first_nan)]
+        eos = np.nonzero(wb.iseos(x))[-1]
+        if eos.size > 0:
+            return x[..., : np.min(eos)]
         else:
             return x
     else:

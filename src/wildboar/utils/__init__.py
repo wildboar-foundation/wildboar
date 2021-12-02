@@ -1,12 +1,17 @@
+import os
+import platform
 import warnings
 
+import numpy as np
 from sklearn.utils.validation import check_array as sklearn_check_array
 
+import wildboar as wb
 from wildboar.utils.data import check_dataset
 
 __all__ = [
     "check_array",
     "check_dataset",
+    "os_cache_dir",
     "_soft_dependency_error",
     "DependencyMissing",
 ]
@@ -47,9 +52,38 @@ class DependencyMissing:
         )
 
 
+def os_cache_path(dir):
+    """Get the path to a operating system specific cache directory
+
+    Parameters
+    ----------
+    dir : str
+        The sub-directory in the cache location
+
+    Returns
+    -------
+    path : str
+        The cache path
+    """
+    if platform.system() == "Windows":
+        cache_dir = os.path.expandvars(r"%LOCALAPPDATA%\cache")
+        return os.path.join(cache_dir, dir)
+    elif platform.system() == "Linux":
+        cache_dir = os.environ.get("XDG_CACHE_HOME")
+        if not cache_dir:
+            cache_dir = ".cache"
+        return os.path.join(os.path.expanduser("~"), cache_dir, dir)
+    elif platform.system() == "Darwin":
+        return os.path.join(os.path.expanduser("~"), "Library", "Caches", dir)
+    else:
+        return os.path.join(os.path.expanduser("~"), ".cache", dir)
+
+
 def check_array(
     x,
     allow_multivariate=False,
+    allow_eos=False,
+    allow_nan=False,
     contiguous=True,
     **kwargs,
 ):
@@ -72,10 +106,19 @@ def check_array(
         The checked array
     """
     if contiguous:
-        order = kwargs.get("order")
+        order = kwargs.get("order", None)
         if order is not None and order.lower() != "c":
             raise ValueError("order=%r and contiguous=True are incompatible")
         kwargs["order"] = "C"
+
+    dtype = kwargs.get("dtype", None)
+    if dtype is None:
+        dtype = np.double
+    else:
+        kwargs.pop("dtype")
+
+    if not np.issubdtype(dtype, np.double):
+        raise ValueError("Invalid dtype (%r), expect np.double" % dtype)
 
     if allow_multivariate:
         if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
@@ -87,7 +130,14 @@ def check_array(
             raise ValueError(
                 "allow_nd=False and allow_multivaraite=True are incompatible"
             )
-        x = sklearn_check_array(x, ensure_2d=False, allow_nd=True, **kwargs)
+        x = sklearn_check_array(
+            x,
+            ensure_2d=False,
+            allow_nd=True,
+            force_all_finite=False,
+            dtype=dtype,
+            **kwargs,
+        )
         if x.ndim == 0:
             raise ValueError(
                 "Expected 2D or 3D array, got scalar array instead:\narray={}.\n"
@@ -108,9 +158,19 @@ def check_array(
                     x.ndim, x
                 )
             )
-        return x
     else:
-        return sklearn_check_array(x, **kwargs)
+        x = sklearn_check_array(x, force_all_finite=False, dtype=dtype, **kwargs)
+
+    if not allow_eos and wb.iseos(x).any():
+        raise ValueError("Expected time series of equal length.")
+
+    if not allow_nan and np.isnan(x).any():
+        raise ValueError("Input contains NaN.")
+
+    if np.isposinf(x).any():
+        raise ValueError("Input contains infinity.")
+
+    return x
 
 
 def _soft_dependency_error(e=None, package=None, context=None, warning=False):

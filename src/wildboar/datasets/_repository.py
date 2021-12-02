@@ -28,6 +28,7 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from pkg_resources import parse_version
 
+import wildboar as wb
 from wildboar import __version__ as wildboar_version
 
 try:
@@ -244,7 +245,7 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
                 length += len(data)
                 f.write(data)
                 done = int(50 * length / total_length)
-                if length % 10 == 0 and progress:
+                if length % 100 == 0 and progress:
                     sys.stderr.write(
                         "\r[%s%s] %d/%d downloading %s"
                         % (
@@ -369,7 +370,7 @@ class Repository(metaclass=ABCMeta):
         version = version or bundle.version
         tag = tag or bundle.tag
 
-        cache_dir = os.path.join(cache_dir, self.name)
+        cache_dir = os.path.join(cache_dir, self.identifier)
         download_url = _replace_placeholders(
             self.download_url, bundle=bundle.key, version=version, tag=tag
         )
@@ -400,7 +401,7 @@ class Repository(metaclass=ABCMeta):
         version = version or bundle.version
         tag = tag or bundle.tag
 
-        cache_dir = os.path.join(cache_dir, self.name)
+        cache_dir = os.path.join(cache_dir, self.identifier)
         download_url = _replace_placeholders(
             self.download_url, bundle=bundle.key, version=version, tag=tag
         )
@@ -415,7 +416,7 @@ class Repository(metaclass=ABCMeta):
             return bundle.list(archive, collection)
 
     def clear_cache(self, cache_dir, keep_last_version=True):
-        cache_dir = os.path.join(cache_dir, self.name)
+        cache_dir = os.path.join(cache_dir, self.identifier)
         if not os.path.exists(cache_dir) or not os.path.isdir(cache_dir):
             return
 
@@ -508,7 +509,7 @@ class JSONRepository(Repository):
 
     @property
     def identifier(self):
-        return base64.b64encode(self.repo_url.encode())
+        return base64.b64encode(self.repo_url.encode()).decode("utf-8")
 
     @property
     def wildboar_requires(self):
@@ -597,8 +598,6 @@ class RepositoryCollection:
         self.pending_repositories = set()
         self.repositories = set()
         self.cache_dir = cache_dir
-        if not os.path.exists(self.cache_dir):
-            os.mkdir(self.cache_dir)
 
     def __getitem__(self, key):
         repository = next(
@@ -618,9 +617,9 @@ class RepositoryCollection:
         return repository
 
     def __delitem__(self, key):
-        self.repositories = [
+        self.repositories = set(
             repository for repository in self.repositories if repository.name != key
-        ]
+        )
 
     def __contains__(self, item):
         return any(
@@ -633,23 +632,25 @@ class RepositoryCollection:
     def __len__(self):
         return len(self.repositories)
 
-    def _load_from_cache(self, repository):
-        if self.cache_dir:
-            cached_repository = os.path.join(
-                self.cache_dir, "%s.repo" % repository.identifier
-            )
-            if os.path.exists(cached_repository):
-                with open(cached_repository, "rb") as f:
+    def load_repository(self, repository):
+        if self.cache_dir and not repository.active:
+            cache_dir = os.path.join(self.cache_dir, repository.identifier)
+            if not os.path.exists(cache_dir):
+                os.makedirs(cache_dir, exist_ok=True)
+            repo_path = os.path.join(cache_dir, "repo")
+            if os.path.exists(repo_path):
+                with open(repo_path, "rb") as f:
                     return pickle.load(f)
 
         return None
 
-    def _save_to_cache(self, repository):
+    def save_repository(self, repository):
         if self.cache_dir and repository.active:
-            cached_repository = os.path.join(
-                self.cache_dir, "%s.repo" % repository.identifier
-            )
-            with open(cached_repository, "wb") as f:
+            cache_dir = os.path.join(self.cache_dir, repository.identifier)
+            if not os.path.exists(cache_dir):
+                os.makedirs(cache_dir, exist_ok=True)
+            repo_path = os.path.join(cache_dir, "repo")
+            with open(repo_path, "wb") as f:
                 pickle.dump(repository, f)
 
     def refresh(self, repository=None, timeout=None):
@@ -657,27 +658,28 @@ class RepositoryCollection:
             for repository in self.repositories:
                 repository.refresh(timeout)
                 if repository.active:
-                    self._save_to_cache(repository)
+                    self.save_repository(repository)
 
             for repository in self.pending_repositories:
                 repository.refresh(timeout)
                 if repository.active:
-                    self._save_to_cache(repository)
                     self.repositories.add(repository)
+                    self.save_repository(repository)
                 else:
-                    cached_repository = self._load_from_cache(repository)
+                    cached_repository = self.load_repository(repository)
                     if cached_repository:
                         self.repositories.add(repository)
 
-            self.pending_repositories = [
+            self.pending_repositories = set(
                 repository
                 for repository in self.pending_repositories
                 if not repository.active
-            ]
+            )
         else:
             repository = self[repository]
             repository.refresh(timeout)
-            self._save_to_cache(repository)
+            if repository.active:
+                self.save_repository(repository)
 
     def append(self, repository, refresh=True, timeout=None):
         if refresh:
@@ -686,7 +688,7 @@ class RepositoryCollection:
         if repository.active:
             self.repositories.add(repository)
         else:
-            cached_repository = self._load_from_cache(repository)
+            cached_repository = self.load_repository(repository)
             if cached_repository:
                 self.repositories.add(cached_repository)
             else:
@@ -750,7 +752,7 @@ class Bundle(metaclass=ABCMeta):
     def get_filename(self, version=None, tag=None, ext=None):
         filename = "%s-v%s" % (self.key, version or self.version)
         if tag:
-            filename += ":%s" % tag
+            filename += "-%s" % tag
         if ext:
             filename += ext
         return filename
@@ -884,7 +886,7 @@ class Bundle(metaclass=ABCMeta):
                             max(test.shape[-1], train.shape[-1]),
                         )
 
-                    merge = np.full(shape, fill_value=np.nan, dtype=np.double)
+                    merge = np.full(shape, fill_value=wb.eos, dtype=np.double)
                     merge[: train.shape[0], ..., : train.shape[-1]] = train
                     merge[train.shape[0] :, ..., : test.shape[-1]] = test
                     data[array] = merge

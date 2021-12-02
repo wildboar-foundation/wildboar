@@ -15,10 +15,13 @@
 #
 # Authors: Isak Samsten
 
-import os
 import re
+import warnings
 
 import numpy as np
+from sklearn.utils.deprecation import deprecated
+
+from wildboar.utils import os_cache_path
 
 from ._repository import (
     Bundle,
@@ -91,6 +94,7 @@ def _split_repo_bundle(repo_bundle_name):
         raise ValueError("repository (%s) is not supported" % repo_bundle_name)
 
 
+@deprecated
 def set_cache_dir(cache_dir):
     """Change the global cache directory
 
@@ -102,24 +106,9 @@ def set_cache_dir(cache_dir):
 
 
 def _default_cache_dir():
-    return _os_cache_path("wildboar") if not _CACHE_DIR else _CACHE_DIR
-
-
-def _os_cache_path(dir):
-    import platform
-
-    if platform.system() == "Windows":
-        cache_dir = os.path.expandvars(r"%LOCALAPPDATA%\cache")
-        return os.path.join(cache_dir, dir)
-    elif platform.system() == "Linux":
-        cache_dir = os.environ.get("XDG_CACHE_HOME")
-        if not cache_dir:
-            cache_dir = ".cache"
-        return os.path.join(os.path.expanduser("~"), cache_dir, dir)
-    elif platform.system() == "Darwin":
-        return os.path.join(os.path.expanduser("~"), "Library", "Caches", dir)
-    else:
-        return os.path.join(os.path.expanduser("~"), ".cache", dir)
+    if _CACHE_DIR is not None:
+        warnings.warn("Setting a custom cache directory globally has been deprectated.")
+    return os_cache_path("wildboar") if not _CACHE_DIR else _CACHE_DIR
 
 
 def load_synthetic_control(merge_train_test=True):
@@ -308,12 +297,13 @@ def load_dataset(
     contiguous : bool, optional
         Ensure that the returned dataset is memory contiguous.
 
-    preprocess : str or callable, optional
+    preprocess : str, list or callable, optional
         Preprocess the dataset
 
         - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
           for valid keys)
         - if callable, function taking a np.ndarray and returns the preprocessed dataset
+        - if list, a list of callable or str
 
     merge_train_test : bool, optional
         Merge the existing training and testing partitions.
@@ -422,6 +412,21 @@ def load_dataset(
 
     if isinstance(preprocess, str):
         preprocess = named_preprocess(preprocess)
+    if isinstance(preprocess, list):
+        op = []
+        for p in preprocess:
+            if isinstance(p, str):
+                op.append(named_preprocess(p))
+            elif callable(p):
+                op.append(p)
+            else:
+                raise ValueError("preprocess (%r) is not supported" % p)
+
+        def preprocess(x):
+            for o in op:
+                x = o(x)
+            return x
+
     elif not hasattr(preprocess, "__call__"):
         raise ValueError("preprocess (%r) is not supported" % preprocess)
 
@@ -701,9 +706,7 @@ def list_repositories(*, refresh=False, timeout=None):
 
 
 _CACHE_DIR = None
-_REPOSITORIES = RepositoryCollection(
-    os.path.join(_os_cache_path("wildboar"), "repository")
-)
+_REPOSITORIES = RepositoryCollection(cache_dir=os_cache_path("wildboar"))
 
 
 # Install the default 'wildboar' repository
