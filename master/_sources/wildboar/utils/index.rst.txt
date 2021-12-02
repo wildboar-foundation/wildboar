@@ -49,7 +49,7 @@ Functions
 
 
 
-.. py:function:: check_array(x, allow_multivariate=False, contiguous=True, **kwargs)
+.. py:function:: check_array(x, allow_multivariate=False, allow_eos=False, allow_nan=False, contiguous=True, **kwargs)
 
    Wrapper to check array
 

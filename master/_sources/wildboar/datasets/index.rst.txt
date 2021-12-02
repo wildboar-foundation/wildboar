@@ -202,6 +202,10 @@ Functions
       :rtype: a dictionary of key and bundle
 
 
+   .. py:method:: identifier(self)
+      :property:
+
+
    .. py:method:: name(self)
       :property:
 
@@ -254,6 +258,16 @@ Functions
 
    A repository is a collection of bundles
 
+   .. py:method:: __eq__(self, o)
+
+      Return self==value.
+
+
+   .. py:method:: __hash__(self) -> int
+
+      Return hash(self).
+
+
    .. py:method:: active(self)
       :property:
 
@@ -288,6 +302,10 @@ Functions
 
       :returns: **dict**
       :rtype: a dictionary of key and bundle
+
+
+   .. py:method:: identifier(self)
+      :property:
 
 
    .. py:method:: list_datasets(self, bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
@@ -484,7 +502,8 @@ Functions
                       - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
                         for valid keys)
                       - if callable, function taking a np.ndarray and returns the preprocessed dataset
-   :type preprocess: str or callable, optional
+                      - if list, a list of callable or str
+   :type preprocess: str, list or callable, optional
    :param merge_train_test: Merge the existing training and testing partitions.
    :type merge_train_test: bool, optional
    :param progress: Show a progress bar while downloading a bundle.

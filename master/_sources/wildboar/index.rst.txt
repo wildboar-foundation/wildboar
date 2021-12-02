@@ -33,8 +33,43 @@ Submodules
 Package Contents
 ----------------
 
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.iseos
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.__version__
+   wildboar.eos
+
+
 .. py:data:: __version__
    :annotation: = 99.9.99
 
    
+
+.. py:data:: eos
+   
+
+   The end-of-sequence identifier. Indicates the end of a time series.
+
+.. py:function:: iseos(x)
+
+   Boolean indicator if a value is the end-of-sequence value.
+
+   :param x: The array
+   :type x: array-like
+
+   :returns: boolean indicator array
+   :rtype: ndarray
+
 

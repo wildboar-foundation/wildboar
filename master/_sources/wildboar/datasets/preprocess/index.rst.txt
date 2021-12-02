@@ -17,6 +17,7 @@ Functions
    wildboar.datasets.preprocess.minmax_scale
    wildboar.datasets.preprocess.named_preprocess
    wildboar.datasets.preprocess.standardize
+   wildboar.datasets.preprocess.truncate
 
 
 
@@ -77,5 +78,16 @@ Attributes
 
    :returns: **x** -- The standardized dataset
    :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+
+
+.. py:function:: truncate(x, n_shortest=None)
+
+   Truncate x to the shortest sequence.
+
+   :param x: The dataset
+   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+
+   :returns: **x** -- The truncated dataset
+   :rtype: ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
 
 

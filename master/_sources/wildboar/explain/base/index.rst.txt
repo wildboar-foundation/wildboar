@@ -58,9 +58,9 @@ Classes
       Fit the importance explanation to the estimator
 
       :param estimator: An estimator
-                        x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep) # noqa: E501
-                        The samples
       :type estimator: Estimator
+      :param x: The samples
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep) # noqa: E501
       :param y: The labels, by default None
       :type y: array-like of shape (n_samples, ), optional
       :param sample_weight: The sample weights, by default None

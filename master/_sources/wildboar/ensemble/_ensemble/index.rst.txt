@@ -242,7 +242,7 @@ Classes
       :rtype: object
 
 
-   .. py:method:: predict(self, x, check_input=True)
+   .. py:method:: predict(self, x)
 
       Predict class for X.
 
@@ -258,7 +258,7 @@ Classes
       :rtype: ndarray of shape (n_samples,)
 
 
-   .. py:method:: predict_log_proba(self, x, check_input=True)
+   .. py:method:: predict_log_proba(self, x)
 
       Predict class log-probabilities for X.
 
@@ -275,7 +275,7 @@ Classes
       :rtype: ndarray of shape (n_samples, n_classes)
 
 
-   .. py:method:: predict_proba(self, x, check_input=True)
+   .. py:method:: predict_proba(self, x)
 
       Predict class probabilities for X.
 
@@ -488,21 +488,6 @@ Classes
 
       :returns: **self** -- Fitted estimator.
       :rtype: object
-
-
-   .. py:method:: predict(self, x, check_input=True)
-
-      Predict regression target for X.
-
-      The predicted regression target of an input sample is computed as the
-      mean predicted regression targets of the estimators in the ensemble.
-
-      :param X: The training input samples. Sparse matrices are accepted only if
-                they are supported by the base estimator.
-      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
-
-      :returns: **y** -- The predicted values.
-      :rtype: ndarray of shape (n_samples,)
 
 
 

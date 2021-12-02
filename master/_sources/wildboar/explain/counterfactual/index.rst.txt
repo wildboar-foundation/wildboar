@@ -192,7 +192,7 @@ Functions
 
 
 
-.. py:class:: ShapeletForestCounterfactual(*, epsilon=1.0, batch_size=1, random_state=10)
+.. py:class:: ShapeletForestCounterfactual(*, cost='euclidean', aggregation='mean', epsilon=1.0, batch_size=1, verbose=False, random_state=None)
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
@@ -224,6 +224,10 @@ Functions
        Explainable time series tweaking via irreversible and reversible temporal
        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
 
+   :param cost: The cost function to determine the goodness of counterfactual
+   :type cost: {"euclidean", "cosine", "manhattan"}, optional
+   :param aggregation: The aggregation function for the cost of multivariate counterfactuals, by
+   :type aggregation: callable, optional
    :param epsilon: Control the degree of change from the decision threshold
    :type epsilon: float, optional
    :param batch_size: Batch size when evaluating the cost and predictions of
