@@ -95,6 +95,10 @@ def check_array(
         The array to check
     allow_multivariate : bool, optional
         If 3d arrays are allowed, by default False
+    allow_eos : bool, optional
+        If unequal length series are allowed
+    allow_nan : bool, optional
+        If NaN values are allowed
     contiguous : bool, optional
         Ensure that the array is in c-order.
     kwargs : dict
