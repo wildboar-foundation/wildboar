@@ -22,7 +22,11 @@ from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from wildboar.utils import check_array
 
-from ._embed_fast import feature_embedding_fit, feature_embedding_transform
+from ._embed_fast import (
+    feature_embedding_fit,
+    feature_embedding_fit_transform,
+    feature_embedding_transform,
+)
 
 __all__ = [
     "BaseEmbedding",
@@ -55,7 +59,8 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
+        x : array-like of shape [n_samples, n_timestep] or
+        [n_samples, n_dimensions, n_timestep]
             The time series dataset.
 
         y : None, optional
@@ -65,7 +70,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         -------
         embedding : self
         """
-        x = check_array(x, allow_multivariate=True)
+        x = check_array(x, allow_multivariate=True, dtype=np.double)
         random_state = check_random_state(self.random_state)
         self.n_timestep_ = x.shape[-1]
         self.embedding_ = feature_embedding_fit(
@@ -78,7 +83,8 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
+        x : array-like of shape [n_samples, n_timestep] or
+        [n_samples, n_dimensions, n_timestep]
             The time series dataset.
 
         Returns
@@ -87,7 +93,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
             The embedding.
         """
         check_is_fitted(self, attributes="embedding_")
-        x = check_array(x, allow_multivariate=True)
+        x = check_array(x, allow_multivariate=True, dtype=np.double)
         return feature_embedding_transform(self.embedding_, x, self.n_jobs)
 
     def fit_transform(self, x, y=None):
@@ -95,7 +101,8 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or [n_samples, n_dimensions, n_timestep] # noqa: E501
+        x : array-like of shape [n_samples, n_timestep] or
+        [n_samples, n_dimensions, n_timestep]
             The time series dataset.
 
         y : None, optional
@@ -106,7 +113,17 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         x_embedding : ndarray of shape [n_samples, n_outputs]
             The embedding.
         """
-        return self.fit(x, y).transform(x)
+        x = check_array(x, allow_multivariate=True, dtype=np.double)
+        if x.ndim < 2 or x.ndim > 3:
+            raise ValueError("illegal input dimensions")
+
+        random_state = check_random_state(self.random_state)
+        self.n_timestep_ = x.shape[-1]
+        embedding, x_out = feature_embedding_fit_transform(
+            self._get_feature_engineer(), x, random_state, self.n_jobs
+        )
+        self.embedding_ = embedding
+        return x_out
 
     @abstractmethod
     def _get_feature_engineer(self):
