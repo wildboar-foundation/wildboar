@@ -391,7 +391,7 @@ Functions
    :rtype: Repository
 
 
-.. py:function:: install_repository(repository, *, refresh=True, timeout=None)
+.. py:function:: install_repository(repository, *, refresh=True, timeout=None, cache_dir=None)
 
    Install repository
 
@@ -405,6 +405,10 @@ Functions
 
                    ..versionadded :: 1.1
    :type timeout: float, optional
+   :param cache_dir: Cache directory
+
+                     ..versionadded :: 1.1
+   :type cache_dir: str, optional
 
 
 .. py:function:: list_bundles(repository, *, refresh=False, timeout=None)
@@ -470,7 +474,7 @@ Functions
    :rtype: set
 
 
-.. py:function:: list_repositories(refresh=False, timeout=None)
+.. py:function:: list_repositories(refresh=False, timeout=None, cache_dir=None)
 
    List the key of all installed repositories
 
@@ -481,6 +485,11 @@ Functions
 
    timeout : float, optional
        Timeout for json request
+
+       ..versionadded :: 1.1
+
+   cache_dir : str, optional
+       Cache directory
 
        ..versionadded :: 1.1
 
@@ -656,16 +665,30 @@ Functions
           load a named dataset
 
 
-.. py:function:: refresh_repositories(repository=None, *, timeout=None)
+.. py:function:: refresh_repositories(repository=None, *, timeout=None, cache_dir=None)
 
-   Refresh the installed repositories=None
+   Refresh the installed repositories
+
+   repository : str, optional
+       The repository. None means all repositories.
+
+   timeout : float, optional
+       Timeout for request
+
+       ..versionadded :: 1.1
+
+   cache_dir : str, optional
+       Cache directory
+
+       ..versionadded :: 1.1
 
 
-.. py:function:: set_cache_dir(cache_dir)
+.. py:function:: set_cache_dir(cache_dir=None)
 
-   Change the global cache directory
+   Change the global cache directory. If called without arguments, the cache
+   directory is reset to the default directory.
 
-   cache_dir : str
+   cache_dir : str, optional
        The cache directory root
 
 

@@ -184,13 +184,13 @@ Functions
 
    Compute the distance between the i:th time series
 
-   :param y: The input data
-   :type y: : ndarray of shape (n_samples, n_timestep) or (y_samples, n_dims, n_timestep)
    :param x: The input data. y will be broadcast to the shape of x if possible.
-   :type x: ndarray of shape (n_samples, n_timestep) or (x_samples, n_dims, n_timestep)
+   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+   :param y: The input data
+   :type y: : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
    :param dim:    The dim to compute distance
 
-               metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+               metric : str or callable, optional
                   The distance metric
 
                   - if str use optimized implementations of the named distance measure
@@ -207,7 +207,7 @@ Functions
    :param n_jobs: The number of parallel jobs.
    :type n_jobs: int, optional
 
-   :returns: **dist** -- An array of shape (y_samples, )
+   :returns: **dist** -- An array of shape (n_samples, )
    :rtype: float or ndarray
 
 
@@ -267,7 +267,7 @@ Functions
    :type threshold: float
    :param dim:    The dim to search for shapelets
 
-               metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+               metric : str or callable, optional
                   The distance metric
 
                   - if str use optimized implementations of the named distance measure
@@ -301,17 +301,18 @@ Functions
              * **distance** (*list*) -- A list of shape (n_samples, ) of ndarray with distance at the matching position.
 
 
-.. py:function:: pairwise_distance(x, y, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)
+.. py:function:: pairwise_distance(x, y=None, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)
 
    Compute the distance between subsequences and time series
 
+   :param x:
+   :type x: ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep),
+   :param optional: The input data
    :param y: The input data
    :type y: : ndarray of shape (y_samples, n_timestep) or (y_samples, n_dims, n_timestep)
-   :param x: The input data
-   :type x: ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep)
    :param dim:    The dim to compute distance
 
-               metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+               metric : str or callable, optional # noqa: E501
                   The distance metric
 
                   - if str use optimized implementations of the named distance measure

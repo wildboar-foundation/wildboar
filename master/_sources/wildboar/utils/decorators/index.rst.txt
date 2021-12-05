@@ -14,9 +14,13 @@ Functions
 .. autoapisummary::
 
    wildboar.utils.decorators.array_or_scalar
+   wildboar.utils.decorators.singleton
 
 
 
 .. py:function:: array_or_scalar(squeeze=True)
+
+
+.. py:function:: singleton(f)
 
 

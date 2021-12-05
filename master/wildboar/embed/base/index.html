@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.ensemble" href="../../ensemble/index.html" /><link rel="prev" title="wildboar.embed.catch22" href="../catch22/index.html" />
 
     <meta name="generator" content="sphinx-4.3.1, furo 2021.11.23"/>
-        <title>wildboar.embed.base - Wildboar 1.1.0rc4.dev47+g8dcb2791 documentation</title>
+        <title>wildboar.embed.base - Wildboar 1.1.0rc4.dev51+g09e81e48 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc4.dev47+g8dcb2791 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc4.dev51+g09e81e48 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -220,6 +220,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../motif/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.motif</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
@@ -288,7 +289,7 @@
 </table></div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.embed.base.BaseEmbedding">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.embed.base.</span></span><span class="sig-name descname"><span class="pre">BaseEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L32-L113"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.embed.base.</span></span><span class="sig-name descname"><span class="pre">BaseEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L36-L130"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.BaseEstimator</span></code></p>
 <p>Base embedding</p>
 <dl class="py attribute">
@@ -303,12 +304,15 @@
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.embed.base.BaseEmbedding.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L53-L74"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding.fit" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L57-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the embedding.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] or </em><em>[</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timestep</em><em>] </em><em># noqa: E501</em>) – The time series dataset.</p></li>
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] </em><em>or</em>) – </p></li>
+<li><p><strong>[</strong><strong>n_samples</strong> – The time series dataset.</p></li>
+<li><p><strong>n_dimensions</strong> – The time series dataset.</p></li>
+<li><p><strong>n_timestep</strong><strong>]</strong> – The time series dataset.</p></li>
 <li><p><strong>y</strong> (<em>None</em><em>, </em><em>optional</em>) – For compatibility.</p></li>
 </ul>
 </dd>
@@ -322,12 +326,15 @@
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.embed.base.BaseEmbedding.fit_transform">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L93-L109"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding.fit_transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L99-L126"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding.fit_transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the embedding and return the transform of x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] or </em><em>[</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timestep</em><em>] </em><em># noqa: E501</em>) – The time series dataset.</p></li>
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] </em><em>or</em>) – </p></li>
+<li><p><strong>[</strong><strong>n_samples</strong> – The time series dataset.</p></li>
+<li><p><strong>n_dimensions</strong> – The time series dataset.</p></li>
+<li><p><strong>n_timestep</strong><strong>]</strong> – The time series dataset.</p></li>
 <li><p><strong>y</strong> (<em>None</em><em>, </em><em>optional</em>) – For compatibility.</p></li>
 </ul>
 </dd>
@@ -341,11 +348,16 @@
 </dd></dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.embed.base.BaseEmbedding.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L76-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding.transform" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/base.py#L81-L97"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed.base.BaseEmbedding.transform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] or </em><em>[</em><em>n_samples</em><em>, </em><em>n_dimensions</em><em>, </em><em>n_timestep</em><em>] </em><em># noqa: E501</em>) – The time series dataset.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> [</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>] </em><em>or</em>) – </p></li>
+<li><p><strong>[</strong><strong>n_samples</strong> – The time series dataset.</p></li>
+<li><p><strong>n_dimensions</strong> – The time series dataset.</p></li>
+<li><p><strong>n_timestep</strong><strong>]</strong> – The time series dataset.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>x_embedding</strong> – The embedding.</p>

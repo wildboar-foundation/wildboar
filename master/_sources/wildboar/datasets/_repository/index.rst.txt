@@ -330,7 +330,7 @@ Attributes
 
 
 
-.. py:class:: RepositoryCollection(cache_dir=None)
+.. py:class:: RepositoryCollection
 
    .. py:method:: __contains__(self, item)
 
@@ -347,16 +347,16 @@ Attributes
    .. py:method:: __len__(self)
 
 
-   .. py:method:: append(self, repository, refresh=True, timeout=None)
+   .. py:method:: install(self, repository, refresh=True, timeout=None, cache_dir=None)
 
 
-   .. py:method:: load_repository(self, repository)
+   .. py:method:: load_repository(self, repository, cache_dir=None)
 
 
-   .. py:method:: refresh(self, repository=None, timeout=None)
+   .. py:method:: refresh(self, repository=None, timeout=None, cache_dir=None)
 
 
-   .. py:method:: save_repository(self, repository)
+   .. py:method:: save_repository(self, repository, cache_dir=None)
 
 
 
