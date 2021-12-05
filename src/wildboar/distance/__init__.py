@@ -21,7 +21,7 @@ import numpy as np
 from sklearn.utils.deprecation import deprecated
 
 from wildboar.utils import check_array
-from wildboar.utils.decorators import array_or_scalar
+from wildboar.utils.decorators import array_or_scalar, singleton
 
 from . import _distance, _dtw_distance, _euclidean_distance, _mass, _matrix_profile
 
@@ -48,6 +48,10 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
 _DISTANCE_MEASURE = {
     "euclidean": _euclidean_distance.EuclideanDistanceMeasure,
     "dtw": _dtw_distance.DtwDistanceMeasure,
+}
+
+_THRESHOLD = {
+    "best": lambda x: max(np.mean(x) - 2.0 * np.std(x), np.min(x)),
 }
 
 
@@ -77,7 +81,7 @@ def _validate_subsequence(y):
     return y
 
 
-def _top_k_matches(indicies, distances, max_matches):
+def _filter_by_max_matches(indicies, distances, max_matches):
     indicies_tmp = []
     distances_tmp = []
     for index, distance in zip(indicies, distances):
@@ -86,6 +90,21 @@ def _top_k_matches(indicies, distances, max_matches):
             distances_tmp.append(None)
         else:
             idx = np.argsort(distance)[:max_matches]
+            indicies_tmp.append(index[idx])
+            distances_tmp.append(distance[idx])
+
+    return indicies_tmp, distances_tmp
+
+
+def _filter_by_max_dist(indicies, distances, max_dist):
+    indicies_tmp = []
+    distances_tmp = []
+    for index, distance in zip(indicies, distances):
+        if index is None:
+            indicies_tmp.append(None)
+            distances_tmp.append(None)
+        else:
+            idx = max_dist(distance)
             indicies_tmp.append(index[idx])
             distances_tmp.append(distance[idx])
 
@@ -256,6 +275,7 @@ def paired_subsequence_distance(
         return min_dist
 
 
+@singleton
 def subsequence_match(
     y,
     x,
@@ -279,14 +299,19 @@ def subsequence_match(
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data
 
-    threshold : float, optional
+    threshold : str, float or callable, optional
         The distance threshold used to consider a subsequence matching. If no threshold
         is selected, `max_matches´ default to 10.
+
+        - if float, return all matches closer than threshold
+        - if callable, return all matches closer than the treshold computed by the
+          threshold function, given all distances to the subsequence
+        - if str, return all matches according to the named threshold.
 
     dim : int, optional
         The dim to search for shapelets
 
-     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+     metric : str or callable, optional
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -319,12 +344,14 @@ def subsequence_match(
 
     Returns
     -------
-    indicies : list
+    indicies : list or ndarray
         A list of shape (n_samples, ) of ndarray with start index of matching
-        subsequences
+        subsequences. If only one subsequence is given, the return value is a single
+        ndarray.
 
-    distance : list
+    distance : list or ndarray
         A list of shape (n_samples, ) of ndarray with distance at the matching position.
+        If only one subsequence is given, the return value is a single ndarray.
     """
     y = _validate_subsequence(y)
     if len(y) > 1:
@@ -348,6 +375,27 @@ def subsequence_match(
         if max_matches is None:
             max_matches = 10
 
+    if callable(threshold):
+        threshold_fn = threshold
+
+        def max_dist(d):
+            return d <= threshold_fn(d)
+
+        threshold = np.inf
+    elif isinstance(threshold, str):
+        threshold_fn = _THRESHOLD.get(threshold, None)
+        if threshold_fn is None:
+            raise ValueError("invalid threshold (%r)" % threshold)
+
+        def max_dist(d):
+            return d <= threshold_fn(d)
+
+        threshold = np.inf
+    elif not isinstance(threshold, float):
+        raise ValueError("invalid threshold (%r)" % threshold)
+    else:
+        max_dist = None
+
     indicies, distances = _distance._subsequence_match(
         y,
         x,
@@ -357,8 +405,11 @@ def subsequence_match(
         n_jobs,
     )
 
+    if max_dist is not None:
+        indicies, distances = _filter_by_max_dist(indicies, distances, max_dist)
+
     if max_matches:
-        indicies, distances = _top_k_matches(indicies, distances, max_matches)
+        indicies, distances = _filter_by_max_matches(indicies, distances, max_matches)
 
     if return_distance:
         return indicies, distances
@@ -366,6 +417,7 @@ def subsequence_match(
         return indicies
 
 
+@singleton
 def paired_subsequence_match(
     y,
     x,
@@ -398,7 +450,7 @@ def paired_subsequence_match(
     dim : int, optional
         The dim to search for shapelets
 
-     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+     metric : str or callable, optional
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -449,6 +501,11 @@ def paired_subsequence_match(
                 "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
+    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
+    if distance_measure is None:
+        raise ValueError("unsupported metric (%r)" % metric)
+    metric_params = metric_params if metric_params is not None else {}
+
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
@@ -457,10 +514,27 @@ def paired_subsequence_match(
         if max_matches is None:
             max_matches = 10
 
-    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
-    metric_params = metric_params if metric_params is not None else {}
+    if callable(threshold):
+        threshold_fn = threshold
+
+        def max_dist(d):
+            return d <= threshold_fn(d)
+
+        threshold = np.inf
+    elif isinstance(threshold, str):
+        threshold_fn = _THRESHOLD.get(threshold, None)
+        if threshold_fn is None:
+            raise ValueError("invalid threshold (%r)" % threshold)
+
+        def max_dist(d):
+            return d <= threshold_fn(d)
+
+        threshold = np.inf
+    elif not isinstance(threshold, float):
+        raise ValueError("invalid threshold (%r)" % threshold)
+    else:
+        max_dist = None
+
     indicies, distances = _distance._paired_subsequence_match(
         y,
         x,
@@ -470,8 +544,11 @@ def paired_subsequence_match(
         n_jobs,
     )
 
+    if max_dist is not None:
+        indicies, distances = _filter_by_max_dist(indicies, distances, max_dist)
+
     if max_matches:
-        indicies, distances = _top_k_matches(indicies, distances, max_matches)
+        indicies, distances = _filter_by_max_matches(indicies, distances, max_matches)
 
     if return_distance:
         return indicies, distances
@@ -492,16 +569,16 @@ def paired_distance(
 
     Parameters
     ----------
-    y : : ndarray of shape (n_samples, n_timestep) or (y_samples, n_dims, n_timestep)
-        The input data
-
-    x : ndarray of shape (n_samples, n_timestep) or (x_samples, n_dims, n_timestep)
+    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data. y will be broadcast to the shape of x if possible.
+
+    y : : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The input data
 
     dim : int, optional
         The dim to compute distance
 
-     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+     metric : str or callable, optional
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -522,7 +599,7 @@ def paired_distance(
     Returns
     -------
     dist : float or ndarray
-        An array of shape (y_samples, )
+        An array of shape (n_samples, )
     """
     x = check_array(x, allow_multivariate=True, dtype=np.double)
     y = check_array(y, allow_multivariate=True, dtype=np.double)
@@ -560,7 +637,7 @@ def paired_distance(
 
 def pairwise_distance(
     x,
-    y,
+    y=None,
     *,
     dim=0,
     metric="euclidean",
@@ -571,16 +648,17 @@ def pairwise_distance(
 
     Parameters
     ----------
-    y : : ndarray of shape (y_samples, n_timestep) or (y_samples, n_dims, n_timestep)
+    x : ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep),
+    optional
         The input data
 
-    x : ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep)
+    y : : ndarray of shape (y_samples, n_timestep) or (y_samples, n_dims, n_timestep)
         The input data
 
     dim : int, optional
         The dim to compute distance
 
-     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+     metric : str or callable, optional # noqa: E501
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -609,6 +687,10 @@ def pairwise_distance(
 
     metric_params = metric_params or {}
     distance_measure = distance_measure(**metric_params)
+
+    if y is None:
+        y = x
+
     if x is y:
         x = check_array(x, allow_multivariate=True, dtype=np.double)
         if not 0 >= dim < x.ndim:

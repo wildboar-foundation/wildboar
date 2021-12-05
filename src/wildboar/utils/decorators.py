@@ -12,14 +12,15 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+# Authors: Isak Samsten
 
 from functools import wraps
 
-# Authors: Isak Samsten
 import numpy as np
 
 __all__ = [
     "array_or_scalar",
+    "singleton",
 ]
 
 
@@ -48,3 +49,22 @@ def array_or_scalar(squeeze=True):
         return wrap
 
     return decorator
+
+
+def _singleton(x):
+    if isinstance(x, list):
+        return x[0] if len(x) == 1 else x
+    else:
+        return x
+
+
+def singleton(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        ret_vals = f(*args, **kwargs)
+        if isinstance(ret_vals, tuple):
+            return tuple(_singleton(ret_val) for ret_val in ret_vals)
+        else:
+            return _singleton(ret_vals)
+
+    return wrap
