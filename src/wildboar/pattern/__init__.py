@@ -14,6 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # Authors: Isak Samsten
 
-from ._mp import find_motifs
+from ._motifs import motifs
+from ._segment import regimes
 
-__all__ = ["find_motifs"]
+__all__ = ["motifs", "regimes"]

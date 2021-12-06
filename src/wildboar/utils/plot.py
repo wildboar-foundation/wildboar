@@ -71,7 +71,7 @@ def plot_time_domain(
     if ax is None:
         fig, ax = plt.subplots()
 
-    x = check_array(x, allow_multivariate=False, contiguous=False)
+    x = check_array(np.atleast_2d(x), allow_multivariate=False, contiguous=False)
     if y is not None:
         y = check_array(y, ensure_2d=False, allow_nd=False, contiguous=False)
         if y.shape[0] != x.shape[0]:

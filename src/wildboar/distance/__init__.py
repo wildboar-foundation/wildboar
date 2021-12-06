@@ -798,10 +798,7 @@ def matrix_profile(
         that includes motifs, discords and shapelets. In 2016 IEEE 16th international
         conference on data mining (ICDM)
     """
-    x = np.array(x)
-    if x.ndim == 1:
-        x = x.reshape(1, -1)
-    x = check_array(x, allow_multivariate=True)
+    x = check_array(np.atleast_2d(x), allow_multivariate=True)
 
     if y is not None:
         y = np.array(y)
@@ -829,11 +826,9 @@ def matrix_profile(
         raise ValueError("invalid dim (%d)" % x.shape[1])
 
     if isinstance(exclude, float):
-        if not 0 <= exclude <= 1.0:
-            raise ValueError("invalid exclusion (%f) not in [0, 1.0[" % exclude)
-        exclude = int(window * exclude)
-    elif exclude > window or exclude < 0:
-        raise ValueError("invalid exclusion (0 >= %d < %d)" % (exclude, window))
+        exclude = math.ceil(window * exclude)
+    elif exclude < 0:
+        raise ValueError("invalid exclusion (%d < 0)" % exclude)
 
     if isinstance(window, float):
         if not 0.0 < window <= 1.0:
