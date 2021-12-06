@@ -17,7 +17,7 @@ Subpackages
    explain/index.rst
    linear_model/index.rst
    model_selection/index.rst
-   motif/index.rst
+   pattern/index.rst
    tree/index.rst
    utils/index.rst
 

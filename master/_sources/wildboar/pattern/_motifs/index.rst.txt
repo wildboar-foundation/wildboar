@@ -1,0 +1,63 @@
+:orphan:
+
+:py:mod:`wildboar.pattern._motifs`
+==================================
+
+.. py:module:: wildboar.pattern._motifs
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.pattern._motifs.motifs
+
+
+
+.. py:function:: motifs(x, mp=None, window=None, exclude=0.2, max_distance='best', max_neighbours=10, min_neighbours=1, max_motif=1, return_distance=False)
+
+   Find motifs
+
+   :param x: The time series
+   :type x: array-like of shape (n_samples, n_timestep)
+   :param mp: The matrix profile. The matrix profile is computed if None.
+   :type mp: ndarray or shape (n_samples, profile_size), optional
+   :param window: The window size of the matrix profile.
+   :type window: int, optional
+   :param exclude: The size of the exclusion zone.
+   :type exclude: float, optional
+   :param max_distance: The maximum distance between motifs.
+   :type max_distance: str, optional
+   :param max_matches: The maximum number of neighbours
+   :type max_matches: int, optional
+   :param min_neighbours: The minimum number of neighbours
+   :type min_neighbours: int, optional
+   :param max_motif: The maximum number of motifs to return.
+   :type max_motif: int, optional
+   :param return_distance: Return the distance from main to neighbours
+   :type return_distance: bool, optional
+
+   :returns: * **motif_indicies** (*list*) -- List of arrays of motif neighbour indicies
+             * **motif_distance** (*list, optional*) -- List of arrays of distance from motif to neighbours
+
+   .. seealso::
+
+      :obj:`wildboar.distance.subsequence_match`
+          find subsequence matches
+
+      :obj:`wildboar.distance.matrix_profile`
+          compute the matrix profile
+
+   .. rubric:: References
+
+   Yeh, C. C. M. et al. (2016).
+       Matrix profile I: All pairs similarity joins for time series: a unifying view
+       that includes motifs, discords and shapelets. In 2016 IEEE 16th international
+       conference on data mining (ICDM)
+
+
