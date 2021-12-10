@@ -53,11 +53,13 @@ Universal binaries are compiled for GNU/Linux and Python 3.7, 3.8 and 3.9.
 If you already have a working installation of numpy, scikit-learn, scipy and cython,
 compiling and installing wildboar is as simple as:
 
-    python setup.py install
+    pip install .
 	
 To install the requirements, use:
 
     pip install -r requirements.txt
+
+For complete instructions see the [documentation](https://isaksamsten.github.io/wildboar/master/install.html#build-and-compile-from-source)
 	
 
 ## Development
