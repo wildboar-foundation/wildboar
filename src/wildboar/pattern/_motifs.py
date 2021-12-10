@@ -112,10 +112,13 @@ def motifs(
             raise ValueError("invalid max_distance (%r)" % max_distance)
 
     cutoff = max_distance
-    if isinstance(exclude, float):
+    if isinstance(exclude, int):
+        if exclude < 0:
+            raise ValueError("invalid exclusion (%d < 0)" % exclude)
+    elif isinstance(exclude, float):
         exclude = math.ceil(window * exclude)
-    elif exclude < 0:
-        raise ValueError("invalid exclusion (%d < 0)" % exclude)
+    elif exclude is not None:
+        raise ValueError("invalid exclusion (%r)" % exclude)
 
     x = check_array(np.atleast_2d(x), dtype=np.double)
     if x.shape[0] != mp.shape[0]:
@@ -145,6 +148,7 @@ def motifs(
                 threshold=max_distance,
                 metric="scaled_euclidean",
                 max_matches=max_neighbours,
+                exclude=exclude,
                 return_distance=True,
             )
 
@@ -152,11 +156,14 @@ def motifs(
                 motif_index.append(match_idx[:max_neighbours])
                 motif_distance.append(match_dist[:max_neighbours])
                 # The first match is always the same as candidate
+                # so we can exclude all the matches from the matrix
+                # profile
                 for j in match_idx[:max_neighbours]:
                     start = max(0, j - exclude)
                     end = min(mp.shape[-1], j + exclude)
                     mp[i, start:end] = np.inf
             else:
+                # Just exclude the candidate from the matrix profile
                 start = max(0, candidate - exclude)
                 end = min(mp.shape[-1], candidate + exclude)
                 mp[i, start:end] = np.inf

@@ -81,6 +81,37 @@ def _validate_subsequence(y):
     return y
 
 
+def _any_in_exclude(lst, i, exclude):
+    for e in lst:
+        if not (e <= i - exclude or e >= i + exclude):
+            return True
+    return False
+
+
+def _exclude_trivial_matches(indicies, distances, exclude):
+    indicies_tmp = []
+    distances_tmp = []
+    for index, distance in zip(indicies, distances):
+        if index is None:
+            indicies_tmp.append(None)
+            distances_tmp.append(None)
+        else:
+            # For each index if index has neighbors do not include those
+            sort = np.argsort(distance)
+            idx = np.zeros(sort.size, dtype=bool)
+            excluded = []
+            for i in range(index.size):
+                if not _any_in_exclude(excluded, index[sort[i]], exclude):
+                    excluded.append(index[sort[i]])
+                    idx[sort[i]] = True
+
+            idx = np.array(idx)
+            indicies_tmp.append(index[idx])
+            distances_tmp.append(distance[idx])
+
+    return indicies_tmp, distances_tmp
+
+
 def _filter_by_max_matches(indicies, distances, max_matches):
     indicies_tmp = []
     distances_tmp = []
@@ -219,7 +250,7 @@ def paired_subsequence_distance(
     dim : int, optional
         The dim to search for shapelets
 
-     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+     metric : str or callable, optional
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -285,15 +316,23 @@ def subsequence_match(
     metric="euclidean",
     metric_params=None,
     max_matches=None,
+    exclude=None,
     return_distance=False,
     n_jobs=None,
 ):
     """Find the positions where the distance is less than the threshold between the
     subsequence and all time series.
 
+    - If a `threshold` is given, the default behaviour is to return all matching
+      indices in the order of occurrence
+    - If no `threshold` is given, the default behaviour is to return the top 10
+      matching indicies ordered by distance
+    - If both `threshold` and `max_matches` are given, the top matches are returned
+      ordered by distance.
+
     Parameters
     ----------
-    y : array-like of shape (n_timestep, )
+    y : array-like of shape (yn_timestep, )
         The subsequence
 
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
@@ -311,7 +350,7 @@ def subsequence_match(
     dim : int, optional
         The dim to search for shapelets
 
-     metric : str or callable, optional
+    metric : str or callable, optional
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -326,18 +365,20 @@ def subsequence_match(
           is interpreted as an exact time warping window. Use 'r' == 0 for
           a widow size of exactly 1.
 
-    return_distance : bool, optional
-        - if True, return the distance of the match
-
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
 
-        - If a `threshold` is given, the default behaviour is to return all matching
-          indices in the order of occurrence .
-        - If no `threshold` is given, the default behaviour is to return the top 10
-          matching indicies ordered by distance
-        - If both `threshold` and `max_matches` are given the top matches are returned
-          ordered by distance.
+    exclude : float or int, optional
+        Exclude trivial matches in the vicinity of the match.
+
+        - if float, the exclusion zone is computed as ``math.ceil(exclude * y.size)``
+        - if int, the exclusion zone is exact
+
+        A match is considered trivial if a match with lower distance is within `exclude`
+        timesteps of another match with higher distance.
+
+    return_distance : bool, optional
+        - if True, return the distance of the match
 
     n_jobs : int, optional
         The number of parallel jobs to run. Ignored
@@ -396,6 +437,14 @@ def subsequence_match(
     else:
         max_dist = None
 
+    if isinstance(exclude, int):
+        if exclude < 0:
+            raise ValueError("invalid exclusion (%d < 0)" % exclude)
+    elif isinstance(exclude, float):
+        exclude = math.ceil(y.size * exclude)
+    elif exclude is not None:
+        raise ValueError("invalid exclusion (%r)" % exclude)
+
     indicies, distances = _distance._subsequence_match(
         y,
         x,
@@ -407,6 +456,9 @@ def subsequence_match(
 
     if max_dist is not None:
         indicies, distances = _filter_by_max_dist(indicies, distances, max_dist)
+
+    if exclude:
+        indicies, distances = _exclude_trivial_matches(indicies, distances, exclude)
 
     if max_matches:
         indicies, distances = _filter_by_max_matches(indicies, distances, max_matches)
