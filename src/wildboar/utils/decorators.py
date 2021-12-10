@@ -35,6 +35,15 @@ def _array_or_scalar(x, squeeze=True):
 
 
 def array_or_scalar(squeeze=True):
+    """Decorate a function returning an ndarray to return a single scalar if the array
+    has a single item.
+
+    Parameters
+    ----------
+    squeeze : bool, optional
+        Remove axis of length one from the returned arrays
+    """
+
     def decorator(f):
         @wraps(f)
         def wrap(*args, **kwargs):
@@ -53,12 +62,16 @@ def array_or_scalar(squeeze=True):
 
 def _singleton(x):
     if isinstance(x, list):
-        return x[0] if len(x) == 1 else x
+        return _singleton(x[0]) if len(x) == 1 else x
     else:
         return x
 
 
 def singleton(f):
+    """Recursivley try to unwrap list return arguments such that a single element can
+    be returned
+    """
+
     @wraps(f)
     def wrap(*args, **kwargs):
         ret_vals = f(*args, **kwargs)
