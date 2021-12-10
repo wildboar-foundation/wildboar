@@ -224,7 +224,7 @@ Functions
    :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
    :param dim:    The dim to search for shapelets
 
-               metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+               metric : str or callable, optional
                   The distance metric
 
                   - if str use optimized implementations of the named distance measure

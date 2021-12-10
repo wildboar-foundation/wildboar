@@ -20,7 +20,16 @@ Functions
 
 .. py:function:: array_or_scalar(squeeze=True)
 
+   Decorate a function returning an ndarray to return a single scalar if the array
+   has a single item.
+
+   :param squeeze: Remove axis of length one from the returned arrays
+   :type squeeze: bool, optional
+
 
 .. py:function:: singleton(f)
+
+   Recursivley try to unwrap list return arguments such that a single element can
+   be returned
 
 
