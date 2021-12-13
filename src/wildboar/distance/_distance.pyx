@@ -241,6 +241,15 @@ cdef class DistanceMeasure:
     ) nogil:
         return NAN
 
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return NAN
+
     @property
     def is_elastic(self):
         return False
@@ -595,140 +604,3 @@ def _paired_distance(
             out_view[i] = dist
 
     return out
-
-# This is equivivalent to _pairwise_subsequence_distance exept for sample
-def distance(shapelet, data, dim=0, sample=None, metric="euclidean", metric_params=None, subsequence_distance=True, return_index=False):
-    pass
-    # cdef np.ndarray s = _validate_shapelet(shapelet)
-    # cdef np.ndarray x = _validate_data(data)
-    # if sample is None:
-    #     if x.shape[0] == 1:
-    #         sample = 0
-    #     else:
-    #         sample = np.arange(x.shape[0])
-    # cdef Dataset sd = Dataset(x)
-
-    # _check_dim(dim, sd.n_dims)
-    # cdef double min_dist
-    # cdef Py_ssize_t min_index
-
-    # cdef double mean = 0
-    # cdef double std = 0
-
-    # cdef DistanceMeasure distance_measure = get_distance_measure(
-    #     sd.n_timestep, metric, metric_params
-    # )
-
-    # if (
-    #         not subsequence_distance and
-    #         not distance_measure.support_unaligned() and
-    #         s.shape[0] != sd.n_timestep
-    # ):
-    #     raise ValueError(
-    #         "x.shape[0] != y.shape[-1], got %r, %r" % (s.shape[0], sd.n_timestep)
-    #     )
-
-    # if not distance_measure.support_unaligned() and s.shape[0] > sd.n_timestep:
-    #     raise ValueError(
-    #         "x.shape[0] > y.shape[-1], got %r, %r" % (s.shape[0], sd.n_timestep)
-    #     )
-
-
-    # cdef Subsequence shape # TODO: free me
-    # distance_measure.init_ts_copy_from_obj(&shape, (dim, s))
-    # if isinstance(sample, int):
-    #     if subsequence_distance:
-    #         min_dist = distance_measure.ts_copy_sub_distance(
-    #             &shape, sd, sample, &min_index)
-    #     else:
-    #         min_dist = distance_measure.ts_copy_distance(
-    #             &shape, sd, sample
-    #         )
-    #         min_index = 0
-
-    #     if return_index:
-    #         return min_dist, min_index
-    #     else:
-    #         return min_dist
-    # else:  # assume an `array_like` object for `samples`
-    #     samples = np.array(sample, dtype=int)
-    #     if samples.ndim != 1:
-    #         raise ValueError("invalid samples (%r)" % samples)
-    #     dist = []
-    #     ind = []
-    #     # TODO: add n_jobs
-    #     for i in samples:
-    #         if subsequence_distance:
-    #             min_dist = distance_measure.ts_copy_sub_distance(
-    #                 &shape, sd, i, &min_index
-    #             )
-    #         else:
-    #             min_dist = distance_measure.ts_copy_distance(
-    #                 &shape, sd, i
-    #             )
-    #             min_index = 0
-
-    #         dist.append(min_dist)
-    #         ind.append(min_index)
-
-    #     if return_index:
-    #         return np.array(dist), np.array(ind)
-    #     else:
-    #         return np.array(dist)
-
-
-def matches(shapelet, X, threshold, dim=0, sample=None, metric="euclidean", metric_params=None, return_distance=False):
-    pass
-    # cdef np.ndarray s = _validate_shapelet(shapelet)
-    # cdef np.ndarray x = _validate_data(X)
-    # _check_dim(dim, x.ndim)
-    # if sample is None:
-    #     if x.shape[0] == 1:
-    #         sample = 0
-    #     else:
-    #         sample = np.arange(x.shape[0])
-
-    # cdef Dataset sd = Dataset(x)
-
-    # cdef Py_ssize_t *matches
-    # cdef double *distances
-    # cdef Py_ssize_t n_matches
-
-    # cdef DistanceMeasure distance_measure = get_distance_measure(
-    #     sd.n_timestep, metric, metric_params
-    # )
-    # cdef Subsequence shape
-    # distance_measure.init_ts_copy_from_obj(&shape, (dim, s))
-    # cdef Py_ssize_t i
-    # if isinstance(sample, int):
-    #     _check_sample(sample, sd.n_samples)
-    #     distance_measure.ts_copy_sub_matches(
-    #         &shape, sd, sample, threshold, &matches, &distances, &n_matches)
-
-    #     match_array = _new_match_array(matches, n_matches)
-    #     distance_array = _new_distance_array(distances, n_matches)
-    #     free(distances)
-    #     free(matches)
-
-    #     if return_distance:
-    #         return distance_array, match_array
-    #     else:
-    #         return match_array
-    # else:
-    #     samples = check_array(sample, ensure_2d=False, dtype=int)
-    #     match_list = []
-    #     distance_list = []
-    #     for i in samples:
-    #         _check_sample(i, sd.n_samples)
-    #         distance_measure.ts_copy_sub_matches(&shape, sd, i, threshold, &matches, &distances, &n_matches)
-    #         match_array = _new_match_array(matches, n_matches)
-    #         distance_array = _new_distance_array(distances, n_matches)
-    #         match_list.append(match_array)
-    #         distance_list.append(distance_array)
-    #         free(matches)
-    #         free(distances)
-
-    #     if return_distance:
-    #         return distance_list, match_list
-    #     else:
-    #         return match_list

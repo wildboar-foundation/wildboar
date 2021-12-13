@@ -19,8 +19,8 @@
 cimport numpy as np
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils._utils cimport safe_realloc
 from wildboar.utils.data cimport Dataset
+from wildboar.utils.misc cimport safe_realloc
 from wildboar.utils.rand cimport RAND_R_MAX
 
 from ._feature cimport Feature, FeatureEngineer

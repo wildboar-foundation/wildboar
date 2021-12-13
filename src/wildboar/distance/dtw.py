@@ -16,6 +16,7 @@
 # Authors: Isak Samsten
 
 import math
+import numbers
 
 import numpy as np
 
@@ -45,12 +46,12 @@ def _compute_warp_size(x_size, r, *, y_size=0):
     This function ensures that r is always in the range [1, max(x_size, y_size) - 1]
     """
     x_size = max(x_size, y_size)
-    if isinstance(r, float):
+    if isinstance(r, numbers.Integral) and 0 <= r < x_size:
+        return max(1, r)
+    elif isinstance(r, numbers.Real):
         if not 0.0 <= r <= 1.0:
             raise ValueError("r should be in [0, 1], got %r" % r)
         return max(min(math.floor(x_size * r), x_size - 1), 1)
-    elif isinstance(r, int) and 0 <= r < x_size:
-        return max(1, r)
     else:
         raise ValueError("invalid warping window, got %r" % r)
 

@@ -47,8 +47,8 @@ if __name__ == "__main__":
         raise RuntimeError("%s is not a valid build type" % BUILD_TYPE)
 
     extensions = {
-        "wildboar.utils._utils": {
-            "sources": ["src/wildboar/utils/_utils.pyx"],
+        "wildboar.utils.misc": {
+            "sources": ["src/wildboar/utils/misc.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.distance._distance": {
@@ -89,6 +89,10 @@ if __name__ == "__main__":
         },
         "wildboar.embed._cinterval": {
             "sources": ["src/wildboar/embed/_cinterval.pyx"],
+            "include_dirs": include_dirs(),
+        },
+        "wildboar.embed._cpivot": {
+            "sources": ["src/wildboar/embed/_cpivot.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.embed._embed_fast": {

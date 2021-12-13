@@ -130,3 +130,11 @@ cdef class DistanceMeasure:
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil

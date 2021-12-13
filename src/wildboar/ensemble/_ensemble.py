@@ -34,6 +34,7 @@ from wildboar.tree import (
     ExtraShapeletTreeRegressor,
     IntervalTreeClassifier,
     IntervalTreeRegressor,
+    PivotTreeClassifier,
     ShapeletTreeClassifier,
     ShapeletTreeRegressor,
 )
@@ -1537,6 +1538,56 @@ class IntervalForestRegressor(BaseForestRegressor):
         self.sample_size = sample_size
         self.min_size = min_size
         self.max_size = max_size
+
+    def _parallel_args(self):
+        return _joblib_parallel_args(prefer="threads")
+
+
+class PivotForestClassifier(BaseForestClassifier):
+    def __init__(
+        self,
+        n_estimators=100,
+        *,
+        n_pivot="sqrt",
+        metrics="all",
+        oob_score=False,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0,
+        criterion="entropy",
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        class_weight=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=PivotTreeClassifier(),
+            estimator_params=(
+                "n_pivot",
+                "metrics",
+                "max_depth",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "criterion",
+            ),
+            oob_score=oob_score,
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            bootstrap=bootstrap,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            class_weight=class_weight,
+            random_state=random_state,
+        )
+        self.n_pivot = n_pivot
+        self.metrics = metrics
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")

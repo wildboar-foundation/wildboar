@@ -15,6 +15,7 @@
 #
 # Authors: Isak Samsten
 import math
+import numbers
 import warnings
 
 import numpy as np
@@ -73,7 +74,7 @@ def _validate_subsequence(y):
                 )
             )
     else:
-        if all(isinstance(e, (int, float)) for e in y):
+        if all(isinstance(e, (int, numbers.Real)) for e in y):
             y = [np.array(y, dtype=np.double)]
         else:
             y = [np.array(e, dtype=np.double) for e in y]
@@ -432,15 +433,15 @@ def subsequence_match(
             return d <= threshold_fn(d)
 
         threshold = np.inf
-    elif not isinstance(threshold, float):
+    elif not isinstance(threshold, numbers.Real):
         raise ValueError("invalid threshold (%r)" % threshold)
     else:
         max_dist = None
 
-    if isinstance(exclude, int):
+    if isinstance(exclude, numbers.Integral):
         if exclude < 0:
             raise ValueError("invalid exclusion (%d < 0)" % exclude)
-    elif isinstance(exclude, float):
+    elif isinstance(exclude, numbers.Real):
         exclude = math.ceil(y.size * exclude)
     elif exclude is not None:
         raise ValueError("invalid exclusion (%r)" % exclude)
@@ -582,7 +583,7 @@ def paired_subsequence_match(
             return d <= threshold_fn(d)
 
         threshold = np.inf
-    elif not isinstance(threshold, float):
+    elif not isinstance(threshold, numbers.Real):
         raise ValueError("invalid threshold (%r)" % threshold)
     else:
         max_dist = None
@@ -877,12 +878,12 @@ def matrix_profile(
     if x.ndim > 2 and not 0 <= dim < x.shape[1]:
         raise ValueError("invalid dim (%d)" % x.shape[1])
 
-    if isinstance(exclude, float):
+    if isinstance(exclude, numbers.Real):
         exclude = math.ceil(window * exclude)
     elif exclude < 0:
         raise ValueError("invalid exclusion (%d < 0)" % exclude)
 
-    if isinstance(window, float):
+    if isinstance(window, numbers.Real):
         if not 0.0 < window <= 1.0:
             raise ValueError("invalid window size, got %f (expected [0, 1[)")
         window = math.ceil(window * y.shape[-1])

@@ -26,8 +26,8 @@ cimport numpy as np
 from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils._utils cimport realloc_array
 from wildboar.utils.data cimport Dataset
+from wildboar.utils.misc cimport realloc_array
 
 from ._distance cimport (
     DistanceMeasure,
@@ -222,13 +222,21 @@ cdef class EuclideanDistanceMeasure(DistanceMeasure):
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil:
-        return euclidean_distance(
+        return self._distance(
             x.get_sample(x_index, dim=dim),
             x.n_timestep,
             y.get_sample(y_index, dim=dim),
             y.n_timestep,
-            NULL,
         )
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return euclidean_distance(x, x_len, y, y_len, NULL)
 
 
 cdef double scaled_euclidean_distance(

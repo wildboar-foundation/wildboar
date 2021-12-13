@@ -30,9 +30,11 @@ from libc.string cimport memcpy, memset
 from scipy.sparse import csr_matrix
 
 from wildboar.embed._feature cimport Feature, FeatureEngineer
+
 from wildboar.utils import check_dataset
-from wildboar.utils._utils cimport argsort, safe_realloc
+
 from wildboar.utils.data cimport Dataset
+from wildboar.utils.misc cimport argsort, safe_realloc
 from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 

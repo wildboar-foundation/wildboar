@@ -28,6 +28,19 @@ from libc.math cimport M_PI, cos, log, log2, sin, sqrt
 from libc.stdlib cimport realloc
 
 
+cdef extern from "Python.h":
+  cdef void* PyList_GET_ITEM(list, Py_ssize_t index) nogil
+
+cdef class CList:
+    
+    def __cinit__(self, list py_list):
+        self.py_list = py_list
+        self.size = len(py_list)
+
+    cdef void* get(self, Py_ssize_t i) nogil:
+        return PyList_GET_ITEM(self.py_list, i)
+
+
 cdef void strided_copy(Py_ssize_t stride, double *f, double *t, Py_ssize_t length) nogil:
     cdef Py_ssize_t i
     for i in range(length):

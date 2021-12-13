@@ -28,8 +28,8 @@ from libc.math cimport INFINITY, floor, log2, pow, sqrt
 from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 
-from wildboar.utils._utils cimport to_ndarray_int
 from wildboar.utils.data cimport Dataset
+from wildboar.utils.misc cimport to_ndarray_int
 from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
 
 from ._feature cimport Feature, FeatureEngineer

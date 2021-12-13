@@ -152,19 +152,19 @@ class KMeansLabeler(OutlierLabeler):
         random_state = check_random_state(self.random_state)
         if self.n_outliers is None:
             n_outliers = x.shape[0]
-        elif isinstance(self.n_outliers, float):
-            if not 0.0 < self.n_outliers <= 1.0:
-                raise ValueError(
-                    "n_outliers must be in (0, 1], got %r" % self.n_outliers
-                )
-            n_outliers = math.ceil(x.shape[0] * self.n_outliers)
-        elif isinstance(self.n_outliers, int):
+        elif isinstance(self.n_outliers, numbers.Integral):
             if not 0 < self.n_outliers < x.shape[0]:
                 raise ValueError(
                     "n_outliers must be in (0, %d), got %r"
                     % (x.shape[0], self.n_outliers)
                 )
             n_outliers = self.n_outliers
+        elif isinstance(self.n_outliers, numbers.Real):
+            if not 0.0 < self.n_outliers <= 1.0:
+                raise ValueError(
+                    "n_outliers must be in (0, 1], got %r" % self.n_outliers
+                )
+            n_outliers = math.ceil(x.shape[0] * self.n_outliers)
         else:
             raise ValueError("n_outliers (%s) not supported" % self.n_outliers)
         labels = self.k_means_.predict(x)
@@ -276,7 +276,7 @@ class MajorityLabeler(OutlierLabeler):
 
         if self.n_outliers is None:
             n_outliers = outlier_indices.shape[0]
-        elif isinstance(self.n_outliers, float):
+        elif isinstance(self.n_outliers, numbers.Real):
             if not 0.0 < self.n_outliers <= 1.0:
                 raise ValueError(
                     "n_outliers must be in (0, 1), got %r" % self.n_outliers
@@ -609,7 +609,7 @@ class EmmottLabeler(OutlierLabeler):
 
         if self.n_outliers is None:
             n_outliers = y_outliers.shape[0]
-        elif isinstance(self.n_outliers, float):
+        elif isinstance(self.n_outliers, numbers.Real):
             if not 0.0 < self.n_outliers <= 1.0:
                 raise ValueError(
                     "n_outliers must be in (0, 1], got %r" % self.n_outliers
@@ -618,7 +618,7 @@ class EmmottLabeler(OutlierLabeler):
                 y_outliers.shape[0],
                 math.ceil(self.n_outliers * inlier_indices[0].shape[0]),
             )
-        elif isinstance(self.n_outliers, int):
+        elif isinstance(self.n_outliers, numbers.Integral):
             if 0 < self.n_outliers <= y_outliers.shape[0]:
                 raise ValueError(
                     "n_outliers must be in (0, %d], got %r"

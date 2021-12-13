@@ -16,6 +16,7 @@
 # Authors: Isak Samsten
 
 import math
+import numbers
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
@@ -211,14 +212,14 @@ class IntervalImportance(BaseImportance):
             n_interval = math.ceil(math.sqrt(x.shape[-1]))
         elif self.n_interval == "log":
             n_interval = math.ceil(math.log2(x.shape[-1]))
-        elif isinstance(self.n_interval, float):
+        elif isinstance(self.n_interval, numbers.Integral):
+            n_interval = self.n_interval
+        elif isinstance(self.n_interval, numbers.Real):
             if not 0 < self.n_interval <= 1:
                 raise ValueError(
                     "n_interval (%r) not in range [0, 1[" % self.n_interval
                 )
             n_interval = math.floor(x.shape[-1] * self.n_interval)
-        elif isinstance(self.n_interval, int):
-            n_interval = self.n_interval
         else:
             raise ValueError("unsupported n_interval, got %r" % self.n_interval)
 
@@ -310,7 +311,7 @@ class IntervalImportance(BaseImportance):
 
         if top_k is None or top_k > importances.shape[0]:
             top_k = importances.shape[0]
-        elif isinstance(top_k, float):
+        elif isinstance(top_k, numbers.Real):
             if not 0 < top_k <= 1.0:
                 raise ValueError("top_k (%r) not in range ]0, 1]" % top_k)
             top_k = math.ceil(top_k * importances.shape[0])
@@ -327,7 +328,7 @@ class IntervalImportance(BaseImportance):
             if n_samples is None:
                 x = x
             else:
-                if isinstance(n_samples, float):
+                if isinstance(n_samples, numbers.Real):
                     if not 0 < n_samples <= 1.0:
                         raise ValueError("sample (%r) out of range")
                     n_samples = math.ceil(x.shape[0] * n_samples)

@@ -15,6 +15,7 @@
 #
 # Authors: Isak Samsten
 import math
+import numbers
 
 from ._cinterval import (
     Catch22Summarizer,
@@ -144,9 +145,9 @@ class IntervalEmbedding(BaseEmbedding):
             n_interval = math.ceil(math.sqrt(self.n_timestep_))
         elif self.n_interval == "log":
             n_interval = math.ceil(math.log2(self.n_timestep_))
-        elif isinstance(self.n_interval, int):
+        elif isinstance(self.n_interval, numbers.Integral):
             n_interval = self.n_interval
-        elif isinstance(self.n_interval, float):
+        elif isinstance(self.n_interval, numbers.Real):
             if not 0.0 < self.n_interval < 1.0:
                 raise ValueError("n_interval must be between 0.0 and 1.0")
             n_interval = math.floor(self.n_interval * self.n_timestep_)

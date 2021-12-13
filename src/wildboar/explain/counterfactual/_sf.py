@@ -15,6 +15,7 @@
 #
 # Authors: Isak Samsten
 import math
+import numbers
 from copy import deepcopy
 
 import numpy as np
@@ -243,14 +244,14 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         prediction_paths = self.paths_[y]
         n_counterfactuals = len(prediction_paths)
 
-        if isinstance(self.batch_size, float):
+        if isinstance(self.batch_size, numbers.Integral):
+            batch_size = max(0, min(self.batch_size, n_counterfactuals))
+        elif isinstance(self.batch_size, numbers.Real):
             if not 0.0 < self.batch_size <= 1:
                 raise ValueError(
                     "batch_size should be in range (0, 1], got %r" % self.batch_size
                 )
             batch_size = math.ceil(n_counterfactuals * self.batch_size)
-        elif isinstance(self.batch_size, int):
-            batch_size = max(0, min(self.batch_size, n_counterfactuals))
         else:
             raise ValueError("unsupported batch_size, got %r" % self.batch_size)
 

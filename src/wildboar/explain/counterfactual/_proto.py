@@ -16,6 +16,7 @@
 # Authors: Isak Samsten
 import abc
 import math
+import numbers
 from copy import deepcopy
 from functools import partial
 
@@ -183,9 +184,9 @@ class PrototypeCounterfactual(BaseCounterfactual):
             x_partition = x[y == c]
             if self.n_prototypes == "auto":
                 n_prototypes = x_partition.shape[0]
-            elif isinstance(self.n_prototypes, int):
+            elif isinstance(self.n_prototypes, numbers.Integral):
                 n_prototypes = max(1, min(self.n_prototypes, x_partition.shape[0]))
-            elif isinstance(self.n_prototypes, float):
+            elif isinstance(self.n_prototypes, numbers.Real):
                 if not 0.0 < self.n_prototypes <= 1.0:
                     raise ValueError("n_prototypes")
                 n_prototypes = math.ceil(self.n_prototypes * x_partition.shape[0])

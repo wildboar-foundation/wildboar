@@ -1313,6 +1313,9 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
         self.cost = NULL
         self.cost_prev = NULL
 
+    def __reduce__(self):
+        return self.__class__, (self.r, )
+
     def __dealloc__(self):
         self.__free()
 
@@ -1340,13 +1343,27 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil:
-        cdef double dist = _dtw(
+        return self._distance(
             x.get_sample(x_index, dim=dim),
             x.n_timestep,
-            0.0,
-            1.0,
             y.get_sample(y_index, dim=dim),
             y.n_timestep,
+        )
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        cdef double dist = _dtw(
+            x,
+            x_len,
+            0.0,
+            1.0,
+            y,
+            y_len,
             0.0,
             1.0,
             self.warp_width,

@@ -20,6 +20,12 @@
 cimport numpy as np
 
 
+cdef class CList:
+    cdef list py_list
+    cdef readonly Py_ssize_t size
+
+    cdef void* get(self, Py_ssize_t i) nogil
+
 cdef void strided_copy(Py_ssize_t stride, double* f, double* t, Py_ssize_t length) nogil
 
 cdef void argsort(double *values, Py_ssize_t *order, Py_ssize_t length) nogil

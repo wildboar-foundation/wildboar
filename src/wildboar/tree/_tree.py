@@ -16,6 +16,7 @@
 # Authors: Isak Samsten
 
 import math
+import numbers
 import sys
 import warnings
 from abc import ABCMeta, abstractmethod
@@ -25,7 +26,7 @@ from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
-from wildboar.distance import _SUBSEQUENCE_DISTANCE_MEASURE
+from wildboar.distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
 from wildboar.embed._interval import (
     _SUMMARIZER,
     IntervalFeatureEngineer,
@@ -33,6 +34,7 @@ from wildboar.embed._interval import (
     RandomFixedIntervalFeatureEngineer,
     RandomIntervalFeatureEngineer,
 )
+from wildboar.embed._pivot import PivotFeatureEngineer
 from wildboar.embed._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
 from wildboar.embed._shapelet import RandomShapeletFeatureEngineer
 from wildboar.utils import check_array, check_dataset
@@ -95,7 +97,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         return self.tree_.apply(x)
 
     @abstractmethod
-    def _get_feature_engineer(self):
+    def _get_feature_engineer(self, n_samples, n_timestep):
         pass
 
     @abstractmethod
@@ -118,7 +120,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         elif max_depth > sys.getrecursionlimit():
             warnings.warn("max_depth exceeds the maximum recursion limit.")
 
-        feature_engineer = self._get_feature_engineer()
+        feature_engineer = self._get_feature_engineer(x.shape[0], x.shape[-1])
         x = check_dataset(x)
         tree_builder = self._get_tree_builder(
             x,
@@ -412,7 +414,7 @@ class BaseShapeletTree(BaseTree):
         self.n_timestep_ = None
         self.n_dims_ = None
 
-    def _get_feature_engineer(self):
+    def _get_feature_engineer(self, n_samples, n_timestep):
         if (
             self.min_shapelet_size < 0
             or self.min_shapelet_size > self.max_shapelet_size
@@ -425,8 +427,8 @@ class BaseShapeletTree(BaseTree):
         if self.max_shapelet_size > 1:
             raise ValueError("max_shapelet_size %d > 1" % self.max_shapelet_size)
 
-        max_shapelet_size = int(self.n_timestep_ * self.max_shapelet_size)
-        min_shapelet_size = int(self.n_timestep_ * self.min_shapelet_size)
+        max_shapelet_size = int(n_timestep * self.max_shapelet_size)
+        min_shapelet_size = int(n_timestep * self.min_shapelet_size)
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
@@ -942,7 +944,7 @@ class BaseRocketTree(BaseTree, metaclass=ABCMeta):
         self.padding_prob = padding_prob
         self.random_state = random_state
 
-    def _get_feature_engineer(self):
+    def _get_feature_engineer(self, n_samples, n_timestep):
         if self.kernel_size is None:
             kernel_size = [7, 11, 13]
         elif isinstance(self.kernel_size, tuple) and len(self.kernel_size) == 2:
@@ -953,8 +955,8 @@ class BaseRocketTree(BaseTree, metaclass=ABCMeta):
                 )
             if max_size > 1:
                 raise ValueError("`max_size` {0} > 1".format(max_size))
-            max_size = int(self.n_timestep_ * max_size)
-            min_size = int(self.n_timestep_ * min_size)
+            max_size = int(n_timestep * max_size)
+            min_size = int(n_timestep * min_size)
             if min_size < 2:
                 min_size = 2
             kernel_size = np.arange(min_size, max_size)
@@ -1099,7 +1101,6 @@ class BaseIntervalTree(BaseTree, metaclass=ABCMeta):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        criterion="entropy",
         intervals="fixed",
         sample_size=0.5,
         min_size=0.0,
@@ -1134,7 +1135,6 @@ class BaseIntervalTree(BaseTree, metaclass=ABCMeta):
             force_dim=force_dim,
         )
         self.n_interval = n_interval
-        self.criterion = criterion
         self.intervals = intervals
         self.sample_size = sample_size
         self.min_size = min_size
@@ -1142,7 +1142,7 @@ class BaseIntervalTree(BaseTree, metaclass=ABCMeta):
         self.summarizer = summarizer
         self.random_state = random_state
 
-    def _get_feature_engineer(self):
+    def _get_feature_engineer(self, n_samples, n_timestep):
         if isinstance(self.summarizer, list):
             if not all(hasattr(func, "__call__") for func in self.summarizer):
                 raise ValueError("summarizer (%r) is not supported")
@@ -1153,15 +1153,15 @@ class BaseIntervalTree(BaseTree, metaclass=ABCMeta):
                 raise ValueError("summarizer (%r) is not supported." % self.summarizer)
 
         if self.n_interval == "sqrt":
-            n_interval = math.ceil(math.sqrt(self.n_timestep_))
+            n_interval = math.ceil(math.sqrt(n_timestep))
         elif self.n_interval == "log":
-            n_interval = math.ceil(math.log2(self.n_timestep_))
-        elif isinstance(self.n_interval, int):
+            n_interval = math.ceil(math.log2(n_timestep))
+        elif isinstance(self.n_interval, numbers.Integral):
             n_interval = self.n_interval
-        elif isinstance(self.n_interval, float):
+        elif isinstance(self.n_interval, numbers.Real):
             if not 0.0 < self.n_interval < 1.0:
                 raise ValueError("n_interval must be between 0.0 and 1.0")
-            n_interval = math.floor(self.n_interval * self.n_timestep_)
+            n_interval = math.floor(self.n_interval * n_timestep)
             # TODO: ensure that no interval is smaller than 2
         else:
             raise ValueError("n_interval (%r) is not supported" % self.n_interval)
@@ -1219,7 +1219,6 @@ class IntervalTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseIntervalT
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            criterion=criterion,
             intervals=intervals,
             sample_size=sample_size,
             min_size=min_size,
@@ -1229,6 +1228,7 @@ class IntervalTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BaseIntervalT
             random_state=random_state,
         )
         self.class_weight = class_weight
+        self.criterion = criterion
 
 
 class IntervalTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseIntervalTree):
@@ -1255,7 +1255,6 @@ class IntervalTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseIntervalTree
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            criterion=criterion,
             intervals=intervals,
             sample_size=sample_size,
             min_size=min_size,
@@ -1264,3 +1263,99 @@ class IntervalTreeRegressor(RegressorMixin, RegressorTreeMixin, BaseIntervalTree
             force_dim=force_dim,
             random_state=random_state,
         )
+        self.criterion = criterion
+
+
+class BasePivotTree(BaseTree, metaclass=ABCMeta):
+    def __init__(
+        self,
+        n_pivot="sqrt",
+        *,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        metrics="all",
+        force_dim=None,
+        random_state=None,
+    ):
+        """
+        Parameters
+        ----------
+        n_kernels : int, optional
+            The number of kernels to inspect at each node.
+
+        max_depth : int, optional
+            The maxium depth.
+
+        min_samples_split : int, optional
+            The minimum number of samples required to split.
+
+        force_dim : int, optional
+            Force reshaping of input data.
+
+        random_state : int or RandomState, optional
+            The psudo-random number generator.
+        """
+        super().__init__(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            force_dim=force_dim,
+        )
+        self.n_pivot = n_pivot
+        self.metrics = metrics
+        self.random_state = random_state
+
+    def _get_feature_engineer(self, n_samples, n_timestep):
+        if isinstance(self.n_pivot, str):
+            if self.n_pivot == "sqrt":
+                n_pivot = math.ceil(math.sqrt(n_samples))
+            elif self.n_pivot == "log":
+                n_pivot = math.ceil(math.log2(n_samples))
+            else:
+                raise ValueError("invalid n_pivot (%s)" % self.n_pivot)
+        elif isinstance(self.n_pivot, numbers.Integral):
+            n_pivot = self.n_pivot
+        elif isinstance(self.n_pivot, numbers.Real):
+            if not 0 < self.n_pivot <= 1.0:
+                raise ValueError(
+                    "invalid n_pivots, got %d expected in range [0, 1]" % self.n_pivot
+                )
+            n_pivot = math.ceil(self.n_pivot * n_samples)
+        else:
+            raise ValueError("invalid n_pivot (%r)" % self.n_pivot)
+        metrics = [_DISTANCE_MEASURE["dtw"](r) for r in np.linspace(0.1, 0.4, 8)]
+        return PivotFeatureEngineer(
+            n_pivot, [_DISTANCE_MEASURE["euclidean"]()] + metrics
+        )
+
+
+class PivotTreeClassifier(ClassifierMixin, ClassifierTreeMixin, BasePivotTree):
+    def __init__(
+        self,
+        n_pivot="sqrt",
+        *,
+        metrics="all",
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="entropy",
+        class_weight=None,
+        force_dim=None,
+        random_state=None,
+    ):
+        super().__init__(
+            n_pivot=n_pivot,
+            metrics=metrics,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            force_dim=force_dim,
+            random_state=random_state,
+        )
+        self.criterion = criterion
+        self.class_weight = class_weight

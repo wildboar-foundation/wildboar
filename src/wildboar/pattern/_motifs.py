@@ -14,6 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # Authors: Isak Samsten
 import math
+import numbers
 
 import numpy as np
 
@@ -112,10 +113,10 @@ def motifs(
             raise ValueError("invalid max_distance (%r)" % max_distance)
 
     cutoff = max_distance
-    if isinstance(exclude, int):
+    if isinstance(exclude, numbers.Integral):
         if exclude < 0:
             raise ValueError("invalid exclusion (%d < 0)" % exclude)
-    elif isinstance(exclude, float):
+    elif isinstance(exclude, numbers.Real):
         exclude = math.ceil(window * exclude)
     elif exclude is not None:
         raise ValueError("invalid exclusion (%r)" % exclude)
@@ -139,7 +140,10 @@ def motifs(
             if mp[i, candidate] > cutoff:
                 break
 
-            if isinstance(max_distance, float) and mp[i, candidate] > max_distance:
+            if (
+                isinstance(max_distance, numbers.Real)
+                and mp[i, candidate] > max_distance
+            ):
                 break
 
             match_idx, match_dist = subsequence_match(
