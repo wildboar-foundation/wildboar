@@ -708,7 +708,7 @@ cdef class Tree:
         ret = safe_realloc(<void**> &self._right, sizeof(Py_ssize_t) * new_capacity)
         if ret == -1:
             return -1
-
+        self._capacity = new_capacity
         return 0
 
 cdef class TreeBuilder:
