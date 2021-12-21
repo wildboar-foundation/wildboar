@@ -15,6 +15,7 @@ Classes
 .. autoapisummary::
 
    wildboar.tree._tree.BaseIntervalTree
+   wildboar.tree._tree.BasePivotTree
    wildboar.tree._tree.BaseRocketTree
    wildboar.tree._tree.BaseShapeletTree
    wildboar.tree._tree.BaseTree
@@ -23,6 +24,7 @@ Classes
    wildboar.tree._tree.ExtraShapeletTreeRegressor
    wildboar.tree._tree.IntervalTreeClassifier
    wildboar.tree._tree.IntervalTreeRegressor
+   wildboar.tree._tree.PivotTreeClassifier
    wildboar.tree._tree.RegressorTreeMixin
    wildboar.tree._tree.RocketTreeClassifier
    wildboar.tree._tree.RocketTreeRegressor
@@ -51,7 +53,31 @@ Attributes
 
    
 
-.. py:class:: BaseIntervalTree(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
+.. py:class:: BaseIntervalTree(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
+
+   Bases: :py:obj:`BaseTree`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   :param n_kernels: The number of kernels to inspect at each node.
+   :type n_kernels: int, optional
+   :param max_depth: The maxium depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples required to split.
+   :type min_samples_split: int, optional
+   :param force_dim: Force reshaping of input data.
+   :type force_dim: int, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+
+.. py:class:: BasePivotTree(n_pivot='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, metrics='all', force_dim=None, random_state=None)
 
    Bases: :py:obj:`BaseTree`
 
@@ -560,6 +586,24 @@ Attributes
    Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseIntervalTree`
 
    Mixin class for all regression estimators in scikit-learn.
+
+   :param n_kernels: The number of kernels to inspect at each node.
+   :type n_kernels: int, optional
+   :param max_depth: The maxium depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples required to split.
+   :type min_samples_split: int, optional
+   :param force_dim: Force reshaping of input data.
+   :type force_dim: int, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+
+.. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, force_dim=None, random_state=None)
+
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BasePivotTree`
+
+   Mixin class for all classifiers in scikit-learn.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional

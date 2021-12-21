@@ -16,6 +16,7 @@ Classes
    wildboar.tree.ExtraShapeletTreeRegressor
    wildboar.tree.IntervalTreeClassifier
    wildboar.tree.IntervalTreeRegressor
+   wildboar.tree.PivotTreeClassifier
    wildboar.tree.RocketTreeClassifier
    wildboar.tree.RocketTreeRegressor
    wildboar.tree.ShapeletTreeClassifier
@@ -398,6 +399,24 @@ Classes
    Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseIntervalTree`
 
    Mixin class for all regression estimators in scikit-learn.
+
+   :param n_kernels: The number of kernels to inspect at each node.
+   :type n_kernels: int, optional
+   :param max_depth: The maxium depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples required to split.
+   :type min_samples_split: int, optional
+   :param force_dim: Force reshaping of input data.
+   :type force_dim: int, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+
+.. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, force_dim=None, random_state=None)
+
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BasePivotTree`
+
+   Mixin class for all classifiers in scikit-learn.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional

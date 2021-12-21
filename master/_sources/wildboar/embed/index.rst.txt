@@ -32,6 +32,7 @@ Classes
 
    wildboar.embed.BaseEmbedding
    wildboar.embed.IntervalEmbedding
+   wildboar.embed.PivotEmbedding
    wildboar.embed.RandomShapeletEmbedding
    wildboar.embed.RocketEmbedding
 
@@ -168,6 +169,31 @@ Classes
    :type n_jobs: int, optional
    :param random_state: The pseudo-random number generator used to ensure consistent results.
    :type random_state: int or np.RandomState
+
+
+.. py:class:: PivotEmbedding(n_pivot=1, *, metrics='all', random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
+
+   Base embedding
+
+   .. attribute:: embedding_
+
+      The underlying embedding.
+
+      :type: Embedding
+
+   .. attribute::
+
+      -1 means using all processors.
+
+      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
+
+   .. attribute::
+
+
+
+      :type: type n_jobs: int, optional
 
 
 .. py:class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
