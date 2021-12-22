@@ -71,8 +71,12 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/distance/_matrix_profile.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.tree._tree_builder": {
-            "sources": ["src/wildboar/tree/_tree_builder.pyx"],
+        "wildboar.tree._ctree": {
+            "sources": ["src/wildboar/tree/_ctree.pyx"],
+            "include_dirs": include_dirs(),
+        },
+        "wildboar.tree._cptree": {
+            "sources": ["src/wildboar/tree/_cptree.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.embed._feature": {

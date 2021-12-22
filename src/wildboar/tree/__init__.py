@@ -15,6 +15,7 @@
 #
 # Authors: Isak Samsten
 
+from ._ptree import ProximityTreeClassifier
 from ._tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
@@ -37,4 +38,5 @@ __all__ = [
     "IntervalTreeClassifier",
     "IntervalTreeRegressor",
     "PivotTreeClassifier",
+    "ProximityTreeClassifier",
 ]
