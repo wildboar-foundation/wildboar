@@ -1,0 +1,141 @@
+:py:mod:`wildboar.tree.base`
+============================
+
+.. py:module:: wildboar.tree.base
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.tree.base.BaseTree
+   wildboar.tree.base.TreeClassifierMixin
+   wildboar.tree.base.TreeRegressorMixin
+
+
+
+
+.. py:class:: BaseTree(*, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
+
+   Bases: :py:obj:`sklearn.base.BaseEstimator`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   .. py:method:: apply(self, x, check_input=True)
+
+
+   .. py:method:: decision_path(self, x, check_input=True)
+
+
+
+.. py:class:: TreeClassifierMixin
+
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`
+
+   Mixin class for all classifiers in scikit-learn.
+
+   .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
+
+      Fit a shapelet tree regressor from the training set
+
+      :param x: The training time series.
+      :type x: array-like of shape (n_samples, n_timesteps)
+      :param y: The target values (class labels) as integers
+      :type y: array-like of shape (n_samples,) or (n_samples, n_classes)
+      :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
+                            nodes with net zero or negative weight are ignored while searching for a
+                            split in each node. Splits are also ignored if they would result in any
+                            single class carrying a negative weight in either child node.
+      :type sample_weight: array-like of shape (n_samples,)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
+      :type check_input: bool, optional
+
+      :returns: **self**
+      :rtype: object
+
+
+   .. py:method:: predict(self, x, check_input=True)
+
+      Predict the regression of the input samples x.
+
+      :param x: The input time series
+      :type x: array-like of shape (n_samples, n_timesteps)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
+      :type check_input: bool, optional
+
+      :returns: **y** -- The predicted classes.
+      :rtype: ndarray of shape (n_samples,)
+
+
+   .. py:method:: predict_proba(self, x, check_input=True)
+
+      Predict class probabilities of the input samples X.  The predicted
+      class probability is the fraction of samples of the same class
+      in a leaf.
+
+      :param x: The input time series
+      :type x: array-like of shape (n_samples, n_timesteps)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
+      :type check_input: bool, optional
+
+      :returns: **proba** -- The class probabilities of the input samples. The order of the classes
+                corresponds to that in the attribute `classes_`
+      :rtype: ndarray of shape (n_samples, n_classes)
+
+
+
+.. py:class:: TreeRegressorMixin
+
+   Bases: :py:obj:`sklearn.base.RegressorMixin`
+
+   Mixin class for all regression estimators in scikit-learn.
+
+   .. py:method:: fit(self, X, y, sample_weight=None, check_input=True)
+
+      Fit a shapelet tree regressor from the training set
+
+      :param X: The training time series.
+      :type X: array-like of shape (n_samples, n_timesteps)
+      :param y: Target values as floating point values
+      :type y: array-like of shape (n_samples,)
+      :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
+                            nodes with net zero or negative weight are ignored while searching for a
+                            split in each node. Splits are also ignored if they would result in any
+                            single class carrying a negative weight in either child node.
+      :type sample_weight: array-like of shape (n_samples,)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
+      :type check_input: bool, optional
+
+      :returns: **self**
+      :rtype: object
+
+
+   .. py:method:: predict(self, x, check_input=True)
+
+      Predict the regression of the input samples x.
+
+      :param x: The input time series
+      :type x: array-like of shape (n_samples, n_timesteps)
+      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
+                          know what you do.
+      :type check_input: bool, optional
+
+      :returns: **y** -- The predicted classes.
+      :rtype: ndarray of shape (n_samples,)
+
+
+

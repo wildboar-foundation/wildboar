@@ -1,7 +1,7 @@
-:py:mod:`wildboar.pattern`
-==========================
+:py:mod:`wildboar.annotate`
+===========================
 
-.. py:module:: wildboar.pattern
+.. py:module:: wildboar.annotate
 
 
 Package Contents
@@ -13,8 +13,8 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.pattern.motifs
-   wildboar.pattern.regimes
+   wildboar.annotate.motifs
+   wildboar.annotate.regimes
 
 
 

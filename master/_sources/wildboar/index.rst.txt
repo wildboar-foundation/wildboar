@@ -10,6 +10,7 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
+   annotate/index.rst
    datasets/index.rst
    distance/index.rst
    embed/index.rst
@@ -17,7 +18,6 @@ Subpackages
    explain/index.rst
    linear_model/index.rst
    model_selection/index.rst
-   pattern/index.rst
    tree/index.rst
    utils/index.rst
 

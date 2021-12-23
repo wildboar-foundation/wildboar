@@ -1,9 +1,9 @@
 :orphan:
 
-:py:mod:`wildboar.pattern._motifs`
-==================================
+:py:mod:`wildboar.annotate._motifs`
+===================================
 
-.. py:module:: wildboar.pattern._motifs
+.. py:module:: wildboar.annotate._motifs
 
 
 Module Contents
@@ -15,7 +15,7 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.pattern._motifs.motifs
+   wildboar.annotate._motifs.motifs
 
 
 

@@ -4,6 +4,15 @@
 .. py:module:: wildboar.tree
 
 
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
+
+
 Package Contents
 ----------------
 
@@ -17,6 +26,7 @@ Classes
    wildboar.tree.IntervalTreeClassifier
    wildboar.tree.IntervalTreeRegressor
    wildboar.tree.PivotTreeClassifier
+   wildboar.tree.ProximityTreeClassifier
    wildboar.tree.RocketTreeClassifier
    wildboar.tree.RocketTreeRegressor
    wildboar.tree.ShapeletTreeClassifier
@@ -378,7 +388,7 @@ Classes
 
 .. py:class:: IntervalTreeClassifier(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseIntervalTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -396,7 +406,7 @@ Classes
 
 .. py:class:: IntervalTreeRegressor(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseIntervalTree`
+   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
    Mixin class for all regression estimators in scikit-learn.
 
@@ -414,7 +424,7 @@ Classes
 
 .. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, force_dim=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BasePivotTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -430,9 +440,59 @@ Classes
    :type random_state: int or RandomState, optional
 
 
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics='auto', force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
+
+   A proximity tree defines a k-branching tree based on pivot-time series.
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_dataset
+   >>> from wildboar.tree import ProximityTreeClassifier
+   >>> x, y = load_dataset("GunPoint")
+   >>> f = ProximityTreeClassifier(n_pivot=10, criterion="gini")
+   >>> f.fit(x, y)
+
+   .. rubric:: References
+
+   Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O’Neill, Nayyar Zaidi,
+   Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
+       Proximity forest: an effective and scalable distance-based classifier for time
+       series. Data Mining and Knowledge Discovery
+
+   :param n_pivot: The number of pivots to sample at each node.
+   :type n_pivot: int, optional
+   :param criterion: The impurity criterion.
+
+                     - if gini, use the Gini-impurity.
+                     - if entropy, use the information gain impurity.
+   :type criterion: str, optional
+   :param pivot_sample: The pivot sampling method.
+
+                        - if "label", sample one pivot from each label
+   :type pivot_sample: str, optional
+   :param metric_sample: The metric sampling method.
+
+                         - if "uniform", sample metrics uniformly at random.
+   :type metric_sample: str, optional
+   :param max_depth: The maximum tree depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to consider a split.
+   :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf.
+   :type min_samples_leaf: int, optional
+   :param min_impurity_decrease: The minimum impurity decrease to build a sub-tree.
+   :type min_impurity_decrease: float, optional
+   :param class_weight: The class weights.
+   :type class_weight: array-like of shape (n_labels, ) or "balanced", optional
+   :param random_state: The pseudo random number generator.
+   :type random_state: int or RandomState, optional
+
+
 .. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseRocketTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -450,7 +510,7 @@ Classes
 
 .. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseRocketTree`
+   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
    Mixin class for all regression estimators in scikit-learn.
 
@@ -468,7 +528,7 @@ Classes
 
 .. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree classifier.
 
@@ -544,7 +604,7 @@ Classes
 
 .. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree regressor.
 

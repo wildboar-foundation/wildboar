@@ -1,9 +1,9 @@
 :orphan:
 
-:py:mod:`wildboar.pattern._segment`
-===================================
+:py:mod:`wildboar.annotate._segment`
+====================================
 
-.. py:module:: wildboar.pattern._segment
+.. py:module:: wildboar.annotate._segment
 
 
 Module Contents
@@ -15,7 +15,7 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.pattern._segment.regimes
+   wildboar.annotate._segment.regimes
 
 
 

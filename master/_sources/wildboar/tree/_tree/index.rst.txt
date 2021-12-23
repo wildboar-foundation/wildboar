@@ -14,18 +14,18 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.tree._tree.BaseFeatureTree
    wildboar.tree._tree.BaseIntervalTree
    wildboar.tree._tree.BasePivotTree
    wildboar.tree._tree.BaseRocketTree
    wildboar.tree._tree.BaseShapeletTree
-   wildboar.tree._tree.BaseTree
-   wildboar.tree._tree.ClassifierTreeMixin
    wildboar.tree._tree.ExtraShapeletTreeClassifier
    wildboar.tree._tree.ExtraShapeletTreeRegressor
+   wildboar.tree._tree.FeatureTreeClassifierMixin
+   wildboar.tree._tree.FeatureTreeRegressorMixin
    wildboar.tree._tree.IntervalTreeClassifier
    wildboar.tree._tree.IntervalTreeRegressor
    wildboar.tree._tree.PivotTreeClassifier
-   wildboar.tree._tree.RegressorTreeMixin
    wildboar.tree._tree.RocketTreeClassifier
    wildboar.tree._tree.RocketTreeRegressor
    wildboar.tree._tree.ShapeletTreeClassifier
@@ -53,9 +53,22 @@ Attributes
 
    
 
+.. py:class:: BaseFeatureTree(*, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
+
+   Bases: :py:obj:`wildboar.tree.base.BaseTree`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+
 .. py:class:: BaseIntervalTree(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
 
-   Bases: :py:obj:`BaseTree`
+   Bases: :py:obj:`BaseFeatureTree`
 
    Base class for all estimators in scikit-learn.
 
@@ -79,7 +92,7 @@ Attributes
 
 .. py:class:: BasePivotTree(n_pivot='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, metrics='all', force_dim=None, random_state=None)
 
-   Bases: :py:obj:`BaseTree`
+   Bases: :py:obj:`BaseFeatureTree`
 
    Base class for all estimators in scikit-learn.
 
@@ -103,7 +116,7 @@ Attributes
 
 .. py:class:: BaseRocketTree(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
 
-   Bases: :py:obj:`BaseTree`
+   Bases: :py:obj:`BaseFeatureTree`
 
    Base class for all estimators in scikit-learn.
 
@@ -127,7 +140,7 @@ Attributes
 
 .. py:class:: BaseShapeletTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
-   Bases: :py:obj:`BaseTree`
+   Bases: :py:obj:`BaseFeatureTree`
 
    Base class for all estimators in scikit-learn.
 
@@ -136,80 +149,6 @@ Attributes
    All estimators should specify all the parameters that can be set
    at the class level in their ``__init__`` as explicit keyword
    arguments (no ``*args`` or ``**kwargs``).
-
-
-.. py:class:: BaseTree(*, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
-
-   Bases: :py:obj:`sklearn.base.BaseEstimator`
-
-   Base class for all estimators in scikit-learn.
-
-   .. rubric:: Notes
-
-   All estimators should specify all the parameters that can be set
-   at the class level in their ``__init__`` as explicit keyword
-   arguments (no ``*args`` or ``**kwargs``).
-
-   .. py:method:: apply(self, x, check_input=True)
-
-
-   .. py:method:: decision_path(self, x, check_input=True)
-
-
-
-.. py:class:: ClassifierTreeMixin
-
-   .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
-
-      Fit a shapelet tree regressor from the training set
-
-      :param x: The training time series.
-      :type x: array-like of shape (n_samples, n_timesteps)
-      :param y: The target values (class labels) as integers
-      :type y: array-like of shape (n_samples,) or (n_samples, n_classes)
-      :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
-                            nodes with net zero or negative weight are ignored while searching for a
-                            split in each node. Splits are also ignored if they would result in any
-                            single class carrying a negative weight in either child node.
-      :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
-                          know what you do.
-      :type check_input: bool, optional
-
-      :returns: **self**
-      :rtype: object
-
-
-   .. py:method:: predict(self, x, check_input=True)
-
-      Predict the regression of the input samples x.
-
-      :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
-                          know what you do.
-      :type check_input: bool, optional
-
-      :returns: **y** -- The predicted classes.
-      :rtype: ndarray of shape (n_samples,)
-
-
-   .. py:method:: predict_proba(self, x, check_input=True)
-
-      Predict class probabilities of the input samples X.  The predicted
-      class probability is the fraction of samples of the same class
-      in a leaf.
-
-      :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
-                          know what you do.
-      :type check_input: bool, optional
-
-      :returns: **proba** -- The class probabilities of the input samples. The order of the classes
-                corresponds to that in the attribute `classes_`
-      :rtype: ndarray of shape (n_samples, n_classes)
-
 
 
 .. py:class:: ExtraShapeletTreeClassifier(*, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
@@ -563,9 +502,23 @@ Attributes
       :type: type random_state: int or RandomState
 
 
+.. py:class:: FeatureTreeClassifierMixin
+
+   Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`
+
+   Mixin class for all classifiers in scikit-learn.
+
+
+.. py:class:: FeatureTreeRegressorMixin
+
+   Bases: :py:obj:`wildboar.tree.base.TreeRegressorMixin`
+
+   Mixin class for all regression estimators in scikit-learn.
+
+
 .. py:class:: IntervalTreeClassifier(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseIntervalTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -583,7 +536,7 @@ Attributes
 
 .. py:class:: IntervalTreeRegressor(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseIntervalTree`
+   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
    Mixin class for all regression estimators in scikit-learn.
 
@@ -601,7 +554,7 @@ Attributes
 
 .. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, force_dim=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BasePivotTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -617,47 +570,9 @@ Attributes
    :type random_state: int or RandomState, optional
 
 
-.. py:class:: RegressorTreeMixin
-
-   .. py:method:: fit(self, X, y, sample_weight=None, check_input=True)
-
-      Fit a shapelet tree regressor from the training set
-
-      :param X: The training time series.
-      :type X: array-like of shape (n_samples, n_timesteps)
-      :param y: Target values as floating point values
-      :type y: array-like of shape (n_samples,)
-      :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
-                            nodes with net zero or negative weight are ignored while searching for a
-                            split in each node. Splits are also ignored if they would result in any
-                            single class carrying a negative weight in either child node.
-      :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
-                          know what you do.
-      :type check_input: bool, optional
-
-      :returns: **self**
-      :rtype: object
-
-
-   .. py:method:: predict(self, x, check_input=True)
-
-      Predict the regression of the input samples x.
-
-      :param x: The input time series
-      :type x: array-like of shape (n_samples, n_timesteps)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
-                          know what you do.
-      :type check_input: bool, optional
-
-      :returns: **y** -- The predicted classes.
-      :rtype: ndarray of shape (n_samples,)
-
-
-
 .. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseRocketTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
    Mixin class for all classifiers in scikit-learn.
 
@@ -675,7 +590,7 @@ Attributes
 
 .. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseRocketTree`
+   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
    Mixin class for all regression estimators in scikit-learn.
 
@@ -693,7 +608,7 @@ Attributes
 
 .. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`ClassifierTreeMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree classifier.
 
@@ -769,7 +684,7 @@ Attributes
 
 .. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`RegressorTreeMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree regressor.
 
