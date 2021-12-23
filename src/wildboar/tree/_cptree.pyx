@@ -33,7 +33,15 @@ from wildboar.utils import check_dataset
 
 from wildboar.utils.data cimport Dataset
 from wildboar.utils.misc cimport CList, argsort, safe_realloc
-from wildboar.utils.rand cimport RAND_R_MAX, rand_int
+from wildboar.utils.rand cimport (
+    RAND_R_MAX,
+    VoseRand,
+    rand_int,
+    vose_rand_free,
+    vose_rand_init,
+    vose_rand_int,
+    vose_rand_precompute,
+)
 
 
 cdef struct Pivot:
@@ -419,14 +427,29 @@ cdef class EntropyCriterion(Criterion):
                     branches[branch] -= v * log2(v)
 
 
-
 cdef class DistanceMeasureSampler:
+    cdef VoseRand vr
+    cdef Py_ssize_t n_measures
+
+    def __cinit__(self, Py_ssize_t n_measures, np.ndarray weights=None):
+        self.n_measures = n_measures
+        if weights is not None:
+            if weights.dtype != np.double:
+                raise ValueError("unexpected dtype (%r != np.double)" % weights.dtype)
+            if weights.ndim != 1:
+                raise ValueError("unexpected dim (%r != 1)" % weights.ndim)
+            if weights.strides[0] // weights.itemsize != 1:
+                raise ValueError("unexpected stride")
+            vose_rand_init(&self.vr, weights.size)
+            vose_rand_precompute(&self.vr, <double*> weights.data)
+
+    def __dealloc__(self):
+        vose_rand_free(&self.vr)
 
     cdef Py_ssize_t sample(
         self, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples, 
-        Py_ssize_t n_measures,
         size_t *seed
     ) nogil:
         pass
@@ -437,10 +460,20 @@ cdef class UniformDistanceMeasureSampler(DistanceMeasureSampler):
         self, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples, 
-        Py_ssize_t n_measures,
         size_t *seed
     ) nogil:
-        return rand_int(0, n_measures, seed)
+        return rand_int(0, self.n_measures, seed)
+
+
+cdef class WeightedDistanceMeasureSampler(DistanceMeasureSampler):
+
+    cdef Py_ssize_t sample(
+        self, 
+        Py_ssize_t *samples, 
+        Py_ssize_t n_samples, 
+        size_t *seed
+    ) nogil:
+        return vose_rand_int(&self.vr, seed)
 
 
 cdef class PivotSampler:
@@ -519,7 +552,7 @@ cdef class TreeBuilder:
 
     cdef Dataset dataset
     cdef CList distance_measures
-    cdef Tree tree
+    cdef readonly Tree tree
     cdef Criterion criterion
     cdef DistanceMeasureSampler distance_measure_sampler
     cdef PivotSampler pivot_sampler 
@@ -605,10 +638,6 @@ cdef class TreeBuilder:
         free(self.pivot_buffer)
         free(self.samples_branch)
         free(self.branch_count)
-
-    @property
-    def tree_(self):
-        return self.tree
 
     def build_tree(self):
         cdef Py_ssize_t max_depth = 0
@@ -763,10 +792,7 @@ cdef class TreeBuilder:
                         pivot_index += 1
                 
                 split.distance_measure = self.distance_measure_sampler.sample(
-                    self.samples + start, 
-                    n_samples, 
-                    self.distance_measures.size, 
-                    &self.seed,
+                    self.samples + start, n_samples, &self.seed,
                 )
                 self._partition_pivots(
                     start, end, split.pivot, split.distance_measure, n_branches

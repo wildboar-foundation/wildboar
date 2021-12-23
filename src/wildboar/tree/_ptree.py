@@ -17,6 +17,8 @@
 import sys
 import warnings
 
+import numpy as np
+
 from wildboar.distance import _DISTANCE_MEASURE
 from wildboar.tree._cptree import (
     EntropyCriterion,
@@ -25,6 +27,7 @@ from wildboar.tree._cptree import (
     Tree,
     TreeBuilder,
     UniformDistanceMeasureSampler,
+    WeightedDistanceMeasureSampler,
 )
 from wildboar.tree.base import BaseTree, TreeClassifierMixin
 from wildboar.utils.data import check_dataset
@@ -34,17 +37,51 @@ _CLF_CRITERION = {
     "entropy": EntropyCriterion,
 }
 _PIVOT_SAMPLER = {"label": LabelPivotSampler}
-_DISTANCE_MEASURE_SAMPLER = {"uniform": UniformDistanceMeasureSampler}
+_DISTANCE_MEASURE_SAMPLER = {
+    "uniform": UniformDistanceMeasureSampler,
+    "weighted": WeightedDistanceMeasureSampler,
+}
+
+
+def default_distance_measures():
+    metrics = [_DISTANCE_MEASURE["euclidean"]()]
+    dtw = [_DISTANCE_MEASURE["dtw"](r=r) for r in np.linspace(0, 0.25, 10)]
+    metrics.extend(dtw)
+    weights = np.zeros(len(metrics))
+    weights[0] = 0.5
+    for i in range(len(dtw)):
+        weights[i + 1] = 0.5 / 10
+
+    return metrics, weights
 
 
 class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
+    """A proximity tree defines a k-branching tree based on pivot-time series.
+
+    Examples
+    --------
+    >>> from wildboar.datasets import load_dataset
+    >>> from wildboar.tree import ProximityTreeClassifier
+    >>> x, y = load_dataset("GunPoint")
+    >>> f = ProximityTreeClassifier(n_pivot=10, criterion="gini")
+    >>> f.fit(x, y)
+
+    References
+    ----------
+    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O’Neill, Nayyar Zaidi,
+    Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
+        Proximity forest: an effective and scalable distance-based classifier for time
+        series. Data Mining and Knowledge Discovery
+    """
+
     def __init__(
         self,
         n_pivot=1,
         *,
         criterion="entropy",
         pivot_sample="label",
-        metric_sample="uniform",
+        metric_sample="weighted",
+        metrics="auto",
         force_dim=None,
         max_depth=None,
         min_samples_split=2,
@@ -53,6 +90,37 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         class_weight=None,
         random_state=None,
     ):
+        """
+        Parameters
+        ----------
+        n_pivot : int, optional
+            The number of pivots to sample at each node.
+        criterion : str, optional
+            The impurity criterion.
+
+            - if gini, use the Gini-impurity.
+            - if entropy, use the information gain impurity.
+        pivot_sample : str, optional
+            The pivot sampling method.
+
+            - if "label", sample one pivot from each label
+        metric_sample : str, optional
+            The metric sampling method.
+
+            - if "uniform", sample metrics uniformly at random.
+        max_depth : int, optional
+            The maximum tree depth.
+        min_samples_split : int, optional
+            The minimum number of samples to consider a split.
+        min_samples_leaf : int, optional
+            The minimum number of samples in a leaf.
+        min_impurity_decrease : float, optional
+            The minimum impurity decrease to build a sub-tree.
+        class_weight : array-like of shape (n_labels, ) or "balanced", optional
+            The class weights.
+        random_state : int or RandomState, optional
+            The pseudo random number generator.
+        """
         super().__init__(
             force_dim=force_dim,
             max_depth=max_depth,
@@ -64,6 +132,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         self.criterion = criterion
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
+        self.metrics = metrics
         self.class_weight = class_weight
         self.random_state = random_state
 
@@ -90,16 +159,22 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         if self.metric_sample not in _DISTANCE_MEASURE_SAMPLER:
             raise ValueError()
 
+        distance_measures = default_distance_measures()
+        if isinstance(distance_measures, tuple) and len(distance_measures) == 2:
+            distance_measures, weights = distance_measures
+            if len(distance_measures) != len(weights):
+                raise ValueError()
+            if not np.allclose(np.sum(weights), 1.0):
+                raise ValueError()
+        else:
+            weights = None
+
         criterion = _CLF_CRITERION[self.criterion](y, self.n_classes_)
         pivot_sampler = _PIVOT_SAMPLER[self.pivot_sample]()
-        distance_measure_sampler = _DISTANCE_MEASURE_SAMPLER[self.metric_sample]()
-        tree = Tree(
-            [
-                _DISTANCE_MEASURE["dtw"](r=0.2),
-                _DISTANCE_MEASURE["euclidean"](),
-            ],
-            self.n_classes_,
+        distance_measure_sampler = _DISTANCE_MEASURE_SAMPLER[self.metric_sample](
+            len(distance_measures), weights=weights
         )
+        tree = Tree(distance_measures, self.n_classes_)
         n_features = self.n_pivot
 
         x = check_dataset(x)
@@ -115,4 +190,4 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
             n_features=n_features,
         )
         tree_builder.build_tree()
-        self.tree_ = tree_builder.tree_
+        self.tree_ = tree_builder.tree
