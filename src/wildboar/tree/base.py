@@ -178,7 +178,7 @@ class TreeClassifierMixin(ClassifierMixin):
         """
         if check_input:
             x = check_array(x, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False, dtype=np.intc)
+            y = check_array(y, ensure_2d=False)
 
         n_samples = x.shape[0]
         if isinstance(self.force_dim, int):
@@ -191,7 +191,7 @@ class TreeClassifierMixin(ClassifierMixin):
         else:
             n_dims = 1
 
-        if self.class_weight is not None:
+        if hasattr(self, "class_weight") and self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
         else:
             class_weight = None
@@ -213,7 +213,9 @@ class TreeClassifierMixin(ClassifierMixin):
         self.n_classes_ = len(self.classes_)
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
-        random_state = check_random_state(self.random_state)
+        random_state = check_random_state(
+            self.random_state if hasattr(self, "random_state") else None
+        )
 
         if sample_weight is not None:
             sample_weight = _check_sample_weight(sample_weight, x, dtype=float)

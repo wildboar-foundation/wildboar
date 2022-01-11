@@ -27,6 +27,7 @@ from wildboar.tree._cptree import (
     Tree,
     TreeBuilder,
     UniformDistanceMeasureSampler,
+    UniformPivotSampler,
     WeightedDistanceMeasureSampler,
 )
 from wildboar.tree.base import BaseTree, TreeClassifierMixin
@@ -36,23 +37,48 @@ _CLF_CRITERION = {
     "gini": GiniCriterion,
     "entropy": EntropyCriterion,
 }
-_PIVOT_SAMPLER = {"label": LabelPivotSampler}
+_PIVOT_SAMPLER = {
+    "label": LabelPivotSampler,
+    "uniform": UniformPivotSampler,
+}
 _DISTANCE_MEASURE_SAMPLER = {
     "uniform": UniformDistanceMeasureSampler,
     "weighted": WeightedDistanceMeasureSampler,
 }
 
 
-def default_distance_measures():
-    metrics = [_DISTANCE_MEASURE["euclidean"]()]
-    dtw = [_DISTANCE_MEASURE["dtw"](r=r) for r in np.linspace(0, 0.25, 10)]
-    metrics.extend(dtw)
-    weights = np.zeros(len(metrics))
-    weights[0] = 0.5
-    for i in range(len(dtw)):
-        weights[i + 1] = 0.5 / 10
+def make_euclidean():
+    return [_DISTANCE_MEASURE["euclidean"]()]
 
-    return metrics, weights
+
+def make_dtw(min_r=0, max_r=0.25, n=10):
+    return [_DISTANCE_MEASURE["dtw"](r=r) for r in np.linspace(min_r, max_r, n)]
+
+
+_METRICS = {"euclidean": make_euclidean, "dtw": make_dtw}
+
+
+def make_metrics(metrics=None, metrics_params=None):
+    if metrics is None:
+        metrics = ["euclidean", "dtw"]
+    if metrics_params is None:
+        metrics_params = [None, {"min_r": 0, "max_r": 0.25, "n": 20}]
+
+    distance_measures = []
+    weights = []
+    weight = 1.0 / len(metrics)
+    for metric, metric_params in zip(metrics, metrics_params):
+        if callable(metric):
+            _metrics = metric(**(metric_params) or {})
+        elif metric not in _METRICS:
+            raise ValueError("metric (%r) is not supported" % metric)
+
+        _metrics = _METRICS[metric](**(metric_params or {}))
+        for distance_measure in _metrics:
+            distance_measures.append(distance_measure)
+            weights.append(weight / len(_metrics))
+
+    return distance_measures, np.array(weights, dtype=np.double)
 
 
 class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
@@ -81,7 +107,8 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         criterion="entropy",
         pivot_sample="label",
         metric_sample="weighted",
-        metrics="auto",
+        metrics=None,
+        metrics_params=None,
         force_dim=None,
         max_depth=None,
         min_samples_split=2,
@@ -95,19 +122,16 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         ----------
         n_pivot : int, optional
             The number of pivots to sample at each node.
-        criterion : str, optional
+        criterion : {"entropy", "gini"}, optional
             The impurity criterion.
-
-            - if gini, use the Gini-impurity.
-            - if entropy, use the information gain impurity.
-        pivot_sample : str, optional
+        pivot_sample : {"label", "uniform"}, optional
             The pivot sampling method.
-
-            - if "label", sample one pivot from each label
-        metric_sample : str, optional
+        metric_sample : {"uniform", "weighted"}, optional
             The metric sampling method.
-
-            - if "uniform", sample metrics uniformly at random.
+        metrics : str or list, optional
+            The distance metrics
+        metrics_params : list, optional
+            The params to the metrics
         max_depth : int, optional
             The maximum tree depth.
         min_samples_split : int, optional
@@ -133,6 +157,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
         self.metrics = metrics
+        self.metrics_params = metrics_params
         self.class_weight = class_weight
         self.random_state = random_state
 
@@ -159,16 +184,9 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         if self.metric_sample not in _DISTANCE_MEASURE_SAMPLER:
             raise ValueError()
 
-        distance_measures = default_distance_measures()
-        if isinstance(distance_measures, tuple) and len(distance_measures) == 2:
-            distance_measures, weights = distance_measures
-            if len(distance_measures) != len(weights):
-                raise ValueError()
-            if not np.allclose(np.sum(weights), 1.0):
-                raise ValueError()
-        else:
-            weights = None
-
+        distance_measures, weights = make_metrics(
+            metrics=self.metrics, metrics_params=self.metrics_params
+        )
         criterion = _CLF_CRITERION[self.criterion](y, self.n_classes_)
         pivot_sampler = _PIVOT_SAMPLER[self.pivot_sample]()
         distance_measure_sampler = _DISTANCE_MEASURE_SAMPLER[self.metric_sample](

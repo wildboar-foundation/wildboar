@@ -35,6 +35,7 @@ from wildboar.tree import (
     IntervalTreeClassifier,
     IntervalTreeRegressor,
     PivotTreeClassifier,
+    ProximityTreeClassifier,
     ShapeletTreeClassifier,
     ShapeletTreeRegressor,
 )
@@ -141,7 +142,7 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier):
     def fit(self, x, y, sample_weight=None, check_input=True):
         if check_input:
             x = check_array(x, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False, dtype=int)
+            y = check_array(y, ensure_2d=False)
 
         n_samples = x.shape[0]
         self.n_timestep_ = x.shape[-1]
@@ -1588,6 +1589,65 @@ class PivotForestClassifier(BaseForestClassifier):
         )
         self.n_pivot = n_pivot
         self.metrics = metrics
+
+    def _parallel_args(self):
+        return _joblib_parallel_args(prefer="threads")
+
+
+class ProximityForestClassifier(BaseForestClassifier):
+    def __init__(
+        self,
+        n_estimators=100,
+        *,
+        n_pivot=1,
+        pivot_sample="label",
+        metric_sample="weighted",
+        metrics=None,
+        metrics_params=None,
+        oob_score=False,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0,
+        criterion="entropy",
+        bootstrap=True,
+        warm_start=False,
+        n_jobs=None,
+        class_weight=None,
+        random_state=None,
+    ):
+        super().__init__(
+            base_estimator=ProximityTreeClassifier(),
+            estimator_params=(
+                "n_pivot",
+                "metrics",
+                "metrics_params",
+                "pivot_sample",
+                "metric_sample",
+                "max_depth",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "criterion",
+            ),
+            oob_score=oob_score,
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+            criterion=criterion,
+            bootstrap=bootstrap,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            class_weight=class_weight,
+            random_state=random_state,
+        )
+        self.n_pivot = n_pivot
+        self.metrics = metrics
+        self.metrics_params = metrics_params
+        self.pivot_sample = pivot_sample
+        self.metric_sample = metric_sample
 
     def _parallel_args(self):
         return _joblib_parallel_args(prefer="threads")

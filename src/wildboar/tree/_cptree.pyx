@@ -394,7 +394,7 @@ cdef class GiniCriterion(Criterion):
             for label in range(self.n_labels):
                 v = self.weighted_label_branch_count[label + branch * self.n_labels]
                 branches[branch] += v * v
-
+        
         for branch in range(n_branches):
             if self.weighted_n_branch[branch] > 0:
                 branches[branch] = 1 - branches[branch] / (
@@ -406,7 +406,7 @@ cdef class EntropyCriterion(Criterion):
 
     cdef double impurity(self) nogil:
         cdef double c
-        cdef double entropy
+        cdef double entropy = 0
         cdef Py_ssize_t i
         for i in range(self.n_labels):
             c = self.weighted_label_count[i]
@@ -674,6 +674,7 @@ cdef class TreeBuilder:
             or n_node_samples < 2 * self.min_sample_leaf
         )
 
+        cdef Py_ssize_t i
         if is_leaf:
             self._new_leaf_node(parent, branch)
             return
@@ -681,7 +682,6 @@ cdef class TreeBuilder:
         if parent < 0:
             impurity = self.criterion.impurity()
 
-        cdef Py_ssize_t i
         cdef Py_ssize_t j
         cdef Py_ssize_t node_id
         cdef Py_ssize_t current_split
@@ -723,7 +723,7 @@ cdef class TreeBuilder:
                 depth + 1, 
                 node_id, 
                 split.n_split,
-                split.child_impurity[split.n_split - 1],
+                split.child_impurity[split.n_split],
                 max_depth,
             )
         else:
@@ -749,7 +749,7 @@ cdef class TreeBuilder:
     ) nogil:
         cdef Py_ssize_t n_samples = end - start
         cdef Py_ssize_t n_branches = 0
-        cdef Py_ssize_t i
+        cdef Py_ssize_t i, j
         for i in range(self.criterion.n_labels):
             if self.criterion.label_count[i] > 0:
                 n_branches += 1
@@ -763,7 +763,7 @@ cdef class TreeBuilder:
         cdef Split split
 
         # Abort early if the samples of this branch has a single label
-        if n_branches < 1:
+        if n_branches <= 1:
             split.n_split = 0
             split.impurity_improvement = INFINITY
             split.split_point = NULL
@@ -823,16 +823,37 @@ cdef class TreeBuilder:
             argsort(self.samples_branch + start, self.samples + start, n_samples)
             self.criterion.reset(self.samples_branch)
             self.criterion.child_impurity(split.child_impurity, n_branches)
-            split.impurity_improvement = self.criterion.impurity_improvement(
-                impurity_parent,
-                split.child_impurity,
-                n_branches,
-                self.n_weighted_samples,
-            )
+
             # Restore the pivots with the lowest impurity score
             memcpy(split.pivot, self.pivot_buffer, sizeof(Py_ssize_t) * self.criterion.n_labels)
             split.distance_measure = best_distance_measure
+
+            # Shift unused pivots to the end. The number of used pivots might be lower
+            # than the number of possible branches. We compute the number of splits
+            # in the _find_split_points-method. The number of branches is the number
+            # of splits + 1.
+            memset(self.branch_count, 0, sizeof(Py_ssize_t) * self.criterion.n_labels)
+            for i in range(start, end):
+                self.branch_count[<Py_ssize_t> self.samples_branch[i]] += 1
+
+            j = 0
+            for i in range(n_branches):
+                if self.branch_count[i] > 0:
+                    split.pivot[j] = split.pivot[i]
+                    split.child_impurity[j] = split.child_impurity[i]
+                    j += 1
+                else:
+                    split.pivot[i] = -1
+                    split.child_impurity[i] = -1
+
             self._find_split_points(start, end, &split)
+            split.impurity_improvement = self.criterion.impurity_improvement(
+                impurity_parent,
+                split.child_impurity,
+                split.n_split + 1,
+                self.n_weighted_samples,
+            )
+
             return split
 
     # Identify the indices where the values of the samples_branch array changes.
@@ -866,7 +887,6 @@ cdef class TreeBuilder:
         cdef Py_ssize_t min_pivot
         cdef double min_dist = INFINITY
         cdef double dist
-        memset(self.branch_count, 0, sizeof(Py_ssize_t) * self.criterion.n_labels)
         for i in range(start, end):
             j = self.samples[i]
             min_dist = INFINITY
@@ -878,17 +898,5 @@ cdef class TreeBuilder:
                     min_dist = dist
                     min_pivot = pivot
             self.samples_branch[i] = min_pivot
-            self.branch_count[min_pivot] += 1
 
-        # Shift unused pivots to the end. The number of used pivots might be lower
-        # than the number of possible branches. We compute the number of splits
-        # in the _find_split_points-method. The number of branches is the number
-        # of splits + 1.
-        j = 0
-        for i in range(n_branches):
-            if self.branch_count[i] > 0:
-                pivots[j] = pivots[i]
-                self.branch_count[j] = self.branch_count[i]
-                j += 1
-            else:
-                pivots[i] = -1
+from libc.stdio cimport printf

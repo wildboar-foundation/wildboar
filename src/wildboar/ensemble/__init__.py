@@ -22,6 +22,7 @@ from ._ensemble import (
     IntervalForestRegressor,
     IsolationShapeletForest,
     PivotForestClassifier,
+    ProximityForestClassifier,
     RockestClassifier,
     RockestRegressor,
     ShapeletForestClassifier,
@@ -41,4 +42,5 @@ __all__ = [
     "IntervalForestClassifier",
     "IntervalForestRegressor",
     "PivotForestClassifier",
+    "ProximityForestClassifier",
 ]
