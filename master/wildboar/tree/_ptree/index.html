@@ -5,15 +5,15 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2021.11.23"/>
-        <title>wildboar.tree._ptree - Wildboar 1.1.0rc4.dev64+gb3a74f66 documentation</title>
+    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
+        <title>wildboar.tree._ptree - Wildboar 1.1.0rc4.dev65+g329c7c89 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=7f0192ddeb2adecfbaa87ffbcf67d16358b30bc1" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=0af69da206d614734f649b27d4cdc2dd6c31f41d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
     
 
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc4.dev64+gb3a74f66 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc4.dev65+g329c7c89 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -299,14 +299,20 @@
 <col style="width: 90%"/>
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._ptree.default_distance_measures" title="wildboar.tree._ptree.default_distance_measures"><code class="xref py py-obj docutils literal notranslate"><span class="pre">default_distance_measures</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._ptree.make_dtw" title="wildboar.tree._ptree.make_dtw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_dtw</span></code></a>(min_r=0, max_r=0.25, n=10)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree._ptree.make_euclidean" title="wildboar.tree._ptree.make_euclidean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_euclidean</span></code></a>()</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._ptree.make_metrics" title="wildboar.tree._ptree.make_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_metrics</span></code></a>(metrics=None, metrics_params=None)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
 </table></div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.tree._ptree.ProximityTreeClassifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">ProximityTreeClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'entropy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L58-L193"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.ProximityTreeClassifier" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">ProximityTreeClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criterion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'entropy'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pivot_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L84-L211"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.ProximityTreeClassifier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../base/index.html#wildboar.tree.base.TreeClassifierMixin" title="wildboar.tree.base.TreeClassifierMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.tree.base.TreeClassifierMixin</span></code></a>, <a class="reference internal" href="../base/index.html#wildboar.tree.base.BaseTree" title="wildboar.tree.base.BaseTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.tree.base.BaseTree</span></code></a></p>
 <p>A proximity tree defines a k-branching tree based on pivot-time series.</p>
 <p class="rubric">Examples</p>
@@ -328,22 +334,11 @@ series. Data Mining and Knowledge Discovery</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_pivot</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of pivots to sample at each node.</p></li>
-<li><p><strong>criterion</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The impurity criterion.</p>
-<ul>
-<li><p>if gini, use the Gini-impurity.</p></li>
-<li><p>if entropy, use the information gain impurity.</p></li>
-</ul>
-</p></li>
-<li><p><strong>pivot_sample</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The pivot sampling method.</p>
-<ul>
-<li><p>if “label”, sample one pivot from each label</p></li>
-</ul>
-</p></li>
-<li><p><strong>metric_sample</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The metric sampling method.</p>
-<ul>
-<li><p>if “uniform”, sample metrics uniformly at random.</p></li>
-</ul>
-</p></li>
+<li><p><strong>criterion</strong> (<em>{"entropy"</em><em>, </em><em>"gini"}</em><em>, </em><em>optional</em>) – The impurity criterion.</p></li>
+<li><p><strong>pivot_sample</strong> (<em>{"label"</em><em>, </em><em>"uniform"}</em><em>, </em><em>optional</em>) – The pivot sampling method.</p></li>
+<li><p><strong>metric_sample</strong> (<em>{"uniform"</em><em>, </em><em>"weighted"}</em><em>, </em><em>optional</em>) – The metric sampling method.</p></li>
+<li><p><strong>metrics</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – The distance metrics</p></li>
+<li><p><strong>metrics_params</strong> (<em>list</em><em>, </em><em>optional</em>) – The params to the metrics</p></li>
 <li><p><strong>max_depth</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum tree depth.</p></li>
 <li><p><strong>min_samples_split</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of samples to consider a split.</p></li>
 <li><p><strong>min_samples_leaf</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of samples in a leaf.</p></li>
@@ -355,8 +350,16 @@ series. Data Mining and Knowledge Discovery</p>
 </dl>
 </dd></dl>
 <dl class="py function">
-<dt class="sig sig-object py" id="wildboar.tree._ptree.default_distance_measures">
-<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">default_distance_measures</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L46-L55"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.default_distance_measures" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="wildboar.tree._ptree.make_dtw">
+<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">make_dtw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L54-L55"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.make_dtw" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.tree._ptree.make_euclidean">
+<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">make_euclidean</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L50-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.make_euclidean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.tree._ptree.make_metrics">
+<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">make_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L61-L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.make_metrics" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 </section>
 </section>
@@ -400,7 +403,9 @@ series. Data Mining and Knowledge Discovery</p>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.tree._ptree.ProximityTreeClassifier">ProximityTreeClassifier</a></li>
-<li><a class="reference internal" href="#wildboar.tree._ptree.default_distance_measures">default_distance_measures</a></li>
+<li><a class="reference internal" href="#wildboar.tree._ptree.make_dtw">make_dtw</a></li>
+<li><a class="reference internal" href="#wildboar.tree._ptree.make_euclidean">make_euclidean</a></li>
+<li><a class="reference internal" href="#wildboar.tree._ptree.make_metrics">make_metrics</a></li>
 </ul>
 </li>
 </ul>

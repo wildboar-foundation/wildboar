@@ -46,13 +46,13 @@ Classes
       The confidence score for a sample is proportional to the signed
       distance of that sample to the hyperplane.
 
-      :param X: Samples.
-      :type X: array-like or sparse matrix, shape (n_samples, n_features)
+      :param X: The data matrix for which we want to get the confidence scores.
+      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
 
-      :returns: Confidence scores per (sample, class) combination. In the binary
-                case, confidence score for self.classes_[1] where >0 means this
-                class would be predicted.
-      :rtype: array, shape=(n_samples,) if n_classes == 2 else (n_samples, n_classes)
+      :returns: **scores** -- Confidence scores per `(n_samples, n_classes)` combination. In the
+                binary case, confidence score for `self.classes_[1]` where >0 means
+                this class would be predicted.
+      :rtype: ndarray of shape (n_samples,) or (n_samples, n_classes)
 
 
    .. py:method:: fit(self, x, y, sample_weight=None)

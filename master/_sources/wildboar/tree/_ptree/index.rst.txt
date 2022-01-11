@@ -23,11 +23,13 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.tree._ptree.default_distance_measures
+   wildboar.tree._ptree.make_dtw
+   wildboar.tree._ptree.make_euclidean
+   wildboar.tree._ptree.make_metrics
 
 
 
-.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics='auto', force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics=None, metrics_params=None, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
 
@@ -51,18 +53,15 @@ Functions
    :param n_pivot: The number of pivots to sample at each node.
    :type n_pivot: int, optional
    :param criterion: The impurity criterion.
-
-                     - if gini, use the Gini-impurity.
-                     - if entropy, use the information gain impurity.
-   :type criterion: str, optional
+   :type criterion: {"entropy", "gini"}, optional
    :param pivot_sample: The pivot sampling method.
-
-                        - if "label", sample one pivot from each label
-   :type pivot_sample: str, optional
+   :type pivot_sample: {"label", "uniform"}, optional
    :param metric_sample: The metric sampling method.
-
-                         - if "uniform", sample metrics uniformly at random.
-   :type metric_sample: str, optional
+   :type metric_sample: {"uniform", "weighted"}, optional
+   :param metrics: The distance metrics
+   :type metrics: str or list, optional
+   :param metrics_params: The params to the metrics
+   :type metrics_params: list, optional
    :param max_depth: The maximum tree depth.
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to consider a split.
@@ -77,6 +76,12 @@ Functions
    :type random_state: int or RandomState, optional
 
 
-.. py:function:: default_distance_measures()
+.. py:function:: make_dtw(min_r=0, max_r=0.25, n=10)
+
+
+.. py:function:: make_euclidean()
+
+
+.. py:function:: make_metrics(metrics=None, metrics_params=None)
 
 
