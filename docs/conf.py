@@ -66,7 +66,10 @@ autoapi_options = [
 # a list of builtin themes.
 #
 html_theme = "furo"
-html_theme_options = {}
+html_theme_options = {
+    "light_logo": "logo.png",
+    "dark_logo": "logo.png",
+}
 html_sidebars = {
     "**": [
         "sidebar/scroll-start.html",
