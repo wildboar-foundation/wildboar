@@ -1,9 +1,9 @@
 </p>
 <p align="center">
-<img src="https://github.com/isaksamsten/wildboar/blob/master/.github/github-logo.png?raw=true" alt="Wildboar logo" width="200px">
+<img src="https://github.com/isaksamsten/wildboar/blob/master/.github/github-logo.png?raw=true" alt="Wildboar logo" width="100px">
 </p>
 
-# wildboar
+<h1 align="center">wildboar</h1>
 
 ![Python version](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9-blue)
 ![Build, test and upload to PyPI](https://github.com/isaksamsten/wildboar/workflows/Build,%20test%20and%20upload%20to%20PyPI/badge.svg)
