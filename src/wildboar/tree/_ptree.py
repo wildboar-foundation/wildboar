@@ -32,6 +32,7 @@ from wildboar.tree._cptree import (
 )
 from wildboar.tree.base import BaseTree, TreeClassifierMixin
 from wildboar.utils.data import check_dataset
+from wildboar.utils.decorators import unstable
 
 _CLF_CRITERION = {
     "gini": GiniCriterion,
@@ -81,6 +82,7 @@ def make_metrics(metrics=None, metrics_params=None):
     return distance_measures, np.array(weights, dtype=np.double)
 
 
+@unstable
 class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
     """A proximity tree defines a k-branching tree based on pivot-time series.
 

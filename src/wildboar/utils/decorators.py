@@ -34,12 +34,15 @@ def _array_or_scalar(x, squeeze=True):
         return np.squeeze(x) if squeeze else x
 
 
-def array_or_scalar(squeeze=True):
+def array_or_scalar(optional_f=None, squeeze=True):
     """Decorate a function returning an ndarray to return a single scalar if the array
     has a single item.
 
     Parameters
     ----------
+    optional_f : callable, optional
+        Used if the decorator is used without arguments
+
     squeeze : bool, optional
         Remove axis of length one from the returned arrays
     """
@@ -57,7 +60,7 @@ def array_or_scalar(squeeze=True):
 
         return wrap
 
-    return decorator
+    return decorator(optional_f) if callable(optional_f) else decorator
 
 
 def _singleton(x):
@@ -81,3 +84,35 @@ def singleton(f):
             return _singleton(ret_vals)
 
     return wrap
+
+
+def unstable(optional_f=None, stability="beta", description=None):
+    """Decorate a function or class as unsable
+
+    Parameters
+    ----------
+
+    optional_f : callable, optional
+        The decorated function
+
+    stability : str, optional
+        The stability of the feature
+
+    description : str, optional
+        The description of the feature
+
+    """
+    import warnings
+
+    def decorator(f):
+        @wraps(f)
+        def wrap(*args, **kwargs):
+            name = description or f.__qualname__
+            warnings.warn(
+                f"'{name}' is currently in '{stability}' and unstable.", FutureWarning
+            )
+            return f(*args, **kwargs)
+
+        return wrap
+
+    return decorator(optional_f) if callable(optional_f) else decorator

@@ -41,6 +41,7 @@ from wildboar.tree import (
 )
 from wildboar.tree._tree import RocketTreeClassifier, RocketTreeRegressor
 from wildboar.utils import check_array
+from wildboar.utils.decorators import unstable
 
 
 class ForestMixin:
@@ -1594,7 +1595,14 @@ class PivotForestClassifier(BaseForestClassifier):
         return _joblib_parallel_args(prefer="threads")
 
 
+@unstable
 class ProximityForestClassifier(BaseForestClassifier):
+    """A forest of proximity trees
+
+    References
+    ----------
+    """
+
     def __init__(
         self,
         n_estimators=100,

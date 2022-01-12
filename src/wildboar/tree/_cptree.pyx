@@ -776,7 +776,7 @@ cdef class TreeBuilder:
             split.split_point = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.criterion.n_labels)
             split.child_impurity = <double*> malloc(sizeof(double) * self.criterion.n_labels)
             best_impurity = -INFINITY
-            for feature_id in range(self.n_features):
+            for _ in range(self.n_features):
                 pivot_index = 0
                 for label in range(self.criterion.n_labels):
                     if self.criterion.label_count[label] > 0:
