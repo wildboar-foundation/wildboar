@@ -18,11 +18,13 @@ Functions
 
 
 
-.. py:function:: array_or_scalar(squeeze=True)
+.. py:function:: array_or_scalar(optional_f=None, squeeze=True)
 
    Decorate a function returning an ndarray to return a single scalar if the array
    has a single item.
 
+   :param optional_f: Used if the decorator is used without arguments
+   :type optional_f: callable, optional
    :param squeeze: Remove axis of length one from the returned arrays
    :type squeeze: bool, optional
 
