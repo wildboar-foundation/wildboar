@@ -107,10 +107,10 @@ def unstable(optional_f=None, stability="beta", description=None):
     def decorator(f):
         @wraps(f)
         def wrap(*args, **kwargs):
-            name = description or f.__qualname__
-            warnings.warn(
-                f"'{name}' is currently in '{stability}' and unstable.", FutureWarning
-            )
+            warning = f"'{f.__qualname__}' is currently in '{stability}'."
+            if description is not None:
+                warning += f" {description}."
+            warnings.warn(warning, FutureWarning)
             return f(*args, **kwargs)
 
         return wrap
