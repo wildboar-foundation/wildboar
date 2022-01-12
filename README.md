@@ -1,4 +1,9 @@
-# wildboar
+</p>
+<p align="center">
+<img src="https://github.com/isaksamsten/wildboar/blob/master/.github/github-logo.png?raw=true" alt="Wildboar logo" width="200px">
+</p>
+
+#wildboar
 ![Python version](https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9-blue)
 ![Build, test and upload to PyPI](https://github.com/isaksamsten/wildboar/workflows/Build,%20test%20and%20upload%20to%20PyPI/badge.svg)
 [![PyPI version](https://badge.fury.io/py/wildboar.svg)](https://badge.fury.io/py/wildboar)
