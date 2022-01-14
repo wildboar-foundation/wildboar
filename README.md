@@ -13,9 +13,6 @@
 	<a href="https://doi.org/10.5281/zenodo.4264063"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4264063.svg" /></a>
 </p>
 
-<hr />
-
-
 [wildboar](https://isaksamsten.github.io/wildboar/) is a Python module for temporal machine learning and fast
 distance computations built on top of
 [scikit-learn](https://scikit-learn.org) and [numpy](https://numpy.org)
