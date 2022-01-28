@@ -116,10 +116,11 @@ def regimes(
             regimes[i, j] = np.argmin(arc_curve)
             if arc_curve[regimes[i, j]] == 1.0:
                 warnings.warn(
-                    f"no more regimes for sample={i} (regime={j}) "
-                    "all remaining regimes are invalid and point to the first index.",
+                    f"no more regimes for sample={i} (regime={j}) all remaining"
+                    "regimes are invalid",
                     UserWarning,
                 )
+                break
             start = max(regimes[i, j] - boundry, 0)
             end = min(regimes[i, j] + boundry, arc_curve.shape[0])
             arc_curve[start:end] = 1.0
