@@ -755,7 +755,6 @@ cdef class TreeBuilder:
                 n_branches += 1
 
         cdef Py_ssize_t label
-        cdef Py_ssize_t feature_id
         cdef Py_ssize_t pivot_index
         cdef Py_ssize_t best_distance_measure
         cdef double impurity
