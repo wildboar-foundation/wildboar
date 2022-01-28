@@ -20,9 +20,9 @@ f = ShapeletForestClassifier(
 f.fit(x_train, y_train)
 
 i = IntervalImportance(
-    n_interval=72,
+    n_interval=10,
     scoring="accuracy",
-    domain="frequency",
+    domain="time",
     verbose=True,
     random_state=123,
 )
@@ -32,8 +32,5 @@ ax = i.plot(
     y_test,
     top_k=0.2,
     n_samples=0.1,
-    jitter=True,
-    frequency=24 / 720,
-    show_frequency=True,
 )
 plt.show()
