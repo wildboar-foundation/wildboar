@@ -483,7 +483,7 @@ cdef class Tree:
         return arr.reshape(self._node_count, self._n_labels)
 
     @property
-    def features(self):
+    def feature(self):
         cdef Py_ssize_t i, j
         cdef Feature* feature
         cdef object object

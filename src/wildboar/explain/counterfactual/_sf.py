@@ -65,7 +65,7 @@ class PredictionPaths:
         left = tree.left
         right = tree.right
         threshold = tree.threshold
-        shapelet = tree.features
+        shapelet = tree.feature
         value = tree.value
 
         def recurse(node_id, path):
