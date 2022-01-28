@@ -124,26 +124,37 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         ----------
         n_pivot : int, optional
             The number of pivots to sample at each node.
+
         criterion : {"entropy", "gini"}, optional
             The impurity criterion.
+
         pivot_sample : {"label", "uniform"}, optional
             The pivot sampling method.
+
         metric_sample : {"uniform", "weighted"}, optional
             The metric sampling method.
+
         metrics : str or list, optional
             The distance metrics
+
         metrics_params : list, optional
             The params to the metrics
+
         max_depth : int, optional
             The maximum tree depth.
+
         min_samples_split : int, optional
             The minimum number of samples to consider a split.
+
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf.
+
         min_impurity_decrease : float, optional
             The minimum impurity decrease to build a sub-tree.
+
         class_weight : array-like of shape (n_labels, ) or "balanced", optional
             The class weights.
+
         random_state : int or RandomState, optional
             The pseudo random number generator.
         """
@@ -178,13 +189,13 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
             warnings.warn("max_depth exceeds the maximum recursion limit.")
 
         if self.criterion not in _CLF_CRITERION:
-            raise ValueError()
+            raise ValueError("criterion (%r) is not supported" % self.criterion)
 
         if self.pivot_sample not in _PIVOT_SAMPLER:
-            raise ValueError()
+            raise ValueError("pivot_sample (%r) is not supported" % self.pivot_sample)
 
         if self.metric_sample not in _DISTANCE_MEASURE_SAMPLER:
-            raise ValueError()
+            raise ValueError("metric_sample (%r) is not supported" % self.metric_sample)
 
         distance_measures, weights = make_metrics(
             metrics=self.metrics, metrics_params=self.metrics_params

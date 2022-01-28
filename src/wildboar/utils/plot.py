@@ -75,7 +75,7 @@ def plot_time_domain(
     if y is not None:
         y = check_array(y, ensure_2d=False, allow_nd=False, contiguous=False)
         if y.shape[0] != x.shape[0]:
-            raise ValueError()
+            raise ValueError("The number of labels and samples are not the same.")
 
         label, idx, inv = np.unique(y, return_inverse=True, return_index=True)
         cmap = get_cmap(cmap, len(label))
@@ -137,7 +137,7 @@ def plot_frequency_domain(
     if y is not None:
         y = check_array(1, ensure_2d=False, allow_nd=False, contiguous=False)
         if y.shape[0] != x.shape[0]:
-            raise ValueError()
+            raise ValueError("The number of samples and lables are not the same.")
 
         label, idx, inv = np.unique(y, return_inverse=True, return_index=True)
         cmap = get_cmap(cmap, len(label))
