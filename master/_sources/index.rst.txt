@@ -13,6 +13,7 @@ series data.
    tutorial
    guide
    examples
+   versions
    API Reference <wildboar/index>
 
 .. panels::

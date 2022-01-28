@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.distance.dtw" href="dtw/index.html" /><link rel="prev" title="wildboar.datasets.preprocess" href="../datasets/preprocess/index.html" />
 
-    <meta name="generator" content="sphinx-4.3.2, furo 2022.01.02"/>
-        <title>wildboar.distance - Wildboar 1.1.0rc4.dev80+gaf53f398 documentation</title>
+    <meta name="generator" content="sphinx-4.4.0, furo 2022.01.02"/>
+        <title>wildboar.distance - Wildboar 1.1.0rc4.dev89+g2405f1a9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=df49af52631e7917044a9c21a57f7b83170a6dd0" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=fade93df149f7c5fedb3ff897f799dc7d283b420" />
     
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc4.dev80+gaf53f398 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc4.dev89+g2405f1a9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -194,6 +194,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../examples/embeddings.html">Embeddings</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../versions.html">Versions</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -320,6 +321,9 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a>(y, x, *, dim=0, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)</p></td>
 <td><p>Compute the minimum subsequence distance between subsequences and time series</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequence_match</span></code></a>(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, max_matches=None, exclude=None, return_distance=False, n_jobs=None)</p></td>
+<td><p>Find the positions where the distance is less than the threshold between the</p></td>
 </tr>
 </tbody>
 </table></div>
@@ -738,6 +742,77 @@ best match between each subsequence and time series</p></li>
 </dd>
 </dl>
 </dd></dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.distance.subsequence_match">
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.</span></span><span class="sig-name descname"><span class="pre">subsequence_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_matches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L310-L470"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.subsequence_match" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the positions where the distance is less than the threshold between the
+subsequence and all time series.</p>
+<ul class="simple">
+<li><p>If a <cite>threshold</cite> is given, the default behaviour is to return all matching
+indices in the order of occurrence</p></li>
+<li><p>If no <cite>threshold</cite> is given, the default behaviour is to return the top 10
+matching indicies ordered by distance</p></li>
+<li><p>If both <cite>threshold</cite> and <cite>max_matches</cite> are given, the top matches are returned
+ordered by distance.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>yn_timestep</em><em>, </em><em>)</em>) – The subsequence</p></li>
+<li><p><strong>x</strong> (<em>ndarray of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timestep</em><em>)</em>) – The input data</p></li>
+<li><p><strong>threshold</strong> (<em>str</em><em>, </em><em>float</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – <p>The distance threshold used to consider a subsequence matching. If no threshold
+is selected, <a href="#id3"><span class="problematic" id="id4">`</span></a>max_matches´ default to 10.</p>
+<ul>
+<li><p>if float, return all matches closer than threshold</p></li>
+<li><p>if callable, return all matches closer than the treshold computed by the
+threshold function, given all distances to the subsequence</p></li>
+<li><p>if str, return all matches according to the named threshold.</p></li>
+</ul>
+</p></li>
+<li><p><strong>dim</strong> (<em>int</em><em>, </em><em>optional</em>) – The dim to search for shapelets</p></li>
+<li><p><strong>metric</strong> (<em>str</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – <p>The distance metric</p>
+<ul>
+<li><p>if str use optimized implementations of the named distance measure</p></li>
+<li><p>if callable a function taking two arrays as input</p></li>
+</ul>
+</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Parameters to the metric</p>
+<ul>
+<li><p>’euclidean’ and ‘scaled_euclidean’ take no parameters</p></li>
+<li><p>’dtw’ and ‘scaled_dtw’ take a single paramater ‘r’. If ‘r’ &lt;= 1 it
+is interpreted as a fraction of the time series length. If &gt; 1 it
+is interpreted as an exact time warping window. Use ‘r’ == 0 for
+a widow size of exactly 1.</p></li>
+</ul>
+</p></li>
+<li><p><strong>max_matches</strong> (<em>int</em><em>, </em><em>optional</em>) – Return the top <cite>max_matches</cite> matches below <cite>threshold</cite>.</p></li>
+<li><p><strong>exclude</strong> (<em>float</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – <p>Exclude trivial matches in the vicinity of the match.</p>
+<ul>
+<li><p>if float, the exclusion zone is computed as <code class="docutils literal notranslate"><span class="pre">math.ceil(exclude</span> <span class="pre">*</span> <span class="pre">y.size)</span></code></p></li>
+<li><p>if int, the exclusion zone is exact</p></li>
+</ul>
+<p>A match is considered trivial if a match with lower distance is within <cite>exclude</cite>
+timesteps of another match with higher distance.</p>
+</p></li>
+<li><p><strong>return_distance</strong> (<em>bool</em><em>, </em><em>optional</em>) – <ul>
+<li><p>if True, return the distance of the match</p></li>
+</ul>
+</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of parallel jobs to run. Ignored</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>indicies</strong> (<em>list or ndarray</em>) – A list of shape (n_samples, ) of ndarray with start index of matching
+subsequences. If only one subsequence is given, the return value is a single
+ndarray.</p></li>
+<li><p><strong>distance</strong> (<em>list or ndarray</em>) – A list of shape (n_samples, ) of ndarray with distance at the matching position.
+If only one subsequence is given, the return value is a single ndarray.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
 </section>
 </section>
 </section>
@@ -805,6 +880,7 @@ best match between each subsequence and time series</p></li>
 <li><a class="reference internal" href="#wildboar.distance.paired_subsequence_match">paired_subsequence_match</a></li>
 <li><a class="reference internal" href="#wildboar.distance.pairwise_distance">pairwise_distance</a></li>
 <li><a class="reference internal" href="#wildboar.distance.pairwise_subsequence_distance">pairwise_subsequence_distance</a></li>
+<li><a class="reference internal" href="#wildboar.distance.subsequence_match">subsequence_match</a></li>
 </ul>
 </li>
 </ul>

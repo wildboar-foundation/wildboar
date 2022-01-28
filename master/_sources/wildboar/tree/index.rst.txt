@@ -390,7 +390,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -408,7 +408,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
-   Mixin class for all regression estimators in scikit-learn.
+   Mixin for regression trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -426,7 +426,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -491,7 +491,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -509,7 +509,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
-   Mixin class for all regression estimators in scikit-learn.
+   Mixin for regression trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional

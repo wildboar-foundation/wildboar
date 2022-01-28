@@ -23,13 +23,7 @@ Classes
 
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
-   Base class for all estimators in scikit-learn.
-
-   .. rubric:: Notes
-
-   All estimators should specify all the parameters that can be set
-   at the class level in their ``__init__`` as explicit keyword
-   arguments (no ``*args`` or ``**kwargs``).
+   Base class for tree based estimators.
 
    .. py:method:: apply(self, x, check_input=True)
 
@@ -42,7 +36,7 @@ Classes
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
    .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
 
@@ -101,7 +95,7 @@ Classes
 
    Bases: :py:obj:`sklearn.base.RegressorMixin`
 
-   Mixin class for all regression estimators in scikit-learn.
+   Mixin for regression trees.
 
    .. py:method:: fit(self, X, y, sample_weight=None, check_input=True)
 

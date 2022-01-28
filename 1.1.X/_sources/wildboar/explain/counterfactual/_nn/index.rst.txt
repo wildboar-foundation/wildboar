@@ -44,7 +44,6 @@ Classes
       :param estimator: An estimator for which counterfactual explanations are produced
       :type estimator: object
 
-      :returns:
       :rtype: self
 
 

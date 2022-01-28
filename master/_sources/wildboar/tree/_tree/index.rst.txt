@@ -57,26 +57,14 @@ Attributes
 
    Bases: :py:obj:`wildboar.tree.base.BaseTree`
 
-   Base class for all estimators in scikit-learn.
-
-   .. rubric:: Notes
-
-   All estimators should specify all the parameters that can be set
-   at the class level in their ``__init__`` as explicit keyword
-   arguments (no ``*args`` or ``**kwargs``).
+   Base class for trees using feature engineering.
 
 
 .. py:class:: BaseIntervalTree(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
 
    Bases: :py:obj:`BaseFeatureTree`
 
-   Base class for all estimators in scikit-learn.
-
-   .. rubric:: Notes
-
-   All estimators should specify all the parameters that can be set
-   at the class level in their ``__init__`` as explicit keyword
-   arguments (no ``*args`` or ``**kwargs``).
+   Base class for trees using feature engineering.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -94,13 +82,7 @@ Attributes
 
    Bases: :py:obj:`BaseFeatureTree`
 
-   Base class for all estimators in scikit-learn.
-
-   .. rubric:: Notes
-
-   All estimators should specify all the parameters that can be set
-   at the class level in their ``__init__`` as explicit keyword
-   arguments (no ``*args`` or ``**kwargs``).
+   Base class for trees using feature engineering.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -118,13 +100,7 @@ Attributes
 
    Bases: :py:obj:`BaseFeatureTree`
 
-   Base class for all estimators in scikit-learn.
-
-   .. rubric:: Notes
-
-   All estimators should specify all the parameters that can be set
-   at the class level in their ``__init__`` as explicit keyword
-   arguments (no ``*args`` or ``**kwargs``).
+   Base class for trees using feature engineering.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -142,13 +118,7 @@ Attributes
 
    Bases: :py:obj:`BaseFeatureTree`
 
-   Base class for all estimators in scikit-learn.
-
-   .. rubric:: Notes
-
-   All estimators should specify all the parameters that can be set
-   at the class level in their ``__init__`` as explicit keyword
-   arguments (no ``*args`` or ``**kwargs``).
+   Base class for trees using feature engineering.
 
 
 .. py:class:: ExtraShapeletTreeClassifier(*, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
@@ -506,21 +476,21 @@ Attributes
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
 
 .. py:class:: FeatureTreeRegressorMixin
 
    Bases: :py:obj:`wildboar.tree.base.TreeRegressorMixin`
 
-   Mixin class for all regression estimators in scikit-learn.
+   Mixin for regression trees.
 
 
 .. py:class:: IntervalTreeClassifier(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -538,7 +508,7 @@ Attributes
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
-   Mixin class for all regression estimators in scikit-learn.
+   Mixin for regression trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -556,7 +526,7 @@ Attributes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -574,7 +544,7 @@ Attributes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
-   Mixin class for all classifiers in scikit-learn.
+   Mixin for classifation trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -592,7 +562,7 @@ Attributes
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
-   Mixin class for all regression estimators in scikit-learn.
+   Mixin for regression trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
