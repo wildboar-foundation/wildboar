@@ -19,6 +19,8 @@ from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
 
 
 class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
+    """A classifier that uses random shapelets."""
+
     def __init__(
         self,
         n_shapelets=1000,
@@ -65,6 +67,8 @@ class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
 
 
 class RandomShapeletRegressor(EmbeddingRidgeCV):
+    """A regressor that uses random shapelets."""
+
     def __init__(
         self,
         n_shapelets=1000,

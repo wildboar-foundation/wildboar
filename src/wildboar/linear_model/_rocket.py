@@ -20,6 +20,8 @@ from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
 
 
 class RocketClassifier(EmbeddingRidgeClassifierCV):
+    """Implements the ROCKET classifier"""
+
     def __init__(
         self,
         n_kernels=10000,
@@ -71,59 +73,16 @@ class RocketClassifier(EmbeddingRidgeClassifierCV):
         )
 
 
-#
-#
-# class ShacketClassifier(EmbeddingRidgeClassifierCV):
-#     def __init__(
-#         self,
-#         n_kernels=10000,
-#         *,
-#         size=None,
-#         standardize=True,
-#         use_bias=False,
-#         alphas=(0.1, 1.0, 10.0),
-#         fit_intercept=True,
-#         normalize=False,
-#         scoring=None,
-#         cv=None,
-#         class_weight=None,
-#         n_jobs=None,
-#         random_state=None
-#     ):
-#         super().__init__(
-#             alphas=alphas,
-#             fit_intercept=fit_intercept,
-#             normalize=normalize,
-#             scoring=scoring,
-#             cv=cv,
-#             class_weight=class_weight,
-#             n_jobs=n_jobs,
-#             random_state=random_state,
-#         )
-#         self.n_kernels = n_kernels
-#         self.size = size
-#         self.use_bias = use_bias
-#         self.standardize = standardize
-#
-#     def _get_embedding(self, random_state):
-#         return ShacketEmbedding(
-#             n_kernels=self.n_kernels,
-#             size=self.size,
-#             standardize=self.standardize,
-#             use_bias=self.use_bias,
-#             n_jobs=self.n_jobs,
-#             random_state=random_state,
-#         )
-
-
 class RocketRegressor(EmbeddingRidgeCV):
+    """Implements the ROCKET regressor"""
+
     def __init__(
         self,
         n_kernels=10000,
         *,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize=False,
+        normalize="deprecated",
         scoring=None,
         cv=None,
         gcv_mode=None,

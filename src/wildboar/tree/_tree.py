@@ -52,15 +52,29 @@ REG_CRITERION = {"mse": MSECriterion}
 
 
 class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
+    """Base class for trees using feature engineering."""
+
     @abstractmethod
     def _get_feature_engineer(self, n_samples, n_timestep):
-        pass
+        """Get the feature engineer
+
+        Returns
+        -------
+
+        FeatureEngineer : the feature engineer
+        """
 
     @abstractmethod
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        pass
+        """Get the tree builder
+
+        Returns
+        -------
+
+        TreeBuilder : the tree builder
+        """
 
     def _fit(self, x, y, sample_weights, random_state):
         max_depth = (

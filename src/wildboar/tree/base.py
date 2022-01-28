@@ -24,6 +24,8 @@ from wildboar.utils import check_array
 
 
 class BaseTree(BaseEstimator):
+    """Base class for tree based estimators."""
+
     def __init__(
         self,
         *,
@@ -69,6 +71,8 @@ class BaseTree(BaseEstimator):
 
 
 class TreeRegressorMixin(RegressorMixin):
+    """Mixin for regression trees."""
+
     def fit(self, X, y, sample_weight=None, check_input=True):
         """Fit a shapelet tree regressor from the training set
 
@@ -150,6 +154,8 @@ class TreeRegressorMixin(RegressorMixin):
 
 
 class TreeClassifierMixin(ClassifierMixin):
+    """Mixin for classifation trees."""
+
     def fit(self, x, y, sample_weight=None, check_input=True):
         """Fit a shapelet tree regressor from the training set
 
