@@ -31,7 +31,7 @@ __all__ = [
     "matches",
     "pairwise_subsequence_distance",
     "paired_subsequence_distance",
-    "pairwise_subsequence_match",
+    "subsequence_match",
     "paired_subsequence_match",
     "pairwise_distance",
     "paired_distance",
