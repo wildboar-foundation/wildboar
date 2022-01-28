@@ -22,6 +22,22 @@
 * Add `linear_model.RandomShapeletClassifier`
 * Add `wildboar.embed` with `RandomShapeletEmbedding` and `RocketEmbedding`
 * Add `tree.RocketTreeClassifier`
+* Add `tree.IntervalTree`
+* Add `embed.IntervalEmbedding`
+* Add `tree.ProximityTreeClassifier`
+* Add `ensemble.ProximityForestClassifer`
+* Add `annotate.motifs`
+* Add `annotate.regimes`
+* Add `distance.matrix_profile`
+* Add `distance.pairwise_subsequence_distance`
+* Add `distance.paired_subsequence_distance`
+* Add `distance.pairwise_distance`
+* Add `distance.paired_distance`
+* Add `distance.subsequence_match`
+* Add `distance.paired_subsequence_match`
+* Add support for MASS-distance measure
+* Add support for CATCH22 features
+* Add `explain.IntervalImportance`
 * For implementors:
   * Add `FeaturEngineer` to `*TreeBuilder` to support different
     feature types
@@ -39,6 +55,7 @@
 ### Changed
 * Rename `datasets._filter` to `datasets.filter`
 * Parameter `shapelets` of `Tree` is changed to `features`
+* Deprecate `distance.distance` and `distance.matches`
 * For implementors
   * `ShapeletTreeBuilder` is renamed to `TreeBuilder`
   * Data handling has been refactored to `_data`
