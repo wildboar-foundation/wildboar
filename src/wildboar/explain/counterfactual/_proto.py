@@ -640,10 +640,10 @@ class DynamicTimeWarpTransform(MetricTransform):
         self.r = r
 
     def move(self, o, p):
-        indicator, indices = dtw_mapping(o, p, r=self.r, return_index=True)
+        _, indices = dtw_mapping(o, p, r=self.r, return_index=True)
         result = o * (1 - self.gamma)
         weight = np.ones(o.shape[0]) * (1 - self.gamma)
-        for i, j in zip(*indices):
+        for _, j in zip(*indices):
             result[j] += self.gamma * p[j]
             weight[j] += self.gamma
         return result / weight
