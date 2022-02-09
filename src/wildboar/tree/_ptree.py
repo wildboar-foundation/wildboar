@@ -82,7 +82,6 @@ def make_metrics(metrics=None, metrics_params=None):
     return distance_measures, np.array(weights, dtype=np.double)
 
 
-@unstable
 class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
     """A proximity tree defines a k-branching tree based on pivot-time series.
 
@@ -102,6 +101,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         series. Data Mining and Knowledge Discovery
     """
 
+    @unstable
     def __init__(
         self,
         n_pivot=1,

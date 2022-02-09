@@ -1595,7 +1595,6 @@ class PivotForestClassifier(BaseForestClassifier):
         return _joblib_parallel_args(prefer="threads")
 
 
-@unstable
 class ProximityForestClassifier(BaseForestClassifier):
     """A forest of proximity trees
 
@@ -1603,6 +1602,7 @@ class ProximityForestClassifier(BaseForestClassifier):
     ----------
     """
 
+    @unstable
     def __init__(
         self,
         n_estimators=100,
