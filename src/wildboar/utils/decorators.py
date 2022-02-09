@@ -87,7 +87,7 @@ def singleton(f):
 
 
 def unstable(optional_f=None, stability="beta", description=None):
-    """Decorate a function or class as unsable
+    """Decorate a function as unsatable
 
     Parameters
     ----------
