@@ -369,6 +369,7 @@ cdef class MSECriterion(RegressionCriterion):
 cpdef Tree _make_tree(
     FeatureEngineer feature_engineer,
     Py_ssize_t n_labels,
+    Py_ssize_t max_depth,
     list features,
     np.ndarray threshold,
     np.ndarray value,
@@ -379,6 +380,7 @@ cpdef Tree _make_tree(
     np.ndarray n_weighted_node_samples
 ):
     cdef Tree tree = Tree(feature_engineer, n_labels, capacity=len(features) + 1)
+    tree._max_depth = max_depth
     cdef Py_ssize_t node_count = len(features)
     cdef Py_ssize_t i
     cdef Py_ssize_t dim
@@ -460,6 +462,7 @@ cdef class Tree:
         return _make_tree, (
             self.feature_engineer,
             self._n_labels,
+            self._max_depth,
             self.features,
             self.threshold,
             self.value,
