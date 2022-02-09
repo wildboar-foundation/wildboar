@@ -73,6 +73,46 @@ cdef void free_split(Split *split) nogil:
         free(split.child_impurity)
         split.child_impurity = NULL
 
+cpdef Tree _make_tree(
+    list distance_measures,
+    Py_ssize_t n_labels,
+    Py_ssize_t max_depth,
+    np.ndarray branch,
+    list pivots,
+    np.ndarray value,
+):
+    cdef Tree tree = Tree(distance_measures, n_labels, capacity=len(pivots) + 1)
+    tree._max_depth = max_depth
+    tree._node_count = len(pivots)
+    cdef Py_ssize_t i, j, k
+    cdef Pivot *pivot
+    cdef np.ndarray arr
+    value = value.reshape(-1)
+    for i in range(tree._node_count):
+        if pivots[i] is not None:
+            pivot = <Pivot*> malloc(sizeof(Pivot))
+            pivot.distance_measure = pivots[i][0]
+            arr = pivots[i][1]
+            pivot.n_branches = arr.shape[0]
+            pivot.length = arr.shape[1]
+            pivot.data = <double**> malloc(sizeof(double*) * pivot.n_branches)
+            for j in range(pivot.n_branches):
+                pivot.data[j] = <double*> malloc(sizeof(double) * pivot.length)
+                for k in range(pivot.length):
+                    pivot.data[j][k] = arr[j, k]
+
+            tree._pivots[i] = pivot
+        else:
+            tree._pivots[i] = NULL
+
+        for j in range(n_labels):
+            tree._branches[j][i] = branch[j, i]
+
+    for i in range(tree._node_count * n_labels):
+        tree._values[i] = value[i]
+
+    return tree
+
 
 cdef class Tree:
 
@@ -103,6 +143,16 @@ cdef class Tree:
         self._pivots = <Pivot**> malloc(sizeof(Pivot*) * capacity)
         self._values = <double*> malloc(sizeof(double) * capacity * n_labels)
         self.distance_measures = CList(distance_measures)
+
+    def __reduce__(self):
+       return _make_tree, (
+           self.distance_measures.py_list,
+           self._n_labels,
+           self._max_depth,
+           self.branch,
+           self.pivot,
+           self.value,
+       )
 
     cdef Py_ssize_t add_branch_node(
         self,
@@ -175,7 +225,7 @@ cdef class Tree:
         return 0
 
     @property
-    def branches(self):
+    def branch(self):
         branches = np.zeros((self._n_labels, self._node_count), dtype=np.intp)
         for i in range(self._n_labels):
             for j in range(self._node_count):
@@ -183,7 +233,7 @@ cdef class Tree:
         return branches
 
     @property
-    def pivots(self):
+    def pivot(self):
         pivots = []
         cdef Pivot *pivot
         for i in range(self._node_count):
@@ -693,6 +743,7 @@ cdef class TreeBuilder:
             split.n_split < 1 or
             split.impurity_improvement <= self.min_impurity_decrease
         )
+
         if not is_leaf:
             node_id = self.tree.add_branch_node(
                 parent,
@@ -775,6 +826,7 @@ cdef class TreeBuilder:
             split.split_point = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.criterion.n_labels)
             split.child_impurity = <double*> malloc(sizeof(double) * self.criterion.n_labels)
             best_impurity = -INFINITY
+            # TODO: we should not stop until a split with improvement is found.
             for _ in range(self.n_features):
                 pivot_index = 0
                 for label in range(self.criterion.n_labels):
