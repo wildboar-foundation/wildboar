@@ -1,3 +1,4 @@
+# cython: boundscheck=False
 # cython: language_level=3
 
 # This file is part of wildboar
