@@ -1422,7 +1422,7 @@ class RockestClassifier(BaseForestClassifier):
         return {"prefer": "threads"}
 
 
-class bIntervalForestClassifier(BaseForestClassifier):
+class IntervalForestClassifier(BaseForestClassifier):
     def __init__(
         self,
         n_estimators=100,
