@@ -93,39 +93,6 @@ cdef Py_ssize_t vose_rand_int(VoseRand *vr, size_t *seed) nogil:
     else:
         return vr.alias[i]
 
-
-from libc.stdio cimport printf
-
-
-def test(r):
-    cdef Py_ssize_t i
-    cdef VoseRand vr
-    vose_rand_init(&vr, 10)
-    cdef double *p = <double*> malloc(sizeof(double) * 10)
-    p[0] = 0.5
-    for i in range(9):
-        p[i + 1] = 0.5 / 9
-    for i in range(10):
-        printf("p[%d]=%f\n", i, p[i])
-
-    vose_rand_precompute(&vr, p)
-
-    cdef size_t seed = 102
-    cdef Py_ssize_t k
-    import numpy as np
-    arr = np.zeros(r, dtype=np.intp)
-    for i in range(r):
-        k = vose_rand_int(&vr, &seed)
-        if k < 0:
-            printf("wtf!!!\n")
-        if k > 9:
-            printf("wtf2!!!\n")
-        #printf("%d=%d\n", i, k)
-        arr[i] = k
-
-    return arr
-
-
 cdef inline size_t rand_r(size_t *seed) nogil:
     """Returns a pesudo-random number based on the seed."""
     seed[0] = seed[0] * 1103515245 + 12345
