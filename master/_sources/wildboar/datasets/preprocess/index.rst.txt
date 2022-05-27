@@ -86,6 +86,8 @@ Attributes
 
    :param x: The dataset
    :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+   :param n_shortest: The maximum size
+   :type n_shortest: int, optional
 
    :returns: **x** -- The truncated dataset
    :rtype: ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
