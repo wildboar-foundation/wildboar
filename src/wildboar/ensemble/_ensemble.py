@@ -25,7 +25,6 @@ from sklearn.ensemble._bagging import BaseBagging
 from sklearn.metrics import precision_recall_curve, roc_curve
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils import check_random_state, compute_sample_weight
-from sklearn.utils.fixes import _joblib_parallel_args
 from sklearn.utils.validation import check_is_fitted
 
 from wildboar.model_selection.outlier import threshold_score
@@ -50,7 +49,7 @@ class ForestMixin:
         results = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
-            **_joblib_parallel_args(prefer="threads"),
+            **{"prefer": "threads"},
         )(delayed(tree.apply)(x, check_input=False) for tree in self.estimators_)
 
         return np.array(results).T
@@ -61,7 +60,7 @@ class ForestMixin:
         indicators = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
-            **_joblib_parallel_args(prefer="threads"),
+            **{"prefer": "threads"},
         )(
             delayed(tree.decision_path)(x, check_input=False)
             for tree in self.estimators_
@@ -228,7 +227,7 @@ class BaseShapeletForestClassifier(BaseForestClassifier):
         self.metric_params = metric_params
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
 
 class ShapeletForestClassifier(BaseShapeletForestClassifier):
@@ -598,7 +597,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
         self.metric_params = metric_params
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
 
 class ShapeletForestRegressor(BaseShapeletForestRegressor):
@@ -1108,7 +1107,7 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
         raise NotImplementedError("OOB score not supported")
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
     def fit(self, x, y=None, sample_weight=None, check_input=True):
         random_state = check_random_state(self.random_state)
@@ -1355,7 +1354,7 @@ class RockestRegressor(BaseForestRegressor):
         self.padding_prob = padding_prob
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
 
 class RockestClassifier(BaseForestClassifier):
@@ -1420,10 +1419,10 @@ class RockestClassifier(BaseForestClassifier):
         self.padding_prob = padding_prob
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
 
-class IntervalForestClassifier(BaseForestClassifier):
+class bIntervalForestClassifier(BaseForestClassifier):
     def __init__(
         self,
         n_estimators=100,
@@ -1482,7 +1481,7 @@ class IntervalForestClassifier(BaseForestClassifier):
         self.max_size = max_size
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
 
 class IntervalForestRegressor(BaseForestRegressor):
@@ -1542,7 +1541,7 @@ class IntervalForestRegressor(BaseForestRegressor):
         self.max_size = max_size
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
 
 class PivotForestClassifier(BaseForestClassifier):
@@ -1592,7 +1591,7 @@ class PivotForestClassifier(BaseForestClassifier):
         self.metrics = metrics
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
 
 
 class ProximityForestClassifier(BaseForestClassifier):
@@ -1658,4 +1657,4 @@ class ProximityForestClassifier(BaseForestClassifier):
         self.metric_sample = metric_sample
 
     def _parallel_args(self):
-        return _joblib_parallel_args(prefer="threads")
+        return {"prefer": "threads"}
