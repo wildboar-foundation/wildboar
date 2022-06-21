@@ -35,6 +35,14 @@ extensions = [
     "sphinx_panels",
 ]
 
+if os.getenv("LOCAL_BUILD", 0):
+    LOCAL_EXTENSIONS_REMOVE = [
+        "autoapi.extension",
+        "sphinx_multiversion",
+    ]
+    for value in LOCAL_EXTENSIONS_REMOVE:
+        extensions.remove(value)
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -86,7 +94,7 @@ html_sidebars = {
 html_static_path = ["_static"]
 smv_branch_whitelist = r"^master|\d+\.\d+\.X$"
 smv_remote_whitelist = r"^origin$"
-smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+\.X$"
+# smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+\.X$"
 smv_tag_whitelist = None
 
 
@@ -105,23 +113,30 @@ def setup(app):
         return gitref.source == "tags" and p.major == major and p.minor == minor
 
     # Build the local version of wildboar into a temporary directory
-    def build_local_version(app):
-        import subprocess
+    if os.getenv("LOCAL_BUILD", 0):
 
-        logger.info("[CONF] building and installing local version")
-        env = os.environ.copy()
-        env["SETUPTOOLS_SCM_PRETEND_VERSION"] = "99.9.99"
-        version_file = os.path.join(app.srcdir, "../src/wildboar/version.py")
-        with open(os.path.abspath(version_file), "w") as f:
-            f.write("version='99.9.99'")  # dummy version
+        def build_local_version(app):
+            pass
 
-        # Build and install local version in temporary directory
-        output = subprocess.run(
-            ["python", "-m", "pip", "install", "--target", "../_build", "."],
-            cwd=os.path.abspath(os.path.join(app.srcdir, "..")),
-            env=env,
-        )
-        output.check_returncode()  # Abort if build failed
+    else:
+
+        def build_local_version(app):
+            import subprocess
+
+            logger.info("[CONF] building and installing local version")
+            env = os.environ.copy()
+            env["SETUPTOOLS_SCM_PRETEND_VERSION"] = "99.9.99"
+            version_file = os.path.join(app.srcdir, "../src/wildboar/version.py")
+            with open(os.path.abspath(version_file), "w") as f:
+                f.write("version='99.9.99'")  # dummy version
+
+            # Build and install local version in temporary directory
+            output = subprocess.run(
+                ["python", "-m", "pip", "install", "--target", "../_build", "."],
+                cwd=os.path.abspath(os.path.join(app.srcdir, "..")),
+                env=env,
+            )
+            output.check_returncode()  # Abort if build failed
 
     # Find the source file given a module
     def find_source(info):
