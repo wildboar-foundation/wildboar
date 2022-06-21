@@ -878,12 +878,12 @@ def matrix_profile(
     if x.ndim > 2 and not 0 <= dim < x.shape[1]:
         raise ValueError("invalid dim (%d)" % x.shape[1])
 
-    if isinstance(exclude, numbers.Real):
+    if isinstance(exclude, float):
         exclude = math.ceil(window * exclude)
     elif exclude < 0:
         raise ValueError("invalid exclusion (%d < 0)" % exclude)
 
-    if isinstance(window, numbers.Real):
+    if isinstance(window, float):
         if not 0.0 < window <= 1.0:
             raise ValueError("invalid window size, got %f (expected [0, 1[)")
         window = math.ceil(window * y.shape[-1])
