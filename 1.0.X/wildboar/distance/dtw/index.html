@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.ensemble" href="../../ensemble/index.html" /><link rel="prev" title="wildboar.distance" href="../index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.04.1"/>
         <title>wildboar.distance.dtw - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
@@ -47,7 +47,7 @@
         
         You're reading the documentation for a development version.
         For the latest released version, please have a look at <a
-            href="../../../../1.1.X/index.html">1.1.0rc3</a>.
+            href="../../../../1.1.X/index.html">1.1.0rc4</a>.
         
     </aside>
 </div>
@@ -229,9 +229,9 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.0rc4</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.0rc5</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.0.12</span></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../1.1.X/index.html">1.1.0rc3</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../1.1.X/index.html">1.1.0rc4</a></li>
             </ul>
         </li>
     </ul>
@@ -249,7 +249,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -269,32 +270,34 @@
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">#</a></h3>
-<div class="table-wrapper"><table class="autosummary longtable docutils align-default">
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
 <colgroup>
-<col style="width: 10%"/>
-<col style="width: 90%"/>
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_alignment" title="wildboar.distance.dtw.dtw_alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_alignment</span></code></a>(x, y, r=1.0, out=None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_alignment" title="wildboar.distance.dtw.dtw_alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_alignment</span></code></a>(x, y, r=1.0, out=None)</p></td>
 <td><p>Compute the Dynamic time warping alignment matrix</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a>(x, y, r=1.0, scale=False)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a>(x, y, r=1.0, scale=False)</p></td>
 <td><p>Compute the dynamic time warping distance</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_envelop" title="wildboar.distance.dtw.dtw_envelop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_envelop</span></code></a>(x, r=1.0)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_envelop" title="wildboar.distance.dtw.dtw_envelop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_envelop</span></code></a>(x, r=1.0)</p></td>
 <td><p>Compute the envelop for LB_keogh</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_lb_keogh" title="wildboar.distance.dtw.dtw_lb_keogh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_lb_keogh</span></code></a>(x, y=None, *, lower=None, upper=None, r=1.0)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_lb_keogh" title="wildboar.distance.dtw.dtw_lb_keogh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_lb_keogh</span></code></a>(x, y=None, *, lower=None, upper=None, r=1.0)</p></td>
 <td><p>The LB_keogh lower bound</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_mapping" title="wildboar.distance.dtw.dtw_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_mapping</span></code></a>(x=None, y=None, *, alignment=None, r=1, return_index=False)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_mapping" title="wildboar.distance.dtw.dtw_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_mapping</span></code></a>(x=None, y=None, *, alignment=None, r=1, return_index=False)</p></td>
 <td><p>Compute the optimal warping path between two series or from a given</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_pairwise_distance" title="wildboar.distance.dtw.dtw_pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_pairwise_distance</span></code></a>(x, r=1.0)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_pairwise_distance" title="wildboar.distance.dtw.dtw_pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_pairwise_distance</span></code></a>(x, r=1.0)</p></td>
 <td><p>Compute the distance between all pairs of rows</p></td>
 </tr>
 </tbody>
-</table></div>
+</table>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_alignment">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/distance/dtw.py#L59-L95"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_alignment" title="Permalink to this definition">#</a></dt>
@@ -330,6 +333,7 @@
 </dl>
 </div>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_distance">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/distance/dtw.py#L98-L130"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_distance" title="Permalink to this definition">#</a></dt>
@@ -363,6 +367,7 @@
 </dl>
 </div>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_envelop">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_envelop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/distance/dtw.py#L160-L190"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_envelop" title="Permalink to this definition">#</a></dt>
@@ -394,6 +399,7 @@ In 28th International Conference on Very Large Data Bases.</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_lb_keogh">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_lb_keogh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/distance/dtw.py#L193-L251"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_lb_keogh" title="Permalink to this definition">#</a></dt>
@@ -434,6 +440,7 @@ In 28th International Conference on Very Large Data Bases.</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_mapping">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/distance/dtw.py#L254-L315"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_mapping" title="Permalink to this definition">#</a></dt>
@@ -468,6 +475,7 @@ the optimal alignment path.</p></li>
 <li><p>if alignment is given r is ignored</p></li>
 </ul>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_pairwise_distance">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_pairwise_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/distance/dtw.py#L133-L157"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_pairwise_distance" title="Permalink to this definition">#</a></dt>
@@ -492,6 +500,7 @@ the optimal alignment path.</p></li>
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 </section>
 </section>

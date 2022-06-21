@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supervised learning" href="supervised.html" /><link rel="prev" title="User guide" href="../guide.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.04.07"/>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.04.1"/>
         <title>Datasets - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=68f4518137b9aefe99b631505a2064c3c42c9852" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
@@ -47,7 +47,7 @@
         
         You're reading the documentation for a development version.
         For the latest released version, please have a look at <a
-            href="../../1.1.X/guide/datasets.html">1.1.0rc3</a>.
+            href="../../1.1.X/guide/datasets.html">1.1.0rc4</a>.
         
     </aside>
 </div>
@@ -229,9 +229,9 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../master/guide/datasets.html">1.1.0rc4</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../master/guide/datasets.html">1.1.0rc5</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.0.12</span></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../1.1.X/guide/datasets.html">1.1.0rc3</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../1.1.X/guide/datasets.html">1.1.0rc4</a></li>
             </ul>
         </li>
     </ul>
@@ -249,7 +249,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -276,7 +277,7 @@ or dataset parts that can be downloaded, cached and loaded by wildboar.</p>
 <h2>How to use a repository?<a class="headerlink" href="#how-to-use-a-repository" title="Permalink to this headline">#</a></h2>
 <p>Repositories are either initialized directly or used together with the <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">'GunPoint'</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s1">'wildboar/ucr'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;GunPoint&#39;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s1">&#39;wildboar/ucr&#39;</span><span class="p">)</span>
 <span class="go"># ... downloading repository to cache folder...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
@@ -285,16 +286,16 @@ or dataset parts that can be downloaded, cached and loaded by wildboar.</p>
 <code class="docutils literal notranslate"><span class="pre">list_repositories</span></code> and <code class="docutils literal notranslate"><span class="pre">list_bundles</span></code> respectively.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">list_repositories</span><span class="p">,</span> <span class="n">list_bundles</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">list_repositories</span><span class="p">()</span>
-<span class="go">['wildboar']</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">list_bundles</span><span class="p">(</span><span class="s2">"wildboar"</span><span class="p">)</span>
-<span class="go">['ucr', 'ucr-tiny']</span>
+<span class="go">[&#39;wildboar&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_bundles</span><span class="p">(</span><span class="s2">&quot;wildboar&quot;</span><span class="p">)</span>
+<span class="go">[&#39;ucr&#39;, &#39;ucr-tiny&#39;]</span>
 </pre></div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>Repositories are cached locally in a folder controlled by the parameter <code class="docutils literal notranslate"><span class="pre">cache_dir</span></code>. The default directory
 depends on platform. To change the default cache-directory:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">"Wafer"</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">"wildboar/ucr"</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="s2">"/data/my_cache_drive"</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Wafer&quot;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">&quot;wildboar/ucr&quot;</span><span class="p">,</span> <span class="n">cache_dir</span><span class="o">=</span><span class="s2">&quot;/data/my_cache_drive&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -314,7 +315,7 @@ The identifier is composed of letters and match <code class="docutils literal no
 with <code class="docutils literal notranslate"><span class="pre">list_repositories()</span></code>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">{bundle}</span></code></dt><dd><p>The bundle identifier, i.e., the dataset bundle of a repository. The available datasets
-can be listed with <code class="docutils literal notranslate"><span class="pre">list_datasets("{repository}/{bundle}")</span></code>. The identifier
+can be listed with <code class="docutils literal notranslate"><span class="pre">list_datasets(&quot;{repository}/{bundle}&quot;)</span></code>. The identifier
 is composed of alphanumeric characters and -, matching <code class="docutils literal notranslate"><span class="pre">[a-zA-Z0-9\-]+</span></code>.</p>
 </dd>
 <dt><code class="docutils literal notranslate"><span class="pre">{version}</span></code></dt><dd><p>The bundle version (defaults to the version specified by the repository). The version
@@ -346,26 +347,26 @@ specifies (versioned) datasets on a JSON endpoint.</p>
 <p>Repositories are installed using the function <code class="docutils literal notranslate"><span class="pre">install_repository</span></code> which takes
 either an url to a JSON-file or an instance of a <code class="docutils literal notranslate"><span class="pre">Repository</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">install_repository</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">install_repository</span><span class="p">(</span><span class="s2">"https://www.example.org/repo.json"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">list_repositories</span><span class="p">(</span><span class="s2">"example"</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">"example"</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">"example/example"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">install_repository</span><span class="p">(</span><span class="s2">&quot;https://www.example.org/repo.json&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">list_repositories</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;example&quot;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">&quot;example/example&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="repository-json-specification">
 <h3>Repository JSON specification<a class="headerlink" href="#repository-json-specification" title="Permalink to this headline">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code> expects a JSON-file following the specification below.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
-<span class="w">    </span><span class="s2">"name"</span><span class="o">:</span><span class="w"> </span><span class="s2">"example"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">"version"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">"wildboar_requires"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1.0.4"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">"bundle_url"</span><span class="o">:</span><span class="w"> </span><span class="s2">"https://example.org/download/{key}-v{version}.zip"</span><span class="p">,</span><span class="w"></span>
-<span class="w">    </span><span class="s2">"bundles"</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;example&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;version&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;wildboar_requires&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1.0.4&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;bundle_url&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;https://example.org/download/{key}-v{version}.zip&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;bundles&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">      </span><span class="p">{</span><span class="w"></span>
-<span class="w">        </span><span class="s2">"key"</span><span class="o">:</span><span class="w"> </span><span class="s2">"example"</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">"version"</span><span class="o">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">"name"</span><span class="o">:</span><span class="w"> </span><span class="s2">"UCR Time series repository"</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">"description"</span><span class="o">:</span><span class="w"> </span><span class="s2">"Example dataset"</span><span class="p">,</span><span class="w"></span>
-<span class="w">        </span><span class="s2">"class_index"</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;key&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;example&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;version&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;UCR Time series repository&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;description&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;Example dataset&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="s2">&quot;class_index&quot;</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1</span><span class="w"></span>
 <span class="w">      </span><span class="p">},</span><span class="w"></span>
 <span class="w">    </span><span class="p">]</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
