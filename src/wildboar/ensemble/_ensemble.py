@@ -521,7 +521,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
     def fit(self, x, y, sample_weight=None, check_input=True):
         if check_input:
             x = check_array(x, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False, dtype=int)
+            y = check_array(y, ensure_2d=False, dtype=float)
 
         n_samples = x.shape[0]
         self.n_timestep_ = x.shape[-1]
