@@ -463,7 +463,7 @@ cdef class Tree:
             self.feature_engineer,
             self._n_labels,
             self._max_depth,
-            self.features,
+            self.feature,
             self.threshold,
             self.value,
             self.left,
