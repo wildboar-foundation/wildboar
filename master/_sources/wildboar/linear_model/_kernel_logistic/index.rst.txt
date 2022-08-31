@@ -41,7 +41,7 @@ Classes
       :param n_components: Number of features to construct
       :type n_components: int, optional
 
-   .. py:method:: decision_function(self, x)
+   .. py:method:: decision_function(x)
 
       Predict confidence scores for samples.
 
@@ -57,7 +57,7 @@ Classes
       :rtype: ndarray of shape (n_samples,) or (n_samples, n_classes)
 
 
-   .. py:method:: fit(self, x, y, sample_weight=None)
+   .. py:method:: fit(x, y, sample_weight=None)
 
       Fit the model according to the given training data.
 

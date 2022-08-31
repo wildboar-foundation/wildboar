@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.distance.dtw" href="dtw/index.html" /><link rel="prev" title="wildboar.datasets.preprocess" href="../datasets/preprocess/index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.04.1"/>
-        <title>wildboar.distance - Wildboar 1.1.0rc5.dev3+gf9213a0d documentation</title>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+        <title>wildboar.distance - Wildboar 1.1.0rc5.dev6+gcf95b3b6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev3+gf9213a0d documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev6+gcf95b3b6 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -306,31 +306,31 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.distance" title="wildboar.distance.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a>(y, x, *, dim=0, sample=None, metric='euclidean', metric_params=None, subsequence_distance=True, return_index=False)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.distance" title="wildboar.distance.distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance</span></code></a>(y, x, *[, dim, sample, metric, ...])</p></td>
 <td><p>Computes the distance between y and the samples of x</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.matches" title="wildboar.distance.matches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matches</span></code></a>(y, x, threshold, *, dim=0, sample=None, metric='euclidean', metric_params=None, return_distance=False)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.matches" title="wildboar.distance.matches"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matches</span></code></a>(y, x, threshold, *[, dim, sample, metric, ...])</p></td>
 <td><p>Find matches</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matrix_profile</span></code></a>(x, y=None, *, window=5, dim=0, exclude=None, n_jobs=-1, return_index=False)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matrix_profile</span></code></a>(x[, y, window, dim, exclude, n_jobs, ...])</p></td>
 <td><p>Compute the matrix profile.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_distance</span></code></a>(x, y, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_distance</span></code></a>(x, y, *[, dim, metric, metric_params, ...])</p></td>
 <td><p>Compute the distance between the i:th time series</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a>(y, x, *, dim=0, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a>(y, x, *[, dim, metric, ...])</p></td>
 <td><p>Compute the minimum subsequence distance between the i:th subsequence and time</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_match" title="wildboar.distance.paired_subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_match</span></code></a>(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, max_matches=None, return_distance=False, n_jobs=None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.paired_subsequence_match" title="wildboar.distance.paired_subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_match</span></code></a>(y, x[, threshold, dim, ...])</p></td>
 <td><p>Compute the minimum subsequence distance between the i:th subsequence and time</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a>(x, y=None, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a>(x[, y, dim, metric, metric_params, ...])</p></td>
 <td><p>Compute the distance between subsequences and time series</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a>(y, x, *, dim=0, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a>(y, x, *[, dim, metric, ...])</p></td>
 <td><p>Compute the minimum subsequence distance between subsequences and time series</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequence_match</span></code></a>(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, max_matches=None, exclude=None, return_distance=False, n_jobs=None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequence_match</span></code></a>(y, x[, threshold, dim, metric, ...])</p></td>
 <td><p>Find the positions where the distance is less than the threshold between the</p></td>
 </tr>
 </tbody>

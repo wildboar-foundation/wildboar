@@ -23,7 +23,7 @@ Classes
 
    Base estimator for counterfactual explanations
 
-   .. py:method:: fit(self, estimator)
+   .. py:method:: fit(estimator)
       :abstractmethod:
 
       Fit the counterfactual to a given estimator
@@ -34,7 +34,7 @@ Classes
       :rtype: self
 
 
-   .. py:method:: plot(self, **kwargs)
+   .. py:method:: plot(**kwargs)
 
       Plot the explanation
 
@@ -42,7 +42,7 @@ Classes
       :rtype: Axes
 
 
-   .. py:method:: transform(self, x, y)
+   .. py:method:: transform(x, y)
       :abstractmethod:
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th

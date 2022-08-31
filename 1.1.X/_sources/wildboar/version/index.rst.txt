@@ -4,16 +4,3 @@
 .. py:module:: wildboar.version
 
 
-Module Contents
----------------
-
-.. py:data:: version
-   :annotation: = 99.9.99
-
-   
-
-.. py:data:: version_tuple
-   :annotation: = [99, 9, 99]
-
-   
-

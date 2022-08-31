@@ -139,13 +139,13 @@ Functions
 
       :type: type arrays: list
 
-   .. py:method:: get_collection(self, collection)
+   .. py:method:: get_collection(collection)
 
 
-   .. py:method:: get_filename(self, version=None, tag=None, ext=None)
+   .. py:method:: get_filename(version=None, tag=None, ext=None)
 
 
-   .. py:method:: list(self, archive, collection=None)
+   .. py:method:: list(archive, collection=None)
 
       List all datasets in this bundle
 
@@ -158,7 +158,7 @@ Functions
       :rtype: list
 
 
-   .. py:method:: load(self, name, archive)
+   .. py:method:: load(name, archive)
 
       Load a dataset from the bundle
 
@@ -185,7 +185,7 @@ Functions
 
       
 
-   .. py:method:: download_url(self)
+   .. py:method:: download_url()
       :property:
 
       The url template for downloading bundles
@@ -194,7 +194,7 @@ Functions
       :rtype: the download url
 
 
-   .. py:method:: get_bundles(self)
+   .. py:method:: get_bundles()
 
       Get all bundles
 
@@ -202,11 +202,11 @@ Functions
       :rtype: a dictionary of key and bundle
 
 
-   .. py:method:: identifier(self)
+   .. py:method:: identifier()
       :property:
 
 
-   .. py:method:: name(self)
+   .. py:method:: name()
       :property:
 
       Name of the repository
@@ -215,7 +215,7 @@ Functions
       :rtype: the name of the repository
 
 
-   .. py:method:: version(self)
+   .. py:method:: version()
       :property:
 
       The repository version
@@ -224,7 +224,7 @@ Functions
       :rtype: the version of the repository
 
 
-   .. py:method:: wildboar_requires(self)
+   .. py:method:: wildboar_requires()
       :property:
 
       The minimum required wildboar version
@@ -258,24 +258,24 @@ Functions
 
    A repository is a collection of bundles
 
-   .. py:method:: __eq__(self, o)
+   .. py:method:: __eq__(o)
 
       Return self==value.
 
 
-   .. py:method:: __hash__(self) -> int
+   .. py:method:: __hash__() -> int
 
       Return hash(self).
 
 
-   .. py:method:: active(self)
+   .. py:method:: active()
       :property:
 
 
-   .. py:method:: clear_cache(self, cache_dir, keep_last_version=True)
+   .. py:method:: clear_cache(cache_dir, keep_last_version=True)
 
 
-   .. py:method:: download_url(self)
+   .. py:method:: download_url()
       :property:
 
       The url template for downloading bundles
@@ -284,7 +284,7 @@ Functions
       :rtype: the download url
 
 
-   .. py:method:: get_bundle(self, key)
+   .. py:method:: get_bundle(key)
 
       Get a bundle with the specified key
 
@@ -295,7 +295,7 @@ Functions
       :rtype: Bundle, optional
 
 
-   .. py:method:: get_bundles(self)
+   .. py:method:: get_bundles()
       :abstractmethod:
 
       Get all bundles
@@ -304,17 +304,17 @@ Functions
       :rtype: a dictionary of key and bundle
 
 
-   .. py:method:: identifier(self)
+   .. py:method:: identifier()
       :property:
 
 
-   .. py:method:: list_datasets(self, bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+   .. py:method:: list_datasets(bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
-   .. py:method:: load_dataset(self, bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+   .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
-   .. py:method:: name(self)
+   .. py:method:: name()
       :property:
 
       Name of the repository
@@ -323,12 +323,12 @@ Functions
       :rtype: the name of the repository
 
 
-   .. py:method:: refresh(self, timeout=None)
+   .. py:method:: refresh(timeout=None)
 
       Refresh the repository
 
 
-   .. py:method:: version(self)
+   .. py:method:: version()
       :property:
 
       The repository version
@@ -337,7 +337,7 @@ Functions
       :rtype: the version of the repository
 
 
-   .. py:method:: wildboar_requires(self)
+   .. py:method:: wildboar_requires()
       :property:
 
       The minimum required wildboar version
@@ -474,7 +474,7 @@ Functions
    :rtype: set
 
 
-.. py:function:: list_repositories(refresh=False, timeout=None, cache_dir=None)
+.. py:function:: list_repositories(*, refresh=False, timeout=None, cache_dir=None)
 
    List the key of all installed repositories
 

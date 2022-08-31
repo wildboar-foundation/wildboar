@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.tree" href="../../tree/index.html" /><link rel="prev" title="wildboar.model_selection" href="../index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.04.1"/>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
         <title>wildboar.model_selection.outlier - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
@@ -296,7 +296,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.model_selection.outlier.threshold_score" title="wildboar.model_selection.outlier.threshold_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">threshold_score</span></code></a>(y_true, score, score_f)</p></td>
 <td><p>Compute the performance of using the i:th score</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.model_selection.outlier.train_test_split" title="wildboar.model_selection.outlier.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_test_split</span></code></a>(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.model_selection.outlier.train_test_split" title="wildboar.model_selection.outlier.train_test_split"><code class="xref py py-obj docutils literal notranslate"><span class="pre">train_test_split</span></code></a>(x, y, normal_class[, test_size, ...])</p></td>
 <td><p>Training and testing split from classification dataset</p></td>
 </tr>
 </tbody>
@@ -354,13 +354,13 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/model_selection/_cv.py#L166-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/model_selection/_cv.py#L166-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">#</a></dt>
 <dd><p>Return repr(self).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits">
-<span class="sig-name descname"><span class="pre">get_n_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/model_selection/_cv.py#L80-L105"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_n_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/model_selection/_cv.py#L80-L105"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns the number of splitting iterations in the cross-validator
 :param X: The samples
 :type X: object
@@ -380,7 +380,7 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.RepeatedOutlierSplit.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/model_selection/_cv.py#L107-L164"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.split" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/model_selection/_cv.py#L107-L164"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.split" title="Permalink to this definition">#</a></dt>
 <dd><p>Return training and test indicies</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

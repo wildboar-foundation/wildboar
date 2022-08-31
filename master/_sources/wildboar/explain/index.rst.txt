@@ -125,7 +125,7 @@ Classes
 
       :type: type random_state: int or RandomState, optional
 
-   .. py:method:: fit(self, estimator, x, y=None, sample_weight=None)
+   .. py:method:: fit(estimator, x, y=None, sample_weight=None)
 
       Fit the importance explanation to the estimator
 
@@ -139,7 +139,7 @@ Classes
       :type sample_weight: array-like of shape (n_samples, ), optional
 
 
-   .. py:method:: plot(self, x=None, y=None, *, scoring=None, top_k=None, n_samples=None, title='Interval importance', **kwargs)
+   .. py:method:: plot(x=None, y=None, *, scoring=None, top_k=None, n_samples=None, title='Interval importance', **kwargs)
 
       Plot the explanation
 

@@ -50,12 +50,12 @@ Classes
       :param random_state: The psudo-random number generator
       :type random_state: int or RandomState, optional
 
-   .. py:method:: __repr__(self)
+   .. py:method:: __repr__()
 
       Return repr(self).
 
 
-   .. py:method:: get_n_splits(self, X, y, groups=None)
+   .. py:method:: get_n_splits(X, y, groups=None)
 
       Returns the number of splitting iterations in the cross-validator
       :param X: The samples
@@ -69,7 +69,7 @@ Classes
       :rtype: int
 
 
-   .. py:method:: split(self, x, y, groups=None)
+   .. py:method:: split(x, y, groups=None)
 
       Return training and test indicies
 

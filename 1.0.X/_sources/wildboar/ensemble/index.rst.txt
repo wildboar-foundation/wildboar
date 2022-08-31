@@ -194,10 +194,10 @@ Classes
                         function calls.
    :type random_state: int or RandomState, optional
 
-   .. py:method:: decision_function(self, x)
+   .. py:method:: decision_function(x)
 
 
-   .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y=None, sample_weight=None, check_input=True)
 
       Build a Bagging ensemble of estimators from the training set (X, y).
 
@@ -216,10 +216,10 @@ Classes
       :rtype: object
 
 
-   .. py:method:: predict(self, x)
+   .. py:method:: predict(x)
 
 
-   .. py:method:: score_samples(self, x)
+   .. py:method:: score_samples(x)
 
 
 
@@ -313,15 +313,15 @@ Classes
                         function calls.
    :type random_state: int or RandomState, optional
 
-   .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y=None, sample_weight=None, check_input=True)
 
       Fit a random shapelet forest regressor
 
 
-   .. py:method:: fit_transform(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit_transform(x, y=None, sample_weight=None, check_input=True)
 
 
-   .. py:method:: transform(self, x)
+   .. py:method:: transform(x)
 
 
 

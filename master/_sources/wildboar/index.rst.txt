@@ -49,14 +49,8 @@ Attributes
 
 .. autoapisummary::
 
-   wildboar.__version__
    wildboar.eos
 
-
-.. py:data:: __version__
-   :annotation: = 99.9.99
-
-   
 
 .. py:data:: eos
    

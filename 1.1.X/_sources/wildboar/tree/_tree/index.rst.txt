@@ -97,16 +97,16 @@ Attributes
    at the class level in their ``__init__`` as explicit keyword
    arguments (no ``*args`` or ``**kwargs``).
 
-   .. py:method:: apply(self, x, check_input=True)
+   .. py:method:: apply(x, check_input=True)
 
 
-   .. py:method:: decision_path(self, x, check_input=True)
+   .. py:method:: decision_path(x, check_input=True)
 
 
 
 .. py:class:: ClassifierTreeMixin
 
-   .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
       Fit a shapelet tree regressor from the training set
 
@@ -127,7 +127,7 @@ Attributes
       :rtype: object
 
 
-   .. py:method:: predict(self, x, check_input=True)
+   .. py:method:: predict(x, check_input=True)
 
       Predict the regression of the input samples x.
 
@@ -141,7 +141,7 @@ Attributes
       :rtype: ndarray of shape (n_samples,)
 
 
-   .. py:method:: predict_proba(self, x, check_input=True)
+   .. py:method:: predict_proba(x, check_input=True)
 
       Predict class probabilities of the input samples X.  The predicted
       class probability is the fraction of samples of the same class
@@ -512,7 +512,7 @@ Attributes
 
 .. py:class:: RegressorTreeMixin
 
-   .. py:method:: fit(self, X, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(X, y, sample_weight=None, check_input=True)
 
       Fit a shapelet tree regressor from the training set
 
@@ -533,7 +533,7 @@ Attributes
       :rtype: object
 
 
-   .. py:method:: predict(self, x, check_input=True)
+   .. py:method:: predict(x, check_input=True)
 
       Predict the regression of the input samples x.
 

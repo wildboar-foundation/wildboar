@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.version" href="../../version/index.html" /><link rel="prev" title="wildboar.utils.decorators" href="../decorators/index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.04.1"/>
-        <title>wildboar.utils.plot - Wildboar 1.1.0rc5.dev3+gf9213a0d documentation</title>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+        <title>wildboar.utils.plot - Wildboar 1.1.0rc5.dev6+gcf95b3b6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev3+gf9213a0d documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev6+gcf95b3b6 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -314,10 +314,10 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.plot.plot_frequency_domain" title="wildboar.utils.plot.plot_frequency_domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_frequency_domain</span></code></a>(x, *, y=None, ax=None, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.plot.plot_frequency_domain" title="wildboar.utils.plot.plot_frequency_domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_frequency_domain</span></code></a>(x, *[, y, ax, jitter, ...])</p></td>
 <td><p>Plot the samples in the freqency domain</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.plot.plot_time_domain" title="wildboar.utils.plot.plot_time_domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_time_domain</span></code></a>(x, *, y=None, ax=None, alpha=0.5, linewidth=0.5, zorder=-1, cmap='Dark2')</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.plot.plot_time_domain" title="wildboar.utils.plot.plot_time_domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_time_domain</span></code></a>(x, *[, y, ax, alpha, linewidth, ...])</p></td>
 <td><p>Plot the samples in the time domain</p></td>
 </tr>
 </tbody>
@@ -372,7 +372,7 @@ surprises; therefore the default is <code class="docutils literal notranslate"><
 <p>Returns 0 if <code class="docutils literal notranslate"><span class="pre">vmin</span> <span class="pre">==</span> <span class="pre">vmax</span></code>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.utils.plot.MidpointNormalize.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/plot.py#L43-L45"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.plot.MidpointNormalize.__call__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/plot.py#L43-L45"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.plot.MidpointNormalize.__call__" title="Permalink to this definition">#</a></dt>
 <dd><p>Normalize <em>value</em> data in the <code class="docutils literal notranslate"><span class="pre">[vmin,</span> <span class="pre">vmax]</span></code> interval into the
 <code class="docutils literal notranslate"><span class="pre">[0.0,</span> <span class="pre">1.0]</span></code> interval and return it.</p>
 <dl class="field-list simple">

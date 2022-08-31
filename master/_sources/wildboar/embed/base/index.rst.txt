@@ -41,7 +41,7 @@ Classes
 
       :type: type n_jobs: int, optional
 
-   .. py:method:: fit(self, x, y=None)
+   .. py:method:: fit(x, y=None)
 
       Fit the embedding.
 
@@ -57,7 +57,7 @@ Classes
       :rtype: self
 
 
-   .. py:method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(x, y=None)
 
       Fit the embedding and return the transform of x.
 
@@ -73,7 +73,7 @@ Classes
       :rtype: ndarray of shape [n_samples, n_outputs]
 
 
-   .. py:method:: transform(self, x)
+   .. py:method:: transform(x)
 
       Transform the dataset.
 

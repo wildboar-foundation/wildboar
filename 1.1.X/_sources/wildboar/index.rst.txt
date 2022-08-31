@@ -29,11 +29,3 @@ Submodules
    version/index.rst
 
 
-Package Contents
-----------------
-
-.. py:data:: __version__
-   :annotation: = 99.9.99
-
-   
-

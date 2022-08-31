@@ -41,10 +41,10 @@ Attributes
 
 .. py:class:: PredictionPaths(classes)
 
-   .. py:method:: __contains__(self, item)
+   .. py:method:: __contains__(item)
 
 
-   .. py:method:: __getitem__(self, item)
+   .. py:method:: __getitem__(item)
 
 
 
@@ -84,10 +84,10 @@ Attributes
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. py:method:: candidates(self, x, y)
+   .. py:method:: candidates(x, y)
 
 
-   .. py:method:: fit(self, estimator)
+   .. py:method:: fit(estimator)
 
       Fit the counterfactual to a given estimator
 
@@ -97,7 +97,7 @@ Attributes
       :rtype: self
 
 
-   .. py:method:: transform(self, x, y)
+   .. py:method:: transform(x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th
        label in y

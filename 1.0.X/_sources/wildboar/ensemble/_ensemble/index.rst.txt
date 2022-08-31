@@ -38,12 +38,12 @@ Classes
       This class should not be used directly. Use derived classes
       instead.
 
-   .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
       Fit a random shapelet forest classifier
 
 
-   .. py:method:: predict(self, X, check_input=True)
+   .. py:method:: predict(X, check_input=True)
 
       Predict class for X.
 
@@ -59,7 +59,7 @@ Classes
       :rtype: ndarray of shape (n_samples,)
 
 
-   .. py:method:: predict_log_proba(self, x, check_input=True)
+   .. py:method:: predict_log_proba(x, check_input=True)
 
       Predict class log-probabilities for X.
 
@@ -76,7 +76,7 @@ Classes
       :rtype: ndarray of shape (n_samples, n_classes)
 
 
-   .. py:method:: predict_proba(self, x, check_input=True)
+   .. py:method:: predict_proba(x, check_input=True)
 
       Predict class probabilities for X.
 
@@ -108,12 +108,12 @@ Classes
       This class should not be used directly. Use derived classes
       instead.
 
-   .. py:method:: fit(self, x, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
       Fit a random shapelet forest regressor
 
 
-   .. py:method:: predict(self, x, check_input=True)
+   .. py:method:: predict(x, check_input=True)
 
       Predict regression target for X.
 
@@ -301,10 +301,10 @@ Classes
                         function calls.
    :type random_state: int or RandomState, optional
 
-   .. py:method:: decision_function(self, x)
+   .. py:method:: decision_function(x)
 
 
-   .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y=None, sample_weight=None, check_input=True)
 
       Build a Bagging ensemble of estimators from the training set (X, y).
 
@@ -323,10 +323,10 @@ Classes
       :rtype: object
 
 
-   .. py:method:: predict(self, x)
+   .. py:method:: predict(x)
 
 
-   .. py:method:: score_samples(self, x)
+   .. py:method:: score_samples(x)
 
 
 
@@ -420,24 +420,24 @@ Classes
                         function calls.
    :type random_state: int or RandomState, optional
 
-   .. py:method:: fit(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y=None, sample_weight=None, check_input=True)
 
       Fit a random shapelet forest regressor
 
 
-   .. py:method:: fit_transform(self, x, y=None, sample_weight=None, check_input=True)
+   .. py:method:: fit_transform(x, y=None, sample_weight=None, check_input=True)
 
 
-   .. py:method:: transform(self, x)
+   .. py:method:: transform(x)
 
 
 
 .. py:class:: ShapeletForestMixin
 
-   .. py:method:: apply(self, x)
+   .. py:method:: apply(x)
 
 
-   .. py:method:: decision_function(self, x)
+   .. py:method:: decision_function(x)
 
 
 

@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.embed" href="../../embed/index.html" /><link rel="prev" title="wildboar.distance" href="../index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.04.1"/>
-        <title>wildboar.distance.dtw - Wildboar 1.1.0rc5.dev3+gf9213a0d documentation</title>
+    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+        <title>wildboar.distance.dtw - Wildboar 1.1.0rc5.dev6+gcf95b3b6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev3+gf9213a0d documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev6+gcf95b3b6 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -298,22 +298,22 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_alignment" title="wildboar.distance.dtw.dtw_alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_alignment</span></code></a>(x, y, r=1.0, out=None)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_alignment" title="wildboar.distance.dtw.dtw_alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_alignment</span></code></a>(x, y[, r, out])</p></td>
 <td><p>Compute the Dynamic time warping alignment matrix</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a>(x, y, r=1.0, scale=False)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a>(x, y[, r, scale])</p></td>
 <td><p>Compute the dynamic time warping distance</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_envelop" title="wildboar.distance.dtw.dtw_envelop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_envelop</span></code></a>(x, r=1.0)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_envelop" title="wildboar.distance.dtw.dtw_envelop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_envelop</span></code></a>(x[, r])</p></td>
 <td><p>Compute the envelop for LB_keogh</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_lb_keogh" title="wildboar.distance.dtw.dtw_lb_keogh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_lb_keogh</span></code></a>(x, y=None, *, lower=None, upper=None, r=1.0)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_lb_keogh" title="wildboar.distance.dtw.dtw_lb_keogh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_lb_keogh</span></code></a>(x[, y, lower, upper, r])</p></td>
 <td><p>The LB_keogh lower bound</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_mapping" title="wildboar.distance.dtw.dtw_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_mapping</span></code></a>(x=None, y=None, *, alignment=None, r=1, return_index=False)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_mapping" title="wildboar.distance.dtw.dtw_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_mapping</span></code></a>([x, y, alignment, r, return_index])</p></td>
 <td><p>Compute the optimal warping path between two series or from a given</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_pairwise_distance" title="wildboar.distance.dtw.dtw_pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_pairwise_distance</span></code></a>(x, r=1.0)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_pairwise_distance" title="wildboar.distance.dtw.dtw_pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_pairwise_distance</span></code></a>(x[, r])</p></td>
 <td><p>Compute the distance between all pairs of rows</p></td>
 </tr>
 </tbody>

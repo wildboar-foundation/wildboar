@@ -43,7 +43,7 @@ Classes
                  is moved more.
    :type gamma: float
 
-   .. py:method:: move(self, o, p)
+   .. py:method:: move(o, p)
 
       Move the sample o towards p
 
@@ -70,7 +70,7 @@ Classes
                  is moved more.
    :type gamma: float
 
-   .. py:method:: move(self, o, p)
+   .. py:method:: move(o, p)
 
       Move the sample o towards p
 
@@ -103,7 +103,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: nearest_index(self, o)
+   .. py:method:: nearest_index(o)
 
       Return the index of the closest sample
 
@@ -114,7 +114,7 @@ Classes
       :rtype: an index
 
 
-   .. py:method:: sample(self, o)
+   .. py:method:: sample(o)
 
       Sample an example
 
@@ -147,7 +147,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: move(self, o, p)
+   .. py:method:: move(o, p)
 
       Move the current counterfactual toward the prototype
 
@@ -160,7 +160,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(self, o)
+   .. py:method:: sample(o)
 
       Sample an example
 
@@ -185,7 +185,7 @@ Classes
                  is moved more.
    :type gamma: float
 
-   .. py:method:: move(self, o, p)
+   .. py:method:: move(o, p)
       :abstractmethod:
 
       Move the sample o towards p
@@ -311,7 +311,7 @@ Classes
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. py:method:: fit(self, estimator)
+   .. py:method:: fit(estimator)
 
       Fit the counterfactual to a given estimator
 
@@ -321,7 +321,7 @@ Classes
       :rtype: self
 
 
-   .. py:method:: transform(self, x, y)
+   .. py:method:: transform(x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th
        label in y
@@ -356,7 +356,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: move(self, o, p)
+   .. py:method:: move(o, p)
 
       Move the current counterfactual toward the prototype
 
@@ -369,7 +369,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(self, o)
+   .. py:method:: sample(o)
       :abstractmethod:
 
       Sample an example
@@ -381,7 +381,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample_move(self, o)
+   .. py:method:: sample_move(o)
 
       Sampla a prototype and move the counterfactual towards the prototype
 
@@ -414,7 +414,7 @@ Classes
    :param max_shapelet_size: The maximum shapelet size
    :type max_shapelet_size: float
 
-   .. py:method:: move(self, o, p)
+   .. py:method:: move(o, p)
 
       Move the best matching shapelet of the  counterfactual sample towards
       the shapelet prototype
@@ -428,7 +428,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(self, _o)
+   .. py:method:: sample(_o)
 
       Sample an example
 
@@ -439,7 +439,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample_shapelet(self, p)
+   .. py:method:: sample_shapelet(p)
 
       Sample a shapelet from x
 
@@ -462,7 +462,7 @@ Classes
    :param estimator: The estimator
    :type estimator: object
 
-   .. py:method:: is_counterfactual(self, x, y)
+   .. py:method:: is_counterfactual(x, y)
 
       Return true if x is a counterfactual of label y
 
@@ -495,7 +495,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: sample(self, _o)
+   .. py:method:: sample(_o)
 
       Sample an example
 

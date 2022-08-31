@@ -30,7 +30,7 @@ Classes
 
    Labels samples as outliers if a density cluster algorithm fail to assign them to a cluster
 
-   .. py:method:: fit(self, x, y=None)
+   .. py:method:: fit(x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -40,10 +40,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. py:method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(x, y=None)
 
 
-   .. py:method:: transform(self, x, y=None)
+   .. py:method:: transform(x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -145,7 +145,7 @@ Classes
    :param random_state: A pseudo-random number generator to control the randomness of the algorithm.
    :type random_state: RandomState or int, optinal
 
-   .. py:method:: fit(self, x, y=None)
+   .. py:method:: fit(x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -155,10 +155,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. py:method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(x, y=None)
 
 
-   .. py:method:: transform(self, x, y=None)
+   .. py:method:: transform(x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -203,7 +203,7 @@ Classes
       :param random_state: The pseudo random state to ensure consistent results.
       :type random_state: RandomState or int, optional
 
-   .. py:method:: fit(self, x, y=None)
+   .. py:method:: fit(x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -213,10 +213,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. py:method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(x, y=None)
 
 
-   .. py:method:: transform(self, x, y=None)
+   .. py:method:: transform(x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -270,7 +270,7 @@ Classes
 
       :type: type random_state: int or RandomState, optional
 
-   .. py:method:: fit(self, x, y=None)
+   .. py:method:: fit(x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -280,7 +280,7 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. py:method:: transform(self, x, y=None)
+   .. py:method:: transform(x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -306,7 +306,7 @@ Classes
 
       :type: object
 
-   .. py:method:: fit(self, x, y=None)
+   .. py:method:: fit(x, y=None)
 
       Fit the outlier labeler to the give samples
 
@@ -316,7 +316,7 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. py:method:: transform(self, x, y=None)
+   .. py:method:: transform(x, y=None)
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 
@@ -334,7 +334,7 @@ Classes
 
    Base-class for outlier labelers
 
-   .. py:method:: fit(self, x, y=None)
+   .. py:method:: fit(x, y=None)
       :abstractmethod:
 
       Fit the outlier labeler to the give samples
@@ -345,10 +345,10 @@ Classes
       :type y: array-like of shape (n_samples, ) optional
 
 
-   .. py:method:: fit_transform(self, x, y=None)
+   .. py:method:: fit_transform(x, y=None)
 
 
-   .. py:method:: transform(self, x, y=None)
+   .. py:method:: transform(x, y=None)
       :abstractmethod:
 
       Transform the labels of (a subset) of samples in x to inlier and outliers

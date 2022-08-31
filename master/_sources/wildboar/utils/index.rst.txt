@@ -38,13 +38,13 @@ Functions
 
 .. py:class:: DependencyMissing(e=None, *, package=None, context=None)
 
-   .. py:method:: __call__(self, *args, **kwds)
+   .. py:method:: __call__(*args, **kwds)
 
 
-   .. py:method:: __getattr__(self, name)
+   .. py:method:: __getattr__(name)
 
 
-   .. py:method:: __mro_entries__(self, bases)
+   .. py:method:: __mro_entries__(bases)
 
 
 
