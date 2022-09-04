@@ -1,18 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.explain" href="../explain/index.html" /><link rel="prev" title="wildboar.embed.base" href="../embed/base/index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>wildboar.ensemble - Wildboar 1.1.0rc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -262,17 +260,13 @@
         </div>
         <article role="main">
           <section id="module-wildboar.ensemble">
-<span id="wildboar-ensemble"></span><h1><a class="reference internal" href="#module-wildboar.ensemble" title="wildboar.ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a><a class="headerlink" href="#module-wildboar.ensemble" title="Permalink to this headline">#</a></h1>
+<span id="wildboar-ensemble"></span><h1><a class="reference internal" href="#module-wildboar.ensemble" title="wildboar.ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a><a class="headerlink" href="#module-wildboar.ensemble" title="Permalink to this heading">#</a></h1>
 <section id="package-contents">
-<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this headline">#</a></h2>
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading">#</a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">#</a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.ExtraShapeletTreesClassifier" title="wildboar.ensemble.ExtraShapeletTreesClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreesClassifier</span></code></a></p></td>
 <td><p>An ensemble of extremely random shapelet trees for time series regression.</p></td>
@@ -317,7 +311,7 @@
 </div>
 <p>Construct a extra shapelet trees classifier.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -366,7 +360,7 @@ function calls.</p></li>
 </div>
 <p>Construct a extra shapelet trees regressor.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -400,7 +394,7 @@ function calls.</p></li>
 <span class="sig-name descname"><span class="pre">offset_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.IsolationShapeletForest.offset_" title="Permalink to this definition">#</a></dt>
 <dd><p>The offset for computing the final decision</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -440,7 +434,7 @@ function calls.</p></li>
 </div>
 <p>Construct a shapelet isolation forest</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -490,7 +484,7 @@ function calls.</p></li>
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py#L1112-L1217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.IsolationShapeletForest.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
@@ -501,10 +495,10 @@ Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -547,7 +541,7 @@ Random Patches <a href="#id20"><span class="problematic" id="id4">[4]_</span></a
 <p><span class="versionmodified added">New in version 0.15.</span></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>base_estimator</strong> (<em>object</em><em>, </em><em>default=None</em>) – The base estimator to fit on random subsets of the dataset.
 If None, then the base estimator is a
@@ -599,7 +593,7 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 <span class="sig-name descname"><span class="pre">base_estimator_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestClassifier.base_estimator_" title="Permalink to this definition">#</a></dt>
 <dd><p>The base estimator from which the ensemble is grown.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>estimator</p>
 </dd>
 </dl>
@@ -614,7 +608,7 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -628,7 +622,7 @@ removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
 <p><span class="versionmodified added">New in version 0.24.</span></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -643,7 +637,7 @@ has feature names that are all strings.</p>
 <p><span class="versionmodified added">New in version 1.0.</span></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (<cite>n_features_in_</cite>,)</p>
 </dd>
 </dl>
@@ -654,7 +648,7 @@ has feature names that are all strings.</p>
 <span class="sig-name descname"><span class="pre">estimators_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestClassifier.estimators_" title="Permalink to this definition">#</a></dt>
 <dd><p>The collection of fitted base estimators.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of estimators</p>
 </dd>
 </dl>
@@ -666,7 +660,7 @@ has feature names that are all strings.</p>
 <dd><p>The subset of drawn samples (i.e., the in-bag samples) for each base
 estimator. Each subset is defined by an array of the indices selected.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of arrays</p>
 </dd>
 </dl>
@@ -677,7 +671,7 @@ estimator. Each subset is defined by an array of the indices selected.</p>
 <span class="sig-name descname"><span class="pre">estimators_features_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestClassifier.estimators_features_" title="Permalink to this definition">#</a></dt>
 <dd><p>The subset of drawn features for each base estimator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of arrays</p>
 </dd>
 </dl>
@@ -688,7 +682,7 @@ estimator. Each subset is defined by an array of the indices selected.</p>
 <span class="sig-name descname"><span class="pre">classes_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestClassifier.classes_" title="Permalink to this definition">#</a></dt>
 <dd><p>The classes labels.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_classes,)</p>
 </dd>
 </dl>
@@ -699,7 +693,7 @@ estimator. Each subset is defined by an array of the indices selected.</p>
 <span class="sig-name descname"><span class="pre">n_classes_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestClassifier.n_classes_" title="Permalink to this definition">#</a></dt>
 <dd><p>The number of classes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int or list</p>
 </dd>
 </dl>
@@ -711,7 +705,7 @@ estimator. Each subset is defined by an array of the indices selected.</p>
 <dd><p>Score of the training dataset obtained using an out-of-bag estimate.
 This attribute exists only when <code class="docutils literal notranslate"><span class="pre">oob_score</span></code> is True.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -726,7 +720,7 @@ was never left out during the bootstrap. In this case,
 <cite>oob_decision_function_</cite> might contain NaN. This attribute exists
 only when <code class="docutils literal notranslate"><span class="pre">oob_score</span></code> is True.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples, n_classes)</p>
 </dd>
 </dl>
@@ -740,25 +734,29 @@ only when <code class="docutils literal notranslate"><span class="pre">oob_score
 </dl>
 </div>
 <p class="rubric">References</p>
-<dl class="footnote brackets">
-<dt class="label" id="id5"><span class="brackets">1</span></dt>
-<dd><p>L. Breiman, “Pasting small votes for classification in large
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>L. Breiman, “Pasting small votes for classification in large
 databases and on-line”, Machine Learning, 36(1), 85-103, 1999.</p>
-</dd>
-<dt class="label" id="id6"><span class="brackets">2</span></dt>
-<dd><p>L. Breiman, “Bagging predictors”, Machine Learning, 24(2), 123-140,
+</aside>
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>L. Breiman, “Bagging predictors”, Machine Learning, 24(2), 123-140,
 1996.</p>
-</dd>
-<dt class="label" id="id7"><span class="brackets">3</span></dt>
-<dd><p>T. Ho, “The random subspace method for constructing decision
+</aside>
+<aside class="footnote brackets" id="id7" role="note">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>T. Ho, “The random subspace method for constructing decision
 forests”, Pattern Analysis and Machine Intelligence, 20(8), 832-844,
 1998.</p>
-</dd>
-<dt class="label" id="id8"><span class="brackets">4</span></dt>
-<dd><p>G. Louppe and P. Geurts, “Ensembles on Random Patches”, Machine
+</aside>
+<aside class="footnote brackets" id="id8" role="note">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>G. Louppe and P. Geurts, “Ensembles on Random Patches”, Machine
 Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
-</dd>
-</dl>
+</aside>
+</aside>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVC</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingClassifier</span>
@@ -799,7 +797,7 @@ Random Patches <a href="#id24"><span class="problematic" id="id12">[4]_</span></
 <p><span class="versionmodified added">New in version 0.15.</span></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>base_estimator</strong> (<em>object</em><em>, </em><em>default=None</em>) – The base estimator to fit on random subsets of the dataset.
 If None, then the base estimator is a
@@ -847,7 +845,7 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 <span class="sig-name descname"><span class="pre">base_estimator_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestRegressor.base_estimator_" title="Permalink to this definition">#</a></dt>
 <dd><p>The base estimator from which the ensemble is grown.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>estimator</p>
 </dd>
 </dl>
@@ -862,7 +860,7 @@ See <span class="xref std std-term">Glossary</span>.</p></li>
 removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -876,7 +874,7 @@ removed in 1.2. Use <cite>n_features_in_</cite> instead.</p>
 <p><span class="versionmodified added">New in version 0.24.</span></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -891,7 +889,7 @@ has feature names that are all strings.</p>
 <p><span class="versionmodified added">New in version 1.0.</span></p>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (<cite>n_features_in_</cite>,)</p>
 </dd>
 </dl>
@@ -902,7 +900,7 @@ has feature names that are all strings.</p>
 <span class="sig-name descname"><span class="pre">estimators_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestRegressor.estimators_" title="Permalink to this definition">#</a></dt>
 <dd><p>The collection of fitted sub-estimators.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of estimators</p>
 </dd>
 </dl>
@@ -914,7 +912,7 @@ has feature names that are all strings.</p>
 <dd><p>The subset of drawn samples (i.e., the in-bag samples) for each base
 estimator. Each subset is defined by an array of the indices selected.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of arrays</p>
 </dd>
 </dl>
@@ -925,7 +923,7 @@ estimator. Each subset is defined by an array of the indices selected.</p>
 <span class="sig-name descname"><span class="pre">estimators_features_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.RockestRegressor.estimators_features_" title="Permalink to this definition">#</a></dt>
 <dd><p>The subset of drawn features for each base estimator.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list of arrays</p>
 </dd>
 </dl>
@@ -937,7 +935,7 @@ estimator. Each subset is defined by an array of the indices selected.</p>
 <dd><p>Score of the training dataset obtained using an out-of-bag estimate.
 This attribute exists only when <code class="docutils literal notranslate"><span class="pre">oob_score</span></code> is True.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -952,7 +950,7 @@ was never left out during the bootstrap. In this case,
 <cite>oob_prediction_</cite> might contain NaN. This attribute exists only
 when <code class="docutils literal notranslate"><span class="pre">oob_score</span></code> is True.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
 </dd>
 </dl>
@@ -966,25 +964,29 @@ when <code class="docutils literal notranslate"><span class="pre">oob_score</spa
 </dl>
 </div>
 <p class="rubric">References</p>
-<dl class="footnote brackets">
-<dt class="label" id="id13"><span class="brackets">1</span></dt>
-<dd><p>L. Breiman, “Pasting small votes for classification in large
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id13" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>L. Breiman, “Pasting small votes for classification in large
 databases and on-line”, Machine Learning, 36(1), 85-103, 1999.</p>
-</dd>
-<dt class="label" id="id14"><span class="brackets">2</span></dt>
-<dd><p>L. Breiman, “Bagging predictors”, Machine Learning, 24(2), 123-140,
+</aside>
+<aside class="footnote brackets" id="id14" role="note">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>L. Breiman, “Bagging predictors”, Machine Learning, 24(2), 123-140,
 1996.</p>
-</dd>
-<dt class="label" id="id15"><span class="brackets">3</span></dt>
-<dd><p>T. Ho, “The random subspace method for constructing decision
+</aside>
+<aside class="footnote brackets" id="id15" role="note">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>T. Ho, “The random subspace method for constructing decision
 forests”, Pattern Analysis and Machine Intelligence, 20(8), 832-844,
 1998.</p>
-</dd>
-<dt class="label" id="id16"><span class="brackets">4</span></dt>
-<dd><p>G. Louppe and P. Geurts, “Ensembles on Random Patches”, Machine
+</aside>
+<aside class="footnote brackets" id="id16" role="note">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>G. Louppe and P. Geurts, “Ensembles on Random Patches”, Machine
 Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
-</dd>
-</dl>
+</aside>
+</aside>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">SVR</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">BaggingRegressor</span>
@@ -1016,7 +1018,7 @@ Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
 </div>
 <p>Shapelet forest classifier.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node</p></li>
@@ -1064,7 +1066,7 @@ coding of a time series with as many ones as trees in the forest.</p>
 <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">n_estimators</span> <span class="pre">*</span> <span class="pre">2^max_depth</span></code></p>
 <p>Construct a shapelet forest embedding.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -1089,7 +1091,7 @@ function calls.</p></li>
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/ensemble/_ensemble.py#L922-L924"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ShapeletForestEmbedding.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
@@ -1100,10 +1102,10 @@ Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -1137,7 +1139,7 @@ sample weighting.</p></li>
 </div>
 <p>Shapelet forest regressor.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node</p></li>
@@ -1287,7 +1289,9 @@ function calls.</p></li>
 <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
     </body>
 </html>

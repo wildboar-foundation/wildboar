@@ -1,18 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>wildboar.linear_model._kernel_logistic - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -265,17 +263,13 @@
         </div>
         <article role="main">
           <section id="module-wildboar.linear_model._kernel_logistic">
-<span id="wildboar-linear-model-kernel-logistic"></span><h1><a class="reference internal" href="#module-wildboar.linear_model._kernel_logistic" title="wildboar.linear_model._kernel_logistic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model._kernel_logistic</span></code></a><a class="headerlink" href="#module-wildboar.linear_model._kernel_logistic" title="Permalink to this headline">#</a></h1>
+<span id="wildboar-linear-model-kernel-logistic"></span><h1><a class="reference internal" href="#module-wildboar.linear_model._kernel_logistic" title="wildboar.linear_model._kernel_logistic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model._kernel_logistic</span></code></a><a class="headerlink" href="#module-wildboar.linear_model._kernel_logistic" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">#</a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression" title="wildboar.linear_model._kernel_logistic.KernelLogisticRegression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KernelLogisticRegression</span></code></a></p></td>
 <td><p>A simple kernel logistic implementation using a Nystroem kernel approximation</p></td>
@@ -297,23 +291,23 @@
 <p>wildboar.datasets.outlier.EmmottLabeler : Synthetic outlier dataset construction</p>
 <p>Create a new kernel logistic regression</p>
 <dl class="field-list simple">
-<dt class="field-odd">param kernel</dt>
+<dt class="field-odd">param kernel<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The kernel function to use. See <cite>sklearn.metrics.pairwise.kernel_metric</cite> for kernels. The default kernel
 is ‘rbf’.</p>
 </dd>
-<dt class="field-even">type kernel</dt>
+<dt class="field-even">type kernel<span class="colon">:</span></dt>
 <dd class="field-even"><p>str, optional</p>
 </dd>
-<dt class="field-odd">param kernel_params</dt>
+<dt class="field-odd">param kernel_params<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Parameters to the kernel function.</p>
 </dd>
-<dt class="field-even">type kernel_params</dt>
+<dt class="field-even">type kernel_params<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict, optional</p>
 </dd>
-<dt class="field-odd">param n_components</dt>
+<dt class="field-odd">param n_components<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Number of features to construct</p>
 </dd>
-<dt class="field-even">type n_components</dt>
+<dt class="field-even">type n_components<span class="colon">:</span></dt>
 <dd class="field-even"><p>int, optional</p>
 </dd>
 </dl>
@@ -325,15 +319,15 @@ is ‘rbf’.</p>
 <p>The confidence score for a sample is proportional to the signed
 distance of that sample to the hyperplane.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data matrix for which we want to get the confidence scores.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>scores</strong> – Confidence scores per <cite>(n_samples, n_classes)</cite> combination. In the
 binary case, confidence score for <cite>self.classes_[1]</cite> where &gt;0 means
 this class would be predicted.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples,) or (n_samples, n_classes)</p>
 </dd>
 </dl>
@@ -344,7 +338,7 @@ this class would be predicted.</p>
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/linear_model/_kernel_logistic.py#L93-L105"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the model according to the given training data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vector, where <cite>n_samples</cite> is the number of samples and
 <cite>n_features</cite> is the number of features.</p></li>
@@ -357,10 +351,10 @@ If not provided, then each sample is given unit weight.</p>
 </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted estimator.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>self</p>
 </dd>
 </dl>
@@ -440,7 +434,9 @@ If not provided, then each sample is given unit weight.</p>
 <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
     </body>
 </html>

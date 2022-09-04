@@ -1,18 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>wildboar.ensemble._ensemble - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -265,17 +263,13 @@
         </div>
         <article role="main">
           <section id="module-wildboar.ensemble._ensemble">
-<span id="wildboar-ensemble-ensemble"></span><h1><a class="reference internal" href="#module-wildboar.ensemble._ensemble" title="wildboar.ensemble._ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble._ensemble</span></code></a><a class="headerlink" href="#module-wildboar.ensemble._ensemble" title="Permalink to this headline">#</a></h1>
+<span id="wildboar-ensemble-ensemble"></span><h1><a class="reference internal" href="#module-wildboar.ensemble._ensemble" title="wildboar.ensemble._ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble._ensemble</span></code></a><a class="headerlink" href="#module-wildboar.ensemble._ensemble" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">#</a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier" title="wildboar.ensemble._ensemble.BaseShapeletForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseShapeletForestClassifier</span></code></a></p></td>
 <td><p>Base class for shapelet forest classifiers.</p></td>
@@ -331,14 +325,14 @@ instead.</p>
 the highest mean predicted probability. If base estimators do not
 implement a <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> method, then it resorts to voting.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
 </dd>
 </dl>
@@ -352,15 +346,15 @@ they are supported by the base estimator.</p>
 the log of the mean predicted class probabilities of the base
 estimators in the ensemble.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>p</strong> – The class log-probabilities of the input samples. The order of the
 classes corresponds to that in the attribute <span class="xref std std-term">classes_</span>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples, n_classes)</p>
 </dd>
 </dl>
@@ -377,15 +371,15 @@ method, then it resorts to voting and the predicted class probabilities
 of an input sample represents the proportion of estimators predicting
 each class.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>p</strong> – The class probabilities of the input samples. The order of the
 classes corresponds to that in the attribute <span class="xref std std-term">classes_</span>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples, n_classes)</p>
 </dd>
 </dl>
@@ -416,14 +410,14 @@ instead.</p>
 <p>The predicted regression target of an input sample is computed as the
 mean predicted regression targets of the estimators in the ensemble.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>y</strong> – The predicted values.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
 </dd>
 </dl>
@@ -447,7 +441,7 @@ they are supported by the base estimator.</p>
 </div>
 <p>Construct a extra shapelet trees classifier.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -484,7 +478,7 @@ function calls.</p></li>
 </div>
 <p>Construct a extra shapelet trees regressor.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -518,7 +512,7 @@ function calls.</p></li>
 <span class="sig-name descname"><span class="pre">offset_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/ensemble/_ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.offset_" title="Permalink to this definition">#</a></dt>
 <dd><p>The offset for computing the final decision</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -552,7 +546,7 @@ function calls.</p></li>
 </div>
 <p>Construct a shapelet isolation forest</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -598,7 +592,7 @@ function calls.</p></li>
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/ensemble/_ensemble.py#L1112-L1217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
@@ -609,10 +603,10 @@ Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -646,7 +640,7 @@ sample weighting.</p></li>
 </div>
 <p>Shapelet forest classifier.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node</p></li>
@@ -682,7 +676,7 @@ coding of a time series with as many ones as trees in the forest.</p>
 <code class="docutils literal notranslate"><span class="pre">&lt;=</span> <span class="pre">n_estimators</span> <span class="pre">*</span> <span class="pre">2^max_depth</span></code></p>
 <p>Construct a shapelet forest embedding.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>bootstrap</strong> (<em>bool</em><em>, </em><em>optional</em>) – Use bootstrap sampling to fit the base estimators</p></li>
@@ -751,7 +745,7 @@ function calls.</p></li>
 </div>
 <p>Shapelet forest regressor.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_estimators</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of estimators</p></li>
 <li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets to sample at each node</p></li>
@@ -874,7 +868,9 @@ function calls.</p></li>
 <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
+    <script src="../../../_static/design-tabs.js"></script>
     </body>
 </html>

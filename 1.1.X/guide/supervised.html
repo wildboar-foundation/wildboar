@@ -1,18 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Unsupervised learning" href="unsupervised.html" /><link rel="prev" title="Datasets" href="datasets.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>Supervised learning - Wildboar 1.1.0rc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -262,25 +260,25 @@
         </div>
         <article role="main">
           <section id="supervised-learning">
-<h1>Supervised learning<a class="headerlink" href="#supervised-learning" title="Permalink to this headline">#</a></h1>
+<h1>Supervised learning<a class="headerlink" href="#supervised-learning" title="Permalink to this heading">#</a></h1>
 <p>In supervised learning, we are given a collection of labeled time series and
 the goal is to produce an estimator that as accurately as possible can map
 previously unseen time series to the correct label.</p>
 <section id="shapelet-trees">
-<h2>Shapelet trees<a class="headerlink" href="#shapelet-trees" title="Permalink to this headline">#</a></h2>
+<h2>Shapelet trees<a class="headerlink" href="#shapelet-trees" title="Permalink to this heading">#</a></h2>
 <p>For classification, wildboar includes two types of shapelet trees. Both trees are based
 on randomly sampling shapelets. <code class="docutils literal notranslate"><span class="pre">ShapeletTreeClassifier</span></code> samples shapelets
 randomly and <code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreeClassifier</span></code> also sample the distance threshold randomly.
 Both <code class="docutils literal notranslate"><span class="pre">ShapeletTreeRegressor</span></code> and <code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreeRegressor</span></code> are available.</p>
 </section>
 <section id="shapelet-forest">
-<h2>Shapelet forest<a class="headerlink" href="#shapelet-forest" title="Permalink to this headline">#</a></h2>
+<h2>Shapelet forest<a class="headerlink" href="#shapelet-forest" title="Permalink to this heading">#</a></h2>
 <p>Shapelet forests, implemented in <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">ShapeletForestRegressor</span></code>,
 construct ensembles of shapelet tree classifiers or regressors respectively. For a large
 variety of tasks, these estimators are excellent baseline methods.</p>
 </section>
 <section id="embedding-methods">
-<h2>Embedding methods<a class="headerlink" href="#embedding-methods" title="Permalink to this headline">#</a></h2>
+<h2>Embedding methods<a class="headerlink" href="#embedding-methods" title="Permalink to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">RocketClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">RocketRegressor</span></code> uses a random convolutional embdding
 to represent time series and fit a ridge regression model to the representation. For
 benchmark tasks, this embedding and estimator configuration often give state-of-the-art
@@ -364,7 +362,9 @@ predictive performance.</p>
 <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/scripts/furo.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     </body>
 </html>

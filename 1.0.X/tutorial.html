@@ -1,18 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="User guide" href="guide.html" /><link rel="prev" title="Installing wildboar" href="install.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>wildboar tutorial - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -265,9 +263,9 @@
         </div>
         <article role="main">
           <section id="wildboar-tutorial">
-<h1>wildboar tutorial<a class="headerlink" href="#wildboar-tutorial" title="Permalink to this headline">#</a></h1>
+<h1>wildboar tutorial<a class="headerlink" href="#wildboar-tutorial" title="Permalink to this heading">#</a></h1>
 <section id="machine-learning">
-<h2>Machine learning<a class="headerlink" href="#machine-learning" title="Permalink to this headline">#</a></h2>
+<h2>Machine learning<a class="headerlink" href="#machine-learning" title="Permalink to this heading">#</a></h2>
 <p>In general, the machine learning problem setting consists of n samples of data an the goal is to predict properties of unknown data.
 <code class="docutils literal notranslate"><span class="pre">wildboar</span></code>, in particular consider machine learning problems in which the samples are data series, e.g., time series or
 otherwise temporally or logically ordered data.</p>
@@ -287,7 +285,7 @@ be either numerical or nominal</p>
 </ul>
 </section>
 <section id="loading-an-example-dataset">
-<h2>Loading an example dataset<a class="headerlink" href="#loading-an-example-dataset" title="Permalink to this headline">#</a></h2>
+<h2>Loading an example dataset<a class="headerlink" href="#loading-an-example-dataset" title="Permalink to this heading">#</a></h2>
 <p>Wildboar bundles a few <a class="reference external" href="http://www.timeseriesclassification.com/">standard datasets (no https)</a> from the time series community.</p>
 <p>In the example, we load the dataset <code class="docutils literal notranslate"><span class="pre">synthetic_control</span></code> and the <code class="docutils literal notranslate"><span class="pre">TwoLeadECG</span></code> dataset.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_synthetic_control</span><span class="p">,</span> <span class="n">load_two_lead_ecg</span>
@@ -310,7 +308,7 @@ be either numerical or nominal</p>
 </div>
 </section>
 <section id="learning-and-predicting">
-<h2>Learning and predicting<a class="headerlink" href="#learning-and-predicting" title="Permalink to this headline">#</a></h2>
+<h2>Learning and predicting<a class="headerlink" href="#learning-and-predicting" title="Permalink to this heading">#</a></h2>
 <p>All estimators in wildboar implements the same interface as all estimators of scikit-learn. We can <cite>fit</cite> an estimator to an input dataset and <cite>predict</cite> the label of a new sample.</p>
 <p>An example of a temporal estimator is the <code class="docutils literal notranslate"><span class="pre">wildboar.ensemble.ShapeletForestClassifier</span></code> which implements a random shapelet forest classifier.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
@@ -330,7 +328,7 @@ of training timestep.</p>
 </div>
 </section>
 <section id="model-persistence">
-<h2>Model persistence<a class="headerlink" href="#model-persistence" title="Permalink to this headline">#</a></h2>
+<h2>Model persistence<a class="headerlink" href="#model-persistence" title="Permalink to this heading">#</a></h2>
 <p>All <cite>wildboar</cite> models can be persisted to disk using <a class="reference external" href="https://docs.python.org/3/library/pickle.html">pickle</a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pickle</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">repr</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span> <span class="c1"># clf fitted earlier</span>
@@ -427,7 +425,9 @@ of training timestep.</p>
 <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/scripts/furo.js"></script>
+    <script src="_static/design-tabs.js"></script>
     </body>
 </html>

@@ -13,53 +13,79 @@ series data.
    tutorial
    guide
    examples
-   news
-   versions
-   API Reference <wildboar/index>
-
-.. panels::
-
-   Classification
-   ^^^^^^^^^^^^^^
-
-   Identifying which category a time series belong to.
-
-   **Algorithms**: Random shapelet forest, Extra shapelet trees and ROCKET.
-
-   ---
-
-   Regression
-   ^^^^^^^^^^
-
-   Predicting a continuous-valued attribute associated with a time series.
-
-   **Algorithms**: Random shapelet forest, Extra shapelet trees and ROCKET.
-
-   ---
-
-   Counterfactuals
-   ^^^^^^^^^^^^^^^
-
-   Explaining time series classifiers by counterfactual reasoning.
-
-   **Algorithms**: Shapelet forest counterfactuals, KNearest counterfactuals and
-   Prototype counterfactuals.
-
-
-   ---
-
-   Unsupervised
-   ^^^^^^^^^^^^
-
-   Identify interesting regions, motifs or outlier in time series. Or embed time series
-   using various features.
-
-   **Algorithms**: MatrixProfile, Isolation shapelet forests and Shapelet, ROCKET, and
-   interval embeddings.
+   more
    
 
-News
-----
-.. include:: news.rst
-   :start-after: .. titles
-   :end-before: .. first-page 
+.. grid:: 2
+    :gutter: 2 2 2 2
+
+    .. grid-item-card:: Classification
+
+        Identifying which category a time series belong to.
+
+        **Algorithms**: Random shapelet forest, Extra shapelet trees and ROCKET.
+
+        +++
+        
+        .. button-ref:: examples-classification
+           :color: secondary
+           :expand:
+
+           Examples
+
+
+    .. grid-item-card:: Regression
+
+        Predicting a continuous-valued attribute associated with a time series.
+
+        **Algorithms**: Random shapelet forest, Extra shapelet trees and ROCKET.
+
+        +++
+
+        .. button-ref:: examples-regression
+           :color: secondary
+           :expand:
+
+           Examples   
+   
+    .. grid-item-card:: Counterfactuals
+
+        Explaining time series classifiers by counterfactual reasoning.
+
+        **Algorithms**: Shapelet forest counterfactuals, KNearest counterfactuals and
+        Prototype counterfactuals.
+
+        +++
+
+        .. button-ref:: examples-counterfactuals
+           :color: secondary
+           :expand:
+
+           Examples
+
+    .. grid-item-card:: Unsupervised
+
+         Identify interesting regions, motifs or outlier in time series. Or embed time series
+         using various features.
+
+         **Algorithms**: MatrixProfile, Isolation shapelet forests and Shapelet, ROCKET, and
+         interval embeddings.
+
+         +++
+         
+         .. button-ref:: examples-unsupervised
+           :color: secondary
+           :expand:
+
+           Examples
+   
+
+
+.. grid:: 1
+
+   .. grid-item::
+      
+      **News**
+      
+      .. include:: more/news.rst
+         :end-before: ..end-first-page 

@@ -1,18 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Supervised learning" href="supervised.html" /><link rel="prev" title="User guide" href="../guide.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.06.21"/>
+    <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>Datasets - Wildboar 1.1.0rc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -262,16 +260,16 @@
         </div>
         <article role="main">
           <section id="datasets">
-<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">#</a></h1>
+<h1>Datasets<a class="headerlink" href="#datasets" title="Permalink to this heading">#</a></h1>
 <p>Wildboar is distributed with an advanced system for handling dataset repositories. A dataset repository can
 be used to load benchmark datasets or to distribute or store datasets.</p>
 <section id="what-is-a-repository">
-<h2>What is a repository?<a class="headerlink" href="#what-is-a-repository" title="Permalink to this headline">#</a></h2>
+<h2>What is a repository?<a class="headerlink" href="#what-is-a-repository" title="Permalink to this heading">#</a></h2>
 <p>I short, a repository is a collection of datasets bundles. More specifically, a repository links to bundles (zip-files) containing datasets
 or dataset parts that can be downloaded, cached and loaded by wildboar.</p>
 </section>
 <section id="how-to-use-a-repository">
-<h2>How to use a repository?<a class="headerlink" href="#how-to-use-a-repository" title="Permalink to this headline">#</a></h2>
+<h2>How to use a repository?<a class="headerlink" href="#how-to-use-a-repository" title="Permalink to this heading">#</a></h2>
 <p>Repositories are either initialized directly or used together with the <code class="docutils literal notranslate"><span class="pre">load_dataset</span></code> function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;GunPoint&#39;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s1">&#39;wildboar/ucr&#39;</span><span class="p">)</span>
@@ -334,7 +332,7 @@ the <cite>wildboar</cite> repository using the tag <cite>hard</cite>.</p></li>
 </div>
 </section>
 <section id="installing-repositories">
-<h2>Installing repositories<a class="headerlink" href="#installing-repositories" title="Permalink to this headline">#</a></h2>
+<h2>Installing repositories<a class="headerlink" href="#installing-repositories" title="Permalink to this heading">#</a></h2>
 <p>A repository implements the interface of the class <code class="docutils literal notranslate"><span class="pre">wildboar.datasets.Repository</span></code></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -350,13 +348,13 @@ either an url to a JSON-file or an instance of a <code class="docutils literal n
 </pre></div>
 </div>
 <section id="updating-repositories">
-<h3>Updating repositories<a class="headerlink" href="#updating-repositories" title="Permalink to this headline">#</a></h3>
+<h3>Updating repositories<a class="headerlink" href="#updating-repositories" title="Permalink to this heading">#</a></h3>
 <p>Repositories can be refreshed using <code class="docutils literal notranslate"><span class="pre">datasets.refresh_repositories()</span></code>.</p>
 </section>
 <section id="implementation-details">
-<h3>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this headline">#</a></h3>
+<h3>Implementation details<a class="headerlink" href="#implementation-details" title="Permalink to this heading">#</a></h3>
 <section id="json-repository-specification">
-<h4>JSON-repository specification<a class="headerlink" href="#json-repository-specification" title="Permalink to this headline">#</a></h4>
+<h4>JSON-repository specification<a class="headerlink" href="#json-repository-specification" title="Permalink to this heading">#</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code> expects a JSON-file following the specification below.</p>
 <div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;example&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// required</span><span class="w"></span>
@@ -408,7 +406,7 @@ extensions .zip and .sha respectively.</p>
 the integrity of the downloaded file. The zip-file should contain the datasets.</p>
 </section>
 <section id="dataset-bundles">
-<h4>Dataset bundles<a class="headerlink" href="#dataset-bundles" title="Permalink to this headline">#</a></h4>
+<h4>Dataset bundles<a class="headerlink" href="#dataset-bundles" title="Permalink to this heading">#</a></h4>
 <p>Out of the box, wildboar supports dataset bundles formatted as zip-files with npy
 or npz files, i.e., as created by <code class="docutils literal notranslate"><span class="pre">numpy.save</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy.savez</span></code>. The dataset files
 in the zip-file must be named according to <code class="docutils literal notranslate"><span class="pre">{dataset_name}(_TRAIN|_TEST)?.(npy|npz)</span></code>.
@@ -504,7 +502,9 @@ setting <code class="docutils literal notranslate"><span class="pre">merge_train
 <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/scripts/furo.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     </body>
 </html>
