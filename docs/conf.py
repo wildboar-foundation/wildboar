@@ -32,7 +32,7 @@ extensions = [
     "sphinx.ext.linkcode",
     "autoapi.extension",
     "sphinx_multiversion",
-    "sphinx_panels",
+    "sphinx_design",
 ]
 
 if os.getenv("LOCAL_BUILD", 0):
