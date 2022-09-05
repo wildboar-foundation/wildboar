@@ -1,0 +1,13 @@
+.. |Fix| replace:: :bdg-warning:`Fix`
+.. |Feature| replace:: :bdg-primary:`Feature`
+.. |Enhancement| replace:: :bdg-secondary:`Enhancement`
+.. |Efficiency| replace:: :bdg-info:`Efficiency`
+.. |API| replace:: :bdg-danger:`API`
+
+- |Feature|: something that you couldn't do before.
+- |Efficiency|: an existing feature now may not require as much computation or
+  memory.
+- |Enhancement|: a miscellaneous minor improvement.
+- |Fix|: something that previously didn't work as documentated
+- |API|: you will need to change your code to have the same effect in the
+  future; or a feature will be removed in the future.
