@@ -49,6 +49,7 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
 _DISTANCE_MEASURE = {
     "euclidean": _euclidean_distance.EuclideanDistanceMeasure,
     "dtw": _dtw_distance.DtwDistanceMeasure,
+    "ddtw": _dtw_distance.DerivativeDtwDistanceMeasure,
 }
 
 _THRESHOLD = {

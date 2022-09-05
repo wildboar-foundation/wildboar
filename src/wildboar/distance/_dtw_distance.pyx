@@ -1376,3 +1376,62 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
     @property
     def is_elastic(self):
         return True
+
+
+cdef void average_slope(double *q, Py_ssize_t len, double *d) nogil:
+    cdef Py_ssize_t i, j
+    j = 0
+    for i in range(1, len - 1):
+        d[j] = ((q[i] - q[i - 1]) + ((q[i + 1] - q[i - 1]) / 2)) / 2
+        j += 1
+
+
+cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
+
+    cdef double *d_x
+    cdef double *d_y
+
+    def __cinit__(self, double r=0):
+        self.d_x = NULL
+        self.d_y = NULL
+
+    cdef void __free(self) nogil:
+        DtwDistanceMeasure.__free(self)
+        if self.d_x != NULL:
+            free(self.d_x)
+            self.d_x = NULL
+
+        if self.d_y != NULL:
+            free(self.d_y)
+            self.d_y = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        DtwDistanceMeasure.reset(self, x, y)
+        self.d_x = <double*> malloc(sizeof(double) * x.n_timestep - 2)
+        self.d_y = <double*> malloc(sizeof(double) * y.n_timestep - 2)
+
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len,
+    ) nogil:
+        average_slope(x, x_len, self.d_x)
+        average_slope(y, y_len, self.d_y)
+        cdef double dist = _dtw(
+            self.d_x,
+            x_len - 2,
+            0.0,
+            1.0,
+            self.d_y,
+            y_len - 2,
+            0.0,
+            1.0,
+            self.warp_width,
+            self.cost,
+            self.cost_prev,
+        )
+
+        return sqrt(dist)
