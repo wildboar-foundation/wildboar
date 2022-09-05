@@ -42,8 +42,8 @@ Installed repositories and dataset bundles can be listed using the function
 
     .. warning::
 
-        The default cache location changed in version 1.0.4. To use the old location set ``cache_dir``
-        to ``'wildboar_cache'``
+        The default cache location changed in version 1.0.4. To use the old
+        location set ``cache_dir`` to ``'wildboar_cache'``.
 
 To force re-download of an already cached repository set the parameter ``force`` to ``True``.
 

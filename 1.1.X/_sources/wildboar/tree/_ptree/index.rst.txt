@@ -1,0 +1,87 @@
+:orphan:
+
+:py:mod:`wildboar.tree._ptree`
+==============================
+
+.. py:module:: wildboar.tree._ptree
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.tree._ptree.ProximityTreeClassifier
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.tree._ptree.make_dtw
+   wildboar.tree._ptree.make_euclidean
+   wildboar.tree._ptree.make_metrics
+
+
+
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics=None, metrics_params=None, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
+
+   A proximity tree defines a k-branching tree based on pivot-time series.
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_dataset
+   >>> from wildboar.tree import ProximityTreeClassifier
+   >>> x, y = load_dataset("GunPoint")
+   >>> f = ProximityTreeClassifier(n_pivot=10, criterion="gini")
+   >>> f.fit(x, y)
+
+   .. rubric:: References
+
+   Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O’Neill, Nayyar Zaidi,
+   Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
+       Proximity forest: an effective and scalable distance-based classifier for time
+       series. Data Mining and Knowledge Discovery
+
+   :param n_pivot: The number of pivots to sample at each node.
+   :type n_pivot: int, optional
+   :param criterion: The impurity criterion.
+   :type criterion: {"entropy", "gini"}, optional
+   :param pivot_sample: The pivot sampling method.
+   :type pivot_sample: {"label", "uniform"}, optional
+   :param metric_sample: The metric sampling method.
+   :type metric_sample: {"uniform", "weighted"}, optional
+   :param metrics: The distance metrics
+   :type metrics: str or list, optional
+   :param metrics_params: The params to the metrics
+   :type metrics_params: list, optional
+   :param max_depth: The maximum tree depth.
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to consider a split.
+   :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf.
+   :type min_samples_leaf: int, optional
+   :param min_impurity_decrease: The minimum impurity decrease to build a sub-tree.
+   :type min_impurity_decrease: float, optional
+   :param class_weight: The class weights.
+   :type class_weight: array-like of shape (n_labels, ) or "balanced", optional
+   :param random_state: The pseudo random number generator.
+   :type random_state: int or RandomState, optional
+
+
+.. py:function:: make_dtw(min_r=0, max_r=0.25, n=10)
+
+
+.. py:function:: make_euclidean()
+
+
+.. py:function:: make_metrics(metrics=None, metrics_params=None)
+
+

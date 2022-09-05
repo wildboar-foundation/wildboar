@@ -1,0 +1,46 @@
+:orphan:
+
+:py:mod:`wildboar.embed._pivot`
+===============================
+
+.. py:module:: wildboar.embed._pivot
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.embed._pivot.PivotEmbedding
+
+
+
+
+.. py:class:: PivotEmbedding(n_pivot=1, *, metrics='all', random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
+
+   Base embedding
+
+   .. attribute:: embedding_
+
+      The underlying embedding.
+
+      :type: Embedding
+
+   .. attribute::
+
+      -1 means using all processors.
+
+      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
+
+   .. attribute::
+
+
+
+      :type: type n_jobs: int, optional
+
+

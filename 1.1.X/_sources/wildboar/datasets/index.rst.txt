@@ -202,6 +202,10 @@ Functions
       :rtype: a dictionary of key and bundle
 
 
+   .. py:method:: identifier()
+      :property:
+
+
    .. py:method:: name()
       :property:
 
@@ -254,6 +258,16 @@ Functions
 
    A repository is a collection of bundles
 
+   .. py:method:: __eq__(o)
+
+      Return self==value.
+
+
+   .. py:method:: __hash__() -> int
+
+      Return hash(self).
+
+
    .. py:method:: active()
       :property:
 
@@ -290,10 +304,14 @@ Functions
       :rtype: a dictionary of key and bundle
 
 
+   .. py:method:: identifier()
+      :property:
+
+
    .. py:method:: list_datasets(bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
-   .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
+   .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
    .. py:method:: name()
@@ -373,7 +391,7 @@ Functions
    :rtype: Repository
 
 
-.. py:function:: install_repository(repository, *, refresh=True, timeout=None)
+.. py:function:: install_repository(repository, *, refresh=True, timeout=None, cache_dir=None)
 
    Install repository
 
@@ -387,6 +405,10 @@ Functions
 
                    ..versionadded :: 1.1
    :type timeout: float, optional
+   :param cache_dir: Cache directory
+
+                     ..versionadded :: 1.1
+   :type cache_dir: str, optional
 
 
 .. py:function:: list_bundles(repository, *, refresh=False, timeout=None)
@@ -452,7 +474,7 @@ Functions
    :rtype: set
 
 
-.. py:function:: list_repositories(*, refresh=False, timeout=None)
+.. py:function:: list_repositories(*, refresh=False, timeout=None, cache_dir=None)
 
    List the key of all installed repositories
 
@@ -466,8 +488,13 @@ Functions
 
        ..versionadded :: 1.1
 
+   cache_dir : str, optional
+       Cache directory
 
-.. py:function:: load_dataset(name, *, repository='wildboar/ucr', dtype=None, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, return_extras=False, force=False, refresh=False, timeout=None)
+       ..versionadded :: 1.1
+
+
+.. py:function:: load_dataset(name, *, repository='wildboar/ucr', dtype=float, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, return_extras=False, force=False, refresh=False, timeout=None)
 
    Load a dataset from a repository
 
@@ -475,7 +502,7 @@ Functions
    :type name: str
    :param repository: The data repository formatted as {repository}/{bundle}[:{version}][:{tag}]
    :type repository: str, optional
-   :param dtype: The data type of the returned data
+   :param dtype: The data type of x (train and test)
    :type dtype: dtype, optional
    :param contiguous: Ensure that the returned dataset is memory contiguous.
    :type contiguous: bool, optional
@@ -484,7 +511,8 @@ Functions
                       - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
                         for valid keys)
                       - if callable, function taking a np.ndarray and returns the preprocessed dataset
-   :type preprocess: str or callable, optional
+                      - if list, a list of callable or str
+   :type preprocess: str, list or callable, optional
    :param merge_train_test: Merge the existing training and testing partitions.
    :type merge_train_test: bool, optional
    :param progress: Show a progress bar while downloading a bundle.
@@ -637,16 +665,30 @@ Functions
           load a named dataset
 
 
-.. py:function:: refresh_repositories(repository=None, *, timeout=None)
+.. py:function:: refresh_repositories(repository=None, *, timeout=None, cache_dir=None)
 
-   Refresh the installed repositories=None
+   Refresh the installed repositories
+
+   repository : str, optional
+       The repository. None means all repositories.
+
+   timeout : float, optional
+       Timeout for request
+
+       ..versionadded :: 1.1
+
+   cache_dir : str, optional
+       Cache directory
+
+       ..versionadded :: 1.1
 
 
-.. py:function:: set_cache_dir(cache_dir)
+.. py:function:: set_cache_dir(cache_dir=None)
 
-   Change the global cache directory
+   Change the global cache directory. If called without arguments, the cache
+   directory is reset to the default directory.
 
-   cache_dir : str
+   cache_dir : str, optional
        The cache directory root
 
 

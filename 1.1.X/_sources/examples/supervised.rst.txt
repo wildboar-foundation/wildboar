@@ -2,6 +2,8 @@
 Supervised
 ==========
 
+.. _examples-regression:
+
 Shapelet forest vs. Nearest neighbors
 =====================================
 
@@ -30,6 +32,7 @@ Output
     - fit-time:   0.21
     - test-score: 0.86
 
+.. _examples-classification:
 
 Comparing classifiers
 =====================

@@ -1,0 +1,72 @@
+:py:mod:`wildboar.utils`
+========================
+
+.. py:module:: wildboar.utils
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   decorators/index.rst
+   plot/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.DependencyMissing
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils._soft_dependency_error
+   wildboar.utils.check_array
+
+
+
+.. py:class:: DependencyMissing(e=None, *, package=None, context=None)
+
+   .. py:method:: __call__(*args, **kwds)
+
+
+   .. py:method:: __getattr__(name)
+
+
+   .. py:method:: __mro_entries__(bases)
+
+
+
+
+.. py:function:: check_array(x, allow_multivariate=False, allow_eos=False, allow_nan=False, contiguous=True, **kwargs)
+
+   Wrapper to check array
+
+   :param x: The array to check
+   :type x: ndarray
+   :param allow_multivariate: If 3d arrays are allowed, by default False
+   :type allow_multivariate: bool, optional
+   :param allow_eos: If unequal length series are allowed
+   :type allow_eos: bool, optional
+   :param allow_nan: If NaN values are allowed
+   :type allow_nan: bool, optional
+   :param contiguous: Ensure that the array is in c-order.
+   :type contiguous: bool, optional
+   :param kwargs: Additional arguments passed to `sklearn.utils.check_array`
+   :type kwargs: dict
+
+   :returns: The checked array
+   :rtype: ndarray
+
+

@@ -10,6 +10,7 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
+   annotate/index.rst
    datasets/index.rst
    distance/index.rst
    embed/index.rst
@@ -18,6 +19,7 @@ Subpackages
    linear_model/index.rst
    model_selection/index.rst
    tree/index.rst
+   utils/index.rst
 
 
 Submodules
@@ -27,5 +29,42 @@ Submodules
    :maxdepth: 1
 
    version/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.iseos
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.eos
+
+
+.. py:data:: eos
+   
+
+   The end-of-sequence identifier. Indicates the end of a time series.
+
+.. py:function:: iseos(x)
+
+   Boolean indicator if a value is the end-of-sequence value.
+
+   :param x: The array
+   :type x: array-like
+
+   :returns: boolean indicator array
+   :rtype: ndarray
 
 

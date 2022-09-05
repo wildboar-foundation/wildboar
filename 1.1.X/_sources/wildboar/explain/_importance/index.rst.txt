@@ -1,0 +1,215 @@
+:orphan:
+
+:py:mod:`wildboar.explain._importance`
+======================================
+
+.. py:module:: wildboar.explain._importance
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain._importance.Domain
+   wildboar.explain._importance.FrequencyDomain
+   wildboar.explain._importance.IntervalImportance
+   wildboar.explain._importance.TimeDomain
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain._importance.Importance
+   wildboar.explain._importance.matplotlib_missing
+
+
+.. py:data:: Importance
+   
+
+   
+
+.. py:data:: matplotlib_missing
+   
+
+   
+
+.. py:class:: Domain
+
+   .. py:method:: intervals(n, n_intervals)
+
+
+   .. py:method:: inverse_transform(x)
+      :abstractmethod:
+
+
+   .. py:method:: plot_samples(x, y=None, ax=None, n_samples=None, **kwargs)
+      :abstractmethod:
+
+
+   .. py:method:: randomize(x, start, end, random_state=None)
+      :abstractmethod:
+
+
+   .. py:method:: transform(x)
+      :abstractmethod:
+
+
+
+.. py:class:: FrequencyDomain
+
+   Bases: :py:obj:`Domain`
+
+   .. py:method:: intervals(n, n_intervals)
+
+
+   .. py:method:: inverse_transform(x)
+
+
+   .. py:method:: plot_samples(x, y=None, ax=None, **kwargs)
+
+
+   .. py:method:: randomize(x, start, end, random_state=None)
+
+
+   .. py:method:: transform(x)
+
+
+
+.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_interval='sqrt', domain='time', verbose=False, random_state=None)
+
+   Bases: :py:obj:`wildboar.explain.base.BaseImportance`
+
+   Compute a model agnostic importance score for non-overlapping intervals in
+   the time or frequency domain by permuting the intervals among samples.
+
+   .. attribute:: importances_
+
+      The importance scores for each interval. If dict, one value per scoring
+      function.
+
+      :type: dict or Importance
+
+   .. attribute::
+
+
+
+      :type: param scoring: The scoring function. By default the estimators score function is used.
+
+   .. attribute::
+
+
+
+      :type: type scoring: str, list, dict or callable, optional
+
+   .. attribute::
+
+
+
+      :type: param n_repeat: The number of repeated permutations, by default 5
+
+   .. attribute::
+
+
+
+      :type: type n_repeat: int, optional
+
+   .. attribute::
+
+
+
+      - if "sqrt", the number of intervals is the square root of n_timestep
+      - if "log", the number of intervals is the log2 of n_timestep
+      - if int, exact number of intervals
+
+      :type: param n_interval: The number of intervals, by default "sqrt"
+
+   .. attribute::
+
+
+
+      :type: type n_interval: str, optional
+
+   .. attribute::
+
+
+
+      :type: param domain: Compute the importance in the time or frequency domain, by default "time"
+
+   .. attribute::
+
+
+
+      :type: type domain: {"time", "frequency"}, optional
+
+   .. attribute::
+
+
+
+      :type: param verbose: Show extra progress information, by default False
+
+   .. attribute::
+
+
+
+      :type: type verbose: bool, optional
+
+   .. attribute::
+
+      None
+
+      :type: param random_state: The psuod-random number generator to ensure consistent results, by default
+
+   .. attribute::
+
+
+
+      :type: type random_state: int or RandomState, optional
+
+   .. py:method:: fit(estimator, x, y=None, sample_weight=None)
+
+      Fit the importance explanation to the estimator
+
+      :param estimator: An estimator
+      :type estimator: Estimator
+      :param x: The samples
+      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep) # noqa: E501
+      :param y: The labels, by default None
+      :type y: array-like of shape (n_samples, ), optional
+      :param sample_weight: The sample weights, by default None
+      :type sample_weight: array-like of shape (n_samples, ), optional
+
+
+   .. py:method:: plot(x=None, y=None, *, scoring=None, top_k=None, n_samples=None, title='Interval importance', **kwargs)
+
+      Plot the explanation
+
+      :returns: **ax** -- The axes object
+      :rtype: Axes
+
+
+
+.. py:class:: TimeDomain
+
+   Bases: :py:obj:`Domain`
+
+   .. py:method:: inverse_transform(x)
+
+
+   .. py:method:: plot_samples(x, y=None, ax=None, **kwargs)
+
+
+   .. py:method:: randomize(x, start, end, random_state=None)
+
+
+   .. py:method:: transform(x)
+
+
+
