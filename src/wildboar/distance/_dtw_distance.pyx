@@ -1325,8 +1325,8 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
             self.cost = NULL
 
         if self.cost_prev != NULL:
-            free(self.cost)
-            self.cost = NULL
+            free(self.cost_prev)
+            self.cost_prev = NULL
 
     cdef int reset(self, Dataset x, Dataset y) nogil:
         self.__free()
