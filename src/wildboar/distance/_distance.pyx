@@ -428,7 +428,7 @@ def _pairwise_subsequence_distance(
     )
     distance_measure.reset(dataset)
     subsequence_distance.set_shapelets(shapelets, dim)
-    run_in_parallel(subsequence_distance, n_jobs=n_jobs, prefer="threads")
+    run_in_parallel(subsequence_distance, n_jobs=n_jobs, require="sharedmem")
     return distances, min_indicies
 
 
