@@ -130,7 +130,12 @@ class EmbeddingRidgeClassifierCV(
         )
 
     def predict_proba(self, x):
-        return softmax(self.decision_function(x))
+        decision = self.decision_function(x)
+        if decision.ndim == 1:
+            decision_2d = np.c_[-decision, decision]
+        else:
+            decision_2d = decision
+        return softmax(decision_2d, copy=False)
 
 
 class EmbeddingRidgeCV(RegressorMixin, EmbeddingRegressorMixin, BaseEmbeddingEstimator):
