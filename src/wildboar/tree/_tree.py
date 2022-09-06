@@ -407,7 +407,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
 
         criterion = REG_CRITERION[self.criterion](y)
         tree = Tree(feature_engineer, 1)
-        return TreeBuilder(
+        return ExtraTreeBuilder(
             x,
             sample_weights,
             feature_engineer,
