@@ -242,7 +242,7 @@ def feature_embedding_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs
     cdef BatchTransform transform = BatchTransform(feature_engineers, embedding)
     transform.init(x_in, x_out)
 
-    Parallel(n_jobs=n_jobs, prefer="threads")(
+    Parallel(n_jobs=n_jobs, require="sharedmem")(
         delayed(transform)(
             jobid, feature_offsets[jobid], batch_sizes[jobid]
         )
@@ -269,7 +269,7 @@ def feature_embedding_fit_transform(FeatureEngineer feature_engineer, np.ndarray
 
     cdef BatchFitTransform fit_transform = BatchFitTransform(feature_engineers, embedding)
     fit_transform.init(x_in, x_out)
-    Parallel(n_jobs=n_jobs, prefer="threads")(
+    Parallel(n_jobs=n_jobs, require="sharedmem")(
         delayed(fit_transform)(
             jobid, feature_offsets[jobid], batch_sizes[jobid], seeds[jobid]
         )
