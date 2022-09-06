@@ -277,6 +277,6 @@ def test_extra_tree_regressor():
     x, y = load_dataset("GunPoint", repository="wildboar/ucr-tiny")
     f = ExtraShapeletTreeRegressor(criterion="mse", random_state=123)
     f.fit(x, y.astype(float))
-    assert_almost_equal(f.tree_.threshold[0], 2.052192203219023)
-    assert_almost_equal(f.tree_.threshold[6], 0.8963769152751806)
-    assert_almost_equal(f.predict(x), y.astype(float))
+    assert_almost_equal(f.tree_.threshold[0], 2.3858733725835246)
+    assert_almost_equal(f.tree_.threshold[6], 7.163849443826518)
+    assert (f.predict(x) == y.astype(float)).sum() == 182
