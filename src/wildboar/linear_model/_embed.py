@@ -75,6 +75,10 @@ class EmbeddingClassifierMixin:
         x = check_array(x, allow_multivariate=True)
         return self.pipe_.decision_function(x)
 
+    @property
+    def classes_(self):
+        return self.pipe_[-1].classes_
+
 
 class EmbeddingRegressorMixin:
     def predict(self, x):
