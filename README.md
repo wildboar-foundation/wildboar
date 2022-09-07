@@ -89,7 +89,7 @@ c.fit(x_train, y_train)
 c.score(x_test, y_test)
 ``` 
     
-See the [tutorial](https://isaksamsten.github.io/wildboar/master/tutorial.html) for more examples.
+See the [documentation](https://isaksamsten.github.io/wildboar/master/examples.html) for more examples.
 
 ## Source code
 
