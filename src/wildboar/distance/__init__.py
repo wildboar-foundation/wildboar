@@ -704,11 +704,12 @@ def pairwise_distance(
 
     Parameters
     ----------
-    x : ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep),
-    optional
+    x : ndarray of shape (n_timestep, ), (x_samples, n_timestep) or
+    (x_samples, n_dims, n_timestep)
         The input data
 
-    y : : ndarray of shape (y_samples, n_timestep) or (y_samples, n_dims, n_timestep)
+    y : ndarray of shape (n_timestep, ), (y_samples, n_timestep) or
+    (y_samples, n_dims, n_timestep), optional
         The input data
 
     dim : int, optional
@@ -753,8 +754,8 @@ def pairwise_distance(
             raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
     else:
-        x = check_array(x, allow_multivariate=True, dtype=np.double)
-        y = check_array(y, allow_multivariate=True, dtype=np.double)
+        x = check_array(np.atleast_2d(x), allow_multivariate=True, dtype=np.double)
+        y = check_array(np.atleast_2d(y), allow_multivariate=True, dtype=np.double)
         if x.ndim != y.ndim:
             raise ValueError(
                 "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
