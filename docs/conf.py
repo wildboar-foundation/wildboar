@@ -19,7 +19,7 @@ version = ".".join(release.split(".")[:3])
 
 project = "Wildboar"
 description = "Time series learning with Python"
-copyright = "2020, Isak Samsten"
+copyright = "2022, Isak Samsten"
 author = "Isak Samsten"
 
 # -- General configuration ---------------------------------------------------
@@ -33,6 +33,7 @@ extensions = [
     "autoapi.extension",
     "sphinx_multiversion",
     "sphinx_design",
+    "nbsphinx",
 ]
 
 if os.getenv("LOCAL_BUILD", 0):

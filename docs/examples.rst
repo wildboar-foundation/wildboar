@@ -7,5 +7,6 @@ Examples
 
    examples/supervised
    examples/unsupervised
-   examples/counterfactuals
+   examples/explainability
    examples/embeddings
+   examples/distance
