@@ -610,6 +610,7 @@ def paired_subsequence_match(
         return indicies
 
 
+@array_or_scalar
 def paired_distance(
     x,
     y,
@@ -689,6 +690,7 @@ def paired_distance(
     )
 
 
+@array_or_scalar
 def pairwise_distance(
     x,
     y=None,
