@@ -19,7 +19,7 @@ version = ".".join(release.split(".")[:3])
 
 project = "Wildboar"
 description = "Time series learning with Python"
-copyright = "2022, Isak Samsten"
+copyright = "2020, Isak Samsten"
 author = "Isak Samsten"
 
 # -- General configuration ---------------------------------------------------
