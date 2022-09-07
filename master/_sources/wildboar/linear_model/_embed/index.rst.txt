@@ -41,6 +41,10 @@ Classes
 
 .. py:class:: EmbeddingClassifierMixin
 
+   .. py:method:: classes_()
+      :property:
+
+
    .. py:method:: decision_function(x)
 
 

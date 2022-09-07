@@ -307,10 +307,16 @@ Functions
    Compute the distance between subsequences and time series
 
    :param x:
-   :type x: ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep),
+   :type x: ndarray of shape (n_timestep, ), (x_samples, n_timestep) or
+   :param (x_samples: The input data
+   :param n_dims: The input data
+   :param n_timestep): The input data
+   :param y:
+   :type y: ndarray of shape (n_timestep, ), (y_samples, n_timestep) or
+   :param (y_samples: The input data
+   :param n_dims: The input data
+   :param n_timestep): The input data
    :param optional: The input data
-   :param y: The input data
-   :type y: : ndarray of shape (y_samples, n_timestep) or (y_samples, n_dims, n_timestep)
    :param dim:    The dim to compute distance
 
                metric : str or callable, optional # noqa: E501
