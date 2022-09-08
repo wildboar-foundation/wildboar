@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Explainability" href="explain.html" /><link rel="prev" title="Unsupervised learning" href="unsupervised.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>Distance metrics - Wildboar 1.1.0rc5.dev24+g6bfdfa16 documentation</title>
+        <title>Distance metrics - Wildboar 1.1.0rc5.dev30+g04620f27 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -137,7 +137,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev24+g6bfdfa16 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev30+g04620f27 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +148,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -305,7 +305,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -313,6 +313,96 @@
         <article role="main">
           <section id="distance-metrics">
 <h1>Distance metrics<a class="headerlink" href="#distance-metrics" title="Permalink to this heading">#</a></h1>
+<p>Wildboar support both subsequence distance using <a class="reference internal" href="../wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.pairwise_subsequence_distance()</span></code></a>
+and traditional distances using <a class="reference internal" href="../wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.pairwise_distance()</span></code></a>. These and related functions
+support different metrics, as specified by the <code class="docutils literal notranslate"><span class="pre">metric</span></code> argument and metric parameters
+using the <code class="docutils literal notranslate"><span class="pre">metric_params</span></code> argument.</p>
+<section id="list-of-subsequence-metrics">
+<h2>List of subsequence metrics<a class="headerlink" href="#list-of-subsequence-metrics" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper colwidths-given docutils container" id="id3">
+<span id="id1"></span><span id="id1"></span><table class="docutils align-default" id="id3">
+<caption><span class="caption-text">Subsequence distance metrics</span><a class="headerlink" href="#id3" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 25.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric name</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">metric</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">metric_params</span></code></p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Euclidean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;euclidean&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Scaled Euclidean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;euclidean&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td><p>Normalized</p></td>
+</tr>
+<tr class="row-even"><td><p>Dynamic time warping</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;dtw&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Scaled DTW</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;scaled_dtw&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="list-of-metrics">
+<h2>List of metrics<a class="headerlink" href="#list-of-metrics" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper colwidths-given docutils container" id="id4">
+<span id="id2"></span><span id="id2"></span><table class="docutils align-default" id="id4">
+<caption><span class="caption-text">Distance metrics</span><a class="headerlink" href="#id4" title="Permalink to this table">#</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 15.0%" />
+<col style="width: 25.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric name</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">metric</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">metric_params</span></code></p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Euclidean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;euclidean&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Dynamic time warping</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;dtw&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
+</tr>
+<tr class="row-even"><td><p>Derivative DTW</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;ddtw&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Weighted Derivative DTW</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;wddtw&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;g&quot;:</span> <span class="pre">float}</span></code></p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Phase difference penelty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 
         </article>
@@ -360,8 +450,28 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            Contents
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Distance metrics</a><ul>
+<li><a class="reference internal" href="#list-of-subsequence-metrics">List of subsequence metrics</a></li>
+<li><a class="reference internal" href="#list-of-metrics">List of metrics</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

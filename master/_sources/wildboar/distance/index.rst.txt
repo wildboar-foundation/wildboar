@@ -57,7 +57,7 @@ Functions
 
                   - if str use optimized implementations of the named distance measure
                   - if callable a function taking two arrays as input
-   :type metric: {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+   :type metric: str or callable, optional
    :param metric_params: Parameters to the metric
 
                          - 'euclidean' and 'scaled_euclidean' take no parameters
@@ -116,7 +116,7 @@ Functions
                   - otherwise an array is returned
    :type sample: int or array-like, optional
    :param metric: The distance metric
-   :type metric: {'euclidean', 'scaled_euclidean'}, optional
+   :type metric: str, optional
    :param metric_params: Parameters to the metric
    :type metric_params: dict, optional
    :param return_distance:
@@ -194,7 +194,9 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
+                     :ref:`User guide <list_of_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
@@ -228,7 +230,9 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
@@ -271,7 +275,9 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
@@ -319,10 +325,12 @@ Functions
    :param optional: The input data
    :param dim:    The dim to compute distance
 
-               metric : str or callable, optional # noqa: E501
+               metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
+                     :ref:`User guide <list_of_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
@@ -352,10 +360,13 @@ Functions
    :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
    :param dim:    The dim to search for shapelets
 
-               metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+               metric : str or callable, optional # noqa: E501
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`.
+
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
@@ -405,7 +416,9 @@ Functions
    :type dim: int, optional
    :param metric: The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`
                   - if callable a function taking two arrays as input
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric

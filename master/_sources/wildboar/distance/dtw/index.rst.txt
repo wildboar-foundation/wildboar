@@ -30,11 +30,8 @@ Functions
    :type x: array-like of shape (x_timestep,)
    :param y: The second time series
    :type y: array-like of shape (y_timestep,)
-   :param r: The warping window
-
-             - if float in [0, 1] a fraction of max(x_timestep, y_timestep)
-             - if int the exact warping window (max(1, r))
-   :type r: int or float, optional
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
    :param out: Store the warping path in this array.
    :type out: array-like of shape (x_timestep, y_timestep), optional
 
@@ -51,7 +48,7 @@ Functions
           compute the dtw distance
 
 
-.. py:function:: dtw_distance(x, y, r=1.0, scale=False)
+.. py:function:: dtw_distance(x, y, r=1.0)
 
    Compute the dynamic time warping distance
 
@@ -59,13 +56,8 @@ Functions
    :type x: array-like of shape (x_timestep, )
    :param y: The second time series
    :type y: array-like of shape (y_timestep, )
-   :param r: The warping window
-
-             - if float in [0, 1] a fraction of max(x_timestep, y_timestep)
-             - if int the exact warping window (max(1, r))
-   :type r: int or float, optional
-   :param scale: If True, x and y are standardized before calculation
-   :type scale: bool, optional
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
 
    :returns: **distance** -- The dynamic time warping distance
    :rtype: float
@@ -82,11 +74,8 @@ Functions
 
    :param x: The time series
    :type x: array-like of shape (x_timestep,)
-   :param r: The size of the warping window
-
-             - if float in [0, 1] a fraction of x_timestep
-             - if int the exact warping window (max(1, r))
-   :type r: float or int, optional
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
 
    :returns: * **lower** (*ndarray of shape (x_timestep,)*) -- The min value of the envelop
              * **upper** (*ndarray of shape (x_timestep,)*) -- The max value of the envelop
@@ -110,11 +99,8 @@ Functions
    :type lower: ndarray of shape (x_timestep,), optional
    :param upper: The max value of the envelop
    :type upper: ndarray of shape (x_timestep,), optional
-   :param r: The size of the warping window
-
-             - if float in [0, 1] a fraction of x_timestep
-             - if int the exact warping window (max(1, r))
-   :type r: float or int, optional
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
 
    :returns: * **min_dist** (*float*) -- The cumulative minimum distance.
              * **lb_keogh** (*ndarray of shape (x_timestep,),*) -- The lower bound at each time step
@@ -143,9 +129,8 @@ Functions
    :type y: array-like of shape (y_timestep,), optional
    :param alignment: Precomputed alignment
    :type alignment: ndarray of shape (x_timestep, y_timestep), optional
-   :param r:
-             - if float, the warping path is a fraction of
-   :type r: float or int, optional
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
    :param return_index: Return the indices of the warping path
    :type return_index: bool, optional
 
@@ -166,10 +151,7 @@ Functions
 
    :param x: An array of samples
    :type x: array-like of shape (n_samples, n_timestep)
-   :param r: The size of the warping window
-
-             - if float in [0, 1] a fraction of x_timestep
-             - if int the exact warping window (max(1, r))
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
    :type r: float or int, optional
 
    :returns: **distances** -- The distance between pairs of rows
