@@ -1474,7 +1474,7 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
 
         self.weights = <double*> malloc(sizeof(double) * n_timestep)
         for i in range(n_timestep):
-            self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2)))
+            self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
 
     cdef double _distance(
         self,
