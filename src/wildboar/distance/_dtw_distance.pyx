@@ -33,7 +33,7 @@ cimport numpy as np
 import numpy as np
 
 from libc.math cimport INFINITY, exp, floor, sqrt
-from libc.stdlib cimport abs, free, malloc
+from libc.stdlib cimport free, labs, malloc
 from libc.string cimport memcpy
 
 from wildboar.utils cimport stats
@@ -656,7 +656,7 @@ cdef double _dtw(
             v = (X[i] - x_mean) / x_std
             v -= (Y[j] - y_mean) / y_std
             if weight_vector != NULL:
-                w = weight_vector[abs(i - j)]
+                w = weight_vector[labs(i - j)]
 
             cost[j] = min(min(x, y), z) + v * v * w
 
@@ -1422,7 +1422,6 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
         self.d_x = <double*> malloc(sizeof(double) * x.n_timestep - 2)
         self.d_y = <double*> malloc(sizeof(double) * y.n_timestep - 2)
 
-
     cdef double _distance(
         self,
         double *x,
@@ -1490,6 +1489,74 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
             1.0,
             y,
             y_len,
+            0.0,
+            1.0,
+            self.warp_width,
+            self.cost,
+            self.cost_prev,
+            self.weights,
+        )
+
+        return sqrt(dist)
+
+
+cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
+
+    cdef double *d_x
+    cdef double *d_y
+    cdef double *weights
+    cdef double g
+
+    def __cinit__(self, double r=0, double g=0.05):
+        self.weights = NULL
+        self.g = g
+        self.d_x = NULL
+        self.d_y = NULL
+    
+    def __reduce__(self):
+        return self.__class__, (self.r, self.g)
+
+    cdef void __free(self) nogil:
+        DtwDistanceMeasure.__free(self)
+        if self.d_x != NULL:
+            free(self.d_x)
+            self.d_x = NULL
+
+        if self.d_y != NULL:
+            free(self.d_y)
+            self.d_y = NULL
+
+        if self.weights != NULL:
+            free(self.weights)
+            self.weights = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        DtwDistanceMeasure.reset(self, x, y)
+        cdef Py_ssize_t i
+        cdef Py_ssize_t n_timestep = max(x.n_timestep - 2, y.n_timestep - 2)
+
+        self.d_x = <double*> malloc(sizeof(double) * x.n_timestep - 2)
+        self.d_y = <double*> malloc(sizeof(double) * y.n_timestep - 2)
+        self.weights = <double*> malloc(sizeof(double) * n_timestep)
+        for i in range(0, n_timestep):
+            self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len,
+    ) nogil:
+        average_slope(x, x_len, self.d_x)
+        average_slope(y, y_len, self.d_y)
+        cdef double dist = _dtw(
+            self.d_x,
+            x_len - 2,
+            0.0,
+            1.0,
+            self.d_y,
+            y_len - 2,
             0.0,
             1.0,
             self.warp_width,

@@ -51,6 +51,7 @@ _DISTANCE_MEASURE = {
     "dtw": _dtw_distance.DtwDistanceMeasure,
     "ddtw": _dtw_distance.DerivativeDtwDistanceMeasure,
     "wdtw": _dtw_distance.WeightedDtwDistanceMeasure,
+    "wddtw": _dtw_distance.WeightedDerivativeDtwDistanceMeasure,
 }
 
 _THRESHOLD = {
