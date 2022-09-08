@@ -21,12 +21,7 @@ import numpy as np
 from sklearn.utils import deprecated
 
 from . import pairwise_distance
-from ._dtw_distance import (
-    _dtw_alignment,
-    _dtw_envelop,
-    _dtw_lb_keogh,
-    _dtw_pairwise_distance,
-)
+from ._dtw_distance import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
 
 __all__ = [
     "dtw_alignment",
@@ -193,7 +188,7 @@ def wddtw_distance(x, y, r=1.0, g=0.05):
 
 @deprecated(
     "Function 'dtw_pairwise_distance' was deprectad in 1.1 and will be removed in 1.2."
-    "Use 'pairwise_distance(x, y, metric=\"dtw\")' instead."
+    "Use 'pairwise_distance(x, metric=\"dtw\")' instead."
 )
 def dtw_pairwise_distance(x, r=1.0):
     """Compute the distance between all pairs of rows
@@ -211,12 +206,7 @@ def dtw_pairwise_distance(x, r=1.0):
     distances : ndarray of shape (n_samples, n_samples)
         The distance between pairs of rows
     """
-    x = np.asarray(x)
-    if not x.ndim == 2:
-        raise ValueError("requires a 2d-array")
-
-    warp_size = _compute_warp_size(x.shape[1], r)
-    return _dtw_pairwise_distance(x, warp_size)
+    return pairwise_distance(x, metric="dtw", metric_params={"r": r})
 
 
 def dtw_envelop(x, r=1.0):
