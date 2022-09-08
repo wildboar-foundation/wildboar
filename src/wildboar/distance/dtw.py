@@ -16,13 +16,13 @@
 # Authors: Isak Samsten
 
 import math
-import numbers
 
 import numpy as np
+from sklearn.utils import deprecated
 
+from . import pairwise_distance
 from ._dtw_distance import (
     _dtw_alignment,
-    _dtw_distance,
     _dtw_envelop,
     _dtw_lb_keogh,
     _dtw_pairwise_distance,
@@ -39,21 +39,10 @@ __all__ = [
 
 
 def _compute_warp_size(x_size, r, *, y_size=0):
-    """Compute the warping window from array sizes and r
-
-    Notes
-    -----
-    This function ensures that r is always in the range [1, max(x_size, y_size) - 1]
-    """
     x_size = max(x_size, y_size)
-    if isinstance(r, numbers.Integral) and 0 <= r < x_size:
-        return max(1, r)
-    elif isinstance(r, numbers.Real):
-        if not 0.0 <= r <= 1.0:
-            raise ValueError("r should be in [0, 1], got %r" % r)
-        return max(min(math.floor(x_size * r), x_size - 1), 1)
-    else:
-        raise ValueError("invalid warping window, got %r" % r)
+    if not 0.0 <= r <= 1.0:
+        raise ValueError("r should be in [0, 1], got %r" % r)
+    return max(min(math.floor(x_size * r), x_size - 1), 1)
 
 
 def dtw_alignment(x, y, r=1.0, out=None):
@@ -67,11 +56,8 @@ def dtw_alignment(x, y, r=1.0, out=None):
     y : array-like of shape (y_timestep,)
         The second time series
 
-    r : int or float, optional
-        The warping window
-
-        - if float in [0, 1] a fraction of max(x_timestep, y_timestep)
-        - if int the exact warping window (max(1, r))
+    r : float, optional
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
 
     out : array-like of shape (x_timestep, y_timestep), optional
         Store the warping path in this array.
@@ -95,7 +81,7 @@ def dtw_alignment(x, y, r=1.0, out=None):
     return _dtw_alignment(x, y, warp_size, out)
 
 
-def dtw_distance(x, y, r=1.0, scale=False):
+def dtw_distance(x, y, r=1.0):
     """Compute the dynamic time warping distance
 
     Parameters
@@ -106,14 +92,8 @@ def dtw_distance(x, y, r=1.0, scale=False):
     y : array-like of shape (y_timestep, )
         The second time series
 
-    r : int or float, optional
-        The warping window
-
-        - if float in [0, 1] a fraction of max(x_timestep, y_timestep)
-        - if int the exact warping window (max(1, r))
-
-    scale : bool, optional
-        If True, x and y are standardized before calculation
+    r : float, optional
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
 
     Returns
     -------
@@ -124,12 +104,97 @@ def dtw_distance(x, y, r=1.0, scale=False):
     --------
     dtw_alignment : compute the dtw alignment matrix
     """
-    x = np.asarray(x)
-    y = np.asarray(y)
-    warp_size = _compute_warp_size(x.shape[0], r, y_size=y.shape[0])
-    return _dtw_distance(x, y, warp_size, scale=scale)
+    return pairwise_distance(x, y, metric="dtw", metric_params={"r": r})
 
 
+def ddtw_distance(x, y, r=1.0):
+    """Compute the derivative dynamic time warping distance
+
+    Parameters
+    ----------
+    x : array-like of shape (x_timestep, )
+        The first time series
+
+    y : array-like of shape (y_timestep, )
+        The second time series
+
+    r : float, optional
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+
+    Returns
+    -------
+    distance : float
+        The dynamic time warping distance
+
+    See Also
+    --------
+    dtw_distance : compute the dtw distance
+    """
+    return pairwise_distance(x, y, metric="ddtw", metric_params={"r": r})
+
+
+def wdtw_distance(x, y, r=1.0, g=0.05):
+    """Compute the weighted dynamic time warping distance
+
+    Parameters
+    ----------
+    x : array-like of shape (x_timestep, )
+        The first time series
+
+    y : array-like of shape (y_timestep, )
+        The second time series
+
+    r : float, optional
+        The warping window in [0, 1] as a fraction of ``max(x_timestep, y_timestep)``
+
+    g : float, optional
+        Penalization for points deviating the diagonal.
+
+    Returns
+    -------
+    distance : float
+        The dynamic time warping distance
+
+    See Also
+    --------
+    dtw_distance : compute the dtw distance
+    """
+    return pairwise_distance(x, y, metric="wdtw", metric_params={"r": r, "g": g})
+
+
+def wddtw_distance(x, y, r=1.0, g=0.05):
+    """Compute the weighted derivative dynamic time warping distance
+
+    Parameters
+    ----------
+    x : array-like of shape (x_timestep, )
+        The first time series
+
+    y : array-like of shape (y_timestep, )
+        The second time series
+
+    r : float, optional
+        The warping window in [0, 1] as a fraction of ``max(x_timestep, y_timestep)``
+
+    g : float, optional
+        Penalization for points deviating the diagonal.
+
+    Returns
+    -------
+    distance : float
+        The dynamic time warping distance
+
+    See Also
+    --------
+    dtw_distance : compute the dtw distance
+    """
+    return pairwise_distance(x, y, metric="wddtw", metric_params={"r": r, "g": g})
+
+
+@deprecated(
+    "Function 'dtw_pairwise_distance' was deprectad in 1.1 and will be removed in 1.2."
+    "Use 'pairwise_distance(x, y, metric=\"dtw\")' instead."
+)
 def dtw_pairwise_distance(x, r=1.0):
     """Compute the distance between all pairs of rows
 
@@ -139,10 +204,7 @@ def dtw_pairwise_distance(x, r=1.0):
         An array of samples
 
     r : float or int, optional
-        The size of the warping window
-
-        - if float in [0, 1] a fraction of x_timestep
-        - if int the exact warping window (max(1, r))
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
 
     Returns
     -------
@@ -165,11 +227,8 @@ def dtw_envelop(x, r=1.0):
     x : array-like of shape (x_timestep,)
         The time series
 
-    r : float or int, optional
-        The size of the warping window
-
-        - if float in [0, 1] a fraction of x_timestep
-        - if int the exact warping window (max(1, r))
+    r : float, optional
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
 
     Returns
     -------
@@ -207,11 +266,8 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
     upper : ndarray of shape (x_timestep,), optional
         The max value of the envelop
 
-    r : float or int, optional
-        The size of the warping window
-
-        - if float in [0, 1] a fraction of x_timestep
-        - if int the exact warping window (max(1, r))
+    r : float, optional
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
 
     Returns
     -------
@@ -266,8 +322,8 @@ def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
     alignment : ndarray of shape (x_timestep, y_timestep), optional
         Precomputed alignment
 
-    r : float or int, optional
-        - if float, the warping path is a fraction of
+    r : float, optional
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
 
     return_index : bool, optional
         Return the indices of the warping path
