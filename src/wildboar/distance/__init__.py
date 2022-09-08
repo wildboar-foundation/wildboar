@@ -172,10 +172,13 @@ def pairwise_subsequence_distance(
     dim : int, optional
         The dim to search for shapelets
 
-     metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+     metric : str or callable, optional # noqa: E501
         The distance metric
 
-        - if str use optimized implementations of the named distance measure
+        - if str use optimized implementations of the named distance measure. See
+          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+          Read more in the :ref:`User guide <list_of_subseqence_metrics>`.
+
         - if callable a function taking two arrays as input
 
     metric_params: dict, optional
@@ -257,7 +260,9 @@ def paired_subsequence_distance(
      metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure
+        - if str use optimized implementations of the named distance measure. See
+          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+          Read more in the :ref:`User guide <list_of_subseqence_metrics>`
         - if callable a function taking two arrays as input
 
     metric_params: dict, optional
@@ -357,7 +362,9 @@ def subsequence_match(
     metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure
+        - if str use optimized implementations of the named distance measure. See
+          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+          Read more in the :ref:`User guide <list_of_subseqence_metrics>`
         - if callable a function taking two arrays as input
 
     metric_params: dict, optional
@@ -509,7 +516,9 @@ def paired_subsequence_match(
      metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure
+        - if str use optimized implementations of the named distance measure. See
+          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+          Read more in the :ref:`User guide <list_of_subseqence_metrics>`
         - if callable a function taking two arrays as input
 
     metric_params: dict, optional
@@ -638,7 +647,9 @@ def paired_distance(
      metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure
+        - if str use optimized implementations of the named distance measure. See
+          ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
+           :ref:`User guide <list_of_metrics>`
         - if callable a function taking two arrays as input
 
     metric_params: dict, optional
@@ -717,10 +728,12 @@ def pairwise_distance(
     dim : int, optional
         The dim to compute distance
 
-     metric : str or callable, optional # noqa: E501
+     metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure
+        - if str use optimized implementations of the named distance measure. See
+          ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
+           :ref:`User guide <list_of_metrics>`
         - if callable a function taking two arrays as input
 
     metric_params: dict, optional
@@ -945,7 +958,7 @@ def distance(
           returned
         - otherwise an array is returned
 
-    metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+    metric : str or callable, optional
         The distance metric
 
         - if str use optimized implementations of the named distance measure
@@ -1051,7 +1064,7 @@ def matches(
           returned
         - otherwise an array is returned
 
-    metric : {'euclidean', 'scaled_euclidean'}, optional
+    metric : str, optional
         The distance metric
 
     metric_params: dict, optional
