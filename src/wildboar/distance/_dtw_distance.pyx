@@ -33,7 +33,7 @@ cimport numpy as np
 import numpy as np
 
 from libc.math cimport INFINITY, floor, sqrt
-from libc.stdlib cimport free, malloc
+from libc.stdlib cimport abs, free, malloc
 from libc.string cimport memcpy
 
 from wildboar.utils cimport stats
@@ -589,6 +589,7 @@ cdef double _dtw(
     Py_ssize_t r,
     double *cost,
     double *cost_prev,
+    double *weight_vector = NULL,
 ) nogil:
     """Dynamic time warping distance
     
@@ -605,6 +606,7 @@ cdef double _dtw(
     r : the warp window
     cost : cost matrix (max(x_length, y_length))
     cost_prev : cost matrix (max(x_length, y_length))
+    weight_vector : weight vector (max(x_length, y_length))
 
     Returns
     -------
@@ -618,15 +620,22 @@ cdef double _dtw(
     cdef double y
     cdef double z
     cdef double v
+    cdef double w = 1.0
 
     v = (X[0] - x_mean) / x_std
     v -= (Y[0] - y_mean) / y_std
 
-    cost_prev[0] = v * v
+    if weight_vector != NULL:
+        w = weight_vector[0]
+    
+    cost_prev[0] = v * v * w
     for i in range(1, min(y_length, max(0, y_length - x_length) + r)):
         v = (X[0] - x_mean) / x_std
         v -= (Y[i] - y_mean) / y_std
-        cost_prev[i] = cost_prev[i - 1] + v * v
+        if weight_vector != NULL:
+            w = weight_vector[i - 1]
+
+        cost_prev[i] = cost_prev[i - 1] + v * v * w
 
     if max(0, y_length - x_length) + r < y_length:
         cost_prev[max(0, y_length - x_length) + r] = INFINITY
@@ -646,7 +655,10 @@ cdef double _dtw(
                 z = INFINITY
             v = (X[i] - x_mean) / x_std
             v -= (Y[j] - y_mean) / y_std
-            cost[j] = min(min(x, y), z) + v * v
+            if weight_vector != NULL:
+                w = weight_vector[abs(i - j)]
+
+            cost[j] = min(min(x, y), z) + v * v * w
 
         if j_stop < y_length:
             cost[j_stop] = INFINITY
