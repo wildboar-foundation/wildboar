@@ -184,12 +184,6 @@ def pairwise_subsequence_distance(
     metric_params: dict, optional
         Parameters to the metric
 
-        - 'euclidean' and 'scaled_euclidean' take no parameters
-        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-          is interpreted as a fraction of the time series length. If > 1 it
-          is interpreted as an exact time warping window. Use 'r' == 0 for
-          a widow size of exactly 1.
-
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
@@ -267,12 +261,6 @@ def paired_subsequence_distance(
 
     metric_params: dict, optional
         Parameters to the metric
-
-        - 'euclidean' and 'scaled_euclidean' take no parameters
-        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-          is interpreted as a fraction of the time series length. If > 1 it
-          is interpreted as an exact time warping window. Use 'r' == 0 for
-          a widow size of exactly 1.
 
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
@@ -369,12 +357,6 @@ def subsequence_match(
 
     metric_params: dict, optional
         Parameters to the metric
-
-        - 'euclidean' and 'scaled_euclidean' take no parameters
-        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-          is interpreted as a fraction of the time series length. If > 1 it
-          is interpreted as an exact time warping window. Use 'r' == 0 for
-          a widow size of exactly 1.
 
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
@@ -524,12 +506,6 @@ def paired_subsequence_match(
     metric_params: dict, optional
         Parameters to the metric
 
-        - 'euclidean' and 'scaled_euclidean' take no parameters
-        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-          is interpreted as a fraction of the time series length. If > 1 it
-          is interpreted as an exact time warping window. Use 'r' == 0 for
-          a widow size of exactly 1.
-
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
 
@@ -655,12 +631,6 @@ def paired_distance(
     metric_params: dict, optional
         Parameters to the metric
 
-        - 'euclidean' and 'scaled_euclidean' take no parameters
-        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-          is interpreted as a fraction of the time series length. If > 1 it
-          is interpreted as an exact time warping window. Use 'r' == 0 for
-          a widow size of exactly 1.
-
     n_jobs : int, optional
         The number of parallel jobs.
 
@@ -738,12 +708,6 @@ def pairwise_distance(
 
     metric_params: dict, optional
         Parameters to the metric
-
-        - 'euclidean' and 'scaled_euclidean' take no parameters
-        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-          is interpreted as a fraction of the time series length. If > 1 it
-          is interpreted as an exact time warping window. Use 'r' == 0 for
-          a widow size of exactly 1.
 
     n_jobs : int, optional
         The number of parallel jobs.
@@ -966,12 +930,6 @@ def distance(
 
     metric_params: dict, optional
         Parameters to the metric
-
-        - 'euclidean' and 'scaled_euclidean' take no parameters
-        - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-          is interpreted as a fraction of the time series length. If > 1 it
-          is interpreted as an exact time warping window. Use 'r' == 0 for
-          a widow size of exactly 1.
 
     subsequence_distance: bool, optional
         - if True, compute the minimum subsequence distance
