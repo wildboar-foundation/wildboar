@@ -50,6 +50,7 @@ _DISTANCE_MEASURE = {
     "euclidean": _euclidean_distance.EuclideanDistanceMeasure,
     "dtw": _dtw_distance.DtwDistanceMeasure,
     "ddtw": _dtw_distance.DerivativeDtwDistanceMeasure,
+    "wdtw": _dtw_distance.WeightedDtwDistanceMeasure,
 }
 
 _THRESHOLD = {

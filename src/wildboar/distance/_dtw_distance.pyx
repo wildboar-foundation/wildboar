@@ -32,7 +32,7 @@ cimport numpy as np
 
 import numpy as np
 
-from libc.math cimport INFINITY, floor, sqrt
+from libc.math cimport INFINITY, exp, floor, sqrt
 from libc.stdlib cimport abs, free, malloc
 from libc.string cimport memcpy
 
@@ -1318,7 +1318,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
     cdef Py_ssize_t warp_width
     cdef double r
     
-    def __cinit__(self, double r=0):
+    def __cinit__(self, double r=0, *args, **kwargs):
         if not 0 <= r <= 1.0:
             raise ValueError("r should be in [0, 1], got %d" % r)
         self.r = r
@@ -1444,6 +1444,58 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
             self.warp_width,
             self.cost,
             self.cost_prev,
+        )
+
+        return sqrt(dist)
+
+
+cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
+
+    cdef double g
+    cdef double *weights
+
+    def __cinit__(self, double r=0, double g=0.05):
+        self.weights = NULL
+        self.g = g
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.g)
+
+    cdef void __free(self) nogil:
+        DtwDistanceMeasure.__free(self)
+        if self.weights != NULL:
+            free(self.weights)
+            self.weights = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        DtwDistanceMeasure.reset(self, x, y)
+        cdef Py_ssize_t i
+        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+
+        self.weights = <double*> malloc(sizeof(double) * n_timestep)
+        for i in range(n_timestep):
+            self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2)))
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len,
+    ) nogil:
+        cdef double dist = _dtw(
+            x,
+            x_len,
+            0.0,
+            1.0,
+            y,
+            y_len,
+            0.0,
+            1.0,
+            self.warp_width,
+            self.cost,
+            self.cost_prev,
+            self.weights,
         )
 
         return sqrt(dist)
