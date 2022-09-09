@@ -37,7 +37,7 @@ def _compute_warp_size(x_size, r, *, y_size=0):
     x_size = max(x_size, y_size)
     if not 0.0 <= r <= 1.0:
         raise ValueError("r should be in [0, 1], got %r" % r)
-    return max(min(math.floor(x_size * r), x_size - 1), 1)
+    return max(math.floor(x_size * r), 1)
 
 
 def dtw_alignment(x, y, r=1.0, out=None):

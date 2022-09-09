@@ -728,7 +728,7 @@ def _dtw_alignment(np.ndarray x, np.ndarray y, Py_ssize_t r, np.ndarray out=None
         Contains the dtw alignment. Values outside the warping
         window size is undefined.
     """
-    if not 0 < r < max(x.shape[0], y.shape[0]):
+    if not 0 < r <= max(x.shape[0], y.shape[0]):
         raise ValueError("invalid r")
     cdef Py_ssize_t x_size = x.shape[0]
     cdef Py_ssize_t y_size = y.shape[0]
@@ -743,7 +743,7 @@ def _dtw_alignment(np.ndarray x, np.ndarray y, Py_ssize_t r, np.ndarray out=None
 
 
 def _dtw_envelop(np.ndarray x, Py_ssize_t r):
-    if not 0 < r < x.shape[0]:
+    if not 0 < r <= x.shape[0]:
         raise ValueError("invalid r")
 
     x = np.ascontiguousarray(x, dtype=float)
@@ -1218,7 +1218,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
     cdef int reset(self, Dataset x, Dataset y) nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
-        self.warp_width = <Py_ssize_t> max(min(floor(n_timestep * self.r), n_timestep - 1), 1)
+        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
