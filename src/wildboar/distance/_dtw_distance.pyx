@@ -667,22 +667,39 @@ cdef double _dtw(
     return cost_prev[y_length - 1]
 
 
-cdef void _dtw_align(double[:] X, double[:] Y, Py_ssize_t r, double[:,:] out) nogil:
+cdef void _dtw_align(
+    double[:] X, 
+    double[:] Y, 
+    Py_ssize_t r, 
+    double[:] weights, 
+    double[:,:] out
+) nogil:
     """Compute the warp alignment """
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start, j_stop
     cdef double v
     cdef double x, y, z
+    cdef double w = 1.0
     v = X[0] - Y[0]
-    out[0, 0] = v * v
+
+    if weights is not None:
+        w = weights[0]
+    
+    out[0, 0] = v * v * w
     for i in range(1, min(X.shape[0], r + 1)):
         v = X[i] - Y[0]
-        out[i, 0] = out[i - 1, 0] + v * v
+        if weights is not None:
+            w = weights[i]
+
+        out[i, 0] = out[i - 1, 0] + v * v * w
 
     for i in range(1, min(Y.shape[0], max(0, Y.shape[0] - X.shape[0]) + r)):
         v = X[0] - Y[i]
-        out[0, i] = out[0, i - 1] + v * v
+        if weights is not None:
+            w = weights[i]
+
+        out[0, i] = out[0, i - 1] + v * v * w
 
     if max(0, Y.shape[0] - X.shape[0]) + r < Y.shape[0]:
         out[0, max(0, Y.shape[0] - X.shape[0]) + r] = INFINITY
@@ -697,13 +714,22 @@ cdef void _dtw_align(double[:] X, double[:] Y, Py_ssize_t r, double[:,:] out) no
             x = out[i - 1, j]
             y = out[i, j - 1] if j > 0 else INFINITY
             z = out[i - 1, j - 1] if j > 0 else INFINITY
-            out[i, j] = min(min(x, y), z) + v * v
+            if weights is not None:
+                w = weights[labs(i - j)]
+
+            out[i, j] = min(min(x, y), z) + v * v * w
 
         if j_stop < Y.shape[0]:
             out[i, j_stop] = INFINITY
 
 
-def _dtw_alignment(np.ndarray x, np.ndarray y, Py_ssize_t r, np.ndarray out=None):
+def _dtw_alignment(
+    np.ndarray x, 
+    np.ndarray y, 
+    Py_ssize_t r, 
+    np.ndarray weights=None, 
+    np.ndarray out=None
+):
     """Computes that dtw alignment matrix
 
     Parameters
@@ -737,8 +763,7 @@ def _dtw_alignment(np.ndarray x, np.ndarray y, Py_ssize_t r, np.ndarray out=None
 
     if out.shape[0] < x_size or out.shape[1] < y_size:
         raise ValueError("out has wrong shape, got [%d, %d]" (x_size, y_size))
-
-    _dtw_align(x, y, r, out)
+    _dtw_align(x, y, r, weights, out)
     return out
 
 

@@ -16,9 +16,12 @@
 # Authors: Isak Samsten
 
 import math
+import numbers
 
 import numpy as np
 from sklearn.utils import deprecated
+
+from wildboar.utils import check_array
 
 from . import pairwise_distance
 from ._dtw_distance import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
@@ -40,7 +43,7 @@ def _compute_warp_size(x_size, r, *, y_size=0):
     return max(math.floor(x_size * r), 1)
 
 
-def dtw_alignment(x, y, r=1.0, out=None):
+def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
     """Compute the Dynamic time warping alignment matrix
 
     Parameters
@@ -57,6 +60,14 @@ def dtw_alignment(x, y, r=1.0, out=None):
     out : array-like of shape (x_timestep, y_timestep), optional
         Store the warping path in this array.
 
+    weight : float or array-like of shape (max(x_timestep, y_timestep), ), optional
+        A weighting vector to penalize warping.
+
+        - if float, use the weighting described by Jeong et. al. (2011) using the
+          parameter as the penalty control.
+
+          .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}},
+
     Returns
     -------
     alignment : ndarray of shape (x_timestep, y_timestep)
@@ -69,14 +80,68 @@ def dtw_alignment(x, y, r=1.0, out=None):
     See Also
     --------
     dtw_distance : compute the dtw distance
+
+    References
+    ----------
+    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+        Weighted dynamic time warping for time series classification.
+        Pattern Recognition 44, 2231-2240
     """
-    x = np.asarray(x)
-    y = np.asarray(y)
+    x = check_array(x, ensure_2d=False, dtype=float)
+    y = check_array(y, ensure_2d=False, dtype=float)
     warp_size = _compute_warp_size(x.shape[0], r, y_size=y.shape[0])
-    return _dtw_alignment(x, y, warp_size, out)
+    if isinstance(weight, numbers.Real):
+        n_timestep = max(x.shape[0], y.shape[0])
+        weight = 1.0 / (
+            1.0
+            + np.exp(-weight * (np.arange(n_timestep, dtype=float) - n_timestep / 2.0))
+        )
+    elif weight is not None:
+        weight = np.asarray(weight, dtype=float)
+        if weight.shape[0] != max(x.shape[0], y.shape[0]):
+            raise ValueError("invalid weight array.")
+
+    return _dtw_alignment(x, y, warp_size, weight, out)
 
 
-def dtw_distance(x, y, r=1.0):
+def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
+    """Weighted dynamic time warping alignment
+
+    Parameters
+    ----------
+    x : array-like of shape (x_timestep,)
+        The first time series
+
+    y : array-like of shape (y_timestep,)
+        The second time series
+
+    r : float, optional
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+
+
+    g : float or array-like of shape (max(x_timestep, y_timestep), ), optional
+        Weighting described by Jeong et. al. (2011) using the  as the penalty control.
+
+        .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}},
+
+    out : array-like of shape (x_timestep, y_timestep), optional
+        Store the warping path in this array.
+
+    Returns
+    -------
+    alignment : ndarray of shape (x_timestep, y_timestep)
+        The dynamic time warping alignment matrix
+
+    References
+    ----------
+    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+        Weighted dynamic time warping for time series classification.
+        Pattern Recognition 44, 2231-2240
+    """
+    return dtw_alignment(x, y, r=r, weight=g, out=out)
+
+
+def dtw_distance(x, y, *, r=1.0):
     """Compute the dynamic time warping distance
 
     Parameters
