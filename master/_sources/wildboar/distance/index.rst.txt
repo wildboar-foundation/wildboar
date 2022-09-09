@@ -59,12 +59,6 @@ Functions
                   - if callable a function taking two arrays as input
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param subsequence_distance:
                                 - if True, compute the minimum subsequence distance
@@ -200,12 +194,6 @@ Functions
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param n_jobs: The number of parallel jobs.
    :type n_jobs: int, optional
@@ -236,12 +224,6 @@ Functions
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param return_index:
                         - if True return the index of the best match. If there are many equally good
@@ -281,12 +263,6 @@ Functions
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param max_matches: Return the top `max_matches` matches below `threshold`.
 
@@ -334,12 +310,6 @@ Functions
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param n_jobs: The number of parallel jobs.
    :type n_jobs: int, optional
@@ -370,12 +340,6 @@ Functions
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param return_index:
                         - if True return the index of the best match. If there are many equally good
@@ -422,12 +386,6 @@ Functions
                   - if callable a function taking two arrays as input
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param max_matches: Return the top `max_matches` matches below `threshold`.
    :type max_matches: int, optional

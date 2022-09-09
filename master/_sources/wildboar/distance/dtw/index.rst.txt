@@ -22,33 +22,55 @@ Functions
 
 
 
-.. py:function:: dtw_alignment(x, y, r=1.0, out=None)
+.. py:function:: dtw_alignment(x, y, *, r=1.0, weight=None, out=None)
 
    Compute the Dynamic time warping alignment matrix
 
-   :param x: The first time series
-   :type x: array-like of shape (x_timestep,)
-   :param y: The second time series
-   :type y: array-like of shape (y_timestep,)
-   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
-   :type r: float, optional
-   :param out: Store the warping path in this array.
-   :type out: array-like of shape (x_timestep, y_timestep), optional
+       Parameters
+       ----------
+       x : array-like of shape (x_timestep,)
+           The first time series
 
-   :returns: **alignment** -- The dynamic time warping alignment matrix
-   :rtype: ndarray of shape (x_timestep, y_timestep)
+       y : array-like of shape (y_timestep,)
+           The second time series
 
-   .. rubric:: Notes
+       r : float, optional
+           The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
 
-   If only the distance between two series is required use `dtw_distance` instead
+       out : array-like of shape (x_timestep, y_timestep), optional
+           Store the warping path in this array.
 
-   .. seealso::
+       weight : float or array-like of shape (max(x_timestep, y_timestep), ), optional
+           A weighting vector to penalize warping.
 
-      :obj:`dtw_distance`
-          compute the dtw distance
+           - if float, use the weighting described by Jeong et. al. (2011) using the
+             parameter as the penalty control.
+
+             .. math:: w(x)=
+   rac{w_{max}}{1+e^{-g(x-m/2)}},
+
+       Returns
+       -------
+       alignment : ndarray of shape (x_timestep, y_timestep)
+           The dynamic time warping alignment matrix
+
+       Notes
+       --------
+       If only the distance between two series is required use `dtw_distance` instead
+
+       See Also
+       --------
+       dtw_distance : compute the dtw distance
+
+       References
+       ----------
+       Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+           Weighted dynamic time warping for time series classification.
+           Pattern Recognition 44, 2231-2240
 
 
-.. py:function:: dtw_distance(x, y, r=1.0)
+
+.. py:function:: dtw_distance(x, y, *, r=1.0)
 
    Compute the dynamic time warping distance
 
@@ -68,7 +90,7 @@ Functions
           compute the dtw alignment matrix
 
 
-.. py:function:: dtw_envelop(x, r=1.0)
+.. py:function:: dtw_envelop(x, *, r=1.0)
 
    Compute the envelop for LB_keogh
 
