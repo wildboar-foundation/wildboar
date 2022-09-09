@@ -167,7 +167,7 @@ def dtw_distance(x, y, *, r=1.0):
     return pairwise_distance(x, y, metric="dtw", metric_params={"r": r})
 
 
-def ddtw_distance(x, y, r=1.0):
+def ddtw_distance(x, y, *, r=1.0):
     """Compute the derivative dynamic time warping distance
 
     Parameters
@@ -193,7 +193,7 @@ def ddtw_distance(x, y, r=1.0):
     return pairwise_distance(x, y, metric="ddtw", metric_params={"r": r})
 
 
-def wdtw_distance(x, y, r=1.0, g=0.05):
+def wdtw_distance(x, y, *, r=1.0, g=0.05):
     """Compute the weighted dynamic time warping distance
 
     Parameters
@@ -222,7 +222,7 @@ def wdtw_distance(x, y, r=1.0, g=0.05):
     return pairwise_distance(x, y, metric="wdtw", metric_params={"r": r, "g": g})
 
 
-def wddtw_distance(x, y, r=1.0, g=0.05):
+def wddtw_distance(x, y, *, r=1.0, g=0.05):
     """Compute the weighted derivative dynamic time warping distance
 
     Parameters
@@ -274,7 +274,7 @@ def dtw_pairwise_distance(x, r=1.0):
     return pairwise_distance(x, metric="dtw", metric_params={"r": r})
 
 
-def dtw_envelop(x, r=1.0):
+def dtw_envelop(x, *, r=1.0):
     """Compute the envelop for LB_keogh
 
     Parameters
@@ -299,7 +299,7 @@ def dtw_envelop(x, r=1.0):
         Exact indexing of dynamic time warping.
         In 28th International Conference on Very Large Data Bases.
     """
-    x = np.asarray(x)
+    x = check_array(x, ensure_2d=False, dtype=float, contiguous=True)
     warp_size = _compute_warp_size(x.shape[0], r)
     return _dtw_envelop(x, warp_size)
 
