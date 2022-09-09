@@ -23,13 +23,15 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.tree._ptree.make_dtw
-   wildboar.tree._ptree.make_euclidean
+   wildboar.tree._ptree.ddtw_factory
+   wildboar.tree._ptree.dtw_factory
+   wildboar.tree._ptree.euclidean_factory
    wildboar.tree._ptree.make_metrics
+   wildboar.tree._ptree.wdtw_factory
 
 
 
-.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics=None, metrics_params=None, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories=None, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
 
@@ -58,10 +60,13 @@ Functions
    :type pivot_sample: {"label", "uniform"}, optional
    :param metric_sample: The metric sampling method.
    :type metric_sample: {"uniform", "weighted"}, optional
-   :param metrics: The distance metrics
-   :type metrics: str or list, optional
-   :param metrics_params: The params to the metrics
-   :type metrics_params: list, optional
+   :param metric_factories: The distance metrics. A dictionary where key is:
+
+                            - str: a named distance factory (``_DISTANCE_FACTORIES.keys()``)
+                            - callable, a function returning a list of ``DistanceMeasure``-objects
+
+                            and where value is a dict of parameters to the factory.
+   :type metric_factories: dict, optional
    :param max_depth: The maximum tree depth.
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to consider a split.
@@ -76,12 +81,18 @@ Functions
    :type random_state: int or RandomState, optional
 
 
-.. py:function:: make_dtw(min_r=0, max_r=0.25, n=10)
+.. py:function:: ddtw_factory(min_r=0, max_r=0.25, n=10)
 
 
-.. py:function:: make_euclidean()
+.. py:function:: dtw_factory(min_r=0, max_r=0.25, n=10)
 
 
-.. py:function:: make_metrics(metrics=None, metrics_params=None)
+.. py:function:: euclidean_factory()
+
+
+.. py:function:: make_metrics(metric_factories=None)
+
+
+.. py:function:: wdtw_factory(min_g=0.05, max_g=0.2, n=10)
 
 

@@ -440,7 +440,7 @@ Classes
    :type random_state: int or RandomState, optional
 
 
-.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics=None, metrics_params=None, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories=None, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
 
@@ -469,10 +469,13 @@ Classes
    :type pivot_sample: {"label", "uniform"}, optional
    :param metric_sample: The metric sampling method.
    :type metric_sample: {"uniform", "weighted"}, optional
-   :param metrics: The distance metrics
-   :type metrics: str or list, optional
-   :param metrics_params: The params to the metrics
-   :type metrics_params: list, optional
+   :param metric_factories: The distance metrics. A dictionary where key is:
+
+                            - str: a named distance factory (``_DISTANCE_FACTORIES.keys()``)
+                            - callable, a function returning a list of ``DistanceMeasure``-objects
+
+                            and where value is a dict of parameters to the factory.
+   :type metric_factories: dict, optional
    :param max_depth: The maximum tree depth.
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to consider a split.
