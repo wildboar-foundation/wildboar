@@ -32,7 +32,6 @@ from wildboar.tree._cptree import (
 )
 from wildboar.tree.base import BaseTree, TreeClassifierMixin
 from wildboar.utils.data import check_dataset
-from wildboar.utils.decorators import unstable
 
 _CLF_CRITERION = {
     "gini": GiniCriterion,
@@ -48,36 +47,52 @@ _DISTANCE_MEASURE_SAMPLER = {
 }
 
 
-def make_euclidean():
+def euclidean_factory():
     return [_DISTANCE_MEASURE["euclidean"]()]
 
 
-def make_dtw(min_r=0, max_r=0.25, n=10):
+def dtw_factory(min_r=0, max_r=0.25, n=10):
     return [_DISTANCE_MEASURE["dtw"](r=r) for r in np.linspace(min_r, max_r, n)]
 
 
-_METRICS = {"euclidean": make_euclidean, "dtw": make_dtw}
+def ddtw_factory(min_r=0, max_r=0.25, n=10):
+    return [_DISTANCE_MEASURE["ddtw"](r=r) for r in np.linspace(min_r, max_r, n)]
 
 
-def make_metrics(metrics=None, metrics_params=None):
-    if metrics is None:
-        metrics = ["euclidean", "dtw"]
-    if metrics_params is None:
-        metrics_params = [None, {"min_r": 0, "max_r": 0.25, "n": 20}]
+def wdtw_factory(min_g=0.05, max_g=0.2, n=10):
+    return [_DISTANCE_MEASURE["wdtw"](g=g) for g in np.linspace(min_g, max_g, n)]
+
+
+_METRIC_FACTORIES = {
+    "euclidean": euclidean_factory,
+    "dtw": dtw_factory,
+    "ddtw": ddtw_factory,
+    "wdtw": wdtw_factory,
+}
+
+
+def make_metrics(metric_factories=None):
+    if metric_factories is None:
+        metric_factories = {
+            "euclidean": None,
+            "dtw": {"min_r": 0, "max_r": 0.25, "n": 20},
+            "ddtw": {"min_r": 0, "max_r": 0.25, "n": 20},
+            "wdtw": {"min_g": 0.05, "max_g": 0.0},
+        }
 
     distance_measures = []
     weights = []
-    weight = 1.0 / len(metrics)
-    for metric, metric_params in zip(metrics, metrics_params):
-        if callable(metric):
-            _metrics = metric(**(metric_params) or {})
-        elif metric not in _METRICS:
-            raise ValueError("metric (%r) is not supported" % metric)
+    weight = 1.0 / len(metric_factories)
+    for metric_factory, metric_factory_params in metric_factories.items():
+        if callable(metric_factory):
+            metrics = metric_factory(**(metric_factory_params) or {})
+        elif metric_factory not in _METRIC_FACTORIES:
+            raise ValueError("metric (%r) is not supported" % metric_factory)
 
-        _metrics = _METRICS[metric](**(metric_params or {}))
-        for distance_measure in _metrics:
+        metrics = _METRIC_FACTORIES[metric_factory](**(metric_factory_params or {}))
+        for distance_measure in metrics:
             distance_measures.append(distance_measure)
-            weights.append(weight / len(_metrics))
+            weights.append(weight / len(metrics))
 
     return distance_measures, np.array(weights, dtype=np.double)
 
@@ -101,7 +116,6 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         series. Data Mining and Knowledge Discovery
     """
 
-    @unstable
     def __init__(
         self,
         n_pivot=1,
@@ -109,8 +123,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         criterion="entropy",
         pivot_sample="label",
         metric_sample="weighted",
-        metrics=None,
-        metrics_params=None,
+        metric_factories=None,
         force_dim=None,
         max_depth=None,
         min_samples_split=2,
@@ -134,11 +147,13 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         metric_sample : {"uniform", "weighted"}, optional
             The metric sampling method.
 
-        metrics : str or list, optional
-            The distance metrics
+        metric_factories : dict, optional
+            The distance metrics. A dictionary where key is:
 
-        metrics_params : list, optional
-            The params to the metrics
+            - str: a named distance factory (``_DISTANCE_FACTORIES.keys()``)
+            - callable, a function returning a list of ``DistanceMeasure``-objects
+
+            and where value is a dict of parameters to the factory.
 
         max_depth : int, optional
             The maximum tree depth.
@@ -169,8 +184,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         self.criterion = criterion
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
-        self.metrics = metrics
-        self.metrics_params = metrics_params
+        self.metric_factories = metric_factories
         self.class_weight = class_weight
         self.random_state = random_state
 
@@ -198,7 +212,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
             raise ValueError("metric_sample (%r) is not supported" % self.metric_sample)
 
         distance_measures, weights = make_metrics(
-            metrics=self.metrics, metrics_params=self.metrics_params
+            metric_factories=self.metric_factories
         )
         criterion = _CLF_CRITERION[self.criterion](y, self.n_classes_)
         pivot_sampler = _PIVOT_SAMPLER[self.pivot_sample]()

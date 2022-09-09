@@ -40,7 +40,6 @@ from wildboar.tree import (
 )
 from wildboar.tree._tree import RocketTreeClassifier, RocketTreeRegressor
 from wildboar.utils import check_array
-from wildboar.utils.decorators import unstable
 
 
 class ForestMixin:
@@ -1601,7 +1600,6 @@ class ProximityForestClassifier(BaseForestClassifier):
     ----------
     """
 
-    @unstable
     def __init__(
         self,
         n_estimators=100,
@@ -1609,8 +1607,7 @@ class ProximityForestClassifier(BaseForestClassifier):
         n_pivot=1,
         pivot_sample="label",
         metric_sample="weighted",
-        metrics=None,
-        metrics_params=None,
+        metric_factories=None,
         oob_score=False,
         max_depth=None,
         min_samples_split=2,
@@ -1627,8 +1624,7 @@ class ProximityForestClassifier(BaseForestClassifier):
             base_estimator=ProximityTreeClassifier(),
             estimator_params=(
                 "n_pivot",
-                "metrics",
-                "metrics_params",
+                "metric_factories",
                 "pivot_sample",
                 "metric_sample",
                 "max_depth",
@@ -1651,8 +1647,7 @@ class ProximityForestClassifier(BaseForestClassifier):
             random_state=random_state,
         )
         self.n_pivot = n_pivot
-        self.metrics = metrics
-        self.metrics_params = metrics_params
+        self.metric_factories = metric_factories
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
 
