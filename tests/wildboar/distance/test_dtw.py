@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal
 
-from wildboar.distance.dtw import dtw_alignment, dtw_mapping
+from wildboar.distance.dtw import dtw_alignment, dtw_mapping, jeong_weight
 
 
 @pytest.mark.parametrize(
@@ -44,7 +44,7 @@ from wildboar.distance.dtw import dtw_alignment, dtw_mapping
                     27.975712863958133,
                 ],
             ],
-            0.05,
+            jeong_weight(4, 0.05),
         ),
     ],
 )
@@ -75,7 +75,7 @@ def test_dtw_alignment(expected_alignment, weight):
                 [False, False, True, False],
                 [False, False, False, True],
             ],
-            0.5,
+            jeong_weight(4, 0.5),
         ),
     ],
 )
