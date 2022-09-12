@@ -79,7 +79,7 @@ def _2d_3d_paired_distance(x, y, *, metric):
         raise ValueError("invalid rank, %d > 3" % x.ndim)
 
 
-def score(x_true, x_counterfactuals, metric="euclidean", success=None):
+def score(x_true, x_counterfactuals, metric="euclidean", valid=None, success=None):
     """Compute the score for the counterfactuals
 
     Parameters
@@ -100,7 +100,7 @@ def score(x_true, x_counterfactuals, metric="euclidean", success=None):
           the key and the value an ndarray of scores
         - if callable
 
-    success : ndarray of shape (n_samples)
+    valid : ndarray of shape (n_samples)
         Indicator matrix of successful counterfactual transformations
 
     Returns
@@ -108,9 +108,18 @@ def score(x_true, x_counterfactuals, metric="euclidean", success=None):
     score : ndarray or dict
         The scores
     """
+    # TODO: (1.2) remove success
     if success is not None:
-        x_true = x_true[success]
-        x_counterfactuals = x_counterfactuals[success]
+        valid = success
+        warnings.warn(
+            "The success parameter has been deprecated in 1.1 "
+            "and will be removed in 1.2",
+            FutureWarning,
+        )
+
+    if valid is not None:
+        x_true = x_true[valid]
+        x_counterfactuals = x_counterfactuals[valid]
 
     if isinstance(metric, str) or hasattr(metric, "__call__"):
         return _2d_3d_paired_distance(x_true, x_counterfactuals, metric=metric)
@@ -155,16 +164,19 @@ def counterfactuals(
     y : array-like broadcast to shape (n_samples,)
         The desired label of the counterfactual
 
-    method : str, optional
+    method : str or BaseCounterfactual, optional
         The method to generate counterfactual explanations
 
         - if 'best', infer the most appropriate counterfactual explanation method
           based on the estimator
+
           .. versionchanged :: 1.1.0
           The default parameter value is changed to 'best'
 
         - if str, select counterfactual explainer from named collection. See
           ``_COUNTERFACTUALS.keys()`` for a list of valid values.
+
+        - if, BaseCounterfactual use the supplied counterfactual
 
     scoring : str, callable, list or dict, optional
         The scoring function to determine the similarity between the counterfactual
@@ -177,7 +189,7 @@ def counterfactuals(
         The pseudo random number generator to ensure stable result
 
     method_args : dict, optional
-        Optional arguments to the counterfactual explainer
+        Optional arguments to the counterfactual explainer.
 
         ..versionadded :: 1.1.0
 
@@ -197,44 +209,42 @@ def counterfactuals(
         method_args = {}
 
     # TODO: (1.2) Remove "infer"
-    if method == "infer" or method == "best":
-        if method == "infer":
-            warnings.warn(
-                "'infer' is deprecated and should be changed "
-                "to 'best' (default). 'infer' will be disabled in 1.2.",
-                DeprecationWarning,
-            )
-        Explainer = _best_counterfactional(estimator)
-        if Explainer == PrototypeCounterfactual:
-            warnings.warn(
-                "no specific counterfactual explanation method "
-                "is available for the given estimator. "
-                "Using a model agnostic estimator."
-            )
+    if isinstance(method, str):
+        if method == "infer" or method == "best":
+            if method == "infer":
+                warnings.warn(
+                    "'infer' is deprecated and should be changed "
+                    "to 'best' (default). 'infer' will be disabled in 1.2.",
+                    DeprecationWarning,
+                )
+            Explainer = _best_counterfactional(estimator)
+        else:
+            Explainer = _COUNTERFACTUALS.get(method)
+            if Explainer is None:
+                raise ValueError("no counterfactual explainer for '%r'" % method)
+
+        if Explainer == PrototypeCounterfactual and not (
+            "train_x" in method_args or "train_y" in method_args
+        ):
+            raise ValueError("train_x and train_y are required in method_args")
+        explainer = Explainer(**method_args)
     else:
-        Explainer = _COUNTERFACTUALS.get(method)
+        explainer = method
 
-    if Explainer is None:
-        raise ValueError("no counterfactual explainer for '%r'" % method)
+    if random_state is not None and "random_state" in explainer.get_params():
+        explainer.set_params(random_state=random_state)
 
-    if Explainer == PrototypeCounterfactual and not (
-        "train_x" in method_args or "train_y" in method_args
-    ):
-        raise ValueError("train_x and train_y are required in method_args")
-
-    y = np.broadcast_to(y, (x.shape[0],))
-    explainer = Explainer(**method_args)
-    explainer.set_params(random_state=random_state)
     explainer.fit(estimator)
+    y = np.broadcast_to(y, (x.shape[0],))
     x_counterfactuals = explainer.transform(x, y)
-    success = estimator.predict(x_counterfactuals) == y
+    valid = estimator.predict(x_counterfactuals) == y
     if scoring is not None:
         sc = score(
             x,
             x_counterfactuals,
             metric=scoring,
-            success=success if valid_scoring else None,
+            valid=valid if valid_scoring else None,
         )
-        return x_counterfactuals, success, sc
+        return x_counterfactuals, valid, sc
     else:
-        return x_counterfactuals, success
+        return x_counterfactuals, valid
