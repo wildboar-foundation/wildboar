@@ -27,11 +27,16 @@ from ._dtw_distance import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
 
 __all__ = [
     "dtw_alignment",
+    "wdtw_alignment",
     "dtw_distance",
+    "wdtw_distance",
+    "ddtw_distance",
+    "wddtw_distance",
     "dtw_mapping",
     "dtw_envelop",
     "dtw_pairwise_distance",
     "dtw_lb_keogh",
+    "jeong_weight",
 ]
 
 
