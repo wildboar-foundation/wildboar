@@ -250,7 +250,7 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
         y = np.asarray(y)
         if y.shape[0] != x.shape[0]:
             raise ValueError("invalid shape, got (%d, %d)" % (x.shape[0], y.shape[0]))
-        lower, upper = dtw_envelop(y, r)
+        lower, upper = dtw_envelop(y, r=r)
     elif lower is None or upper is None:
         raise ValueError("both y, lower and upper can't be None")
 
