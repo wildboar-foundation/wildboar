@@ -82,7 +82,7 @@ def os_cache_path(dir):
 def check_array(
     x,
     allow_multivariate=False,
-    ensure_1d=True,
+    ensure_1d=False,
     allow_eos=False,
     allow_nan=False,
     contiguous=True,
@@ -96,6 +96,8 @@ def check_array(
         The array to check
     allow_multivariate : bool, optional
         If 3d arrays are allowed, by default False
+    ensure_1d: bool, optional
+        Ensure that the array has only one dimension.
     allow_eos : bool, optional
         If unequal length series are allowed
     allow_nan : bool, optional
