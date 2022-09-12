@@ -792,7 +792,7 @@ def _dtw_envelop(np.ndarray x, Py_ssize_t r):
 
 
 def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r):
-    if not 0 < r < x.shape[0]:
+    if not 0 < r <= x.shape[0]:
         raise ValueError("invalid r")
     x = np.ascontiguousarray(x, dtype=float)
     lower = np.ascontiguousarray(lower, dtype=float)
