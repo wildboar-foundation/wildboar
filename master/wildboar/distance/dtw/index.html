@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.embed" href="../../embed/index.html" /><link rel="prev" title="wildboar.distance" href="../index.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>wildboar.distance.dtw - Wildboar 1.1.0rc5.dev36+g4435e0d1 documentation</title>
+        <title>wildboar.distance.dtw - Wildboar 1.1.0rc5.dev46+g1bc5aa8e documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -137,7 +137,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev36+g4435e0d1 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev46+g1bc5aa8e documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -210,6 +210,9 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/dtw.html#Dynamic-Time-Warping">Dynamic Time Warping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/dtw.html#Weighted-Dynamic-Time-Warping">Weighted Dynamic Time Warping</a></li>
 </ul>
 </li>
 </ul>
@@ -320,73 +323,111 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_alignment" title="wildboar.distance.dtw.dtw_alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_alignment</span></code></a>(x, y, *[, r, weight, out])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.ddtw_distance" title="wildboar.distance.dtw.ddtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ddtw_distance</span></code></a>(x, y, *[, r])</p></td>
+<td><p>Compute the derivative dynamic time warping distance</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_alignment" title="wildboar.distance.dtw.dtw_alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_alignment</span></code></a>(x, y, *[, r, weight, out])</p></td>
 <td><p>Compute the Dynamic time warping alignment matrix</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a>(x, y, *[, r])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a>(x, y, *[, r])</p></td>
 <td><p>Compute the dynamic time warping distance</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_envelop" title="wildboar.distance.dtw.dtw_envelop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_envelop</span></code></a>(x, *[, r])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_envelop" title="wildboar.distance.dtw.dtw_envelop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_envelop</span></code></a>(x, *[, r])</p></td>
 <td><p>Compute the envelop for LB_keogh</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_lb_keogh" title="wildboar.distance.dtw.dtw_lb_keogh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_lb_keogh</span></code></a>(x[, y, lower, upper, r])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_lb_keogh" title="wildboar.distance.dtw.dtw_lb_keogh"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_lb_keogh</span></code></a>(x[, y, lower, upper, r])</p></td>
 <td><p>The LB_keogh lower bound</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_mapping" title="wildboar.distance.dtw.dtw_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_mapping</span></code></a>([x, y, alignment, r, return_index])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_mapping" title="wildboar.distance.dtw.dtw_mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_mapping</span></code></a>([x, y, alignment, r, return_index])</p></td>
 <td><p>Compute the optimal warping path between two series or from a given</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_pairwise_distance" title="wildboar.distance.dtw.dtw_pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_pairwise_distance</span></code></a>(x[, r])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.dtw_pairwise_distance" title="wildboar.distance.dtw.dtw_pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_pairwise_distance</span></code></a>(x[, r])</p></td>
 <td><p>Compute the distance between all pairs of rows</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.jeong_weight" title="wildboar.distance.dtw.jeong_weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jeong_weight</span></code></a>(n[, g])</p></td>
+<td><p>Weighting described by Jeong et. al. (2011) using g as the penalty control.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.wddtw_distance" title="wildboar.distance.dtw.wddtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wddtw_distance</span></code></a>(x, y, *[, r, g])</p></td>
+<td><p>Compute the weighted derivative dynamic time warping distance</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance.dtw.wdtw_alignment" title="wildboar.distance.dtw.wdtw_alignment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wdtw_alignment</span></code></a>(x, y, *[, r, g, out])</p></td>
+<td><p>Weighted dynamic time warping alignment</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance.dtw.wdtw_distance" title="wildboar.distance.dtw.wdtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wdtw_distance</span></code></a>(x, y, *[, r, g])</p></td>
+<td><p>Compute the weighted dynamic time warping distance</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <dl class="py function">
-<dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_alignment">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L46-L104"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_alignment" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute the Dynamic time warping alignment matrix</p>
-<blockquote>
-<div><dl>
-<dt>x<span class="classifier">array-like of shape (x_timestep,)</span></dt><dd><p>The first time series</p>
-</dd>
-<dt>y<span class="classifier">array-like of shape (y_timestep,)</span></dt><dd><p>The second time series</p>
-</dd>
-<dt>r<span class="classifier">float, optional</span></dt><dd><p>The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)</p>
-</dd>
-<dt>out<span class="classifier">array-like of shape (x_timestep, y_timestep), optional</span></dt><dd><p>Store the warping path in this array.</p>
-</dd>
-<dt>weight<span class="classifier">float or array-like of shape (max(x_timestep, y_timestep), ), optional</span></dt><dd><p>A weighting vector to penalize warping.</p>
-<ul>
-<li><p>if float, use the weighting described by Jeong et. al. (2011) using the
-parameter as the penalty control.</p>
-<div class="math-wrapper docutils container">
-<div class="math notranslate nohighlight">
-\[w(x)=\]</div>
-</div>
-</li>
+<dt class="sig sig-object py" id="wildboar.distance.dtw.ddtw_distance">
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">ddtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L76-L99"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.ddtw_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the derivative dynamic time warping distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>x_timestep</em><em>, </em><em>)</em>) – The first time series</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>y_timestep</em><em>, </em><em>)</em>) – The second time series</p></li>
+<li><p><strong>r</strong> (<em>float</em><em>, </em><em>optional</em>) – The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)</p></li>
 </ul>
 </dd>
-</dl>
-</div></blockquote>
-<p>rac{w_{max}}{1+e^{-g(x-m/2)}},</p>
-<blockquote>
-<div><dl class="simple">
-<dt>alignment<span class="classifier">ndarray of shape (x_timestep, y_timestep)</span></dt><dd><p>The dynamic time warping alignment matrix</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>distance</strong> – The dynamic time warping distance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a></dt><dd><p>compute the dtw distance</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_alignment">
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L275-L322"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_alignment" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the Dynamic time warping alignment matrix</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>x_timestep</em><em>,</em><em>)</em>) – The first time series</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>y_timestep</em><em>,</em><em>)</em>) – The second time series</p></li>
+<li><p><strong>r</strong> (<em>float</em><em>, </em><em>optional</em>) – The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)</p></li>
+<li><p><strong>out</strong> (<em>array-like of shape</em><em> (</em><em>x_timestep</em><em>, </em><em>y_timestep</em><em>)</em><em>, </em><em>optional</em>) – Store the warping path in this array.</p></li>
+<li><p><strong>weight</strong> (<em>array-like of shape</em><em> (</em><em>max</em><em>(</em><em>x_timestep</em><em>, </em><em>y_timestep</em><em>)</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – A weighting vector to penalize warping.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>alignment</strong> – The dynamic time warping alignment matrix</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (x_timestep, y_timestep)</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
 <p>If only the distance between two series is required use <cite>dtw_distance</cite> instead</p>
-<p>dtw_distance : compute the dtw distance</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a></dt><dd><p>compute the dtw distance</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">References</p>
 <dl class="simple">
 <dt>Jeong, Y., Jeong, M., Omitaomu, O. (2021)</dt><dd><p>Weighted dynamic time warping for time series classification.
 Pattern Recognition 44, 2231-2240</p>
 </dd>
 </dl>
-</div></blockquote>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_distance">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L144-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_distance" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L50-L73"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_distance" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the dynamic time warping distance</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -414,7 +455,7 @@ Pattern Recognition 44, 2231-2240</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_envelop">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_envelop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L277-L304"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_envelop" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_envelop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L183-L210"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_envelop" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the envelop for LB_keogh</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -441,7 +482,7 @@ In 28th International Conference on Very Large Data Bases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_lb_keogh">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_lb_keogh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L307-L362"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_lb_keogh" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_lb_keogh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L213-L272"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_lb_keogh" title="Permalink to this definition">#</a></dt>
 <dd><p>The LB_keogh lower bound</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -477,7 +518,7 @@ In 28th International Conference on Very Large Data Bases.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.distance.dtw.dtw_mapping">
-<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L365-L426"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_mapping" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">dtw_mapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alignment</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L391-L452"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.dtw_mapping" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the optimal warping path between two series or from a given
 alignment matrix</p>
 <dl class="field-list simple">
@@ -525,6 +566,132 @@ the optimal alignment path.</p></li>
 <dd class="field-odd"><p>ndarray of shape (n_samples, n_samples)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.distance.dtw.jeong_weight">
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">jeong_weight</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L363-L388"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.jeong_weight" title="Permalink to this definition">#</a></dt>
+<dd><p>Weighting described by Jeong et. al. (2011) using g as the penalty control.</p>
+<blockquote>
+<div><div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[w(x)=\]</div>
+</div>
+</div></blockquote>
+<p>rac{w_{max}}{1+e^{-g(x-m/2)}},</p>
+<blockquote>
+<div><dl class="simple">
+<dt>n<span class="classifier">int</span></dt><dd><p>The number of weights.</p>
+</dd>
+<dt>g<span class="classifier">float or array-like of shape (max(x_timestep, y_timestep), ), optional</span></dt><dd><p>Penalty control.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>weight<span class="classifier">ndarray of shape (n, )</span></dt><dd><p>The weights</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Jeong, Y., Jeong, M., Omitaomu, O. (2021)</dt><dd><p>Weighted dynamic time warping for time series classification.
+Pattern Recognition 44, 2231-2240</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.distance.dtw.wddtw_distance">
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wddtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L131-L157"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wddtw_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the weighted derivative dynamic time warping distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>x_timestep</em><em>, </em><em>)</em>) – The first time series</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>y_timestep</em><em>, </em><em>)</em>) – The second time series</p></li>
+<li><p><strong>r</strong> (<em>float</em><em>, </em><em>optional</em>) – The warping window in [0, 1] as a fraction of <code class="docutils literal notranslate"><span class="pre">max(x_timestep,</span> <span class="pre">y_timestep)</span></code></p></li>
+<li><p><strong>g</strong> (<em>float</em><em>, </em><em>optional</em>) – Penalization for points deviating the diagonal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>distance</strong> – The dynamic time warping distance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a></dt><dd><p>compute the dtw distance</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.distance.dtw.wdtw_alignment">
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wdtw_alignment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L325-L360"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wdtw_alignment" title="Permalink to this definition">#</a></dt>
+<dd><p>Weighted dynamic time warping alignment</p>
+<blockquote>
+<div><dl>
+<dt>x<span class="classifier">array-like of shape (x_timestep,)</span></dt><dd><p>The first time series</p>
+</dd>
+<dt>y<span class="classifier">array-like of shape (y_timestep,)</span></dt><dd><p>The second time series</p>
+</dd>
+<dt>r<span class="classifier">float, optional</span></dt><dd><p>The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)</p>
+</dd>
+<dt>g<span class="classifier">float, optional</span></dt><dd><p>Weighting described by Jeong et. al. (2011) using g as penalty control.</p>
+<div class="math-wrapper docutils container">
+<div class="math notranslate nohighlight">
+\[w(x)=\]</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
+<p>rac{w_{max}}{1+e^{-g(x-m/2)}},</p>
+<blockquote>
+<div><dl class="simple">
+<dt>out<span class="classifier">array-like of shape (x_timestep, y_timestep), optional</span></dt><dd><p>Store the warping path in this array.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>alignment<span class="classifier">ndarray of shape (x_timestep, y_timestep)</span></dt><dd><p>The dynamic time warping alignment matrix</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Jeong, Y., Jeong, M., Omitaomu, O. (2021)</dt><dd><p>Weighted dynamic time warping for time series classification.
+Pattern Recognition 44, 2231-2240</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.distance.dtw.wdtw_distance">
+<span class="sig-prename descclassname"><span class="pre">wildboar.distance.dtw.</span></span><span class="sig-name descname"><span class="pre">wdtw_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/distance/dtw.py#L102-L128"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance.dtw.wdtw_distance" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the weighted dynamic time warping distance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>x_timestep</em><em>, </em><em>)</em>) – The first time series</p></li>
+<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>y_timestep</em><em>, </em><em>)</em>) – The second time series</p></li>
+<li><p><strong>r</strong> (<em>float</em><em>, </em><em>optional</em>) – The warping window in [0, 1] as a fraction of <code class="docutils literal notranslate"><span class="pre">max(x_timestep,</span> <span class="pre">y_timestep)</span></code></p></li>
+<li><p><strong>g</strong> (<em>float</em><em>, </em><em>optional</em>) – Penalization for points deviating the diagonal.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>distance</strong> – The dynamic time warping distance</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance" title="wildboar.distance.dtw.dtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dtw_distance</span></code></a></dt><dd><p>compute the dtw distance</p>
+</dd>
+</dl>
+</div>
 </dd></dl>
 
 </section>
@@ -591,12 +758,17 @@ the optimal alignment path.</p></li>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#wildboar.distance.dtw.ddtw_distance">ddtw_distance</a></li>
 <li><a class="reference internal" href="#wildboar.distance.dtw.dtw_alignment">dtw_alignment</a></li>
 <li><a class="reference internal" href="#wildboar.distance.dtw.dtw_distance">dtw_distance</a></li>
 <li><a class="reference internal" href="#wildboar.distance.dtw.dtw_envelop">dtw_envelop</a></li>
 <li><a class="reference internal" href="#wildboar.distance.dtw.dtw_lb_keogh">dtw_lb_keogh</a></li>
 <li><a class="reference internal" href="#wildboar.distance.dtw.dtw_mapping">dtw_mapping</a></li>
 <li><a class="reference internal" href="#wildboar.distance.dtw.dtw_pairwise_distance">dtw_pairwise_distance</a></li>
+<li><a class="reference internal" href="#wildboar.distance.dtw.jeong_weight">jeong_weight</a></li>
+<li><a class="reference internal" href="#wildboar.distance.dtw.wddtw_distance">wddtw_distance</a></li>
+<li><a class="reference internal" href="#wildboar.distance.dtw.wdtw_alignment">wdtw_alignment</a></li>
+<li><a class="reference internal" href="#wildboar.distance.dtw.wdtw_distance">wdtw_distance</a></li>
 </ul>
 </li>
 </ul>

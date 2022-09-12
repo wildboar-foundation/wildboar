@@ -49,7 +49,7 @@ Functions
 
 
 
-.. py:function:: check_array(x, allow_multivariate=False, allow_eos=False, allow_nan=False, contiguous=True, **kwargs)
+.. py:function:: check_array(x, allow_multivariate=False, ensure_1d=False, allow_eos=False, allow_nan=False, contiguous=True, **kwargs)
 
    Wrapper to check array
 
@@ -57,6 +57,8 @@ Functions
    :type x: ndarray
    :param allow_multivariate: If 3d arrays are allowed, by default False
    :type allow_multivariate: bool, optional
+   :param ensure_1d: Ensure that the array has only one dimension.
+   :type ensure_1d: bool, optional
    :param allow_eos: If unequal length series are allowed
    :type allow_eos: bool, optional
    :param allow_nan: If NaN values are allowed

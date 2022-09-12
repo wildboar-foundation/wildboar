@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.utils.decorators" href="decorators/index.html" /><link rel="prev" title="wildboar.tree.base" href="../tree/base/index.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>wildboar.utils - Wildboar 1.1.0rc5.dev36+g4435e0d1 documentation</title>
+        <title>wildboar.utils - Wildboar 1.1.0rc5.dev46+g1bc5aa8e documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -137,7 +137,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev36+g4435e0d1 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev46+g1bc5aa8e documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -210,6 +210,9 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/dtw.html#Dynamic-Time-Warping">Dynamic Time Warping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/dtw.html#Weighted-Dynamic-Time-Warping">Weighted Dynamic Time Warping</a></li>
 </ul>
 </li>
 </ul>
@@ -344,7 +347,7 @@
 <tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">_soft_dependency_error</span></code>([e, package, context, warning])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.check_array" title="wildboar.utils.check_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_array</span></code></a>(x[, allow_multivariate, allow_eos, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.check_array" title="wildboar.utils.check_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_array</span></code></a>(x[, allow_multivariate, ensure_1d, ...])</p></td>
 <td><p>Wrapper to check array</p></td>
 </tr>
 </tbody>
@@ -372,13 +375,14 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.check_array">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.</span></span><span class="sig-name descname"><span class="pre">check_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_multivariate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_eos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/__init__.py#L82-L168"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.check_array" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.</span></span><span class="sig-name descname"><span class="pre">check_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_multivariate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_1d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_eos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/__init__.py#L82-L192"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.check_array" title="Permalink to this definition">#</a></dt>
 <dd><p>Wrapper to check array</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>ndarray</em>) – The array to check</p></li>
 <li><p><strong>allow_multivariate</strong> (<em>bool</em><em>, </em><em>optional</em>) – If 3d arrays are allowed, by default False</p></li>
+<li><p><strong>ensure_1d</strong> (<em>bool</em><em>, </em><em>optional</em>) – Ensure that the array has only one dimension.</p></li>
 <li><p><strong>allow_eos</strong> (<em>bool</em><em>, </em><em>optional</em>) – If unequal length series are allowed</p></li>
 <li><p><strong>allow_nan</strong> (<em>bool</em><em>, </em><em>optional</em>) – If NaN values are allowed</p></li>
 <li><p><strong>contiguous</strong> (<em>bool</em><em>, </em><em>optional</em>) – Ensure that the array is in c-order.</p></li>
