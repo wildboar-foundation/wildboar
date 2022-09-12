@@ -728,7 +728,7 @@ def pairwise_distance(
         y = x
 
     if x is y:
-        x = check_array(x, allow_multivariate=True, dtype=np.double)
+        x = check_array(np.atleast_2d(x), allow_multivariate=True, dtype=np.double)
         if not 0 >= dim < x.ndim:
             raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
