@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.explain.counterfactual.base" href="base/index.html" /><link rel="prev" title="wildboar.explain" href="../index.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>wildboar.explain.counterfactual - Wildboar 1.1.0rc5.dev46+g1bc5aa8e documentation</title>
+        <title>wildboar.explain.counterfactual - Wildboar 1.1.0rc5.dev47+g38ec87cf documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -137,7 +137,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev46+g1bc5aa8e documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev47+g38ec87cf documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -352,7 +352,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.counterfactuals" title="wildboar.explain.counterfactual.counterfactuals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">counterfactuals</span></code></a>(estimator, x, y, *[, method, scoring, ...])</p></td>
 <td><p>Compute a single counterfactual example for each sample</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.score" title="wildboar.explain.counterfactual.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(x_true, x_counterfactuals[, metric, success])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.score" title="wildboar.explain.counterfactual.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(x_true, x_counterfactuals[, metric, valid, success])</p></td>
 <td><p>Compute the score for the counterfactuals</p></td>
 </tr>
 </tbody>
@@ -656,7 +656,7 @@ all counterfactual samples.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.counterfactuals">
-<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">counterfactuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/__init__.py#L134-L240"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">counterfactuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/__init__.py#L143-L250"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute a single counterfactual example for each sample</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -664,21 +664,25 @@ all counterfactual samples.</p></li>
 <li><p><strong>estimator</strong> (<em>object</em>) – The estimator used to compute the counterfactual example</p></li>
 <li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The data samples to fit counterfactuals to</p></li>
 <li><p><strong>y</strong> (<em>array-like broadcast to shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual</p></li>
-<li><p><strong>method</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The method to generate counterfactual explanations</p>
+<li><p><strong>method</strong> (<em>str</em><em> or </em><a class="reference internal" href="base/index.html#wildboar.explain.counterfactual.base.BaseCounterfactual" title="wildboar.explain.counterfactual.base.BaseCounterfactual"><em>BaseCounterfactual</em></a><em>, </em><em>optional</em>) – <p>The method to generate counterfactual explanations</p>
 <ul>
 <li><p>if ‘best’, infer the most appropriate counterfactual explanation method
-based on the estimator
-.. versionchanged :: 1.1.0
-The default parameter value is changed to ‘best’</p></li>
+based on the estimator</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.1.0.</span></p>
+</div>
+<p>The default parameter value is changed to ‘best’</p>
+</li>
 <li><p>if str, select counterfactual explainer from named collection. See
 <code class="docutils literal notranslate"><span class="pre">_COUNTERFACTUALS.keys()</span></code> for a list of valid values.</p></li>
+<li><p>if, BaseCounterfactual use the supplied counterfactual</p></li>
 </ul>
 </p></li>
 <li><p><strong>scoring</strong> (<em>str</em><em>, </em><em>callable</em><em>, </em><em>list</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – The scoring function to determine the similarity between the counterfactual
 sample and the original sample</p></li>
 <li><p><strong>valid_scoring</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only compute score for successful counterfactuals</p></li>
 <li><p><strong>random_state</strong> (<em>RandomState</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – The pseudo random number generator to ensure stable result</p></li>
-<li><p><strong>method_args</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Optional arguments to the counterfactual explainer</p>
+<li><p><strong>method_args</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Optional arguments to the counterfactual explainer.</p>
 <p>..versionadded :: 1.1.0</p>
 </p></li>
 </ul>
@@ -696,7 +700,7 @@ sample and the original sample</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.score">
-<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/__init__.py#L82-L131"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.score" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/__init__.py#L82-L140"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.score" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the score for the counterfactuals</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -713,7 +717,7 @@ the key and the value an ndarray of scores</p></li>
 <li><p>if callable</p></li>
 </ul>
 </p></li>
-<li><p><strong>success</strong> (<em>ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em>) – Indicator matrix of successful counterfactual transformations</p></li>
+<li><p><strong>valid</strong> (<em>ndarray of shape</em><em> (</em><em>n_samples</em><em>)</em>) – Indicator matrix of successful counterfactual transformations</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
