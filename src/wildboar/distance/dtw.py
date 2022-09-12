@@ -250,15 +250,19 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
         Exact indexing of dynamic time warping.
         In 28th International Conference on Very Large Data Bases.
     """
-    x = np.asarray(x)
+    x = check_array(x, ensure_1d=True, contiguous=True, dtype=float)
+    if x.ndim != 1:
+        raise ValueError("invalid ndim, got (%d)" % x.ndim)
     if y is not None:
-        y = np.asarray(y)
+        y = check_array(y, ensure_1d=True, contiguous=True, dtype=float)
         if y.shape[0] != x.shape[0]:
             raise ValueError("invalid shape, got (%d, %d)" % (x.shape[0], y.shape[0]))
         lower, upper = dtw_envelop(y, r=r)
     elif lower is None or upper is None:
         raise ValueError("both y, lower and upper can't be None")
 
+    lower = check_array(lower, ensure_1d=True, contiguous=True, dtype=float)
+    upper = check_array(upper, ensure_1d=True, contiguous=True, dtype=float)
     if lower.shape[0] != upper.shape[0] or lower.shape[0] != x.shape[0]:
         raise ValueError(
             "invalid shape for lower (%d), upper (%d) and x (%d)"
