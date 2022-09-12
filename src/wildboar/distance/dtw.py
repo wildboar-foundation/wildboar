@@ -205,7 +205,7 @@ def dtw_envelop(x, *, r=1.0):
         Exact indexing of dynamic time warping.
         In 28th International Conference on Very Large Data Bases.
     """
-    x = check_array(x, ensure_2d=False, dtype=float, contiguous=True)
+    x = check_array(x, ensure_1d=True, dtype=float, contiguous=True)
     warp_size = _compute_warp_size(x.shape[0], r)
     return _dtw_envelop(x, warp_size)
 
