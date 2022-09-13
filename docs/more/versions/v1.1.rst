@@ -2,17 +2,22 @@
 
 .. _version-1-1:
 
+===========
 Version 1.1
 ===========
-**In development**
 
 .. include:: defs.hrst
 
 Dependencies
-------------
+============
 
 Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 1.1+.
 
+
+Version 1.1.0
+=============
+
+**In development**
 
 New and changed models
 ----------------------
@@ -22,7 +27,8 @@ others we introduce :class:`ensemble.IntervalImportance` to highlight important 
 :class:`linear_model.RocketClassifier` and :class:`linear_model.RocketRegressor` for 
 state-of-the-art predictive performance using random convoultions. We have also been hard 
 at work adding support for :func:`distance.matrix_profile` and implemented motif and regime
-search in terms of it.
+search in terms of it. We also add support for three new distance metrics, weighted, derivative
+and weighted derivative dynamic time warping.
 
 
 Changelog
@@ -35,17 +41,24 @@ Changelog
      :mod:`wildboar.annotate`
      ^^^
      
-     - |Feature| :func:`annotate.motifs` added to find motifs
-     - |Feature| :func:`annotate.regimes`` added to find regime changes
+     - |Feature| :func:`annotate.motifs` added to find motifs in time series
+
+     - |Feature| :func:`annotate.segment`` added to segment time series
 
   .. grid-item-card::
 
     :mod:`wildboar.datasets`
     ^^^
 
+    - |Feature| The new module :mod:`datasets.preprocess` for preprocessing datasets.
+
     - |Enhancement| Setting a global cache directory has been deprecated.
+
     - |Enhancement| Repository definitions are cached locally to support loading cached datasets while offline.
+
     - |Enhancement| Support multiple preprocessing directives in :func:`datasets.load_dataset`.
+
+
     - |API| Rename ``datasets._filter`` to :mod:`datasets.filter`
   
   .. grid-item-card:: 
@@ -54,6 +67,10 @@ Changelog
      ^^^
 
      - |Feature| The new :func:`distance.matrix_profile` function construct a matrix profile
+
+     - |Feature| Support for Weighted dynamic time warping.
+
+     - |Feature| Support for Derivative (Weighted) dynamic time warping.
      
      - |Enhancement| The function :func:`distance.pairwise_subsequence_distance` generalizes the
        former `distance`-function and add support for ``n_jobs``.
@@ -71,6 +88,13 @@ Changelog
      - |Enhancement| The function :func:`distance.paired_subsequence_match` expands the 
        use-case for the former `matches`-function.
 
+     - |Enhancement| The function :func:`distance.dtw.dtw_alignment` now supports the `weight` parameter for specifying optional warping weights.
+
+     - |Feature| The new :func:`distance.dtw.wdtw_alignment` for weighted DTW alignments.
+
+     - |API| All functions in :mod:`distance.dtw` now require keyword arguments for optional parameters.
+
+
   .. grid-item-card::
 
     :mod:`wildboar.ensemble`
@@ -83,10 +107,19 @@ Changelog
       an ensemble of random convolution trees
     
     - |Feature| The new :class:`ensemble.IntervalForestClassifier` is a classifier that constructs
-      an ensenble of interval trees
+      an ensemble of interval trees
     
     - |Feature| The new :class:`ensemble.IntervalForestRegressor` is a regressor that constructs
-      an ensenble of interval trees
+      an ensemble of interval trees
+
+    - |Feature| The new :class:`ensemble.PivotForestClassifier` is a classifier that constructs
+      an ensemble of pivot trees
+
+    - |Feature| The new :class:`ensemble.PivotForestRegressor` is a regressor that constructs
+      an ensemble of pivot trees
+
+    - |Feature| The new :class:`ensemble.ProximityForestClassifier` is an ensemble of proximity trees.
+
 
   .. grid-item-card::
 
@@ -120,6 +153,8 @@ Changelog
 
     - |API| The parameters `background_x` and `background_y` of :class:`explain.counterfactual.PrototypeCounterfactual`
       has been renamed to `train_x` and `train_y`.
+
+    - |API| The parameter `success` to :func:`explain.counterfactual.score` is deprecated and has been renamed to `valid`.
 
   .. grid-item-card::
 
