@@ -34,6 +34,7 @@ extensions = [
     "sphinx_multiversion",
     "sphinx_design",
     "nbsphinx",
+    "sphinx_copybutton",
 ]
 
 if os.getenv("LOCAL_BUILD", 0):
@@ -97,6 +98,8 @@ smv_branch_whitelist = r"^master|\d+\.\d+\.X$"
 smv_remote_whitelist = r"^origin$"
 # smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+\.X$"
 smv_tag_whitelist = None
+
+nbsphinx_prompt_width = "0px"
 
 
 def setup(app):
