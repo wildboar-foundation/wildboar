@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Older versions" href="older.html" /><link rel="prev" title="Version 1.1" href="v1.1.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
-        <title>Version 1.0 - Wildboar 1.1.0rc5.dev53+g0399b8a7 documentation</title>
+        <title>Version 1.0 - Wildboar 1.1.0rc5.dev54+g97d49cab documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev53+g0399b8a7 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev54+g97d49cab documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -335,10 +335,62 @@ future; or a feature will be removed in the future.</p></li>
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
 <p>Wildboar 1.0 requires Python 3.6+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 0.24+.</p>
 </section>
-<section id="version-1-0-7">
-<h2>Version 1.0.7<a class="headerlink" href="#version-1-0-7" title="Permalink to this heading">#</a></h2>
+<section id="version-1-0-12">
+<h2>Version 1.0.12<a class="headerlink" href="#version-1-0-12" title="Permalink to this heading">#</a></h2>
 <section id="changelog">
 <h3>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Correctly address the issue in the previous version.</p></li>
+</ul>
+</section>
+</section>
+<section id="version-1-0-11">
+<h2>Version 1.0.11<a class="headerlink" href="#version-1-0-11" title="Permalink to this heading">#</a></h2>
+<section id="id2">
+<h3>Changelog<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Correctly use <cite>_n_features_in`</cite> to support sklearn&gt;=1.0</p></li>
+</ul>
+</section>
+</section>
+<section id="version-1-0-10">
+<h2>Version 1.0.10<a class="headerlink" href="#version-1-0-10" title="Permalink to this heading">#</a></h2>
+<section id="id3">
+<h3>Changelog<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Adress a serious issue in tree._tree_builder.Tree where platform dependent</p></li>
+</ul>
+<p>integer sizes were used.</p>
+</section>
+</section>
+<section id="version-1-0-9">
+<h2>Version 1.0.9<a class="headerlink" href="#version-1-0-9" title="Permalink to this heading">#</a></h2>
+<section id="id4">
+<h3>Changelog<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> The default repository endpoint, previous releases are now deprecated.</p></li>
+</ul>
+</section>
+</section>
+<section id="version-1-0-8">
+<h2>Version 1.0.8<a class="headerlink" href="#version-1-0-8" title="Permalink to this heading">#</a></h2>
+<section id="id5">
+<h3>Changelog<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add <cite>model_selection.outlier.RepeatedOutlierSplit</cite> to cross-validate
+outlier detection algorithms</p></li>
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> A bug in <cite>filter</cite> of <cite>datasets.load_datasets</cite></p></li>
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Correctly set the number of outliers when setting <cite>n_outliers</cite> to <cite>None</cite> for
+<cite>KMeansLabeler</cite></p></li>
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Correctly set the number of outliers when setting <cite>n_outliers</cite> to <cite>float</cite> for
+<cite>MinorityLabeler</cite></p></li>
+</ul>
+</section>
+</section>
+<section id="version-1-0-7">
+<h2>Version 1.0.7<a class="headerlink" href="#version-1-0-7" title="Permalink to this heading">#</a></h2>
+<section id="id6">
+<h3>Changelog<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Add <cite>filter</cite> keyword-argument to <cite>datasets.load_datasets</cite></p></li>
 </ul>
@@ -346,8 +398,8 @@ future; or a feature will be removed in the future.</p></li>
 </section>
 <section id="version-1-0-6">
 <h2>Version 1.0.6<a class="headerlink" href="#version-1-0-6" title="Permalink to this heading">#</a></h2>
-<section id="id2">
-<h3>Changelog<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<section id="id7">
+<h3>Changelog<a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Fix bug in source distribution</p></li>
 </ul>
@@ -355,8 +407,8 @@ future; or a feature will be removed in the future.</p></li>
 </section>
 <section id="version-1-0-5">
 <h2>Version 1.0.5<a class="headerlink" href="#version-1-0-5" title="Permalink to this heading">#</a></h2>
-<section id="id3">
-<h3>Changelog<a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
+<section id="id8">
+<h3>Changelog<a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add <cite>MajorityLabeler</cite> to construct synthetic outlier datasets</p></li>
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> A bug in <cite>IsolationShapeletForest</cite> where <cite>max_depth</cite> was incorrectly computed</p></li>
@@ -365,8 +417,8 @@ future; or a feature will be removed in the future.</p></li>
 </section>
 <section id="version-1-0-4">
 <h2>Version 1.0.4<a class="headerlink" href="#version-1-0-4" title="Permalink to this heading">#</a></h2>
-<section id="id4">
-<h3>Changelog<a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
+<section id="id9">
+<h3>Changelog<a class="headerlink" href="#id9" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Model agnostic counterfactual explanations has been added.</p></li>
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Synthetic generation of outlier detection datasets.</p></li>
@@ -387,15 +439,15 @@ time series outliers.</p></li>
 </section>
 <section id="version-1-0-3">
 <h2>Version 1.0.3<a class="headerlink" href="#version-1-0-3" title="Permalink to this heading">#</a></h2>
-<section id="id5">
-<h3>Changelog<a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
+<section id="id10">
+<h3>Changelog<a class="headerlink" href="#id10" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Added a counterfactual explainability module</p></li>
 </ul>
 </section>
 </section>
-<section id="id6">
-<h2>Version 1.0<a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h2>
+<section id="id11">
+<h2>Version 1.0<a class="headerlink" href="#id11" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Stable enough for the first release.</p></li>
 </ul>
@@ -461,27 +513,47 @@ time series outliers.</p></li>
             <ul>
 <li><a class="reference internal" href="#">Version 1.0</a><ul>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li><a class="reference internal" href="#version-1-0-7">Version 1.0.7</a><ul>
+<li><a class="reference internal" href="#version-1-0-12">Version 1.0.12</a><ul>
 <li><a class="reference internal" href="#changelog">Changelog</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#version-1-0-6">Version 1.0.6</a><ul>
+<li><a class="reference internal" href="#version-1-0-11">Version 1.0.11</a><ul>
 <li><a class="reference internal" href="#id2">Changelog</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#version-1-0-5">Version 1.0.5</a><ul>
+<li><a class="reference internal" href="#version-1-0-10">Version 1.0.10</a><ul>
 <li><a class="reference internal" href="#id3">Changelog</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#version-1-0-4">Version 1.0.4</a><ul>
+<li><a class="reference internal" href="#version-1-0-9">Version 1.0.9</a><ul>
 <li><a class="reference internal" href="#id4">Changelog</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#version-1-0-3">Version 1.0.3</a><ul>
+<li><a class="reference internal" href="#version-1-0-8">Version 1.0.8</a><ul>
 <li><a class="reference internal" href="#id5">Changelog</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#id6">Version 1.0</a></li>
+<li><a class="reference internal" href="#version-1-0-7">Version 1.0.7</a><ul>
+<li><a class="reference internal" href="#id6">Changelog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#version-1-0-6">Version 1.0.6</a><ul>
+<li><a class="reference internal" href="#id7">Changelog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#version-1-0-5">Version 1.0.5</a><ul>
+<li><a class="reference internal" href="#id8">Changelog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#version-1-0-4">Version 1.0.4</a><ul>
+<li><a class="reference internal" href="#id9">Changelog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#version-1-0-3">Version 1.0.3</a><ul>
+<li><a class="reference internal" href="#id10">Changelog</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id11">Version 1.0</a></li>
 </ul>
 </li>
 </ul>
