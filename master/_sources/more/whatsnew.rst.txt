@@ -7,3 +7,5 @@ What's new
    :caption: Versions
 
    versions/v1.1
+   versions/v1.0
+   versions/older

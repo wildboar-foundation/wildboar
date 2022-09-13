@@ -27,7 +27,7 @@ series data.
 
         +++
         
-        .. button-ref:: examples-classification
+        .. button-ref:: examples-supervised
            :color: secondary
            :expand:
 
@@ -42,22 +42,22 @@ series data.
 
         +++
 
-        .. button-ref:: examples-regression
+        .. button-ref:: examples-supervised
            :color: secondary
            :expand:
 
            Examples   
    
-    .. grid-item-card:: Counterfactuals
+    .. grid-item-card:: Explainability
 
-        Explaining time series classifiers by counterfactual reasoning.
+        Explaining time series classifiers by counterfactual reasoning and by importance scores.
 
         **Algorithms**: Shapelet forest counterfactuals, KNearest counterfactuals and
         Prototype counterfactuals.
 
         +++
 
-        .. button-ref:: examples-counterfactuals
+        .. button-ref:: examples-explainability
            :color: secondary
            :expand:
 

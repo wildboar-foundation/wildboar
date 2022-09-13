@@ -57,14 +57,8 @@ Functions
 
                   - if str use optimized implementations of the named distance measure
                   - if callable a function taking two arrays as input
-   :type metric: {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+   :type metric: str or callable, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param subsequence_distance:
                                 - if True, compute the minimum subsequence distance
@@ -116,7 +110,7 @@ Functions
                   - otherwise an array is returned
    :type sample: int or array-like, optional
    :param metric: The distance metric
-   :type metric: {'euclidean', 'scaled_euclidean'}, optional
+   :type metric: str, optional
    :param metric_params: Parameters to the metric
    :type metric_params: dict, optional
    :param return_distance:
@@ -194,16 +188,12 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
+                     :ref:`User guide <list_of_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param n_jobs: The number of parallel jobs.
    :type n_jobs: int, optional
@@ -228,16 +218,12 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param return_index:
                         - if True return the index of the best match. If there are many equally good
@@ -271,16 +257,12 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param max_matches: Return the top `max_matches` matches below `threshold`.
 
@@ -307,25 +289,27 @@ Functions
    Compute the distance between subsequences and time series
 
    :param x:
-   :type x: ndarray of shape (x_samples, n_timestep) or (x_samples, n_dims, n_timestep),
+   :type x: ndarray of shape (n_timestep, ), (x_samples, n_timestep) or
+   :param (x_samples: The input data
+   :param n_dims: The input data
+   :param n_timestep): The input data
+   :param y:
+   :type y: ndarray of shape (n_timestep, ), (y_samples, n_timestep) or
+   :param (y_samples: The input data
+   :param n_dims: The input data
+   :param n_timestep): The input data
    :param optional: The input data
-   :param y: The input data
-   :type y: : ndarray of shape (y_samples, n_timestep) or (y_samples, n_dims, n_timestep)
    :param dim:    The dim to compute distance
 
-               metric : str or callable, optional # noqa: E501
+               metric : str or callable, optional
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
+                     :ref:`User guide <list_of_metrics>`
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param n_jobs: The number of parallel jobs.
    :type n_jobs: int, optional
@@ -346,19 +330,16 @@ Functions
    :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
    :param dim:    The dim to search for shapelets
 
-               metric : {'euclidean', 'scaled_euclidean', 'dtw', 'scaled_dtw'} or callable, optional # noqa: E501
+               metric : str or callable, optional # noqa: E501
                   The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`.
+
                   - if callable a function taking two arrays as input
    :type dim: int, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param return_index:
                         - if True return the index of the best match. If there are many equally good
@@ -399,16 +380,12 @@ Functions
    :type dim: int, optional
    :param metric: The distance metric
 
-                  - if str use optimized implementations of the named distance measure
+                  - if str use optimized implementations of the named distance measure. See
+                    ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                    Read more in the :ref:`User guide <list_of_subseqence_metrics>`
                   - if callable a function taking two arrays as input
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric
-
-                         - 'euclidean' and 'scaled_euclidean' take no parameters
-                         - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-                           is interpreted as a fraction of the time series length. If > 1 it
-                           is interpreted as an exact time warping window. Use 'r' == 0 for
-                           a widow size of exactly 1.
    :type metric_params: dict, optional
    :param max_matches: Return the top `max_matches` matches below `threshold`.
    :type max_matches: int, optional

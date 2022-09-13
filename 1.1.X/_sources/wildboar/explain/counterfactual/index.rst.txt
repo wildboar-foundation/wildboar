@@ -277,12 +277,15 @@ Functions
 
                   - if 'best', infer the most appropriate counterfactual explanation method
                     based on the estimator
+
                     .. versionchanged :: 1.1.0
                     The default parameter value is changed to 'best'
 
                   - if str, select counterfactual explainer from named collection. See
                     ``_COUNTERFACTUALS.keys()`` for a list of valid values.
-   :type method: str, optional
+
+                  - if, BaseCounterfactual use the supplied counterfactual
+   :type method: str or BaseCounterfactual, optional
    :param scoring: The scoring function to determine the similarity between the counterfactual
                    sample and the original sample
    :type scoring: str, callable, list or dict, optional
@@ -290,7 +293,7 @@ Functions
    :type valid_scoring: bool, optional
    :param random_state: The pseudo random number generator to ensure stable result
    :type random_state: RandomState or int, optional
-   :param method_args: Optional arguments to the counterfactual explainer
+   :param method_args: Optional arguments to the counterfactual explainer.
 
                        ..versionadded :: 1.1.0
    :type method_args: dict, optional
@@ -300,7 +303,7 @@ Functions
              * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Return score of the counterfactual transform, if ``scoring`` is not None
 
 
-.. py:function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
+.. py:function:: score(x_true, x_counterfactuals, metric='euclidean', valid=None, success=None)
 
    Compute the score for the counterfactuals
 
@@ -317,8 +320,8 @@ Functions
                     the key and the value an ndarray of scores
                   - if callable
    :type metric: str, callable, list or dict, optional
-   :param success: Indicator matrix of successful counterfactual transformations
-   :type success: ndarray of shape (n_samples)
+   :param valid: Indicator matrix of successful counterfactual transformations
+   :type valid: ndarray of shape (n_samples)
 
    :returns: **score** -- The scores
    :rtype: ndarray or dict

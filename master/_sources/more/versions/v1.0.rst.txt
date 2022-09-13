@@ -1,0 +1,85 @@
+
+.. _version-1-0:
+
+===========
+Version 1.0
+===========
+
+.. include:: defs.hrst
+
+Dependencies
+============
+
+Wildboar 1.0 requires Python 3.6+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 0.24+.
+
+Version 1.0.7
+=============
+
+Changelog
+---------
+
+- |Enhancement| Add `filter` keyword-argument to `datasets.load_datasets`
+
+Version 1.0.6
+=============
+
+Changelog
+---------
+
+- |Fix| Fix bug in source distribution
+
+Version 1.0.5
+=============
+
+Changelog
+---------
+
+- |Feature| Add `MajorityLabeler` to construct synthetic outlier datasets
+
+- |Fix| A bug in `IsolationShapeletForest` where `max_depth` was incorrectly computed
+
+Version 1.0.4
+=============
+
+Changelog
+---------
+
+- |Feature| Model agnostic counterfactual explanations has been added.
+
+- |Feature| Synthetic generation of outlier detection datasets.
+
+- |Feature| IsolationShapeletForest has been added. A novel semi-supervised method for detecting
+  time series outliers.
+
+- |Feature| Fast computation of scaled and unscaled dynamic time warping (using the UCRSuite algorithm).
+
+- |Feature| LB_Keogh lower bound and envelope.
+
+- |Enhancement| Shapelet forest counterfactual explanations has been refined.
+
+- |Enhancement| KNearestNeighbors counterfactual explanations has been refined.
+
+- |Enhancement| Add new class `Repository` which represents a collection of bundles
+
+- |Enhancement| `datasets.set_cache_dir` to globally change the default cache directory
+
+- |Enhancement| `datasets.clear_cache` to clear the cache
+
+- |Enhancement| `wildboar.datasets.install_repository` now installs a repository instead of a bundle
+
+- |API| `datasets.load_all_datasets` has been replaced by `load_datasets`
+
+- |API| Rename `Repository` to `Bundle`
+
+Version 1.0.3
+=============
+
+Changelog
+---------
+
+- |Feature| Added a counterfactual explainability module
+
+Version 1.0
+=============
+
+- |Enhancement| Stable enough for the first release.

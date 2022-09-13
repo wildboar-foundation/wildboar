@@ -3,13 +3,14 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Developer’s guide" href="../contributing.html" /><link rel="prev" title="What’s new" href="../whatsnew.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Version 1.0" href="v1.0.html" /><link rel="prev" title="What’s new" href="../whatsnew.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.06.21"/>
         <title>Version 1.1 - Wildboar 1.1.0rc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=40978830699223671f4072448e654b5958f38b89" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
@@ -176,38 +177,68 @@
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/supervised.html">Supervised</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/unsupervised.html">Unsupervised</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/counterfactuals.html">Counterfactuals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../examples/embeddings.html">Embeddings</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/annotate/motif.html">Motif discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/annotate/segment.html">Segmentation</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../../more.html">More</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../whatsnew.html">What’s new</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/embeddings.html">Embeddings</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/embedding/interval.html">Interval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/embedding/rocket.html">Rocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/embedding/shapelet.html">Shapelets</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/explainability/counterfactuals.html">Comparing counterfactals</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/supervised/classifier_comparision.html">Comparing classifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/supervised/miss_classification_analysis.html">Miss-classification analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/supervised/shapelet_forest_vs_shapelet_extra_trees.html">Shapelet forests and extremly randomized shapelet trees</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/unsupervised/matrix_profile.html">Matrix profile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../examples/notebooks/unsupervised/outlier_detection.html">Outlier detection</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../more.html">More</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../whatsnew.html">What’s new</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Version 1.1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="v1.0.html">Version 1.0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="older.html">Older versions</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../contributing.html">Developer’s guide</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../wildboar/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../wildboar/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../wildboar/annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/embed/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/embed/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/embed/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.catch22</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/embed/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../wildboar/ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4 has-children"><a class="reference internal" href="../../wildboar/explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4 has-children"><a class="reference internal" href="../../wildboar/explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l5"><a class="reference internal" href="../../wildboar/explain/counterfactual/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></a></li>
 </ul>
 </li>
@@ -215,15 +246,15 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../wildboar/linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../wildboar/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../wildboar/utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
 </ul>
@@ -281,7 +312,6 @@
         <article role="main">
           <section id="version-1-1">
 <span id="id1"></span><h1>Version 1.1<a class="headerlink" href="#version-1-1" title="Permalink to this heading">#</a></h1>
-<p><strong>In development</strong></p>
 <ul class="simple">
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span>: something that you couldn’t do before.</p></li>
 <li><p><span class="sd-sphinx-override sd-badge sd-bg-info sd-bg-text-info">Efficiency</span>: an existing feature now may not require as much computation or
@@ -295,17 +325,21 @@ future; or a feature will be removed in the future.</p></li>
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
 <p>Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 1.1+.</p>
 </section>
+<section id="version-1-1-0">
+<h2>Version 1.1.0<a class="headerlink" href="#version-1-1-0" title="Permalink to this heading">#</a></h2>
+<p><strong>In development</strong></p>
 <section id="new-and-changed-models">
-<h2>New and changed models<a class="headerlink" href="#new-and-changed-models" title="Permalink to this heading">#</a></h2>
+<h3>New and changed models<a class="headerlink" href="#new-and-changed-models" title="Permalink to this heading">#</a></h3>
 <p>Wildboar 1.1 introduces a large number of new models, explanations and visualizations. Among
 others we introduce <code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.IntervalImportance</span></code> to highlight important temporal regions;
 <a class="reference internal" href="../../wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketClassifier</span></code></a> and <a class="reference internal" href="../../wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketRegressor</span></code></a> for
 state-of-the-art predictive performance using random convoultions. We have also been hard
 at work adding support for <a class="reference internal" href="../../wildboar/distance/index.html#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.matrix_profile()</span></code></a> and implemented motif and regime
-search in terms of it.</p>
+search in terms of it. We also add support for three new distance metrics, weighted, derivative
+and weighted derivative dynamic time warping.</p>
 </section>
 <section id="changelog">
-<h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">#</a></h2>
+<h3>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">#</a></h3>
 <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
 <div class="sd-col sd-d-flex-row docutils">
@@ -315,8 +349,8 @@ search in terms of it.</p>
 </div>
 <div class="sd-card-body docutils">
 <ul class="simple">
-<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> <a class="reference internal" href="../../wildboar/annotate/index.html#wildboar.annotate.motifs" title="wildboar.annotate.motifs"><code class="xref py py-func docutils literal notranslate"><span class="pre">annotate.motifs()</span></code></a> added to find motifs</p></li>
-<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> <code class="xref py py-func docutils literal notranslate"><span class="pre">annotate.regimes`()</span></code> added to find regime changes</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> <a class="reference internal" href="../../wildboar/annotate/index.html#wildboar.annotate.motifs" title="wildboar.annotate.motifs"><code class="xref py py-func docutils literal notranslate"><span class="pre">annotate.motifs()</span></code></a> added to find motifs in time series</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> <code class="xref py py-func docutils literal notranslate"><span class="pre">annotate.segment`()</span></code> added to segment time series</p></li>
 </ul>
 </div>
 </div>
@@ -328,6 +362,7 @@ search in terms of it.</p>
 </div>
 <div class="sd-card-body docutils">
 <ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new module <code class="xref py py-mod docutils literal notranslate"><span class="pre">datasets.preprocess</span></code> for preprocessing datasets.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Setting a global cache directory has been deprecated.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Repository definitions are cached locally to support loading cached datasets while offline.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Support multiple preprocessing directives in <a class="reference internal" href="../../wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.load_dataset()</span></code></a>.</p></li>
@@ -344,6 +379,8 @@ search in terms of it.</p>
 <div class="sd-card-body docutils">
 <ul class="simple">
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/distance/index.html#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.matrix_profile()</span></code></a> function construct a matrix profile</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Support for Weighted dynamic time warping.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Support for Derivative (Weighted) dynamic time warping.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> The function <a class="reference internal" href="../../wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.pairwise_subsequence_distance()</span></code></a> generalizes the
 former <cite>distance</cite>-function and add support for <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code>.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> The function <a class="reference internal" href="../../wildboar/distance/index.html#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.paired_subsequence_distance()</span></code></a> expands the
@@ -354,6 +391,9 @@ use-case for the former <cite>distance</cite>-function.</p></li>
 <cite>matches</cite>-function and add support for <cite>n_jobs</cite>.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> The function <a class="reference internal" href="../../wildboar/distance/index.html#wildboar.distance.paired_subsequence_match" title="wildboar.distance.paired_subsequence_match"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.paired_subsequence_match()</span></code></a> expands the
 use-case for the former <cite>matches</cite>-function.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> The function <a class="reference internal" href="../../wildboar/distance/dtw/index.html#wildboar.distance.dtw.dtw_alignment" title="wildboar.distance.dtw.dtw_alignment"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.dtw.dtw_alignment()</span></code></a> now supports the <cite>weight</cite> parameter for specifying optional warping weights.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/distance/dtw/index.html#wildboar.distance.dtw.wdtw_alignment" title="wildboar.distance.dtw.wdtw_alignment"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.dtw.wdtw_alignment()</span></code></a> for weighted DTW alignments.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> All functions in <code class="xref py py-mod docutils literal notranslate"><span class="pre">distance.dtw</span></code> now require keyword arguments for optional parameters.</p></li>
 </ul>
 </div>
 </div>
@@ -370,9 +410,14 @@ an ensemble of random convolution trees</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/ensemble/index.html#wildboar.ensemble.RockestClassifier" title="wildboar.ensemble.RockestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.RockestClassifier</span></code></a> is a regressor that constructs
 an ensemble of random convolution trees</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestClassifier" title="wildboar.ensemble.IntervalForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.IntervalForestClassifier</span></code></a> is a classifier that constructs
-an ensenble of interval trees</p></li>
+an ensemble of interval trees</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/ensemble/index.html#wildboar.ensemble.IntervalForestRegressor" title="wildboar.ensemble.IntervalForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.IntervalForestRegressor</span></code></a> is a regressor that constructs
-an ensenble of interval trees</p></li>
+an ensemble of interval trees</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier" title="wildboar.ensemble.PivotForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.PivotForestClassifier</span></code></a> is a classifier that constructs
+an ensemble of pivot trees</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.PivotForestRegressor</span></code> is a regressor that constructs
+an ensemble of pivot trees</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier" title="wildboar.ensemble.ProximityForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ProximityForestClassifier</span></code></a> is an ensemble of proximity trees.</p></li>
 </ul>
 </div>
 </div>
@@ -408,6 +453,7 @@ The effect is the same as for <cite>infer</cite>, which has been deprecated.</p>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.counterfactuals" title="wildboar.explain.counterfactual.counterfactuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">explain.counterfactual.counterfactuals()</span></code></a> now support a dictionary of <cite>method_args</cite>.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The parameters <cite>background_x</cite> and <cite>background_y</cite> of <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual" title="wildboar.explain.counterfactual.PrototypeCounterfactual"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.counterfactual.PrototypeCounterfactual</span></code></a>
 has been renamed to <cite>train_x</cite> and <cite>train_y</cite>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The parameter <cite>success</cite> to <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.score" title="wildboar.explain.counterfactual.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">explain.counterfactual.score()</span></code></a> is deprecated and has been renamed to <cite>valid</cite>.</p></li>
 </ul>
 </div>
 </div>
@@ -461,11 +507,12 @@ random convolution trees</p></li>
 </div>
 </section>
 <section id="other-improvements">
-<h2>Other improvements<a class="headerlink" href="#other-improvements" title="Permalink to this heading">#</a></h2>
+<h3>Other improvements<a class="headerlink" href="#other-improvements" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Binary builds for Apple ARM processors (M1 and M2)</p></li>
 <li><p>Drop support for Python 3.7 and introduce support for Python 3.10</p></li>
 </ul>
+</section>
 </section>
 </section>
 
@@ -474,12 +521,12 @@ random convolution trees</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../contributing.html">
+          <a class="next-page" href="v1.0.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Developer’s guide</div>
+                <div class="title">Version 1.0</div>
               </div>
               <svg><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -528,9 +575,12 @@ random convolution trees</p></li>
             <ul>
 <li><a class="reference internal" href="#">Version 1.1</a><ul>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#version-1-1-0">Version 1.1.0</a><ul>
 <li><a class="reference internal" href="#new-and-changed-models">New and changed models</a></li>
 <li><a class="reference internal" href="#changelog">Changelog</a></li>
 <li><a class="reference internal" href="#other-improvements">Other improvements</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -549,6 +599,8 @@ random convolution trees</p></li>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
     <script src="../../_static/design-tabs.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     </body>

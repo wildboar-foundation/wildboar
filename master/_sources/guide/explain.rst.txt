@@ -17,7 +17,7 @@ The easiest way to generate counterfactuals is to use the function ``counterfact
 
 .. code-block:: python
 
-    from wildboar.explain.counterfactual import counterfactual
+    from wildboar.explain.counterfactual import counterfactuals
 
 .. note::
 
@@ -41,8 +41,7 @@ of `x` to a sample labeled as the i:th label in `y`.
     >>> clf.fit(x_train, y_train)
     >>> c = KNeighborsCounterfactuals()
     >>> c.fit(clf)
-    >>> counterfactual, success = c.transform(x_test, y_desired)
-    >>> counterfactual[success] # only successful transformations
+    >>> counterfactual = c.transform(x_test, y_desired)
 
 .. warning::
 
@@ -79,12 +78,18 @@ denoted as `abnormal` and `normal` respectively).
     x_test = x_test[y_test == 2.0]
 
     # generate counterfactuals for the samples classified as 2, instead labeled as 1
-    x_counterfactuals, success, score = counterfactuals(estimator, x_test, 1.0, scoring="euclidean", random_state=123)
+    x_counterfactuals, valid, score = counterfactuals(
+        estimator, 
+        x_test, 
+        1.0, 
+        scoring="euclidean", 
+        random_state=123,
+    )
 
     # only consider the successful counterfactuals
-    x_test = x_test[success]
-    x_counterfactuals = x_counterfactuals[success]
-    i = np.argsort(score[success])[:2]
+    x_test = x_test[valid]
+    x_counterfactuals = x_counterfactuals[valid]
+    i = np.argsort(score[valid])[:2]
     x_counterfactuals = x_counterfactuals[i, :]
     x_test = x_test[i, :]
 
