@@ -24,11 +24,11 @@ from wildboar.utils.decorators import array_or_scalar
 
 
 @array_or_scalar()
-def regimes(
+def segment(
     x=None,
     mpi=None,
     *,
-    n_regimes=1,
+    n_segments=1,
     window=5,
     exclude=0.2,
     boundry=1.0,
@@ -44,7 +44,7 @@ def regimes(
     mpi : array-like of shape (n_samples, profile_size) or (profile_size), optional
         The matrix profile index. Must be given unless x is given.
 
-    n_regimes : int, optional
+    n_segments : int, optional
         The number of segmentations to identify
 
     window : int, optional
@@ -62,7 +62,7 @@ def regimes(
 
     Returns
     -------
-    segments : ndarray of shape (n_samples, n_regimes), (n_regimes) or int
+    segments : ndarray of shape (n_samples, n_segments), (n_segments) or int
         The start index of a segment
 
     arc_curves : ndarray of shape (n_samples, profile_size) or (profile_size, )
@@ -90,7 +90,7 @@ def regimes(
         mpi = check_array(np.atleast_2d(mpi))
 
     boundry = math.ceil(window * boundry)
-    regimes = np.empty((mpi.shape[0], n_regimes), dtype=np.intp)
+    segments = np.empty((mpi.shape[0], n_segments), dtype=np.intp)
     if return_arc_curve:
         arc_curves = np.empty(mpi.shape, dtype=np.double)
 
@@ -112,20 +112,20 @@ def regimes(
         if return_arc_curve:
             arc_curves[i, :] = arc_curve
 
-        for j in range(n_regimes):
-            regimes[i, j] = np.argmin(arc_curve)
-            if arc_curve[regimes[i, j]] == 1.0:
+        for j in range(n_segments):
+            segments[i, j] = np.argmin(arc_curve)
+            if arc_curve[segments[i, j]] == 1.0:
                 warnings.warn(
-                    f"no more regimes for sample={i} (regime={j}) all remaining"
-                    "regimes are invalid",
+                    f"no more segments for sample={i} "
+                    f"(segment={j}) all remaining segments are invalid",
                     UserWarning,
                 )
                 break
-            start = max(regimes[i, j] - boundry, 0)
-            end = min(regimes[i, j] + boundry, arc_curve.shape[0])
+            start = max(segments[i, j] - boundry, 0)
+            end = min(segments[i, j] + boundry, arc_curve.shape[0])
             arc_curve[start:end] = 1.0
 
     if return_arc_curve:
-        return regimes, arc_curves
+        return segments, arc_curves
     else:
-        return regimes
+        return segments

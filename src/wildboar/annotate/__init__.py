@@ -15,6 +15,6 @@
 # Authors: Isak Samsten
 
 from ._motifs import motifs
-from ._segment import regimes
+from ._segment import segment
 
-__all__ = ["motifs", "regimes"]
+__all__ = ["motifs", "segment"]
