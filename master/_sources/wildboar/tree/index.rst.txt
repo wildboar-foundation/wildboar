@@ -526,9 +526,9 @@ Classes
    :type random_state: int or RandomState, optional
 
 
-.. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
+.. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree classifier.
 
@@ -578,6 +578,11 @@ Classes
       :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
                                 as `ceil(X.shape[-1] * max_shapelet_size)`.
       :type max_shapelet_size: float, optional
+      :param alpha: Dynamically decrease the number of sampled shapelets at each node according
+                    to the current depth.
+
+                    .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
+      :type alpha: float, optional
       :param metric: Distance metric used to identify the best shapelet.
       :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
       :param metric_params: Parameters for the distance measure
@@ -602,9 +607,9 @@ Classes
       :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
+.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
 
-   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree regressor.
 
@@ -714,6 +719,20 @@ Classes
 
 
       :type: type max_shapelet_size: float, optional
+
+   .. attribute::
+
+      to the current depth.
+
+      .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
+
+      :type: param alpha: Dynamically decrease the number of sampled shapelets at each node according
+
+   .. attribute::
+
+
+
+      :type: type alpha: float, optional
 
    .. attribute::
 
