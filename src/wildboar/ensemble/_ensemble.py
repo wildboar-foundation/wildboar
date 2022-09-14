@@ -254,6 +254,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         min_impurity_decrease=0.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        alpha=None,
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
@@ -285,6 +286,12 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
 
         max_shapelet_size : float, optional
             The maximum shapelet size to sample
+
+        alpha : float, optional
+            Dynamically decrease the number of sampled shapelets at each node according
+            to the current depth.
+
+            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
 
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
@@ -336,6 +343,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
                 "min_impurity_decrease",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "alpha",
                 "metric",
                 "metric_params",
                 "criterion",
@@ -358,6 +366,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
             n_jobs=n_jobs,
             random_state=random_state,
         )
+        self.alpha = alpha
 
 
 class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
@@ -624,6 +633,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         min_impurity_decrease=0.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        alpha=None,
         metric="euclidean",
         metric_params=None,
         criterion="mse",
@@ -654,6 +664,12 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
 
         max_shapelet_size : float, optional
             The maximum shapelet size to sample
+
+        alpha : float, optional
+            Dynamically decrease the number of sampled shapelets at each node according
+            to the current depth.
+
+            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
 
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
@@ -687,6 +703,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
                 "min_impurity_decrease",
                 "min_shapelet_size",
                 "max_shapelet_size",
+                "alpha",
                 "metric",
                 "metric_params",
                 "criterion",
@@ -708,6 +725,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             n_jobs=n_jobs,
             random_state=random_state,
         )
+        self.alpha = (alpha,)
 
 
 class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):

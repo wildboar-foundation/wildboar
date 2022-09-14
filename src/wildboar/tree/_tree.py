@@ -36,12 +36,14 @@ from wildboar.embed._pivot import PivotFeatureEngineer
 from wildboar.embed._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
 from wildboar.embed._shapelet import RandomShapeletFeatureEngineer
 from wildboar.tree._ctree import (
+    DynamicTreeFeatureEngineer,
     EntropyCriterion,
     ExtraTreeBuilder,
     GiniCriterion,
     MSECriterion,
     Tree,
     TreeBuilder,
+    TreeFeatureEngineer,
 )
 from wildboar.utils import check_dataset
 
@@ -76,6 +78,9 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
         TreeBuilder : the tree builder
         """
 
+    def _wrap_feature_engineer(self, feature_engineer):
+        return TreeFeatureEngineer(feature_engineer)
+
     def _fit(self, x, y, sample_weights, random_state):
         max_depth = (
             sys.getrecursionlimit() if self.max_depth is None else self.max_depth
@@ -90,7 +95,9 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
         elif max_depth > sys.getrecursionlimit():
             warnings.warn("max_depth exceeds the maximum recursion limit.")
 
-        feature_engineer = self._get_feature_engineer(x.shape[0], x.shape[-1])
+        feature_engineer = self._wrap_feature_engineer(
+            self._get_feature_engineer(x.shape[0], x.shape[-1])
+        )
         x = check_dataset(x)
         tree_builder = self._get_tree_builder(
             x,
@@ -148,6 +155,18 @@ class FeatureTreeClassifierMixin(TreeClassifierMixin):
             min_sample_leaf=self.min_samples_leaf,
             min_impurity_decrease=self.min_impurity_decrease,
         )
+
+
+class DynamicTreeMixin:
+    def _wrap_feature_engineer(self, feature_engineer):
+        if hasattr(self, "alpha") and self.alpha is not None:
+            if self.alpha < 0:
+                raise ValueError("alpha must be larger than or equal to 0")
+
+            if self.alpha > 0:
+                return DynamicTreeFeatureEngineer(feature_engineer, self.alpha)
+
+        return TreeFeatureEngineer(feature_engineer)
 
 
 class BaseShapeletTree(BaseFeatureTree):
@@ -213,7 +232,9 @@ class BaseShapeletTree(BaseFeatureTree):
         )
 
 
-class ShapeletTreeRegressor(FeatureTreeRegressorMixin, BaseShapeletTree):
+class ShapeletTreeRegressor(
+    DynamicTreeMixin, FeatureTreeRegressorMixin, BaseShapeletTree
+):
     """A shapelet tree regressor.
 
     Attributes
@@ -232,6 +253,7 @@ class ShapeletTreeRegressor(FeatureTreeRegressorMixin, BaseShapeletTree):
         n_shapelets=10,
         min_shapelet_size=0,
         max_shapelet_size=1,
+        alpha=None,
         metric="euclidean",
         metric_params=None,
         force_dim=None,
@@ -271,6 +293,12 @@ class ShapeletTreeRegressor(FeatureTreeRegressorMixin, BaseShapeletTree):
             The maximum length of a sampled shapelet, expressed as a fraction, computed
             as `ceil(X.shape[-1] * max_shapelet_size)`.
 
+        alpha : float, optional
+            Dynamically decrease the number of sampled shapelets at each node according
+            to the current depth.
+
+            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
+
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
 
@@ -303,6 +331,7 @@ class ShapeletTreeRegressor(FeatureTreeRegressorMixin, BaseShapeletTree):
             random_state=random_state,
         )
         self.criterion = criterion
+        self.alpha = alpha
 
 
 class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
@@ -421,7 +450,9 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         )
 
 
-class ShapeletTreeClassifier(FeatureTreeClassifierMixin, BaseShapeletTree):
+class ShapeletTreeClassifier(
+    DynamicTreeMixin, FeatureTreeClassifierMixin, BaseShapeletTree
+):
     """A shapelet tree classifier.
 
     Attributes
@@ -452,6 +483,7 @@ class ShapeletTreeClassifier(FeatureTreeClassifierMixin, BaseShapeletTree):
         min_impurity_decrease=0.0,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
+        alpha=None,
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
@@ -491,6 +523,12 @@ class ShapeletTreeClassifier(FeatureTreeClassifierMixin, BaseShapeletTree):
         max_shapelet_size : float, optional
             The maximum length of a sampled shapelet, expressed as a fraction, computed
             as `ceil(X.shape[-1] * max_shapelet_size)`.
+
+        alpha : float, optional
+            Dynamically decrease the number of sampled shapelets at each node according
+            to the current depth.
+
+            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
@@ -534,6 +572,7 @@ class ShapeletTreeClassifier(FeatureTreeClassifierMixin, BaseShapeletTree):
         self.n_classes_ = None
         self.criterion = criterion
         self.class_weight = class_weight
+        self.alpha = alpha
 
 
 class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):

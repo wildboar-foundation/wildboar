@@ -23,7 +23,7 @@
 import numpy as np
 
 cimport numpy as np
-from libc.math cimport INFINITY, NAN, log2
+from libc.math cimport INFINITY, NAN, ceil, exp, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
@@ -43,6 +43,121 @@ from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
 cdef double FEATURE_THRESHOLD = 1e-7
+
+
+cdef struct SplitPoint:
+    Py_ssize_t split_point
+    double threshold
+    double impurity_improvement
+    double impurity_left
+    double impurity_right
+    Feature feature
+
+
+cdef class TreeFeatureEngineer:
+    cdef FeatureEngineer feature_engineer
+
+    def __init__(self, FeatureEngineer feature_engineer):
+        self.feature_engineer = feature_engineer
+    
+    def __reduce__(self):
+        return self.__class__, (self.feature_engineer, )
+
+    cdef Py_ssize_t reset(self, Dataset td) nogil:
+        return self.feature_engineer.reset(td)
+
+    cdef Py_ssize_t get_n_features(self, Dataset td, Py_ssize_t depth) nogil:
+        return self.feature_engineer.get_n_features(td)
+
+    cdef Py_ssize_t next_feature(
+        self,
+        Py_ssize_t feature_id,
+        Dataset td, 
+        Py_ssize_t *samples, 
+        Py_ssize_t n_samples,
+        Feature *transient,
+        size_t *seed
+    ) nogil:
+        return self.feature_engineer.next_feature(
+            feature_id, td, samples, n_samples, transient, seed
+        )
+
+    cdef Py_ssize_t init_persistent_feature(
+        self, 
+        Dataset td,
+        Feature *transient, 
+        Feature *persistent
+    ) nogil:
+        return self.feature_engineer.init_persistent_feature(td, transient, persistent)
+    
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
+        return self.feature_engineer.free_transient_feature(feature)
+
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
+        return self.feature_engineer.free_persistent_feature(feature)
+
+    cdef double transient_feature_value(
+        self,
+        Feature *feature,
+        Dataset td,
+        Py_ssize_t sample
+    ) nogil:
+        return self.feature_engineer.transient_feature_value(feature, td, sample)
+
+    cdef double persistent_feature_value(
+        self,
+        Feature *feature,
+        Dataset td,
+        Py_ssize_t sample
+    ) nogil:
+        return self.feature_engineer.persistent_feature_value(feature, td, sample)
+    
+    cdef void transient_feature_values(
+        self, 
+        Feature *feature, 
+        Dataset td, 
+        Py_ssize_t *samples, 
+        Py_ssize_t n_samples,
+        double* values
+    ) nogil:
+        self.feature_engineer.transient_feature_values(
+            feature, td, samples, n_samples, values
+        )
+    
+    cdef void persistent_feature_values(
+        self, 
+        Feature *feature, 
+        Dataset td, 
+        Py_ssize_t *samples, 
+        Py_ssize_t n_samples,
+        double* values
+    ) nogil:
+        self.feature_engineer.persistent_feature_values(
+            feature, td, samples, n_samples, values
+        )
+
+    cdef object persistent_feature_to_object(self, Feature *feature):
+        return self.feature_engineer.persistent_feature_to_object(feature)
+
+    cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
+        return self.feature_engineer.persistent_feature_from_object(object, feature)
+
+
+cdef class DynamicTreeFeatureEngineer(TreeFeatureEngineer):
+
+    cdef double alpha
+
+    def __init__(self, FeatureEngineer feature_engineer, double alpha):
+        super().__init__(feature_engineer)
+        self.alpha = alpha
+
+    def __reduce__(self):
+        return self.__class__, (self.feature_engineer, self.alpha)
+
+    cdef Py_ssize_t get_n_features(self, Dataset td, Py_ssize_t depth) nogil:
+        cdef Py_ssize_t n_features = self.feature_engineer.get_n_features(td)
+        return <Py_ssize_t> max(1, ceil(n_features * (0 / 1.0 + exp(-self.alpha * depth))))
+
 
 cdef class Criterion:
 
@@ -367,7 +482,7 @@ cdef class MSECriterion(RegressionCriterion):
         right[0] -= (self.sum_right / self.weighted_n_right) ** 2
 
 cpdef Tree _make_tree(
-    FeatureEngineer feature_engineer,
+    TreeFeatureEngineer feature_engineer,
     Py_ssize_t n_labels,
     Py_ssize_t max_depth,
     list features,
@@ -409,9 +524,26 @@ cpdef Tree _make_tree(
 
 
 cdef class Tree:
+
+    cdef TreeFeatureEngineer feature_engineer
+
+    cdef Py_ssize_t _max_depth
+    cdef Py_ssize_t _capacity
+    cdef Py_ssize_t _n_labels  # 1 for regression
+
+    cdef Py_ssize_t _node_count
+    cdef Py_ssize_t *_left
+    cdef Py_ssize_t *_right
+    cdef Feature **_features
+    cdef double *_thresholds
+    cdef double *_impurity
+    cdef double *_values
+    cdef double *_n_weighted_node_samples
+    cdef Py_ssize_t *_n_node_samples
+
     def __cinit__(
         self,
-        FeatureEngineer feature_engineer,
+        TreeFeatureEngineer feature_engineer,
         Py_ssize_t n_labels,
         Py_ssize_t capacity=10
     ):
@@ -751,7 +883,7 @@ cdef class TreeBuilder:
     # temporary buffer for feature computations
     cdef double *feature_buffer
 
-    cdef FeatureEngineer feature_engineer
+    cdef TreeFeatureEngineer feature_engineer
     cdef Criterion criterion
     cdef Tree tree
     cdef size_t random_seed
@@ -760,7 +892,7 @@ cdef class TreeBuilder:
         self,
         np.ndarray X,
         np.ndarray sample_weights,
-        FeatureEngineer feature_engineer,
+        TreeFeatureEngineer feature_engineer,
         Criterion criterion,
         Tree tree,
         object random_state,
@@ -931,7 +1063,7 @@ cdef class TreeBuilder:
         if parent < 0:
             impurity = self.criterion.impurity()
 
-        cdef SplitPoint split = self._split(start, end, impurity)
+        cdef SplitPoint split = self._split(start, end, depth, impurity)
 
         cdef Feature *persistent_feature
         cdef Py_ssize_t current_node_id
@@ -976,7 +1108,13 @@ cdef class TreeBuilder:
         else:
             return self.new_leaf_node(start, end, parent, is_left)
 
-    cdef SplitPoint _split(self, Py_ssize_t start, Py_ssize_t end, double parent_impurity) nogil:
+    cdef SplitPoint _split(
+        self, 
+        Py_ssize_t start, 
+        Py_ssize_t end, 
+        Py_ssize_t depth, 
+        double parent_impurity
+    ) nogil:
         cdef Py_ssize_t i, n_samples
         cdef Py_ssize_t current_split_point
         cdef double current_threshold
@@ -998,7 +1136,7 @@ cdef class TreeBuilder:
         best.split_point = 0
         best.feature.feature = NULL
 
-        for i in range(self.feature_engineer.get_n_features(self.td)):
+        for i in range(self.feature_engineer.get_n_features(self.td, depth)):
             self.feature_engineer.next_feature(
                 i, self.td, self.samples + start, n_samples, &current_feature, &self.random_seed)
             

@@ -199,6 +199,10 @@ Changelog
     - |Feature| The new :class:`tree.RocketTreeRegressor` is a regressor that construct
       random convolution trees
 
+    - |Enhancement| Add support for dynamically reducing the number of shapelets depending
+      on the currents node depth while constructing :class:`tree.ShapeletTreeClassifier`
+      and :class:`tree.ShapeletTreeRegressor`.
+
     - |API| Rename ``shapelet`` of the ``tree_`` attribute to ``feature``.
 
 
