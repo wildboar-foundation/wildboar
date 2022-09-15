@@ -28,7 +28,7 @@ List of subsequence metrics
      -
 
    * - Scaled Euclidean
-     - ``"euclidean"``
+     - ``"scaled_euclidean"``
      - ``{}``
      - Normalized
     
