@@ -363,7 +363,7 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
 def jeong_weight(n, g=0.05):
     """Weighting described by Jeong et. al. (2011) using g as the penalty control.
 
-    .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}},
+    .. math:: w(x)=\frac{1}{1+e^{-g(x-m/2)}}
 
     Parameters
     ----------
