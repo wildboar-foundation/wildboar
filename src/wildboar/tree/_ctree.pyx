@@ -23,7 +23,7 @@
 import numpy as np
 
 cimport numpy as np
-from libc.math cimport INFINITY, NAN, ceil, exp, log2
+from libc.math cimport INFINITY, NAN, ceil, exp, fabs, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
@@ -156,7 +156,11 @@ cdef class DynamicTreeFeatureEngineer(TreeFeatureEngineer):
 
     cdef Py_ssize_t get_n_features(self, Dataset td, Py_ssize_t depth) nogil:
         cdef Py_ssize_t n_features = self.feature_engineer.get_n_features(td)
-        return <Py_ssize_t> max(1, ceil(n_features * (0 / 1.0 + exp(-self.alpha * depth))))
+        cdef double weight = 1.0 - exp(-fabs(self.alpha) * depth)
+        if self.alpha < 0:
+            weight = 1 - weight
+        
+        return <Py_ssize_t> max(1, ceil(n_features * weight))
 
 
 cdef class Criterion:

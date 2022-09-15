@@ -160,11 +160,10 @@ class FeatureTreeClassifierMixin(TreeClassifierMixin):
 class DynamicTreeMixin:
     def _wrap_feature_engineer(self, feature_engineer):
         if hasattr(self, "alpha") and self.alpha is not None:
-            if self.alpha < 0:
-                raise ValueError("alpha must be larger than or equal to 0")
+            if self.alpha == 0.0:
+                raise ValueError("alpha == 0.0 is not supported.")
 
-            if self.alpha > 0:
-                return DynamicTreeFeatureEngineer(feature_engineer, self.alpha)
+            return DynamicTreeFeatureEngineer(feature_engineer, self.alpha)
 
         return TreeFeatureEngineer(feature_engineer)
 
@@ -297,7 +296,20 @@ class ShapeletTreeRegressor(
             Dynamically decrease the number of sampled shapelets at each node according
             to the current depth.
 
-            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
+            .. math:`w = 1 - e^{-|alpha| * depth})`
+
+            - if :math:`alpha < 0`, the number of sampled shapelets decrease from
+              ``n_shapelets`` towards 1 with increased depth.
+
+              .. math:`n_shapelets * (1 - w)`
+
+            - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
+              towards ``n_shapelets`` with increased depth.
+
+              .. math:`n_shapelets * w`
+
+            - if ``None``, the number of sampled shapelets are the same independeth of
+              depth.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
@@ -528,7 +540,20 @@ class ShapeletTreeClassifier(
             Dynamically decrease the number of sampled shapelets at each node according
             to the current depth.
 
-            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
+            .. math:`w = 1 - e^{-|alpha| * depth})`
+
+            - if :math:`alpha < 0`, the number of sampled shapelets decrease from
+              ``n_shapelets`` towards 1 with increased depth.
+
+              .. math:`n_shapelets * (1 - w)`
+
+            - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
+              towards ``n_shapelets`` with increased depth.
+
+              .. math:`n_shapelets * w`
+
+            - if ``None``, the number of sampled shapelets are the same independeth of
+              depth.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.

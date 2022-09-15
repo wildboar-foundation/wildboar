@@ -28,6 +28,7 @@ author = "Isak Samsten"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.linkcode",
     "autoapi.extension",

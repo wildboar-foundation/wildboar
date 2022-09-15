@@ -291,7 +291,20 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
             Dynamically decrease the number of sampled shapelets at each node according
             to the current depth.
 
-            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
+            .. math:`w = 1 - e^{-|alpha| * depth})`
+
+            - if :math:`alpha < 0`, the number of sampled shapelets decrease from
+              ``n_shapelets`` towards 1 with increased depth.
+
+              .. math:`n_shapelets * (1 - w)`
+
+            - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
+              towards ``n_shapelets`` with increased depth.
+
+              .. math:`n_shapelets * w`
+
+            - if ``None``, the number of sampled shapelets are the same independeth of
+              depth.
 
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
@@ -669,7 +682,20 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             Dynamically decrease the number of sampled shapelets at each node according
             to the current depth.
 
-            .. math:`max(n_shapelets * e^{-alpha * depth}), 1)
+            .. math:`w = 1 - e^{-|alpha| * depth})`
+
+            - if :math:`alpha < 0`, the number of sampled shapelets decrease from
+              ``n_shapelets`` towards 1 with increased depth.
+
+              .. math:`n_shapelets * (1 - w)`
+
+            - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
+              towards ``n_shapelets`` with increased depth.
+
+              .. math:`n_shapelets * w`
+
+            - if ``None``, the number of sampled shapelets are the same independeth of
+              depth.
 
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
@@ -725,7 +751,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             n_jobs=n_jobs,
             random_state=random_state,
         )
-        self.alpha = (alpha,)
+        self.alpha = alpha
 
 
 class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
