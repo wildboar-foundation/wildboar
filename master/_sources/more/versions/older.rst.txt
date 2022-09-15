@@ -57,6 +57,6 @@ Changelog
   `wildboar.ensemble.ShapeletForestRegressor` which allows for constructing
   shapelet forests for predicting real value outputs.
 
- - |Fix| Where strided labels were not correctly accounted for
+- |Fix| Where strided labels were not correctly accounted for
 
- - |API| Remove unused property `unscaled_threshold`
+- |API| Remove unused property `unscaled_threshold`

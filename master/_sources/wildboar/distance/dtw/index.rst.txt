@@ -196,7 +196,7 @@ Functions
    Weighting described by Jeong et. al. (2011) using g as the penalty control.
 
        .. math:: w(x)=
-   rac{w_{max}}{1+e^{-g(x-m/2)}},
+   rac{1}{1+e^{-g(x-m/2)}}
 
        Parameters
        ----------
