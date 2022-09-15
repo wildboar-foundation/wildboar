@@ -6,7 +6,7 @@
 <h1 align="center">wildboar</h1>
 
 <p align="center">
-	<img src="https://img.shields.io/badge/python-3.7%20|%203.8%20|%203.9-blue" />
+	<img src="https://img.shields.io/badge/python-3.8%20|%203.9%20|%203.10-blue" />
 	<img src="https://github.com/isaksamsten/wildboar/workflows/Build,%20test%20and%20upload%20to%20PyPI/badge.svg"/>
 	<a href="https://badge.fury.io/py/wildboar"><img src="https://badge.fury.io/py/wildboar.svg" /></a>
 	<a href="https://pepy.tech/project/wildboar"><img src="https://static.pepy.tech/personalized-badge/wildboar?period=total&units=international_system&left_color=black&right_color=orange&left_text=downloads" /></a>
@@ -16,7 +16,7 @@
 [wildboar](https://isaksamsten.github.io/wildboar/) is a Python module for temporal machine learning and fast
 distance computations built on top of
 [scikit-learn](https://scikit-learn.org) and [numpy](https://numpy.org)
-distributed under the GNU Lesser General Public License Version 3. Learn more about [what's new](https://isaksamsten.github.io/wildboar/master/more/whatsnew.html).
+distributed under the GNU Lesser General Public License Version 3. 
 
 It is currently maintained by Isak Samsten
 
@@ -38,28 +38,13 @@ See the [documentation](https://isaksamsten.github.io/wildboar/master/examples.h
 
 ## Installation
 
-### Dependencies
-
-wildboar requires:
-
- * python>=3.7
- * numpy>=1.17.4
- * scikit-learn>=0.21.3
- * scipy>=1.3.2
- 
-Some parts of wildboar is implemented using Cython. Hence, compilation
-requires:
-
- * cython (>= 0.29.14)
-
-
 ### Binaries
 
 `wildboar` is available through `pip` and can be installed with:
 
     pip install wildboar
 
-Universal binaries are compiled for GNU/Linux and Python 3.7, 3.8 and 3.9. 
+Universal binaries are compiled for GNU/Linux and Python 3.8, 3.9, 3.10
 
 ### Compilation
 
@@ -73,12 +58,6 @@ To install the requirements, use:
     pip install -r requirements.txt
 
 For complete instructions see the [documentation](https://isaksamsten.github.io/wildboar/master/install.html#build-and-compile-from-source)
-	
-
-## Development
-
-Contributions are welcome. Pull requests should be
-formatted using [Black](https://black.readthedocs.io).
 
 ## Usage
 
@@ -91,11 +70,29 @@ c.fit(x_train, y_train)
 c.score(x_test, y_test)
 ``` 
 
+The [User guide](https://isaksamsten.github.io/wildboar/master/guide.html) includes more detailed usage instructions.
+
+
+## Changelog
+The [changelog](https://isaksamsten.github.io/wildboar/master/more/whatsnew.html) records a history of notable changes to ``wildboar``.
+
+
+## Development
+
+Contributions are welcome! The [developer's guide](https://isaksamsten.github.io/wildboar/master/more/contributing.html) has detailed information about contributing code and more!
+
+In short, pull requests should:
+
+* be well motivated
+* be fomatted using Black
+* add relevant tests
+* add relevant documentation
+
 ## Source code
 
 You can check the latest sources with the command:
 
-    git clone https://github.com/isakkarlsson/wildboar
+    git clone https://github.com/isaksamsten/wildboar
     
 ## Documentation
 
