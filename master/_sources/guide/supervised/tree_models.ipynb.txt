@@ -1,0 +1,30 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Decision trees"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3.9.7 ('wb2')",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "name": "python",
+   "version": "3.9.7"
+  },
+  "orig_nbformat": 4,
+  "vscode": {
+   "interpreter": {
+    "hash": "52652bfa9fd4561eadaaee81a668145a0f20ccab101fde0ad61faafa07b87b33"
+   }
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
