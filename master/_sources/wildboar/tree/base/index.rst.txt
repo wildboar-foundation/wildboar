@@ -36,11 +36,11 @@ Classes
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`
 
-   Mixin for classifation trees.
+   Mixin for classification trees.
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
-      Fit a shapelet tree regressor from the training set
+      Fit a classification tree.
 
       :param x: The training time series.
       :type x: array-like of shape (n_samples, n_timesteps)

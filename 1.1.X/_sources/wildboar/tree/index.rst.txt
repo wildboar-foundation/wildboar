@@ -390,7 +390,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
-   Mixin for classifation trees.
+   Mixin for classification trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -426,7 +426,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
-   Mixin for classifation trees.
+   Mixin for classification trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional
@@ -494,7 +494,7 @@ Classes
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
-   Mixin for classifation trees.
+   Mixin for classification trees.
 
    :param n_kernels: The number of kernels to inspect at each node.
    :type n_kernels: int, optional

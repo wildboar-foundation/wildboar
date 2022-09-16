@@ -75,69 +75,16 @@ Functions
 
       :type: int or array-like
 
-   .. attribute:: Construct a bundle
-
-
-
-   .. attribute::
-
-
-
-      :type: param key: A unique key of the bundle
-
-   .. attribute::
-
-
-
-      :type: type key: str
-
-   .. attribute::
-
-
-
-      :type: param version: The version of the bundle
-
-   .. attribute::
-
-
-
-      :type: type version: str
-
-   .. attribute::
-
-
-
-      :type: param name: Human-readable name of the bundle
-
-   .. attribute::
-
-
-
-      :type: type name: str
-
-   .. attribute::
-
-
-
-      :type: param description: Description of the bundle
-
-   .. attribute::
-
-
-
-      :type: type description: str
-
-   .. attribute::
-
-
-
-      :type: param arrays: The arrays of the dataset
-
-   .. attribute::
-
-
-
-      :type: type arrays: list
+   :param key: A unique key of the bundle
+   :type key: str
+   :param version: The version of the bundle
+   :type version: str
+   :param name: Human-readable name of the bundle
+   :type name: str
+   :param description: Description of the bundle
+   :type description: str
+   :param arrays: The arrays of the dataset
+   :type arrays: list
 
    .. py:method:: get_collection(collection)
 
@@ -239,8 +186,6 @@ Functions
    Bases: :py:obj:`Bundle`
 
    bundle of numpy binary files
-
-   Construct a bundle
 
    :param key: A unique key of the bundle
    :type key: str
@@ -593,22 +538,17 @@ Functions
 
                   - if str, filter based on attribute comparison
 
-                  Attribute comparison
-                  --------------------
+                  The format of attribute comparisons are ``[attribute][comparison spec]``.
 
-                      The format of attribute comparisons are ``[attribute][comparison spec].
+                  Valid attributes are
+                  - ``dataset``
+                  - ``n_samples``
+                  - ``n_timestep``
+                  - ``n_dims``
+                  - ``n_labels``
 
-                      Valid attributes are
-                      - ``dataset``
-                      - ``n_samples``
-                      - ``n_timestep``
-                      - ``n_dims``
-                      - ``n_labels``
-
-                  Comparison spec
-                  ---------------
-                      str of two parts, comparison operator (<, <=, >, >= or =) and a number,
-                      e.g., "<100", "<= 200", or ">300"
+                  The `comparison spec` is a string of two parts, comparison operator
+                  (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
    :type filter: str, dict, list or callable, optional
    :param kwargs: Optional arguments to ``load_dataset``
    :type kwargs: dict

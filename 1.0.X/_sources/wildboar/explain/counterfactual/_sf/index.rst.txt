@@ -100,10 +100,10 @@ Attributes
    .. py:method:: transform(x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th
-       label in y
+      label in y
 
       :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
+      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dimension, n_timestep)
       :param y: The desired label of the counterfactual sample
       :type y: array-like of shape (n_samples,)
 

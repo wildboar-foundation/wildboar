@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>wildboar.embed._interval - Wildboar 1.1.0rc5.dev60+g265208a6 documentation</title>
+        <title>wildboar.embed._interval - Wildboar 1.1.0rc5.dev61+g4d0b6da1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev60+g265208a6 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev61+g4d0b6da1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -340,7 +340,7 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.embed._interval.FeatureEmbedding">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.embed._interval.</span></span><span class="sig-name descname"><span class="pre">FeatureEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_interval.py#L186-L219"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed._interval.FeatureEmbedding" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.embed._interval.</span></span><span class="sig-name descname"><span class="pre">FeatureEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_interval.py#L184-L218"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed._interval.FeatureEmbedding" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.embed._interval.IntervalEmbedding" title="wildboar.embed._interval.IntervalEmbedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalEmbedding</span></code></a></p>
 <p>Embed a time series as a number of features</p>
 <dl class="field-list simple">
@@ -359,17 +359,16 @@ x is a numpy array.</p></li>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<p>Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz, Ben D. Fulcher,
-and Nick S. Jones.</p>
-<blockquote>
-<div><p>catch22: Canonical time-series characteristics.
+<dl class="simple">
+<dt>Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz,         Ben D. Fulcher, and Nick S. Jones.</dt><dd><p>catch22: Canonical time-series characteristics.
 Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.embed._interval.IntervalEmbedding">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.embed._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_interval.py#L43-L183"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed._interval.IntervalEmbedding" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.embed._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalEmbedding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/embed/_interval.py#L43-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.embed._interval.IntervalEmbedding" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../base/index.html#wildboar.embed.base.BaseEmbedding" title="wildboar.embed.base.BaseEmbedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.embed.base.BaseEmbedding</span></code></a></p>
 <p>Embed a time series as a collection of features per interval.</p>
 <p class="rubric">Examples</p>
@@ -391,37 +390,41 @@ and the standard deviation.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_interval</strong> (<em>str</em><em>, </em><em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the embedding.</p>
 <ul>
-<li><p>if float, a fraction of n_timestep</p></li>
-<li><p>if int, a fixed number of intervals</p></li>
-<li><p>if “sqrt”, sqrt(n_timestep)</p></li>
-<li><p>if “log”, log2(n_timestep)</p></li>
+<li><p>if “log”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
+<li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
+<li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
+<li><p>if float, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span> <span class="pre">*</span> <span class="pre">n_timestep</span></code>, with
+<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">n_intervals</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p></li>
 </ul>
 </p></li>
 <li><p><strong>intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The method for selecting intervals</p>
 <ul>
-<li><p>if “fixed”, intervals are distributed evenly over the time series
-without overlaps</p></li>
-<li><p>if “sample”, a sample of non-overlapping intervals as selected
-by fixed are selected. The size of the sample is determined by
-<cite>sample_size</cite>.</p></li>
-<li><p>if “random”, a sample of possibly overlapping intervals. The size of
-the interval is determined by <cite>min_size</cite> and <cite>max_size</cite></p></li>
+<li><p>if “fixed”, <cite>n_interval</cite> non-overlapping intervals.</p></li>
+<li><p>if “sample”, <code class="docutils literal notranslate"><span class="pre">n_intervals</span> <span class="pre">*</span> <span class="pre">sample_size</span></code> non-overlapping intervals.</p></li>
+<li><p>if “random”, <cite>n_interval</cite> possibly overlapping intervals of randomly
+sampled in <code class="docutils literal notranslate"><span class="pre">[min_size</span> <span class="pre">*</span> <span class="pre">n_timestep,</span> <span class="pre">max_size</span> <span class="pre">*</span> <span class="pre">n_timestep]</span></code></p></li>
 </ul>
 </p></li>
-<li><p><strong>sample_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The sample size of fixed intervals if <cite>intervals=”sample”</cite></p></li>
-<li><p><strong>min_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum interval size if <cite>intervals=”random”</cite></p></li>
-<li><p><strong>max_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum interval size if <cite>intervals=”random”</cite></p></li>
+<li><p><strong>sample_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The sample size of fixed intervals if <code class="docutils literal notranslate"><span class="pre">intervals=&quot;sample&quot;</span></code></p></li>
+<li><p><strong>min_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum interval size if <code class="docutils literal notranslate"><span class="pre">intervals=&quot;random&quot;</span></code></p></li>
+<li><p><strong>max_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum interval size if <code class="docutils literal notranslate"><span class="pre">intervals=&quot;random&quot;</span></code></p></li>
 <li><p><strong>summarizer</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – <p>The method to summarize each interval.</p>
 <ul>
-<li><p>if str, the summarizer is determined by <cite>_SUMMARIZERS.keys()</cite>.</p></li>
-<li><p>if list, the summarizer is a list of functions f(x) -&gt; float, where
+<li><p>if str, the summarizer is determined by <code class="docutils literal notranslate"><span class="pre">_SUMMARIZERS.keys()</span></code>.</p></li>
+<li><p>if list, the summarizer is a list of functions <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code>, where
 x is a numpy array.</p></li>
 </ul>
 <p>The default summarizer summarizes each interval as its mean, standard
 deviation and slope.</p>
 </p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of cores to use on multi-core.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>np.RandomState</em>) – The pseudo-random number generator used to ensure consistent results.</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used
+by <cite>np.random</cite>.</p></li>
+</ul>
+</p></li>
 </ul>
 </dd>
 </dl>

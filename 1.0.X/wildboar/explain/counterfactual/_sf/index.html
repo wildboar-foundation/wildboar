@@ -384,14 +384,12 @@ The default setting is to evaluate all counterfactual samples.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform">
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.0.X/src/wildboar/explain/counterfactual/_sf.py#L213-L235"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Transform the i:th sample in x to a sample that would be labeled as the i:th</dt><dd><p>label in y</p>
-</dd>
-</dl>
+<dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th
+label in y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>) </em><em># noqa: E501</em>) – The samples to generate counterfactual explanations for</p></li>
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or             </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>)</em>) – The samples to generate counterfactual explanations for</p></li>
 <li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual sample</p></li>
 </ul>
 </dd>

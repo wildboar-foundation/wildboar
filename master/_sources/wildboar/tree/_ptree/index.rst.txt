@@ -35,7 +35,7 @@ Functions
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
 
-   A proximity tree defines a k-branching tree based on pivot-time series.
+   A classifier that uses a k-branching tree based on pivot-time series.
 
    .. rubric:: Examples
 
@@ -47,8 +47,7 @@ Functions
 
    .. rubric:: References
 
-   Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O’Neill, Nayyar Zaidi,
-   Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
+   Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi,     Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
        Proximity forest: an effective and scalable distance-based classifier for time
        series. Data Mining and Knowledge Discovery
 
@@ -62,8 +61,8 @@ Functions
    :type metric_sample: {"uniform", "weighted"}, optional
    :param metric_factories: The distance metrics. A dictionary where key is:
 
-                            - str: a named distance factory (``_DISTANCE_FACTORIES.keys()``)
-                            - callable, a function returning a list of ``DistanceMeasure``-objects
+                            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
+                            - if callable, a function returning a list of ``DistanceMeasure``-objects
 
                             and where value is a dict of parameters to the factory.
    :type metric_factories: dict, optional
@@ -75,10 +74,19 @@ Functions
    :type min_samples_leaf: int, optional
    :param min_impurity_decrease: The minimum impurity decrease to build a sub-tree.
    :type min_impurity_decrease: float, optional
-   :param class_weight: The class weights.
-   :type class_weight: array-like of shape (n_labels, ) or "balanced", optional
-   :param random_state: The pseudo random number generator.
-   :type random_state: int or RandomState, optional
+   :param class_weight: Weights associated with the labels.
+
+                        - if dict, weights on the form {label: weight}.
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency.
+                        - if None, each class has equal weight.
+   :type class_weight: dict or "balanced", optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
 .. py:function:: ddtw_factory(min_r=0, max_r=0.25, n=10)

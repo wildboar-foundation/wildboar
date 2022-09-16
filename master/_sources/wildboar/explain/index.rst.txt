@@ -49,81 +49,28 @@ Classes
 
       :type: dict or Importance
 
-   .. attribute::
+   :param scoring: The scoring function. By default the estimators score function is used.
+   :type scoring: str, list, dict or callable, optional
+   :param n_repeat: The number of repeated permutations
+   :type n_repeat: int, optional
+   :param n_interval: The number of intervals.
 
+                      - if "sqrt", the number of intervals is the square root of n_timestep.
 
+                      - if "log", the number of intervals is the log2 of n_timestep.
 
-      :type: param scoring: The scoring function. By default the estimators score function is used.
-
-   .. attribute::
-
-
-
-      :type: type scoring: str, list, dict or callable, optional
-
-   .. attribute::
-
-
-
-      :type: param n_repeat: The number of repeated permutations, by default 5
-
-   .. attribute::
-
-
-
-      :type: type n_repeat: int, optional
-
-   .. attribute::
-
-
-
-      - if "sqrt", the number of intervals is the square root of n_timestep
-      - if "log", the number of intervals is the log2 of n_timestep
-      - if int, exact number of intervals
-
-      :type: param n_interval: The number of intervals, by default "sqrt"
-
-   .. attribute::
-
-
-
-      :type: type n_interval: str, optional
-
-   .. attribute::
-
-
-
-      :type: param domain: Compute the importance in the time or frequency domain, by default "time"
-
-   .. attribute::
-
-
-
-      :type: type domain: {"time", "frequency"}, optional
-
-   .. attribute::
-
-
-
-      :type: param verbose: Show extra progress information, by default False
-
-   .. attribute::
-
-
-
-      :type: type verbose: bool, optional
-
-   .. attribute::
-
-      None
-
-      :type: param random_state: The psuod-random number generator to ensure consistent results, by default
-
-   .. attribute::
-
-
-
-      :type: type random_state: int or RandomState, optional
+                      - if int, exact number of intervals.
+   :type n_interval: str, optional
+   :param domain: Compute the importance in the time or frequency domain.
+   :type domain: {"time", "frequency"}, optional
+   :param verbose: Show extra progress information.
+   :type verbose: bool, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
    .. py:method:: fit(estimator, x, y=None, sample_weight=None)
 
@@ -132,7 +79,7 @@ Classes
       :param estimator: An estimator
       :type estimator: Estimator
       :param x: The samples
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep) # noqa: E501
+      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dim, n_timestep)
       :param y: The labels, by default None
       :type y: array-like of shape (n_samples, ), optional
       :param sample_weight: The sample weights, by default None

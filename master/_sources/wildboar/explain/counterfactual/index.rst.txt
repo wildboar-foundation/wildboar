@@ -68,10 +68,10 @@ Functions
    .. py:method:: transform(x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th
-       label in y
+      label in y
 
       :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
+      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dimension, n_timestep)
       :param y: The desired label of the counterfactual sample
       :type y: array-like of shape (n_samples,)
 
@@ -178,10 +178,10 @@ Functions
    .. py:method:: transform(x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th
-       label in y
+      label in y
 
       :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
+      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dimension, n_timestep)
       :param y: The desired label of the counterfactual sample
       :type y: array-like of shape (n_samples,)
 
@@ -251,10 +251,10 @@ Functions
    .. py:method:: transform(x, y)
 
       Transform the i:th sample in x to a sample that would be labeled as the i:th
-       label in y
+      label in y
 
       :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
+      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dimension, n_timestep)
       :param y: The desired label of the counterfactual sample
       :type y: array-like of shape (n_samples,)
 
@@ -279,7 +279,6 @@ Functions
                     based on the estimator
 
                     .. versionchanged :: 1.1.0
-                    The default parameter value is changed to 'best'
 
                   - if str, select counterfactual explainer from named collection. See
                     ``_COUNTERFACTUALS.keys()`` for a list of valid values.
@@ -295,7 +294,7 @@ Functions
    :type random_state: RandomState or int, optional
    :param method_args: Optional arguments to the counterfactual explainer.
 
-                       ..versionadded :: 1.1.0
+                       .. versionadded :: 1.1.0
    :type method_args: dict, optional
 
    :returns: * **x_counterfactuals** (*ndarray of shape (n_samples, n_timestep)*) -- The counterfactual example.

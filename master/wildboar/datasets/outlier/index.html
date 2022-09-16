@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.datasets.preprocess" href="../preprocess/index.html" /><link rel="prev" title="wildboar.datasets.filter" href="../filter/index.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>wildboar.datasets.outlier - Wildboar 1.1.0rc5.dev60+g265208a6 documentation</title>
+        <title>wildboar.datasets.outlier - Wildboar 1.1.0rc5.dev61+g4d0b6da1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev60+g265208a6 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev61+g4d0b6da1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -481,7 +481,6 @@ In Proceedings of the ACM SIGKDD workshop on outlier detection and description
 (pp. 16-21).</p>
 </dd>
 </dl>
-<p>Construct a new emmott labeler for synthetic outlier datasets</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -589,28 +588,16 @@ location algorithm such that they are distributed among the outliers.</p></li>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The implementation does not yet work as expected.</p>
-<p>Construct a new labeler</p>
+</div>
 <dl class="field-list simple">
-<dt class="field-odd">param n_clusters<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Number of clusters to fit</p>
-</dd>
-<dt class="field-even">type n_clusters<span class="colon">:</span></dt>
-<dd class="field-even"><p>int, optional</p>
-</dd>
-<dt class="field-odd">param n_outliers<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of outliers in the resulting dataset. This is not guaranteed.</p>
-</dd>
-<dt class="field-even">type n_outliers<span class="colon">:</span></dt>
-<dd class="field-even"><p>int or float, optional</p>
-</dd>
-<dt class="field-odd">param random_state<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The pseudo random state to ensure consistent results.</p>
-</dd>
-<dt class="field-even">type random_state<span class="colon">:</span></dt>
-<dd class="field-even"><p>RandomState or int, optional</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_clusters</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of clusters to fit</p></li>
+<li><p><strong>n_outliers</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – The number of outliers in the resulting dataset. This is not guaranteed.</p></li>
+<li><p><strong>random_state</strong> (<em>RandomState</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – The pseudo random state to ensure consistent results.</p></li>
+</ul>
 </dd>
 </dl>
-</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.KMeansLabeler.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.KMeansLabeler.fit" title="Permalink to this definition">#</a></dt>
@@ -669,11 +656,15 @@ location algorithm such that they are distributed among the outliers.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">Create</span> <span class="pre">a</span> <span class="pre">new</span> <span class="pre">majority</span> <span class="pre">labeler</span></span></dt>
-<dd></dd></dl>
-
+<p>Create a new majority labeler</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_outliers</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of outliers, by default None</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – The psudo-random number generator, by default None</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.MajorityLabeler.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.fit" title="Permalink to this definition">#</a></dt>

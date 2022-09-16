@@ -23,24 +23,10 @@ Classes
 
    Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
 
-   Base embedding
+   An embedding using pivot time series and sampled distance metrics.
 
-   .. attribute:: embedding_
-
-      The underlying embedding.
-
-      :type: Embedding
-
-   .. attribute::
-
-      -1 means using all processors.
-
-      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
-
-   .. attribute::
-
-
-
-      :type: type n_jobs: int, optional
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
 
 

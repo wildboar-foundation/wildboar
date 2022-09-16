@@ -180,7 +180,7 @@ Attributes
       :param estimator: An estimator
       :type estimator: Estimator
       :param x: The samples
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep) # noqa: E501
+      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dim, n_timestep)
       :param y: The labels, by default None
       :type y: array-like of shape (n_samples, ), optional
       :param sample_weight: The sample weights, by default None

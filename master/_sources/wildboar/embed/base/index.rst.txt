@@ -29,17 +29,9 @@ Classes
 
       :type: Embedding
 
-   .. attribute::
-
-      -1 means using all processors.
-
-      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
-
-   .. attribute::
-
-
-
-      :type: type n_jobs: int, optional
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
 
    .. py:method:: fit(x, y=None)
 

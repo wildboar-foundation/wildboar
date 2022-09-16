@@ -29,6 +29,7 @@ Classes
    :param summarizer: The method to summarize each interval.
 
                       - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+
                       - if list, the summarizer is a list of functions f(x) -> float, where
                         x is a numpy array.
 
@@ -39,8 +40,7 @@ Classes
 
    .. rubric:: References
 
-   Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz, Ben D. Fulcher,
-   and Nick S. Jones.
+   Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz,         Ben D. Fulcher, and Nick S. Jones.
        catch22: Canonical time-series characteristics.
        Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.
 
@@ -68,33 +68,29 @@ Classes
 
    :param n_interval: The number of intervals to use for the embedding.
 
-                      - if float, a fraction of n_timestep
-                      - if int, a fixed number of intervals
-                      - if "sqrt", sqrt(n_timestep)
-                      - if "log", log2(n_timestep)
+                      - if "log", the number of intervals is ``log2(n_timestep)``.
+                      - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
+                      - if int, the number of intervals is ``n_intervals``.
+                      - if float, the number of intervals is ``n_intervals * n_timestep``, with
+                        ``0 < n_intervals < 1``.
    :type n_interval: str, int or float, optional
    :param intervals: The method for selecting intervals
 
-                     - if "fixed", intervals are distributed evenly over the time series
-                       without overlaps
-
-                     - if "sample", a sample of non-overlapping intervals as selected
-                       by fixed are selected. The size of the sample is determined by
-                       `sample_size`.
-
-                     - if "random", a sample of possibly overlapping intervals. The size of
-                       the interval is determined by `min_size` and `max_size`
+                     - if "fixed", `n_interval` non-overlapping intervals.
+                     - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
+                     - if "random", `n_interval` possibly overlapping intervals of randomly
+                       sampled in ``[min_size * n_timestep, max_size * n_timestep]``
    :type intervals: str, optional
-   :param sample_size: The sample size of fixed intervals if `intervals="sample"`
+   :param sample_size: The sample size of fixed intervals if ``intervals="sample"``
    :type sample_size: float, optional
-   :param min_size: The minimum interval size if `intervals="random"`
+   :param min_size: The minimum interval size if ``intervals="random"``
    :type min_size: float, optional
-   :param max_size: The maximum interval size if `intervals="random"`
+   :param max_size: The maximum interval size if ``intervals="random"``
    :type max_size: float, optional
    :param summarizer: The method to summarize each interval.
 
-                      - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
-                      - if list, the summarizer is a list of functions f(x) -> float, where
+                      - if str, the summarizer is determined by ``_SUMMARIZERS.keys()``.
+                      - if list, the summarizer is a list of functions ``f(x) -> float``, where
                         x is a numpy array.
 
                       The default summarizer summarizes each interval as its mean, standard
@@ -102,7 +98,11 @@ Classes
    :type summarizer: str or list, optional
    :param n_jobs: The number of cores to use on multi-core.
    :type n_jobs: int, optional
-   :param random_state: The pseudo-random number generator used to ensure consistent results.
-   :type random_state: int or np.RandomState
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 

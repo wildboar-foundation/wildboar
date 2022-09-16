@@ -121,8 +121,6 @@ Classes
        In Proceedings of the ACM SIGKDD workshop on outlier detection and description
        (pp. 16-21).
 
-   Construct a new emmott labeler for synthetic outlier datasets
-
    :param n_outliers: Number of desired (but not guaranteed) outliers in the resulting
                       transformation.
    :type n_outliers: int, float, optional
@@ -201,18 +199,14 @@ Classes
 
       :type: int
 
-   .. warning::
+   .. warning:: The implementation does not yet work as expected.
 
-      The implementation does not yet work as expected.
-
-      Construct a new labeler
-
-      :param n_clusters: Number of clusters to fit
-      :type n_clusters: int, optional
-      :param n_outliers: The number of outliers in the resulting dataset. This is not guaranteed.
-      :type n_outliers: int or float, optional
-      :param random_state: The pseudo random state to ensure consistent results.
-      :type random_state: RandomState or int, optional
+   :param n_clusters: Number of clusters to fit
+   :type n_clusters: int, optional
+   :param n_outliers: The number of outliers in the resulting dataset. This is not guaranteed.
+   :type n_outliers: int or float, optional
+   :param random_state: The pseudo random state to ensure consistent results.
+   :type random_state: RandomState or int, optional
 
    .. py:method:: fit(x, y=None)
 
@@ -253,33 +247,12 @@ Classes
 
       :type: ndarray
 
-   .. attribute:: Create a new majority labeler
+   Create a new majority labeler
 
-
-
-   .. attribute::
-
-
-
-      :type: param n_outliers: The fraction of outliers, by default None
-
-   .. attribute::
-
-
-
-      :type: type n_outliers: float, optional
-
-   .. attribute::
-
-
-
-      :type: param random_state: The psudo-random number generator, by default None
-
-   .. attribute::
-
-
-
-      :type: type random_state: int or RandomState, optional
+   :param n_outliers: The fraction of outliers, by default None
+   :type n_outliers: float, optional
+   :param random_state: The psudo-random number generator, by default None
+   :type random_state: int or RandomState, optional
 
    .. py:method:: fit(x, y=None)
 

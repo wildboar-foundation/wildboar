@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>wildboar.explain.counterfactual._proto - Wildboar 1.1.0rc5.dev60+g265208a6 documentation</title>
+        <title>wildboar.explain.counterfactual._proto - Wildboar 1.1.0rc5.dev61+g4d0b6da1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev60+g265208a6 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev61+g4d0b6da1 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -736,14 +736,12 @@ closest n prototypes</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PrototypeCounterfactual.transform">
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L200-L213"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeCounterfactual.transform" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Transform the i:th sample in x to a sample that would be labeled as the i:th</dt><dd><p>label in y</p>
-</dd>
-</dl>
+<dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th
+label in y</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>) </em><em># noqa: E501</em>) – The samples to generate counterfactual explanations for</p></li>
+<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or             </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>)</em>) – The samples to generate counterfactual explanations for</p></li>
 <li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual sample</p></li>
 </ul>
 </dd>
