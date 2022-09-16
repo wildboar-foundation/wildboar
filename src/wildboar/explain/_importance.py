@@ -157,6 +157,7 @@ class IntervalImportance(BaseImportance):
     importances_ : dict or Importance
         The importance scores for each interval. If dict, one value per scoring
         function.
+
     """
 
     def __init__(
@@ -170,26 +171,34 @@ class IntervalImportance(BaseImportance):
         random_state=None,
     ):
         """
-
         Parameters
         ----------
         scoring : str, list, dict or callable, optional
             The scoring function. By default the estimators score function is used.
-        n_repeat : int, optional
-            The number of repeated permutations, by default 5
-        n_interval : str, optional
-            The number of intervals, by default "sqrt"
 
-            - if "sqrt", the number of intervals is the square root of n_timestep
-            - if "log", the number of intervals is the log2 of n_timestep
-            - if int, exact number of intervals
+        n_repeat : int, optional
+            The number of repeated permutations
+
+        n_interval : str, optional
+            The number of intervals.
+
+            - if "sqrt", the number of intervals is the square root of n_timestep.
+
+            - if "log", the number of intervals is the log2 of n_timestep.
+
+            - if int, exact number of intervals.
+
         domain : {"time", "frequency"}, optional
-            Compute the importance in the time or frequency domain, by default "time"
+            Compute the importance in the time or frequency domain.
+
         verbose : bool, optional
-            Show extra progress information, by default False
-        random_state : int or RandomState, optional
-            The psuod-random number generator to ensure consistent results, by default
-            None
+            Show extra progress information.
+
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         self.scoring = scoring
         self.n_repeat = n_repeat
@@ -301,12 +310,12 @@ class IntervalImportance(BaseImportance):
         **kwargs,
     ):
         if isinstance(self.importances_, dict):
-            if scoring is None:
-                raise ValueError()
+            if scoring is None and scoring not in self.importances_:
+                raise ValueError("scoring (%s) is invalid" % scoring)
             importances = self.importances_[scoring].mean
         else:
             if scoring is not None and scoring != self.scoring:
-                raise ValueError()
+                raise ValueError("scoring (%s) is invalid" % scoring)
             importances = self.importances_.mean
 
         if top_k is None or top_k > importances.shape[0]:

@@ -46,10 +46,6 @@ def standardize(x):
     )
 
 
-normalize = standardize
-normalize.__doc__ = standardize.__doc__
-
-
 def minmax_scale(x, min=0, max=1):
     """Scale x along the time dimension so that each value is between min and max
 

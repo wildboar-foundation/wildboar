@@ -36,6 +36,7 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
     cross-validator does not ensure that all folds will be different.
     Instead, the inlier samples are shuffled and new outlier samples
     are inserted in the training and test sets repeatedly.
+
     """
 
     def __init__(
@@ -47,8 +48,7 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         shuffle=True,
         random_state=None,
     ):
-        """Construct a new cross-validator
-
+        """
         Parameters
         ----------
         n_splits : int, optional

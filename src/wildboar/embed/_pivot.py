@@ -5,6 +5,8 @@ from .base import BaseEmbedding
 
 
 class PivotEmbedding(BaseEmbedding):
+    """An embedding using pivot time series and sampled distance metrics."""
+
     def __init__(self, n_pivot=1, *, metrics="all", random_state=None, n_jobs=None):
         super().__init__(random_state=random_state, n_jobs=n_jobs)
         self.n_pivot = n_pivot

@@ -98,11 +98,11 @@ class KMeansLabeler(OutlierLabeler):
     Warnings
     --------
     The implementation does not yet work as expected.
+
     """
 
     def __init__(self, *, n_clusters=None, n_outliers=None, random_state=None):
-        """Construct a new labeler
-
+        """
         Parameters
         ----------
         n_clusters : int, optional
@@ -243,6 +243,7 @@ class MajorityLabeler(OutlierLabeler):
 
     outlier_labels_ : ndarray
         The outlier labels
+
     """
 
     def __init__(self, n_outliers=None, random_state=None):
@@ -304,6 +305,7 @@ class MinorityLabeler(OutlierLabeler):
 
     outlier_label_ : object
         The label of the outlier class
+
     """
 
     def __init__(self, n_outliers=None, random_state=None):
@@ -449,8 +451,7 @@ class EmmottLabeler(OutlierLabeler):
         variation="tight",
         random_state=None,
     ):
-        """Construct a new emmott labeler for synthetic outlier datasets
-
+        """
         Parameters
         ----------
         n_outliers : int, float, optional

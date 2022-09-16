@@ -710,6 +710,7 @@ class Bundle(metaclass=ABCMeta):
 
     label_index : int or array-like
         Index of the class label(s)
+
     """
 
     def __init__(
@@ -723,8 +724,7 @@ class Bundle(metaclass=ABCMeta):
         description=None,
         collections=None,
     ):
-        """Construct a bundle
-
+        """
         Parameters
         ----------
         key : str
@@ -886,6 +886,8 @@ class Bundle(metaclass=ABCMeta):
                             test.shape[1],
                             max(test.shape[-1], train.shape[-1]),
                         )
+                    else:
+                        raise ValueError("invalid rank of dataset")
 
                     merge = np.full(shape, fill_value=wb.eos, dtype=np.double)
                     merge[: train.shape[0], ..., : train.shape[-1]] = train

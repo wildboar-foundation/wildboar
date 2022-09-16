@@ -41,6 +41,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
     embedding_ : Embedding
         The underlying embedding.
+
     """
 
     def __init__(self, *, random_state=None, n_jobs=None):

@@ -171,7 +171,6 @@ def counterfactuals(
           based on the estimator
 
           .. versionchanged :: 1.1.0
-          The default parameter value is changed to 'best'
 
         - if str, select counterfactual explainer from named collection. See
           ``_COUNTERFACTUALS.keys()`` for a list of valid values.
@@ -191,7 +190,7 @@ def counterfactuals(
     method_args : dict, optional
         Optional arguments to the counterfactual explainer.
 
-        ..versionadded :: 1.1.0
+        .. versionadded :: 1.1.0
 
     Returns
     -------

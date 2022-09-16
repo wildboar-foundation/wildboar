@@ -195,22 +195,17 @@ def load_datasets(
 
         - if str, filter based on attribute comparison
 
-        Attribute comparison
-        --------------------
+        The format of attribute comparisons are ``[attribute][comparison spec]``.
 
-            The format of attribute comparisons are ``[attribute][comparison spec].
+        Valid attributes are
+        - ``dataset``
+        - ``n_samples``
+        - ``n_timestep``
+        - ``n_dims``
+        - ``n_labels``
 
-            Valid attributes are
-            - ``dataset``
-            - ``n_samples``
-            - ``n_timestep``
-            - ``n_dims``
-            - ``n_labels``
-
-        Comparison spec
-        ---------------
-            str of two parts, comparison operator (<, <=, >, >= or =) and a number,
-            e.g., "<100", "<= 200", or ">300"
+        The `comparison spec` is a string of two parts, comparison operator
+        (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
 
     kwargs : dict
         Optional arguments to ``load_dataset``

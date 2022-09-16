@@ -154,10 +154,10 @@ class TreeRegressorMixin(RegressorMixin):
 
 
 class TreeClassifierMixin(ClassifierMixin):
-    """Mixin for classifation trees."""
+    """Mixin for classification trees."""
 
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a shapelet tree regressor from the training set
+        """Fit a classification tree.
 
         Parameters
         ----------

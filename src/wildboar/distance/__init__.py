@@ -172,17 +172,16 @@ def pairwise_subsequence_distance(
     dim : int, optional
         The dim to search for shapelets
 
-     metric : str or callable, optional # noqa: E501
+     metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure. See
-          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
-          Read more in the :ref:`User guide <list_of_subseqence_metrics>`.
-
-        - if callable a function taking two arrays as input
+        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
-        Parameters to the metric
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
 
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
@@ -251,16 +250,16 @@ def paired_subsequence_distance(
     dim : int, optional
         The dim to search for shapelets
 
-     metric : str or callable, optional
+    metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure. See
-          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
-          Read more in the :ref:`User guide <list_of_subseqence_metrics>`
-        - if callable a function taking two arrays as input
+        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
-        Parameters to the metric
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
 
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
@@ -337,7 +336,7 @@ def subsequence_match(
 
     threshold : str, float or callable, optional
         The distance threshold used to consider a subsequence matching. If no threshold
-        is selected, `max_matches´ default to 10.
+        is selected, `max_matches` defaults to 10.
 
         - if float, return all matches closer than threshold
         - if callable, return all matches closer than the treshold computed by the
@@ -350,13 +349,13 @@ def subsequence_match(
     metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure. See
-          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
-          Read more in the :ref:`User guide <list_of_subseqence_metrics>`
-        - if callable a function taking two arrays as input
+        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
-        Parameters to the metric
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
 
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
@@ -490,21 +489,21 @@ def paired_subsequence_match(
 
     threshold : float
         The distance threshold used to consider a subsequence matching. If no threshold
-        is selected, `max_matches´ default to 10.
+        is selected, `max_matches` defaults to 10.
 
     dim : int, optional
         The dim to search for shapelets
 
-     metric : str or callable, optional
+    metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure. See
-          ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
-          Read more in the :ref:`User guide <list_of_subseqence_metrics>`
-        - if callable a function taking two arrays as input
+        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
-        Parameters to the metric
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
 
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
@@ -623,13 +622,13 @@ def paired_distance(
      metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure. See
-          ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
-           :ref:`User guide <list_of_metrics>`
-        - if callable a function taking two arrays as input
+        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
-        Parameters to the metric
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
 
     n_jobs : int, optional
         The number of parallel jobs.
@@ -687,12 +686,12 @@ def pairwise_distance(
 
     Parameters
     ----------
-    x : ndarray of shape (n_timestep, ), (x_samples, n_timestep) or
-    (x_samples, n_dims, n_timestep)
+    x : ndarray of shape (n_timestep, ), (x_samples, n_timestep) or \
+            (x_samples, n_dims, n_timestep)
         The input data
 
-    y : ndarray of shape (n_timestep, ), (y_samples, n_timestep) or
-    (y_samples, n_dims, n_timestep), optional
+    y : ndarray of shape (n_timestep, ), (y_samples, n_timestep) or \
+            (y_samples, n_dims, n_timestep), optional
         The input data
 
     dim : int, optional
@@ -701,13 +700,13 @@ def pairwise_distance(
      metric : str or callable, optional
         The distance metric
 
-        - if str use optimized implementations of the named distance measure. See
-          ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics. Read more in the
-           :ref:`User guide <list_of_metrics>`
-        - if callable a function taking two arrays as input
+        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
-        Parameters to the metric
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
 
     n_jobs : int, optional
         The number of parallel jobs.
@@ -728,7 +727,7 @@ def pairwise_distance(
         y = x
 
     if x is y:
-        x = check_array(np.atleast_2d(x), allow_multivariate=True, dtype=np.double)
+        x = check_array(x, allow_multivariate=True, dtype=np.double)
         if not 0 >= dim < x.ndim:
             raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
@@ -774,20 +773,21 @@ def matrix_profile(
 ):
     """Compute the matrix profile.
 
-    - If only `x` is given, compute the similarity self-join of every subsequence in `x`
-      of size `window` to its nearest neighbor in `x` excluding trivial matches according
-      to the `exclude` parameter.
-    - If both `x` and `y` are given, compute the similarity join of every subsequenec in
-      `y` of size `window` to its nearest neighbor in `x` excluding matches according to
-      the `exclude` parameter.
-
+    - If only ``x`` is given, compute the similarity self-join of every subsequence in
+      ``x`` of size ``window`` to its nearest neighbor in `x` excluding trivial matches
+      according to the ``exclude`` parameter.
+    - If both ``x`` and ``y`` are given, compute the similarity join of every
+      subsequenec in ``y`` of size ``window`` to its nearest neighbor in ``x`` excluding
+      matches according to the ``exclude`` parameter.
 
     Parameters
     ----------
-    x : array-like of shape (n_timestep, ), (n_samples, xn_timestep) or (n_samples, n_dim, xn_timestep) # noqa E501
+    x : array-like of shape (n_timestep, ), (n_samples, xn_timestep) or \
+        (n_samples, n_dim, xn_timestep)
         The first time series
 
-    y : array-like of shape (n_timestep, ), (n_samples, yn_timestep) or (n_samples, n_dim, yn_timestep), optional # noqa E501
+    y : array-like of shape (n_timestep, ), (n_samples, yn_timestep) or \
+        (n_samples, n_dim, yn_timestep), optional
         The optional second time series. y is broadcast to the shape of x if possible.
 
     window : int or float, optional

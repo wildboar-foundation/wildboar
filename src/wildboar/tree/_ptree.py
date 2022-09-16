@@ -98,7 +98,7 @@ def make_metrics(metric_factories=None):
 
 
 class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
-    """A proximity tree defines a k-branching tree based on pivot-time series.
+    """A classifier that uses a k-branching tree based on pivot-time series.
 
     Examples
     --------
@@ -110,10 +110,11 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
 
     References
     ----------
-    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O’Neill, Nayyar Zaidi,
+    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi, \
     Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
         Proximity forest: an effective and scalable distance-based classifier for time
         series. Data Mining and Knowledge Discovery
+
     """
 
     def __init__(
@@ -150,8 +151,8 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         metric_factories : dict, optional
             The distance metrics. A dictionary where key is:
 
-            - str: a named distance factory (``_DISTANCE_FACTORIES.keys()``)
-            - callable, a function returning a list of ``DistanceMeasure``-objects
+            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
+            - if callable, a function returning a list of ``DistanceMeasure``-objects
 
             and where value is a dict of parameters to the factory.
 
@@ -167,11 +168,19 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         min_impurity_decrease : float, optional
             The minimum impurity decrease to build a sub-tree.
 
-        class_weight : array-like of shape (n_labels, ) or "balanced", optional
-            The class weights.
+        class_weight : dict or "balanced", optional
+            Weights associated with the labels.
 
-        random_state : int or RandomState, optional
-            The pseudo random number generator.
+            - if dict, weights on the form {label: weight}.
+            - if "balanced" each class weight inversely proportional to the class
+              frequency.
+            - if None, each class has equal weight.
+
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super().__init__(
             force_dim=force_dim,

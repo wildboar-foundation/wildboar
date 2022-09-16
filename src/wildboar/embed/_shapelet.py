@@ -63,9 +63,9 @@ class RandomShapeletEmbedding(BaseEmbedding):
 
             - 'euclidean' and 'scaled_euclidean' take no parameters
             - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-            is interpreted as a fraction of the time series length. If > 1 it
-            is interpreted as an exact time warping window. Use 'r' == 0 for
-            a widow size of exactly 1.
+              is interpreted as a fraction of the time series length. If > 1 it
+              is interpreted as an exact time warping window. Use 'r' == 0 for
+              a widow size of exactly 1.
 
         min_shapelet_size : float, optional
             Minimum shapelet size.

@@ -43,12 +43,13 @@ class BaseCounterfactual(BaseExplanation):
     @abc.abstractmethod
     def transform(self, x, y):
         """Transform the i:th sample in x to a sample that would be labeled as the i:th
-         label in y
+        label in y
 
         Parameters
         ----------
 
-        x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
+        x : array-like of shape (n_samples, n_timestep) or \
+            (n_samples, n_dimension, n_timestep)
             The samples to generate counterfactual explanations for
 
         y : array-like of shape (n_samples,)

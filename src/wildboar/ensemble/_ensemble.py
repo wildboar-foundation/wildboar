@@ -43,6 +43,8 @@ from wildboar.utils import check_array
 
 
 class ForestMixin:
+    """"""
+
     def apply(self, x):
         x = self._validate_x_predict(x)
         results = Parallel(
@@ -90,6 +92,8 @@ class ForestMixin:
 
 
 class BaseForestClassifier(ForestMixin, BaggingClassifier):
+    """"""
+
     def __init__(
         self,
         *,
@@ -241,6 +245,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
     >>> f = ShapeletForestClassifier(n_estimators=100, metric='scaled_euclidean')
     >>> f.fit(x, y)
     >>> y_hat = f.predict(x)
+
     """
 
     def __init__(
@@ -341,10 +346,11 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
               frequency
             - if None, each class has equal weight
 
-        random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction
-            of the base estimators. Pass an int for reproducible output across multiple
-            function calls.
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super().__init__(
             base_estimator=ShapeletTreeClassifier(),
@@ -468,10 +474,11 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
               frequency
             - if None, each class has equal weight
 
-        random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction
-            of the base estimators. Pass an int for reproducible output across multiple
-            function calls.
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super().__init__(
             base_estimator=ExtraShapeletTreeClassifier(),
@@ -714,10 +721,11 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         oob_score : bool, optional
             Compute out-of-bag estimates of the ensembles performance.
 
-        random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction
-            of the base estimators. Pass an int for reproducible output across multiple
-            function calls.
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super().__init__(
             base_estimator=ShapeletTreeRegressor(),
@@ -819,10 +827,11 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         metric_params : dict, optional
             Parameters passed to the metric construction
 
-        random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction
-            of the base estimators. Pass an int for reproducible output across multiple
-            function calls.
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super().__init__(
             base_estimator=ExtraShapeletTreeRegressor(),
@@ -862,6 +871,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
 
     The dimensionality of the resulting representation is
     ``<= n_estimators * 2^max_depth``
+
     """
 
     def __init__(
@@ -884,8 +894,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         sparse_output=True,
         random_state=None,
     ):
-        """Construct a shapelet forest embedding.
-
+        """
         Parameters
         ----------
 
@@ -921,10 +930,11 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         sparse_output : bool, optional
             Return a sparse CSR-matrix.
 
-        random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction
-            of the base estimators. Pass an int for reproducible output across multiple
-            function calls.
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super().__init__(
             base_estimator=ExtraShapeletTreeRegressor(),
@@ -1038,6 +1048,7 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
     >>> f.fit(x_train)
     >>> y_pred = f.predict(x_test)
     >>> balanced_accuracy_score(y_test, y_pred)
+
     """
 
     def __init__(
@@ -1116,10 +1127,11 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
         metric_params : dict, optional
             Parameters passed to the metric construction
 
-        random_state : int or RandomState, optional
-            Controls the random resampling of the original dataset and the construction
-            of the base estimators. Pass an int for reproducible output across multiple
-            function calls.
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
         super(IsolationShapeletForest, self).__init__(
             base_estimator=ExtraShapeletTreeRegressor(),
@@ -1338,6 +1350,8 @@ def _average_path_length(n_samples_leaf):
 
 
 class RockestRegressor(BaseForestRegressor):
+    """An ensemble of rocket tree regressors."""
+
     def __init__(
         self,
         n_estimators=100,
@@ -1401,6 +1415,8 @@ class RockestRegressor(BaseForestRegressor):
 
 
 class RockestClassifier(BaseForestClassifier):
+    """An ensemble of rocket tree classifiers."""
+
     def __init__(
         self,
         n_estimators=100,
@@ -1466,6 +1482,8 @@ class RockestClassifier(BaseForestClassifier):
 
 
 class IntervalForestClassifier(BaseForestClassifier):
+    """An ensemble of interval tree classifiers."""
+
     def __init__(
         self,
         n_estimators=100,
@@ -1528,6 +1546,8 @@ class IntervalForestClassifier(BaseForestClassifier):
 
 
 class IntervalForestRegressor(BaseForestRegressor):
+    """An ensemble of interval tree regressors."""
+
     def __init__(
         self,
         n_estimators=100,
@@ -1588,6 +1608,8 @@ class IntervalForestRegressor(BaseForestRegressor):
 
 
 class PivotForestClassifier(BaseForestClassifier):
+    """An ensemble of interval tree classifiers."""
+
     def __init__(
         self,
         n_estimators=100,
@@ -1642,6 +1664,10 @@ class ProximityForestClassifier(BaseForestClassifier):
 
     References
     ----------
+    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi, \
+    Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
+        Proximity forest: an effective and scalable distance-based classifier for time
+        series. Data Mining and Knowledge Discovery
     """
 
     def __init__(

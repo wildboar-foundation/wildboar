@@ -40,7 +40,6 @@ extensions = [
 
 if os.getenv("LOCAL_BUILD", 0):
     LOCAL_EXTENSIONS_REMOVE = [
-        "autoapi.extension",
         "sphinx_multiversion",
     ]
     for value in LOCAL_EXTENSIONS_REMOVE:
@@ -54,7 +53,11 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-autoapi_dirs = "autoapi"
+if os.getenv("LOCAL_BUILD", 0):
+    autoapi_dirs = ["../src/"]
+else:
+    autoapi_dirs = "autoapi"
+
 autoapi_root = "."
 autoapi_template_dir = "_templates/autoapi/"
 autoapi_ignore = ["*tests*", "_*.py"]
@@ -157,14 +160,15 @@ def setup(app):
         return fn, lineno, lineno + len(source) - 1
 
     def read_latest_version(app, config):
-
         build_local_version(app)
 
         def linkcode_resolve(domain, info):
             sys.path.insert(0, "../_build/")  # Insert the local build dir first in path
             from wildboar import __version__
 
-            if __version__ != "99.9.99":  # ensure we are using the local build
+            if (
+                not os.getenv("LOCAL_BUILD", 0) and __version__ != "99.9.99"
+            ):  # ensure we are using the local build
                 raise ValueError("Local build failed")
 
             if domain != "py" or not info["module"]:
@@ -176,64 +180,73 @@ def setup(app):
 
             del sys.path[0]
             return "https://github.com/isaksamsten/wildboar/blob/%s/src/%s" % (
-                config.smv_current_version,
+                config.smv_current_version
+                if not os.getenv("LOCAL_BUILD", 0)
+                else "master",
                 filename,
             )
 
         config.linkcode_resolve = linkcode_resolve
-        if not hasattr(config, "smv_metadata") or len(config.smv_metadata) == 0:
-            return
+        if not os.getenv("LOCAL_BUILD", 0):
+            if not hasattr(config, "smv_metadata") or len(config.smv_metadata) == 0:
+                return
 
-        logger.info("[CONF] installed version %s", config.release)
+            logger.info("[CONF] installed version %s", config.release)
 
-        from sphinx_multiversion import git
+            from sphinx_multiversion import git
 
-        gitroot = pathlib.Path(
-            git.get_toplevel_path(cwd=os.path.abspath(app.confdir))
-        ).resolve()
-        gitrefs = list(git.get_all_refs(gitroot))
-        latest_version_tags = {}
-        for ver, metadata in config.smv_metadata.items():
-            current_version = re.match(r"(\d)\.(\d)(?:.X)?", ver)
-            if current_version:
-                major = int(current_version.group(1))
-                minor = int(current_version.group(2))
-                matching_tags = [
-                    re.sub("^v", "", gitref.name)
-                    for gitref in gitrefs
-                    if is_tag_for(gitref, major, minor)
+            gitroot = pathlib.Path(
+                git.get_toplevel_path(cwd=os.path.abspath(app.confdir))
+            ).resolve()
+            gitrefs = list(git.get_all_refs(gitroot))
+            latest_version_tags = {}
+            for ver, metadata in config.smv_metadata.items():
+                current_version = re.match(r"(\d)\.(\d)(?:.X)?", ver)
+                if current_version:
+                    major = int(current_version.group(1))
+                    minor = int(current_version.group(2))
+                    matching_tags = [
+                        re.sub("^v", "", gitref.name)
+                        for gitref in gitrefs
+                        if is_tag_for(gitref, major, minor)
+                    ]
+                    matching_tags.sort(key=parse_version)
+                    latest_tag = matching_tags[-1] if matching_tags else ver
+                    latest_version_tags[ver] = latest_tag
+                elif ver == "master":
+                    latest_version_tags[ver] = config.version
+                else:
+                    logger.warning("[CONF] using branch version for tag (%s)", ver)
+                    latest_version_tags[ver] = ver
+
+                logger.info(
+                    "[CONF] latest version tag for '%s' is '%s'",
+                    ver,
+                    latest_version_tags[ver],
+                )
+                metadata["version"] = latest_version_tags[ver]
+
+            if config.smv_current_version != "master":
+                config.version = config.smv_metadata[config.smv_current_version][
+                    "version"
                 ]
-                matching_tags.sort(key=parse_version)
-                latest_tag = matching_tags[-1] if matching_tags else ver
-                latest_version_tags[ver] = latest_tag
-            elif ver == "master":
-                latest_version_tags[ver] = config.version
-            else:
-                logger.warning("[CONF] using branch version for tag (%s)", ver)
-                latest_version_tags[ver] = ver
+                config.release = config.version
 
-            logger.info(
-                "[CONF] latest version tag for '%s' is '%s'",
-                ver,
-                latest_version_tags[ver],
+            config.smv_latest_version_tags = latest_version_tags
+            config.smv_current_version_tag = latest_version_tags[
+                config.smv_current_version
+            ]
+
+            version_sorted = sorted(
+                config.smv_metadata.keys(),
+                key=lambda x: parse_version(re.sub(".X$", "", x)),
             )
-            metadata["version"] = latest_version_tags[ver]
+            # TODO: exclude pre-releases?
+            config.smv_latest_stable = (
+                version_sorted[-1] if version_sorted else "master"
+            )
 
-        if config.smv_current_version != "master":
-            config.version = config.smv_metadata[config.smv_current_version]["version"]
-            config.release = config.version
-
-        config.smv_latest_version_tags = latest_version_tags
-        config.smv_current_version_tag = latest_version_tags[config.smv_current_version]
-
-        version_sorted = sorted(
-            config.smv_metadata.keys(),
-            key=lambda x: parse_version(re.sub(".X$", "", x)),
-        )
-        # TODO: exclude pre-releases?
-        config.smv_latest_stable = version_sorted[-1] if version_sorted else "master"
-
-        logger.info("[DOCS] latest stable version is %s", config.smv_latest_stable)
+            logger.info("[DOCS] latest stable version is %s", config.smv_latest_stable)
 
     def set_latest_version(app, pagename, templatename, context, doctree):
         if not hasattr(app.config, "smv_metadata") or len(app.config.smv_metadata) == 0:

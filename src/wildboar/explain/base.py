@@ -44,7 +44,8 @@ class BaseImportance(BaseExplanation):
         ----------
         estimator : Estimator
             An estimator
-        x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep) # noqa: E501
+        x : array-like of shape (n_samples, n_timestep) or \
+            (n_samples, n_dim, n_timestep)
             The samples
         y : array-like of shape (n_samples, ), optional
             The labels, by default None
