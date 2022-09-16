@@ -4,13 +4,16 @@ Datasets
 Wildboar is distributed with an advanced system for handling dataset repositories. A dataset repository can
 be used to load benchmark datasets or to distribute or store datasets.
 
-What is a repository?
-=====================
-I short, a repository is a collection of datasets bundles. More specifically, a repository links to bundles (zip-files) containing datasets
-or dataset parts that can be downloaded, cached and loaded by wildboar.
+.. toctree::
+   :maxdepth: 2
+   :hidden:
 
-How to use a repository?
-========================
+   datasets/preprocess_filter
+   datasets/outlier
+
+Repositories
+============
+
 Repositories are either initialized directly or used together with the ``load_dataset`` function.
 
 .. code-block:: python
@@ -29,7 +32,7 @@ Installed repositories and dataset bundles can be listed using the function
  >>> list_repositories()
  ['wildboar']
  >>> list_bundles("wildboar")
- ['ucr', 'ucr-tiny']
+ ['ucr', 'ucr-tiny', ... (and more)]
 
 .. note::
 
@@ -39,11 +42,6 @@ Installed repositories and dataset bundles can be listed using the function
     .. code-block:: python
 
      >>> load_dataset("Wafer", repository="wildboar/ucr", cache_dir="/data/my_cache_drive")
-
-    .. warning::
-
-        The default cache location changed in version 1.0.4. To use the old
-        location set ``cache_dir`` to ``'wildboar_cache'``.
 
 To force re-download of an already cached repository set the parameter ``force`` to ``True``.
 
@@ -106,9 +104,6 @@ Repositories can be refreshed using ``datasets.refresh_repositories()``.
 Implementation details
 ----------------------
 
-JSON-repository specification
-.............................
-
 The ``JSONRepository`` expects a JSON-file following the specification below.
 
 .. code-block:: javascript
@@ -160,11 +155,8 @@ extensions .zip and .sha respectively.
 The .sha-file should contain the sha1-hash of the .zip-file to ensure
 the integrity of the downloaded file. The zip-file should contain the datasets.
 
-Dataset bundles
-...............
-
 Out of the box, wildboar supports dataset bundles formatted as zip-files with npy
-or npz files, i.e., as created by ``numpy.save`` and ``numpy.savez``. The dataset files
+or npz files, as created by ``numpy.save`` and ``numpy.savez``. The dataset files
 in the zip-file must be named according to ``{dataset_name}(_TRAIN|_TEST)?.(npy|npz)``.
 Multiple datasets with the same name will be merged. If both _TRAIN and _TEST files are
 present, ``load_dataset`` can return these train and test samples separately by

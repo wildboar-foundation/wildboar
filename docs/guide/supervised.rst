@@ -28,3 +28,11 @@ Embedding methods
 to represent time series and fit a ridge regression model to the representation. For
 benchmark tasks, this embedding and estimator configuration often give state-of-the-art
 predictive performance.
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+
+   supervised/linear_models
+   supervised/tree_models
+   supervised/ensemble_models
