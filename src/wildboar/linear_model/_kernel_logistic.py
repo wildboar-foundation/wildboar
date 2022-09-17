@@ -31,6 +31,7 @@ class KernelLogisticRegression(LogisticRegression):
     See Also
     --------
     wildboar.datasets.outlier.EmmottLabeler : Synthetic outlier dataset construction
+
     """
 
     def __init__(
@@ -55,13 +56,12 @@ class KernelLogisticRegression(LogisticRegression):
         n_jobs=None,
         l1_ratio=None
     ):
-        """Create a new kernel logistic regression
-
+        """
         Parameters
         ----------
         kernel : str, optional
-            The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric` for kernels. The default kernel
-            is 'rbf'.
+            The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
+            for kernels. The default kernel is 'rbf'.
 
         kernel_params : dict, optional
             Parameters to the kernel function.
