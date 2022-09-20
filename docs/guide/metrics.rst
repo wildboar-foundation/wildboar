@@ -9,8 +9,6 @@ and traditional distances using :func:`distance.pairwise_distance`. These and re
 support different metrics, as specified by the ``metric`` argument and metric parameters
 using the ``metric_params`` argument.
 
-List of subsequence metrics
-===========================
 .. _list_of_subsequence_metrics:
 
 .. list-table:: Subsequence distance metrics
@@ -42,9 +40,6 @@ List of subsequence metrics
      - ``{"r": float}``
      - Window ``r`` in ``[0, 1]``
 
-
-List of metrics
-===============
 .. _list_of_metrics:
 
 .. list-table:: Distance metrics
