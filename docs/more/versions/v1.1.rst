@@ -58,8 +58,24 @@ Changelog
 
     - |Enhancement| Support multiple preprocessing directives in :func:`datasets.load_dataset`.
 
-
     - |API| Rename ``datasets._filter`` to :mod:`datasets.filter`
+
+   .. grid-item-card::
+
+    :mod:`wildboar.datasets.outlier`
+    ^^^
+
+    - |API| Deprecate and remove all labelers.
+
+    - |Enhancement| Add the new function :func:`datasets.outlier.minority_outlier`.
+
+    - |Enhancement| Add the new function :func:`datasets.outlier.majority_outlier`.
+
+    - |Enhancement| Add the new function :func:`datasets.outlier.kmeans_outlier`.
+
+    - |Enhancement| Add the new function :func:`datasets.outlier.density_outlier`.
+
+    - |Enhancement| Add the new function :func:`datasets.outlier.emmott_outlier`.
   
   .. grid-item-card:: 
     
