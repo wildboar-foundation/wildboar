@@ -311,22 +311,22 @@ def load_dataset(
     return_extras : bool, optional
         Return optional extras
 
-        ..versionadded :: 1.1
+        .. versionadded :: 1.1
 
     force : bool, optional
         Force re-download of already cached bundle
 
-        ..versionadded :: 1.0.4
+        .. versionadded :: 1.0.4
 
     refresh : bool, optional
         Refresh the repository
 
-        ..versionadded :: 1.1
+        .. versionadded :: 1.1
 
     timeout : float, optional
         Timeout for json request
 
-        ..versionadded :: 1.1
+        .. versionadded :: 1.1
 
     Returns
     -------
@@ -442,7 +442,7 @@ def load_dataset(
 
     if contiguous:
         return [
-            np.ascontiguousarray(x)
+            np.ascontiguousarray(x)  # TODO: migrate to check_array
             if isinstance(x, np.ndarray)
             else {k: np.ascontiguousarray(v) for k, v in extras.items()}
             for x in ret_val
@@ -489,12 +489,12 @@ def list_datasets(
     refresh : bool, optional
         Refresh the repository
 
-        ..versionadded :: 1.1
+        .. versionadded :: 1.1
 
     timeout : float, optional
         Timeout for json request
 
-        ..versionadded :: 1.1
+        .. versionadded :: 1.1
 
     Returns
     -------
