@@ -58,6 +58,7 @@ def array_or_scalar(optional_f=None, squeeze=True):
             else:
                 return x
 
+        wrap.__doc__ == f.__doc__
         return wrap
 
     return decorator(optional_f) if callable(optional_f) else decorator
@@ -83,6 +84,7 @@ def singleton(f):
         else:
             return _singleton(ret_vals)
 
+    wrap.__doc__ = f.__doc__
     return wrap
 
 
