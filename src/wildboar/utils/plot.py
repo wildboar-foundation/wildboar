@@ -47,8 +47,8 @@ class MidpointNormalize(Normalize):
 
 def plot_time_domain(
     x,
-    *,
     y=None,
+    *,
     ax=None,
     alpha=0.5,
     linewidth=0.5,
@@ -103,8 +103,8 @@ def plot_time_domain(
 
 def plot_frequency_domain(
     x,
-    *,
     y=None,
+    *,
     ax=None,
     jitter=False,
     sample_spacing=1,
