@@ -60,7 +60,7 @@ Changelog
 
     - |API| Rename ``datasets._filter`` to :mod:`datasets.filter`
 
-   .. grid-item-card::
+  .. grid-item-card::
 
     :mod:`wildboar.datasets.outlier`
     ^^^
