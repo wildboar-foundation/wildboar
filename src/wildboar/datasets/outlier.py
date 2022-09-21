@@ -381,10 +381,11 @@ def emmott_outliers(
         using ``np.digitize(difficulty, scale)``.
 
     variation : {'tight', 'dispersed'}, optional
-        Selection procedure for sampling outlier samples
+        Selection procedure for sampling outlier samples. If ``difficulty="simplest"``
+        or ``difficulty="hardest"``, this parameter has no effect.
 
         - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples
-          are selected according to their euclidean distance
+          are selected according to their euclidean distance.
         - if 'dispersed' ``n_outlier`` points are selected according to a facility
           location algorithm such that they are distributed among the outliers.
 
