@@ -31,17 +31,16 @@ Classes
 
    .. seealso::
 
-      wildboar.datasets.outlier.EmmottLabeler : Synthetic outlier dataset construction
+      :obj:`wildboar.datasets.outlier.EmmottLabeler`
+          Synthetic outlier dataset construction
 
-      Create a new kernel logistic regression
-
-      :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric` for kernels. The default kernel
-                     is 'rbf'.
-      :type kernel: str, optional
-      :param kernel_params: Parameters to the kernel function.
-      :type kernel_params: dict, optional
-      :param n_components: Number of features to construct
-      :type n_components: int, optional
+   :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
+                  for kernels. The default kernel is 'rbf'.
+   :type kernel: str, optional
+   :param kernel_params: Parameters to the kernel function.
+   :type kernel_params: dict, optional
+   :param n_components: Number of features to construct
+   :type n_components: int, optional
 
    .. py:method:: decision_function(x)
 

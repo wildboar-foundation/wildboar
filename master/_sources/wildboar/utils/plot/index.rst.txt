@@ -83,7 +83,7 @@ Attributes
 
 
 
-.. py:function:: plot_frequency_domain(x, *, y=None, ax=None, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
+.. py:function:: plot_frequency_domain(x, y=None, *, ax=None, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
 
    Plot the samples in the freqency domain
 
@@ -103,7 +103,7 @@ Attributes
    :type cmap: str, optional
 
 
-.. py:function:: plot_time_domain(x, *, y=None, ax=None, alpha=0.5, linewidth=0.5, zorder=-1, cmap='Dark2')
+.. py:function:: plot_time_domain(x, y=None, *, ax=None, alpha=0.5, linewidth=0.5, zorder=-1, cmap='Dark2')
 
    Plot the samples in the time domain
 

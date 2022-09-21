@@ -408,11 +408,11 @@ Functions
    :type force: bool, optional
    :param refresh: Refresh the repository
 
-                   ..versionadded :: 1.1
+                   .. versionadded :: 1.1
    :type refresh: bool, optional
    :param timeout: Timeout for json request
 
-                   ..versionadded :: 1.1
+                   .. versionadded :: 1.1
    :type timeout: float, optional
 
    :returns: **dataset** -- A set of dataset names
@@ -468,19 +468,19 @@ Functions
    :type create_cache_dir: bool, optional
    :param return_extras: Return optional extras
 
-                         ..versionadded :: 1.1
+                         .. versionadded :: 1.1
    :type return_extras: bool, optional
    :param force: Force re-download of already cached bundle
 
-                 ..versionadded :: 1.0.4
+                 .. versionadded :: 1.0.4
    :type force: bool, optional
    :param refresh: Refresh the repository
 
-                   ..versionadded :: 1.1
+                   .. versionadded :: 1.1
    :type refresh: bool, optional
    :param timeout: Timeout for json request
 
-                   ..versionadded :: 1.1
+                   .. versionadded :: 1.1
    :type timeout: float, optional
 
    :returns: * **x** (*ndarray*) -- The data samples, optional

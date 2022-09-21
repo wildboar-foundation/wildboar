@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Interval permutation importance" href="importance.html" /><link rel="prev" title="Explainability" href="../explain.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>Counterfactual explanations - Wildboar 1.1.0rc5.dev62+gbe748b36 documentation</title>
+        <title>Counterfactual explanations - Wildboar 1.1.0rc5.dev74+g0ab6b875 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev62+gbe748b36 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev74+g0ab6b875 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -149,7 +149,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -180,8 +180,9 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../../guide.html">User guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../basics.html">Time series</a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../datasets/preprocess_filter.html">Preprocessing datasets</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../datasets/preprocess_filter.html#Filtering-datasets">Filtering datasets</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/repositories.html">Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/preprocess.html">Preprocessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../datasets/filter.html">Filtering</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../datasets/outlier.html">Outlier generation</a></li>
 </ul>
 </li>
@@ -332,7 +333,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -608,37 +609,135 @@ div.rendered_html tbody tr:hover {
 </div>
 <p>Currently, the classifiers that supports counterfactual explanations are <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">KNearestNeighborsClassifier</span></code> from <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> and <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> respectively. Model agnostic counterfactual explanations can be provided for any other estimators.</p>
 <p>To have more control over the generation of counterfactual samples, the classes <code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual</span></code> and <code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactuals</span></code> can be used. They implement the interface of <code class="docutils literal notranslate"><span class="pre">BaseCounterfactuals</span></code> which exposes two methods <code class="docutils literal notranslate"><span class="pre">fit(estimator)</span></code> and <code class="docutils literal notranslate"><span class="pre">transform(x,</span> <span class="pre">y)</span></code>, where the former fits a counterfactual explainer to an estimator and the latter transform the i:th sample of <code class="docutils literal notranslate"><span class="pre">x</span></code> to a sample labeled as the i:th label in <code class="docutils literal notranslate"><span class="pre">y</span></code>.</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 <span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">KNeighborsCounterfactual</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
-
-<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">,</span> <span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>That is, given</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">,</span> <span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
 <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">KNeighborsCounterfactual</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">c</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
+<span class="n">counterfactual</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">counterfactual</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;original&quot;</span><span class="p">,</span> <span class="s2">&quot;counterfactual&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.legend.Legend at 0x7fb830816730&gt;
+&lt;matplotlib.legend.Legend at 0x7fb7e145ebb0&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/guide_explain_counterfactuals_4_1.png" src="../../_images/guide_explain_counterfactuals_4_1.png" />
+<img alt="../../_images/guide_explain_counterfactuals_8_1.png" src="../../_images/guide_explain_counterfactuals_8_1.png" />
 </div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactuals</span></code> only supports <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code> fit with the Euclidean distance.</p>
+</div>
+<section id="Example">
+<h2>Example<a class="headerlink" href="#Example" title="Permalink to this heading">#</a></h2>
+<p>In the following example, we explain the a nearest neighbors classifier and a shapelet forest classifier for the datasets <code class="docutils literal notranslate"><span class="pre">TwoLeadECG</span></code> and explaining samples classified as <code class="docutils literal notranslate"><span class="pre">2.0</span></code> if they instead where classified as <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (in the legend denoted as <code class="docutils literal notranslate"><span class="pre">abnormal</span></code> and <code class="docutils literal notranslate"><span class="pre">normal</span></code> respectively).</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
+<span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactuals</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;TwoLeadECG&quot;</span><span class="p">)</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+
+<span class="n">estimator</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">==</span> <span class="mf">2.0</span><span class="p">]</span>
+<span class="n">x_counterfactuals</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">counterfactuals</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="p">,</span>
+    <span class="n">x_test</span><span class="p">,</span>
+    <span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="n">valid</span><span class="p">])[:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+<p>Plotting the counterfactual with the lowest score, yeilds the following figure.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_counterfactuals</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[&lt;matplotlib.lines.Line2D at 0x7fb840fae130&gt;]
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/guide_explain_counterfactuals_15_1.png" src="../../_images/guide_explain_counterfactuals_15_1.png" />
+</div>
+</div>
+</section>
 </section>
 
         </article>
@@ -686,8 +785,27 @@ div.rendered_html tbody tr:hover {
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Counterfactual explanations</a><ul>
+<li><a class="reference internal" href="#Example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
