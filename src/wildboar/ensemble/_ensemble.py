@@ -1488,7 +1488,7 @@ class IntervalForestClassifier(BaseForestClassifier):
         self,
         n_estimators=100,
         *,
-        n_interval="sqrt",
+        n_intervals="sqrt",
         intervals="fixed",
         summarizer="auto",
         sample_size=0.5,
@@ -1509,7 +1509,7 @@ class IntervalForestClassifier(BaseForestClassifier):
         super().__init__(
             base_estimator=IntervalTreeClassifier(),
             estimator_params=(
-                "n_interval",
+                "n_intervals",
                 "intervals",
                 "summarizer",
                 "sample_size",
@@ -1534,7 +1534,7 @@ class IntervalForestClassifier(BaseForestClassifier):
             class_weight=class_weight,
             random_state=random_state,
         )
-        self.n_interval = n_interval
+        self.n_intervals = n_intervals
         self.intervals = intervals
         self.summarizer = summarizer
         self.sample_size = sample_size
@@ -1552,7 +1552,7 @@ class IntervalForestRegressor(BaseForestRegressor):
         self,
         n_estimators=100,
         *,
-        n_interval="sqrt",
+        n_intervals="sqrt",
         intervals="fixed",
         summarizer="auto",
         sample_size=0.5,
@@ -1572,7 +1572,7 @@ class IntervalForestRegressor(BaseForestRegressor):
         super().__init__(
             base_estimator=IntervalTreeRegressor(),
             estimator_params=(
-                "n_interval",
+                "n_intervals",
                 "intervals",
                 "summarizer",
                 "sample_size",
@@ -1596,7 +1596,7 @@ class IntervalForestRegressor(BaseForestRegressor):
             n_jobs=n_jobs,
             random_state=random_state,
         )
-        self.n_interval = n_interval
+        self.n_intervals = n_intervals
         self.intervals = intervals
         self.summarizer = summarizer
         self.sample_size = sample_size

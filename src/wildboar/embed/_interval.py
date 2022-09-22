@@ -48,12 +48,12 @@ class IntervalEmbedding(BaseEmbedding):
 
     >>> from wildboar.datasets import load_dataset
     >>> x, y = load_dataset("GunPoint")
-    >>> embedding = IntervalEmbedding(n_interval=10, summarizer="mean")
+    >>> embedding = IntervalEmbedding(n_intervals=10, summarizer="mean")
     >>> embedding.fit_transform(x)
 
     Each interval (15 timepoints) are embedded as its mean.
 
-    >>> embedding = IntervalEmbedding(n_interval="sqrt", summarizer=[np.mean, np.std])
+    >>> embedding = IntervalEmbedding(n_intervals="sqrt", summarizer=[np.mean, np.std])
     >>> embedding.fit_transform(x)
 
     Each interval (150 // 12 timepoints) are embedded as two features. The mean
@@ -63,7 +63,7 @@ class IntervalEmbedding(BaseEmbedding):
 
     def __init__(
         self,
-        n_interval="sqrt",
+        n_intervals="sqrt",
         *,
         intervals="fixed",
         sample_size=0.5,
@@ -76,7 +76,7 @@ class IntervalEmbedding(BaseEmbedding):
         """
         Parameters
         ----------
-        n_interval : str, int or float, optional
+        n_intervals : str, int or float, optional
             The number of intervals to use for the embedding.
 
             - if "log", the number of intervals is ``log2(n_timestep)``.
@@ -88,9 +88,9 @@ class IntervalEmbedding(BaseEmbedding):
         intervals : str, optional
             The method for selecting intervals
 
-            - if "fixed", `n_interval` non-overlapping intervals.
+            - if "fixed", `n_intervals` non-overlapping intervals.
             - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
-            - if "random", `n_interval` possibly overlapping intervals of randomly
+            - if "random", `n_intervals` possibly overlapping intervals of randomly
               sampled in ``[min_size * n_timestep, max_size * n_timestep]``
 
         sample_size : float, optional
@@ -122,7 +122,7 @@ class IntervalEmbedding(BaseEmbedding):
               by `np.random`.
         """
         super().__init__(n_jobs=n_jobs, random_state=random_state)
-        self.n_interval = n_interval
+        self.n_intervals = n_intervals
         self.summarizer = summarizer
         self.intervals = intervals
         self.sample_size = sample_size
@@ -139,29 +139,33 @@ class IntervalEmbedding(BaseEmbedding):
             if summarizer is None:
                 raise ValueError("summarizer (%r) is not supported." % self.summarizer)
 
-        if self.n_interval == "sqrt":
-            n_interval = math.ceil(math.sqrt(self.n_timestep_))
-        elif self.n_interval == "log":
-            n_interval = math.ceil(math.log2(self.n_timestep_))
-        elif isinstance(self.n_interval, numbers.Integral):
-            n_interval = self.n_interval
-        elif isinstance(self.n_interval, numbers.Real):
-            if not 0.0 < self.n_interval < 1.0:
-                raise ValueError("n_interval must be between 0.0 and 1.0")
-            n_interval = math.floor(self.n_interval * self.n_timestep_)
-            # TODO: ensure that no interval is smaller than 2
+        if self.n_intervalss == "sqrt":
+            n_intervals = math.ceil(math.sqrt(self.n_timestep_))
+        elif self.n_intervals == "log":
+            n_intervals = math.ceil(math.log2(self.n_timestep_))
+        elif isinstance(self.n_intervals, numbers.Integral):
+            if not 0 < self.n_intervals <= self.n_timestep_:
+                raise ValueError(
+                    "n_intervals must be in the range [1, x.shape[-1]], got %d"
+                    % self.n_intervals,
+                )
+            n_intervals = self.n_intervals
+        elif isinstance(self.n_intervals, numbers.Real):
+            if not 0.0 < self.n_intervals < 1.0:
+                raise ValueError("n_intervals must be between 0.0 and 1.0")
+            n_intervals = math.max(1, math.floor(self.n_intervals * self.n_timestep_))
         else:
-            raise ValueError("n_interval (%r) is not supported" % self.n_interval)
+            raise ValueError("n_intervals (%r) is not supported" % self.n_intervals)
 
         if self.intervals == "fixed":
-            return IntervalFeatureEngineer(n_interval, summarizer)
+            return IntervalFeatureEngineer(n_intervals, summarizer)
         elif self.intervals == "sample":
             if not 0.0 < self.sample_size < 1.0:
                 raise ValueError("sample_size must be between 0.0 and 1.0")
 
-            sample_size = math.floor(n_interval * self.sample_size)
+            sample_size = math.max(1, math.floor(n_intervals * self.sample_size))
             return RandomFixedIntervalFeatureEngineer(
-                n_interval, summarizer, sample_size
+                n_intervals, summarizer, sample_size
             )
         elif self.intervals == "random":
             if not 0.0 <= self.min_size < self.max_size:
@@ -175,7 +179,7 @@ class IntervalEmbedding(BaseEmbedding):
                 min_size = 2
 
             return RandomIntervalFeatureEngineer(
-                n_interval, summarizer, min_size, max_size
+                n_intervals, summarizer, min_size, max_size
             )
         else:
             raise ValueError("intervals (%r) is unsupported." % self.intervals)
@@ -214,5 +218,5 @@ class FeatureEmbedding(IntervalEmbedding):
             Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.
         """
         super(FeatureEmbedding).__init__(
-            self, n_interval=1, summarizer=summarizer, n_jobs=n_jobs
+            self, n_intervals=1, summarizer=summarizer, n_jobs=n_jobs
         )

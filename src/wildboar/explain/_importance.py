@@ -54,12 +54,12 @@ except ModuleNotFoundError as e:
     plot_time_domain = matplotlib_missing
 
 
-def _intervals(n, n_interval):
+def _intervals(n, n_intervals):
 
-    for i in range(n_interval):
-        length = n // n_interval
-        start = i * length + min(i % n_interval, n % n_interval)
-        if i % n_interval < n % n_interval:
+    for i in range(n_intervals):
+        length = n // n_intervals
+        start = i * length + min(i % n_intervals, n % n_intervals)
+        if i % n_intervals < n % n_intervals:
             length += 1
         yield start, start + length
 
@@ -165,7 +165,7 @@ class IntervalImportance(BaseImportance):
         *,
         scoring=None,
         n_repeat=5,
-        n_interval="sqrt",
+        n_intervals="sqrt",
         domain="time",
         verbose=False,
         random_state=None,
@@ -179,7 +179,7 @@ class IntervalImportance(BaseImportance):
         n_repeat : int, optional
             The number of repeated permutations
 
-        n_interval : str, optional
+        n_intervals : str, optional
             The number of intervals.
 
             - if "sqrt", the number of intervals is the square root of n_timestep.
@@ -202,7 +202,7 @@ class IntervalImportance(BaseImportance):
         """
         self.scoring = scoring
         self.n_repeat = n_repeat
-        self.n_interval = n_interval
+        self.n_intervals = n_intervals
         self.domain = domain
         self.verbose = verbose
         self.random_state = random_state
@@ -217,20 +217,20 @@ class IntervalImportance(BaseImportance):
                 % (x.shape[0], y.shape[0])
             )
 
-        if self.n_interval == "sqrt":
-            n_interval = math.ceil(math.sqrt(x.shape[-1]))
-        elif self.n_interval == "log":
-            n_interval = math.ceil(math.log2(x.shape[-1]))
-        elif isinstance(self.n_interval, numbers.Integral):
-            n_interval = self.n_interval
-        elif isinstance(self.n_interval, numbers.Real):
-            if not 0 < self.n_interval <= 1:
+        if self.n_intervals == "sqrt":
+            n_intervals = math.ceil(math.sqrt(x.shape[-1]))
+        elif self.n_intervals == "log":
+            n_intervals = math.ceil(math.log2(x.shape[-1]))
+        elif isinstance(self.n_intervals, numbers.Integral):
+            n_intervals = self.n_intervals
+        elif isinstance(self.n_intervals, numbers.Real):
+            if not 0 < self.n_intervals <= 1:
                 raise ValueError(
-                    "n_interval (%r) not in range [0, 1[" % self.n_interval
+                    "n_intervals (%r) not in range [0, 1[" % self.n_intervals
                 )
-            n_interval = math.floor(x.shape[-1] * self.n_interval)
+            n_intervals = math.floor(x.shape[-1] * self.n_intervals)
         else:
-            raise ValueError("unsupported n_interval, got %r" % self.n_interval)
+            raise ValueError("unsupported n_intervals, got %r" % self.n_intervals)
 
         if callable(self.scoring):
             scoring = self.scoring
@@ -249,7 +249,7 @@ class IntervalImportance(BaseImportance):
 
         x_transform = self.domain_.transform(x=x)
         self.intervals_ = list(
-            self.domain_.intervals(x_transform.shape[-1], n_interval)
+            self.domain_.intervals(x_transform.shape[-1], n_intervals)
         )
         scores = []
         for iter, (start, end) in enumerate(self.intervals_):
@@ -290,7 +290,7 @@ class IntervalImportance(BaseImportance):
             self.importances_ = {
                 name: _unpack_scores(
                     self.baseline_score_[name],
-                    np.array([scores[i][name] for i in range(n_interval)]),
+                    np.array([scores[i][name] for i in range(n_intervals)]),
                 )
                 for name in self.baseline_score_
             }

@@ -1045,7 +1045,7 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
 class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
     def __init__(
         self,
-        n_interval="sqrt",
+        n_intervals="sqrt",
         *,
         max_depth=None,
         min_samples_split=2,
@@ -1066,7 +1066,7 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
             min_impurity_decrease=min_impurity_decrease,
             force_dim=force_dim,
         )
-        self.n_interval = n_interval
+        self.n_intervals = n_intervals
         self.intervals = intervals
         self.sample_size = sample_size
         self.min_size = min_size
@@ -1084,29 +1084,29 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
             if summarizer is None:
                 raise ValueError("summarizer (%r) is not supported." % self.summarizer)
 
-        if self.n_interval == "sqrt":
-            n_interval = math.ceil(math.sqrt(n_timestep))
-        elif self.n_interval == "log":
-            n_interval = math.ceil(math.log2(n_timestep))
-        elif isinstance(self.n_interval, numbers.Integral):
-            n_interval = self.n_interval
-        elif isinstance(self.n_interval, numbers.Real):
-            if not 0.0 < self.n_interval < 1.0:
-                raise ValueError("n_interval must be between 0.0 and 1.0")
-            n_interval = math.floor(self.n_interval * n_timestep)
+        if self.n_intervals == "sqrt":
+            n_intervals = math.ceil(math.sqrt(n_timestep))
+        elif self.n_intervals == "log":
+            n_intervals = math.ceil(math.log2(n_timestep))
+        elif isinstance(self.n_intervals, numbers.Integral):
+            n_intervals = self.n_intervals
+        elif isinstance(self.n_intervals, numbers.Real):
+            if not 0.0 < self.n_intervals < 1.0:
+                raise ValueError("n_intervals must be between 0.0 and 1.0")
+            n_intervals = math.floor(self.n_intervals * n_timestep)
             # TODO: ensure that no interval is smaller than 2
         else:
-            raise ValueError("n_interval (%r) is not supported" % self.n_interval)
+            raise ValueError("n_intervals (%r) is not supported" % self.n_intervals)
 
         if self.intervals == "fixed":
-            return IntervalFeatureEngineer(n_interval, summarizer)
+            return IntervalFeatureEngineer(n_intervals, summarizer)
         elif self.intervals == "sample":
             if not 0.0 < self.sample_size < 1.0:
                 raise ValueError("sample_size must be between 0.0 and 1.0")
 
-            sample_size = math.floor(n_interval * self.sample_size)
+            sample_size = math.floor(n_intervals * self.sample_size)
             return RandomFixedIntervalFeatureEngineer(
-                n_interval, summarizer, sample_size
+                n_intervals, summarizer, sample_size
             )
         elif self.intervals == "random":
             if not 0.0 <= self.min_size < self.max_size:
@@ -1120,7 +1120,7 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
                 min_size = 2
 
             return RandomIntervalFeatureEngineer(
-                n_interval, summarizer, min_size, max_size
+                n_intervals, summarizer, min_size, max_size
             )
         else:
             raise ValueError("intervals (%r) is unsupported." % self.intervals)
@@ -1139,7 +1139,7 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
 
     def __init__(
         self,
-        n_interval="sqrt",
+        n_intervals="sqrt",
         *,
         max_depth=None,
         min_samples_split=2,
@@ -1159,7 +1159,7 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
         Parameters
         ----------
 
-        n_interval : {"log", "sqrt"}, int or float, optional
+        n_intervals : {"log", "sqrt"}, int or float, optional
             The number of intervals to partition the time series into.
 
             - if "log", the number of intervals is ``log2(n_timestep)``.
@@ -1188,9 +1188,9 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
 
         intervals : {"fixed", "sample", "random"}, optional
 
-            - if "fixed", `n_interval` non-overlapping intervals.
+            - if "fixed", `n_intervals` non-overlapping intervals.
             - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
-            - if "random", `n_interval` possibly overlapping intervals of randomly
+            - if "random", `n_intervals` possibly overlapping intervals of randomly
               sampled in ``[min_size * n_timestep, max_size * n_timestep]``
 
         sample_size : float, optional
@@ -1226,7 +1226,7 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
               by `np.random`.
         """
         super().__init__(
-            n_interval=n_interval,
+            n_intervals=n_intervals,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
@@ -1256,7 +1256,7 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
 
     def __init__(
         self,
-        n_interval="sqrt",
+        n_intervals="sqrt",
         *,
         max_depth=None,
         min_samples_split=2,
@@ -1275,7 +1275,7 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
         Parameters
         ----------
 
-        n_interval : {"log", "sqrt"}, int or float, optional
+        n_intervals : {"log", "sqrt"}, int or float, optional
             The number of intervals to partition the time series into.
 
             - if "log", the number of intervals is ``log2(n_timestep)``.
@@ -1304,9 +1304,9 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
 
         intervals : {"fixed", "sample", "random"}, optional
 
-            - if "fixed", `n_interval` non-overlapping intervals.
+            - if "fixed", `n_intervals` non-overlapping intervals.
             - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
-            - if "random", `n_interval` possibly overlapping intervals of randomly
+            - if "random", `n_intervals` possibly overlapping intervals of randomly
               sampled in ``[min_size * n_timestep, max_size * n_timestep]``
 
         sample_size : float, optional
@@ -1334,7 +1334,7 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
               by `np.random`.
         """
         super().__init__(
-            n_interval=n_interval,
+            n_intervals=n_intervals,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
