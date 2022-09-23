@@ -275,6 +275,9 @@ cdef class Tree:
         cdef Pivot *pivot
 
         with nogil:
+            for i in range(self.distance_measures.size):
+                (<DistanceMeasure>self.distance_measures.get(i)).reset(td, td)
+
             for i in range(td.n_samples):
                 node_index = 0
                 while self._branches[0][node_index] != -1:
