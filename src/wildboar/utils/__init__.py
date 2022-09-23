@@ -1,15 +1,31 @@
+# This file is part of wildboar
+#
+# wildboar is free software: you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# wildboar is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
+# General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+#
+# Authors: Isak Samsten
+
 import os
 import platform
 import warnings
 
-import numpy as np
-from sklearn.utils.validation import check_array as sklearn_check_array
-
-import wildboar as wb
 from wildboar.utils.data import check_dataset
+
+from ._validation import check_array, check_X_y
 
 __all__ = [
     "check_array",
+    "check_X_y",
     "check_dataset",
     "os_cache_dir",
     "_soft_dependency_error",
@@ -77,119 +93,6 @@ def os_cache_path(dir):
         return os.path.join(os.path.expanduser("~"), "Library", "Caches", dir)
     else:
         return os.path.join(os.path.expanduser("~"), ".cache", dir)
-
-
-def check_array(
-    x,
-    allow_multivariate=False,
-    ensure_1d=False,
-    allow_eos=False,
-    allow_nan=False,
-    contiguous=True,
-    **kwargs,
-):
-    """Wrapper to check array
-
-    Parameters
-    ----------
-    x : ndarray
-        The array to check
-    allow_multivariate : bool, optional
-        If 3d arrays are allowed, by default False
-    ensure_1d: bool, optional
-        Ensure that the array has only one dimension.
-    allow_eos : bool, optional
-        If unequal length series are allowed
-    allow_nan : bool, optional
-        If NaN values are allowed
-    contiguous : bool, optional
-        Ensure that the array is in c-order.
-    kwargs : dict
-        Additional arguments passed to `sklearn.utils.check_array`
-
-    Returns
-    -------
-    ndarray
-        The checked array
-    """
-    if contiguous:
-        order = kwargs.get("order", None)
-        if order is not None and order.lower() != "c":
-            raise ValueError("order=%r and contiguous=True are incompatible")
-        kwargs["order"] = "C"
-
-    if allow_multivariate:
-        if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
-            raise ValueError(
-                "ensure_2d=True and allow_multivariate=True are incompatible"
-            )
-
-        if "allow_nd" in kwargs and not kwargs.pop("allow_nd"):
-            raise ValueError(
-                "allow_nd=False and allow_multivaraite=True are incompatible"
-            )
-        x = sklearn_check_array(
-            x,
-            ensure_2d=False,
-            allow_nd=True,
-            force_all_finite=False,
-            **kwargs,
-        )
-        if x.ndim == 0:
-            raise ValueError(
-                "Expected 2D or 3D array, got scalar array instead:\narray={}.\n"
-                "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single timestep or array.reshape(1, -1) "
-                "if it contains a single sample.".format(x)
-            )
-        if x.ndim == 1:
-            raise ValueError(
-                "Expected 2D or 3D array, got 1D array instead:\narray={}.\n"
-                "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single timestep or array.reshape(1, -1) "
-                "if it contains a single sample.".format(x)
-            )
-        if x.ndim > 3:
-            raise ValueError(
-                "Expected 2D or 3D array, got {}D array instead:\narray={}.\n".format(
-                    x.ndim, x
-                )
-            )
-    elif ensure_1d:
-        if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
-            raise ValueError("ensure_2d=True and ensure_1d=True are incompatible")
-        x = np.squeeze(
-            sklearn_check_array(
-                x, ensure_2d=False, allow_nd=False, force_all_finite=False, **kwargs
-            )
-        )
-        if x.ndim == 0:
-            raise ValueError(
-                "Expected 2D or 3D array, got scalar array instead:\narray={}.\n"
-                "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single timestep or array.reshape(1, -1) "
-                "if it contains a single sample.".format(x)
-            )
-
-        if x.ndim > 1:
-            raise ValueError(
-                "Expected 1D or 2D array with an empty dimension, "
-                "got {}D array instead:\narray={}.\n".format(x.ndim, x)
-            )
-    else:
-        x = sklearn_check_array(x, force_all_finite=False, **kwargs)
-
-    if np.issubdtype(x.dtype, np.double):
-        if not allow_eos and wb.iseos(x).any():
-            raise ValueError("Expected time series of equal length.")
-
-        if not allow_nan and np.isnan(x).any():
-            raise ValueError("Input contains NaN.")
-
-        if np.isposinf(x).any():
-            raise ValueError("Input contains infinity.")
-
-    return x
 
 
 def _soft_dependency_error(e=None, package=None, context=None, warning=False):
