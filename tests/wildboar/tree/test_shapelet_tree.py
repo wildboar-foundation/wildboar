@@ -2,7 +2,13 @@ import numpy as np
 from numpy.testing import assert_array_equal
 
 from wildboar.datasets import load_dataset
-from wildboar.tree import ShapeletTreeClassifier
+from wildboar.tree import ShapeletTreeClassifier, ShapeletTreeRegressor
+from wildboar.utils.estimator_checks import check_estimator
+
+
+def test_check_estimator():
+    check_estimator(ShapeletTreeClassifier())
+    check_estimator(ShapeletTreeRegressor())
 
 
 def test_apply():

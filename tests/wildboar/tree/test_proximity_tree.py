@@ -3,6 +3,14 @@ from numpy.testing import assert_almost_equal, assert_equal
 
 from wildboar.datasets import load_dataset
 from wildboar.tree import ProximityTreeClassifier
+from wildboar.utils.estimator_checks import check_estimator
+
+
+def test_check_estimator():
+    check_estimator(
+        ProximityTreeClassifier(metric_factories={"euclidean": {}}),
+        ignore=["check_sample_weights_invariance"],
+    )
 
 
 def test_proximity_tree():

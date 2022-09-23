@@ -3,6 +3,12 @@ from numpy.testing import assert_almost_equal, assert_equal
 
 from wildboar.datasets import load_dataset
 from wildboar.tree import ExtraShapeletTreeClassifier, ExtraShapeletTreeRegressor
+from wildboar.utils.estimator_checks import check_estimator
+
+
+def test_check_estimator():
+    check_estimator(ExtraShapeletTreeClassifier())
+    check_estimator(ExtraShapeletTreeRegressor())
 
 
 @pytest.mark.parametrize(
