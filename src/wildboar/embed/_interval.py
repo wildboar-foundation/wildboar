@@ -139,7 +139,7 @@ class IntervalEmbedding(BaseEmbedding):
             if summarizer is None:
                 raise ValueError("summarizer (%r) is not supported." % self.summarizer)
 
-        if self.n_intervalss == "sqrt":
+        if self.n_intervals == "sqrt":
             n_intervals = math.ceil(math.sqrt(self.n_timestep_))
         elif self.n_intervals == "log":
             n_intervals = math.ceil(math.log2(self.n_timestep_))
