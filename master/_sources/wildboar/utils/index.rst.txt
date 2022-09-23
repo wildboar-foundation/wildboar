@@ -11,6 +11,7 @@ Submodules
    :maxdepth: 1
 
    decorators/index.rst
+   estimator_checks/index.rst
    plot/index.rst
 
 
@@ -32,6 +33,7 @@ Functions
 .. autoapisummary::
 
    wildboar.utils._soft_dependency_error
+   wildboar.utils.check_X_y
    wildboar.utils.check_array
 
 
@@ -47,6 +49,9 @@ Functions
    .. py:method:: __mro_entries__(bases)
 
 
+
+
+.. py:function:: check_X_y(x, y, *, allow_multivariate=False, ensure_min_samples=1, allow_eos=False, allow_nan=False, contiguous=True, dtype=float, y_numeric=False, y_contiguous=True, multi_output=False, estimator=None)
 
 
 .. py:function:: check_array(x, allow_multivariate=False, ensure_1d=False, allow_eos=False, allow_nan=False, contiguous=True, **kwargs)

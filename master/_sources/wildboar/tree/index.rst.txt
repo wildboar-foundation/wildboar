@@ -146,7 +146,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. py:class:: IntervalTreeClassifier(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, class_weight=None, random_state=None)
+.. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
@@ -158,14 +158,14 @@ Classes
 
       :type: Tree
 
-   :param n_interval: The number of intervals to partition the time series into.
+   :param n_intervals: The number of intervals to partition the time series into.
 
-                      - if "log", the number of intervals is ``log2(n_timestep)``.
-                      - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-                      - if int, the number of intervals is ``n_intervals``.
-                      - if float, the number of intervals is ``n_intervals * n_timestep``, with
-                        ``0 < n_intervals < 1``.
-   :type n_interval: {"log", "sqrt"}, int or float, optional
+                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
+                       - if int, the number of intervals is ``n_intervals``.
+                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
+                         ``0 < n_intervals < 1``.
+   :type n_intervals: {"log", "sqrt"}, int or float, optional
    :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
                      leaves are pure or until all leaves contain less than `min_samples_split`
                      samples.
@@ -180,9 +180,9 @@ Classes
    :param criterion: The criterion used to evaluate the utility of a split.
    :type criterion: {"entropy", "gini"}, optional
    :param intervals:
-                     - if "fixed", `n_interval` non-overlapping intervals.
+                     - if "fixed", `n_intervals` non-overlapping intervals.
                      - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
-                     - if "random", `n_interval` possibly overlapping intervals of randomly
+                     - if "random", `n_intervals` possibly overlapping intervals of randomly
                        sampled in ``[min_size * n_timestep, max_size * n_timestep]``
    :type intervals: {"fixed", "sample", "random"}, optional
    :param sample_size: The fraction of intervals to sample at each node. Ignored unless
@@ -214,7 +214,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. py:class:: IntervalTreeRegressor(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
+.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
@@ -226,14 +226,14 @@ Classes
 
       :type: Tree
 
-   :param n_interval: The number of intervals to partition the time series into.
+   :param n_intervals: The number of intervals to partition the time series into.
 
-                      - if "log", the number of intervals is ``log2(n_timestep)``.
-                      - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-                      - if int, the number of intervals is ``n_intervals``.
-                      - if float, the number of intervals is ``n_intervals * n_timestep``, with
-                        ``0 < n_intervals < 1``.
-   :type n_interval: {"log", "sqrt"}, int or float, optional
+                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
+                       - if int, the number of intervals is ``n_intervals``.
+                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
+                         ``0 < n_intervals < 1``.
+   :type n_intervals: {"log", "sqrt"}, int or float, optional
    :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
                      leaves are pure or until all leaves contain less than `min_samples_split`
                      samples.
@@ -248,9 +248,9 @@ Classes
    :param criterion: The criterion used to evaluate the utility of a split.
    :type criterion: {"mse"}, optional
    :param intervals:
-                     - if "fixed", `n_interval` non-overlapping intervals.
+                     - if "fixed", `n_intervals` non-overlapping intervals.
                      - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
-                     - if "random", `n_interval` possibly overlapping intervals of randomly
+                     - if "random", `n_intervals` possibly overlapping intervals of randomly
                        sampled in ``[min_size * n_timestep, max_size * n_timestep]``
    :type intervals: {"fixed", "sample", "random"}, optional
    :param sample_size: The fraction of intervals to sample at each node. Ignored unless

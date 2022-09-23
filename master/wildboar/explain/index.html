@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.explain.counterfactual" href="counterfactual/index.html" /><link rel="prev" title="wildboar.ensemble" href="../ensemble/index.html" />
 
     <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
-        <title>wildboar.explain - Wildboar 1.1.0rc5.dev74+g0ab6b875 documentation</title>
+        <title>wildboar.explain - Wildboar 1.1.0rc5.dev81+g9629e921 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev74+g0ab6b875 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev81+g9629e921 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -285,6 +285,7 @@
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
 </ul>
 </li>
@@ -375,7 +376,7 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.IntervalImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L150-L379"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L150-L379"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.IntervalImportance" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="base/index.html#wildboar.explain.base.BaseImportance" title="wildboar.explain.base.BaseImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.explain.base.BaseImportance</span></code></a></p>
 <p>Compute a model agnostic importance score for non-overlapping intervals in
 the time or frequency domain by permuting the intervals among samples.</p>
@@ -396,7 +397,7 @@ function.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>scoring</strong> (<em>str</em><em>, </em><em>list</em><em>, </em><em>dict</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – The scoring function. By default the estimators score function is used.</p></li>
 <li><p><strong>n_repeat</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of repeated permutations</p></li>
-<li><p><strong>n_interval</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals.</p>
+<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals.</p>
 <ul>
 <li><p>if “sqrt”, the number of intervals is the square root of n_timestep.</p></li>
 <li><p>if “log”, the number of intervals is the log2 of n_timestep.</p></li>

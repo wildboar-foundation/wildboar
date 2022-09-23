@@ -45,7 +45,7 @@ Classes
        Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.
 
 
-.. py:class:: IntervalEmbedding(n_interval='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', n_jobs=None, random_state=None)
+.. py:class:: IntervalEmbedding(n_intervals='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', n_jobs=None, random_state=None)
 
    Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
 
@@ -55,30 +55,30 @@ Classes
 
    >>> from wildboar.datasets import load_dataset
    >>> x, y = load_dataset("GunPoint")
-   >>> embedding = IntervalEmbedding(n_interval=10, summarizer="mean")
+   >>> embedding = IntervalEmbedding(n_intervals=10, summarizer="mean")
    >>> embedding.fit_transform(x)
 
    Each interval (15 timepoints) are embedded as its mean.
 
-   >>> embedding = IntervalEmbedding(n_interval="sqrt", summarizer=[np.mean, np.std])
+   >>> embedding = IntervalEmbedding(n_intervals="sqrt", summarizer=[np.mean, np.std])
    >>> embedding.fit_transform(x)
 
    Each interval (150 // 12 timepoints) are embedded as two features. The mean
    and the standard deviation.
 
-   :param n_interval: The number of intervals to use for the embedding.
+   :param n_intervals: The number of intervals to use for the embedding.
 
-                      - if "log", the number of intervals is ``log2(n_timestep)``.
-                      - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-                      - if int, the number of intervals is ``n_intervals``.
-                      - if float, the number of intervals is ``n_intervals * n_timestep``, with
-                        ``0 < n_intervals < 1``.
-   :type n_interval: str, int or float, optional
+                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
+                       - if int, the number of intervals is ``n_intervals``.
+                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
+                         ``0 < n_intervals < 1``.
+   :type n_intervals: str, int or float, optional
    :param intervals: The method for selecting intervals
 
-                     - if "fixed", `n_interval` non-overlapping intervals.
+                     - if "fixed", `n_intervals` non-overlapping intervals.
                      - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
-                     - if "random", `n_interval` possibly overlapping intervals of randomly
+                     - if "random", `n_intervals` possibly overlapping intervals of randomly
                        sampled in ``[min_size * n_timestep, max_size * n_timestep]``
    :type intervals: str, optional
    :param sample_size: The sample size of fixed intervals if ``intervals="sample"``

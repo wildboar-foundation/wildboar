@@ -45,7 +45,7 @@ Classes
       :param x: The training time series.
       :type x: array-like of shape (n_samples, n_timesteps)
       :param y: The target values (class labels) as integers
-      :type y: array-like of shape (n_samples,) or (n_samples, n_classes)
+      :type y: array-like of shape (n_samples,)
       :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
                             nodes with net zero or negative weight are ignored while searching for a
                             split in each node. Splits are also ignored if they would result in any

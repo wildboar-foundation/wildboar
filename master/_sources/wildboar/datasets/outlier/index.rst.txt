@@ -91,10 +91,11 @@ Functions
                  Scores (which are probabilities in the range [0, 1]) are fit into the ranges
                  using ``np.digitize(difficulty, scale)``.
    :type scale: array-like, optional
-   :param variation: Selection procedure for sampling outlier samples
+   :param variation: Selection procedure for sampling outlier samples. If ``difficulty="simplest"``
+                     or ``difficulty="hardest"``, this parameter has no effect.
 
                      - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples
-                       are selected according to their euclidean distance
+                       are selected according to their euclidean distance.
                      - if 'dispersed' ``n_outlier`` points are selected according to a facility
                        location algorithm such that they are distributed among the outliers.
    :type variation: {'tight', 'dispersed'}, optional

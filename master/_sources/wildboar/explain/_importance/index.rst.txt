@@ -83,7 +83,7 @@ Attributes
 
 
 
-.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_interval='sqrt', domain='time', verbose=False, random_state=None)
+.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', domain='time', verbose=False, random_state=None)
 
    Bases: :py:obj:`wildboar.explain.base.BaseImportance`
 
@@ -101,14 +101,14 @@ Attributes
    :type scoring: str, list, dict or callable, optional
    :param n_repeat: The number of repeated permutations
    :type n_repeat: int, optional
-   :param n_interval: The number of intervals.
+   :param n_intervals: The number of intervals.
 
-                      - if "sqrt", the number of intervals is the square root of n_timestep.
+                       - if "sqrt", the number of intervals is the square root of n_timestep.
 
-                      - if "log", the number of intervals is the log2 of n_timestep.
+                       - if "log", the number of intervals is the log2 of n_timestep.
 
-                      - if int, exact number of intervals.
-   :type n_interval: str, optional
+                       - if int, exact number of intervals.
+   :type n_intervals: str, optional
    :param domain: Compute the importance in the time or frequency domain.
    :type domain: {"time", "frequency"}, optional
    :param verbose: Show extra progress information.
