@@ -22,7 +22,6 @@ import warnings
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from sklearn.utils import check_random_state
 
 from wildboar.distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
 from wildboar.embed._interval import (
@@ -191,14 +190,12 @@ class BaseShapeletTree(BaseFeatureTree):
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
         )
-        self.random_state = check_random_state(random_state)
+        self.random_state = random_state
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
-        self.n_timestep_ = None
-        self.n_dims_ = None
 
     def _get_feature_engineer(self, n_samples, n_timestep):
         if (
@@ -603,7 +600,6 @@ class ShapeletTreeClassifier(
             force_dim=force_dim,
             random_state=random_state,
         )
-        self.n_classes_ = None
         self.criterion = criterion
         self.class_weight = class_weight
         self.alpha = alpha

@@ -18,9 +18,10 @@
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
+from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
-from wildboar.utils import check_array
+from wildboar.utils import check_array, check_X_y
 
 
 class BaseTree(BaseEstimator):
@@ -44,6 +45,9 @@ class BaseTree(BaseEstimator):
     def _validate_x_predict(self, x, check_input):
         if check_input:
             x = check_array(x, allow_multivariate=True)
+
+        if hasattr(self, "classes_") and len(self.classes_) < 2:
+            raise ValueError("Classifier can't predict when only one class is present.")
 
         if isinstance(self.force_dim, int):
             x = np.reshape(x, [x.shape[0], self.force_dim, -1])
@@ -100,8 +104,7 @@ class TreeRegressorMixin(RegressorMixin):
         self: object
         """
         if check_input:
-            X = check_array(X, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False, dtype=float)
+            X, y = check_X_y(X, y, allow_multivariate=True, dtype=float, y_numeric=True)
 
         n_samples = X.shape[0]
         if isinstance(self.force_dim, int):
@@ -114,11 +117,7 @@ class TreeRegressorMixin(RegressorMixin):
         else:
             n_dims = 1
 
-        if len(y) != n_samples:
-            raise ValueError(
-                "Number of labels={} does not match "
-                "number of samples={}".format(len(y), n_samples)
-            )
+        self.n_features_in_ = n_timesteps
 
         self.n_timestep_ = n_timesteps
         self.n_dims_ = n_dims
@@ -164,7 +163,7 @@ class TreeClassifierMixin(ClassifierMixin):
         x : array-like of shape (n_samples, n_timesteps)
             The training time series.
 
-        y : array-like of shape (n_samples,) or (n_samples, n_classes)
+        y : array-like of shape (n_samples,)
             The target values (class labels) as integers
 
         sample_weight : array-like of shape (n_samples,)
@@ -183,38 +182,28 @@ class TreeClassifierMixin(ClassifierMixin):
         self: object
         """
         if check_input:
-            x = check_array(x, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False)
+            x, y = check_X_y(x, y, allow_multivariate=True, dtype=float)
 
-        n_samples = x.shape[0]
-        if isinstance(self.force_dim, int):
-            x = np.reshape(x, [n_samples, self.force_dim, -1])
-
-        n_timesteps = x.shape[-1]
-
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
+        check_classification_targets(y)
         if hasattr(self, "class_weight") and self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
         else:
             class_weight = None
 
-        if y.ndim == 1:
-            self.classes_, y = np.unique(y, return_inverse=True)
-        else:
-            _, y = np.nonzero(y)
-            if len(y) != n_samples:
-                raise ValueError("Single label per sample expected.")
-            self.classes_ = np.unique(y)
+        self.classes_, y = np.unique(y, return_inverse=True)
+        if len(self.classes_) < 2:
+            raise ValueError("Classifier can't train when only one class is present.")
 
-        if len(y) != n_samples:
-            raise ValueError(
-                "Number of labels={} does not match "
-                "number of samples={}".format(len(y), n_samples)
-            )
+        if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
+            x = np.reshape(x, [x.shape[0], self.force_dim, -1])
+
+        n_timesteps = x.shape[-1]
+        self.n_features_in_ = n_timesteps  # for sklearn compat
+
+        if x.ndim > 2:
+            n_dims = x.shape[1]
+        else:
+            n_dims = 1
 
         self.n_classes_ = len(self.classes_)
         self.n_timestep_ = n_timesteps
@@ -253,6 +242,7 @@ class TreeClassifierMixin(ClassifierMixin):
         y : ndarray of shape (n_samples,)
             The predicted classes.
         """
+        check_is_fitted(self, ["tree_"])
         return self.classes_[
             np.argmax(self.predict_proba(x, check_input=check_input), axis=1)
         ]
