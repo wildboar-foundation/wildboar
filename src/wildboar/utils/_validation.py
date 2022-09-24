@@ -6,6 +6,95 @@ from sklearn.utils.validation import check_consistent_length
 import wildboar as wb
 
 
+def _num_timesteps_dim(dim):
+    type_ = type(dim)
+    if type_.__module__ == "builtins":
+        type_name = type_.__qualname__
+    else:
+        type_name = f"{type_.__module__}.{type_.__qualname__}"
+    message = (
+        f"Unable to find the number of timesteps from dimension of type {type_name}"
+    )
+    if not hasattr(dim, "__len__") and not hasattr(dim, "shape"):
+        if not hasattr(dim, "__array__"):
+            raise TypeError(message)
+        dim = np.asarray(dim)
+
+    if hasattr(dim, "shape"):
+        if not hasattr(dim, "__len__") or len(dim.shape) != 1:
+            message += f" with shape {dim.shape}"
+            raise TypeError(message)
+
+        return dim.shape[0]
+
+    if len(dim) > 0:
+        if (
+            hasattr(dim, "__len__")
+            or hasattr(dim, "shape")
+            or hasattr(dim, "__array__")
+        ):
+            raise TypeError(message)
+
+    return len(dim)
+
+
+def _num_timesteps(X):
+    """Return the number of timesteps and dimensions of ``X``
+
+    Parameters
+    ----------
+    X : object
+        The object to guess the number of timesteps and dimensions
+
+    Returns
+    -------
+    n_timesteps : int
+        The number of timesteps
+
+    n_dims : int
+        The number of dimensions
+    """
+    type_ = type(X)
+    if type_.__module__ == "builtins":
+        type_name = type_.__qualname__
+    else:
+        type_name = f"{type_.__module__}.{type_.__qualname__}"
+    message = f"Unable to find the number of timesteps from X of type {type_name}"
+    if not hasattr(X, "__len__") and not hasattr(X, "shape"):
+        if not hasattr(X, "__array__"):
+            raise TypeError(message)
+        # Only convert X to a numpy array if there is no cheaper, heuristic
+        # option.
+        X = np.asarray(X)
+
+    if hasattr(X, "shape"):
+        if not hasattr(X.shape, "__len__") or len(X.shape) <= 1 or len(X.shape) > 3:
+            message += f" with shape {X.shape}"
+            raise TypeError(message)
+        return X.shape[-1], X.shape[1] if len(X.shape) == 3 else 1
+
+    first_sample = X[0]
+
+    # Do not consider an array-like of strings or dicts to be a 2D array
+    if isinstance(first_sample, (str, bytes, dict)):
+        message += f" where the samples are of type {type(first_sample).__qualname__}"
+        raise TypeError(message)
+
+    try:
+        possibly_first_dim = first_sample[0]
+        if hasattr(possibly_first_dim, "__len__") or hasattr(
+            possibly_first_dim, "shape"
+        ):
+            return _num_timesteps_dim(possibly_first_dim), len(first_sample)
+
+        # If X is a list of lists, for instance, we assume that all nested
+        # lists have the same length without checking or converting to
+        # a numpy array to keep this function call as cheap as possible.
+        return len(first_sample), 1
+    except Exception as err:
+        raise TypeError(message) from err
+
+
 def check_X_y(
     x,
     y,
