@@ -140,11 +140,11 @@ class IntervalEmbedding(BaseEmbedding):
                 raise ValueError("summarizer (%r) is not supported." % self.summarizer)
 
         if self.n_intervals == "sqrt":
-            n_intervals = math.ceil(math.sqrt(self.n_timestep_))
+            n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
         elif self.n_intervals == "log":
-            n_intervals = math.ceil(math.log2(self.n_timestep_))
+            n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
         elif isinstance(self.n_intervals, numbers.Integral):
-            if not 0 < self.n_intervals <= self.n_timestep_:
+            if not 0 < self.n_intervals <= self.n_timesteps_in_:
                 raise ValueError(
                     "n_intervals must be in the range [1, x.shape[-1]], got %d"
                     % self.n_intervals,
@@ -153,7 +153,9 @@ class IntervalEmbedding(BaseEmbedding):
         elif isinstance(self.n_intervals, numbers.Real):
             if not 0.0 < self.n_intervals < 1.0:
                 raise ValueError("n_intervals must be between 0.0 and 1.0")
-            n_intervals = math.max(1, math.floor(self.n_intervals * self.n_timestep_))
+            n_intervals = math.max(
+                1, math.floor(self.n_intervals * self.n_timesteps_in_)
+            )
         else:
             raise ValueError("n_intervals (%r) is not supported" % self.n_intervals)
 
@@ -173,8 +175,8 @@ class IntervalEmbedding(BaseEmbedding):
             if not self.min_size < self.max_size <= 1.0:
                 raise ValueError("max_size must be between min_size and 1.0")
 
-            min_size = int(self.min_size * self.n_timestep_)
-            max_size = int(self.max_size * self.n_timestep_)
+            min_size = int(self.min_size * self.n_timesteps_in_)
+            max_size = int(self.max_size * self.n_timesteps_in_)
             if min_size < 2:
                 min_size = 2
 

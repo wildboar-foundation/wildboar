@@ -95,8 +95,8 @@ class RocketEmbedding(BaseEmbedding):
                 )
             if max_size > 1:
                 raise ValueError("`max_size` {0} > 1".format(max_size))
-            max_size = int(self.n_timestep_ * max_size)
-            min_size = int(self.n_timestep_ * min_size)
+            max_size = int(self.n_timesteps_in_ * max_size)
+            min_size = int(self.n_timesteps_in_ * min_size)
             if min_size < 2:
                 min_size = 2
             kernel_size = np.arange(min_size, max_size)
@@ -149,8 +149,8 @@ class RocketEmbedding(BaseEmbedding):
 #                 )
 #             if max_size > 1:
 #                 raise ValueError("`max_size` {0} > 1".format(max_size))
-#             max_size = int(self.n_timestep_ * max_size)
-#             min_size = int(self.n_timestep_ * min_size)
+#             max_size = int(self.n_timesteps_in_ * max_size)
+#             min_size = int(self.n_timesteps_in_ * min_size)
 #             if min_size < 2:
 #                 min_size = 2
 #             size = np.arange(min_size, max_size)

@@ -102,8 +102,8 @@ class RandomShapeletEmbedding(BaseEmbedding):
             raise ValueError(
                 "`max_shapelet_size` {0} > 1".format(self.max_shapelet_size)
             )
-        max_shapelet_size = int(self.n_timestep_ * self.max_shapelet_size)
-        min_shapelet_size = int(self.n_timestep_ * self.min_shapelet_size)
+        max_shapelet_size = int(self.n_timesteps_in_ * self.max_shapelet_size)
+        min_shapelet_size = int(self.n_timesteps_in_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
             min_shapelet_size = 2
 
