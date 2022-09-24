@@ -180,11 +180,9 @@ class BaseShapeletTree(BaseFeatureTree):
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
-        force_dim=None,
         random_state=None,
     ):
         super().__init__(
-            force_dim=force_dim,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
@@ -254,7 +252,6 @@ class ShapeletTreeRegressor(
         alpha=None,
         metric="euclidean",
         metric_params=None,
-        force_dim=None,
         criterion="mse",
         random_state=None,
     ):
@@ -321,12 +318,6 @@ class ShapeletTreeRegressor(
             Read more about the parameters in the
             :ref:`User guide <list_of_subsequence_metrics>`.
 
-        force_dim : int, optional
-            Force the number of dimensions.
-
-            - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-              for interoperability with `sklearn`.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -343,7 +334,6 @@ class ShapeletTreeRegressor(
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
-            force_dim=force_dim,
             random_state=random_state,
         )
         self.criterion = criterion
@@ -376,7 +366,6 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
-        force_dim=None,
         criterion="mse",
         random_state=None,
     ):
@@ -418,12 +407,6 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         metric_params : dict, optional
             Parameters for the distance measure
 
-        force_dim : int, optional
-            Force the number of dimensions.
-
-            - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-              for interoperability with `sklearn`.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
@@ -441,7 +424,6 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,
-            force_dim=force_dim,
             random_state=random_state,
         )
 
@@ -505,7 +487,6 @@ class ShapeletTreeClassifier(
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
-        force_dim=None,
         class_weight=None,
         random_state=None,
     ):
@@ -567,12 +548,6 @@ class ShapeletTreeClassifier(
         metric_params : dict, optional
             Parameters for the distance measure
 
-        force_dim : int, optional
-            Force the number of dimensions.
-
-            - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-              for interoperability with `sklearn`.
-
         class_weight : dict or "balanced", optional
             Weights associated with the labels
 
@@ -597,7 +572,6 @@ class ShapeletTreeClassifier(
             max_shapelet_size=max_shapelet_size,
             metric=metric,
             metric_params=metric_params,
-            force_dim=force_dim,
             random_state=random_state,
         )
         self.criterion = criterion
@@ -630,7 +604,6 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         metric="euclidean",
         metric_params=None,
         criterion="entropy",
-        force_dim=None,
         class_weight=None,
         random_state=None,
     ):
@@ -669,12 +642,6 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         metric_params : dict, optional
             Parameters for the distance measure
 
-        force_dim : int, optional
-            Force the number of dimensions.
-
-            - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-              for interoperability with `sklearn`.
-
         class_weight : dict or "balanced", optional
             Weights associated with the labels
 
@@ -700,7 +667,6 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             metric=metric,
             metric_params=metric_params,
             criterion=criterion,
-            force_dim=force_dim,
             class_weight=class_weight,
             random_state=random_state,
         )
@@ -743,7 +709,6 @@ class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
-        force_dim=None,
         random_state=None,
     ):
         super().__init__(
@@ -751,7 +716,6 @@ class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            force_dim=force_dim,
         )
         self.n_kernels = n_kernels
         self.criterion = criterion
@@ -825,7 +789,6 @@ class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
-        force_dim=None,
         random_state=None,
     ):
         """
@@ -900,7 +863,6 @@ class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            force_dim=force_dim,
         )
         self.n_kernels = n_kernels
         self.criterion = criterion
@@ -939,7 +901,6 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
-        force_dim=None,
         class_weight=None,
         random_state=None,
     ):
@@ -1024,7 +985,6 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
             min_samples_split=min_samples_split,
             min_sample_leaf=min_sample_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            force_dim=force_dim,
         )
         self.n_kernels = n_kernels
         self.criterion = criterion
@@ -1052,7 +1012,6 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
         min_size=0.0,
         max_size=1.0,
         summarizer="auto",
-        force_dim=None,
         random_state=None,
     ):
         super().__init__(
@@ -1060,7 +1019,6 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            force_dim=force_dim,
         )
         self.n_intervals = n_intervals
         self.intervals = intervals
@@ -1147,7 +1105,6 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
         min_size=0.0,
         max_size=1.0,
         summarizer="auto",
-        force_dim=None,
         class_weight=None,
         random_state=None,
     ):
@@ -1232,7 +1189,6 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
             min_size=min_size,
             max_size=max_size,
             summarizer=summarizer,
-            force_dim=force_dim,
             random_state=random_state,
         )
         self.class_weight = class_weight
@@ -1264,7 +1220,6 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
         min_size=0.0,
         max_size=1.0,
         summarizer="auto",
-        force_dim=None,
         random_state=None,
     ):
         """
@@ -1340,7 +1295,6 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
             min_size=min_size,
             max_size=max_size,
             summarizer=summarizer,
-            force_dim=force_dim,
             random_state=random_state,
         )
         self.criterion = criterion
@@ -1356,7 +1310,6 @@ class BasePivotTree(BaseFeatureTree, metaclass=ABCMeta):
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
         metrics="all",
-        force_dim=None,
         random_state=None,
     ):
         super().__init__(
@@ -1364,7 +1317,6 @@ class BasePivotTree(BaseFeatureTree, metaclass=ABCMeta):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            force_dim=force_dim,
         )
         self.n_pivot = n_pivot
         self.metrics = metrics
@@ -1417,7 +1369,6 @@ class PivotTreeClassifier(FeatureTreeClassifierMixin, BasePivotTree):
         min_impurity_decrease=0.0,
         criterion="entropy",
         class_weight=None,
-        force_dim=None,
         random_state=None,
     ):
         """
@@ -1468,7 +1419,6 @@ class PivotTreeClassifier(FeatureTreeClassifierMixin, BasePivotTree):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            force_dim=force_dim,
             random_state=random_state,
         )
         self.criterion = criterion

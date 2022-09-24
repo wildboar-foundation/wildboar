@@ -30,13 +30,11 @@ class BaseTree(BaseEstimator):
     def __init__(
         self,
         *,
-        force_dim=None,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
     ):
-        self.force_dim = force_dim
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.min_samples_leaf = min_samples_leaf
@@ -107,7 +105,7 @@ class TreeRegressorMixin(RegressorMixin):
             X, y = check_X_y(X, y, allow_multivariate=True, dtype=float, y_numeric=True)
 
         n_samples = X.shape[0]
-        if isinstance(self.force_dim, int):
+        if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
             X = np.reshape(X, [n_samples, self.force_dim, -1])
 
         n_timesteps = X.shape[-1]

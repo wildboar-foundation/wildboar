@@ -125,7 +125,6 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         pivot_sample="label",
         metric_sample="weighted",
         metric_factories=None,
-        force_dim=None,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -183,7 +182,6 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
               by `np.random`.
         """
         super().__init__(
-            force_dim=force_dim,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
