@@ -5,20 +5,22 @@ from unittest.case import SkipTest
 import numpy as np
 from sklearn.base import clone
 from sklearn.exceptions import SkipTestWarning
-from sklearn.utils.estimator_checks import _enforce_estimator_tags_y, _maybe_skip
-from sklearn.utils.estimator_checks import (
-    _yield_all_checks as _yield_all_checks_sklearn,
-)
-from sklearn.utils.estimator_checks import (
+from sklearn.utils._testing import (
     assert_allclose_dense_sparse,
     ignore_warnings,
     set_random_state,
 )
+from sklearn.utils.estimator_checks import _enforce_estimator_tags_y, _maybe_skip
+from sklearn.utils.estimator_checks import (
+    _yield_all_checks as _yield_all_checks_sklearn,
+)
+from sklearn.utils.validation import has_fit_parameter
 
 
 def _yield_all_checks(estimator):
-    yield partial(check_sample_weights_invariance_samples_order, kind="ones")
-    yield partial(check_sample_weights_invariance_samples_order, kind="zeros")
+    if has_fit_parameter(estimator, "sample_weight"):
+        yield partial(check_sample_weights_invariance_samples_order, kind="ones")
+        yield partial(check_sample_weights_invariance_samples_order, kind="zeros")
 
 
 def check_estimator(estimator, generate_only=False, ignore=None):
