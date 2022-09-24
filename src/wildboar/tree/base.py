@@ -16,15 +16,15 @@
 # Authors: Isak Samsten
 
 import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
+from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
-from wildboar.utils import check_array, check_X_y
+from wildboar.base import BaseTimeEstimator
 
 
-class BaseTree(BaseEstimator):
+class BaseTree(BaseTimeEstimator):
     """Base class for tree based estimators."""
 
     def __init__(
@@ -42,22 +42,10 @@ class BaseTree(BaseEstimator):
 
     def _validate_x_predict(self, x, check_input):
         if check_input:
-            x = check_array(x, allow_multivariate=True)
+            x = self._validate_data(x, dtype=float, reset=False)
 
-        if hasattr(self, "classes_") and len(self.classes_) < 2:
-            raise ValueError("Classifier can't predict when only one class is present.")
-
-        if isinstance(self.force_dim, int):
+        if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
             x = np.reshape(x, [x.shape[0], self.force_dim, -1])
-
-        if x.shape[-1] != self.n_timestep_:
-            raise ValueError(
-                "illegal input shape ({} != {})".format(x.shape[-1], self.n_timestep_)
-            )
-        if x.ndim > 2 and x.shape[1] != self.n_dims_:
-            raise ValueError(
-                "illegal input shape ({} != {}".format(x.shape[1], self.n_dims_)
-            )
 
         return x
 
@@ -102,7 +90,9 @@ class TreeRegressorMixin(RegressorMixin):
         self: object
         """
         if check_input:
-            X, y = check_X_y(X, y, allow_multivariate=True, dtype=float, y_numeric=True)
+            X, y = self._validate_data(
+                X, y, allow_multivariate=True, dtype=float, y_numeric=True
+            )
 
         n_samples = X.shape[0]
         if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
@@ -180,7 +170,7 @@ class TreeClassifierMixin(ClassifierMixin):
         self: object
         """
         if check_input:
-            x, y = check_X_y(x, y, allow_multivariate=True, dtype=float)
+            x, y = self._validate_data(x, y, allow_multivariate=True, dtype=float)
 
         check_classification_targets(y)
         if hasattr(self, "class_weight") and self.class_weight is not None:
