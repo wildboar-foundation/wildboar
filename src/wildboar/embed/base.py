@@ -17,11 +17,10 @@
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.base import TransformerMixin
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
-from wildboar.utils import check_array
-
+from ..base import BaseTimeEstimator
 from ._embed_fast import (
     feature_embedding_fit,
     feature_embedding_fit_transform,
@@ -33,7 +32,7 @@ __all__ = [
 ]
 
 
-class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
+class BaseEmbedding(TransformerMixin, BaseTimeEstimator, metaclass=ABCMeta):
     """Base embedding
 
     Attributes
@@ -71,11 +70,9 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         -------
         embedding : self
         """
-        x = check_array(x, allow_multivariate=True, dtype=np.double)
-        random_state = check_random_state(self.random_state)
-        self.n_timestep_ = x.shape[-1]
+        x = self._validate_data(x, allow_multivariate=True, dtype=np.double)
         self.embedding_ = feature_embedding_fit(
-            self._get_feature_engineer(), x, random_state
+            self._get_feature_engineer(), x, check_random_state(self.random_state)
         )
         return self
 
@@ -94,7 +91,9 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
             The embedding.
         """
         check_is_fitted(self, attributes="embedding_")
-        x = check_array(x, allow_multivariate=True, dtype=np.double)
+        x = self._validate_data(
+            x, reset=False, allow_multivariate=True, dtype=np.double
+        )
         return feature_embedding_transform(self.embedding_, x, self.n_jobs)
 
     def fit_transform(self, x, y=None):
@@ -114,14 +113,12 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         x_embedding : ndarray of shape [n_samples, n_outputs]
             The embedding.
         """
-        x = check_array(x, allow_multivariate=True, dtype=np.double)
-        if x.ndim < 2 or x.ndim > 3:
-            raise ValueError("illegal input dimensions")
-
-        random_state = check_random_state(self.random_state)
-        self.n_timestep_ = x.shape[-1]
+        x = self._validate_data(x, allow_multivariate=True, dtype=np.double)
         embedding, x_out = feature_embedding_fit_transform(
-            self._get_feature_engineer(), x, random_state, self.n_jobs
+            self._get_feature_engineer(),
+            x,
+            check_random_state(self.random_state),
+            self.n_jobs,
         )
         self.embedding_ = embedding
         return x_out

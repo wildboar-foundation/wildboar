@@ -18,13 +18,21 @@
 from ._interval import IntervalEmbedding
 from ._pivot import PivotEmbedding
 from ._rocket import RocketEmbedding
+from ._sax import (
+    PAA,
+    SAX,
+    piecewice_aggregate_approximation,
+    symbolic_aggregate_approximation,
+)
 from ._shapelet import RandomShapeletEmbedding
-from .base import BaseEmbedding
 
 __all__ = [
-    "BaseEmbedding",
+    "symbolic_aggregate_approximation",
+    "piecewice_aggregate_approximation",
     "RandomShapeletEmbedding",
     "RocketEmbedding",
     "IntervalEmbedding",
     "PivotEmbedding",
+    "SAX",
+    "PAA",
 ]
