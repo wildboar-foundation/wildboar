@@ -1,17 +1,17 @@
 import warnings
 
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator as SklearnBaseEstimator
 from sklearn.utils.validation import _check_y
 
 from wildboar import __version__
 from wildboar.utils.validation import _num_timesteps, check_array, check_X_y
 
-__all__ = ["BaseTimeEstimator"]
+__all__ = ["BaseEstimator"]
 
 _DEFAULT_TAGS = {"allow_multivariate": False, "allow_eos": False}
 
 
-class BaseTimeEstimator(BaseEstimator):
+class BaseEstimator(SklearnBaseEstimator):
 
     # Same additions as scikit-learn
     def __getstate__(self):

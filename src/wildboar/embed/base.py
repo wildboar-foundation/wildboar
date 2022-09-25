@@ -20,7 +20,7 @@ import numpy as np
 from sklearn.base import TransformerMixin
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
-from ..base import BaseTimeEstimator
+from ..base import BaseEstimator
 from ._embed_fast import (
     feature_embedding_fit,
     feature_embedding_fit_transform,
@@ -32,7 +32,7 @@ __all__ = [
 ]
 
 
-class BaseEmbedding(TransformerMixin, BaseTimeEstimator, metaclass=ABCMeta):
+class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
     """Base embedding
 
     Attributes
