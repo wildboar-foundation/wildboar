@@ -29,7 +29,7 @@ from libc.string cimport memcpy, memset
 
 from wildboar.distance._distance cimport DistanceMeasure
 
-from wildboar.utils import check_dataset
+from wildboar.utils.data import check_dataset
 
 from wildboar.utils.data cimport Dataset
 from wildboar.utils.misc cimport CList, argsort, safe_realloc

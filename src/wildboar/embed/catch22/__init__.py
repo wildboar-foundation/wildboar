@@ -16,10 +16,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-import numpy as np
 from functools import partial
+
 from wildboar.utils.decorators import array_or_scalar
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 from . import _catch22
 

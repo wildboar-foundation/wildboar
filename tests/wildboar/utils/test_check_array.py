@@ -1,6 +1,7 @@
 import numpy as np
 import pytest
-from wildboar.utils import check_array
+
+from wildboar.utils.validation import check_array
 
 
 def test_check_array_multivariate():

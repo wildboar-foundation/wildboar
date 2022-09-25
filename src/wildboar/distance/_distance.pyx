@@ -34,8 +34,9 @@ from . import _dtw_distance, _euclidean_distance
 
 from wildboar.utils.data cimport Dataset
 
-from wildboar.utils import check_array, check_dataset
+from wildboar.utils.data import check_dataset
 from wildboar.utils.parallel import run_in_parallel
+from wildboar.utils.validation import check_array
 
 
 cdef double EPSILON = 1e-13

@@ -35,7 +35,7 @@ from wildboar.distance import _DISTANCE_MEASURE
 
 from wildboar.embed._feature cimport Feature, FeatureEngineer
 
-from wildboar.utils import check_dataset
+from wildboar.utils.data import check_dataset
 
 from wildboar.utils.data cimport Dataset
 from wildboar.utils.misc cimport CList, argsort, safe_realloc

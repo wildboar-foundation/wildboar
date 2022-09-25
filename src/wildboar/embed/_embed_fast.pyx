@@ -30,7 +30,7 @@ from copy import deepcopy
 import numpy as np
 from joblib import Parallel, delayed, effective_n_jobs
 
-from wildboar.utils import check_dataset
+from wildboar.utils.data import check_dataset
 
 
 def clone_embedding(FeatureEngineer feature_engineer, features):

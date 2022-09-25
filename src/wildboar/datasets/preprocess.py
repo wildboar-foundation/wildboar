@@ -17,7 +17,7 @@
 import numpy as np
 
 import wildboar as wb
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 __all__ = [
     "standardize",

@@ -24,7 +24,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.utils.extmath import softmax
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 
 class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):

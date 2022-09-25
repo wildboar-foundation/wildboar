@@ -26,7 +26,7 @@ from sklearn.metrics._scorer import _check_multimetric_scoring, _MultimetricScor
 from sklearn.model_selection._validation import _aggregate_score_dicts
 from sklearn.utils.validation import check_random_state
 
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 from .base import BaseImportance
 

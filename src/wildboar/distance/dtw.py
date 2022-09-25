@@ -20,7 +20,7 @@ import math
 import numpy as np
 from sklearn.utils import deprecated
 
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 from . import pairwise_distance
 from ._dtw_distance import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh

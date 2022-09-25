@@ -19,14 +19,7 @@ import os
 import platform
 import warnings
 
-from wildboar.utils.data import check_dataset
-
-from ._validation import check_array, check_X_y
-
 __all__ = [
-    "check_array",
-    "check_X_y",
-    "check_dataset",
     "os_cache_dir",
     "_soft_dependency_error",
     "DependencyMissing",

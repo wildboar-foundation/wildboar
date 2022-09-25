@@ -1,6 +1,6 @@
-import pytest
 import numpy as np
-from wildboar.utils import check_dataset
+
+from wildboar.utils.data import check_dataset
 
 
 def test_check_1darray():

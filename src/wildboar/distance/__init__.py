@@ -21,8 +21,8 @@ import warnings
 import numpy as np
 from sklearn.utils.deprecation import deprecated
 
-from wildboar.utils import check_array
 from wildboar.utils.decorators import array_or_scalar, singleton
+from wildboar.utils.validation import check_array
 
 from . import _distance, _dtw_distance, _euclidean_distance, _mass, _matrix_profile
 

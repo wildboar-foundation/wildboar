@@ -19,8 +19,8 @@ import numbers
 import numpy as np
 
 from wildboar.distance import _THRESHOLD, matrix_profile, subsequence_match
-from wildboar.utils import check_array
 from wildboar.utils.decorators import singleton
+from wildboar.utils.validation import check_array
 
 
 @singleton

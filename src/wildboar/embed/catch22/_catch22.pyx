@@ -30,7 +30,7 @@ from wildboar.utils cimport stats
 from wildboar.utils.data cimport Dataset
 from wildboar.utils.parallel cimport MapSample
 
-from wildboar.utils import check_dataset
+from wildboar.utils.data import check_dataset
 from wildboar.utils.parallel import run_in_parallel
 
 

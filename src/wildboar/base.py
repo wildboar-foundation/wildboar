@@ -4,7 +4,7 @@ from sklearn.base import BaseEstimator
 from sklearn.utils.validation import _check_y
 
 from wildboar import __version__
-from wildboar.utils._validation import _num_timesteps, check_array, check_X_y
+from wildboar.utils.validation import _num_timesteps, check_array, check_X_y
 
 __all__ = ["BaseTimeEstimator"]
 

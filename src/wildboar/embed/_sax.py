@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import norm
 from sklearn.base import BaseEstimator, TransformerMixin
 
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 from . import IntervalEmbedding
 

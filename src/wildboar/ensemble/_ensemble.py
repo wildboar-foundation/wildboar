@@ -39,7 +39,7 @@ from wildboar.tree import (
     ShapeletTreeRegressor,
 )
 from wildboar.tree._tree import RocketTreeClassifier, RocketTreeRegressor
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 
 class ForestMixin:

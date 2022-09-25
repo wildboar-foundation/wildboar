@@ -28,7 +28,8 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import check_random_state
 
 from wildboar.linear_model import KernelLogisticRegression
-from wildboar.utils import _soft_dependency_error, check_array
+from wildboar.utils import _soft_dependency_error
+from wildboar.utils.validation import check_array
 
 __all__ = [
     "kmeans_outliers",

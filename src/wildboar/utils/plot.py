@@ -14,7 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 import numpy as np
 
-from wildboar.utils import check_array
+from wildboar.utils.validation import check_array
 
 try:
     import matplotlib.pylab as plt

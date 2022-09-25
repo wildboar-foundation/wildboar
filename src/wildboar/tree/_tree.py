@@ -44,7 +44,7 @@ from wildboar.tree._ctree import (
     TreeBuilder,
     TreeFeatureEngineer,
 )
-from wildboar.utils import check_dataset
+from wildboar.utils.data import check_dataset
 
 from .base import BaseTree, TreeClassifierMixin, TreeRegressorMixin
 
