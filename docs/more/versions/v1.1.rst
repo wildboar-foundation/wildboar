@@ -139,16 +139,16 @@ Changelog
 
   .. grid-item-card::
 
-    :mod:`wildboar.embed`
+    :mod:`wildboar.transform`
     ^^^ 
 
-    - |Feature| The new :class:`embed.RocketEmbedding` embed time series as random convolutions
+    - |Feature| The new :class:`transform.RocketTransform` transform time series using random convolutions
 
-    - |Feature| The new :class:`embed.RandomShapeletEmbedding` embed time series as the distance to random shapelets
+    - |Feature| The new :class:`transform.RandomShapeletTransform` transform time series using the distance to random shapelets
 
-    - |Feature| The new :class:`embed.IntervalEmbedding` embed time series as interval features
+    - |Feature| The new :class:`transform.IntervalTransform` transform time series using interval features
 
-    - |Feature| The new :class:`embed.PivotEmbedding` embed time series as the distance to pivot time series
+    - |Feature| The new :class:`transform.PivotTransform` transform time series using the distance to pivot time series
 
   .. grid-item-card::
 

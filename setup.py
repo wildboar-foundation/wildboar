@@ -79,36 +79,36 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/tree/_cptree.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.embed._feature": {
-            "sources": ["src/wildboar/embed/_feature.pyx"],
+        "wildboar.transform._feature": {
+            "sources": ["src/wildboar/transform/_feature.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.embed._shapelet_fast": {
-            "sources": ["src/wildboar/embed/_shapelet_fast.pyx"],
+        "wildboar.transform._shapelet_fast": {
+            "sources": ["src/wildboar/transform/_shapelet_fast.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.embed._rocket_fast": {
-            "sources": ["src/wildboar/embed/_rocket_fast.pyx"],
+        "wildboar.transform._rocket_fast": {
+            "sources": ["src/wildboar/transform/_rocket_fast.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.embed._cinterval": {
-            "sources": ["src/wildboar/embed/_cinterval.pyx"],
+        "wildboar.transform._cinterval": {
+            "sources": ["src/wildboar/transform/_cinterval.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.embed._cpivot": {
-            "sources": ["src/wildboar/embed/_cpivot.pyx"],
+        "wildboar.transform._cpivot": {
+            "sources": ["src/wildboar/transform/_cpivot.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.embed._embed_fast": {
-            "sources": ["src/wildboar/embed/_embed_fast.pyx"],
+        "wildboar.transform._cfeature_transform": {
+            "sources": ["src/wildboar/transform/_cfeature_transform.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.embed.catch22._catch22": {
+        "wildboar.transform.catch22._catch22": {
             "sources": [
-                "src/wildboar/embed/catch22/_catch22.pyx",
-                "src/wildboar/embed/catch22/src/catch22.c",
+                "src/wildboar/transform/catch22/_catch22.pyx",
+                "src/wildboar/transform/catch22/src/catch22.c",
             ],
-            "include_dirs": include_dirs("src/wildboar/embed/catch22/src/"),
+            "include_dirs": include_dirs("src/wildboar/transform/catch22/src/"),
         },
         "wildboar.utils._fft._pocketfft": {
             "sources": [

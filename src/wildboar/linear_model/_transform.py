@@ -18,16 +18,17 @@ import warnings
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from sklearn.base import BaseEstimator, ClassifierMixin, RegressorMixin
+from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 from sklearn.pipeline import Pipeline
 from sklearn.utils.extmath import softmax
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
-from wildboar.utils.validation import check_array
+from ..base import BaseEstimator
+from ..utils.validation import check_array
 
 
-class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
+class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
     def __init__(self, *, random_state=None, n_jobs=None):
         self.random_state = random_state
         self.n_jobs = n_jobs
@@ -38,7 +39,7 @@ class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
         random_state = check_random_state(self.random_state)
         self.pipe_ = Pipeline(
             [
-                ("embedding", self._get_embedding(random_state.randint(2 ** 31))),
+                ("transform", self._get_transform(random_state.randint(2 ** 31))),
                 ("estimator", self._get_estimator(random_state.randint(2 ** 31))),
             ],
         )
@@ -46,7 +47,7 @@ class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
         return self
 
     @abstractmethod
-    def _get_embedding(self, random_state):
+    def _get_transform(self, random_state):
         pass
 
     @abstractmethod
@@ -54,7 +55,7 @@ class BaseEmbeddingEstimator(BaseEstimator, metaclass=ABCMeta):
         pass
 
 
-class EmbeddingClassifierMixin:
+class TransformClassifierMixin:
     def predict(self, x):
         check_is_fitted(self)
         x = check_array(x, allow_multivariate=True)
@@ -80,7 +81,7 @@ class EmbeddingClassifierMixin:
         return self.pipe_[-1].classes_
 
 
-class EmbeddingRegressorMixin:
+class TransformRegressorMixin:
     def predict(self, x):
         check_is_fitted(self)
         x = check_array(x, allow_multivariate=True)
@@ -92,8 +93,8 @@ class EmbeddingRegressorMixin:
         return self.pipe_.decision_function(x)
 
 
-class EmbeddingRidgeClassifierCV(
-    ClassifierMixin, EmbeddingClassifierMixin, BaseEmbeddingEstimator
+class TransformRidgeClassifierCV(
+    ClassifierMixin, TransformClassifierMixin, BaseTransformEstimator
 ):
     def __init__(
         self,
@@ -142,7 +143,7 @@ class EmbeddingRidgeClassifierCV(
         return softmax(decision_2d, copy=False)
 
 
-class EmbeddingRidgeCV(RegressorMixin, EmbeddingRegressorMixin, BaseEmbeddingEstimator):
+class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEstimator):
     def __init__(
         self,
         *,

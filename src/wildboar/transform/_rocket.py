@@ -22,7 +22,7 @@ from ._rocket_fast import (
     ShapeletWeightSampler,
     UniformWeightSampler,
 )
-from .base import BaseEmbedding
+from .base import BaseFeatureEngineerTransform
 
 _SAMPLING_METHOD = {
     "auto": NormalWeightSampler,
@@ -32,8 +32,8 @@ _SAMPLING_METHOD = {
 }
 
 
-class RocketEmbedding(BaseEmbedding):
-    """Embedd a time series using random convolution features
+class RocketTransform(BaseFeatureEngineerTransform):
+    """Transform a time series using random convolution features
 
     Attributes
     ----------

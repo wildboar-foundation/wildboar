@@ -17,11 +17,11 @@
 
 from ..distance import _SUBSEQUENCE_DISTANCE_MEASURE
 from ._shapelet_fast import RandomShapeletFeatureEngineer
-from .base import BaseEmbedding
+from .base import BaseFeatureEngineerTransform
 
 
-class RandomShapeletEmbedding(BaseEmbedding):
-    """Embed a time series as the distances to a selection of random shapelets.
+class RandomShapeletTransform(BaseFeatureEngineerTransform):
+    """Transform a time series to the distances to a selection of random shapelets.
 
     Attributes
     ----------
@@ -50,7 +50,7 @@ class RandomShapeletEmbedding(BaseEmbedding):
         Parameters
         ----------
         n_shapelets : int, optional
-            The number of shapelets in the resulting embedding
+            The number of shapelets in the resulting transform
 
         metric : str, optional
             Distance metric used to identify the best shapelet.

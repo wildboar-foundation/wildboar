@@ -30,7 +30,7 @@ from copy import deepcopy
 import numpy as np
 from joblib import Parallel, delayed, effective_n_jobs
 
-from wildboar.utils.data import check_dataset
+from ..utils.data import check_dataset
 
 
 def clone_embedding(FeatureEngineer feature_engineer, features):
@@ -192,7 +192,7 @@ cdef class FeatureEmbedding:
             raise ValueError()
         return self.feature_engineer.persistent_feature_to_object(self._features[item])
 
-def feature_embedding_fit(FeatureEngineer feature_engineer, np.ndarray x, object random_state):
+def feature_transform_fit(FeatureEngineer feature_engineer, np.ndarray x, object random_state):
     x = check_dataset(x)
     cdef Dataset td = Dataset(x)
     cdef Py_ssize_t i
@@ -227,7 +227,7 @@ def feature_embedding_fit(FeatureEngineer feature_engineer, np.ndarray x, object
 
     return embedding
 
-def feature_embedding_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs=None):
+def feature_transform_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs=None):
     x = check_dataset(x)
     cdef Dataset x_in = Dataset(x)
     cdef FeatureEngineer feature_engineer = embedding.feature_engineer
@@ -251,7 +251,7 @@ def feature_embedding_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs
     
     return out
 
-def feature_embedding_fit_transform(FeatureEngineer feature_engineer, np.ndarray x, random_state, n_jobs=None):
+def feature_transform_fit_transform(FeatureEngineer feature_engineer, np.ndarray x, random_state, n_jobs=None):
     x = check_dataset(x)
     cdef Dataset x_in = Dataset(x)
     cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(x_in)

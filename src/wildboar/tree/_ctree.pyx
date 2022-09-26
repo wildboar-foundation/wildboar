@@ -33,7 +33,7 @@ from wildboar.distance._distance cimport DistanceMeasure
 
 from wildboar.distance import _DISTANCE_MEASURE
 
-from wildboar.embed._feature cimport Feature, FeatureEngineer
+from wildboar.transform._feature cimport Feature, FeatureEngineer
 
 from wildboar.utils.data import check_dataset
 

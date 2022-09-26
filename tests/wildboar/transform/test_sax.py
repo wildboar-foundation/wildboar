@@ -1,4 +1,4 @@
-from wildboar.embed import PAA, SAX
+from wildboar.transform import PAA, SAX
 from wildboar.utils.estimator_checks import check_estimator
 
 

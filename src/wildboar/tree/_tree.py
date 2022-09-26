@@ -24,16 +24,16 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 
 from wildboar.distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
-from wildboar.embed._interval import (
+from wildboar.transform._interval import (
     _SUMMARIZER,
     IntervalFeatureEngineer,
     PyFuncSummarizer,
     RandomFixedIntervalFeatureEngineer,
     RandomIntervalFeatureEngineer,
 )
-from wildboar.embed._pivot import PivotFeatureEngineer
-from wildboar.embed._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
-from wildboar.embed._shapelet import RandomShapeletFeatureEngineer
+from wildboar.transform._pivot import PivotFeatureEngineer
+from wildboar.transform._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
+from wildboar.transform._shapelet import RandomShapeletFeatureEngineer
 from wildboar.tree._ctree import (
     DynamicTreeFeatureEngineer,
     EntropyCriterion,
@@ -1171,7 +1171,7 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
 
             - if list, a list of callables accepting a numpy array returing a float.
             - if str, a predified summarized. See
-              :mod:`wildboar.embed._interval._INTERVALS.keys()` for all supported
+              :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
               summarizers.
 
         class_weight : dict or "balanced", optional
@@ -1285,7 +1285,7 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
 
             - if list, a list of callables accepting a numpy array returing a float.
             - if str, a predified summarized. See
-              :mod:`wildboar.embed._interval._INTERVALS.keys()` for all supported
+              :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
               summarizers.
 
         random_state : int or RandomState

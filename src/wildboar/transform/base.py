@@ -21,19 +21,19 @@ from sklearn.base import TransformerMixin
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ..base import BaseEstimator
-from ._embed_fast import (
-    feature_embedding_fit,
-    feature_embedding_fit_transform,
-    feature_embedding_transform,
+from ._cfeature_transform import (
+    feature_transform_fit,
+    feature_transform_fit_transform,
+    feature_transform_transform,
 )
 
 __all__ = [
-    "BaseEmbedding",
+    "BaseFeatureEngineerTransform",
 ]
 
 
-class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
-    """Base embedding
+class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
+    """Base feature engineer transform
 
     Attributes
     ----------
@@ -55,7 +55,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
         self.random_state = random_state
 
     def fit(self, x, y=None):
-        """Fit the embedding.
+        """Fit the transform.
 
         Parameters
         ----------
@@ -68,10 +68,10 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Returns
         -------
-        embedding : self
+        self : self
         """
         x = self._validate_data(x, allow_multivariate=True, dtype=np.double)
-        self.embedding_ = feature_embedding_fit(
+        self.embedding_ = feature_transform_fit(
             self._get_feature_engineer(), x, check_random_state(self.random_state)
         )
         return self
@@ -87,14 +87,14 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
 
         Returns
         -------
-        x_embedding : ndarray of shape [n_samples, n_outputs]
-            The embedding.
+        x_transform : ndarray of shape [n_samples, n_outputs]
+            The transformation.
         """
         check_is_fitted(self, attributes="embedding_")
         x = self._validate_data(
             x, reset=False, allow_multivariate=True, dtype=np.double
         )
-        return feature_embedding_transform(self.embedding_, x, self.n_jobs)
+        return feature_transform_transform(self.embedding_, x, self.n_jobs)
 
     def fit_transform(self, x, y=None):
         """Fit the embedding and return the transform of x.
@@ -114,7 +114,7 @@ class BaseEmbedding(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
             The embedding.
         """
         x = self._validate_data(x, allow_multivariate=True, dtype=np.double)
-        embedding, x_out = feature_embedding_fit_transform(
+        embedding, x_out = feature_transform_fit_transform(
             self._get_feature_engineer(),
             x,
             check_random_state(self.random_state),

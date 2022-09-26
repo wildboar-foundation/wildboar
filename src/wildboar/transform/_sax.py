@@ -4,7 +4,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 
 from wildboar.utils.validation import check_array
 
-from . import IntervalEmbedding
+from . import IntervalTransform
 
 
 class SAX(TransformerMixin, BaseEstimator):
@@ -18,7 +18,7 @@ class SAX(TransformerMixin, BaseEstimator):
             The input data.
 
         n_intervals : str, optional
-            The number of intervals to use for the embedding.
+            The number of intervals to use for the transform.
 
             - if "log", the number of intervals is ``log2(n_timestep)``.
             - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
@@ -94,7 +94,7 @@ def symbolic_aggregate_approximation(x, *, n_intervals="sqrt", window=None, n_bi
         The input data.
 
     n_intervals : str, optional
-        The number of intervals to use for the embedding.
+        The number of intervals to use for the transform.
 
         - if "log", the number of intervals is ``log2(n_timestep)``.
         - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
@@ -136,7 +136,7 @@ def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
         The input data.
 
     n_intervals : str, optional
-        The number of intervals to use for the embedding.
+        The number of intervals to use for the transform.
 
         - if "log", the number of intervals is ``log2(n_timestep)``.
         - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
@@ -159,6 +159,6 @@ def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
             raise ValueError("invalid window size, got %d" % window)
         n_intervals = x.shape[-1] // window
     x = check_array(x, dtype=float)
-    return IntervalEmbedding(n_intervals=n_intervals, summarizer="mean").fit_transform(
+    return IntervalTransform(n_intervals=n_intervals, summarizer="mean").fit_transform(
         x
     )

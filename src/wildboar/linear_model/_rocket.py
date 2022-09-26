@@ -15,11 +15,11 @@
 #
 # Authors: Isak Samsten
 
-from ..embed import RocketEmbedding
-from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
+from ..transform import RocketTransform
+from ._transform import TransformRidgeClassifierCV, TransformRidgeCV
 
 
-class RocketClassifier(EmbeddingRidgeClassifierCV):
+class RocketClassifier(TransformRidgeClassifierCV):
     """Implements the ROCKET classifier"""
 
     def __init__(
@@ -59,8 +59,8 @@ class RocketClassifier(EmbeddingRidgeClassifierCV):
         self.kernel_size = kernel_size
         self.n_kernels = n_kernels
 
-    def _get_embedding(self, random_state):
-        return RocketEmbedding(
+    def _get_transform(self, random_state):
+        return RocketTransform(
             self.n_kernels,
             kernel_size=self.kernel_size,
             sampling=self.sampling,
@@ -73,7 +73,7 @@ class RocketClassifier(EmbeddingRidgeClassifierCV):
         )
 
 
-class RocketRegressor(EmbeddingRidgeCV):
+class RocketRegressor(TransformRidgeCV):
     """Implements the ROCKET regressor"""
 
     def __init__(
@@ -101,7 +101,7 @@ class RocketRegressor(EmbeddingRidgeCV):
         )
         self.n_kernels = n_kernels
 
-    def _get_embedding(self, random_state):
-        return RocketEmbedding(
+    def _get_transform(self, random_state):
+        return RocketTransform(
             self.n_kernels, random_state=random_state, n_jobs=self.n_jobs
         )

@@ -7,7 +7,7 @@ Examples
 
    examples/annotate
    examples/distance
-   examples/embeddings
+   examples/transform
    examples/explainability
    examples/supervised
    examples/unsupervised

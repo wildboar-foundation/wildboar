@@ -14,11 +14,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 # Authors: Isak Samsten
-from ..embed import RandomShapeletEmbedding
-from ._embed import EmbeddingRidgeClassifierCV, EmbeddingRidgeCV
+from ..transform import RandomShapeletTransform
+from ._transform import TransformRidgeClassifierCV, TransformRidgeCV
 
 
-class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
+class RandomShapeletClassifier(TransformRidgeClassifierCV):
     """A classifier that uses random shapelets."""
 
     def __init__(
@@ -54,8 +54,8 @@ class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
-    def _get_embedding(self, random_state):
-        return RandomShapeletEmbedding(
+    def _get_transform(self, random_state):
+        return RandomShapeletTransform(
             self.n_shapelets,
             metric=self.metric,
             metric_params=self.metric_params,
@@ -66,7 +66,7 @@ class RandomShapeletClassifier(EmbeddingRidgeClassifierCV):
         )
 
 
-class RandomShapeletRegressor(EmbeddingRidgeCV):
+class RandomShapeletRegressor(TransformRidgeCV):
     """A regressor that uses random shapelets."""
 
     def __init__(
@@ -102,8 +102,8 @@ class RandomShapeletRegressor(EmbeddingRidgeCV):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
-    def _get_embedding(self, random_state):
-        return RandomShapeletEmbedding(
+    def _get_transform(self, random_state):
+        return RandomShapeletTransform(
             self.n_shapelets,
             metric=self.metric,
             metric_params=self.metric_params,

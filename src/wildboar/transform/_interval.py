@@ -28,7 +28,7 @@ from ._cinterval import (
     SlopeSummarizer,
     VarianceSummarizer,
 )
-from .base import BaseEmbedding
+from .base import BaseFeatureEngineerTransform
 
 _SUMMARIZER = {
     "auto": MeanVarianceSlopeSummarizer,
@@ -40,7 +40,7 @@ _SUMMARIZER = {
 }
 
 
-class IntervalEmbedding(BaseEmbedding):
+class IntervalTransform(BaseFeatureEngineerTransform):
     """Embed a time series as a collection of features per interval.
 
     Examples
@@ -48,15 +48,15 @@ class IntervalEmbedding(BaseEmbedding):
 
     >>> from wildboar.datasets import load_dataset
     >>> x, y = load_dataset("GunPoint")
-    >>> embedding = IntervalEmbedding(n_intervals=10, summarizer="mean")
-    >>> embedding.fit_transform(x)
+    >>> t = IntervalTransform(n_intervals=10, summarizer="mean")
+    >>> t.fit_transform(x)
 
-    Each interval (15 timepoints) are embedded as its mean.
+    Each interval (15 timepoints) are transformed to their mean.
 
-    >>> embedding = IntervalEmbedding(n_intervals="sqrt", summarizer=[np.mean, np.std])
-    >>> embedding.fit_transform(x)
+    >>> t = IntervalTransform(n_intervals="sqrt", summarizer=[np.mean, np.std])
+    >>> t.fit_transform(x)
 
-    Each interval (150 // 12 timepoints) are embedded as two features. The mean
+    Each interval (150 // 12 timepoints) are transformed to two features. The mean
     and the standard deviation.
 
     """
@@ -77,7 +77,7 @@ class IntervalEmbedding(BaseEmbedding):
         Parameters
         ----------
         n_intervals : str, int or float, optional
-            The number of intervals to use for the embedding.
+            The number of intervals to use for the transform.
 
             - if "log", the number of intervals is ``log2(n_timestep)``.
             - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
@@ -187,8 +187,8 @@ class IntervalEmbedding(BaseEmbedding):
             raise ValueError("intervals (%r) is unsupported." % self.intervals)
 
 
-class FeatureEmbedding(IntervalEmbedding):
-    """Embed a time series as a number of features"""
+class FeatureTransform(IntervalTransform):
+    """Transform a time series as a number of features"""
 
     def __init__(
         self,
@@ -219,6 +219,6 @@ class FeatureEmbedding(IntervalEmbedding):
             catch22: Canonical time-series characteristics.
             Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.
         """
-        super(FeatureEmbedding).__init__(
+        super(FeatureTransform).__init__(
             self, n_intervals=1, summarizer=summarizer, n_jobs=n_jobs
         )
