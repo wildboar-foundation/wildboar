@@ -713,7 +713,7 @@ class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
         criterion="entropy",
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
         bias_prob=1.0,
@@ -793,7 +793,7 @@ class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
         criterion="mse",
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
         bias_prob=1.0,
@@ -905,7 +905,7 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
         min_sample_leaf=1,
         min_impurity_decrease=0.0,
         criterion="entropy",
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
         bias_prob=1.0,
@@ -1021,7 +1021,7 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
         sample_size=0.5,
         min_size=0.0,
         max_size=1.0,
-        summarizer="auto",
+        summarizer="mean_var_slope",
         random_state=None,
     ):
         super().__init__(
@@ -1114,7 +1114,7 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
         sample_size=0.5,
         min_size=0.0,
         max_size=1.0,
-        summarizer="auto",
+        summarizer="mean_var_slope",
         class_weight=None,
         random_state=None,
     ):
@@ -1229,7 +1229,7 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
         sample_size=0.5,
         min_size=0.0,
         max_size=1.0,
-        summarizer="auto",
+        summarizer="mean_var_slope",
         random_state=None,
     ):
         """

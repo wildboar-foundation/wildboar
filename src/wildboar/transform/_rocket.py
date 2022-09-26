@@ -25,7 +25,6 @@ from ._rocket_fast import (
 from .base import BaseFeatureEngineerTransform
 
 _SAMPLING_METHOD = {
-    "auto": NormalWeightSampler,
     "normal": NormalWeightSampler,
     "uniform": UniformWeightSampler,
     "shapelet": ShapeletWeightSampler,
@@ -52,7 +51,7 @@ class RocketTransform(BaseFeatureEngineerTransform):
         self,
         n_kernels=1000,
         *,
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
         bias_prob=1.0,

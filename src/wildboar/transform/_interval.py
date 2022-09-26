@@ -31,7 +31,6 @@ from ._cinterval import (
 from .base import BaseFeatureEngineerTransform
 
 _SUMMARIZER = {
-    "auto": MeanVarianceSlopeSummarizer,
     "mean_var_slope": MeanVarianceSlopeSummarizer,
     "mean": MeanSummarizer,
     "variance": VarianceSummarizer,
@@ -69,7 +68,7 @@ class IntervalTransform(BaseFeatureEngineerTransform):
         sample_size=0.5,
         min_size=0.0,
         max_size=1.0,
-        summarizer="auto",
+        summarizer="mean_var_slope",
         n_jobs=None,
         random_state=None,
     ):

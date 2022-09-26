@@ -27,7 +27,7 @@ class RocketClassifier(TransformRidgeClassifierCV):
         n_kernels=10000,
         *,
         kernel_size=None,
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         bias_prob=1.0,
         normalize_prob=1.0,
