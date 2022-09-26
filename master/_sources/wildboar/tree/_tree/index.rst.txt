@@ -145,7 +145,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', random_state=None)
+.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
    Bases: :py:obj:`ShapeletTreeRegressor`
 
@@ -169,6 +169,10 @@ Attributes
    :param min_samples_leaf: The minimum number of samples in a leaf
    :type min_samples_leaf: int, optional
    :param criterion: The criterion used to evaluate the utility of a split
+
+                     .. deprecated:: 1.0
+                         Criterion "mse" was deprecated in v1.1 and will be removed in
+                         version 1.2. Use `criterion="squared_error"` which is equivalent.
    :type criterion: {"mse"}, optional
    :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
                                  equal to this value
@@ -275,7 +279,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
+.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
@@ -307,7 +311,11 @@ Attributes
                                  equal to this value.
    :type min_impurity_decrease: float, optional
    :param criterion: The criterion used to evaluate the utility of a split.
-   :type criterion: {"mse"}, optional
+
+                     .. deprecated:: 1.0
+                         Criterion "mse" was deprecated in v1.1 and will be removed in
+                         version 1.2. Use `criterion="squared_error"` which is equivalent.
+   :type criterion: {"squared_error"}, optional
    :param intervals:
                      - if "fixed", `n_intervals` non-overlapping intervals.
                      - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
@@ -454,7 +462,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, random_state=None)
+.. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, random_state=None)
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
@@ -610,7 +618,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='mse', random_state=None)
+.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 
@@ -631,7 +639,11 @@ Attributes
    :param min_samples_leaf: The minimum number of samples in a leaf
    :type min_samples_leaf: int, optional
    :param criterion: The criterion used to evaluate the utility of a split
-   :type criterion: {"mse"}, optional
+
+                     .. deprecated:: 1.0
+                         Criterion "mse" was deprecated in v1.1 and will be removed in
+                         version 1.2. Use `criterion="squared_error"` which is equivalent.
+   :type criterion: {"squared_error"}, optional
    :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
                                  equal to this value
    :type min_impurity_decrease: float, optional
