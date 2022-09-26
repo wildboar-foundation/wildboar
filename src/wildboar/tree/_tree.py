@@ -208,10 +208,20 @@ class BaseShapeletTree(BaseFeatureTree):
         if self.max_shapelet_size > 1:
             raise ValueError("max_shapelet_size %d > 1" % self.max_shapelet_size)
 
-        max_shapelet_size = int(n_timestep * self.max_shapelet_size)
-        min_shapelet_size = int(n_timestep * self.min_shapelet_size)
+        max_shapelet_size = int(self.n_timesteps_in_ * self.max_shapelet_size)
+        min_shapelet_size = int(self.n_timesteps_in_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
-            min_shapelet_size = 2
+            # NOTE: To ensure that the same random_seed generates the same shapelets
+            # in future versions we keep the limit of 2 timesteps for a shapelet as long
+            # as the time series is at least 2 timesteps. Otherwise we fall back to 1
+            # timestep.
+            #
+            # TODO(1.2): consider breaking backwards compatibility and always limit to
+            #            1 timestep.
+            if self.n_timesteps_in_ < 2:
+                min_shapelet_size = 1
+            else:
+                min_shapelet_size = 2
 
         distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(self.metric, None)
         if distance_measure is None:
