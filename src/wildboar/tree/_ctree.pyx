@@ -687,8 +687,8 @@ cdef class Tree:
     def predict(self, object X):
         cdef np.ndarray apply = self.apply(X)
         cdef np.ndarray predict = np.take(self.value, apply, axis=0, mode="clip")
-        if self._n_labels == 1:
-            predict = predict.reshape(X.shape[0])
+        #if self._n_labels == 1:
+        #    predict = predict.reshape(X.shape[0])
         return predict
 
     def apply(self, object X):

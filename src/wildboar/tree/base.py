@@ -137,7 +137,7 @@ class TreeRegressorMixin(RegressorMixin):
         """
         check_is_fitted(self, ["tree_"])
         x = self._validate_x_predict(x, check_input)
-        return self.tree_.predict(x)
+        return self.tree_.predict(x).reshape(-1)
 
 
 class TreeClassifierMixin(ClassifierMixin):
@@ -179,8 +179,8 @@ class TreeClassifierMixin(ClassifierMixin):
             class_weight = None
 
         self.classes_, y = np.unique(y, return_inverse=True)
-        if len(self.classes_) < 2:
-            raise ValueError("Classifier can't train when only one class is present.")
+        # if len(self.classes_) < 2:
+        #     raise ValueError("Classifier can't train when only one class is present.")
 
         if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
             x = np.reshape(x, [x.shape[0], self.force_dim, -1])
@@ -231,9 +231,8 @@ class TreeClassifierMixin(ClassifierMixin):
             The predicted classes.
         """
         check_is_fitted(self, ["tree_"])
-        return self.classes_[
-            np.argmax(self.predict_proba(x, check_input=check_input), axis=1)
-        ]
+        proba = self.predict_proba(x, check_input=check_input)
+        return self.classes_.take(np.argmax(proba, axis=1), axis=0)
 
     def predict_proba(self, x, check_input=True):
         """Predict class probabilities of the input samples X.  The predicted
