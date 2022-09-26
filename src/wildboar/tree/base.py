@@ -98,17 +98,6 @@ class TreeRegressorMixin(RegressorMixin):
         if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
             X = np.reshape(X, [n_samples, self.force_dim, -1])
 
-        n_timesteps = X.shape[-1]
-
-        if X.ndim > 2:
-            n_dims = X.shape[1]
-        else:
-            n_dims = 1
-
-        self.n_features_in_ = n_timesteps
-
-        self.n_timestep_ = n_timesteps
-        self.n_dims_ = n_dims
         random_state = check_random_state(self.random_state)
 
         if sample_weight is not None:
@@ -185,17 +174,7 @@ class TreeClassifierMixin(ClassifierMixin):
         if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
             x = np.reshape(x, [x.shape[0], self.force_dim, -1])
 
-        n_timesteps = x.shape[-1]
-        self.n_features_in_ = n_timesteps  # for sklearn compat
-
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
         self.n_classes_ = len(self.classes_)
-        self.n_timestep_ = n_timesteps
-        self.n_dims_ = n_dims
         random_state = check_random_state(
             self.random_state if hasattr(self, "random_state") else None
         )
