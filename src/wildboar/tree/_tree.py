@@ -48,7 +48,7 @@ from ..utils.data import check_dataset
 from .base import BaseTree, TreeClassifierMixin, TreeRegressorMixin
 
 CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}
-REG_CRITERION = {"mse": MSECriterion}
+REG_CRITERION = {"mse": MSECriterion, "square_error": MSECriterion}
 
 
 class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
@@ -116,6 +116,13 @@ class FeatureTreeRegressorMixin(TreeRegressorMixin):
         if self.criterion not in REG_CRITERION:
             raise ValueError("criterion (%s) is not supported" % self.criterion)
 
+        if self.criterion == "mse":
+            warnings.warn(
+                "Criterion 'mse' was deprecated in v1.1 and will be "
+                "removed in version 1.2. Use `criterion='squared_error'` "
+                "which is equivalent.",
+                FutureWarning,
+            )
         criterion = REG_CRITERION[self.criterion](y)
         tree = Tree(feature_engineer, 1)
         return TreeBuilder(
@@ -261,7 +268,7 @@ class ShapeletTreeRegressor(
         alpha=None,
         metric="euclidean",
         metric_params=None,
-        criterion="mse",
+        criterion="squared_error",
         random_state=None,
     ):
         """
@@ -278,8 +285,12 @@ class ShapeletTreeRegressor(
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf
 
-        criterion : {"mse"}, optional
+        criterion : {"squared_error"}, optional
             The criterion used to evaluate the utility of a split
+
+            .. deprecated:: 1.0
+                Criterion "mse" was deprecated in v1.1 and will be removed in
+                version 1.2. Use `criterion="squared_error"` which is equivalent.
 
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
@@ -375,7 +386,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
-        criterion="mse",
+        criterion="squared_error",
         random_state=None,
     ):
         """
@@ -394,6 +405,10 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
 
         criterion : {"mse"}, optional
             The criterion used to evaluate the utility of a split
+
+            .. deprecated:: 1.0
+                Criterion "mse" was deprecated in v1.1 and will be removed in
+                version 1.2. Use `criterion="squared_error"` which is equivalent.
 
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
@@ -441,6 +456,14 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     ):
         if self.criterion not in REG_CRITERION:
             raise ValueError("criterion (%s) is not supported" % self.criterion)
+
+        if self.criterion == "mse":
+            warnings.warn(
+                "Criterion 'mse' was deprecated in v1.1 and will be "
+                "removed in version 1.2. Use `criterion='squared_error'` "
+                "which is equivalent.",
+                FutureWarning,
+            )
 
         criterion = REG_CRITERION[self.criterion](y)
         tree = Tree(feature_engineer, 1)
@@ -791,7 +814,7 @@ class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        criterion="mse",
+        criterion="squared_error",
         sampling="normal",
         sampling_params=None,
         kernel_size=None,
@@ -1223,7 +1246,7 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        criterion="mse",
+        criterion="squared_error",
         intervals="fixed",
         sample_size=0.5,
         min_size=0.0,
@@ -1259,8 +1282,12 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value.
 
-        criterion : {"mse"}, optional
+        criterion : {"squared_error"}, optional
             The criterion used to evaluate the utility of a split.
+
+            .. deprecated:: 1.0
+                Criterion "mse" was deprecated in v1.1 and will be removed in
+                version 1.2. Use `criterion="squared_error"` which is equivalent.
 
         intervals : {"fixed", "sample", "random"}, optional
 
