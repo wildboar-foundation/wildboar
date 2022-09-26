@@ -201,7 +201,7 @@ class BaseShapeletTree(BaseFeatureTree):
         self.metric = metric
         self.metric_params = metric_params
 
-    def _get_feature_engineer(self, n_samples, n_timestep):
+    def _get_feature_engineer(self, n_samples):
         if (
             self.min_shapelet_size < 0
             or self.min_shapelet_size > self.max_shapelet_size
@@ -773,7 +773,10 @@ class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
             max_size = int(self.n_timesteps_in_ * max_size)
             min_size = int(self.n_timesteps_in_ * min_size)
             if min_size < 2:
-                min_size = 2
+                if self.n_timesteps_in_ < 2:
+                    min_size = 1
+                else:
+                    min_size = 2
             kernel_size = np.arange(min_size, max_size)
         else:
             kernel_size = self.kernel_size
@@ -1103,7 +1106,10 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
             min_size = int(self.min_size * self.n_timesteps_in_)
             max_size = int(self.max_size * self.n_timesteps_in_)
             if min_size < 2:
-                min_size = 2
+                if self.n_timesteps_in_ < 2:
+                    min_size = 1
+                else:
+                    min_size = 2
 
             return RandomIntervalFeatureEngineer(
                 n_intervals, summarizer, min_size, max_size
