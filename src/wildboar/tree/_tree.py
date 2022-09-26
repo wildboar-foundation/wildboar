@@ -55,7 +55,7 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
     """Base class for trees using feature engineering."""
 
     @abstractmethod
-    def _get_feature_engineer(self, n_samples, n_timestep):
+    def _get_feature_engineer(self, n_samples):
         """Get the feature engineer
 
         Returns
@@ -94,7 +94,7 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
             warnings.warn("max_depth exceeds the maximum recursion limit.")
 
         feature_engineer = self._wrap_feature_engineer(
-            self._get_feature_engineer(x.shape[0], x.shape[-1])
+            self._get_feature_engineer(x.shape[0])
         )
         x = check_dataset(x)
         tree_builder = self._get_tree_builder(
@@ -759,7 +759,7 @@ class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
         self.padding_prob = padding_prob
         self.random_state = random_state
 
-    def _get_feature_engineer(self, n_samples, n_timestep):
+    def _get_feature_engineer(self, n_samples):
         if self.kernel_size is None:
             kernel_size = [7, 11, 13]
         elif isinstance(self.kernel_size, tuple) and len(self.kernel_size) == 2:
@@ -770,8 +770,8 @@ class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
                 )
             if max_size > 1:
                 raise ValueError("`max_size` {0} > 1".format(max_size))
-            max_size = int(n_timestep * max_size)
-            min_size = int(n_timestep * min_size)
+            max_size = int(self.n_timesteps_in_ * max_size)
+            min_size = int(self.n_timesteps_in_ * min_size)
             if min_size < 2:
                 min_size = 2
             kernel_size = np.arange(min_size, max_size)
@@ -1060,7 +1060,7 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
         self.summarizer = summarizer
         self.random_state = random_state
 
-    def _get_feature_engineer(self, n_samples, n_timestep):
+    def _get_feature_engineer(self, n_samples):
         if isinstance(self.summarizer, list):
             if not all(hasattr(func, "__call__") for func in self.summarizer):
                 raise ValueError("summarizer (%r) is not supported")
@@ -1071,15 +1071,15 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
                 raise ValueError("summarizer (%r) is not supported." % self.summarizer)
 
         if self.n_intervals == "sqrt":
-            n_intervals = math.ceil(math.sqrt(n_timestep))
+            n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
         elif self.n_intervals == "log":
-            n_intervals = math.ceil(math.log2(n_timestep))
+            n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
         elif isinstance(self.n_intervals, numbers.Integral):
             n_intervals = self.n_intervals
         elif isinstance(self.n_intervals, numbers.Real):
             if not 0.0 < self.n_intervals < 1.0:
                 raise ValueError("n_intervals must be between 0.0 and 1.0")
-            n_intervals = math.floor(self.n_intervals * n_timestep)
+            n_intervals = math.floor(self.n_intervals * self.n_timesteps_in_)
             # TODO: ensure that no interval is smaller than 2
         else:
             raise ValueError("n_intervals (%r) is not supported" % self.n_intervals)
@@ -1100,8 +1100,8 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
             if not self.min_size < self.max_size <= 1.0:
                 raise ValueError("max_size must be between min_size and 1.0")
 
-            min_size = int(self.min_size * self.n_timestep_)
-            max_size = int(self.max_size * self.n_timestep_)
+            min_size = int(self.min_size * self.n_timesteps_in_)
+            max_size = int(self.max_size * self.n_timesteps_in_)
             if min_size < 2:
                 min_size = 2
 
@@ -1358,7 +1358,7 @@ class BasePivotTree(BaseFeatureTree, metaclass=ABCMeta):
         self.metrics = metrics
         self.random_state = random_state
 
-    def _get_feature_engineer(self, n_samples, n_timestep):
+    def _get_feature_engineer(self, n_samples):
         if isinstance(self.n_pivot, str):
             if self.n_pivot == "sqrt":
                 n_pivot = math.ceil(math.sqrt(n_samples))
