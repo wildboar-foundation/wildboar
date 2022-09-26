@@ -53,19 +53,16 @@ class RandomShapeletEmbedding(BaseEmbedding):
             The number of shapelets in the resulting embedding
 
         metric : str, optional
-            The distance metric
+            Distance metric used to identify the best shapelet.
 
-            - if str use optimized implementations of the named distance measure
-            - if callable a function taking two arrays as input
+            See ``distance._SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of
+            supported metrics.
 
-        metric_params: dict, optional
-            Parameters to the metric
+        metric_params : dict, optional
+            Parameters for the distance measure.
 
-            - 'euclidean' and 'scaled_euclidean' take no parameters
-            - 'dtw' and 'scaled_dtw' take a single paramater 'r'. If 'r' <= 1 it
-              is interpreted as a fraction of the time series length. If > 1 it
-              is interpreted as an exact time warping window. Use 'r' == 0 for
-              a widow size of exactly 1.
+            Read more about the parameters in the
+            :ref:`User guide <list_of_subsequence_metrics>`.
 
         min_shapelet_size : float, optional
             Minimum shapelet size.
