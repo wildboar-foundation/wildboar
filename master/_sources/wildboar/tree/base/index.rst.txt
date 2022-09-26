@@ -19,9 +19,9 @@ Classes
 
 
 
-.. py:class:: BaseTree(*, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
+.. py:class:: BaseTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
 
-   Bases: :py:obj:`sklearn.base.BaseEstimator`
+   Bases: :py:obj:`wildboar.base.BaseEstimator`
 
    Base class for tree based estimators.
 

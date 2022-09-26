@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.model_selection" href="../model_selection/index.html" /><link rel="prev" title="wildboar.explain.counterfactual.base" href="../explain/counterfactual/base/index.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.1, furo 2022.09.15"/>
         <title>wildboar.linear_model - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
@@ -321,7 +321,7 @@ is ‘rbf’.</p>
 distance of that sample to the hyperplane.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data matrix for which we want to get the confidence scores.</p>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data matrix for which we want to get the confidence scores.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>scores</strong> – Confidence scores per <cite>(n_samples, n_classes)</cite> combination. In the
@@ -341,10 +341,10 @@ this class would be predicted.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vector, where <cite>n_samples</cite> is the number of samples and
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vector, where <cite>n_samples</cite> is the number of samples and
 <cite>n_features</cite> is the number of features.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target vector relative to X.</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>) </em><em>default=None</em>) – <p>Array of weights that are assigned to individual samples.
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target vector relative to X.</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>) </em><em>default=None</em>) – <p>Array of weights that are assigned to individual samples.
 If not provided, then each sample is given unit weight.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.17: </span><em>sample_weight</em> support to LogisticRegression.</p>
@@ -429,6 +429,11 @@ If not provided, then each sample is given unit weight.</p>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a><ul>
 <li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression.decision_function"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression.decision_function()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression.fit"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression.fit()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression">KernelLogisticRegression</a><ul>
 <li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression.decision_function">decision_function</a></li>
 <li><a class="reference internal" href="#wildboar.linear_model.KernelLogisticRegression.fit">fit</a></li>
@@ -455,6 +460,7 @@ If not provided, then each sample is given unit weight.</p>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>

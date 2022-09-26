@@ -118,7 +118,9 @@ Functions
    >>> from wildboar.datasets import load_two_lead_ecg
    >>> from sklearn.metrics import balanced_accuracy_score
    >>> x, y = load_two_lead_ecg()
-   >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+   >>> x_train, x_test, y_train, y_test = train_test_split(
+   ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+   ... )
    >>> f = IsolationShapeletForest()
    >>> f.fit(x_train)
    >>> scores = f.score_samples(x_train)
@@ -152,6 +154,8 @@ Functions
 
    >>> from wildboar.datasets import load_two_lead_ecg
    >>> x, y = load_two_lead_ecg()
-   >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+   >>> x_train, x_test, y_train, y_test = train_test_split(
+   ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+   ... )
 
 

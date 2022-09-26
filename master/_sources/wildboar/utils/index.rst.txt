@@ -13,6 +13,7 @@ Submodules
    decorators/index.rst
    estimator_checks/index.rst
    plot/index.rst
+   validation/index.rst
 
 
 Package Contents
@@ -33,8 +34,6 @@ Functions
 .. autoapisummary::
 
    wildboar.utils._soft_dependency_error
-   wildboar.utils.check_X_y
-   wildboar.utils.check_array
 
 
 
@@ -49,31 +48,5 @@ Functions
    .. py:method:: __mro_entries__(bases)
 
 
-
-
-.. py:function:: check_X_y(x, y, *, allow_multivariate=False, ensure_min_samples=1, allow_eos=False, allow_nan=False, contiguous=True, dtype=float, y_numeric=False, y_contiguous=True, multi_output=False, estimator=None)
-
-
-.. py:function:: check_array(x, allow_multivariate=False, ensure_1d=False, allow_eos=False, allow_nan=False, contiguous=True, **kwargs)
-
-   Wrapper to check array
-
-   :param x: The array to check
-   :type x: ndarray
-   :param allow_multivariate: If 3d arrays are allowed, by default False
-   :type allow_multivariate: bool, optional
-   :param ensure_1d: Ensure that the array has only one dimension.
-   :type ensure_1d: bool, optional
-   :param allow_eos: If unequal length series are allowed
-   :type allow_eos: bool, optional
-   :param allow_nan: If NaN values are allowed
-   :type allow_nan: bool, optional
-   :param contiguous: Ensure that the array is in c-order.
-   :type contiguous: bool, optional
-   :param kwargs: Additional arguments passed to `sklearn.utils.check_array`
-   :type kwargs: dict
-
-   :returns: The checked array
-   :rtype: ndarray
 
 

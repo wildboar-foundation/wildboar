@@ -1,0 +1,32 @@
+:orphan:
+
+:py:mod:`wildboar.transform._pivot`
+===================================
+
+.. py:module:: wildboar.transform._pivot
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.transform._pivot.PivotTransform
+
+
+
+
+.. py:class:: PivotTransform(n_pivot=1, *, metrics='all', random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+
+   A transform using pivot time series and sampled distance metrics.
+
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
+
+

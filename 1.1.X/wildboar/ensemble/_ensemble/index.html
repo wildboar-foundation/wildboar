@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.1, furo 2022.09.15"/>
         <title>wildboar.ensemble._ensemble - Wildboar 1.1.0rc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
@@ -634,11 +634,11 @@ Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
 regression).</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
 Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
@@ -661,7 +661,7 @@ the highest mean predicted probability. If base estimators do not
 implement a <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> method, then it resorts to voting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -682,7 +682,7 @@ the log of the mean predicted class probabilities of the base
 estimators in the ensemble.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -707,7 +707,7 @@ of an input sample represents the proportion of estimators predicting
 each class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -957,11 +957,11 @@ Learning and Knowledge Discovery in Databases, 346-361, 2012.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
 regression).</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
 Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
@@ -1693,11 +1693,11 @@ function calls.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
 regression).</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
 Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
@@ -2564,11 +2564,11 @@ function calls.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
 regression).</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
 Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
@@ -2679,6 +2679,129 @@ function calls.</p></li>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble._ensemble</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.base_estimator_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.base_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_features_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.n_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_features_in_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.n_features_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.feature_names_in_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.feature_names_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.estimators_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.estimators_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.estimators_samples_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.estimators_samples_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.estimators_features_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.estimators_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.classes_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_classes_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.n_classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.oob_score_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.oob_score_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.oob_decision_function_"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.oob_decision_function_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.fit"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.predict"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.predict()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.predict_log_proba"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.predict_log_proba()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.predict_proba"><code class="docutils literal notranslate"><span class="pre">BaseForestClassifier.predict_proba()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.base_estimator_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.base_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.n_features_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.n_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.n_features_in_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.n_features_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.feature_names_in_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.feature_names_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.estimators_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.estimators_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.estimators_samples_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.estimators_samples_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.estimators_features_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.estimators_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.oob_score_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.oob_score_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.oob_prediction_"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.oob_prediction_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestRegressor.fit"><code class="docutils literal notranslate"><span class="pre">BaseForestRegressor.fit()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestClassifier</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestRegressor"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestRegressor</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ExtraShapeletTreesClassifier"><code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreesClassifier</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ExtraShapeletTreesRegressor"><code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreesRegressor</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ForestMixin"><code class="docutils literal notranslate"><span class="pre">ForestMixin</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ForestMixin.apply"><code class="docutils literal notranslate"><span class="pre">ForestMixin.apply()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ForestMixin.decision_path"><code class="docutils literal notranslate"><span class="pre">ForestMixin.decision_path()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.base_estimator_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.base_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.n_features_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.n_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.n_features_in_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.n_features_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.feature_names_in_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.feature_names_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.estimators_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.estimators_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.estimators_samples_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.estimators_samples_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.estimators_features_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.estimators_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.classes_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.n_classes_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.n_classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.oob_score_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.oob_score_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestClassifier.oob_decision_function_"><code class="docutils literal notranslate"><span class="pre">IntervalForestClassifier.oob_decision_function_</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.base_estimator_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.base_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.n_features_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.n_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.n_features_in_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.n_features_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.feature_names_in_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.feature_names_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.estimators_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.estimators_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.estimators_samples_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.estimators_samples_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.estimators_features_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.estimators_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.oob_score_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.oob_score_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IntervalForestRegressor.oob_prediction_"><code class="docutils literal notranslate"><span class="pre">IntervalForestRegressor.oob_prediction_</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.offset_"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.offset_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.decision_function"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.decision_function()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.fit"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.predict"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.predict()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.score_samples"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.score_samples()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.base_estimator_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.base_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.n_features_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.n_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.n_features_in_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.n_features_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.feature_names_in_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.feature_names_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.estimators_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.estimators_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.estimators_samples_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.estimators_samples_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.estimators_features_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.estimators_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.classes_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.n_classes_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.n_classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.oob_score_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.oob_score_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.PivotForestClassifier.oob_decision_function_"><code class="docutils literal notranslate"><span class="pre">PivotForestClassifier.oob_decision_function_</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ProximityForestClassifier"><code class="docutils literal notranslate"><span class="pre">ProximityForestClassifier</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier"><code class="docutils literal notranslate"><span class="pre">RockestClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.base_estimator_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.base_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.n_features_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.n_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.n_features_in_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.n_features_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.feature_names_in_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.feature_names_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.estimators_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.estimators_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.estimators_samples_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.estimators_samples_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.estimators_features_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.estimators_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.classes_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.n_classes_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.n_classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.oob_score_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.oob_score_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestClassifier.oob_decision_function_"><code class="docutils literal notranslate"><span class="pre">RockestClassifier.oob_decision_function_</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor"><code class="docutils literal notranslate"><span class="pre">RockestRegressor</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.base_estimator_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.base_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.n_features_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.n_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.n_features_in_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.n_features_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.feature_names_in_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.feature_names_in_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.estimators_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.estimators_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.estimators_samples_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.estimators_samples_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.estimators_features_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.estimators_features_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.oob_score_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.oob_score_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.RockestRegressor.oob_prediction_"><code class="docutils literal notranslate"><span class="pre">RockestRegressor.oob_prediction_</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestClassifier"><code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit_transform"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding.fit_transform()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.transform"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding.transform()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestRegressor"><code class="docutils literal notranslate"><span class="pre">ShapeletForestRegressor</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier">BaseForestClassifier</a><ul>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.base_estimator_">base_estimator_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseForestClassifier.n_features_">n_features_</a></li>
@@ -2823,6 +2946,7 @@ function calls.</p></li>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>

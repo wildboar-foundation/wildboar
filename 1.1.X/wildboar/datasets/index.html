@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.datasets.filter" href="filter/index.html" /><link rel="prev" title="wildboar.annotate" href="../annotate/index.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.1, furo 2022.09.15"/>
         <title>wildboar.datasets - Wildboar 1.1.0rc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
@@ -1185,6 +1185,59 @@ directory is reset to the default directory.</p>
 <li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle"><code class="docutils literal notranslate"><span class="pre">Bundle</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle.name"><code class="docutils literal notranslate"><span class="pre">Bundle.name</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle.description"><code class="docutils literal notranslate"><span class="pre">Bundle.description</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle.label_index"><code class="docutils literal notranslate"><span class="pre">Bundle.label_index</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle.get_collection"><code class="docutils literal notranslate"><span class="pre">Bundle.get_collection()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle.get_filename"><code class="docutils literal notranslate"><span class="pre">Bundle.get_filename()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle.list"><code class="docutils literal notranslate"><span class="pre">Bundle.list()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Bundle.load"><code class="docutils literal notranslate"><span class="pre">Bundle.load()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository"><code class="docutils literal notranslate"><span class="pre">JSONRepository</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository.supported_version"><code class="docutils literal notranslate"><span class="pre">JSONRepository.supported_version</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository.download_url"><code class="docutils literal notranslate"><span class="pre">JSONRepository.download_url()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository.get_bundles"><code class="docutils literal notranslate"><span class="pre">JSONRepository.get_bundles()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository.identifier"><code class="docutils literal notranslate"><span class="pre">JSONRepository.identifier()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository.name"><code class="docutils literal notranslate"><span class="pre">JSONRepository.name()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository.version"><code class="docutils literal notranslate"><span class="pre">JSONRepository.version()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.JSONRepository.wildboar_requires"><code class="docutils literal notranslate"><span class="pre">JSONRepository.wildboar_requires()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.datasets.NpBundle"><code class="docutils literal notranslate"><span class="pre">NpBundle</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository"><code class="docutils literal notranslate"><span class="pre">Repository</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.__eq__"><code class="docutils literal notranslate"><span class="pre">Repository.__eq__()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.__hash__"><code class="docutils literal notranslate"><span class="pre">Repository.__hash__()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.active"><code class="docutils literal notranslate"><span class="pre">Repository.active()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.clear_cache"><code class="docutils literal notranslate"><span class="pre">Repository.clear_cache()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.download_url"><code class="docutils literal notranslate"><span class="pre">Repository.download_url()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.get_bundle"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundle()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.get_bundles"><code class="docutils literal notranslate"><span class="pre">Repository.get_bundles()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.identifier"><code class="docutils literal notranslate"><span class="pre">Repository.identifier()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.list_datasets"><code class="docutils literal notranslate"><span class="pre">Repository.list_datasets()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.load_dataset"><code class="docutils literal notranslate"><span class="pre">Repository.load_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.name"><code class="docutils literal notranslate"><span class="pre">Repository.name()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.refresh"><code class="docutils literal notranslate"><span class="pre">Repository.refresh()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.version"><code class="docutils literal notranslate"><span class="pre">Repository.version()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.Repository.wildboar_requires"><code class="docutils literal notranslate"><span class="pre">Repository.wildboar_requires()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.datasets.clear_cache"><code class="docutils literal notranslate"><span class="pre">clear_cache()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.get_bundles"><code class="docutils literal notranslate"><span class="pre">get_bundles()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.get_repository"><code class="docutils literal notranslate"><span class="pre">get_repository()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.install_repository"><code class="docutils literal notranslate"><span class="pre">install_repository()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.list_bundles"><code class="docutils literal notranslate"><span class="pre">list_bundles()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.list_collections"><code class="docutils literal notranslate"><span class="pre">list_collections()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.list_datasets"><code class="docutils literal notranslate"><span class="pre">list_datasets()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.list_repositories"><code class="docutils literal notranslate"><span class="pre">list_repositories()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.load_dataset"><code class="docutils literal notranslate"><span class="pre">load_dataset()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.load_datasets"><code class="docutils literal notranslate"><span class="pre">load_datasets()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.load_gun_point"><code class="docutils literal notranslate"><span class="pre">load_gun_point()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.load_synthetic_control"><code class="docutils literal notranslate"><span class="pre">load_synthetic_control()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.load_two_lead_ecg"><code class="docutils literal notranslate"><span class="pre">load_two_lead_ecg()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.refresh_repositories"><code class="docutils literal notranslate"><span class="pre">refresh_repositories()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.set_cache_dir"><code class="docutils literal notranslate"><span class="pre">set_cache_dir()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.Bundle">Bundle</a><ul>
 <li><a class="reference internal" href="#wildboar.datasets.Bundle.name">name</a></li>
 <li><a class="reference internal" href="#wildboar.datasets.Bundle.description">description</a></li>
@@ -1259,6 +1312,7 @@ directory is reset to the default directory.</p>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>

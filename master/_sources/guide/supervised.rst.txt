@@ -26,7 +26,7 @@ Embedding methods
 
 ``RocketClassifier`` and ``RocketRegressor`` uses a random convolutional embdding
 to represent time series and fit a ridge regression model to the representation. For
-benchmark tasks, this embedding and estimator configuration often give state-of-the-art
+benchmark tasks, this transformation and estimator configuration often give state-of-the-art
 predictive performance.
 
 .. toctree::

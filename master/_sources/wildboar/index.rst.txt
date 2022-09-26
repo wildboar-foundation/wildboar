@@ -13,11 +13,11 @@ Subpackages
    annotate/index.rst
    datasets/index.rst
    distance/index.rst
-   embed/index.rst
    ensemble/index.rst
    explain/index.rst
    linear_model/index.rst
    model_selection/index.rst
+   transform/index.rst
    tree/index.rst
    utils/index.rst
 
@@ -28,6 +28,7 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
+   base/index.rst
    version/index.rst
 
 

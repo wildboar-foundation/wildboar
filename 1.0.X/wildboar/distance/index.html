@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.distance.dtw" href="dtw/index.html" /><link rel="prev" title="wildboar.datasets.outlier" href="../datasets/outlier/index.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.1, furo 2022.09.15"/>
         <title>wildboar.distance - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
@@ -296,8 +296,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>x_timestep</em><em>, </em><em>)</em>) – A 1-dimensional float array</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – </p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>x_timestep</em><em>, </em><em>)</em>) – A 1-dimensional float array</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – </p></li>
 <li><p><strong>dim</strong> (<em>int</em><em>, </em><em>optional</em>) – The time series dimension to search</p></li>
 <li><p><strong>sample</strong> (<em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The samples to compare to</p>
 <ul>
@@ -369,8 +369,8 @@ matches, the first match is returned.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>x_timestep</em><em>, </em><em>)</em>) – A 1-dimensional float array</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – The collection of samples</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>x_timestep</em><em>, </em><em>)</em>) – A 1-dimensional float array</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – The collection of samples</p></li>
 <li><p><strong>threshold</strong> (<em>float</em>) – The maximum threshold to consider a match</p></li>
 <li><p><strong>dim</strong> (<em>int</em><em>, </em><em>optional</em>) – The time series dimension to search</p></li>
 <li><p><strong>sample</strong> (<em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The samples to compare to</p>
@@ -469,6 +469,8 @@ matches, the first match is returned.</p></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#wildboar.distance.distance"><code class="docutils literal notranslate"><span class="pre">distance()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance.matches"><code class="docutils literal notranslate"><span class="pre">matches()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.distance.distance">distance</a></li>
 <li><a class="reference internal" href="#wildboar.distance.matches">matches</a></li>
 </ul>
@@ -492,6 +494,7 @@ matches, the first match is returned.</p></li>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/scripts/furo.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>

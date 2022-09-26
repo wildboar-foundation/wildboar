@@ -54,35 +54,35 @@ Attributes
 
    
 
-.. py:class:: BaseFeatureTree(*, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
+.. py:class:: BaseFeatureTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
 
    Bases: :py:obj:`wildboar.tree.base.BaseTree`
 
    Base class for trees using feature engineering.
 
 
-.. py:class:: BaseIntervalTree(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
+.. py:class:: BaseIntervalTree(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
 
    Bases: :py:obj:`BaseFeatureTree`
 
    Base class for trees using feature engineering.
 
 
-.. py:class:: BasePivotTree(n_pivot='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, metrics='all', force_dim=None, random_state=None)
+.. py:class:: BasePivotTree(n_pivot='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, metrics='all', random_state=None)
 
    Bases: :py:obj:`BaseFeatureTree`
 
    Base class for trees using feature engineering.
 
 
-.. py:class:: BaseRocketTree(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
+.. py:class:: BaseRocketTree(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, random_state=None)
 
    Bases: :py:obj:`BaseFeatureTree`
 
    Base class for trees using feature engineering.
 
 
-.. py:class:: BaseShapeletTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+.. py:class:: BaseShapeletTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, random_state=None)
 
    Bases: :py:obj:`BaseFeatureTree`
 
@@ -92,7 +92,7 @@ Attributes
 .. py:class:: DynamicTreeMixin
 
 
-.. py:class:: ExtraShapeletTreeClassifier(*, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
+.. py:class:: ExtraShapeletTreeClassifier(*, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
    Bases: :py:obj:`ShapeletTreeClassifier`
 
@@ -130,11 +130,6 @@ Attributes
    :type metric: {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
    :param metric_params: Parameters for the distance measure
    :type metric_params: dict, optional
-   :param force_dim: Force the number of dimensions.
-
-                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-                       for interoperability with `sklearn`.
-   :type force_dim: int, optional
    :param class_weight: Weights associated with the labels
 
                         - if dict, weights on the form {label: weight}
@@ -150,7 +145,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
+.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='mse', random_state=None)
 
    Bases: :py:obj:`ShapeletTreeRegressor`
 
@@ -190,11 +185,6 @@ Attributes
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
    :param metric_params: Parameters for the distance measure
    :type metric_params: dict, optional
-   :param force_dim: Force the number of dimensions.
-
-                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-                       for interoperability with `sklearn`.
-   :type force_dim: int, optional
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator;
                         - If `RandomState` instance, `random_state` is the random number generator;
@@ -217,7 +207,7 @@ Attributes
    Mixin for regression trees.
 
 
-.. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, class_weight=None, random_state=None)
+.. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
@@ -267,7 +257,7 @@ Attributes
 
                       - if list, a list of callables accepting a numpy array returing a float.
                       - if str, a predified summarized. See
-                        :mod:`wildboar.embed._interval._INTERVALS.keys()` for all supported
+                        :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
                         summarizers.
    :type summarizer: list or str, optional
    :param class_weight: Weights associated with the labels
@@ -285,7 +275,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
+.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
@@ -335,7 +325,7 @@ Attributes
 
                       - if list, a list of callables accepting a numpy array returing a float.
                       - if str, a predified summarized. See
-                        :mod:`wildboar.embed._interval._INTERVALS.keys()` for all supported
+                        :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
                         summarizers.
    :type summarizer: list or str, optional
    :param random_state:
@@ -346,7 +336,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, force_dim=None, random_state=None)
+.. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
@@ -391,7 +381,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, class_weight=None, random_state=None)
+.. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
@@ -464,7 +454,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
+.. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, random_state=None)
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
@@ -530,7 +520,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
+.. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
 
@@ -605,11 +595,6 @@ Attributes
    :type metric: {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
    :param metric_params: Parameters for the distance measure
    :type metric_params: dict, optional
-   :param force_dim: Force the number of dimensions.
-
-                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-                       for interoperability with `sklearn`.
-   :type force_dim: int, optional
    :param class_weight: Weights associated with the labels
 
                         - if dict, weights on the form {label: weight}
@@ -625,7 +610,7 @@ Attributes
    :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
+.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='mse', random_state=None)
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 
@@ -686,11 +671,6 @@ Attributes
                          Read more about the parameters in the
                          :ref:`User guide <list_of_subsequence_metrics>`.
    :type metric_params: dict, optional
-   :param force_dim: Force the number of dimensions.
-
-                     - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-                       for interoperability with `sklearn`.
-   :type force_dim: int, optional
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator
                         - If `RandomState` instance, `random_state` is the random number generator

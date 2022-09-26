@@ -175,18 +175,6 @@ Classes
 
    Bases: :py:obj:`wildboar.embed.base.BaseEmbedding`
 
-   Base embedding
-
-   .. attribute:: embedding_
-
-      The underlying embedding.
-
-      :type: Embedding
-
-   :param n_jobs: The number of jobs to run in parallel. None means 1 and
-                  -1 means using all processors.
-   :type n_jobs: int, optional
-
 
 .. py:class:: RandomShapeletEmbedding(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
 

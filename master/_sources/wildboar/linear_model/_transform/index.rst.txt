@@ -1,0 +1,86 @@
+:orphan:
+
+:py:mod:`wildboar.linear_model._transform`
+==========================================
+
+.. py:module:: wildboar.linear_model._transform
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.linear_model._transform.BaseTransformEstimator
+   wildboar.linear_model._transform.TransformClassifierMixin
+   wildboar.linear_model._transform.TransformRegressorMixin
+   wildboar.linear_model._transform.TransformRidgeCV
+   wildboar.linear_model._transform.TransformRidgeClassifierCV
+
+
+
+
+.. py:class:: BaseTransformEstimator(*, random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`wildboar.base.BaseEstimator`
+
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+
+
+.. py:class:: TransformClassifierMixin
+
+   .. py:method:: classes_()
+      :property:
+
+
+   .. py:method:: decision_function(x)
+
+
+   .. py:method:: predict(x)
+
+
+   .. py:method:: predict_log_proba(x)
+
+
+   .. py:method:: predict_proba(x)
+
+
+
+.. py:class:: TransformRegressorMixin
+
+   .. py:method:: decision_function(x)
+
+
+   .. py:method:: predict(x)
+
+
+
+.. py:class:: TransformRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`TransformRegressorMixin`, :py:obj:`BaseTransformEstimator`
+
+   Mixin class for all regression estimators in scikit-learn.
+
+
+.. py:class:: TransformRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize='deprecated', scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`TransformClassifierMixin`, :py:obj:`BaseTransformEstimator`
+
+   Mixin class for all classifiers in scikit-learn.
+
+   .. py:method:: predict_proba(x)
+
+
+

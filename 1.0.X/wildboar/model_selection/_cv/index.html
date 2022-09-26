@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.1, furo 2022.09.15"/>
         <title>wildboar.model_selection._cv - Wildboar 1.0.12 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
@@ -420,6 +420,12 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection._cv</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit"><code class="docutils literal notranslate"><span class="pre">RepeatedOutlierSplit</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.__repr__"><code class="docutils literal notranslate"><span class="pre">RepeatedOutlierSplit.__repr__()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.get_n_splits"><code class="docutils literal notranslate"><span class="pre">RepeatedOutlierSplit.get_n_splits()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.split"><code class="docutils literal notranslate"><span class="pre">RepeatedOutlierSplit.split()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit">RepeatedOutlierSplit</a><ul>
 <li><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.__repr__">__repr__</a></li>
 <li><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.get_n_splits">get_n_splits</a></li>
@@ -447,6 +453,7 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>

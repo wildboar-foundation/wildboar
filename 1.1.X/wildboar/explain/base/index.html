@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.linear_model" href="../../linear_model/index.html" /><link rel="prev" title="wildboar.explain.counterfactual.base" href="../counterfactual/base/index.html" />
 
-    <meta name="generator" content="sphinx-5.1.1, furo 2022.09.15"/>
+    <meta name="generator" content="sphinx-5.2.1, furo 2022.09.15"/>
         <title>wildboar.explain.base - Wildboar 1.1.0rc4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
@@ -370,9 +370,9 @@ arguments (no <code class="docutils literal notranslate"><span class="pre">*args
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>estimator</strong> (<em>Estimator</em>) – An estimator</p></li>
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dim</em><em>, </em><em>n_timestep</em><em>) </em><em># noqa: E501</em>) – The samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The labels, by default None</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The sample weights, by default None</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dim</em><em>, </em><em>n_timestep</em><em>) </em><em># noqa: E501</em>) – The samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The labels, by default None</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The sample weights, by default None</p></li>
 </ul>
 </dd>
 </dl>
@@ -444,6 +444,14 @@ arguments (no <code class="docutils literal notranslate"><span class="pre">*args
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.base</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.explain.base.BaseExplanation"><code class="docutils literal notranslate"><span class="pre">BaseExplanation</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.explain.base.BaseExplanation.plot"><code class="docutils literal notranslate"><span class="pre">BaseExplanation.plot()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.explain.base.BaseImportance"><code class="docutils literal notranslate"><span class="pre">BaseImportance</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.explain.base.BaseImportance.fit"><code class="docutils literal notranslate"><span class="pre">BaseImportance.fit()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.explain.base.BaseExplanation">BaseExplanation</a><ul>
 <li><a class="reference internal" href="#wildboar.explain.base.BaseExplanation.plot">plot</a></li>
 </ul>
@@ -473,6 +481,7 @@ arguments (no <code class="docutils literal notranslate"><span class="pre">*args
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     <script src="../../../_static/clipboard.min.js"></script>
     <script src="../../../_static/copybutton.js"></script>
