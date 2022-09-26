@@ -48,7 +48,7 @@ from ..utils.data import check_dataset
 from .base import BaseTree, TreeClassifierMixin, TreeRegressorMixin
 
 CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}
-REG_CRITERION = {"mse": MSECriterion, "square_error": MSECriterion}
+REG_CRITERION = {"mse": MSECriterion, "squared_error": MSECriterion}
 
 
 class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
