@@ -28,13 +28,13 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from pkg_resources import parse_version
 
-import wildboar as wb
-from wildboar import __version__ as wildboar_version
+from .. import __version__ as wildboar_version
+from .. import eos as EOS
 
 try:
     import requests
 except ModuleNotFoundError as e:
-    from wildboar.utils import _soft_dependency_error
+    from ..utils import _soft_dependency_error
 
     _soft_dependency_error(e, context="wildboar.datasets")
 
@@ -889,7 +889,7 @@ class Bundle(metaclass=ABCMeta):
                     else:
                         raise ValueError("invalid rank of dataset")
 
-                    merge = np.full(shape, fill_value=wb.eos, dtype=np.double)
+                    merge = np.full(shape, fill_value=EOS, dtype=np.double)
                     merge[: train.shape[0], ..., : train.shape[-1]] = train
                     merge[train.shape[0] :, ..., : test.shape[-1]] = test
                     data[array] = merge

@@ -3,8 +3,8 @@ import warnings
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
 from sklearn.utils.validation import _check_y
 
-from wildboar import __version__
-from wildboar.utils.validation import _num_timesteps, check_array, check_X_y
+from . import __version__
+from .utils.validation import _num_timesteps, check_array, check_X_y
 
 __all__ = ["BaseEstimator"]
 

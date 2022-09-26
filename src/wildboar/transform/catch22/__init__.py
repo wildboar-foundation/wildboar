@@ -18,9 +18,8 @@
 # Authors: Isak Samsten
 from functools import partial
 
-from wildboar.utils.decorators import array_or_scalar
-from wildboar.utils.validation import check_array
-
+from ...utils.decorators import array_or_scalar
+from ...utils.validation import check_array
 from . import _catch22
 
 __all__ = ["histogram_mode", "histogram_mode5", "histogram_mode10"]

@@ -26,10 +26,10 @@ from sklearn.metrics.pairwise import (
 )
 from sklearn.utils.validation import check_is_fitted
 
-from wildboar.distance import pairwise_subsequence_distance
-from wildboar.ensemble._ensemble import BaseShapeletForestClassifier
-from wildboar.explain.counterfactual.base import BaseCounterfactual
-from wildboar.utils.validation import check_array
+from ...distance import pairwise_subsequence_distance
+from ...ensemble._ensemble import BaseShapeletForestClassifier
+from ...explain.counterfactual.base import BaseCounterfactual
+from ...utils.validation import check_array
 
 MIN_MATCHING_DISTANCE = 0.0001
 

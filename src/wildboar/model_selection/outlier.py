@@ -22,7 +22,7 @@ from sklearn import model_selection
 from sklearn.utils import check_random_state
 from sklearn.utils._random import sample_without_replacement
 
-from wildboar.model_selection._cv import RepeatedOutlierSplit
+from ..model_selection._cv import RepeatedOutlierSplit
 
 __all__ = [
     "train_test_split",
@@ -75,7 +75,9 @@ def train_test_split(
 
     >>> from wildboar.datasets import load_two_lead_ecg
     >>> x, y = load_two_lead_ecg()
-    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+    >>> x_train, x_test, y_train, y_test = train_test_split(
+    ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+    ... )
     """
     random_state = check_random_state(random_state)
     normal = y == normal_class
@@ -145,7 +147,9 @@ def threshold_score(y_true, score, score_f):
     >>> from wildboar.datasets import load_two_lead_ecg
     >>> from sklearn.metrics import balanced_accuracy_score
     >>> x, y = load_two_lead_ecg()
-    >>> x_train, x_test, y_train, y_test = train_test_split(x, y, 1, test_size=0.2, anomalies_train_size=0.05)
+    >>> x_train, x_test, y_train, y_test = train_test_split(
+    ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+    ... )
     >>> f = IsolationShapeletForest()
     >>> f.fit(x_train)
     >>> scores = f.score_samples(x_train)

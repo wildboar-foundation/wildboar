@@ -27,8 +27,8 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.validation import check_is_fitted
 
-from wildboar.model_selection.outlier import threshold_score
-from wildboar.tree import (
+from ..model_selection.outlier import threshold_score
+from ..tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
     IntervalTreeClassifier,
@@ -38,8 +38,8 @@ from wildboar.tree import (
     ShapeletTreeClassifier,
     ShapeletTreeRegressor,
 )
-from wildboar.tree._tree import RocketTreeClassifier, RocketTreeRegressor
-from wildboar.utils.validation import check_array
+from ..tree._tree import RocketTreeClassifier, RocketTreeRegressor
+from ..utils.validation import check_array
 
 
 class ForestMixin:

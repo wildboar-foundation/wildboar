@@ -14,7 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 import numpy as np
 
-from wildboar.utils.validation import check_array
+from ..utils.validation import check_array
 
 try:
     import matplotlib.pylab as plt
@@ -23,7 +23,7 @@ try:
     from matplotlib.colors import Normalize
     from matplotlib.lines import Line2D
 except ModuleNotFoundError as e:
-    from wildboar.utils import DependencyMissing
+    from ..utils import DependencyMissing
 
     matplotlib_missing = DependencyMissing(e, package="matplotlib")
     plt = matplotlib_missing

@@ -24,9 +24,9 @@ import numpy as np
 from libc.math cimport INFINITY, NAN, sqrt
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils._fft cimport _pocketfft
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.stats cimport (
+from ..utils._fft cimport _pocketfft
+from ..utils.data cimport Dataset
+from ..utils.stats cimport (
     IncStats,
     cumulative_mean_std,
     find_min,
@@ -35,7 +35,6 @@ from wildboar.utils.stats cimport (
     inc_stats_remove,
     inc_stats_variance,
 )
-
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,

@@ -36,9 +36,8 @@ from libc.math cimport INFINITY, exp, floor, sqrt
 from libc.stdlib cimport free, labs, malloc
 from libc.string cimport memcpy
 
-from wildboar.utils cimport stats
-from wildboar.utils.data cimport Dataset
-
+from ..utils cimport stats
+from ..utils.data cimport Dataset
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,

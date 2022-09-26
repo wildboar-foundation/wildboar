@@ -27,13 +27,12 @@ from libc.math cimport INFINITY, NAN, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
-from wildboar.distance._distance cimport DistanceMeasure
+from ..distance._distance cimport DistanceMeasure
 
-from wildboar.utils.data import check_dataset
-
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.misc cimport CList, argsort, safe_realloc
-from wildboar.utils.rand cimport (
+from ..utils.data import check_dataset
+from ..utils.data cimport Dataset
+from ..utils.misc cimport CList, argsort, safe_realloc
+from ..utils.rand cimport (
     RAND_R_MAX,
     VoseRand,
     rand_int,

@@ -19,7 +19,7 @@
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils.data cimport Dataset
+from ..utils.data cimport Dataset
 
 
 cdef class FeatureEngineer:

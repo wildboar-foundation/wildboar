@@ -21,8 +21,7 @@ from sklearn.metrics.pairwise import paired_distances
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.utils.validation import check_is_fitted
 
-from wildboar.ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
-
+from ...ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
 from ._nn import KNeighborsCounterfactual
 from ._proto import PrototypeCounterfactual
 from ._sf import ShapeletForestCounterfactual

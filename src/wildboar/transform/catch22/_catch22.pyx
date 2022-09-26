@@ -26,12 +26,11 @@ from libc.math cimport INFINITY, ceil, exp, fabs, floor, pow, sqrt
 from libc.stdlib cimport free, malloc, qsort
 from libc.string cimport memcpy, memset
 
-from wildboar.utils cimport stats
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.parallel cimport MapSample
+from ...utils cimport stats
+from ...utils.data cimport Dataset
+from ...utils.parallel cimport MapSample
 
-from wildboar.utils.data import check_dataset
-from wildboar.utils.parallel import run_in_parallel
+from ...utils.data import check_dataset
 
 
 cdef extern from "catch22.h":

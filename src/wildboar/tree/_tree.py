@@ -23,18 +23,18 @@ from abc import ABCMeta, abstractmethod
 
 import numpy as np
 
-from wildboar.distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
-from wildboar.transform._interval import (
+from ..distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
+from ..transform._interval import (
     _SUMMARIZER,
     IntervalFeatureEngineer,
     PyFuncSummarizer,
     RandomFixedIntervalFeatureEngineer,
     RandomIntervalFeatureEngineer,
 )
-from wildboar.transform._pivot import PivotFeatureEngineer
-from wildboar.transform._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
-from wildboar.transform._shapelet import RandomShapeletFeatureEngineer
-from wildboar.tree._ctree import (
+from ..transform._pivot import PivotFeatureEngineer
+from ..transform._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
+from ..transform._shapelet import RandomShapeletFeatureEngineer
+from ..tree._ctree import (
     DynamicTreeFeatureEngineer,
     EntropyCriterion,
     ExtraTreeBuilder,
@@ -44,8 +44,7 @@ from wildboar.tree._ctree import (
     TreeBuilder,
     TreeFeatureEngineer,
 )
-from wildboar.utils.data import check_dataset
-
+from ..utils.data import check_dataset
 from .base import BaseTree, TreeClassifierMixin, TreeRegressorMixin
 
 CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}

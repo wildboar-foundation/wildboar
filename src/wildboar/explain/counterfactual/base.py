@@ -17,7 +17,7 @@
 
 import abc
 
-from wildboar.explain.base import BaseExplanation
+from ...explain.base import BaseExplanation
 
 __all__ = ["BaseCounterfactual"]
 

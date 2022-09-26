@@ -18,9 +18,9 @@ import warnings
 
 import numpy as np
 
-from wildboar.distance import matrix_profile
-from wildboar.utils.decorators import array_or_scalar
-from wildboar.utils.validation import check_array
+from ..distance import matrix_profile
+from ..utils.decorators import array_or_scalar
+from ..utils.validation import check_array
 
 
 @array_or_scalar()

@@ -19,8 +19,7 @@ import re
 
 import numpy as np
 
-from wildboar.utils import os_cache_path
-
+from ..utils import os_cache_path
 from ._repository import (
     Bundle,
     JSONRepository,
@@ -729,7 +728,7 @@ _REPOSITORIES = RepositoryCollection()
 def _get_dataset_version():
     from pkg_resources import parse_version
 
-    from wildboar import __version__
+    from .. import __version__
 
     v = parse_version(__version__)
     if v.is_prerelease:

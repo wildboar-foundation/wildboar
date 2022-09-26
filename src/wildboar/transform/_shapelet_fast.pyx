@@ -20,14 +20,13 @@
 
 from libc.stdlib cimport free, malloc
 
-from wildboar.distance._distance cimport (
+from ..distance._distance cimport (
     Subsequence,
     SubsequenceDistanceMeasure,
     SubsequenceView,
 )
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.rand cimport RAND_R_MAX, rand_int
-
+from ..utils.data cimport Dataset
+from ..utils.rand cimport RAND_R_MAX, rand_int
 from ._feature cimport Feature, FeatureEngineer
 
 

@@ -23,11 +23,10 @@ import numpy as np
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils cimport stats
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.misc cimport to_ndarray_double
-from wildboar.utils.rand cimport RAND_R_MAX, rand_int, shuffle
-
+from ..utils cimport stats
+from ..utils.data cimport Dataset
+from ..utils.misc cimport to_ndarray_double
+from ..utils.rand cimport RAND_R_MAX, rand_int, shuffle
 from ._feature cimport Feature, FeatureEngineer
 from .catch22 cimport _catch22
 

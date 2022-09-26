@@ -19,8 +19,8 @@ import warnings
 
 import numpy as np
 
-from wildboar.distance import _DISTANCE_MEASURE
-from wildboar.tree._cptree import (
+from ..distance import _DISTANCE_MEASURE
+from ..tree._cptree import (
     EntropyCriterion,
     GiniCriterion,
     LabelPivotSampler,
@@ -30,8 +30,8 @@ from wildboar.tree._cptree import (
     UniformPivotSampler,
     WeightedDistanceMeasureSampler,
 )
-from wildboar.tree.base import BaseTree, TreeClassifierMixin
-from wildboar.utils.data import check_dataset
+from ..tree.base import BaseTree, TreeClassifierMixin
+from ..utils.data import check_dataset
 
 _CLF_CRITERION = {
     "gini": GiniCriterion,

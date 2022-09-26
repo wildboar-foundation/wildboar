@@ -29,17 +29,15 @@ from libc.string cimport memcpy, memset
 
 from scipy.sparse import csr_matrix
 
-from wildboar.distance._distance cimport DistanceMeasure
+from ..distance._distance cimport DistanceMeasure
+from ..distance import _DISTANCE_MEASURE
 
-from wildboar.distance import _DISTANCE_MEASURE
+from ..transform._feature cimport Feature, FeatureEngineer
 
-from wildboar.transform._feature cimport Feature, FeatureEngineer
-
-from wildboar.utils.data import check_dataset
-
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.misc cimport CList, argsort, safe_realloc
-from wildboar.utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
+from ..utils.data import check_dataset
+from ..utils.data cimport Dataset
+from ..utils.misc cimport CList, argsort, safe_realloc
+from ..utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
 cdef double FEATURE_THRESHOLD = 1e-7

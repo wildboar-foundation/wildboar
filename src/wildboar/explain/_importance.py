@@ -26,8 +26,7 @@ from sklearn.metrics._scorer import _check_multimetric_scoring, _MultimetricScor
 from sklearn.model_selection._validation import _aggregate_score_dicts
 from sklearn.utils.validation import check_random_state
 
-from wildboar.utils.validation import check_array
-
+from ..utils.validation import check_array
 from .base import BaseImportance
 
 Importance = namedtuple("Importance", ["mean", "std", "full"])
@@ -37,13 +36,9 @@ try:
     from matplotlib.cm import ScalarMappable, get_cmap
     from matplotlib.pylab import subplots
 
-    from wildboar.utils.plot import (
-        MidpointNormalize,
-        plot_frequency_domain,
-        plot_time_domain,
-    )
+    from ..utils.plot import MidpointNormalize, plot_frequency_domain, plot_time_domain
 except ModuleNotFoundError as e:
-    from wildboar.utils import DependencyMissing
+    from ..utils import DependencyMissing
 
     matplotlib_missing = DependencyMissing(e, package="matplotlib")
     get_cmap = matplotlib_missing

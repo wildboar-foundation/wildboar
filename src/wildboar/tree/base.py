@@ -21,7 +21,7 @@ from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
-from wildboar.base import BaseEstimator
+from ..base import BaseEstimator
 
 
 class BaseTree(BaseEstimator):

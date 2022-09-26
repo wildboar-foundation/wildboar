@@ -25,9 +25,9 @@ import numpy as np
 from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.rand cimport RAND_R_MAX, shuffle
-from wildboar.utils.stats cimport (
+from ..utils.data cimport Dataset
+from ..utils.rand cimport RAND_R_MAX, shuffle
+from ..utils.stats cimport (
     IncStats,
     cumulative_mean_std,
     find_min,
@@ -37,9 +37,10 @@ from wildboar.utils.stats cimport (
     inc_stats_variance,
 )
 
-from wildboar.utils.data import check_dataset
+from ..utils.data import check_dataset
 
 from ._mass cimport _mass_distance
+
 
 cdef double EPSILON = 1e-13
 

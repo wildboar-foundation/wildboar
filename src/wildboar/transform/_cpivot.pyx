@@ -24,13 +24,13 @@ from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 
-from wildboar.distance._distance cimport DistanceMeasure
-from wildboar.utils cimport misc, stats
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.misc cimport to_ndarray_double
-from wildboar.utils.rand cimport RAND_R_MAX, rand_int, shuffle
+from ..distance._distance cimport DistanceMeasure
+from ..utils cimport misc, stats
+from ..utils.data cimport Dataset
+from ..utils.misc cimport to_ndarray_double
+from ..utils.rand cimport RAND_R_MAX, rand_int, shuffle
 
-from wildboar.distance import _DISTANCE_MEASURE
+from ..distance import _DISTANCE_MEASURE
 
 from ._feature cimport Feature, FeatureEngineer
 

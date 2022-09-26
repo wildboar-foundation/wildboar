@@ -26,9 +26,8 @@ cimport numpy as np
 from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
-from wildboar.utils.data cimport Dataset
-from wildboar.utils.misc cimport realloc_array
-
+from ..utils.data cimport Dataset
+from ..utils.misc cimport realloc_array
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,

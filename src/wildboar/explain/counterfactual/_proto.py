@@ -24,10 +24,9 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
-from wildboar.distance import pairwise_subsequence_distance
-from wildboar.distance.dtw import dtw_distance, dtw_mapping
-from wildboar.utils.validation import check_array
-
+from ...distance import pairwise_subsequence_distance
+from ...distance.dtw import dtw_distance, dtw_mapping
+from ...utils.validation import check_array
 from .base import BaseCounterfactual
 
 

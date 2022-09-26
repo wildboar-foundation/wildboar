@@ -16,8 +16,8 @@
 # Authors: Isak Samsten
 import numpy as np
 
-import wildboar as wb
-from wildboar.utils.validation import check_array
+from .. import iseos
+from ..utils.validation import check_array
 
 __all__ = [
     "standardize",
@@ -118,7 +118,7 @@ def truncate(x, n_shortest=None):
     """
     x = check_array(x, allow_multivariate=True, allow_eos=True, allow_nan=True)
     if n_shortest is None:
-        eos = np.nonzero(wb.iseos(x))[-1]
+        eos = np.nonzero(iseos(x))[-1]
         if eos.size > 0:
             return x[..., : np.min(eos)]
         else:
