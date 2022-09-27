@@ -19,6 +19,9 @@ from sklearn.utils.validation import has_fit_parameter
 
 def _yield_all_checks(estimator):
     if has_fit_parameter(estimator, "sample_weight"):
+        if hasattr(estimator, "bootstrap"):
+            estimator.bootstrap = False
+
         yield partial(check_sample_weights_invariance_samples_order, kind="ones")
         yield partial(check_sample_weights_invariance_samples_order, kind="zeros")
 
