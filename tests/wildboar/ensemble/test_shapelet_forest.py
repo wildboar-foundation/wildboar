@@ -18,7 +18,17 @@
 from numpy.testing import assert_almost_equal, assert_equal
 
 from wildboar.datasets import load_dataset
-from wildboar.ensemble import ShapeletForestClassifier
+from wildboar.ensemble import ShapeletForestClassifier, ShapeletForestRegressor
+from wildboar.utils.estimator_checks import check_estimator
+
+
+def test_check_estimator():
+    check_estimator(
+        ShapeletForestClassifier(), ignore=["check_sample_weights_invariance"]
+    )
+    check_estimator(
+        ShapeletForestRegressor(), ignore=["check_sample_weights_invariance"]
+    )
 
 
 def test_shapelet_forest_classifier():

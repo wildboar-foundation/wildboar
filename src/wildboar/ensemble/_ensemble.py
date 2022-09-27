@@ -15,18 +15,21 @@
 #
 # Authors: Isak Samsten
 import numbers
+from abc import ABCMeta, abstractmethod
 
 import numpy as np
 from joblib import Parallel, delayed
 from scipy import sparse
 from sklearn.base import OutlierMixin
-from sklearn.ensemble import BaggingClassifier, BaggingRegressor
-from sklearn.ensemble._bagging import BaseBagging
+from sklearn.ensemble import BaggingClassifier as SklearnBaggingClassifier
+from sklearn.ensemble import BaggingRegressor as SklearnBaggingRegressor
+from sklearn.ensemble._bagging import BaseBagging as SklearnBaseBagging
 from sklearn.metrics import precision_recall_curve, roc_curve
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.validation import check_is_fitted
 
+from ..base import BaseEstimator
 from ..model_selection.outlier import threshold_score
 from ..tree import (
     ExtraShapeletTreeClassifier,
@@ -39,14 +42,73 @@ from ..tree import (
     ShapeletTreeRegressor,
 )
 from ..tree._tree import RocketTreeClassifier, RocketTreeRegressor
-from ..utils.validation import check_array
+
+
+class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
+    @abstractmethod
+    def __init__(
+        self,
+        base_estimator=None,
+        n_estimators=10,
+        *,
+        max_samples=1.0,
+        bootstrap=True,
+        oob_score=False,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None,
+        verbose=0,
+    ):
+        super().__init__(
+            base_estimator=base_estimator,
+            n_estimators=n_estimators,
+            max_samples=max_samples,
+            max_features=1.0,
+            bootstrap=bootstrap,
+            bootstrap_features=False,
+            oob_score=oob_score,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            random_state=random_state,
+            verbose=verbose,
+        )
+
+    def _validate_data(
+        self,
+        x="no_validation",
+        y="no_validation",
+        reset=True,
+        validate_separately=False,
+        **check_params,
+    ):
+        new_check_params = {}
+        if "allow_multivariate" in check_params:
+            new_check_params["allow_multivariate"] = check_params["allow_multivariate"]
+
+        if "y_numeric" in check_params:
+            new_check_params["y_numeric"] = check_params["y_numeric"]
+
+        return super()._validate_data(
+            x,
+            y,
+            reset=reset,
+            validate_separately=validate_separately,
+            dtype=float,
+            **new_check_params,
+        )
+
+    def fit(self, x, y, sample_weight=None):
+        x, y = self._validate_data(x, y, allow_multivariate=True)
+        self._fit(
+            x, y, self.max_samples, self.max_depth, sample_weight, check_input=False
+        )
+        return self
 
 
 class ForestMixin:
-    """"""
-
     def apply(self, x):
-        x = self._validate_x_predict(x)
+        check_is_fitted(self)
+        x = self._validate_data(x, allow_multivariate=True, reset=False)
         results = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
@@ -56,8 +118,8 @@ class ForestMixin:
         return np.array(results).T
 
     def decision_path(self, x):
-        x = self._validate_x_predict(x)
-        x = x.reshape(x.shape[0], self.n_dims_ * self.n_timestep_)
+        check_is_fitted(self)
+        x = self._validate_data(x, allow_multivariate=True, reset=False)
         indicators = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
@@ -73,34 +135,63 @@ class ForestMixin:
 
         return sparse.hstack(indicators).tocsr(), n_nodes_ptr
 
-    def _validate_x_predict(self, x):
-        x = check_array(x, allow_multivariate=True)
-        if self.n_dims_ > 1 and x.ndim != 3:
-            raise ValueError("illegal input dimensions X.ndim != 3")
 
-        if x.shape[-1] != self.n_timestep_:
-            raise ValueError(
-                "illegal input shape ({} != {})".format(x.shape[-1], self.n_timestep)
-            )
-        if x.ndim > 2 and x.shape[1] != self.n_dims_:
-            raise ValueError(
-                "illegal input shape ({} != {}".format(x.shape[1], self.n_dims_)
-            )
-
-        x = x.reshape(x.shape[0], self.n_dims_ * self.n_timestep_)
-        return x
-
-
-class BaseForestClassifier(ForestMixin, BaggingClassifier):
-    """"""
-
+class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
     def __init__(
         self,
+        base_estimator=None,
+        n_estimators=10,
         *,
-        base_estimator,
-        estimator_params=tuple(),
+        max_samples=1.0,
+        bootstrap=True,
         oob_score=False,
+        class_weight=None,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None,
+        verbose=0,
+    ):
+
+        super().__init__(
+            base_estimator,
+            n_estimators=n_estimators,
+            max_samples=max_samples,
+            bootstrap=bootstrap,
+            oob_score=oob_score,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            random_state=random_state,
+            verbose=verbose,
+        )
+        self.class_weight = class_weight
+
+    def fit(self, x, y, sample_weight=None):
+        x, y = self._validate_data(x, y, allow_multivariate=True)
+
+        if self.class_weight is not None:
+            class_weight = compute_sample_weight(self.class_weight, y)
+            if sample_weight is not None:
+                sample_weight = sample_weight * class_weight
+            else:
+                sample_weight = class_weight
+
+        self._fit(
+            x, y, self.max_samples, self.max_depth, sample_weight, check_input=True
+        )
+        return self
+
+
+class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
+    """"""
+
+    @abstractmethod
+    def __init__(
+        self,
+        base_estimator,
         n_estimators=100,
+        estimator_params=tuple(),
+        *,
+        oob_score=False,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -116,66 +207,35 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier):
             base_estimator=base_estimator,
             n_estimators=n_estimators,
             bootstrap=bootstrap,
-            bootstrap_features=False,
             n_jobs=n_jobs,
             warm_start=warm_start,
             random_state=random_state,
             oob_score=oob_score,
         )
-        self.estimator_params = estimator_params
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.criterion = criterion
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
         self.class_weight = class_weight
+        self.estimator_params = estimator_params
 
-    def predict(self, x):
-        # Calls predict_proba so no input validation is required
-        return BaggingClassifier.predict(self, x)
+    def _fit(
+        self,
+        X,
+        y,
+        max_samples=None,
+        max_depth=None,
+        sample_weight=None,
+        check_input=False,
+    ):
+        return super()._fit(X, y, max_samples, max_depth, sample_weight, False)
 
-    def predict_proba(self, x):
-        x = self._validate_x_predict(x)
-        return BaggingClassifier.predict_proba(self, x)
-
-    def predict_log_proba(self, x):
-        x = self._validate_x_predict(x)
-        return BaggingClassifier.predict_log_proba(self, x)
-
-    def fit(self, x, y, sample_weight=None, check_input=True):
-        if check_input:
-            x = check_array(x, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False)
-
-        n_samples = x.shape[0]
-        self.n_timestep_ = x.shape[-1]
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
-        self.n_dims_ = n_dims
-
-        if self.class_weight is not None:
-            class_weight = compute_sample_weight(self.class_weight, y)
-            if sample_weight is not None:
-                sample_weight = sample_weight * class_weight
-            else:
-                sample_weight = class_weight
-
-        x = x.reshape(n_samples, n_dims * self.n_timestep_)
-        self.n_features_in_ = x.shape[1]
-        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
-        return self
-
-    def _make_estimator(self, append=True, random_state=None):
-        estimator = super()._make_estimator(append, random_state)
-        if self.n_dims_ > 1:
-            estimator.force_dim = self.n_dims_
-        return estimator
+    def _parallel_args(self):
+        return {"prefer": "threads"}
 
 
-class BaseShapeletForestClassifier(BaseForestClassifier):
+class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
     """Base class for shapelet forest classifiers.
 
     Warnings
@@ -184,13 +244,13 @@ class BaseShapeletForestClassifier(BaseForestClassifier):
     instead.
     """
 
+    @abstractmethod
     def __init__(
         self,
-        *,
         base_estimator,
+        n_estimators=100,
         estimator_params=tuple(),
         oob_score=False,
-        n_estimators=100,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -228,9 +288,6 @@ class BaseShapeletForestClassifier(BaseForestClassifier):
         self.max_shapelet_size = max_shapelet_size
         self.metric = metric
         self.metric_params = metric_params
-
-    def _parallel_args(self):
-        return {"prefer": "threads"}
 
 
 class ShapeletForestClassifier(BaseShapeletForestClassifier):
@@ -511,7 +568,41 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         )
 
 
-class BaseForestRegressor(ForestMixin, BaggingRegressor):
+class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
+    def __init__(
+        self,
+        base_estimator=None,
+        n_estimators=100,
+        *,
+        max_samples=1.0,
+        bootstrap=True,
+        oob_score=False,
+        warm_start=False,
+        n_jobs=None,
+        random_state=None,
+        verbose=0,
+    ):
+        super().__init__(
+            base_estimator,
+            n_estimators,
+            max_samples=max_samples,
+            bootstrap=bootstrap,
+            oob_score=oob_score,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            random_state=random_state,
+            verbose=verbose,
+        )
+
+    def fit(self, x, y, sample_weight=None):
+        x, y = self._validate_data(x, y, allow_multivariate=True, y_numeric=True)
+
+        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
+        return self
+
+
+class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
+    @abstractmethod
     def __init__(
         self,
         *,
@@ -523,7 +614,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        criterion="mse",
+        criterion="squared_error",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,
@@ -533,7 +624,6 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
             base_estimator=base_estimator,
             n_estimators=n_estimators,
             bootstrap=bootstrap,
-            bootstrap_features=False,
             n_jobs=n_jobs,
             warm_start=warm_start,
             random_state=random_state,
@@ -546,30 +636,19 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor):
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
 
-    def fit(self, x, y, sample_weight=None, check_input=True):
-        if check_input:
-            x = check_array(x, allow_multivariate=True, dtype=float)
-            y = check_array(y, ensure_2d=False, dtype=float)
+    def _fit(
+        self,
+        X,
+        y,
+        max_samples=None,
+        max_depth=None,
+        sample_weight=None,
+        check_input=False,
+    ):
+        return super()._fit(X, y, max_samples, max_depth, sample_weight, check_input)
 
-        n_samples = x.shape[0]
-        self.n_timestep_ = x.shape[-1]
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
-        self.n_dims_ = n_dims
-
-        x = x.reshape(n_samples, n_dims * self.n_timestep_)
-        self.n_features_in_ = x.shape[1]
-        super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
-        return self
-
-    def _make_estimator(self, append=True, random_state=None):
-        estimator = super()._make_estimator(append, random_state)
-        if self.n_dims_ > 1:
-            estimator.force_dim = self.n_dims_
-        return estimator
+    def _parallel_args(self):
+        return {"prefer": "threads"}
 
 
 class BaseShapeletForestRegressor(BaseForestRegressor):
@@ -597,7 +676,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
-        criterion="mse",
+        criterion="squared_error",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,
@@ -656,7 +735,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         alpha=None,
         metric="euclidean",
         metric_params=None,
-        criterion="mse",
+        criterion="squared_error",
         oob_score=False,
         bootstrap=True,
         warm_start=False,
@@ -787,7 +866,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         max_shapelet_size=1,
         metric="euclidean",
         metric_params=None,
-        criterion="mse",
+        criterion="squared_error",
         oob_score=False,
         bootstrap=True,
         warm_start=False,
@@ -887,7 +966,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
-        criterion="mse",
+        criterion="squared_error",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,
@@ -972,28 +1051,13 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     def _set_oob_score(self, X, y):
         raise NotImplementedError("OOB score not supported")
 
-    def fit(self, x, y=None, sample_weight=None, check_input=True):
-        self.fit_transform(x, y, sample_weight, check_input)
+    def fit(self, x, y=None, sample_weight=None):
+        self.fit_transform(x, y, sample_weight)
         return self
 
-    def fit_transform(self, x, y=None, sample_weight=None, check_input=True):
+    def fit_transform(self, x, y=None, sample_weight=None):
+        x = self._validate_data(x, allow_multivariate=True)
         random_state = check_random_state(self.random_state)
-        if check_input:
-            x = check_array(x, allow_multivariate=True)
-
-        n_samples = x.shape[0]
-        self.n_timestep_ = x.shape[-1]
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
-        self.n_dims_ = n_dims
-
-        if n_dims > 1:
-            self.base_estimator_.force_dim = n_dims
-
-        x = x.reshape(n_samples, n_dims * self.n_timestep_)
         y = random_state.uniform(size=x.shape[0])
         super().fit(x, y, sample_weight=sample_weight)
         self.one_hot_encoder_ = OneHotEncoder(
@@ -1006,7 +1070,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         return self.one_hot_encoder_.transform(self.apply(x))
 
 
-class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
+class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
     """A isolation shapelet forest.
 
     .. versionadded:: 0.3.5
@@ -1136,7 +1200,6 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
         super(IsolationShapeletForest, self).__init__(
             base_estimator=ExtraShapeletTreeRegressor(),
             bootstrap=bootstrap,
-            bootstrap_features=False,
             warm_start=warm_start,
             n_jobs=n_jobs,
             n_estimators=n_estimators,
@@ -1164,25 +1227,10 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
     def _parallel_args(self):
         return {"prefer": "threads"}
 
-    def fit(self, x, y=None, sample_weight=None, check_input=True):
+    def fit(self, x, y=None, sample_weight=None):
+        x = self._validate_data(x, allow_multivariate=True)
         random_state = check_random_state(self.random_state)
-        if check_input:
-            x = check_array(x, allow_multivariate=True)  # TODO
 
-        n_samples = x.shape[0]
-        self.n_timestep_ = x.shape[-1]
-        if x.ndim > 2:
-            n_dims = x.shape[1]
-        else:
-            n_dims = 1
-
-        self.n_dims_ = n_dims
-
-        if n_dims > 1:
-            self.base_estimator_.force_dim = n_dims
-
-        x = x.reshape(n_samples, n_dims * self.n_timestep_)
-        self.n_features_in_ = x.shape[1]
         rnd_y = random_state.uniform(size=x.shape[0])
         if isinstance(self.max_samples, str):
             if self.max_samples == "auto":
@@ -1281,7 +1329,7 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
 
     def score_samples(self, x):
         check_is_fitted(self)
-        x = self._validate_x_predict(x)
+        x = self._validate_data(x, reset=False, allow_multivariate=True)
         return _score_samples(x, self.estimators_, self.max_samples_)
 
     def _oob_score_samples(self, x):
@@ -1299,12 +1347,6 @@ class IsolationShapeletForest(ForestMixin, OutlierMixin, BaseBagging):
                 self.max_samples_,
             )
         return score_samples
-
-    def _make_estimator(self, append=True, random_state=None):
-        estimator = super()._make_estimator(append, random_state)
-        if self.n_dims_ > 1:
-            estimator.force_dim = self.n_dims_
-        return estimator
 
 
 def _score_samples(x, estimators, max_samples):
@@ -1368,7 +1410,7 @@ class RockestRegressor(BaseForestRegressor):
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
-        criterion="mse",
+        criterion="squared_error",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,
@@ -1563,7 +1605,7 @@ class IntervalForestRegressor(BaseForestRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0,
-        criterion="mse",
+        criterion="squared_error",
         bootstrap=True,
         warm_start=False,
         n_jobs=None,

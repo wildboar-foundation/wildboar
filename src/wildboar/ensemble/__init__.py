@@ -16,6 +16,9 @@
 # Authors: Isak Samsten
 
 from ._ensemble import (
+    BaggingClassifier,
+    BaggingRegressor,
+    BaseBagging,
     ExtraShapeletTreesClassifier,
     ExtraShapeletTreesRegressor,
     IntervalForestClassifier,
@@ -31,6 +34,9 @@ from ._ensemble import (
 )
 
 __all__ = [
+    "BaseBagging",
+    "BaggingClassifier",
+    "BaggingRegressor",
     "ShapeletForestClassifier",
     "ExtraShapeletTreesClassifier",
     "ShapeletForestRegressor",

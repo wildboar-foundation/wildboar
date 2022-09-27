@@ -22,6 +22,7 @@ from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
 from ..base import BaseEstimator
+from ..utils.validation import _num_timesteps
 
 
 class BaseTree(BaseEstimator):
@@ -40,30 +41,25 @@ class BaseTree(BaseEstimator):
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
 
-    def _validate_x_predict(self, x, check_input):
+    def decision_path(self, x, check_input=True):
+        check_is_fitted(self, attributes="tree_")
         if check_input:
             x = self._validate_data(x, dtype=float, reset=False)
 
-        if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
-            x = np.reshape(x, [x.shape[0], self.force_dim, -1])
-
-        return x
-
-    def decision_path(self, x, check_input=True):
-        check_is_fitted(self, attributes="tree_")
-        x = self._validate_x_predict(x, check_input)
         return self.tree_.decision_path(x)
 
     def apply(self, x, check_input=True):
         check_is_fitted(self, attributes="tree_")
-        x = self._validate_x_predict(x, check_input)
+        if check_input:
+            x = self._validate_data(x, dtype=float, reset=False)
+
         return self.tree_.apply(x)
 
 
 class TreeRegressorMixin(RegressorMixin):
     """Mixin for regression trees."""
 
-    def fit(self, X, y, sample_weight=None, check_input=True):
+    def fit(self, x, y, sample_weight=None, check_input=True):
         """Fit a shapelet tree regressor from the training set
 
         Parameters
@@ -90,20 +86,18 @@ class TreeRegressorMixin(RegressorMixin):
         self: object
         """
         if check_input:
-            X, y = self._validate_data(
-                X, y, allow_multivariate=True, dtype=float, y_numeric=True
+            x, y = self._validate_data(
+                x, y, allow_multivariate=True, dtype=float, y_numeric=True
             )
-
-        n_samples = X.shape[0]
-        if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
-            X = np.reshape(X, [n_samples, self.force_dim, -1])
+        else:
+            self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
+            self.n_features_in_ = self.n_timesteps_in_
 
         random_state = check_random_state(self.random_state)
-
         if sample_weight is not None:
-            sample_weight = _check_sample_weight(sample_weight, X, dtype=float)
+            sample_weight = _check_sample_weight(sample_weight, x, dtype=float)
 
-        self._fit(X, y, sample_weight, random_state)
+        self._fit(x, y, sample_weight, random_state)
         return self
 
     def predict(self, x, check_input=True):
@@ -125,7 +119,9 @@ class TreeRegressorMixin(RegressorMixin):
             The predicted classes.
         """
         check_is_fitted(self, ["tree_"])
-        x = self._validate_x_predict(x, check_input)
+        if check_input:
+            x = self._validate_data(x, dtype=float, reset=False)
+
         return self.tree_.predict(x).reshape(-1)
 
 
@@ -160,20 +156,17 @@ class TreeClassifierMixin(ClassifierMixin):
         """
         if check_input:
             x, y = self._validate_data(x, y, allow_multivariate=True, dtype=float)
+            check_classification_targets(y)
+        else:
+            self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
+            self.n_features_in_ = self.n_timesteps_in_
 
-        check_classification_targets(y)
         if hasattr(self, "class_weight") and self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
         else:
             class_weight = None
 
         self.classes_, y = np.unique(y, return_inverse=True)
-        # if len(self.classes_) < 2:
-        #     raise ValueError("Classifier can't train when only one class is present.")
-
-        if hasattr(self, "force_dim") and isinstance(self.force_dim, int):
-            x = np.reshape(x, [x.shape[0], self.force_dim, -1])
-
         self.n_classes_ = len(self.classes_)
         random_state = check_random_state(
             self.random_state if hasattr(self, "random_state") else None
@@ -209,7 +202,6 @@ class TreeClassifierMixin(ClassifierMixin):
         y : ndarray of shape (n_samples,)
             The predicted classes.
         """
-        check_is_fitted(self, ["tree_"])
         proba = self.predict_proba(x, check_input=check_input)
         return self.classes_.take(np.argmax(proba, axis=1), axis=0)
 
@@ -234,5 +226,7 @@ class TreeClassifierMixin(ClassifierMixin):
             corresponds to that in the attribute `classes_`
         """
         check_is_fitted(self, ["tree_"])
-        x = self._validate_x_predict(x, check_input)
+        if check_input:
+            x = self._validate_data(x, dtype=float, reset=False)
+
         return self.tree_.predict(x)
