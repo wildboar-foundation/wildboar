@@ -97,7 +97,7 @@ Classes
 
    Mixin for regression trees.
 
-   .. py:method:: fit(X, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
       Fit a shapelet tree regressor from the training set
 
