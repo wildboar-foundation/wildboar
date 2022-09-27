@@ -541,6 +541,8 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
             base_estimator=ExtraShapeletTreeClassifier(),
             estimator_params=(
                 "max_depth",
+                "min_impurity_decrease",
+                "min_samples_leaf",
                 "min_samples_split",
                 "min_shapelet_size",
                 "max_shapelet_size",
@@ -916,6 +918,8 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
             base_estimator=ExtraShapeletTreeRegressor(),
             estimator_params=(
                 "max_depth",
+                "min_impurity_decrease",
+                "min_samples_leaf",
                 "min_samples_split",
                 "min_shapelet_size",
                 "max_shapelet_size",
