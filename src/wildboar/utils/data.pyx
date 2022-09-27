@@ -94,7 +94,13 @@ cdef class Dataset:
         self.n_timestep = <Py_ssize_t> data.shape[data.ndim - 1]
         self.data = <double*> data.data
         self.sample_stride = <Py_ssize_t> (data.strides[0] / <Py_ssize_t> data.itemsize)
-        cdef Py_ssize_t timestep_stride = <Py_ssize_t> (data.strides[data.ndim - 1] / <Py_ssize_t> data.itemsize)
+        
+        cdef Py_ssize_t timestep_stride
+        if self.n_timestep == 1:
+            timestep_stride = 1
+        else:
+            timestep_stride = <Py_ssize_t> (data.strides[data.ndim - 1] / <Py_ssize_t> data.itemsize)
+        
         if timestep_stride != 1:
             raise ValueError(
                 "timestep_stride is invalid (%d != 1)" % timestep_stride,
@@ -106,7 +112,10 @@ cdef class Dataset:
 
         if data.ndim == 3:
             self.n_dims = <Py_ssize_t> data.shape[data.ndim - 2]
-            self.dim_stride = <Py_ssize_t> (data.strides[data.ndim - 2] / <Py_ssize_t> data.itemsize)
+            if self.n_dims == 1:
+                self.dim_stride = 1
+            else:
+                self.dim_stride = <Py_ssize_t> (data.strides[data.ndim - 2] / <Py_ssize_t> data.itemsize)
         else:
             self.n_dims = 1
             self.dim_stride = 0
