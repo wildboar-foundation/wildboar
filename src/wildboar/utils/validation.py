@@ -181,6 +181,10 @@ def check_array(
             raise ValueError("order=%r and contiguous=True are incompatible")
         kwargs["order"] = "C"
 
+    # Never force_all_finite. We always force all finite.
+    if "force_all_finite" in kwargs:
+        del kwargs["force_all_finite"]
+
     if allow_multivariate:
         if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
             raise ValueError(
