@@ -14,7 +14,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Authors: Isak Samsten
-
+import pytest
 from numpy.testing import assert_almost_equal, assert_equal
 
 from wildboar.datasets import load_dataset
@@ -24,11 +24,54 @@ from wildboar.utils.estimator_checks import check_estimator
 
 def test_check_estimator():
     check_estimator(
-        ShapeletForestClassifier(), ignore=["check_sample_weights_invariance"]
+        ShapeletForestClassifier(n_estimators=10),
+        ignore=["check_sample_weights_invariance"],
     )
     check_estimator(
-        ShapeletForestRegressor(), ignore=["check_sample_weights_invariance"]
+        ShapeletForestRegressor(n_estimators=10),
+        ignore=["check_sample_weights_invariance"],
     )
+
+
+@pytest.mark.parametrize(
+    "estimator, expected_estimator_params",
+    [
+        (
+            ShapeletForestClassifier(),
+            (
+                "max_depth",
+                "n_shapelets",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "min_shapelet_size",
+                "max_shapelet_size",
+                "alpha",
+                "metric",
+                "metric_params",
+                "criterion",
+            ),
+        ),
+        (
+            ShapeletForestRegressor(),
+            (
+                "max_depth",
+                "n_shapelets",
+                "min_samples_split",
+                "min_samples_leaf",
+                "min_impurity_decrease",
+                "min_shapelet_size",
+                "max_shapelet_size",
+                "alpha",
+                "metric",
+                "metric_params",
+                "criterion",
+            ),
+        ),
+    ],
+)
+def test_check_estimator_params(estimator, expected_estimator_params):
+    assert set(estimator.estimator_params) == set(expected_estimator_params)
 
 
 def test_shapelet_forest_classifier():

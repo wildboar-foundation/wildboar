@@ -25,6 +25,9 @@ def _yield_all_checks(estimator):
         yield partial(check_sample_weights_invariance_samples_order, kind="ones")
         yield partial(check_sample_weights_invariance_samples_order, kind="zeros")
 
+    if hasattr(estimator, "estimator_params"):
+        yield check_consistent_estimator_params
+
 
 def check_estimator(estimator, generate_only=False, ignore=None):
     """Check if estimator adheres to scikit-learn (and wildboar) conventions.
@@ -119,28 +122,7 @@ def check_sample_weights_invariance_samples_order(name, estimator_orig, kind="on
     set_random_state(estimator1, random_state=0)
     set_random_state(estimator2, random_state=0)
 
-    X1 = np.array(
-        [
-            [1, 3],
-            [1, 3],
-            [1, 3],
-            [1, 3],
-            [2, 1],
-            [2, 1],
-            [2, 1],
-            [2, 1],
-            [3, 3],
-            [3, 3],
-            [3, 3],
-            [3, 3],
-            [4, 1],
-            [4, 1],
-            [4, 1],
-            [4, 1],
-        ],
-        dtype=np.float64,
-    )
-    y1 = np.array([1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2], dtype=int)
+    X1, y1 = _dummy_dataset()
 
     if kind == "ones":
         X2 = X1
@@ -178,3 +160,42 @@ def check_sample_weights_invariance_samples_order(name, estimator_orig, kind="on
             X_pred1 = getattr(estimator1, method)(X1)
             X_pred2 = getattr(estimator2, method)(X1)
             assert_allclose_dense_sparse(X_pred1, X_pred2, err_msg=err_msg)
+
+
+def _dummy_dataset():
+    X1 = np.array(
+        [
+            [1, 3],
+            [1, 3],
+            [1, 3],
+            [1, 3],
+            [2, 1],
+            [2, 1],
+            [2, 1],
+            [2, 1],
+            [3, 3],
+            [3, 3],
+            [3, 3],
+            [3, 3],
+            [4, 1],
+            [4, 1],
+            [4, 1],
+            [4, 1],
+        ],
+        dtype=np.float64,
+    )
+    y1 = np.array([1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1, 1, 2, 2, 2, 2], dtype=int)
+    return X1, y1
+
+
+def check_consistent_estimator_params(name, estimator):
+    x, y = _dummy_dataset()
+    estimator = clone(estimator)
+    estimator.fit(x, y)
+
+    for tree in estimator.estimators_:
+        for param in estimator.estimator_params:
+            assert getattr(tree, param) == getattr(estimator, param), (
+                f"For {name} estimator_params are not equivalent "
+                "to the base estimators parameters"
+            )
