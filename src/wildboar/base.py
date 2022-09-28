@@ -1,14 +1,22 @@
 import warnings
 
+import numpy as np
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
-from sklearn.utils.validation import _check_y
+from sklearn.utils import deprecated
+from sklearn.utils.validation import _check_y, check_is_fitted
 
 from . import __version__
 from .utils.validation import _num_timesteps, check_array, check_X_y
 
 __all__ = ["BaseEstimator"]
 
-_DEFAULT_TAGS = {"allow_multivariate": False, "allow_eos": False}
+_DEFAULT_TAGS = {
+    # The estimator can be fit with variable length time series
+    "allow_eos": False,
+    # The explainer requires an estimator to fit
+    "requires_estimator": False,
+    # X_types = ["3darray"]
+}
 
 
 class BaseEstimator(SklearnBaseEstimator):
@@ -140,7 +148,82 @@ class BaseEstimator(SklearnBaseEstimator):
                 X, y = check_X_y(X, y, **check_params)
             out = X, y
 
-        if not no_val_X and check_params.get("ensure_2d", True):
-            self._check_n_features(X, reset=reset)
+        if not no_val_X:
+            self._check_n_timesteps(X, reset=reset)
 
         return out
+
+
+class ExplainerMixin:
+    """Mixin class for all explainers in wildboar"""
+
+    _estimator_type = "explainer"
+
+    def fit_explain(self, estimator, x=None, y=None, **kwargs):
+        return self.fit(estimator, x, y, **kwargs).explain(x, y)
+
+    def plot(self, x=None, y=None, ax=None, **kwargs):
+        """Plot the explanation
+
+        Returns
+        -------
+        ax : Axes
+            The axes object
+        """
+        from .utils.plot import plot_time_domain
+
+        plot_time_domain(self.explain(x, y), y, ax=ax)
+
+    def _more_tags():
+        return {"requires_estimator": True}
+
+
+class CounterfactualMixin:
+    """Mixin class for counterfactual explainer."""
+
+    def _check_estimator(self, estimator, allow_3d=False):
+        """Check the estimator and set the `n_timesteps_in_` and `n_dims_in_`
+        parameter from the estimator.
+
+        Parameters
+        ----------
+        estimator : object
+            The estimator object to check
+
+        allow_3d : bool, optional
+            If estimator fit with 3d-arrays are supported.
+        """
+        check_is_fitted(estimator)
+        self.n_timesteps_in_ = estimator.n_timesteps_in_
+        self.n_dims_in_ = estimator.n_dimes_in_
+        if self.n_dims_in_ > 1 and not allow_3d:
+            raise ValueError("estimator has been fit with 3d-array.")
+
+        self.n_features_in_ = self.n_timesteps_in_
+
+    @deprecated(
+        "transform(x, y) has been deprecated in 1.1 and will be removed in 1.2. "
+        "Use explain(x, y) instead."
+    )
+    def transform(self, x, y):
+        return self.explain(x, y)
+
+    def score(self, x, y):
+        """Score the counterfactual explainer in terms of closeness of fit.
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep)
+            The samples.
+
+        y : array-like of shape (n_samples, )
+            The desired counterfactal label.
+
+        Returns
+        -------
+        score : float
+            The closensess of fit.
+        """
+        from .explain.counterfactual import score
+
+        return np.mean(-score(x, self.explain(x, y)))

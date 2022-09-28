@@ -26,10 +26,9 @@ from sklearn.metrics.pairwise import (
 )
 from sklearn.utils.validation import check_is_fitted
 
+from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
 from ...ensemble._ensemble import BaseShapeletForestClassifier
-from ...explain.counterfactual.base import BaseCounterfactual
-from ...utils.validation import check_array
 
 MIN_MATCHING_DISTANCE = 0.0001
 
@@ -118,7 +117,7 @@ _AGGREGATION = {
 }
 
 
-class ShapeletForestCounterfactual(BaseCounterfactual):
+class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
     """Counterfactual explanations for shapelet forest classifiers
 
     Attributes
@@ -181,10 +180,15 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         self.batch_size = batch_size
         self.verbose = verbose
 
-    def fit(self, estimator):
+    def _check_estimator(self, estimator, allow_3d=False):
         if not isinstance(estimator, BaseShapeletForestClassifier):
             raise ValueError("unsupported estimator, got %r" % estimator)
-        check_is_fitted(estimator)
+
+        return super()._check_estimator(estimator, allow_3d)
+
+    def fit(self, estimator, x=None, y=None):
+        self._check_estimator(estimator, allow_3d=True)
+
         if isinstance(self.cost, str):
             self.cost_ = _COST.get(self.cost, None)
             if self.cost_ is None:
@@ -203,22 +207,18 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         else:
             raise ValueError("invalid aggregation (%r)" % self.aggregation)
 
-        self._estimator = deepcopy(estimator)
+        self.estimator_ = deepcopy(estimator)
         self.paths_ = PredictionPaths(estimator.classes_)
 
-        for base_estimator in self._estimator.estimators_:
+        for base_estimator in self.estimator_.estimators_:
             self.paths_._append(base_estimator.tree_)
         return self
 
-    def transform(self, x, y):
-        check_is_fitted(self, "paths_")
-        x = check_array(x, allow_multivariate=True)
-        y = check_array(y, ensure_2d=False)
-        if len(y) != x.shape[0]:
-            raise ValueError(
-                "Number of labels={} does not match "
-                "number of samples={}".format(len(y), x.shape[0])
-            )
+    def explain(self, x, y):
+        check_is_fitted(self)
+        x, y = self._validate_data(
+            x, y, allow_multivariate=True, reset=False, dtype=float
+        )
         counterfactuals = np.empty(x.shape)
         for i in range(x.shape[0]):
             if self.verbose:
@@ -226,6 +226,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
                     f"Generating counterfactual for the {i}:th sample. "
                     f"The target label is {y[i]}."
                 )
+
             t = self.candidates(x[i], y[i])
             if t is not None:
                 counterfactuals[i] = t
@@ -269,7 +270,7 @@ class ShapeletForestCounterfactual(BaseCounterfactual):
         for i in range(0, n_counterfactuals, batch_size):
             batch_cost = cost_sort[i : min(n_counterfactuals, i + batch_size)]
             batch_counterfactuals = counterfactuals[batch_cost]
-            batch_prediction = self._estimator.predict(batch_counterfactuals)
+            batch_prediction = self.estimator_.predict(batch_counterfactuals)
             batch_counterfactuals = batch_counterfactuals[batch_prediction == y]
             if batch_counterfactuals.shape[0] > 0:
                 return batch_counterfactuals[0]

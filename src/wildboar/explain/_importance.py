@@ -26,8 +26,7 @@ from sklearn.metrics._scorer import _check_multimetric_scoring, _MultimetricScor
 from sklearn.model_selection._validation import _aggregate_score_dicts
 from sklearn.utils.validation import check_random_state
 
-from ..utils.validation import check_array
-from .base import BaseImportance
+from ..base import BaseEstimator, ExplainerMixin
 
 Importance = namedtuple("Importance", ["mean", "std", "full"])
 
@@ -142,7 +141,7 @@ _PERMUTATION_DOMAIN = {
 }
 
 
-class IntervalImportance(BaseImportance):
+class IntervalImportance(ExplainerMixin, BaseEstimator):
     """Compute a model agnostic importance score for non-overlapping intervals in
     the time or frequency domain by permuting the intervals among samples.
 
@@ -202,9 +201,8 @@ class IntervalImportance(BaseImportance):
         self.verbose = verbose
         self.random_state = random_state
 
-    def fit(self, estimator, x, y=None, sample_weight=None):
-        x = check_array(x, allow_multivariate=False)
-        y = check_array(y, ensure_2d=False)
+    def fit(self, estimator, x, y, sample_weight=None):
+        x, y = self._validate_data(x, y, allow_multivariate=False)
         random_state = check_random_state(self.random_state)
         if x.shape[0] != y.shape[0]:
             raise ValueError(
@@ -293,15 +291,22 @@ class IntervalImportance(BaseImportance):
             self.importances_ = _unpack_scores(self.baseline_score_, np.array(scores))
         return self
 
+    def explain(self, x, y=None):
+        x = self._validate_data(x, reset=False)
+        importances = np.empty(self.n_timesteps_in_, dtype=float)
+        for i, (start, end) in enumerate(self.intervals_):
+            importances[start:end] = self.importances_.mean[i]
+        return np.broadcast_to(importances, (x.shape[0], self.n_timesteps_in_))
+
     def plot(
         self,
         x=None,
         y=None,
         *,
+        ax=None,
         scoring=None,
         top_k=None,
         n_samples=None,
-        title="Interval importance",
         **kwargs,
     ):
         if isinstance(self.importances_, dict):
@@ -320,7 +325,11 @@ class IntervalImportance(BaseImportance):
                 raise ValueError("top_k (%r) not in range ]0, 1]" % top_k)
             top_k = math.ceil(top_k * importances.shape[0])
 
-        fig, ax = subplots()
+        if ax is None:
+            fig, ax = subplots()
+        else:
+            fig = None
+
         order = np.argsort(importances)[: -(top_k + 1) : -1]
         norm = MidpointNormalize(
             vmin=max(importances[order[-1]] - 0.1, 0),
@@ -369,6 +378,8 @@ class IntervalImportance(BaseImportance):
                 )
 
         mappable = ScalarMappable(cmap=cmap, norm=norm)
-        fig.colorbar(mappable)
-        fig.suptitle(title)
-        return ax
+        if fig is not None:
+            fig.colorbar(mappable)
+            return ax
+        else:
+            return ax, mappable

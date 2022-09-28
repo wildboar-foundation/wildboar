@@ -144,6 +144,8 @@ def counterfactuals(
     x,
     y,
     *,
+    train_x=None,
+    train_y=None,
     method="best",
     scoring=None,
     valid_scoring=False,
@@ -221,10 +223,15 @@ def counterfactuals(
             if Explainer is None:
                 raise ValueError("no counterfactual explainer for '%r'" % method)
 
-        if Explainer == PrototypeCounterfactual and not (
-            "train_x" in method_args or "train_y" in method_args
-        ):
-            raise ValueError("train_x and train_y are required in method_args")
+        if "train_x" in method_args or "train_y" in method_args:
+            train_x = method_args.pop("train_x")
+            train_y = method_args.pot("train_y")
+            warnings.warn(
+                "train_x and train_y as method_args has been deprecated in 1.1 and "
+                "will be removed in 1.2. Use the train_x and train_y keyword params.",
+                FutureWarning,
+            )
+
         explainer = Explainer(**method_args)
     else:
         explainer = method
@@ -232,9 +239,9 @@ def counterfactuals(
     if random_state is not None and "random_state" in explainer.get_params():
         explainer.set_params(random_state=random_state)
 
-    explainer.fit(estimator)
+    explainer.fit(estimator, train_x, train_y)
     y = np.broadcast_to(y, (x.shape[0],))
-    x_counterfactuals = explainer.transform(x, y)
+    x_counterfactuals = explainer.explain(x, y)
     valid = estimator.predict(x_counterfactuals) == y
     if scoring is not None:
         sc = score(

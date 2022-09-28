@@ -20,10 +20,10 @@ from sklearn.cluster import KMeans
 from sklearn.neighbors import KNeighborsClassifier, NearestNeighbors
 from sklearn.utils.validation import check_is_fitted
 
-from .base import BaseCounterfactual
+from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 
 
-class KNeighborsCounterfactual(BaseCounterfactual):
+class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
     """Fit a counterfactual explainer to a k-nearest neighbors classifier
 
     Attributes
@@ -43,17 +43,26 @@ class KNeighborsCounterfactual(BaseCounterfactual):
     def __init__(self, random_state=None):
         self.random_state = random_state
 
-    def fit(self, estimator):
+    def _check_estimator(self, estimator, allow_3d=False):
         if not isinstance(estimator, KNeighborsClassifier):
             raise ValueError("not a valid estimator")
-        check_is_fitted(estimator)
+
         if estimator.metric != "euclidean":
             raise ValueError(
                 "only euclidean distance is supported, got %r" % estimator.metric
             )
 
+        return super()._check_estimator(estimator, allow_3d)
+
+    def fit(self, estimator, x=None, y=None):
+        self._check_estimator(estimator)
         x = estimator._fit_X
         y = estimator._y
+
+        self.n_timesteps_in_ = estimator.n_features_in_
+        self.n_dims_in_ = 1
+        self.n_features_in_ = self.n_timesteps_in_
+
         classes = estimator.classes_
         n_clusters = x.shape[0] // estimator.n_neighbors
         kmeans = KMeans(n_clusters=n_clusters, random_state=self.random_state).fit(x)
@@ -83,9 +92,10 @@ class KNeighborsCounterfactual(BaseCounterfactual):
         self.explainer_ = label_nn
         return self
 
-    def transform(self, x, y):
-        check_is_fitted(self, ["explainer_"])
-        x_counter = x.copy()
+    def explain(self, x, y):
+        check_is_fitted(self)
+        x, y = self._validate_data(x, y, reset=False, dtype=float)
+        x_counterfactuals = x.copy()
         labels = np.unique(y)
         for label in labels:
             label_indices = np.where(y == label)[0]
@@ -93,6 +103,6 @@ class KNeighborsCounterfactual(BaseCounterfactual):
             nn, mc = self.explainer_[label]
             if mc.shape[0] > 0:
                 closest = nn.kneighbors(x[label_indices, :], return_distance=False)
-                x_counter[label_indices, :] = mc[closest[:, 0], :]
+                x_counterfactuals[label_indices, :] = mc[closest[:, 0], :]
 
-        return x_counter
+        return x_counterfactuals

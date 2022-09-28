@@ -40,13 +40,10 @@ def test_counterfactuals_best(clf, expected_score):
         x_test[1:3],
         1,
         method="best",
+        train_x=x_train,
+        train_y=y_train,
         scoring="euclidean",
         random_state=123,
-        method_args=(
-            dict(train_x=x_train, train_y=y_train)
-            if isinstance(clf, RandomForestClassifier)
-            else {}
-        ),
     )
     assert_almost_equal(actual_score, expected_score)
 
@@ -58,11 +55,16 @@ def test_counterfactuals_prototype():
     clf = ShapeletForestClassifier(n_estimators=10, random_state=123)
     clf.fit(x_train, y_train)
 
-    method = PrototypeCounterfactual(
-        train_x=x_train, train_y=y_train, method="shapelet", metric="euclidean"
-    )
+    method = PrototypeCounterfactual(method="shapelet", metric="euclidean")
     _, _, actual_score = counterfactuals(
-        clf, x_test[1:3], 1, method=method, scoring="euclidean", random_state=123
+        clf,
+        x_test[1:3],
+        1,
+        method=method,
+        train_x=x_train,
+        train_y=y_train,
+        scoring="euclidean",
+        random_state=123,
     )
     expected_score = np.array([0.8731226473373813, 6.270890036587185])
     assert_almost_equal(actual_score, expected_score)

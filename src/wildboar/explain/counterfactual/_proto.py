@@ -24,13 +24,12 @@ import numpy as np
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
+from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
 from ...distance.dtw import dtw_distance, dtw_mapping
-from ...utils.validation import check_array
-from .base import BaseCounterfactual
 
 
-class PrototypeCounterfactual(BaseCounterfactual):
+class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
     """Model agnostic approach for constructing counterfactual explanations
 
     Attributes
@@ -58,8 +57,6 @@ class PrototypeCounterfactual(BaseCounterfactual):
     def __init__(
         self,
         *,
-        train_x,
-        train_y,
         metric="euclidean",
         metric_params=None,
         max_iter=100,
@@ -74,12 +71,6 @@ class PrototypeCounterfactual(BaseCounterfactual):
 
         Parameters
         ----------
-        train_x : array-like of shape (n_samples, n_timestep)
-            The background data from which prototypes are sampled
-
-        train_y : array-like of shape (n_samples,)
-            The background label from which prototypes are sampled
-
         metric : {'euclidean', 'dtw'}, optional
             The metric used to move the samples
 
@@ -132,8 +123,6 @@ class PrototypeCounterfactual(BaseCounterfactual):
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
         """
-        self.train_x = train_x
-        self.train_y = train_y
         self.random_state = random_state
         self.metric = metric
         self.metric_params = metric_params
@@ -144,18 +133,14 @@ class PrototypeCounterfactual(BaseCounterfactual):
         self.method_params = method_params
         self.target = target
 
-    def fit(self, estimator):
-        check_is_fitted(estimator)
-        if self.train_x is None or self.train_y is None:
-            raise ValueError("background data are required.")
+    def fit(self, estimator, x, y):
+        if x is None:
+            raise ValueError("training samples are required.")
+        if y is None:
+            raise ValueError("training labels are required.")
+        self._check_estimator(estimator)
+        x, y = self._validate_data(x, y, reset=False, dtype=float)
 
-        x = check_array(self.train_x)
-        y = check_array(self.train_y, ensure_2d=False)
-        if len(y) != x.shape[0]:
-            raise ValueError(
-                "Number of labels={} does not match "
-                "number of samples={}".format(len(y), x.shape[0])
-            )
         random_state = check_random_state(self.random_state)
         metric_params = self.metric_params or {}
         method_params = self.method_params or {}
@@ -170,7 +155,7 @@ class PrototypeCounterfactual(BaseCounterfactual):
             raise ValueError("method (%s) is not supported" % self.method)
 
         self.estimator_ = deepcopy(estimator)
-        self.classes_ = np.unique(self.train_y)
+        self.classes_ = np.unique(y)
         if self.target == "auto":
             self.target_ = PredictEvaluator(self.estimator_)
         else:
@@ -196,17 +181,11 @@ class PrototypeCounterfactual(BaseCounterfactual):
                 x_partition, c, n_prototypes, metric, random_state, **method_params
             )
 
-    def transform(self, x, y):
-        x = check_array(x)
-        y = check_array(y, ensure_2d=False)
-        if len(y) != x.shape[0]:
-            raise ValueError(
-                "Number of labels={} does not match "
-                "number of samples={}".format(len(y), x.shape[0])
-            )
-        n_samples = x.shape[0]
+    def explain(self, x, y):
+        check_is_fitted(self)
+        x, y = self._validate_data(x, y, reset=False, dtype=float)
         counterfactuals = np.empty(x.shape, dtype=x.dtype)
-        for i in range(n_samples):
+        for i in range(x.shape[0]):
             counterfactuals[i] = self._transform_sample(x[i], y[i])
 
         return counterfactuals
@@ -219,6 +198,9 @@ class PrototypeCounterfactual(BaseCounterfactual):
             o = sampler.sample_move(o)
             n_iter += 1
         return o
+
+    def _more_tags():
+        return {"requires_y": True}
 
 
 class TargetEvaluator(abc.ABC):
