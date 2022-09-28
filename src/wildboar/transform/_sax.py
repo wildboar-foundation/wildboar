@@ -2,6 +2,8 @@ import numpy as np
 from scipy.stats import norm, uniform
 from sklearn.base import TransformerMixin
 
+from wildboar.utils.validation import check_array
+
 from ..base import BaseEstimator
 from . import IntervalTransform
 
@@ -10,22 +12,30 @@ def _percentiles(n_bins):
     return np.linspace(0, 1, num=n_bins, endpoint=False)[1:].reshape(1, -1)
 
 
-def _normal_bins(percentiles, x, estimate=True):
+def _normal_bins(percentiles, x=None, estimate=True):
     if estimate:
         loc = np.mean(x, axis=1).reshape(-1, 1)
         scale = np.std(x, axis=1).reshape(-1, 1)
         return norm.ppf(percentiles, loc=loc, scale=scale)
     else:
-        return np.repeat(norm.ppf(percentiles).reshape(1, -1), x.shape[0], axis=0)
+        ppf = norm.ppf(percentiles)
+        if x is None:
+            return ppf.reshape(-1)
+        else:
+            return np.repeat(ppf, x.shape[0], axis=0)
 
 
-def _uniform_bins(percentiles, x, estimate=True):
+def _uniform_bins(percentiles, x=None, estimate=True):
     if estimate:
         loc = np.min(x, axis=1).reshape(-1, 1)
         scale = np.max(x, axis=1).reshape(-1, 1) - loc
         return uniform.ppf(percentiles, loc=loc, scale=scale)
     else:
-        return np.repeat(uniform.ppf(percentiles).reshape(1, -1), x.shape[0], axis=0)
+        ppf = uniform.ppf(percentiles)
+        if x is None:
+            return ppf.reshape(-1)
+        else:
+            return np.repeat(ppf, x.shape[0], axis=0)
 
 
 _BINNING = {"normal": _normal_bins, "uniform": _uniform_bins}
@@ -90,15 +100,15 @@ class SAX(TransformerMixin, BaseEstimator):
 
     def fit(self, x, y=None):
         x = self._validate_data(x, dtype=float)
+        if self.binning not in _BINNING:
+            raise ValueError("binning (%s) not supported." % self.binning)
+
         self.paa_ = PAA(n_intervals=self.n_intervals, window=self.window).fit(x)
         return self
 
     def transform(self, x):
         x = self._validate_data(x, reset=False, dtype=float)
         x_paa = self.paa_.transform(x)
-
-        if self.binning not in _BINNING.keys():
-            raise ValueError("binning (%s) not supported." % self.binning)
 
         bins = _BINNING[self.binning](
             _percentiles(self.n_bins), x, estimate=self.estimate
@@ -107,6 +117,24 @@ class SAX(TransformerMixin, BaseEstimator):
         for i, (x_i, bin_i) in enumerate(zip(x_paa, bins)):
             x_out[i] = np.digitize(x_i, bin_i)
         return x_out
+
+    def inverse_transform(self, x):
+        if self.estimate:
+            raise ValueError("Unable to inverse_transform with estimate=True")
+
+        x = check_array(x, dtype=np.min_scalar_type(self.n_bins))
+        x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
+        bins = _BINNING[self.binning](_percentiles(self.n_bins), estimate=self.estimate)
+        bins = np.hstack([bins[0], (bins[:-1] + bins[1:]) / 2, bins[-1]])
+
+        for i, (start, end) in enumerate(self.intervals_):
+            x_inverse[:, start:end] = bins[x[:, i], np.newaxis]
+
+        return x_inverse
+
+    @property
+    def intervals_(self):
+        return self.paa_.intervals_
 
     def _more_tags(self):
         return {
@@ -138,8 +166,16 @@ class PAA(TransformerMixin, BaseEstimator):
 
     def transform(self, x):
         x = self._validate_data(x, dtype=float, reset=False)
-
         return self.interval_transform_.transform(x)
+
+    def inverse_transform(self, x):
+        x = check_array(x, dtype=float)
+
+        x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
+        for i, (start, end) in enumerate(self.intervals_):
+            x_inverse[:, start:end] = x[:, i].reshape(-1, 1)
+
+        return x_inverse
 
     @property
     def intervals_(self):
