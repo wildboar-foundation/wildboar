@@ -88,12 +88,15 @@ class SAX(TransformerMixin, BaseEstimator):
         self.binning = binning
         self.estimate = estimate
 
-    def fit(self, x=None, y=None):
+    def fit(self, x, y=None):
+        x = self._validate_data(x, dtype=float)
+        self.paa_ = PAA(n_intervals=self.n_intervals, window=self.window).fit(x)
         return self
 
     def transform(self, x):
-        x = self._validate_data(x, dtype=float, reset=False)
-        x_paa = PAA(n_intervals=self.n_intervals, window=self.window).fit_transform(x)
+        x = self._validate_data(x, reset=False, dtype=float)
+        x_paa = self.paa_.transform(x)
+
         if self.binning not in _BINNING.keys():
             raise ValueError("binning (%s) not supported." % self.binning)
 
@@ -105,15 +108,8 @@ class SAX(TransformerMixin, BaseEstimator):
             x_out[i] = np.digitize(x_i, bin_i)
         return x_out
 
-    def __sklearn_is_fitted__(self):
-        """Return True since SAX is stateless."""
-        return True
-
     def _more_tags(self):
         return {
-            "requires_fit": False,
-            "stateless": True,
-            "no_validation": True,
             "preserves_dtype": [],
         }
 
@@ -125,11 +121,8 @@ class PAA(TransformerMixin, BaseEstimator):
         self.n_intervals = n_intervals
         self.window = window
 
-    def fit(self, x=None, y=None):
-        return self
-
-    def transform(self, x):
-        x = self._validate_data(x, dtype=float, reset=False)
+    def fit(self, x, y=None):
+        x = self._validate_data(x, dtype=float)
         if self.window is not None:
             if not 0 < self.window <= x.shape[-1]:
                 raise ValueError("invalid window size, got %d" % self.window)
@@ -137,20 +130,23 @@ class PAA(TransformerMixin, BaseEstimator):
         else:
             n_intervals = self.n_intervals
 
-        return IntervalTransform(
+        self.interval_transform_ = IntervalTransform(
             n_intervals=n_intervals, summarizer="mean"
-        ).fit_transform(x)
+        )
+        self.interval_transform_.fit(x)
+        return self
 
-    def __sklearn_is_fitted__(self):
-        """Return True since SAX is stateless."""
-        return True
+    def transform(self, x):
+        x = self._validate_data(x, dtype=float, reset=False)
 
-    def _more_tags(self):
-        return {
-            "requires_fit": False,
-            "stateless": True,
-            "no_validation": True,
-        }
+        return self.interval_transform_.transform(x)
+
+    @property
+    def intervals_(self):
+        return [
+            (start, start + length)
+            for (_, (start, length, _)) in self.interval_transform_.embedding_.features
+        ]
 
 
 def symbolic_aggregate_approximation(
