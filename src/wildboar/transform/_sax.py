@@ -88,10 +88,10 @@ class SAX(TransformerMixin, BaseEstimator):
         self.binning = binning
         self.estimate = estimate
 
-    def fit(self, x, y=None):
+    def fit(self, x=None, y=None):
         return self
 
-    def transform(self, x, y=None):
+    def transform(self, x):
         x = self._validate_data(x, dtype=float, reset=False)
         x_paa = PAA(n_intervals=self.n_intervals, window=self.window).fit_transform(x)
         if self.binning not in _BINNING.keys():
@@ -128,7 +128,7 @@ class PAA(TransformerMixin, BaseEstimator):
     def fit(self, x=None, y=None):
         return self
 
-    def transform(self, x, y=None):
+    def transform(self, x):
         x = self._validate_data(x, dtype=float, reset=False)
         if self.window is not None:
             if not 0 < self.window <= x.shape[-1]:
