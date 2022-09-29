@@ -43,7 +43,7 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
     def __init__(self, random_state=None):
         self.random_state = random_state
 
-    def _check_estimator(self, estimator, allow_3d=False):
+    def _validate_estimator(self, estimator, allow_3d=False):
         if not isinstance(estimator, KNeighborsClassifier):
             raise ValueError("not a valid estimator")
 
@@ -52,10 +52,10 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
                 "only euclidean distance is supported, got %r" % estimator.metric
             )
 
-        return super()._check_estimator(estimator, allow_3d)
+        return super()._validate_estimator(estimator, allow_3d)
 
     def fit(self, estimator, x=None, y=None):
-        self._check_estimator(estimator)
+        estimator = self._validate_estimator(estimator)
         x = estimator._fit_X
         y = estimator._y
 

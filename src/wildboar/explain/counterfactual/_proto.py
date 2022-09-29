@@ -138,7 +138,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
             raise ValueError("training samples are required.")
         if y is None:
             raise ValueError("training labels are required.")
-        self._check_estimator(estimator)
+        estimator = self._validate_estimator(estimator)
         x, y = self._validate_data(x, y, reset=False, dtype=float)
 
         random_state = check_random_state(self.random_state)

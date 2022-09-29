@@ -202,13 +202,9 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
         self.random_state = random_state
 
     def fit(self, estimator, x, y, sample_weight=None):
-        x, y = self._validate_data(x, y, allow_multivariate=False)
+        estimator = self._validate_estimator(estimator)
+        x, y = self._validate_data(x, y, reset=False, allow_multivariate=False)
         random_state = check_random_state(self.random_state)
-        if x.shape[0] != y.shape[0]:
-            raise ValueError(
-                "expected the same number of samples (%d) and labels (%d)"
-                % (x.shape[0], y.shape[0])
-            )
 
         if self.n_intervals == "sqrt":
             n_intervals = math.ceil(math.sqrt(x.shape[-1]))

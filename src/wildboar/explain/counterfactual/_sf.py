@@ -180,14 +180,14 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         self.batch_size = batch_size
         self.verbose = verbose
 
-    def _check_estimator(self, estimator, allow_3d=False):
+    def _validate_estimator(self, estimator, allow_3d=False):
         if not isinstance(estimator, BaseShapeletForestClassifier):
             raise ValueError("unsupported estimator, got %r" % estimator)
 
-        return super()._check_estimator(estimator, allow_3d)
+        return super()._validate_estimator(estimator, allow_3d)
 
     def fit(self, estimator, x=None, y=None):
-        self._check_estimator(estimator, allow_3d=True)
+        estimator = self._validate_estimator(estimator, allow_3d=True)
 
         if isinstance(self.cost, str):
             self.cost_ = _COST.get(self.cost, None)

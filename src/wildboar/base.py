@@ -159,6 +159,35 @@ class ExplainerMixin:
 
     _estimator_type = "explainer"
 
+    def _validate_estimator(self, estimator, allow_3d=False):
+        """Check the estimator and set the `n_timesteps_in_` and `n_dims_in_`
+        parameter from the estimator.
+
+        Parameters
+        ----------
+        estimator : object
+            The estimator object to check
+
+        allow_3d : bool, optional
+            If estimator fit with 3d-arrays are supported.
+        """
+        check_is_fitted(estimator)
+        if hasattr(estimator, "n_timesteps_in_"):
+            self.n_timesteps_in_ = estimator.n_timesteps_in_
+        else:
+            self.n_timesteps_in_ = estimator.n_features_in_
+
+        self.n_features_in_ = self.n_timesteps_in_
+        if hasattr(estimator, "n_dims_in_"):
+            self.n_dims_in_ = estimator.n_dims_in_
+        else:
+            self.n_dims_in_ = 1
+
+        if self.n_dims_in_ > 1 and not allow_3d:
+            raise ValueError("estimator has been fit with 3d-array.")
+
+        return estimator
+
     def fit_explain(self, estimator, x=None, y=None, **kwargs):
         return self.fit(estimator, x, y, **kwargs).explain(x, y)
 
@@ -180,26 +209,6 @@ class ExplainerMixin:
 
 class CounterfactualMixin:
     """Mixin class for counterfactual explainer."""
-
-    def _check_estimator(self, estimator, allow_3d=False):
-        """Check the estimator and set the `n_timesteps_in_` and `n_dims_in_`
-        parameter from the estimator.
-
-        Parameters
-        ----------
-        estimator : object
-            The estimator object to check
-
-        allow_3d : bool, optional
-            If estimator fit with 3d-arrays are supported.
-        """
-        check_is_fitted(estimator)
-        self.n_timesteps_in_ = estimator.n_timesteps_in_
-        self.n_dims_in_ = estimator.n_dimes_in_
-        if self.n_dims_in_ > 1 and not allow_3d:
-            raise ValueError("estimator has been fit with 3d-array.")
-
-        self.n_features_in_ = self.n_timesteps_in_
 
     @deprecated(
         "transform(x, y) has been deprecated in 1.1 and will be removed in 1.2. "
