@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 import warnings
 from functools import partial
 from unittest.case import SkipTest

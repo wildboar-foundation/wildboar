@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 from wildboar.transform import PAA, SAX
 from wildboar.utils.estimator_checks import check_estimator
 

@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 import pytest
 
 from wildboar.ensemble import ExtraShapeletTreesClassifier, ExtraShapeletTreesRegressor
@@ -47,5 +50,4 @@ def test_check_estimator():
     ],
 )
 def test_estimator_params(estimator, expected_estimator_params):
-
     assert set(estimator.estimator_params) == set(expected_estimator_params)

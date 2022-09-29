@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 from wildboar.transform import (  # PivotEmbedding,; RandomShapeletEmbedding,
     IntervalTransform,
     RandomShapeletTransform,

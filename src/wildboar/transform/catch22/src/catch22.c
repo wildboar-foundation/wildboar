@@ -1,8 +1,7 @@
 /**
  * This file is part of wildboar.
  *
- * This is a modified implementation of a subset of catch22. The original
- * code is licensed with GPLv3. This file retain GPLv3 license.
+ * This is a modified implementation of a subset of catch22.
  *
  * Original author: Carl Henning Lubba
  *

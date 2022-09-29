@@ -1,29 +1,16 @@
-# This file is part of wildboar
-#
-# wildboar is free software: you can redistribute it and/or modify it
-# under the terms of the GNU Lesser General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# wildboar is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser
-# General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
 # Authors: Isak Samsten
+# License: BSD 3 clause
 
 import numpy as np
+
 from wildboar.datasets.filter import make_str_filter
 
 
 class TestStrFilter:
     def test_n_samples(self):
         f = make_str_filter("n_samples<100")
-        assert f("hello", np.zeros((101, 10)), None) == False
+        assert f("hello", np.zeros((101, 10)), None) is False
 
     def test_dataset(self):
         f = make_str_filter("dataset=~TwoLead")
-        assert f("TwoLeadECG", None, None) == True
+        assert f("TwoLeadECG", None, None) is True

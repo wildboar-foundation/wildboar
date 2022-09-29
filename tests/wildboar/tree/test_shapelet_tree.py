@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 import numpy as np
 from numpy.testing import assert_array_equal
 

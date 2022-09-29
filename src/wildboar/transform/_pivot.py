@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 from ..distance import _DISTANCE_MEASURE
 from ._cpivot import PivotFeatureEngineer
 from .base import BaseFeatureEngineerTransform

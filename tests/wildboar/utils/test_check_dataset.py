@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 import numpy as np
 
 from wildboar.utils.data import check_dataset

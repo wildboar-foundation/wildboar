@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 import numpy as np
 from sklearn.utils.validation import _check_estimator_name, _check_y
 from sklearn.utils.validation import check_array as sklearn_check_array
