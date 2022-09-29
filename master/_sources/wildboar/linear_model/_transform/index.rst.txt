@@ -41,8 +41,7 @@ Classes
 
 .. py:class:: TransformClassifierMixin
 
-   .. py:method:: classes_()
-      :property:
+   .. py:property:: classes_
 
 
    .. py:method:: decision_function(x)

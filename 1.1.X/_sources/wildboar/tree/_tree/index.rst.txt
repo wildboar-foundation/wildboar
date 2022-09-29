@@ -43,16 +43,6 @@ Attributes
    wildboar.tree._tree.REG_CRITERION
 
 
-.. py:data:: CLF_CRITERION
-   
-
-   
-
-.. py:data:: REG_CRITERION
-   
-
-   
-
 .. py:class:: BaseFeatureTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
 
    Bases: :py:obj:`wildboar.tree.base.BaseTree`
@@ -821,4 +811,14 @@ Attributes
 
       :type: type random_state: int or RandomState
 
+
+.. py:data:: CLF_CRITERION
+   
+
+   
+
+.. py:data:: REG_CRITERION
+   
+
+   
 

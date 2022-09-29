@@ -13,9 +13,13 @@ Functions
 
 .. autoapisummary::
 
+   wildboar.utils.estimator_checks.check_consistent_estimator_params
    wildboar.utils.estimator_checks.check_estimator
    wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order
 
+
+
+.. py:function:: check_consistent_estimator_params(name, estimator)
 
 
 .. py:function:: check_estimator(estimator, generate_only=False, ignore=None)

@@ -226,9 +226,9 @@ Classes
    :type probability: float
 
 
-.. py:class:: PrototypeCounterfactual(*, train_x, train_y, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
+.. py:class:: PrototypeCounterfactual(*, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
+   Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
    Model agnostic approach for constructing counterfactual explanations
 
@@ -263,10 +263,6 @@ Classes
 
    Crate a new model agnostic counterfactual explainer.
 
-   :param train_x: The background data from which prototypes are sampled
-   :type train_x: array-like of shape (n_samples, n_timestep)
-   :param train_y: The background label from which prototypes are sampled
-   :type train_y: array-like of shape (n_samples,)
    :param metric: The metric used to move the samples
    :type metric: {'euclidean', 'dtw'}, optional
    :param metric_params: Optional parameters to the metric
@@ -311,28 +307,10 @@ Classes
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. py:method:: fit(estimator)
-
-      Fit the counterfactual to a given estimator
-
-      :param estimator: An estimator for which counterfactual explanations are produced
-      :type estimator: object
-
-      :rtype: self
+   .. py:method:: explain(x, y)
 
 
-   .. py:method:: transform(x, y)
-
-      Transform the i:th sample in x to a sample that would be labeled as the i:th
-      label in y
-
-      :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dimension, n_timestep)
-      :param y: The desired label of the counterfactual sample
-      :type y: array-like of shape (n_samples,)
-
-      :returns: **counterfactuals** -- The counterfactual for each sample.
-      :rtype: ndarray of same shape as x
+   .. py:method:: fit(estimator, x, y)
 
 
 

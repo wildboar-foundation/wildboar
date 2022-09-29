@@ -127,19 +127,41 @@ Functions
 
    A repository is a collection of bundles
 
-   .. py:attribute:: supported_version
-      :annotation: = 1.1
-
-      
-
-   .. py:method:: download_url()
-      :property:
+   .. py:property:: download_url
 
       The url template for downloading bundles
 
       :returns: **str**
       :rtype: the download url
 
+   .. py:property:: identifier
+
+
+   .. py:property:: name
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: wildboar_requires
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+   .. py:attribute:: supported_version
+      :annotation: = 1.1
+
+      
 
    .. py:method:: get_bundles()
 
@@ -147,37 +169,6 @@ Functions
 
       :returns: **dict**
       :rtype: a dictionary of key and bundle
-
-
-   .. py:method:: identifier()
-      :property:
-
-
-   .. py:method:: name()
-      :property:
-
-      Name of the repository
-
-      :returns: **str**
-      :rtype: the name of the repository
-
-
-   .. py:method:: version()
-      :property:
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-
-   .. py:method:: wildboar_requires()
-      :property:
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
 
 
 
@@ -203,6 +194,45 @@ Functions
 
    A repository is a collection of bundles
 
+   .. py:property:: active
+
+
+   .. py:property:: download_url
+      :abstractmethod:
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+   .. py:property:: identifier
+      :abstractmethod:
+
+
+   .. py:property:: name
+      :abstractmethod:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+      :abstractmethod:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: wildboar_requires
+      :abstractmethod:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
    .. py:method:: __eq__(o)
 
       Return self==value.
@@ -213,20 +243,7 @@ Functions
       Return hash(self).
 
 
-   .. py:method:: active()
-      :property:
-
-
    .. py:method:: clear_cache(cache_dir, keep_last_version=True)
-
-
-   .. py:method:: download_url()
-      :property:
-
-      The url template for downloading bundles
-
-      :returns: **str**
-      :rtype: the download url
 
 
    .. py:method:: get_bundle(key)
@@ -249,46 +266,15 @@ Functions
       :rtype: a dictionary of key and bundle
 
 
-   .. py:method:: identifier()
-      :property:
-
-
    .. py:method:: list_datasets(bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
    .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
 
-   .. py:method:: name()
-      :property:
-
-      Name of the repository
-
-      :returns: **str**
-      :rtype: the name of the repository
-
-
    .. py:method:: refresh(timeout=None)
 
       Refresh the repository
-
-
-   .. py:method:: version()
-      :property:
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-
-   .. py:method:: wildboar_requires()
-      :property:
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
 
 
 

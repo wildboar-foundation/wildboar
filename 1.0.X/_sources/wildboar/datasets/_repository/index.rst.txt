@@ -32,11 +32,6 @@ Attributes
    wildboar.datasets._repository.DEFAULT_TAG
 
 
-.. py:data:: DEFAULT_TAG
-   :annotation: = default
-
-   
-
 .. py:class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
 
    Bases: :py:obj:`Bundle`
@@ -180,14 +175,33 @@ Attributes
 
    A repository is a collection of bundles
 
-   .. py:method:: download_url()
-      :property:
+   .. py:property:: download_url
 
       The url template for downloading bundles
 
       :returns: **str**
       :rtype: the download url
 
+   .. py:property:: name
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: wildboar_requires
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
 
    .. py:method:: get_bundles()
 
@@ -197,36 +211,9 @@ Attributes
       :rtype: a dictionary of key and bundle
 
 
-   .. py:method:: name()
-      :property:
-
-      Name of the repository
-
-      :returns: **str**
-      :rtype: the name of the repository
-
-
    .. py:method:: refresh()
 
       Refresh the repository
-
-
-   .. py:method:: version()
-      :property:
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-
-   .. py:method:: wildboar_requires()
-      :property:
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
 
 
 
@@ -254,16 +241,39 @@ Attributes
 
    A repository is a collection of bundles
 
-   .. py:method:: clear_cache(cache_dir, keep_last_version=True)
-
-
-   .. py:method:: download_url()
-      :property:
+   .. py:property:: download_url
+      :abstractmethod:
 
       The url template for downloading bundles
 
       :returns: **str**
       :rtype: the download url
+
+   .. py:property:: name
+      :abstractmethod:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+      :abstractmethod:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: wildboar_requires
+      :abstractmethod:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+   .. py:method:: clear_cache(cache_dir, keep_last_version=True)
 
 
    .. py:method:: get_bundle(key)
@@ -292,36 +302,9 @@ Attributes
    .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
 
 
-   .. py:method:: name()
-      :property:
-
-      Name of the repository
-
-      :returns: **str**
-      :rtype: the name of the repository
-
-
    .. py:method:: refresh()
 
       Refresh the repository
-
-
-   .. py:method:: version()
-      :property:
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-
-   .. py:method:: wildboar_requires()
-      :property:
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
 
 
 
@@ -339,4 +322,9 @@ Attributes
    .. py:method:: append(item)
 
 
+
+.. py:data:: DEFAULT_TAG
+   :annotation: = default
+
+   
 

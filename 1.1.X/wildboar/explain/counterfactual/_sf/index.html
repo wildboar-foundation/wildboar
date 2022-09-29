@@ -340,29 +340,24 @@
 </tbody>
 </table>
 </div>
-<dl class="py data">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE">
-<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">MIN_MATCHING_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">0.0001</span></em><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.PredictionPaths">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">PredictionPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classes</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L59-L90"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.PredictionPaths" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">PredictionPaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">classes</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L58-L89"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.PredictionPaths" title="Permalink to this definition">#</a></dt>
 <dd><dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.PredictionPaths.__contains__">
-<span class="sig-name descname"><span class="pre">__contains__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L86-L87"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__contains__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__contains__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L85-L86"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__contains__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.PredictionPaths.__getitem__">
-<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L89-L90"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__getitem__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L88-L89"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__getitem__" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">ShapeletForestCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L121-L302"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">ShapeletForestCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L120-L303"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../base/index.html#wildboar.explain.counterfactual.base.BaseCounterfactual" title="wildboar.explain.counterfactual.base.BaseCounterfactual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base.BaseCounterfactual</span></code></a></p>
 <p>Counterfactual explanations for shapelet forest classifiers</p>
 <dl class="py attribute">
@@ -408,45 +403,25 @@ all counterfactual samples.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates">
-<span class="sig-name descname"><span class="pre">candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L237-L277"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L238-L278"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.candidates" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L184-L211"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.fit" title="Permalink to this definition">#</a></dt>
-<dd><p>Fit the counterfactual to a given estimator</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>estimator</strong> (<em>object</em>) – An estimator for which counterfactual explanations are produced</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>self</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L189-L215"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.fit" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L213-L235"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform" title="Permalink to this definition">#</a></dt>
-<dd><p>Transform the i:th sample in x to a sample that would be labeled as the i:th
-label in y</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or             </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>)</em>) – The samples to generate counterfactual explanations for</p></li>
-<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual sample</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>counterfactuals</strong> – The counterfactual for each sample.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of same shape as x</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE">
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._sf.</span></span><span class="sig-name descname"><span class="pre">MIN_MATCHING_DISTANCE</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">0.0001</span></em><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
@@ -495,7 +470,6 @@ label in y</p>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#attributes">Attributes</a><ul>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE"><code class="docutils literal notranslate"><span class="pre">MIN_MATCHING_DISTANCE</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.PredictionPaths"><code class="docutils literal notranslate"><span class="pre">PredictionPaths</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__contains__"><code class="docutils literal notranslate"><span class="pre">PredictionPaths.__contains__()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__getitem__"><code class="docutils literal notranslate"><span class="pre">PredictionPaths.__getitem__()</span></code></a></li>
@@ -508,7 +482,7 @@ label in y</p>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform"><code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactual.transform()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE">MIN_MATCHING_DISTANCE</a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE"><code class="docutils literal notranslate"><span class="pre">MIN_MATCHING_DISTANCE</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.PredictionPaths">PredictionPaths</a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__contains__">__contains__</a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.PredictionPaths.__getitem__">__getitem__</a></li>
@@ -521,6 +495,7 @@ label in y</p>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual.transform">transform</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual._sf.MIN_MATCHING_DISTANCE">MIN_MATCHING_DISTANCE</a></li>
 </ul>
 </li>
 </ul>

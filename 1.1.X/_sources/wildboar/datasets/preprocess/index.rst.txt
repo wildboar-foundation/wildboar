@@ -30,16 +30,6 @@ Attributes
    wildboar.datasets.preprocess.normalize
 
 
-.. py:data:: __doc__
-   
-
-   
-
-.. py:data:: normalize
-   
-
-   
-
 .. py:function:: maxabs_scale(x)
 
    Scale each time series by its maximum absolute value.
@@ -92,4 +82,14 @@ Attributes
    :returns: **x** -- The truncated dataset
    :rtype: ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
 
+
+.. py:data:: __doc__
+   
+
+   
+
+.. py:data:: normalize
+   
+
+   
 

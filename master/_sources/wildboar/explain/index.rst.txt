@@ -13,15 +13,6 @@ Subpackages
    counterfactual/index.rst
 
 
-Submodules
-----------
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   base/index.rst
-
-
 Package Contents
 ----------------
 
@@ -37,7 +28,7 @@ Classes
 
 .. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', domain='time', verbose=False, random_state=None)
 
-   Bases: :py:obj:`wildboar.explain.base.BaseImportance`
+   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
    Compute a model agnostic importance score for non-overlapping intervals in
    the time or frequency domain by permuting the intervals among samples.
@@ -72,21 +63,13 @@ Classes
                           by `np.random`.
    :type random_state: int or RandomState
 
-   .. py:method:: fit(estimator, x, y=None, sample_weight=None)
-
-      Fit the importance explanation to the estimator
-
-      :param estimator: An estimator
-      :type estimator: Estimator
-      :param x: The samples
-      :type x: array-like of shape (n_samples, n_timestep) or             (n_samples, n_dim, n_timestep)
-      :param y: The labels, by default None
-      :type y: array-like of shape (n_samples, ), optional
-      :param sample_weight: The sample weights, by default None
-      :type sample_weight: array-like of shape (n_samples, ), optional
+   .. py:method:: explain(x, y=None)
 
 
-   .. py:method:: plot(x=None, y=None, *, scoring=None, top_k=None, n_samples=None, title='Interval importance', **kwargs)
+   .. py:method:: fit(estimator, x, y, sample_weight=None)
+
+
+   .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, top_k=None, n_samples=None, **kwargs)
 
       Plot the explanation
 

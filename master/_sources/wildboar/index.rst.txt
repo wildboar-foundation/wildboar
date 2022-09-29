@@ -53,11 +53,6 @@ Attributes
    wildboar.eos
 
 
-.. py:data:: eos
-   
-
-   The end-of-sequence identifier. Indicates the end of a time series.
-
 .. py:function:: iseos(x)
 
    Boolean indicator if a value is the end-of-sequence value.
@@ -68,4 +63,9 @@ Attributes
    :returns: boolean indicator array
    :rtype: ndarray
 
+
+.. py:data:: eos
+   
+
+   The end-of-sequence identifier. Indicates the end of a time series.
 

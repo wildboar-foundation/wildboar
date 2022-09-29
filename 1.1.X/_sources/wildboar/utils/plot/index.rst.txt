@@ -34,11 +34,6 @@ Attributes
    wildboar.utils.plot.matplotlib_missing
 
 
-.. py:data:: matplotlib_missing
-   
-
-   
-
 .. py:class:: MidpointNormalize(vmin=None, vmax=None, midpoint=None, clip=False)
 
    Bases: :py:obj:`matplotlib.colors.Normalize`
@@ -116,4 +111,9 @@ Attributes
    :param cmap: The colormap, by default "Dark2"
    :type cmap: str, optional
 
+
+.. py:data:: matplotlib_missing
+   
+
+   
 

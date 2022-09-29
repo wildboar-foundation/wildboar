@@ -35,15 +35,16 @@ Functions
 
    Peicewise aggregate approximation
 
-   .. py:method:: __sklearn_is_fitted__()
-
-      Return True since SAX is stateless.
+   .. py:property:: intervals_
 
 
-   .. py:method:: fit(x=None, y=None)
+   .. py:method:: fit(x, y=None)
 
 
-   .. py:method:: transform(x, y=None)
+   .. py:method:: inverse_transform(x)
+
+
+   .. py:method:: transform(x)
 
 
 
@@ -83,15 +84,16 @@ Functions
                       ``binning="uniform"``
    :type estimate: bool, optional
 
-   .. py:method:: __sklearn_is_fitted__()
-
-      Return True since SAX is stateless.
+   .. py:property:: intervals_
 
 
    .. py:method:: fit(x, y=None)
 
 
-   .. py:method:: transform(x, y=None)
+   .. py:method:: inverse_transform(x)
+
+
+   .. py:method:: transform(x)
 
 
 
