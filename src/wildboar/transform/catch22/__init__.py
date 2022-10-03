@@ -29,7 +29,7 @@ def histogram_mode(x, n_bins=5):
     mode : array or float
        The histogram mode
     """
-    x = check_array(x, allow_multivariate=True)
+    x = check_array(x, allow_3d=True)
     return _catch22.histogram_mode_(x, n_bins)
 
 

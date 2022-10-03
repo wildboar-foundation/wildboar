@@ -189,7 +189,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
 
     def fit(self, estimator, x, y, sample_weight=None):
         estimator = self._validate_estimator(estimator)
-        x, y = self._validate_data(x, y, reset=False, allow_multivariate=False)
+        x, y = self._validate_data(x, y, reset=False, allow_3d=False)
         random_state = check_random_state(self.random_state)
 
         if self.n_intervals == "sqrt":

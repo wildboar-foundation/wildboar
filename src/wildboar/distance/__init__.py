@@ -181,7 +181,7 @@ def pairwise_subsequence_distance(
         best match between each subsequence and time series
     """
     y = _validate_subsequence(y)
-    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, dtype=np.double)
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
@@ -262,7 +262,7 @@ def paired_subsequence_distance(
         of the i:th subsequence and the i:th sample
     """
     y = _validate_subsequence(y)
-    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, dtype=np.double)
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
@@ -373,7 +373,7 @@ def subsequence_match(
     if len(y) > 1:
         raise ValueError("a single sample expected")
     y = y[0]
-    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, dtype=np.double)
     if y.shape[0] > x.shape[-1]:
         raise ValueError(
             "invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
@@ -514,7 +514,7 @@ def paired_subsequence_match(
         A list of shape (n_samples, ) of ndarray with distance at the matching position.
     """
     y = _validate_subsequence(y)
-    x = check_array(x, allow_multivariate=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, dtype=np.double)
     if len(y) != x.shape[0]:
         raise ValueError("x and y must have the same number of samples")
 
@@ -621,8 +621,8 @@ def paired_distance(
     dist : float or ndarray
         An array of shape (n_samples, )
     """
-    x = check_array(x, allow_multivariate=True, dtype=np.double)
-    y = check_array(y, allow_multivariate=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, dtype=np.double)
+    y = check_array(y, allow_3d=True, dtype=np.double)
     y = np.broadcast_to(y, x.shape)
     if x.ndim != y.ndim:
         raise ValueError(
@@ -710,13 +710,13 @@ def pairwise_distance(
         y = x
 
     if x is y:
-        x = check_array(x, allow_multivariate=True, dtype=np.double)
+        x = check_array(x, allow_3d=True, dtype=np.double)
         if not 0 >= dim < x.ndim:
             raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
     else:
-        x = check_array(np.atleast_2d(x), allow_multivariate=True, dtype=np.double)
-        y = check_array(np.atleast_2d(y), allow_multivariate=True, dtype=np.double)
+        x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
+        y = check_array(np.atleast_2d(y), allow_3d=True, dtype=np.double)
         if x.ndim != y.ndim:
             raise ValueError(
                 "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
@@ -817,13 +817,13 @@ def matrix_profile(
         that includes motifs, discords and shapelets. In 2016 IEEE 16th international
         conference on data mining (ICDM)
     """
-    x = check_array(np.atleast_2d(x), allow_multivariate=True)
+    x = check_array(np.atleast_2d(x), allow_3d=True)
 
     if y is not None:
         y = np.array(y)
         if y.ndim == 1:
             y = y.reshape(1, -1)
-        y = np.broadcast_to(check_array(y, allow_multivariate=True), x.shape)
+        y = np.broadcast_to(check_array(y, allow_3d=True), x.shape)
 
         if x.ndim != y.ndim:
             raise ValueError("both x and y must have the same dimensionality")

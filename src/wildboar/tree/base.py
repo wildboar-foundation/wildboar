@@ -72,9 +72,7 @@ class TreeRegressorMixin(RegressorMixin):
         self: object
         """
         if check_input:
-            x, y = self._validate_data(
-                x, y, allow_multivariate=True, dtype=float, y_numeric=True
-            )
+            x, y = self._validate_data(x, y, allow_3d=True, dtype=float, y_numeric=True)
         else:
             self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
             self.n_features_in_ = self.n_timesteps_in_
@@ -141,7 +139,7 @@ class TreeClassifierMixin(ClassifierMixin):
         self: object
         """
         if check_input:
-            x, y = self._validate_data(x, y, allow_multivariate=True, dtype=float)
+            x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
             check_classification_targets(y)
         else:
             self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)

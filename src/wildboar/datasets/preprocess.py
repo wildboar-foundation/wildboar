@@ -35,7 +35,7 @@ def standardize(x):
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The standardized dataset
     """
-    x = check_array(x, allow_multivariate=True, allow_nan=True)
+    x = check_array(x, allow_3d=True, allow_nan=True)
     return (x - np.nanmean(x, axis=-1, keepdims=True)) / np.nanstd(
         x, axis=-1, keepdims=True
     )
@@ -62,7 +62,7 @@ def minmax_scale(x, min=0, max=1):
     """
     if min > max:
         raise ValueError("min must be smaller than max.")
-    x = check_array(x, allow_multivariate=True, allow_nan=True)
+    x = check_array(x, allow_3d=True, allow_nan=True)
     x_min = np.nanmin(x, axis=-1, keepdims=True)
     x_max = np.nanmax(x, axis=-1, keepdims=True)
     x = (x - x_min) / (x_max - x_min)
@@ -82,7 +82,7 @@ def maxabs_scale(x):
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The transformed dataset
     """
-    x = check_array(x, allow_multivariate=True, allow_nan=True)
+    x = check_array(x, allow_3d=True, allow_nan=True)
     x_max = np.nanmax(np.abs(x), axis=-1, keepdims=True)
     return x / x_max
 
@@ -103,7 +103,7 @@ def truncate(x, n_shortest=None):
     x : ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
         The truncated dataset
     """
-    x = check_array(x, allow_multivariate=True, allow_eos=True, allow_nan=True)
+    x = check_array(x, allow_3d=True, allow_eos=True, allow_nan=True)
     if n_shortest is None:
         eos = np.nonzero(iseos(x))[-1]
         if eos.size > 0:

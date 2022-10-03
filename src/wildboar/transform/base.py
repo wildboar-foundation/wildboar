@@ -57,7 +57,7 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         -------
         self : self
         """
-        x = self._validate_data(x, allow_multivariate=True, dtype=np.double)
+        x = self._validate_data(x, allow_3d=True, dtype=np.double)
         self.embedding_ = feature_transform_fit(
             self._get_feature_engineer(), x, check_random_state(self.random_state)
         )
@@ -78,9 +78,7 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
             The transformation.
         """
         check_is_fitted(self, attributes="embedding_")
-        x = self._validate_data(
-            x, reset=False, allow_multivariate=True, dtype=np.double
-        )
+        x = self._validate_data(x, reset=False, allow_3d=True, dtype=np.double)
         return feature_transform_transform(self.embedding_, x, self.n_jobs)
 
     def fit_transform(self, x, y=None):
@@ -100,7 +98,7 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         x_embedding : ndarray of shape [n_samples, n_outputs]
             The embedding.
         """
-        x = self._validate_data(x, allow_multivariate=True, dtype=np.double)
+        x = self._validate_data(x, allow_3d=True, dtype=np.double)
         embedding, x_out = feature_transform_fit_transform(
             self._get_feature_engineer(),
             x,

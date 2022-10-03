@@ -102,7 +102,7 @@ def check_X_y(
     x,
     y,
     *,
-    allow_multivariate=False,
+    allow_3d=False,
     ensure_min_samples=1,
     allow_eos=False,
     allow_nan=False,
@@ -123,7 +123,7 @@ def check_X_y(
         )
     x = check_array(
         x,
-        allow_multivariate=allow_multivariate,
+        allow_3d=allow_3d,
         ensure_min_samples=ensure_min_samples,
         allow_eos=allow_eos,
         allow_nan=allow_nan,
@@ -147,7 +147,7 @@ def check_X_y(
 
 def check_array(
     x,
-    allow_multivariate=False,
+    allow_3d=False,
     ensure_1d=False,
     allow_eos=False,
     allow_nan=False,
@@ -160,7 +160,7 @@ def check_array(
     ----------
     x : ndarray
         The array to check
-    allow_multivariate : bool, optional
+    allow_3d : bool, optional
         If 3d arrays are allowed, by default False
     ensure_1d: bool, optional
         Ensure that the array has only one dimension.
@@ -188,11 +188,9 @@ def check_array(
     if "force_all_finite" in kwargs:
         del kwargs["force_all_finite"]
 
-    if allow_multivariate:
+    if allow_3d:
         if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
-            raise ValueError(
-                "ensure_2d=True and allow_multivariate=True are incompatible"
-            )
+            raise ValueError("ensure_2d=True and allow_3d=True are incompatible")
 
         if "allow_nd" in kwargs and not kwargs.pop("allow_nd"):
             raise ValueError(

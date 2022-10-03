@@ -203,9 +203,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
     def explain(self, x, y):
         check_is_fitted(self)
-        x, y = self._validate_data(
-            x, y, allow_multivariate=True, reset=False, dtype=float
-        )
+        x, y = self._validate_data(x, y, allow_3d=True, reset=False, dtype=float)
         counterfactuals = np.empty(x.shape)
         for i in range(x.shape[0]):
             if self.verbose:

@@ -220,7 +220,7 @@ def majority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
         The inliers (labeled as 1) and outlier (labled as -1)
     """
-    x = check_array(x, allow_multivariate=True)
+    x = check_array(x, allow_3d=True)
     y = check_array(y, ensure_2d=False)
     labels, counts = np.unique(y, return_counts=True)
     if len(labels) < 2:
@@ -275,7 +275,7 @@ def minority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
         The inliers (labeled as 1) and outlier (labled as -1)
     """
-    x = check_array(x, allow_multivariate=True)
+    x = check_array(x, allow_3d=True)
     y = check_array(y, ensure_2d=False)
 
     labels, label_count = np.unique(y, return_counts=True)

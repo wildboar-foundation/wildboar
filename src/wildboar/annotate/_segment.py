@@ -70,7 +70,7 @@ def segment(
     if x is not None:
         if mpi is not None:
             raise ValueError("both x and mpi cannot be given")
-        x = check_array(np.atleast_2d(x), allow_multivariate=False)
+        x = check_array(np.atleast_2d(x), allow_3d=False)
         _, mpi = matrix_profile(x, window=window, exclude=exclude, return_index=True)
         mpi = np.atleast_2d(mpi)
     else:

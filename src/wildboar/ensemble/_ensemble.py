@@ -69,8 +69,8 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         **check_params,
     ):
         new_check_params = {}
-        if "allow_multivariate" in check_params:
-            new_check_params["allow_multivariate"] = check_params["allow_multivariate"]
+        if "allow_3d" in check_params:
+            new_check_params["allow_3d"] = check_params["allow_3d"]
 
         if "y_numeric" in check_params:
             new_check_params["y_numeric"] = check_params["y_numeric"]
@@ -85,7 +85,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         )
 
     def fit(self, x, y, sample_weight=None):
-        x, y = self._validate_data(x, y, allow_multivariate=True)
+        x, y = self._validate_data(x, y, allow_3d=True)
         self._fit(
             x, y, self.max_samples, self.max_depth, sample_weight, check_input=False
         )
@@ -95,7 +95,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
 class ForestMixin:
     def apply(self, x):
         check_is_fitted(self)
-        x = self._validate_data(x, allow_multivariate=True, reset=False)
+        x = self._validate_data(x, allow_3d=True, reset=False)
         results = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
@@ -106,7 +106,7 @@ class ForestMixin:
 
     def decision_path(self, x):
         check_is_fitted(self)
-        x = self._validate_data(x, allow_multivariate=True, reset=False)
+        x = self._validate_data(x, allow_3d=True, reset=False)
         indicators = Parallel(
             n_jobs=self.n_jobs,
             verbose=self.verbose,
@@ -153,7 +153,7 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         self.class_weight = class_weight
 
     def fit(self, x, y, sample_weight=None):
-        x, y = self._validate_data(x, y, allow_multivariate=True)
+        x, y = self._validate_data(x, y, allow_3d=True)
 
         if self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
@@ -584,7 +584,7 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
         )
 
     def fit(self, x, y, sample_weight=None):
-        x, y = self._validate_data(x, y, allow_multivariate=True, y_numeric=True)
+        x, y = self._validate_data(x, y, allow_3d=True, y_numeric=True)
 
         super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
         return self
@@ -1047,7 +1047,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         return self
 
     def fit_transform(self, x, y=None, sample_weight=None):
-        x = self._validate_data(x, allow_multivariate=True)
+        x = self._validate_data(x, allow_3d=True)
         random_state = check_random_state(self.random_state)
         y = random_state.uniform(size=x.shape[0])
         super().fit(x, y, sample_weight=sample_weight)
@@ -1219,7 +1219,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         return {"prefer": "threads"}
 
     def fit(self, x, y=None, sample_weight=None):
-        x = self._validate_data(x, allow_multivariate=True)
+        x = self._validate_data(x, allow_3d=True)
         random_state = check_random_state(self.random_state)
 
         rnd_y = random_state.uniform(size=x.shape[0])
@@ -1320,7 +1320,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
     def score_samples(self, x):
         check_is_fitted(self)
-        x = self._validate_data(x, reset=False, allow_multivariate=True)
+        x = self._validate_data(x, reset=False, allow_3d=True)
         return _score_samples(x, self.estimators_, self.max_samples_)
 
     def _oob_score_samples(self, x):
