@@ -24,6 +24,7 @@ from libc.string cimport memcpy
 
 from ..utils cimport stats
 from ..utils.data cimport Dataset
+from ..utils.misc cimport realloc_array
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,
@@ -31,6 +32,8 @@ from ._distance cimport (
     SubsequenceDistanceMeasure,
     SubsequenceView,
 )
+
+from sklearn.utils.validation import check_scalar
 
 
 cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
@@ -474,7 +477,151 @@ cdef double scaled_dtw_distance(
     return sqrt(min_dist)
 
 
-cdef double inner_dtw(
+cdef Py_ssize_t scaled_dtw_matches(
+    double *S,
+    Py_ssize_t s_length,
+    double s_mean,
+    double s_std,
+    double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double *X_buffer,
+    double *cost,
+    double *cost_prev,
+    double *s_lower,
+    double *s_upper,
+    double *t_lower,
+    double *t_upper,
+    double *cb,
+    double *cb_1,
+    double *cb_2,
+    double threshold,
+    double **distances,
+    Py_ssize_t **matches,
+) nogil:
+    cdef double current_value = 0
+    cdef double mean = 0
+    cdef double std = 0
+    cdef double dist = 0
+
+    cdef double lb_kim
+    cdef double lb_k
+    cdef double lb_k2
+
+    cdef double ex = 0
+    cdef double ex2 = 0
+    cdef double tmp = 0
+
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t k
+    cdef Py_ssize_t I
+    cdef Py_ssize_t buffer_pos
+
+    cdef Py_ssize_t capacity = 1
+    cdef Py_ssize_t tmp_capacity
+    threshold = threshold * threshold
+    cdef Py_ssize_t n_matches = 0
+
+    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
+    distances[0] = <double*> malloc(sizeof(double) * capacity)
+
+    for i in range(t_length):
+        current_value = T[i]
+        ex += current_value
+        ex2 += current_value * current_value
+
+        buffer_pos = i % s_length
+        X_buffer[buffer_pos] = current_value
+        X_buffer[buffer_pos + s_length] = current_value
+
+        if i >= s_length - 1:
+            j = (i + 1) % s_length
+            I = i - (s_length - 1)
+            mean = ex / s_length
+            tmp = ex2 / s_length - mean * mean
+            if tmp > 0:
+                std = sqrt(tmp)
+            else:
+                std = 1.0
+            lb_kim = constant_lower_bound(
+                S,
+                s_mean, 
+                s_std, 
+                X_buffer + j,
+                mean, 
+                std, 
+                s_length, 
+                threshold,
+            )
+
+            if lb_kim < threshold:
+                lb_k = cumulative_bound(
+                    X_buffer + j,
+                    s_length, 
+                    mean, 
+                    std, 
+                    s_mean, 
+                    s_std, 
+                    s_lower,
+                    s_upper,
+                    cb_1, 
+                    threshold,
+                )
+                if lb_k < threshold:
+                    lb_k2 = cumulative_bound(
+                        S,
+                        s_length, 
+                        s_mean, 
+                        s_std, 
+                        mean, 
+                        std, 
+                        t_lower + I, 
+                        t_upper + I, 
+                        cb_2, 
+                        threshold,
+                    )
+
+                    if lb_k2 < threshold:
+                        if lb_k > lb_k2:
+                            cb[s_length - 1] = cb_1[s_length - 1]
+                            for k in range(s_length - 2, -1, -1):
+                                cb[k] = cb[k + 1] + cb_1[k]
+                        else:
+                            cb[s_length - 1] = cb_2[s_length - 1]
+                            for k in range(s_length - 2, -1, -1):
+                                cb[k] = cb[k + 1] + cb_2[k]
+                        dist = inner_scaled_dtw(
+                            S, 
+                            s_length, 
+                            s_mean,
+                            s_std, 
+                            X_buffer + j, 
+                            mean, 
+                            std, 
+                            r, 
+                            cb,
+                            cost, 
+                            cost_prev,
+                            threshold,
+                        )
+
+                        if dist <= threshold:
+                            tmp_capacity = capacity
+                            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+                            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
+                            matches[0][n_matches] = (i + 1) - s_length
+                            distances[0][n_matches] = sqrt(dist)
+                            n_matches += 1
+
+            current_value = X_buffer[j]
+            ex -= current_value
+            ex2 -= current_value * current_value
+
+    return n_matches
+
+
+cdef double inner_dtw_subsequence(
     double *S,
     int s_length,
     double *T,
@@ -530,7 +677,7 @@ cdef double inner_dtw(
     return cost_prev[k - 1]
 
 
-cdef double dtw_distance(
+cdef double dtw_subsequence_distance(
     double *S,
     Py_ssize_t s_length,
     double *T,
@@ -545,7 +692,7 @@ cdef double dtw_distance(
 
     cdef Py_ssize_t i
     for i in range(t_length - s_length + 1):
-        dist = inner_dtw(
+        dist = inner_dtw_subsequence(
             S,
             s_length, 
             T + i,
@@ -562,7 +709,51 @@ cdef double dtw_distance(
     return sqrt(min_dist)
 
 
-cdef double _dtw(
+cdef Py_ssize_t dtw_subsequence_matches(
+    double *S,
+    Py_ssize_t s_length,
+    double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double *cost,
+    double *cost_prev,
+    double threshold,
+    double **distances,
+    Py_ssize_t **matches
+) nogil:
+    cdef double dist = 0
+    cdef Py_ssize_t capacity = 1
+    cdef Py_ssize_t tmp_capacity
+    threshold = threshold * threshold
+    cdef Py_ssize_t i
+    cdef Py_ssize_t n_matches = 0
+
+    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
+    distances[0] = <double*> malloc(sizeof(double) * capacity)
+
+    for i in range(t_length - s_length + 1):
+        dist = inner_dtw_subsequence(
+            S,
+            s_length, 
+            T + i,
+            r, 
+            cost, 
+            cost_prev, 
+            threshold,
+        )
+
+        if dist <= threshold:
+            tmp_capacity = capacity
+            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
+            matches[0][n_matches] = i
+            distances[0][n_matches] = sqrt(dist)
+            n_matches += 1
+
+    return n_matches
+
+
+cdef double dtw_distance(
     double *X,
     Py_ssize_t x_length,
     double x_mean,
@@ -823,13 +1014,10 @@ def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r
 
 
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
-    # Warping path should be [0, length - 1]
     if r == 1:
         return length - 1
-    if r < 1:
-        return <Py_ssize_t> floor(length * r)
     else:
-        return <Py_ssize_t> min(floor(r), length - 1)
+        return <Py_ssize_t> floor(length * r)
 
 
 cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
@@ -850,6 +1038,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     cdef double r
 
     def __cinit__(self, double r=0):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
         self.X_buffer = NULL
         self.lower = NULL
@@ -868,20 +1057,28 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     cdef void _free(self) nogil:
         if self.X_buffer != NULL:
             free(self.X_buffer)
+            self.X_buffer = NULL
         if self.lower != NULL:            
             free(self.lower)
+            self.lower = NULL
         if self.upper != NULL:
             free(self.upper)
+            self.upper = NULL
         if self.cost != NULL:
             free(self.cost)
+            self.cost = NULL
         if self.cost_prev != NULL:
             free(self.cost_prev)
+            self.cost_prev = NULL
         if self.cb != NULL:
             free(self.cb)
+            self.cb = NULL
         if self.cb_1 != NULL:
             free(self.cb_1)
+            self.cb_1 = NULL
         if self.cb_2 != NULL:
             free(self.cb_2)
+            self.cb_2 = NULL
         
         deque_destroy(&self.dl)
         deque_destroy(&self.du)
@@ -1023,6 +1220,98 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
 
         return distance
 
+
+    cdef Py_ssize_t transient_matches(
+        self,
+        SubsequenceView *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
+        cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
+        find_min_max(
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            warp_width,
+            self.lower,
+            self.upper,
+            &self.dl,
+            &self.du,
+        )
+
+        return scaled_dtw_matches(
+            dataset.get_sample(s.index, s.dim) + s.start,
+            s.length,
+            s.mean,
+            s.std if s.std != 0.0 else 1.0,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            warp_width,
+            self.X_buffer,
+            self.cost,
+            self.cost_prev,
+            dtw_extra[0].lower,
+            dtw_extra[0].upper,
+            self.lower,
+            self.upper,
+            self.cb,
+            self.cb_1,
+            self.cb_2,
+            threshold,
+            distances,
+            indicies,
+        )
+
+    cdef Py_ssize_t persistent_matches(
+        self,
+        Subsequence *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        cdef double *s_lower
+        cdef double *s_upper
+        cdef DtwExtra *extra = <DtwExtra*> s.extra
+        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
+
+        find_min_max(
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            warp_width,
+            self.lower,
+            self.upper,
+            &self.dl,
+            &self.du,
+        )
+
+        return scaled_dtw_matches(
+            s.data,
+            s.length,
+            s.mean,
+            s.std if s.std != 0.0 else 1.0,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            warp_width,
+            self.X_buffer,
+            self.cost,
+            self.cost_prev,
+            extra.lower,
+            extra.upper,
+            self.lower,
+            self.upper,
+            self.cb,
+            self.cb_1,
+            self.cb_2,
+            threshold,
+            distances,
+            indicies,
+        )
+
     cdef int init_transient(
         self,
         Dataset dataset,
@@ -1126,8 +1415,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 
     def __cinit__(self, double r=0):
-        if r < 0:
-            raise ValueError("illegal warp width")
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
         self.cost = NULL
         self.cost_prev = NULL
@@ -1165,7 +1453,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     ) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
-        return dtw_distance(
+        return dtw_subsequence_distance(
             s.data,
             s.length,
             dataset.get_sample(index, s.dim),
@@ -1184,7 +1472,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
-        return dtw_distance(
+        return dtw_subsequence_distance(
             dataset.get_sample(s.index, s.dim) + s.start,
             s.length,
             dataset.get_sample(index, s.dim),
@@ -1193,6 +1481,52 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
             self.cost,
             self.cost_prev,
             return_index,
+        )
+
+    cdef Py_ssize_t transient_matches(
+        self,
+        SubsequenceView *v,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        cdef Py_ssize_t warp_width = _compute_warp_width(v.length, self.r)
+        return dtw_subsequence_matches(
+            dataset.get_sample(v.index, v.dim) + v.start,
+            v.length,
+            dataset.get_sample(index, v.dim),
+            dataset.n_timestep,
+            warp_width,
+            self.cost,
+            self.cost_prev,
+            threshold,
+            distances,
+            indicies,
+        )
+
+    cdef Py_ssize_t persistent_matches(
+        self,
+        Subsequence *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
+        return dtw_subsequence_matches(
+            s.data,
+            s.length,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            warp_width,
+            self.cost,
+            self.cost_prev,
+            threshold,
+            distances,
+            indicies,
         )
 
 
@@ -1204,8 +1538,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
     cdef double r
     
     def __cinit__(self, double r=0, *args, **kwargs):
-        if not 0 <= r <= 1.0:
-            raise ValueError("r should be in [0, 1], got %d" % r)
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
         self.cost = NULL
         self.cost_prev = NULL
@@ -1254,7 +1587,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
         double *y,
         Py_ssize_t y_len
     ) nogil:
-        cdef double dist = _dtw(
+        cdef double dist = dtw_distance(
             x,
             x_len,
             0.0,
@@ -1289,6 +1622,7 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double *d_y
 
     def __cinit__(self, double r=0):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.d_x = NULL
         self.d_y = NULL
 
@@ -1316,7 +1650,7 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     ) nogil:
         average_slope(x, x_len, self.d_x)
         average_slope(y, y_len, self.d_y)
-        cdef double dist = _dtw(
+        cdef double dist = dtw_distance(
             self.d_x,
             x_len - 2,
             0.0,
@@ -1339,6 +1673,7 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double *weights
 
     def __cinit__(self, double r=0, double g=0.05):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.weights = NULL
         self.g = g
 
@@ -1367,7 +1702,7 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
         double *y,
         Py_ssize_t y_len,
     ) nogil:
-        cdef double dist = _dtw(
+        cdef double dist = dtw_distance(
             x,
             x_len,
             0.0,
@@ -1393,6 +1728,7 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double g
 
     def __cinit__(self, double r=0, double g=0.05):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.weights = NULL
         self.g = g
         self.d_x = NULL
@@ -1435,7 +1771,7 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     ) nogil:
         average_slope(x, x_len, self.d_x)
         average_slope(y, y_len, self.d_y)
-        cdef double dist = _dtw(
+        cdef double dist = dtw_distance(
             self.d_x,
             x_len - 2,
             0.0,

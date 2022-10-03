@@ -7,6 +7,7 @@ import warnings
 
 import numpy as np
 from sklearn.utils.deprecation import deprecated
+from sklearn.utils.validation import _is_arraylike
 
 from ..utils.decorators import array_or_scalar, singleton
 from ..utils.validation import check_array
@@ -48,14 +49,9 @@ _THRESHOLD = {
 def _validate_subsequence(y):
     if isinstance(y, np.ndarray):
         if y.ndim == 1:
-            raise ValueError(
-                "Expected 2D array, got 1D array instead:\narray={}.\n"
-                "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single timestep or array.reshape(1, -1) "
-                "if it contains a single sample.".format(y)
-            )
+            return [y.astype(float)]
         elif y.ndim == 2:
-            y = list(y.astype(np.double))
+            y = list(y.astype(float))
         else:
             raise ValueError(
                 "Expected 2D array, got {}D array instead:\narray={}.\n".format(
@@ -63,10 +59,11 @@ def _validate_subsequence(y):
                 )
             )
     else:
-        if all(isinstance(e, (int, numbers.Real)) for e in y):
-            y = [np.array(y, dtype=np.double)]
-        else:
+
+        if any(_is_arraylike(e) for e in y):
             y = [np.array(e, dtype=np.double) for e in y]
+        else:
+            y = [np.array(y, dtype=np.double)]
 
     return y
 
@@ -365,12 +362,12 @@ def subsequence_match(
     -------
     indicies : list or ndarray
         A list of shape (n_samples, ) of ndarray with start index of matching
-        subsequences. If only one subsequence is given, the return value is a single
-        ndarray.
+        subsequences. If only one sample is given, the return value is a single
+        array.
 
     distance : list or ndarray
         A list of shape (n_samples, ) of ndarray with distance at the matching position.
-        If only one subsequence is given, the return value is a single ndarray.
+        If only one sample is given, the return value is a single array.
     """
     y = _validate_subsequence(y)
     if len(y) > 1:
