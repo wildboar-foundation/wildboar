@@ -24,7 +24,7 @@ BUILD_ARGS = {
     },
     "optimized": {
         "extra_compile_args": [
-            "-O2",
+            "-O3",
             "-march=native",
             "-msse",
             "-msse2",
@@ -36,6 +36,17 @@ BUILD_ARGS = {
     },
 }
 
+
+def _merge_build_options(options, build_args):
+    for arg, value in build_args.items():
+        if arg in options:
+            options[arg].extend(value)
+        else:
+            options[arg] = value
+
+    return options
+
+
 if __name__ == "__main__":
     from Cython.Build import cythonize
 
@@ -45,6 +56,9 @@ if __name__ == "__main__":
     build_args = BUILD_ARGS.get(BUILD_TYPE)
     if build_args is None:
         raise RuntimeError("%s is not a valid build type" % BUILD_TYPE)
+
+    if os.name == "unix":
+        build_args["libraries"].append("m")
 
     extensions = {
         "wildboar.utils.misc": {
@@ -135,7 +149,8 @@ if __name__ == "__main__":
         },
     }
     ext_modules = [
-        Extension(name, **options, **build_args) for name, options in extensions.items()
+        Extension(name, **_merge_build_options(options, build_args))
+        for name, options in extensions.items()
     ]
 
     setup(ext_modules=cythonize(ext_modules))
