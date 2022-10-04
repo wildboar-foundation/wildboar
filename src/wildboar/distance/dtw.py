@@ -240,7 +240,9 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
     if y is not None:
         y = check_array(y, **check_args)
         if y.shape[0] != x.shape[0]:
-            raise ValueError("invalid shape, got (%d, %d)" % (x.shape[0], y.shape[0]))
+            raise ValueError(
+                "invalid size for x (%d) and y (%d)" % (x.shape[0], y.shape[0])
+            )
         lower, upper = dtw_envelop(y, r=r)
     elif lower is None or upper is None:
         raise ValueError("both y, lower and upper can't be None")
@@ -249,7 +251,7 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
     upper = check_array(upper, **check_args)
     if lower.shape[0] != upper.shape[0] or lower.shape[0] != x.shape[0]:
         raise ValueError(
-            "invalid shape for lower (%d), upper (%d) and x (%d)"
+            "invalid size for lower (%d), upper (%d) and x (%d)"
             % (lower.shape[0], upper.shape[0], x.shape[0])
         )
     warp_size = _compute_warp_size(x.shape[0], r)
@@ -303,7 +305,11 @@ def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
             weight, ravel_1d=True, ensure_2d=False, dtype=float, input_name="weight"
         )
         if weight.shape[0] != max(x.shape[0], y.shape[0]):
-            raise ValueError("invalid weight array.")
+            raise ValueError(
+                "invalid weight array size (%d), expected %d"(
+                    weight.shape[0], max(x.shape[0], y.shape[0])
+                )
+            )
 
     return _dtw_alignment(x, y, warp_size, weight, out)
 
