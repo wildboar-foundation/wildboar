@@ -15,7 +15,7 @@ from sklearn.utils import check_random_state
 
 from ..linear_model import KernelLogisticRegression
 from ..utils import _soft_dependency_error
-from ..utils.validation import check_array
+from ..utils.validation import check_array, check_X_y
 
 __all__ = [
     "kmeans_outliers",
@@ -415,8 +415,7 @@ def emmott_outliers(
         (pp. 16-21).
 
     """
-    x = check_array(x, dtype=float)
-    y = check_array(y, ensure_1d=True)
+    x, y = check_X_y(x, y, dtype=float)
     random_state = check_random_state(random_state)
     n_classes = np.unique(y).shape[0]
 

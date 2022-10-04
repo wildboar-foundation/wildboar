@@ -60,9 +60,9 @@ def plot_time_domain(
     if ax is None:
         fig, ax = plt.subplots()
 
-    x = check_array(np.atleast_2d(x), allow_3d=False, contiguous=False)
+    x = check_array(np.atleast_2d(x), allow_3d=False, order=None)
     if y is not None:
-        y = check_array(y, ensure_2d=False, allow_nd=False, contiguous=False)
+        y = check_array(y, ensure_2d=False, allow_nd=False, order=None)
         if y.shape[0] != x.shape[0]:
             raise ValueError("The number of labels and samples are not the same.")
 
@@ -122,9 +122,9 @@ def plot_frequency_domain(
     if ax is None:
         fig, ax = plt.subplots()
 
-    x = check_array(x, allow_3d=False, contiguous=False)
+    x = check_array(x, allow_3d=False, order=None)
     if y is not None:
-        y = check_array(1, ensure_2d=False, allow_nd=False, contiguous=False)
+        y = check_array(y, ensure_2d=False, allow_nd=False, order=None)
         if y.shape[0] != x.shape[0]:
             raise ValueError("The number of samples and lables are not the same.")
 

@@ -102,15 +102,20 @@ def check_X_y(
     x,
     y,
     *,
-    allow_3d=False,
-    ensure_min_samples=1,
-    allow_eos=False,
-    allow_nan=False,
-    contiguous=True,
     dtype=float,
+    order="C",
+    copy=False,
+    ensure_2d=True,
+    allow_3d=False,
+    allow_nd=False,
+    force_all_finite=True,
+    multi_output=False,
+    ensure_min_samples=1,
+    ensure_min_timesteps=1,
+    ensure_min_dims=1,
+    allow_eos=False,
     y_numeric=False,
     y_contiguous=True,
-    multi_output=False,
     estimator=None,
 ):
     if y is None:
@@ -124,11 +129,15 @@ def check_X_y(
     x = check_array(
         x,
         allow_3d=allow_3d,
+        allow_nd=allow_nd,
         ensure_min_samples=ensure_min_samples,
+        ensure_min_dims=ensure_min_dims,
+        ensure_min_timesteps=ensure_min_timesteps,
+        force_all_finite=force_all_finite,
         allow_eos=allow_eos,
-        allow_nan=allow_nan,
-        contiguous=contiguous,
-        ensure_1d=False,
+        order=order,
+        copy=copy,
+        ensure_2d=ensure_2d,
         dtype=dtype,
     )
 
@@ -146,115 +155,187 @@ def check_X_y(
 
 
 def check_array(
-    x,
+    array,
+    *,
+    dtype="numeric",
+    order="C",
+    copy=False,
+    ravel_1d=False,
+    ensure_2d=True,
     allow_3d=False,
-    ensure_1d=False,
+    allow_nd=False,
+    force_all_finite=True,
+    ensure_min_samples=1,
+    ensure_min_timesteps=1,
+    ensure_min_dims=1,
+    estimator=None,
+    input_name="",
     allow_eos=False,
-    allow_nan=False,
-    contiguous=True,
-    **kwargs,
 ):
-    """Wrapper to check array
+    """Delegate array validation to scikit-learn
+    :func:`sklearn.utils.validation.check_array` with wildboar defaults and conventions.
+
+    - we optionally allow end-of-sequence identifiers
+    - by default we convert arrays to c-order
+    - we optionally specifically allow for 3d-arrays
+    - we never allow for sparse arrays
+
+    By default, the input is checked to be a non-empty 2D array in c-order containing
+    only finite values, with at least 1 sample, 1 timestep and 1 dimension. If the dtype
+    of the array is object, attempt converting to float, raising on failure.
 
     Parameters
     ----------
-    x : ndarray
-        The array to check
+    array : object
+        Input object to check / convert.
+
+    dtype : 'numeric', type, list of type or None, optional
+        Data type of result. If None, the dtype of the input is preserved.
+        If "numeric", dtype is preserved unless array.dtype is object.
+        If dtype is a list of types, conversion on the first type is only
+        performed if the dtype of the input is not in the list.
+
+    order : {'F', 'C'} or None, optional
+        Whether an array will be forced to be fortran or c-style.
+        When order is None, then if copy=False, nothing is ensured
+        about the memory layout of the output array; otherwise (copy=True)
+        the memory layout of the returned array is kept as close as possible
+        to the original array.
+
+    copy : bool, optional
+        Whether a forced copy will be triggered. If copy=False, a copy might
+        be triggered by a conversion.
+
+    ravel_1d : bool, optional
+        Whether to ravel 1d arrays or column vectors.
+
+    ensure_2d : bool, optional
+        Whether to raise a value error if array is not 2D.
+
     allow_3d : bool, optional
-        If 3d arrays are allowed, by default False
-    ensure_1d: bool, optional
-        Ensure that the array has only one dimension.
-    allow_eos : bool, optional
-        If unequal length series are allowed
-    allow_nan : bool, optional
-        If NaN values are allowed
-    contiguous : bool, optional
-        Ensure that the array is in c-order.
-    kwargs : dict
-        Additional arguments passed to `sklearn.utils.check_array`
+        Wheter to allow array.ndim == 3
+
+    allow_nd : bool, optional
+        Whether to allow array.ndim > 2.
+
+    force_all_finite : bool or 'allow-nan', default=True
+        Whether to raise an error on np.inf, np.nan, pd.NA in array. The
+        possibilities are:
+
+        - True: Force all values of array to be finite.
+        - False: accepts np.inf, np.nan, pd.NA in array.
+        - 'allow-nan': accepts only np.nan and pd.NA values in array. Values
+          cannot be infinite.
+
+        If allow_eos=True, -np.inf is allowed despite force_all_finite=True.
+
+    ensure_min_samples : int, optional
+        Make sure that the array has a minimum number of samples in its first
+        axis (rows for a 2D array). Setting to 0 disables this check.
+
+    ensure_min_timesteps : int, optional
+        Make sure that the 2D array has some minimum number of timesteps
+        (columns). The default value of 1 rejects empty datasets.
+        This check is only enforced when the input data has effectively 2
+        dimensions or is originally 1D and ``ensure_2d`` is True. Setting to 0
+        disables this check.
+
+    ensure_min_dims : int, optional
+        Make sure that the array has a minimum number of dimensions. Setting to 0
+        disables this check.
+
+    estimator : str or estimator instance, default=None
+        If passed, include the name of the estimator in warning messages.
+
+    input_name : str, default=""
+        The data name used to construct the error message.
 
     Returns
     -------
-    ndarray
-        The checked array
+    array_converted : object
+        The converted and validated array.
+
     """
-    if contiguous:
-        order = kwargs.get("order", None)
-        if order is not None and order.lower() != "c":
-            raise ValueError("order=%r and contiguous=True are incompatible")
-        kwargs["order"] = "C"
 
-    # Never force_all_finite. We always force all finite.
-    if "force_all_finite" in kwargs:
-        del kwargs["force_all_finite"]
-
-    if allow_3d:
-        if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
-            raise ValueError("ensure_2d=True and allow_3d=True are incompatible")
-
-        if "allow_nd" in kwargs and not kwargs.pop("allow_nd"):
-            raise ValueError(
-                "allow_nd=False and allow_multivaraite=True are incompatible"
-            )
-        x = sklearn_check_array(
-            x,
-            ensure_2d=False,
-            allow_nd=True,
-            force_all_finite=False,
-            **kwargs,
+    check_params = dict(
+        accept_sparse=False,
+        accept_large_sparse=False,
+        dtype=dtype,
+        order=order,
+        copy=copy,
+        force_all_finite=False,
+        ensure_2d=ensure_2d,
+        allow_nd=allow_3d or allow_nd,
+        ensure_min_samples=ensure_min_samples,
+        ensure_min_features=0,
+        estimator=estimator,
+        input_name=input_name,
+    )
+    if force_all_finite not in (True, False, "allow-nan"):
+        raise ValueError(
+            'force_all_finite should be a bool or "allow-nan".'
+            f"Got {force_all_finite} instead"
         )
-        if x.ndim == 0:
-            raise ValueError(
-                "Expected 2D or 3D array, got scalar array instead:\narray={}.\n"
-                "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single timestep or array.reshape(1, -1) "
-                "if it contains a single sample.".format(x)
-            )
-        if x.ndim == 1:
-            raise ValueError(
-                "Expected 2D or 3D array, got 1D array instead:\narray={}.\n"
-                "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single timestep or array.reshape(1, -1) "
-                "if it contains a single sample.".format(x)
-            )
-        if x.ndim > 3:
-            raise ValueError(
-                "Expected 2D or 3D array, got {}D array instead:\narray={}.\n".format(
-                    x.ndim, x
-                )
-            )
-    elif ensure_1d:
-        if "ensure_2d" in kwargs and kwargs.pop("ensure_2d"):
-            raise ValueError("ensure_2d=True and ensure_1d=True are incompatible")
-        x = np.squeeze(
-            sklearn_check_array(
-                x, ensure_2d=False, allow_nd=False, force_all_finite=False, **kwargs
-            )
+
+    array = sklearn_check_array(array, **check_params)
+    estimator_name = _check_estimator_name(estimator)
+    if not (allow_nd or allow_3d) and array.ndim >= 3:
+        raise ValueError(
+            "Found array with dim %d. %s expected <= 2." % (array.ndim, estimator_name)
         )
-        if x.ndim == 0:
+
+    if not allow_nd and allow_3d and array.ndim >= 4:
+        raise ValueError(
+            "Found array with dim %d. %s expected <= 3." % (array.ndim, estimator_name)
+        )
+
+    if ravel_1d:
+        if array.ndim == 1:
+            return array.ravel(order=order)
+        elif array.ndim == 2 and array.shape[1] == 1:
+            return array.ravel(order=order)
+        else:
             raise ValueError(
-                "Expected 2D or 3D array, got scalar array instead:\narray={}.\n"
-                "Reshape your data either using array.reshape(-1, 1) if "
-                "your data has a single timestep or array.reshape(1, -1) "
-                "if it contains a single sample.".format(x)
+                "Found array with dim %d.%s expect 1 dim or column vector"
+                % (array.ndim, estimator_name)
             )
 
-        if x.ndim > 1:
+    context = " by %s" % estimator_name if estimator is not None else ""
+    if ensure_min_dims > 0 and (array.ndim == 2 or array.ndim == 3):
+        if array.ndim == 3:
+            n_dims = array.shape[1]
+        else:
+            n_dims = 1
+
+        if n_dims < ensure_min_dims:
             raise ValueError(
-                "Expected 1D or 2D array with an empty dimension, "
-                "got {}D array instead:\narray={}.\n".format(x.ndim, x)
+                "Found array with %d dimension(s) (shape=%s) while a"
+                " minimum of %d is required%s."
+                % (n_dims, array.shape, ensure_min_dims, context)
             )
-    else:
-        x = sklearn_check_array(x, force_all_finite=False, **kwargs)
 
-    if np.issubdtype(x.dtype, np.double):
-        if not allow_eos and wb.iseos(x).any():
-            raise ValueError("Expected time series of equal length.")
+    if ensure_min_timesteps > 0 and (array.ndim == 2 or array.ndim == 3):
+        n_timesteps = array.shape[-1]
+        if n_timesteps < ensure_min_timesteps:
+            # TODO: ignore sklearn tests for this error message and create our own
+            #       estimator check
+            raise ValueError(
+                "Found array with %d feature(s) (shape=%s) while"
+                " a minimum of %d is required%s."
+                % (n_timesteps, array.shape, ensure_min_timesteps, context)
+            )
 
-        if not allow_nan and np.isnan(x).any():
-            raise ValueError("Input contains NaN.")
+    if np.issubdtype(array.dtype, np.double):
+        padded_input_name = input_name + " " if input_name else ""
+        if force_all_finite and not allow_eos and wb.iseos(array).any():
+            raise ValueError(
+                f"Input {padded_input_name}expected time series of equal length."
+            )
 
-        if np.isposinf(x).any():
-            raise ValueError("Input contains infinity.")
+        if force_all_finite is True and np.isnan(array).any():
+            raise ValueError(f"Input {padded_input_name}contains NaN.")
 
-    return x
+        if force_all_finite and np.isposinf(array).any():
+            raise ValueError(f"Input {padded_input_name}contains infinity.")
+
+    return array

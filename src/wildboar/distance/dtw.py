@@ -190,7 +190,7 @@ def dtw_envelop(x, *, r=1.0):
         Exact indexing of dynamic time warping.
         In 28th International Conference on Very Large Data Bases.
     """
-    x = check_array(x, ensure_1d=True, dtype=float, contiguous=True)
+    x = check_array(x, ravel_1d=True, ensure_2d=False, dtype=float)
     warp_size = _compute_warp_size(x.shape[0], r)
     return _dtw_envelop(x, warp_size)
 
@@ -235,19 +235,18 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
         Exact indexing of dynamic time warping.
         In 28th International Conference on Very Large Data Bases.
     """
-    x = check_array(x, ensure_1d=True, contiguous=True, dtype=float)
-    if x.ndim != 1:
-        raise ValueError("invalid ndim, got (%d)" % x.ndim)
+    check_args = dict(ravel_1d=True, ensure_2d=False, dtype=float)
+    x = check_array(x, **check_args)
     if y is not None:
-        y = check_array(y, ensure_1d=True, contiguous=True, dtype=float)
+        y = check_array(y, **check_args)
         if y.shape[0] != x.shape[0]:
             raise ValueError("invalid shape, got (%d, %d)" % (x.shape[0], y.shape[0]))
         lower, upper = dtw_envelop(y, r=r)
     elif lower is None or upper is None:
         raise ValueError("both y, lower and upper can't be None")
 
-    lower = check_array(lower, ensure_1d=True, contiguous=True, dtype=float)
-    upper = check_array(upper, ensure_1d=True, contiguous=True, dtype=float)
+    lower = check_array(lower, **check_args)
+    upper = check_array(upper, **check_args)
     if lower.shape[0] != upper.shape[0] or lower.shape[0] != x.shape[0]:
         raise ValueError(
             "invalid shape for lower (%d), upper (%d) and x (%d)"
@@ -296,11 +295,13 @@ def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
         Weighted dynamic time warping for time series classification.
         Pattern Recognition 44, 2231-2240
     """
-    x = check_array(x, ensure_2d=False, dtype=float)
-    y = check_array(y, ensure_2d=False, dtype=float)
+    x = check_array(x, ravel_1d=True, ensure_2d=False, dtype=float, input_name="x")
+    y = check_array(y, ravel_1d=True, ensure_2d=False, dtype=float, input_name="y")
     warp_size = _compute_warp_size(x.shape[0], r, y_size=y.shape[0])
     if weight is not None:
-        weight = np.asarray(weight, dtype=float)
+        weight = check_array(
+            weight, ravel_1d=True, ensure_2d=False, dtype=float, input_name="weight"
+        )
         if weight.shape[0] != max(x.shape[0], y.shape[0]):
             raise ValueError("invalid weight array.")
 
@@ -412,6 +413,8 @@ def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
         if x is None or y is None:
             raise ValueError("if alignment=None, neither x or y can be None")
         alignment = dtw_alignment(x, y, r=r)
+    else:
+        alignment = check_array(alignment, force_all_finite=False, order=None)
 
     indicator = np.zeros(alignment.shape).astype(bool)
     i = alignment.shape[0] - 1
