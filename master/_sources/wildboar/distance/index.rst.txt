@@ -393,9 +393,9 @@ Functions
    :type n_jobs: int, optional
 
    :returns: * **indicies** (*list or ndarray*) -- A list of shape (n_samples, ) of ndarray with start index of matching
-               subsequences. If only one subsequence is given, the return value is a single
-               ndarray.
+               subsequences. If only one sample is given, the return value is a single
+               array.
              * **distance** (*list or ndarray*) -- A list of shape (n_samples, ) of ndarray with distance at the matching position.
-               If only one subsequence is given, the return value is a single ndarray.
+               If only one sample is given, the return value is a single array.
 
 

@@ -26,9 +26,9 @@ using the ``metric_params`` argument.
      -
 
    * - Scaled Euclidean
-     - ``"scaled_euclidean"``
+     - ``"scaled_euclidean"`` or ``"mass"``
      - ``{}``
-     - Normalized
+     - Normalized.
     
    * - Dynamic time warping
      - ``"dtw"``
@@ -60,6 +60,11 @@ using the ``metric_params`` argument.
      - ``"dtw"``
      - ``{"r": float}``
      - Window ``r`` in ``[0, 1]``. Elastic.
+
+   * - Weighted DTW
+     - ``"wdtw"``
+     - ``{"r": float, "g": float}``
+     - Window ``r`` in ``[0, 1]``. Phase difference penelty ``g``. Elastic.
 
    * - Derivative DTW
      - ``"ddtw"``

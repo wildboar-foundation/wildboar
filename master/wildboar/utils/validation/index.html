@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.base" href="../../base/index.html" /><link rel="prev" title="wildboar.utils.plot" href="../plot/index.html" />
 
-    <meta name="generator" content="sphinx-5.2.2, furo 2022.09.15"/>
-        <title>wildboar.utils.validation - Wildboar 1.1.0rc5.dev117+g0bf8fa00 documentation</title>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+        <title>wildboar.utils.validation - Wildboar 1.1.0rc5.dev125+g67506fe7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev117+g0bf8fa00 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev125+g67506fe7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -325,7 +325,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -348,41 +349,81 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.validation.check_X_y" title="wildboar.utils.validation.check_X_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_X_y</span></code></a>(x, y, *[, allow_multivariate, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.validation.check_X_y" title="wildboar.utils.validation.check_X_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_X_y</span></code></a>(x, y, *[, dtype, order, copy, ensure_2d, ...])</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.validation.check_array" title="wildboar.utils.validation.check_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_array</span></code></a>(x[, allow_multivariate, ensure_1d, ...])</p></td>
-<td><p>Wrapper to check array</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.validation.check_array" title="wildboar.utils.validation.check_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_array</span></code></a>(array, *[, dtype, order, copy, ravel_1d, ...])</p></td>
+<td><p>Delegate array validation to scikit-learn</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.validation.check_X_y">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.validation.</span></span><span class="sig-name descname"><span class="pre">check_X_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_multivariate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_eos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_numeric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/validation.py#L101-L145"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.validation.check_X_y" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.validation.</span></span><span class="sig-name descname"><span class="pre">check_X_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_3d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_all_finite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_min_timesteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_min_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_eos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_numeric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/validation.py#L101-L154"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.validation.check_X_y" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.validation.check_array">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.validation.</span></span><span class="sig-name descname"><span class="pre">check_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_multivariate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_1d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_eos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contiguous</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/validation.py#L148-L262"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.validation.check_array" title="Permalink to this definition">#</a></dt>
-<dd><p>Wrapper to check array</p>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.validation.</span></span><span class="sig-name descname"><span class="pre">check_array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'numeric'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">copy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ravel_1d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_2d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_3d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_all_finite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_min_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_min_timesteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_min_dims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_eos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/validation.py#L157-L341"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.validation.check_array" title="Permalink to this definition">#</a></dt>
+<dd><p>Delegate array validation to scikit-learn
+<code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.utils.validation.check_array()</span></code> with wildboar defaults and conventions.</p>
+<ul class="simple">
+<li><p>we optionally allow end-of-sequence identifiers</p></li>
+<li><p>by default we convert arrays to c-order</p></li>
+<li><p>we optionally specifically allow for 3d-arrays</p></li>
+<li><p>we never allow for sparse arrays</p></li>
+</ul>
+<p>By default, the input is checked to be a non-empty 2D array in c-order containing
+only finite values, with at least 1 sample, 1 timestep and 1 dimension. If the dtype
+of the array is object, attempt converting to float, raising on failure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>ndarray</em>) – The array to check</p></li>
-<li><p><strong>allow_multivariate</strong> (<em>bool</em><em>, </em><em>optional</em>) – If 3d arrays are allowed, by default False</p></li>
-<li><p><strong>ensure_1d</strong> (<em>bool</em><em>, </em><em>optional</em>) – Ensure that the array has only one dimension.</p></li>
-<li><p><strong>allow_eos</strong> (<em>bool</em><em>, </em><em>optional</em>) – If unequal length series are allowed</p></li>
-<li><p><strong>allow_nan</strong> (<em>bool</em><em>, </em><em>optional</em>) – If NaN values are allowed</p></li>
-<li><p><strong>contiguous</strong> (<em>bool</em><em>, </em><em>optional</em>) – Ensure that the array is in c-order.</p></li>
-<li><p><strong>kwargs</strong> (<em>dict</em>) – Additional arguments passed to <cite>sklearn.utils.check_array</cite></p></li>
+<li><p><strong>array</strong> (<em>object</em>) – Input object to check / convert.</p></li>
+<li><p><strong>dtype</strong> (<em>'numeric'</em><em>, </em><em>type</em><em>, </em><em>list</em><em> of </em><em>type</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Data type of result. If None, the dtype of the input is preserved.
+If “numeric”, dtype is preserved unless array.dtype is object.
+If dtype is a list of types, conversion on the first type is only
+performed if the dtype of the input is not in the list.</p></li>
+<li><p><strong>order</strong> (<em>{'F'</em><em>, </em><em>'C'}</em><em> or </em><em>None</em><em>, </em><em>optional</em>) – Whether an array will be forced to be fortran or c-style.
+When order is None, then if copy=False, nothing is ensured
+about the memory layout of the output array; otherwise (copy=True)
+the memory layout of the returned array is kept as close as possible
+to the original array.</p></li>
+<li><p><strong>copy</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether a forced copy will be triggered. If copy=False, a copy might
+be triggered by a conversion.</p></li>
+<li><p><strong>ravel_1d</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to ravel 1d arrays or column vectors.</p></li>
+<li><p><strong>ensure_2d</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to raise a value error if array is not 2D.</p></li>
+<li><p><strong>allow_3d</strong> (<em>bool</em><em>, </em><em>optional</em>) – Wheter to allow array.ndim == 3</p></li>
+<li><p><strong>allow_nd</strong> (<em>bool</em><em>, </em><em>optional</em>) – Whether to allow array.ndim &gt; 2.</p></li>
+<li><p><strong>force_all_finite</strong> (<em>bool</em><em> or </em><em>'allow-nan'</em><em>, </em><em>default=True</em>) – <p>Whether to raise an error on np.inf, np.nan, pd.NA in array. The
+possibilities are:</p>
+<ul>
+<li><p>True: Force all values of array to be finite.</p></li>
+<li><p>False: accepts np.inf, np.nan, pd.NA in array.</p></li>
+<li><p>’allow-nan’: accepts only np.nan and pd.NA values in array. Values
+cannot be infinite.</p></li>
+</ul>
+<p>If allow_eos=True, -np.inf is allowed despite force_all_finite=True.</p>
+</p></li>
+<li><p><strong>ensure_min_samples</strong> (<em>int</em><em>, </em><em>optional</em>) – Make sure that the array has a minimum number of samples in its first
+axis (rows for a 2D array). Setting to 0 disables this check.</p></li>
+<li><p><strong>ensure_min_timesteps</strong> (<em>int</em><em>, </em><em>optional</em>) – Make sure that the 2D array has some minimum number of timesteps
+(columns). The default value of 1 rejects empty datasets.
+This check is only enforced when the input data has effectively 2
+dimensions or is originally 1D and <code class="docutils literal notranslate"><span class="pre">ensure_2d</span></code> is True. Setting to 0
+disables this check.</p></li>
+<li><p><strong>ensure_min_dims</strong> (<em>int</em><em>, </em><em>optional</em>) – Make sure that the array has a minimum number of dimensions. Setting to 0
+disables this check.</p></li>
+<li><p><strong>estimator</strong> (<em>str</em><em> or </em><em>estimator instance</em><em>, </em><em>default=None</em>) – If passed, include the name of the estimator in warning messages.</p></li>
+<li><p><strong>input_name</strong> (<em>str</em><em>, </em><em>default=&quot;&quot;</em>) – The data name used to construct the error message.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The checked array</p>
+<dd class="field-even"><p><strong>array_converted</strong> – The converted and validated array.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray</p>
+<dd class="field-odd"><p>object</p>
 </dd>
 </dl>
 </dd></dl>

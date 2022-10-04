@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Explainability" href="explain.html" /><link rel="prev" title="Outlier detection" href="unsupervised/outlier_detection.html" />
 
-    <meta name="generator" content="sphinx-5.2.2, furo 2022.09.15"/>
-        <title>Distance metrics - Wildboar 1.1.0rc5.dev117+g0bf8fa00 documentation</title>
+    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
+        <title>Distance metrics - Wildboar 1.1.0rc5.dev125+g67506fe7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=9ec31e2665bf879c1d47d93a8ec4893870ee1e45" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev117+g0bf8fa00 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev125+g67506fe7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -325,7 +325,8 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -368,9 +369,9 @@ using the <code class="docutils literal notranslate"><span class="pre">metric_pa
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>Scaled Euclidean</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&quot;scaled_euclidean&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;scaled_euclidean&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;mass&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
-<td><p>Normalized</p></td>
+<td><p>Normalized.</p></td>
 </tr>
 <tr class="row-even"><td><p>Dynamic time warping</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;dtw&quot;</span></code></p></td>
@@ -412,12 +413,17 @@ using the <code class="docutils literal notranslate"><span class="pre">metric_pa
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-even"><td><p>Derivative DTW</p></td>
+<tr class="row-even"><td><p>Weighted DTW</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;wdtw&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;g&quot;:</span> <span class="pre">float}</span></code></p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Phase difference penelty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Derivative DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;ddtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Weighted Derivative DTW</p></td>
+<tr class="row-even"><td><p>Weighted Derivative DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;wddtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;g&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Phase difference penelty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>
