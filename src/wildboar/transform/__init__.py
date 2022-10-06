@@ -1,7 +1,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-from ._interval import IntervalTransform
+from ._interval import FeatureTransform, IntervalTransform
 from ._pivot import PivotTransform
 from ._rocket import RocketTransform
 from ._sax import (
@@ -19,6 +19,7 @@ __all__ = [
     "RocketTransform",
     "IntervalTransform",
     "PivotTransform",
+    "FeatureTransform",
     "SAX",
     "PAA",
 ]

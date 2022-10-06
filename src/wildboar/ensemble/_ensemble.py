@@ -1,6 +1,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import math
 import numbers
 from abc import ABCMeta, abstractmethod
 
@@ -14,7 +15,7 @@ from sklearn.ensemble._bagging import BaseBagging as SklearnBaseBagging
 from sklearn.metrics import precision_recall_curve, roc_curve
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils import check_random_state, compute_sample_weight
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, check_scalar
 
 from ..base import BaseEstimator
 from ..model_selection.outlier import threshold_score
@@ -1228,16 +1229,22 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
                 max_samples = min(x.shape[0], 256)
             else:
                 raise ValueError(
-                    "max_samples (%s) is not supported." % self.max_samples
+                    "max_samples must be 'auto', got %r." % self.max_samples
                 )
         elif isinstance(self.max_samples, numbers.Integral):
             max_samples = min(self.max_samples, x.shape[0])
         else:
-            if not 0.0 < self.max_samples <= 1.0:
-                raise ValueError(
-                    "max_samples must be in (0, 1], got %r" % self.max_samples
+            max_samples = math.ceil(
+                check_scalar(
+                    self.max_samples,
+                    "max_samples",
+                    numbers.Real,
+                    min_val=0,
+                    max_val=1.0,
+                    include_boundaries="right",
                 )
-            max_samples = int(self.max_samples * x.shape[0])
+                * x.shape[0]
+            )
 
         max_depth = int(np.ceil(np.log2(max(max_samples, 2))))
         super(IsolationShapeletForest, self)._fit(
@@ -1282,10 +1289,14 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
                 thresholds = scores
             self.offset_ = thresholds[best_threshold]
         elif isinstance(self.contamination, numbers.Real):
-            if not 0.0 < self.contamination <= 1.0:
-                raise ValueError(
-                    "contamination must be in (0, 1], got %r" % self.contamination
-                )
+            check_scalar(
+                self.contamination,
+                "contamination",
+                numbers.Real,
+                min_val=0,
+                max_val=1.0,
+                include_boundaries="right",
+            )
             if self.contamination_set == "training":
                 self.offset_ = np.percentile(
                     self.score_samples(x), 100.0 * self.contamination
@@ -1301,11 +1312,13 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
                 )
             else:
                 raise ValueError(
-                    "contamination_set (%s) is not supported" % self.contamination_set
+                    "contamination_set must be 'oob' or 'training', got %r."
+                    % self.contamination_set
                 )
         else:
             raise ValueError(
-                "contamination (%s) is not supported." % self.contamination
+                "contamination must be 'roc', 'prc', callable or float, got %r."
+                % self.contamination
             )
 
         return self

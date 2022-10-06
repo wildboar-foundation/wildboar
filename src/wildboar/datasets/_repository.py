@@ -74,7 +74,7 @@ def _check_integrity(bundle_file, hash_file, throws=True):
         if hash != actual_hash:
             if throws:
                 raise ValueError(
-                    "integrity check failed, expected '%s', got '%s'"
+                    "Integrity check failed, expected '%s', got '%s'."
                     % (hash, actual_hash)
                 )
             else:
@@ -139,8 +139,8 @@ def _load_archive(
             os.makedirs(os.path.abspath(cache_dir), exist_ok=True)
         else:
             raise ValueError(
-                "output directory does not exist "
-                "(set create_cache_dir=True to create it)"
+                "The output directory %s does not exist. "
+                "Set create_cache_dir=True to create it." % cache_dir
             )
 
     cached_hash = os.path.join(cache_dir, "%s.sha1" % bundle_name)
@@ -184,13 +184,15 @@ def _download_hash_file(cached_hash, hash_url, filename):
     """
     with open(cached_hash, "w") as f:
         response = requests.get(hash_url)
-        if not response:
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
             f.close()
             os.remove(cached_hash)
             raise ValueError(
-                "bundle (%s) not found (.sha1-file is missing). "
-                "Try another version or tag." % filename
-            )
+                "Downloading %s.sha1 failed. Try another version or tag." % filename
+            ) from e
+
         f.write(response.text)
 
 
@@ -213,13 +215,14 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
     """
     with open(cached_bundle, "wb") as f:
         response = requests.get(bundle_url, stream=True)
-        if not response:
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
             f.close()
             os.remove(cached_bundle)
             raise ValueError(
-                "bundle (%s) not found (.zip-file is missing). "
-                "Try another version or tag." % filename
-            )
+                "Downloading %s.zip failed. Try another version or tag." % filename
+            ) from e
 
         total_length = response.headers.get("content-length")
         if total_length is None:  # no content length header
@@ -337,7 +340,7 @@ class Repository(metaclass=ABCMeta):
         """
         bundle = self.get_bundles().get(key)
         if bundle is None:
-            raise ValueError("bundle (%s) does not exist" % key)
+            raise ValueError("The bundle %s does not exist." % key)
         return bundle
 
     def load_dataset(
@@ -441,7 +444,7 @@ def _validate_url(url):
         return url
     else:
         raise ValueError(
-            "repository url is invalid, got %s "
+            "The repository url is invalid, got %s "
             "({bundle}, {version} and {tag} are required)" % url
         )
 
@@ -450,38 +453,49 @@ def _validate_repository_name(str):
     if re.match("[a-zA-Z]+", str):
         return str
     else:
-        raise ValueError("repository name (%s) is not valid" % str)
+        raise ValueError(
+            "The repository name %s is not valid, expected only characters." % str
+        )
 
 
 def _validate_bundle_key(str):
     if re.match(r"[a-zA-Z0-9\-]+", str):
         return str
     else:
-        raise ValueError("bundle key (%s) is not valid" % str)
+        raise ValueError(
+            "The bundle key %s is not valid, expected only characters, numbers or -."
+            % str
+        )
 
 
 def _validate_version(str, *, max_version=None):
     if re.match(r"(^(?:\d+\.)?(?:\d+\.)?(?:\*|\d+)$)", str):
         if max_version and parse_version(str) > parse_version(max_version):
-            raise ValueError("unsupported version (%s > %s)" % (str, max_version))
+            raise ValueError(
+                "The dataset is not supported, required version >=%s, got %s"
+                % (max_version, str)
+            )
         return str
     else:
-        raise ValueError("version (%s) is not valid" % str)
+        raise ValueError("The version %s is not valid." % str)
 
 
 def _validate_collections(collections):
     if not isinstance(collections, dict):
-        raise ValueError(
-            "value (%r) is not supported for attribute 'collections'" % collections
+        raise TypeError(
+            "'collections' must be dict, not %r" % type(collections).__qualname__
         )
     else:
         for key, values in collections.items():
             if not isinstance(values, list):
-                raise ValueError(
-                    "value (%r) is not supported as 'collections.value'" % values
+                raise TypeError(
+                    "'collections.value' must be list, not %r"
+                    % type(values).__qualname__
                 )
             if not isinstance(key, str):
-                raise ValueError("value (%r) is not supported as 'collections.key' ")
+                raise TypeError(
+                    "'collections.key' must be str, not" % type(key).__qualname__
+                )
     return collections
 
 
@@ -525,7 +539,7 @@ class JSONRepository(Repository):
         )
         if parse_version(self.wildboar_requires) > parse_version(wildboar_version):
             raise ValueError(
-                "repository requires wildboar (>=%s), got %s",
+                "The repository requires wildboar >=%s, got %s",
                 self.wildboar_requires,
                 wildboar_version,
             )
@@ -534,7 +548,7 @@ class JSONRepository(Repository):
         for bundle_json in json["bundles"]:
             key = _validate_bundle_key(bundle_json["key"])
             if key in bundles:
-                warnings.warn("duplicate dataset, %s (ignoring)" % key)
+                warnings.warn("duplicate dataset %s (ignoring)" % key)
 
             version = _validate_version(bundle_json["version"])
             tag = bundle_json.get("tag")
@@ -543,13 +557,14 @@ class JSONRepository(Repository):
 
             name = bundle_json.get("name")
             if name is None:
-                raise ValueError("bundle name is required (%s)" % key)
+                raise ValueError("bundle %s require 'name', but got None" % key)
 
             arrays = bundle_json.get("arrays")
             if arrays is not None:
                 if not isinstance(arrays, list):
                     warnings.warn(
-                        "value (%r) is not supported for attribute 'arrays'" % arrays
+                        "'arrays' should be list, not %r. Using defaults."
+                        % type(arrays).__qualname__
                     )
                     arrays = None
 
@@ -557,8 +572,8 @@ class JSONRepository(Repository):
             if description is not None:
                 if not isinstance(description, str):
                     warnings.warn(
-                        "value (%r) is not supported for attribute 'description'"
-                        % description
+                        "'description' should be str, not %r. Using defaults."
+                        % type(description).__qualname__
                     )
                     description = None
 
@@ -593,11 +608,11 @@ class RepositoryCollection:
         if repository is None:
             if self.pending_repositories:
                 raise ValueError(
-                    "repository (%s) does not exist, but %d repositories have not been "
-                    "refreshed yet." % (key, len(self.pending_repositories))
+                    "The repository %s does not exist, but %d repositories have not "
+                    "been refreshed yet." % (key, len(self.pending_repositories))
                 )
             else:
-                raise ValueError("repository (%s) does not exist" % key)
+                raise ValueError("The repository %s does not exist." % key)
 
         return repository
 
@@ -746,11 +761,11 @@ class Bundle(metaclass=ABCMeta):
 
     def get_collection(self, collection):
         if self.collections is None:
-            raise ValueError("collection (%s) not found" % collection)
+            raise ValueError("The collection %s cannot be found." % collection)
         else:
             c = self.collections.get(collection)
             if c is None:
-                raise ValueError("collection (%s) not found" % collection)
+                raise ValueError("The collection %s cannot be found." % collection)
             return c
 
     def list(self, archive, collection=None):
@@ -819,7 +834,8 @@ class Bundle(metaclass=ABCMeta):
                 datasets.append(dataset)
 
         if not datasets:
-            raise ValueError("no dataset found (%s)" % name)
+            raise ValueError("The dataset %s cannot be found." % name)
+
         train_parts = [
             self._load_array(archive, dataset.file)
             for dataset in datasets
@@ -839,7 +855,9 @@ class Bundle(metaclass=ABCMeta):
 
         sizes = [data[array].shape[0] for array in self.arrays]
         if max(sizes) != min(sizes):
-            raise ValueError("all arrays must have the same number of samples")
+            raise ValueError(
+                "Arrays %s must have the same number of samples." % self.arrays
+            )
 
         n_train_samples = sizes[0]
         if test_parts:
@@ -851,11 +869,15 @@ class Bundle(metaclass=ABCMeta):
                 test = np.concatenate(test, axis=0)
 
                 if test.ndim != train.ndim:
-                    raise ValueError("train and test parts have incompatible rank")
+                    raise ValueError(
+                        "The training (%d) and testing (%d) parts have incompatible "
+                        "rank" % (test.ndim, train.ndim)
+                    )
 
                 if test.ndim > 2 and train.shape[1] != test.shape[1]:
                     raise ValueError(
-                        "train and test parts have incompatible number dimensions"
+                        "The training (%d) and testing (%d) parts have incompatible "
+                        "number dimensions" % (train.shape[1], test.shape[1])
                     )
 
                 if test.ndim == 1:
@@ -873,7 +895,9 @@ class Bundle(metaclass=ABCMeta):
                             max(test.shape[-1], train.shape[-1]),
                         )
                     else:
-                        raise ValueError("invalid rank of dataset")
+                        raise ValueError(
+                            "Invalid dataset rank %d, expected <= 3" % test.ndim
+                        )
 
                     merge = np.full(shape, fill_value=EOS, dtype=np.double)
                     merge[: train.shape[0], ..., : train.shape[-1]] = train
@@ -944,7 +968,7 @@ class NpBundle(Bundle):
             elif "x" in self.arrays:
                 return {"x": data}
             else:
-                raise ValueError("Can't infer arrays to export")
+                raise ValueError("Can't infer arrays to export.")
         else:
             return data
 

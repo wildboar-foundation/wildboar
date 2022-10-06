@@ -4,7 +4,7 @@
 import numpy as np
 
 from .. import iseos
-from ..utils.validation import check_array
+from ..utils.validation import check_array, check_option
 
 __all__ = [
     "standardize",
@@ -16,10 +16,7 @@ __all__ = [
 
 
 def named_preprocess(name):
-    if name in _PREPROCESS:
-        return _PREPROCESS[name]
-    else:
-        raise ValueError("preprocess (%s) does not exists" % name)
+    return check_option(_PREPROCESS, name, "name")
 
 
 def standardize(x):

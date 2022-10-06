@@ -4,17 +4,19 @@ import math
 import numbers
 
 import numpy as np
+from sklearn.utils import check_scalar
 
 from ..distance import _THRESHOLD, matrix_profile, subsequence_match
 from ..utils.decorators import singleton
-from ..utils.validation import check_array
+from ..utils.validation import check_array, check_option, check_type
 
 
 @singleton
 def motifs(
     x,
     mp=None,
-    window=None,
+    *,
+    window="auto",
     exclude=0.2,
     max_distance="best",
     max_neighbours=10,
@@ -32,8 +34,13 @@ def motifs(
     mp : ndarray or shape (n_samples, profile_size), optional
         The matrix profile. The matrix profile is computed if None.
 
-    window : int, optional
+    window : "auto", int or float, optional
         The window size of the matrix profile.
+
+        - if "auto" the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
+          window of the matrix profile if mp is not None.
+        - if float, a fraction of n_timestep
+        - if int, the exact window size
 
     exclude : float, optional
         The size of the exclusion zone.
@@ -75,42 +82,62 @@ def motifs(
         conference on data mining (ICDM)
     """
     if mp is None:
-        if window is None:
-            raise ValueError("if the matrix profile is not given, window must be set")
+        if window == "auto":
+            window = 0.1
 
         mp = matrix_profile(x, window=window, exclude=exclude, return_index=False)
         mp = np.atleast_2d(mp)
     elif isinstance(mp, np.ndarray) and np.issubdtype(mp.dtype, np.double):
         w = x.shape[-1] - mp.shape[-1] + 1
-        if window is None:
+        if window == "auto":
             window = w
         elif window != w:
-            raise ValueError("given window parameter is invalid, set to None")
+            raise ValueError(
+                "window == %r, expecting window == %d. Set window='auto', to "
+                "automatically set window from the supplied matrix profile."
+                % (window, w)
+            )
+        else:
+            raise ValueError("window must be 'auto' or float, got %r" % window)
 
         mp = np.atleast_2d(mp).copy()
     else:
-        raise ValueError("unexpected matrix profile")
+        raise TypeError(
+            "matrix profile must be an ndarray, not %r" % type(mp).__qualname__
+        )
 
     if max_neighbours is None:
         max_neighbours = x.shape[-1]
 
     if isinstance(max_distance, str):
-        max_distance = _THRESHOLD.get(max_distance, None)
-        if max_distance is None:
-            raise ValueError("invalid max_distance (%r)" % max_distance)
+        max_distance = check_option(_THRESHOLD, max_distance, "max_distance")
 
     cutoff = max_distance
+
+    check_type(exclude, "exclude", (numbers.Integral, numbers.Real), required=False)
     if isinstance(exclude, numbers.Integral):
-        if exclude < 0:
-            raise ValueError("invalid exclusion (%d < 0)" % exclude)
+        exclude = check_scalar(
+            exclude, "exclude", numbers.Integral, min_val=0, max_val=window
+        )
     elif isinstance(exclude, numbers.Real):
-        exclude = math.ceil(window * exclude)
-    elif exclude is not None:
-        raise ValueError("invalid exclusion (%r)" % exclude)
+        exclude = math.ceil(
+            window
+            * check_scalar(
+                exclude,
+                "exclude",
+                numbers.Real,
+                min_val=0,
+                max_val=1,
+                include_boundaries="right",
+            )
+        )
 
     x = check_array(np.atleast_2d(x), dtype=np.double)
     if x.shape[0] != mp.shape[0]:
-        raise ValueError("not the same number of samples")
+        raise ValueError(
+            "The matrix profile and x does not have the same number of samples. "
+            "Set mp=None, to correctly compute the matrix profile for x."
+        )
 
     motif_distances = []
     motif_indicies = []

@@ -177,8 +177,14 @@ class ExplainerMixin:
         check_is_fitted(estimator)
         if hasattr(estimator, "n_timesteps_in_"):
             self.n_timesteps_in_ = estimator.n_timesteps_in_
-        else:
+        elif hasattr(estimator, "n_features_in_"):
             self.n_timesteps_in_ = estimator.n_features_in_
+        else:
+            raise ValueError(
+                "Unable to find the number of timesteps from %s. Please ensure that "
+                "the estimator is correctly fit and sets the n_timesteps_in_ or "
+                "n_features_in_ properties." % type(estimator).__qualname__
+            )
 
         self.n_features_in_ = self.n_timesteps_in_
         if hasattr(estimator, "n_dims_in_"):
@@ -187,7 +193,10 @@ class ExplainerMixin:
             self.n_dims_in_ = 1
 
         if self.n_dims_in_ > 1 and not allow_3d:
-            raise ValueError("estimator has been fit with 3d-array.")
+            raise ValueError(
+                "The explainer does not permit 3darrays as input but the estimator is "
+                "fitted with a 3darray of shape (?, %d, ?)." % self.n_dims_in_
+            )
 
         return estimator
 

@@ -99,7 +99,7 @@ def score(x_true, x_counterfactuals, metric="euclidean", valid=None, success=Non
         valid = success
         warnings.warn(
             "The success parameter has been deprecated in 1.1 "
-            "and will be removed in 1.2",
+            "and will be removed in 1.2, please use the valid parameter instead",
             FutureWarning,
         )
 
@@ -122,7 +122,9 @@ def score(x_true, x_counterfactuals, metric="euclidean", valid=None, success=Non
                     x_true, x_counterfactuals, metric=item
                 )
         else:
-            raise ValueError("invalid metric, got %r" % metric)
+            raise ValueError(
+                "metric should be str, callable, list or dict, got %r" % metric
+            )
         return sc
 
 
@@ -208,7 +210,10 @@ def counterfactuals(
         else:
             Explainer = _COUNTERFACTUALS.get(method)
             if Explainer is None:
-                raise ValueError("no counterfactual explainer for '%r'" % method)
+                raise ValueError(
+                    "method should be %s, got %r"
+                    % (set(_COUNTERFACTUALS.keys()), method)
+                )
 
         if "train_x" in method_args or "train_y" in method_args:
             train_x = method_args.pop("train_x")

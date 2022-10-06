@@ -573,8 +573,8 @@ cdef class TreeBuilder:
 
     cdef Py_ssize_t n_features
     cdef Py_ssize_t max_depth
-    cdef Py_ssize_t min_sample_split
-    cdef Py_ssize_t min_sample_leaf
+    cdef Py_ssize_t min_samples_split
+    cdef Py_ssize_t min_samples_leaf
     cdef double min_impurity_decrease
 
     cdef Py_ssize_t n_samples # no samples with non-zero weight
@@ -607,14 +607,14 @@ cdef class TreeBuilder:
         object random_state,
         Py_ssize_t n_features=1,
         Py_ssize_t max_depth=2**10,
-        Py_ssize_t min_sample_split=2,
-        Py_ssize_t min_sample_leaf=1,
+        Py_ssize_t min_samples_split=2,
+        Py_ssize_t min_samples_leaf=1,
         double min_impurity_decrease=0.0
     ):
         self.max_depth = max_depth
         self.n_features = n_features
-        self.min_sample_split = min_sample_split
-        self.min_sample_leaf = min_sample_leaf
+        self.min_samples_split = min_samples_split
+        self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
 
         self.dataset = Dataset(x)
@@ -708,8 +708,8 @@ cdef class TreeBuilder:
         cdef Py_ssize_t n_node_samples = end - start
         cdef bint is_leaf = (
             depth >= self.max_depth
-            or n_node_samples < self.min_sample_split
-            or n_node_samples < 2 * self.min_sample_leaf
+            or n_node_samples < self.min_samples_split
+            or n_node_samples < 2 * self.min_samples_leaf
         )
 
         cdef Py_ssize_t i

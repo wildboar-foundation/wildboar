@@ -1,7 +1,13 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import math
+import numbers
+
+from sklearn.utils.validation import check_scalar
+
 from ..distance import _SUBSEQUENCE_DISTANCE_MEASURE
+from ..utils.validation import check_option
 from ._shapelet_fast import RandomShapeletFeatureEngineer
 from .base import BaseFeatureEngineerTransform
 
@@ -72,21 +78,26 @@ class RandomShapeletTransform(BaseFeatureEngineerTransform):
         self.random_state = random_state
 
     def _get_feature_engineer(self):
-        if (
-            self.min_shapelet_size < 0
-            or self.min_shapelet_size > self.max_shapelet_size
-        ):
-            raise ValueError(
-                "`min_shapelet_size` {0} <= 0 or {0} > {1}".format(
-                    self.min_shapelet_size, self.max_shapelet_size
-                )
-            )
-        if self.max_shapelet_size > 1:
-            raise ValueError(
-                "`max_shapelet_size` {0} > 1".format(self.max_shapelet_size)
-            )
-        max_shapelet_size = int(self.n_timesteps_in_ * self.max_shapelet_size)
-        min_shapelet_size = int(self.n_timesteps_in_ * self.min_shapelet_size)
+        check_scalar(
+            self.max_shapelet_size,
+            "max_shapelet_size",
+            numbers.Real,
+            min_val=self.min_shapelet_size,
+            max_val=1.0,
+        )
+        check_scalar(
+            self.min_shapelet_size,
+            "min_shapelet_size",
+            numbers.Real,
+            min_val=0.0,
+            max_val=self.max_shapelet_size,
+        )
+        n_shapelets = check_scalar(
+            self.n_shapelets, "n_shapelets", numbers.Integral, min_val=1
+        )
+
+        max_shapelet_size = math.ceil(self.n_timesteps_in_ * self.max_shapelet_size)
+        min_shapelet_size = math.ceil(self.n_timesteps_in_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
             # NOTE: To ensure that the same random_seed generates the same shapelets
             # in future versions we keep the limit of 2 timesteps for a shapelet as long
@@ -100,13 +111,14 @@ class RandomShapeletTransform(BaseFeatureEngineerTransform):
             else:
                 min_shapelet_size = 2
 
-        distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(self.metric, None)
-        if distance_measure is None:
-            raise ValueError("invalid distance measure (%r)" % self.metric)
-        metric_params = self.metric_params or {}
+        distance_measure = check_option(
+            _SUBSEQUENCE_DISTANCE_MEASURE, self.metric, "metric"
+        )
         return RandomShapeletFeatureEngineer(
-            distance_measure(**metric_params),
+            distance_measure(
+                **(self.metric_params if self.metric_params is not None else {})
+            ),
             min_shapelet_size,
             max_shapelet_size,
-            self.n_shapelets,
+            n_shapelets,
         )

@@ -9,11 +9,12 @@ from functools import partial
 
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
-from sklearn.utils.validation import check_is_fitted, check_random_state
+from sklearn.utils.validation import check_is_fitted, check_random_state, check_scalar
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
 from ...distance.dtw import dtw_distance, dtw_mapping
+from ...utils.validation import check_option
 
 
 class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
@@ -121,34 +122,40 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         self.target = target
 
     def fit(self, estimator, x, y):
-        if x is None:
-            raise ValueError("training samples are required.")
-        if y is None:
-            raise ValueError("training labels are required.")
+        if x is None or y is None:
+            raise ValueError("Both training samples and labels are required.")
+
         estimator = self._validate_estimator(estimator)
         x, y = self._validate_data(x, y, reset=False, dtype=float)
 
         random_state = check_random_state(self.random_state)
-        metric_params = self.metric_params or {}
-        method_params = self.method_params or {}
-        if self.metric in _METRIC_TRANSFORM:
-            metric = _METRIC_TRANSFORM[self.metric](self.step_size, **metric_params)
-        else:
-            raise ValueError("metric (%s) is not supported" % self.metric)
-
-        if self.method in _PROTOTYPE_SAMPLER:
-            sampler = _PROTOTYPE_SAMPLER[self.method]
-        else:
-            raise ValueError("method (%s) is not supported" % self.method)
+        metric_transform = check_option(_METRIC_TRANSFORM, self.metric, "metric")(
+            check_scalar(
+                self.step_size,
+                "step_size",
+                numbers.Real,
+                min_val=0,
+                max_val=1,
+                include_boundaries="right",
+            ),
+            **(self.metric_params or {})
+        )
+        Sampler = check_option(_PROTOTYPE_SAMPLER, self.method, "method")
 
         self.estimator_ = deepcopy(estimator)
         self.classes_ = np.unique(y)
         if self.target == "auto":
             self.target_ = PredictEvaluator(self.estimator_)
         else:
-            if not 0 < self.target <= 1.0:
-                raise ValueError("target must be in (0, 1], got %r" % self.target)
-            self.target_ = ProbabilityEvaluator(self.estimator_, self.target)
+            target = check_scalar(
+                self.target,
+                "target",
+                numbers.Real,
+                min_val=0,
+                max_val=1,
+                include_boundaries="right",
+            )
+            self.target_ = ProbabilityEvaluator(self.estimator_, target)
 
         self.partitions_ = {}
         for c in self.classes_:
@@ -158,14 +165,28 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
             elif isinstance(self.n_prototypes, numbers.Integral):
                 n_prototypes = max(1, min(self.n_prototypes, x_partition.shape[0]))
             elif isinstance(self.n_prototypes, numbers.Real):
-                if not 0.0 < self.n_prototypes <= 1.0:
-                    raise ValueError("n_prototypes")
+                check_scalar(
+                    self.n_prototypes,
+                    "n_prototypes",
+                    numbers.Real,
+                    min_val=0,
+                    max_val=1,
+                    include_boundaries="right",
+                )
                 n_prototypes = math.ceil(self.n_prototypes * x_partition.shape[0])
             else:
-                raise ValueError("n_prototypes (%r) not supported" % self.n_prototypes)
+                raise ValueError(
+                    "n_prototypes must be 'auto', int or float, got %r"
+                    % self.n_prototypes
+                )
 
-            self.partitions_[c] = sampler(
-                x_partition, c, n_prototypes, metric, random_state, **method_params
+            self.partitions_[c] = Sampler(
+                x_partition,
+                c,
+                n_prototypes,
+                metric_transform,
+                random_state,
+                **(self.method_params or {})
             )
 
     def explain(self, x, y):
@@ -208,7 +229,7 @@ class TargetEvaluator(abc.ABC):
 
         Parameters
         ----------
-        x : ndarray of shape (n_samples, n_timestep) or (n_timestep,)
+        x : ndarray of shape (n_timestep,)
             The counterfactual sample
 
         y : object
@@ -451,8 +472,20 @@ class ShapeletPrototypeSampler(PrototypeSampler):
             The maximum shapelet size
         """
         super().__init__(x, y, n_prototypes, metric_transform, random_state)
-        self.min_shapelet_size = min_shapelet_size
-        self.max_shapelet_size = max_shapelet_size
+        self.min_shapelet_size = check_scalar(
+            min_shapelet_size,
+            "min_shapelet_size",
+            numbers.Real,
+            min_val=0,
+            max_val=max_shapelet_size,
+        )
+        self.max_shapelet_size = check_scalar(
+            max_shapelet_size,
+            "max_shapelet_size",
+            numbers.Real,
+            min_val=min_shapelet_size,
+            max_val=1.0,
+        )
 
     def sample_shapelet(self, p):
         """Sample a shapelet from x
@@ -468,8 +501,10 @@ class ShapeletPrototypeSampler(PrototypeSampler):
             A shapelet
         """
         n_timestep = self.x.shape[-1]
-        min_shapelet_size = max(2, int(n_timestep * self.min_shapelet_size))
-        max_shapelet_size = int(n_timestep * self.max_shapelet_size)
+        min_shapelet_size = max(
+            min(2, n_timestep), math.ceil(n_timestep * self.min_shapelet_size)
+        )
+        max_shapelet_size = math.ceil(n_timestep * self.max_shapelet_size)
         shapelet_length = self.random_state.randint(
             min_shapelet_size, max_shapelet_size
         )
@@ -571,8 +606,6 @@ class MetricTransform(abc.ABC):
             sample is moved less and values closer to 1 mean that the sample
             is moved more.
         """
-        if not 0.0 < gamma <= 1.0:
-            raise ValueError("gamma must be in (0, 1], got %r" % gamma)
         self.gamma = gamma
 
     @abc.abstractmethod
@@ -605,7 +638,7 @@ class DynamicTimeWarpTransform(MetricTransform):
 
     def __init__(self, gamma, r=1.0):
         super().__init__(gamma)
-        self.r = r
+        self.r = check_scalar(r, "r", numbers.Real, min_val=0, max_val=1)
 
     def move(self, o, p):
         _, indices = dtw_mapping(o, p, r=self.r, return_index=True)

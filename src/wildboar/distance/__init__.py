@@ -7,10 +7,10 @@ import warnings
 
 import numpy as np
 from sklearn.utils.deprecation import deprecated
-from sklearn.utils.validation import _is_arraylike
+from sklearn.utils.validation import _is_arraylike, check_scalar
 
 from ..utils.decorators import array_or_scalar, singleton
-from ..utils.validation import check_array
+from ..utils.validation import check_array, check_option, check_type
 from . import _distance, _dtw_distance, _euclidean_distance, _mass, _matrix_profile
 
 __all__ = [
@@ -185,19 +185,16 @@ def pairwise_subsequence_distance(
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
-                "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
+                "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
-
+    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
     metric_params = metric_params or {}
     min_dist, min_ind = _distance._pairwise_subsequence_distance(
         y,
         x,
         dim,
-        distance_measure(**metric_params),
+        DistanceMeasure(**metric_params),
         n_jobs,
     )
     if return_index:
@@ -266,18 +263,15 @@ def paired_subsequence_distance(
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
-                "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
+                "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
-    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
-
+    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
-    metric_params = metric_params or {}
+    metric_params = metric_params if metric_params is not None else {}
     min_dist, min_ind = _distance._paired_subsequence_distance(
-        y, x, dim, distance_measure(**metric_params)
+        y, x, dim, DistanceMeasure(**metric_params)
     )
     if return_index:
         return min_dist, min_ind
@@ -371,16 +365,14 @@ def subsequence_match(
     """
     y = _validate_subsequence(y)
     if len(y) > 1:
-        raise ValueError("a single sample expected")
+        raise ValueError("A single subsequence expected, got %d" % len(y))
     y = y[0]
     x = check_array(x, allow_3d=True, dtype=np.double)
     if y.shape[0] > x.shape[-1]:
         raise ValueError(
-            "invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
+            "Invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
         )
-    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
+    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -399,33 +391,40 @@ def subsequence_match(
 
         threshold = np.inf
     elif isinstance(threshold, str):
-        threshold_fn = _THRESHOLD.get(threshold, None)
-        if threshold_fn is None:
-            raise ValueError("invalid threshold (%r)" % threshold)
+        threshold_fn = check_option(_THRESHOLD, threshold, "threshold")
 
         def max_dist(d):
             return d <= threshold_fn(d)
 
         threshold = np.inf
     elif not isinstance(threshold, numbers.Real):
-        raise ValueError("invalid threshold (%r)" % threshold)
+        raise TypeError(
+            "threshold must be str, callable or float, not %s"
+            % type(threshold).__qualname__
+        )
     else:
         max_dist = None
 
+    check_type(exclude, "exclude", (numbers.Integral, numbers.Real), required=False)
     if isinstance(exclude, numbers.Integral):
-        if exclude < 0:
-            raise ValueError("invalid exclusion (%d < 0)" % exclude)
+        check_scalar(exclude, "exclude", numbers.Integral, min_val=1, max_val=y.size)
     elif isinstance(exclude, numbers.Real):
+        check_scalar(
+            exclude,
+            "exclude",
+            numbers.Real,
+            min_val=0,
+            max_val=1,
+            include_boundaries="right",
+        )
         exclude = math.ceil(y.size * exclude)
-    elif exclude is not None:
-        raise ValueError("invalid exclusion (%r)" % exclude)
 
     indicies, distances = _distance._subsequence_match(
         y,
         x,
         threshold,
         dim,
-        distance_measure(**metric_params),
+        DistanceMeasure(**metric_params),
         n_jobs,
     )
 
@@ -524,9 +523,7 @@ def paired_subsequence_match(
                 "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
+    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -545,16 +542,17 @@ def paired_subsequence_match(
 
         threshold = np.inf
     elif isinstance(threshold, str):
-        threshold_fn = _THRESHOLD.get(threshold, None)
-        if threshold_fn is None:
-            raise ValueError("invalid threshold (%r)" % threshold)
+        threshold_fn = check_option(_THRESHOLD, threshold, "threshold")
 
         def max_dist(d):
             return d <= threshold_fn(d)
 
         threshold = np.inf
     elif not isinstance(threshold, numbers.Real):
-        raise ValueError("invalid threshold (%r)" % threshold)
+        raise TypeError(
+            "threshold must be str, callable or float, not %s"
+            % type(threshold).__qualname__
+        )
     else:
         max_dist = None
 
@@ -563,7 +561,7 @@ def paired_subsequence_match(
         x,
         threshold,
         dim,
-        distance_measure(**metric_params),
+        DistanceMeasure(**metric_params),
         n_jobs,
     )
 
@@ -626,23 +624,20 @@ def paired_distance(
     y = np.broadcast_to(y, x.shape)
     if x.ndim != y.ndim:
         raise ValueError(
-            "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
+            "x (%dD-array) and y (%dD-array) are not compatible." % (x.ndim, y.ndim)
         )
     if x.shape[0] != y.shape[0]:
-        raise ValueError("x and y must have the same number of samples")
+        raise ValueError("x and y must have the same number of samples.")
 
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
-    distance_measure = _DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
-
-    metric_params = metric_params or {}
-    distance_measure = distance_measure(**metric_params)
+    DistanceMeasure = check_option(_DISTANCE_MEASURE, metric, "metric")
+    metric_params = metric_params if metric_params is not None else {}
+    distance_measure = DistanceMeasure(**metric_params)
     if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not distance_measure.is_elastic:
         raise ValueError(
-            "illegal n_timestep (%r != %r) for non-elastic distance measure"
+            "Illegal n_timestep (%r != %r) for non-elastic distance measure"
             % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
         )
 
@@ -699,12 +694,9 @@ def pairwise_distance(
     dist : float or ndarray
         An array of shape (y_samples, x_samples)
     """
-    distance_measure = _DISTANCE_MEASURE.get(metric, None)
-    if distance_measure is None:
-        raise ValueError("unsupported metric (%r)" % metric)
-
-    metric_params = metric_params or {}
-    distance_measure = distance_measure(**metric_params)
+    DistanceMeasure = check_option(_DISTANCE_MEASURE, metric, "metric")
+    metric_params = metric_params if metric_params is not None else {}
+    distance_measure = DistanceMeasure(**metric_params)
 
     if y is None:
         y = x
@@ -712,7 +704,7 @@ def pairwise_distance(
     if x is y:
         x = check_array(x, allow_3d=True, dtype=np.double)
         if not 0 >= dim < x.ndim:
-            raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
+            raise ValueError("dim must be 0 <= %d < %d" % (dim, x.ndim))
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
     else:
         x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
@@ -723,14 +715,14 @@ def pairwise_distance(
             )
 
         if not 0 >= dim < x.ndim:
-            raise ValueError("illegal dim (0>=%d<%d)" % (dim, x.ndim))
+            raise ValueError("dim must be 0 <= %d < %d" % (dim, x.ndim))
 
         if (
             x.shape[x.ndim - 1] != y.shape[y.ndim - 1]
             and not distance_measure.is_elastic
         ):
             raise ValueError(
-                "illegal n_timestep (%r != %r) for non-elastic distance measure"
+                "Illegal n_timestep (%r != %r) for non-elastic distance measure"
                 % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
             )
 
@@ -826,35 +818,57 @@ def matrix_profile(
         y = np.broadcast_to(check_array(y, allow_3d=True), x.shape)
 
         if x.ndim != y.ndim:
-            raise ValueError("both x and y must have the same dimensionality")
+            raise ValueError("Both x and y must have the same dimensionality")
         if x.shape[0] != y.shape[0]:
-            raise ValueError("both x and y must have the same number of samples")
+            raise ValueError("Both x and y must have the same number of samples")
         if x.ndim > 2 and x.shape[1] != y.shape[1]:
-            raise ValueError("both x and y must have the same number of dimensions")
+            raise ValueError("Both x and y must have the same number of dimensions")
         if not y.shape[-1] <= x.shape[-1]:
             raise ValueError(
-                "y.shape[-1] > x.shape[-1]. If you wan't to compute the matrix profile "
+                "y.shape[-1] > x.shape[-1]. If you want to compute the matrix profile "
                 "of the similarity join of YX, swap the order of inputs."
             )
-        exclude = exclude or 0
+        exclude = exclude if exclude is not None else 0
     else:
         y = x
-        exclude = exclude or 0.2
+        exclude = exclude if exclude is not None else 0.2
 
     if x.ndim > 2 and not 0 <= dim < x.shape[1]:
-        raise ValueError("invalid dim (%d)" % x.shape[1])
+        raise ValueError("Invalid dim (%d)" % x.shape[1])
 
-    if isinstance(exclude, float):
-        exclude = math.ceil(window * exclude)
-    elif exclude < 0:
-        raise ValueError("invalid exclusion (%d < 0)" % exclude)
-
-    if isinstance(window, float):
-        if not 0.0 < window <= 1.0:
-            raise ValueError("invalid window size, got %f (expected [0, 1[)")
+    check_type(window, "window", (numbers.Integral, numbers.Real))
+    check_type(exclude, "exclude", (numbers.Integral, numbers.Real))
+    if isinstance(window, numbers.Integral):
+        check_scalar(
+            window,
+            "window",
+            numbers.Integral,
+            min_val=1,
+            max_val=min(y.shape[-1], x.shape[-1]),
+        )
+    elif isinstance(window, numbers.Real):
+        check_scalar(
+            window,
+            "window",
+            numbers.Real,
+            min_val=0,
+            max_val=1,
+            include_boundaries="right",
+        )
         window = math.ceil(window * y.shape[-1])
-    elif window > y.shape[-1] or window > x.shape[-1] or window < 1:
-        raise ValueError("invalid window size, got %r" % window)
+
+    if isinstance(exclude, numbers.Integral):
+        check_scalar(exclude, "exclude", numbers.Integral, min_val=1, max_val=window)
+    elif isinstance(exclude, numbers.Real):
+        check_scalar(
+            exclude,
+            "exclude",
+            numbers.Real,
+            min_val=0,
+            max_val=1,
+            include_boundaries="right",
+        )
+        exclude = math.ceil(window * exclude)
 
     mp, mpi = _matrix_profile._paired_matrix_profile(
         x,

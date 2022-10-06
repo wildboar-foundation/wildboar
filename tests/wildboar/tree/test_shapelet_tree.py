@@ -2,22 +2,70 @@
 # License: BSD 3 clause
 
 import numpy as np
-from numpy.testing import assert_array_equal
+import pytest
+from numpy.testing import assert_almost_equal, assert_array_equal, assert_equal
+from sklearn import clone
 
-from wildboar.datasets import load_dataset
-from wildboar.tree import ShapeletTreeClassifier, ShapeletTreeRegressor
+from wildboar.datasets import load_gun_point
+from wildboar.tree import (
+    ExtraShapeletTreeClassifier,
+    ExtraShapeletTreeRegressor,
+    ShapeletTreeClassifier,
+    ShapeletTreeRegressor,
+)
 from wildboar.utils.estimator_checks import check_estimator
+
+TREE_INVALID_PARAMS = [
+    ({"min_samples_leaf": 0.0}, ValueError, "min_samples_leaf == 0.0"),
+    ({"min_samples_split": 1}, ValueError, "min_samples_split == 1"),
+    ({"min_impurity_decrease": -0.1}, ValueError, "min_impurity_decrease == -0.1"),
+]
+
+EXTRA_SHAPELET_TREE_INVALID_PARAMS = [
+    ({"min_shapelet_size": -0.1}, ValueError, "min_shapelet_size == -0.1"),
+    ({"max_shapelet_size": 1.1}, ValueError, "max_shapelet_size == 1.1"),
+    (
+        {"min_shapelet_size": 0.3, "max_shapelet_size": 0.2},
+        ValueError,
+        "max_shapelet_size == 0.2",
+    ),
+]
+
+SHAPELET_TREE_INVALID_PARAMS = [
+    *TREE_INVALID_PARAMS,
+    *EXTRA_SHAPELET_TREE_INVALID_PARAMS,
+    ({"n_shapelets": -1}, ValueError, "n_shapelets == -1"),
+    ({"alpha": 0.0}, ValueError, "alpha == 0.0"),
+]
+
+
+@pytest.mark.parametrize(
+    "estimator, invalid_params",
+    [
+        (ShapeletTreeClassifier(), SHAPELET_TREE_INVALID_PARAMS),
+        (ShapeletTreeRegressor(), SHAPELET_TREE_INVALID_PARAMS),
+        (ExtraShapeletTreeClassifier(), EXTRA_SHAPELET_TREE_INVALID_PARAMS),
+        (ExtraShapeletTreeRegressor(), EXTRA_SHAPELET_TREE_INVALID_PARAMS),
+    ],
+)
+def test_invalid_params(estimator, invalid_params):
+    for params, err_type, err_msg in invalid_params:
+        estimator_clone = clone(estimator)
+        estimator_clone.set_params(**params)
+        x, y = load_gun_point()
+        with pytest.raises(err_type, match=err_msg):
+            estimator_clone.fit(x, y)
 
 
 def test_check_estimator():
     check_estimator(ShapeletTreeClassifier())
     check_estimator(ShapeletTreeRegressor())
+    check_estimator(ExtraShapeletTreeClassifier())
+    check_estimator(ExtraShapeletTreeRegressor())
 
 
-def test_apply():
-    x_train, x_test, y_train, y_test = load_dataset(
-        "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=False
-    )
+def test_shapelet_tree_apply():
+    x_train, x_test, y_train, y_test = load_gun_point(False)
     f = ShapeletTreeClassifier(random_state=123)
     f.fit(x_test, y_test)
     actual_apply = f.apply(x_train)
@@ -80,10 +128,8 @@ def test_apply():
     assert_array_equal(actual_apply, expected_apply)
 
 
-def test_decision_path():
-    x_train, x_test, y_train, y_test = load_dataset(
-        "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=False
-    )
+def test_shapelet_tree_decision_path():
+    x_train, x_test, y_train, y_test = load_gun_point(False)
     f = ShapeletTreeClassifier(random_state=123)
     f.fit(x_test, y_test)
     actual_decision_path = f.decision_path(x_train)
@@ -1945,3 +1991,280 @@ def test_decision_path():
     )
     assert actual_decision_path.dtype == np.bool_
     assert_array_equal(actual_decision_path.toarray(), expected_decision_path)
+
+
+@pytest.mark.parametrize(
+    "criterion,expected_left,expected_right,threshold",
+    [
+        pytest.param(
+            "entropy",
+            [
+                1,
+                2,
+                -1,
+                4,
+                5,
+                -1,
+                7,
+                8,
+                -1,
+                10,
+                11,
+                12,
+                13,
+                -1,
+                -1,
+                16,
+                -1,
+                18,
+                -1,
+                20,
+                -1,
+                -1,
+                -1,
+                -1,
+                25,
+                -1,
+                27,
+                28,
+                29,
+                -1,
+                31,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                37,
+                38,
+                -1,
+                40,
+                41,
+                -1,
+                -1,
+                44,
+                -1,
+                -1,
+                -1,
+            ],
+            [
+                36,
+                3,
+                -1,
+                35,
+                6,
+                -1,
+                24,
+                9,
+                -1,
+                23,
+                22,
+                15,
+                14,
+                -1,
+                -1,
+                17,
+                -1,
+                19,
+                -1,
+                21,
+                -1,
+                -1,
+                -1,
+                -1,
+                26,
+                -1,
+                34,
+                33,
+                30,
+                -1,
+                32,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                46,
+                39,
+                -1,
+                43,
+                42,
+                -1,
+                -1,
+                45,
+                -1,
+                -1,
+                -1,
+            ],
+            [
+                2.3858733725835246,
+                1.3030318030184422,
+                1.270966228821233,
+                0.571506183038313,
+                7.163849443826518,
+                0.4043070891203555,
+                3.364997328797938,
+                7.144333912205175,
+                0.8748218549098081,
+                0.23495720569659587,
+                0.8174078818698833,
+                1.8713786644191401,
+                2.2760411164401315,
+                5.2621440059644575,
+                3.914107922505309,
+                1.9634446959659837,
+                1.809236776082022,
+                6.981438166500511,
+                3.1568984289668087,
+                0.7390856063408281,
+                5.081020230264091,
+                2.545603715179477,
+                0.5935289709243529,
+            ],
+        ),
+        pytest.param(
+            "gini",
+            [
+                1,
+                2,
+                -1,
+                4,
+                5,
+                -1,
+                7,
+                8,
+                -1,
+                10,
+                11,
+                12,
+                13,
+                -1,
+                -1,
+                16,
+                -1,
+                18,
+                -1,
+                20,
+                -1,
+                -1,
+                -1,
+                -1,
+                25,
+                -1,
+                27,
+                28,
+                29,
+                -1,
+                31,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                37,
+                38,
+                -1,
+                40,
+                41,
+                -1,
+                -1,
+                44,
+                -1,
+                -1,
+                -1,
+            ],
+            [
+                36,
+                3,
+                -1,
+                35,
+                6,
+                -1,
+                24,
+                9,
+                -1,
+                23,
+                22,
+                15,
+                14,
+                -1,
+                -1,
+                17,
+                -1,
+                19,
+                -1,
+                21,
+                -1,
+                -1,
+                -1,
+                -1,
+                26,
+                -1,
+                34,
+                33,
+                30,
+                -1,
+                32,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                46,
+                39,
+                -1,
+                43,
+                42,
+                -1,
+                -1,
+                45,
+                -1,
+                -1,
+                -1,
+            ],
+            [
+                2.3858733725835246,
+                1.3030318030184422,
+                1.270966228821233,
+                0.571506183038313,
+                7.163849443826518,
+                0.4043070891203555,
+                3.364997328797938,
+                7.144333912205175,
+                0.8748218549098081,
+                0.23495720569659587,
+                0.8174078818698833,
+                1.8713786644191401,
+                2.2760411164401315,
+                5.2621440059644575,
+                3.914107922505309,
+                1.9634446959659837,
+                1.809236776082022,
+                6.981438166500511,
+                3.1568984289668087,
+                0.7390856063408281,
+                5.081020230264091,
+                2.545603715179477,
+                0.5935289709243529,
+            ],
+        ),
+    ],
+)
+def test_extra_tree_classifier(criterion, expected_left, expected_right, threshold):
+    x, y = load_gun_point()
+    f = ExtraShapeletTreeClassifier(criterion=criterion, random_state=123)
+    f.fit(x, y)
+    assert (f.predict(x) == y).sum() == 191
+    assert_equal(f.tree_.left, expected_left)
+    assert_equal(f.tree_.right, expected_right)
+    assert_equal(f.tree_.left > 0, f.tree_.right > 0)
+    assert_almost_equal(f.tree_.threshold[f.tree_.left > 0], threshold)
+
+
+def test_extra_tree_regressor():
+    x, y = load_gun_point()
+    f = ExtraShapeletTreeRegressor(criterion="mse", random_state=123)
+    f.fit(x, y.astype(float))
+    assert_almost_equal(f.tree_.threshold[0], 2.3858733725835246)
+    assert_almost_equal(f.tree_.threshold[6], 7.163849443826518)
+    assert (f.predict(x) == y.astype(float)).sum() == 182

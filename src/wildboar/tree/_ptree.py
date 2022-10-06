@@ -1,10 +1,11 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import numbers
 import sys
-import warnings
 
 import numpy as np
+from sklearn.utils import check_scalar
 
 from ..distance import _DISTANCE_MEASURE
 from ..tree._cptree import (
@@ -19,6 +20,7 @@ from ..tree._cptree import (
 )
 from ..tree.base import BaseTree, TreeClassifierMixin
 from ..utils.data import check_dataset
+from ..utils.validation import check_option
 
 _CLF_CRITERION = {
     "gini": GiniCriterion,
@@ -59,24 +61,19 @@ _METRIC_FACTORIES = {
 
 
 def make_metrics(metric_factories=None):
-    if metric_factories is None:
-        metric_factories = {
-            "euclidean": None,
-            "dtw": {"min_r": 0, "max_r": 0.25, "n": 20},
-            "ddtw": {"min_r": 0, "max_r": 0.25, "n": 20},
-            "wdtw": {"min_g": 0.05, "max_g": 0.0},
-        }
-
     distance_measures = []
     weights = []
     weight = 1.0 / len(metric_factories)
     for metric_factory, metric_factory_params in metric_factories.items():
         if callable(metric_factory):
             metrics = metric_factory(**(metric_factory_params) or {})
-        elif metric_factory not in _METRIC_FACTORIES:
-            raise ValueError("metric (%r) is not supported" % metric_factory)
+        else:
+            metrics = check_option(
+                _METRIC_FACTORIES,
+                metric_factory,
+                "metric_factories key",
+            )(**(metric_factory_params or {}))
 
-        metrics = _METRIC_FACTORIES[metric_factory](**(metric_factory_params or {}))
         for distance_measure in metrics:
             distance_measures.append(distance_measure)
             weights.append(weight / len(metrics))
@@ -183,50 +180,58 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         self.random_state = random_state
 
     def _fit(self, x, y, sample_weights, random_state):
-        max_depth = (
-            sys.getrecursionlimit() if self.max_depth is None else self.max_depth
-        )
-        if self.min_impurity_decrease < 0.0:
-            raise ValueError(
-                "min_impurity_decrease must be larger than or equal to 0.0"
+        if self.metric_factories is None:
+            metric_factories = {
+                "euclidean": None,
+                "dtw": {"min_r": 0, "max_r": 0.25, "n": 20},
+                "ddtw": {"min_r": 0, "max_r": 0.25, "n": 20},
+                "wdtw": {"min_g": 0.05, "max_g": 0.0},
+            }
+        elif isinstance(self.metric_factories, dict):
+            metric_factories = self.metric_factories
+        else:
+            raise TypeError(
+                "metric_factories must be dict, got %r" % self.metric_factories
             )
 
-        if max_depth <= 0:
-            raise ValueError("max_depth must be larger than 0")
-        elif max_depth > sys.getrecursionlimit():
-            warnings.warn("max_depth exceeds the maximum recursion limit.")
-
-        if self.criterion not in _CLF_CRITERION:
-            raise ValueError("criterion (%r) is not supported" % self.criterion)
-
-        if self.pivot_sample not in _PIVOT_SAMPLER:
-            raise ValueError("pivot_sample (%r) is not supported" % self.pivot_sample)
-
-        if self.metric_sample not in _DISTANCE_MEASURE_SAMPLER:
-            raise ValueError("metric_sample (%r) is not supported" % self.metric_sample)
-
-        distance_measures, weights = make_metrics(
-            metric_factories=self.metric_factories
+        distance_measures, weights = make_metrics(metric_factories=metric_factories)
+        Criterion = check_option(_CLF_CRITERION, self.criterion, "criterion")
+        PivotSampler = check_option(_PIVOT_SAMPLER, self.pivot_sample, "pivot_sample")
+        DistanceMeasureSampler = check_option(
+            _DISTANCE_MEASURE_SAMPLER, self.metric_sample, "metric_sample"
         )
-        criterion = _CLF_CRITERION[self.criterion](y, self.n_classes_)
-        pivot_sampler = _PIVOT_SAMPLER[self.pivot_sample]()
-        distance_measure_sampler = _DISTANCE_MEASURE_SAMPLER[self.metric_sample](
-            len(distance_measures), weights=weights
-        )
-        tree = Tree(distance_measures, self.n_classes_)
-        n_features = self.n_pivot
 
         x = check_dataset(x)
         tree_builder = TreeBuilder(
             x,
             sample_weights,
-            pivot_sampler,
-            distance_measure_sampler,
-            criterion,
-            tree,
+            PivotSampler(),
+            DistanceMeasureSampler(len(distance_measures), weights=weights),
+            Criterion(y, self.n_classes_),
+            Tree(distance_measures, self.n_classes_),
             random_state,
-            max_depth=max_depth,
-            n_features=n_features,
+            max_depth=check_scalar(
+                sys.getrecursionlimit() if self.max_depth is None else self.max_depth,
+                "max_depth",
+                numbers.Integral,
+                min_val=1,
+                max_val=sys.getrecursionlimit(),
+            ),
+            n_features=check_scalar(
+                self.n_pivot, "n_pivot", numbers.Integral, min_val=1
+            ),
+            min_impurity_decrease=check_scalar(
+                self.min_impurity_decrease,
+                "min_impurity_decrease",
+                numbers.Real,
+                min_val=0,
+            ),
+            min_samples_split=check_scalar(
+                self.min_samples_split, "min_samples_split", numbers.Integral, min_val=2
+            ),
+            min_samples_leaf=check_scalar(
+                self.min_samples_leaf, "min_samples_leaf", numbers.Integral, min_val=1
+            ),
         )
         tree_builder.build_tree()
         self.tree_ = tree_builder.tree

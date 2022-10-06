@@ -1,8 +1,13 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-import numpy as np
+import math
+import numbers
 
+import numpy as np
+from sklearn.utils.validation import _is_arraylike, check_scalar
+
+from ..utils.validation import check_option
 from ._rocket_fast import (
     NormalWeightSampler,
     RocketFeatureEngineer,
@@ -45,7 +50,7 @@ class RocketTransform(BaseFeatureEngineerTransform):
         normalize_prob=1.0,
         padding_prob=0.5,
         n_jobs=None,
-        random_state=None
+        random_state=None,
     ):
         """
         Parameters
@@ -75,34 +80,53 @@ class RocketTransform(BaseFeatureEngineerTransform):
             kernel_size = [7, 11, 13]
         elif isinstance(self.kernel_size, tuple) and len(self.kernel_size) == 2:
             min_size, max_size = self.kernel_size
-            if min_size < 0 or min_size > max_size:
-                raise ValueError(
-                    "`min_size` {0} <= 0 or {0} > {1}".format(min_size, max_size)
-                )
-            if max_size > 1:
-                raise ValueError("`max_size` {0} > 1".format(max_size))
-            max_size = int(self.n_timesteps_in_ * max_size)
-            min_size = int(self.n_timesteps_in_ * min_size)
-            if min_size < 2:
-                min_size = 2
-            kernel_size = np.arange(min_size, max_size)
-        else:
-            kernel_size = self.kernel_size
-
-        if self.sampling in _SAMPLING_METHOD:
-            sampling_params = (
-                {} if self.sampling_params is None else self.sampling_params
+            check_scalar(
+                max_size,
+                "max_size (kernel_size[1])",
+                numbers.Real,
+                min_val=min_size,
+                max_val=1,
             )
-            weight_sampler = _SAMPLING_METHOD[self.sampling](**sampling_params)
+            check_scalar(
+                min_size,
+                "min_size (kernel_size[0])",
+                numbers.Real,
+                min_val=0,
+                max_val=max_size,
+            )
+            max_size = math.ceil(self.n_timesteps_in_ * max_size)
+            min_size = math.ceil(self.n_timesteps_in_ * min_size)
+            if min_size < 2:
+                # TODO(1.2): Break backward
+                if self.n_timesteps_in_ < 2:
+                    min_size = 1
+                else:
+                    min_size = 2
+            kernel_size = np.arange(min_size, max_size)
+        elif _is_arraylike(self.kernel_size):
+            kernel_size = self.kernel_size
         else:
-            raise ValueError("sampling (%r) is not supported." % self.sampling)
+            raise TypeError(
+                "kernel_size must be array-like, got %s"
+                % type(self.kernel_size).__qualname__
+            )
+
+        weight_sampler = check_option(_SAMPLING_METHOD, self.sampling, "sampling")(
+            **({} if self.sampling_params is None else self.sampling_params)
+        )
         return RocketFeatureEngineer(
-            int(self.n_kernels),
+            check_scalar(self.n_kernels, "n_kernels", numbers.Integral, min_val=1),
             weight_sampler,
             np.array(kernel_size, dtype=int),
-            float(self.bias_prob),
-            float(self.padding_prob),
-            float(self.normalize_prob),
+            check_scalar(
+                self.bias_prob, "bias_prob", numbers.Real, min_val=0, max_val=1
+            ),
+            check_scalar(
+                self.padding_prob, "padding_prob", numbers.Real, min_val=0, max_val=1
+            ),
+            check_scalar(
+                self.normalize_prob, "bias_prob", numbers.Real, min_val=0, max_val=1
+            ),
         )
 
 

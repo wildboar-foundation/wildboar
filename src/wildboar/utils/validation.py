@@ -1,12 +1,74 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import numbers
+
 import numpy as np
 from sklearn.utils.validation import _check_estimator_name, _check_y
 from sklearn.utils.validation import check_array as sklearn_check_array
 from sklearn.utils.validation import check_consistent_length
 
 import wildboar as wb
+
+
+def check_type(x, name, target_type, required=True):
+    """Check that the type of x is of a target type.
+
+    Parameters
+    ----------
+    x : object
+        The object to check.
+
+    name : str
+        The name of the parameter.
+
+    target_type : type or tuple
+        The required type(s) of x.
+
+    required : bool, optional
+        If required=False, None is an allowed.
+    """
+
+    def type_name(t):
+        module = t.__module__
+        qualname = t.__qualname__
+        if module == "builtins":
+            return qualname
+        elif t == numbers.Real:
+            return "float"
+        elif t == numbers.Integral:
+            return "int"
+        return f"{module}.{qualname}"
+
+    if isinstance(target_type, tuple):
+        types_str = ", ".join(type_name(t) for t in target_type)
+        target_type_str = f"{{{types_str}}}"
+    else:
+        target_type_str = type_name(target_type)
+
+    if x is None and required:
+        raise TypeError(f"{name} must be an instance of {target_type_str}, not None")
+    if x is None and not required:
+        return
+
+    if not isinstance(x, target_type):
+        raise TypeError(
+            f"{name} must be an instance of {target_type_str}, not"
+            f" {type(x).__qualname__}."
+        )
+
+
+def check_option(dict, key, name):
+    if key in dict:
+        return dict[key]
+    else:
+        keys = ["'%s'" % key for key in sorted(list(dict.keys()))]
+        if len(keys) == 1:
+            msg = f"{name} must be {keys[0]}, got {key}"
+        else:
+            msg = f"{name} must be {', '.join(keys[:-1])} or {keys[-1]}, got {key}"
+
+        raise ValueError(msg)
 
 
 def _num_timesteps_dim(dim):

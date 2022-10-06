@@ -5,6 +5,8 @@ import re
 
 import numpy as np
 
+from wildboar.utils.validation import check_option
+
 from ..utils import os_cache_path
 from ._repository import (
     Bundle,
@@ -14,7 +16,7 @@ from ._repository import (
     RepositoryCollection,
 )
 from .filter import make_filter
-from .preprocess import named_preprocess
+from .preprocess import _PREPROCESS
 
 __all__ = [
     "Repository",
@@ -74,7 +76,7 @@ def _split_repo_bundle(repo_bundle_name):
         tag = match.group(4)
         return repository_name, bundle_name, version, tag
     else:
-        raise ValueError("repository (%s) is not supported" % repo_bundle_name)
+        raise ValueError("Invalid repository/bundle string '%s'." % repo_bundle_name)
 
 
 def set_cache_dir(cache_dir=None):
@@ -387,16 +389,18 @@ def load_dataset(
         x = x.astype(dtype)
 
     if isinstance(preprocess, str):
-        preprocess = named_preprocess(preprocess)
+        preprocess = check_option(_PREPROCESS, preprocess, "preprocess")
     if isinstance(preprocess, list):
         op = []
-        for p in preprocess:
+        for i, p in enumerate(preprocess):
             if isinstance(p, str):
-                op.append(named_preprocess(p))
+                op.append(check_option(_PREPROCESS, p, "preprocess[%d]" % i))
             elif callable(p):
                 op.append(p)
             else:
-                raise ValueError("preprocess (%r) is not supported" % p)
+                raise TypeError(
+                    "preprocess[%d] must be callable or str, not %r." % (i, p)
+                )
 
         def preprocess(x):
             for o in op:
@@ -404,7 +408,9 @@ def load_dataset(
             return x
 
     elif not hasattr(preprocess, "__call__"):
-        raise ValueError("preprocess (%r) is not supported" % preprocess)
+        raise TypeError(
+            "preprocess must be str, callable or list, not %r." % preprocess
+        )
 
     x = preprocess(x)
     if merge_train_test:
@@ -412,7 +418,10 @@ def load_dataset(
         ret_val.append(y)
     else:
         if n_train_samples == x.shape[0]:
-            raise ValueError("found no test parts. Set merge_train_test=True.")
+            raise ValueError(
+                "The dataset %s does not have a training testing split. "
+                "Set merge_train_test=True to return the full dataset." % name
+            )
 
         ret_val.append(x[:n_train_samples])
         ret_val.append(x[n_train_samples:])

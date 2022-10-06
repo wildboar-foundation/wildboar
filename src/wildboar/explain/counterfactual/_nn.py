@@ -35,7 +35,8 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
 
         if estimator.metric != "euclidean":
             raise ValueError(
-                "only euclidean distance is supported, got %r" % estimator.metric
+                "estimator must be fit with metric='euclidean', got %r"
+                % estimator.metric
             )
 
         return super()._validate_estimator(estimator, allow_3d)
@@ -92,3 +93,6 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
                 x_counterfactuals[label_indices, :] = mc[closest[:, 0], :]
 
         return x_counterfactuals
+
+    def _more_tags():
+        return {"X_types": []}

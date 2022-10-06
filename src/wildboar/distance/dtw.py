@@ -2,9 +2,10 @@
 # License: BSD 3 clause
 
 import math
+import numbers
 
 import numpy as np
-from sklearn.utils import deprecated
+from sklearn.utils import check_scalar, deprecated
 
 from ..utils.validation import check_array
 from . import pairwise_distance
@@ -26,10 +27,8 @@ __all__ = [
 
 
 def _compute_warp_size(x_size, r, *, y_size=0):
-    x_size = max(x_size, y_size)
-    if not 0.0 <= r <= 1.0:
-        raise ValueError("r should be in [0, 1], got %r" % r)
-    return max(math.floor(x_size * r), 1)
+    check_scalar(r, "r", numbers.Real, min_val=0, max_val=1)
+    return max(math.floor(max(x_size, y_size) * r), 1)
 
 
 def dtw_distance(x, y, *, r=1.0):
@@ -190,7 +189,7 @@ def dtw_envelop(x, *, r=1.0):
         Exact indexing of dynamic time warping.
         In 28th International Conference on Very Large Data Bases.
     """
-    x = check_array(x, ravel_1d=True, ensure_2d=False, dtype=float)
+    x = check_array(x, ravel_1d=True, ensure_2d=False, dtype=float, input_name="x")
     warp_size = _compute_warp_size(x.shape[0], r)
     return _dtw_envelop(x, warp_size)
 
@@ -236,22 +235,23 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
         In 28th International Conference on Very Large Data Bases.
     """
     check_args = dict(ravel_1d=True, ensure_2d=False, dtype=float)
-    x = check_array(x, **check_args)
+    x = check_array(x, **check_args, input_name="x")
     if y is not None:
-        y = check_array(y, **check_args)
+        y = check_array(y, **check_args, input_name="y")
         if y.shape[0] != x.shape[0]:
             raise ValueError(
-                "invalid size for x (%d) and y (%d)" % (x.shape[0], y.shape[0])
+                "x (%d) and y (%d) must have the same number of timesteps"
+                % (x.shape[0], y.shape[0])
             )
         lower, upper = dtw_envelop(y, r=r)
     elif lower is None or upper is None:
         raise ValueError("both y, lower and upper can't be None")
 
-    lower = check_array(lower, **check_args)
-    upper = check_array(upper, **check_args)
+    lower = check_array(lower, **check_args, input_name="lower")
+    upper = check_array(upper, **check_args, input_name="upper")
     if lower.shape[0] != upper.shape[0] or lower.shape[0] != x.shape[0]:
         raise ValueError(
-            "invalid size for lower (%d), upper (%d) and x (%d)"
+            "lower (%d), upper (%d) and x (%d) have the same number of timesteps"
             % (lower.shape[0], upper.shape[0], x.shape[0])
         )
     warp_size = _compute_warp_size(x.shape[0], r)
@@ -306,9 +306,8 @@ def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
         )
         if weight.shape[0] != max(x.shape[0], y.shape[0]):
             raise ValueError(
-                "invalid weight array size (%d), expected %d"(
-                    weight.shape[0], max(x.shape[0], y.shape[0])
-                )
+                "weight must have the same size as max(x.size, y.size) %d, got %d"
+                % (max(x.shape[0], y.shape[0]), weight.shape[0])
             )
 
     return _dtw_alignment(x, y, warp_size, weight, out)
@@ -420,7 +419,9 @@ def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
             raise ValueError("if alignment=None, neither x or y can be None")
         alignment = dtw_alignment(x, y, r=r)
     else:
-        alignment = check_array(alignment, force_all_finite=False, order=None)
+        alignment = check_array(
+            alignment, force_all_finite=False, order=None, input_name="alignment"
+        )
 
     indicator = np.zeros(alignment.shape).astype(bool)
     i = alignment.shape[0] - 1

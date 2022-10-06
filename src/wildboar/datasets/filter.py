@@ -6,6 +6,8 @@ import re
 
 import numpy as np
 
+from ..utils.validation import check_option
+
 __all__ = [
     "make_dict_filter",
     "make_str_filter",
@@ -29,7 +31,9 @@ def __verb_compare(verb, value):
     if match:
         return _OPERATORS[match.group(1)](value, match.group(2))
     else:
-        raise ValueError("invalid verb (%s)" % verb)
+        raise ValueError(
+            "Invalid comparision %s, must match %s" % (verb, __VERB_PATTERN)
+        )
 
 
 def __new_composite_filter(filters):
@@ -62,7 +66,9 @@ def make_filter(filter):
     elif isinstance(filter, str):
         return make_str_filter(filter)
     else:
-        raise ValueError("invalid filter (%r)" % filter)
+        raise TypeError(
+            "filter must be list, dict or str, not %s" % type(filter).__qualname__
+        )
 
 
 def make_list_filter(filter):
@@ -100,9 +106,11 @@ def make_dict_filter(filter):
     """
     filters = []
     for subject, verb in filter.items():
-        if subject not in _SUBJECTS:
-            raise ValueError("invalid subject (%s)" % subject)
-        filters.append(lambda dataset, x, y: _SUBJECTS[subject](verb, dataset, x, y))
+        filters.append(
+            lambda dataset, x, y: check_option(_SUBJECTS, subject, "subject")(
+                verb, dataset, x, y
+            )
+        )
 
     return __new_composite_filter(filters)
 
@@ -124,13 +132,13 @@ def make_str_filter(filter):
     if match:
         subject = match.group(1)
         verb = match.group(2)
-        if subject not in _SUBJECTS:
-            raise ValueError("invalid subject (%s)" % subject)
     else:
-        raise ValueError("invalid filter (%s)" % filter)
+        raise ValueError(
+            "Invalid filter %s, must match %s" % (filter, __SUBJECT_VERB_PATTERN)
+        )
 
     def f(dataset, x, y):
-        return _SUBJECTS[subject](verb, dataset, x, y)
+        return check_option(_SUBJECTS, subject, "subject")(verb, dataset, x, y)
 
     return f
 

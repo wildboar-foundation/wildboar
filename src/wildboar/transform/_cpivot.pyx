@@ -12,9 +12,8 @@ from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 
 from ..distance._distance cimport DistanceMeasure
-from ..utils cimport misc, stats
 from ..utils.data cimport Dataset
-from ..utils.misc cimport to_ndarray_double
+from ..utils.misc cimport CList, to_ndarray_double
 from ..utils.rand cimport RAND_R_MAX, rand_int, shuffle
 
 from ..distance import _DISTANCE_MEASURE
@@ -33,11 +32,11 @@ cdef struct PersitentPivot:
 
 cdef class PivotFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_pivots
-    cdef misc.CList distance_measures
+    cdef CList distance_measures
 
     def __cinit__(self, Py_ssize_t n_pivots, list distance_measures):
         self.n_pivots = n_pivots
-        self.distance_measures = misc.CList(distance_measures)
+        self.distance_measures = CList(distance_measures)
 
     def __reduce__(self):
         return self.__class__, (self.n_pivots, self.distance_measures.py_list)

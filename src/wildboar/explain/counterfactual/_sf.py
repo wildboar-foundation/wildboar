@@ -11,11 +11,12 @@ from sklearn.metrics.pairwise import (
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, check_scalar
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
 from ...ensemble._ensemble import BaseShapeletForestClassifier
+from ...utils.validation import check_option, check_type
 
 MIN_MATCHING_DISTANCE = 0.0001
 
@@ -177,22 +178,25 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         estimator = self._validate_estimator(estimator, allow_3d=True)
 
         if isinstance(self.cost, str):
-            self.cost_ = _COST.get(self.cost, None)
-            if self.cost_ is None:
-                raise ValueError("invalid cost (%r)" % self.cost)
+            self.cost_ = check_option(_COST, self.cost, "cost")
         elif callable(self.cost):
             self.cost_ = _cost_wrapper(self.cost)
         else:
-            raise ValueError("invalid cost (%r)" % self.cost)
+            raise TypeError(
+                "cost must be str or callable, not %r." % type(self.cost).__qualname__
+            )
 
         if isinstance(self.aggregation, str):
-            self.aggregation_ = _AGGREGATION.get(self.aggregation, None)
-            if self.aggregation_ is None:
-                raise ValueError("invalid aggregation (%s)" % self.aggregation)
+            self.aggregation_ = check_option(
+                _AGGREGATION, self.aggregation, "aggregation"
+            )
         elif callable(self.aggregation):
             self.aggregation_ = self.aggregation
         else:
-            raise ValueError("invalid aggregation (%r)" % self.aggregation)
+            raise TypeError(
+                "aggregation must be str or callable, not %r"
+                % type(self.aggregation).__qualname__
+            )
 
         self.estimator_ = deepcopy(estimator)
         self.paths_ = PredictionPaths(estimator.classes_)
@@ -209,7 +213,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
             if self.verbose:
                 print(
                     f"Generating counterfactual for the {i}:th sample. "
-                    f"The target label is {y[i]}."
+                    f"The desired target label is {y[i]}."
                 )
 
             t = self.candidates(x[i], y[i])
@@ -221,29 +225,41 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         return counterfactuals
 
     def candidates(self, x, y):
-        if self.epsilon < 0.0:
-            raise ValueError("epsilon must be larger than 0, got %r" % self.epsilon)
-
         if y not in self.paths_:
             raise ValueError("unknown label, got %r" % y)
 
         prediction_paths = self.paths_[y]
         n_counterfactuals = len(prediction_paths)
 
+        check_type(self.batch_size, "batch_size", (numbers.Integral, numbers.Real))
         if isinstance(self.batch_size, numbers.Integral):
             batch_size = max(0, min(self.batch_size, n_counterfactuals))
         elif isinstance(self.batch_size, numbers.Real):
-            if not 0.0 < self.batch_size <= 1:
-                raise ValueError(
-                    "batch_size should be in range (0, 1], got %r" % self.batch_size
+            batch_size = math.ceil(
+                n_counterfactuals
+                * check_scalar(
+                    self.batch_size,
+                    "batch_size",
+                    numbers.Real,
+                    min_val=0,
+                    max_val=1,
+                    include_boundaries="right",
                 )
-            batch_size = math.ceil(n_counterfactuals * self.batch_size)
-        else:
-            raise ValueError("unsupported batch_size, got %r" % self.batch_size)
+            )
 
         counterfactuals = np.empty((n_counterfactuals,) + x.shape)
         for i, path in enumerate(prediction_paths):
-            counterfactuals[i] = self._path_transform(x.copy(), path)
+            counterfactuals[i] = self._path_transform(
+                x.copy(),
+                path,
+                check_scalar(
+                    self.epsilon,
+                    "epsilon",
+                    numbers.Real,
+                    min_val=0,
+                    include_boundaries="neither",
+                ),
+            )
 
         # Note that the cost is ordered in increasing order; hence, if a
         # conversion is successful there can exist no other successful
@@ -262,7 +278,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
         return None
 
-    def _path_transform(self, x, path):
+    def _path_transform(self, x, path, epsilon):
         for direction, (dim, shapelet), threshold in path:
             if x.ndim == 2:
                 x_dim = x[dim]
@@ -273,19 +289,22 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
             if direction < 0:
                 if dist > threshold:
                     impute_shape = _shapelet_transform(
-                        shapelet, x_dim, location, threshold - self.epsilon
+                        shapelet, x_dim, location, threshold - epsilon
                     )
                     x_dim[location : location + len(shapelet)] = impute_shape
             elif direction > 0:
                 while dist - threshold < 0:
                     impute_shape = _shapelet_transform(
-                        shapelet, x_dim, location, threshold + self.epsilon
+                        shapelet, x_dim, location, threshold + epsilon
                     )
                     x_dim[location : location + len(shapelet)] = impute_shape
                     dist, location = _min_euclidean_distance(shapelet, x_dim)
             else:
                 raise ValueError("invalid path")
         return x
+
+    def _more_tags():
+        return {"X_types": []}
 
 
 # class IncrementalTreeLabelTransform(CounterfactualTransformer):

@@ -11,11 +11,11 @@ from sklearn.cluster import DBSCAN, OPTICS, KMeans
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import confusion_matrix, pairwise_distances
 from sklearn.neighbors import NearestNeighbors
-from sklearn.utils import check_random_state
+from sklearn.utils import check_random_state, check_scalar
 
 from ..linear_model import KernelLogisticRegression
 from ..utils import _soft_dependency_error
-from ..utils.validation import check_array, check_X_y
+from ..utils.validation import check_array, check_option, check_X_y
 
 __all__ = [
     "kmeans_outliers",
@@ -90,7 +90,7 @@ def kmeans_outliers(
     centroid_distance[invalid_clusters] = np.nan
 
     if np.all(np.isnan(centroid_distance)):
-        raise ValueError("no valid clusters")
+        raise ValueError("There are no valid clusters.")
 
     # hide the warning for ignored clusters
     with warnings.catch_warnings():
@@ -167,19 +167,21 @@ def density_outliers(
     elif method == "optics":
         estimator = OPTICS(max_eps=max_eps, min_samples=min_sample, metric=metric)
     else:
-        raise ValueError("method (%s) is unsupported" % method)
+        raise ValueError("method must be 'dbscan' or 'optics', got %s." % method)
 
     estimator.fit(x)
     label, count = np.unique(estimator.labels_, return_counts=True)
     if len(count) == 1:
-        raise ValueError("a single cluster was formed")
+        raise ValueError("A single cluster was formed.")
     elif not np.any(label == -1):
-        raise ValueError("no outlier points")
+        raise ValueError("There are no outlier points.")
 
     outlier_indicies = np.where(estimator.labels_ == -1)[0]
     inlier_indicies = np.where(estimator.labels_ != -1)[0]
     if outlier_indicies.shape[0] < _min_samples(inlier_indicies.shape[0], n_outliers):
-        raise ValueError("not enough outliers")
+        raise ValueError(
+            "There are not enough outliers, got %d." % outlier_indicies.shape[0]
+        )
 
     check_random_state(random_state).shuffle(outlier_indicies)
     return _make_outlier_arrays(
@@ -224,7 +226,7 @@ def majority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     y = check_array(y, ensure_2d=False)
     labels, counts = np.unique(y, return_counts=True)
     if len(labels) < 2:
-        raise ValueError("require more than 1 labels, got %r" % len(labels))
+        raise ValueError("Two labels are required, got %r" % len(labels))
 
     outlier_label_ = labels[labels != labels[np.argmax(counts)]]
     random_state = check_random_state(random_state)
@@ -280,13 +282,15 @@ def minority_outliers(x, y, *, n_outliers=0.05, random_state=None):
 
     labels, label_count = np.unique(y, return_counts=True)
     if len(labels) < 2:
-        raise ValueError("require more than 1 labels, got %r" % len(labels))
+        raise ValueError("Two labels are required, got %r" % len(labels))
 
     min_label = np.argmin(label_count)
 
     min_samples = _min_samples(x.shape[0] - label_count[min_label], n_outliers)
     if label_count[min_label] < min_samples:
-        raise ValueError("not enough samples of the minority class")
+        raise ValueError(
+            "Not enough samples of the minority class, got %d" % label_count[min_label]
+        )
 
     outlier_label_ = labels[min_label]
     random_state = check_random_state(random_state)
@@ -427,13 +431,16 @@ def emmott_outliers(
         labels, counts = np.unique(y, return_counts=True)
         outlier_label = labels[np.argmin(counts)]
     else:
-        raise ValueError("require more than 1 labels, got %r" % n_classes)
+        raise ValueError("Two labels are required, got %r" % n_classes)
 
     outlier_indicator = np.isin(y, outlier_label)
     if np.sum(outlier_indicator) < _min_samples(
         x.shape[0] - outlier_indicator.shape[0], n_outliers
     ):
-        raise ValueError("not enough samples of the minority class")
+        raise ValueError(
+            "Not enough samples of the minority class, got %d"
+            % np.sum(outlier_indicator)
+        )
 
     y_new = np.ones(x.shape[0], dtype=int)
     y_new[outlier_indicator] = -1
@@ -471,14 +478,17 @@ def emmott_outliers(
                     -n_outliers_:
                 ]
             else:
-                raise ValueError("difficulty (%s) is not supported" % difficulty)
+                raise ValueError(
+                    "difficulty must be 'any', 'simplest' or 'hardest', got %r."
+                    % difficulty
+                )
         else:
             outlier_selector = np.isin(difficulty_scores, difficulty)
             min_samples = _min_samples(inlier_indices.shape[0], n_outliers)
             if np.sum(outlier_selector) < min_samples:
                 scores, counts = np.unique(difficulty_scores, return_counts=True)
                 raise ValueError(
-                    "not enough samples (%d) with the requested "
+                    "Not enough samples (%d) with the requested "
                     "difficulty %s, available %s"
                     % (
                         min_samples,
@@ -488,11 +498,7 @@ def emmott_outliers(
                 )
         x_outliers = x_outliers[outlier_selector]
 
-    if variation in _EMMOTT_VARIATION:
-        variation = _EMMOTT_VARIATION[variation]
-    else:
-        raise ValueError("variation (%s) is not supported" % variation)
-
+    variation = check_option(_EMMOTT_VARIATION, variation, "variation")
     outlier_sampled = variation(
         x_outliers, n_outliers_, random_state.randint(np.iinfo(np.int32).max)
     )
@@ -514,25 +520,40 @@ def _make_outlier_arrays(x, *, n_outliers, outlier_indicies, inlier_indicies):
 
 def _min_samples(n_samples, n_outliers):
     if n_outliers is None:
-        min_sample = 1
+        return 1
     else:
-        if not 0 < n_outliers <= 1.0:
-            raise ValueError(
-                "n_outliers must be in the range ]0, 1], got %f" % n_outliers
-            )
-        min_sample = n_outliers * n_samples
-    return min_sample
+        return n_samples * check_scalar(
+            n_outliers,
+            "n_outliers",
+            numbers.Real,
+            min_val=0,
+            max_val=1,
+            include_boundaries="right",
+        )
 
 
 def _n_outliers(n_outliers, total_outliers, n_inliers):
     if n_outliers is None:
         return total_outliers
     elif isinstance(n_outliers, numbers.Real):
-        if not 0.0 < n_outliers <= 1.0:
-            raise ValueError("n_outliers must be in (0, 1], got %r" % n_outliers)
-        return min(total_outliers, math.ceil(n_outliers * n_inliers))
+        return min(
+            total_outliers,
+            math.ceil(
+                check_scalar(
+                    n_outliers,
+                    "n_outliers",
+                    numbers.Real,
+                    min_val=0,
+                    max_val=1,
+                    include_boundaries="right",
+                )
+                * n_inliers
+            ),
+        )
     else:
-        raise ValueError("n_outlier (%r) is not supported" % n_outliers)
+        raise TypeError(
+            "n_outlier must be float, not %r" % type(n_outliers).__qualname__
+        )
 
 
 def _emmott_estimate_difficulty(

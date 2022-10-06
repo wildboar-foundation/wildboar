@@ -10,7 +10,9 @@ import numpy as np
 from sklearn.metrics import check_scoring
 from sklearn.metrics._scorer import _check_multimetric_scoring, _MultimetricScorer
 from sklearn.model_selection._validation import _aggregate_score_dicts
-from sklearn.utils.validation import check_random_state
+from sklearn.utils.validation import check_random_state, check_scalar
+
+from wildboar.utils.validation import check_option
 
 from ..base import BaseEstimator, ExplainerMixin
 
@@ -199,13 +201,20 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
         elif isinstance(self.n_intervals, numbers.Integral):
             n_intervals = self.n_intervals
         elif isinstance(self.n_intervals, numbers.Real):
-            if not 0 < self.n_intervals <= 1:
-                raise ValueError(
-                    "n_intervals (%r) not in range [0, 1[" % self.n_intervals
-                )
-            n_intervals = math.floor(x.shape[-1] * self.n_intervals)
+            check_scalar(
+                self.n_intervals,
+                "n_intervals",
+                numbers.Real,
+                min_val=0.0,
+                max_val=1.0,
+                include_boundaries="right",
+            )
+            n_intervals = math.ceil(x.shape[-1] * self.n_intervals)
         else:
-            raise ValueError("unsupported n_intervals, got %r" % self.n_intervals)
+            raise ValueError(
+                "n_intervals should either be 'sqrt', 'log', float or int, got %r"
+                % self.n_intervals
+            )
 
         if callable(self.scoring):
             scoring = self.scoring
@@ -216,9 +225,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
             scoring = _MultimetricScorer(**scoring_dict)
 
         if isinstance(self.domain, str):
-            self.domain_ = _PERMUTATION_DOMAIN.get(self.domain, None)()
-            if self.domain_ is None:
-                raise ValueError("domain (%s) is not supported" % self.domain)
+            self.domain_ = check_option(_PERMUTATION_DOMAIN, self.domain, "domain")()
         else:
             self.domain_ = self.domain
 
@@ -229,10 +236,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
         scores = []
         for iter, (start, end) in enumerate(self.intervals_):
             if self.verbose:
-                print(
-                    f"Running iteration {iter + 1} of "
-                    f"{len(self.intervals_)}. {start}:{end}"
-                )
+                print(f"Running iteration {iter + 1} of {len(self.intervals_)}.")
             x_perm_transform = x_transform.copy()
             rep_scores = []
             for rep in range(self.n_repeat):
@@ -293,18 +297,27 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
     ):
         if isinstance(self.importances_, dict):
             if scoring is None and scoring not in self.importances_:
-                raise ValueError("scoring (%s) is invalid" % scoring)
+                raise ValueError(
+                    "scoring must be %s, got %r"
+                    % (set(self.importances_.keys()), scoring)
+                )
             importances = self.importances_[scoring].mean
         else:
             if scoring is not None and scoring != self.scoring:
-                raise ValueError("scoring (%s) is invalid" % scoring)
+                raise ValueError("scoring must be %s, got %r" % (self.scoring, scoring))
             importances = self.importances_.mean
 
         if top_k is None or top_k > importances.shape[0]:
             top_k = importances.shape[0]
         elif isinstance(top_k, numbers.Real):
-            if not 0 < top_k <= 1.0:
-                raise ValueError("top_k (%r) not in range ]0, 1]" % top_k)
+            top_k = check_scalar(
+                top_k,
+                "top_k",
+                numbers.Real,
+                min_val=0,
+                max_val=1,
+                include_boundaries="right",
+            )
             top_k = math.ceil(top_k * importances.shape[0])
 
         if ax is None:
@@ -324,9 +337,17 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
                 x = x
             else:
                 if isinstance(n_samples, numbers.Real):
-                    if not 0 < n_samples <= 1.0:
-                        raise ValueError("sample (%r) out of range")
-                    n_samples = math.ceil(x.shape[0] * n_samples)
+                    n_samples = math.ceil(
+                        x.shape[0]
+                        * check_scalar(
+                            n_samples,
+                            "n_sample",
+                            numbers.Real,
+                            min_val=0,
+                            max_val=1,
+                            include_boundaries="right",
+                        )
+                    )
                 else:
                     n_samples = n_samples
 

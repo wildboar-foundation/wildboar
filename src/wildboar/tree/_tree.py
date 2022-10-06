@@ -8,6 +8,7 @@ import warnings
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
+from sklearn.utils import check_scalar
 
 from ..distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
 from ..transform._interval import (
@@ -31,6 +32,7 @@ from ..tree._ctree import (
     TreeFeatureEngineer,
 )
 from ..utils.data import check_dataset
+from ..utils.validation import check_option
 from .base import BaseTree, TreeClassifierMixin, TreeRegressorMixin
 
 CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}
@@ -66,21 +68,8 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
         return TreeFeatureEngineer(feature_engineer)
 
     def _fit(self, x, y, sample_weights, random_state):
-        max_depth = (
-            sys.getrecursionlimit() if self.max_depth is None else self.max_depth
-        )
-        if self.min_impurity_decrease < 0.0:
-            raise ValueError(
-                "min_impurity_decrease must be larger than or equal to 0.0"
-            )
-
-        if max_depth <= 0:
-            raise ValueError("max_depth must be larger than 0")
-        elif max_depth > sys.getrecursionlimit():
-            warnings.warn("max_depth exceeds the maximum recursion limit.")
-
         feature_engineer = self._wrap_feature_engineer(
-            self._get_feature_engineer(x.shape[0])
+            self._get_feature_engineer(self.n_timesteps_in_)
         )
         x = check_dataset(x)
         tree_builder = self._get_tree_builder(
@@ -89,7 +78,13 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
             sample_weights,
             feature_engineer,
             random_state,
-            max_depth,
+            check_scalar(
+                sys.getrecursionlimit() if self.max_depth is None else self.max_depth,
+                "max_depth",
+                numbers.Integral,
+                min_val=1,
+                max_val=sys.getrecursionlimit(),
+            ),
         )
         tree_builder.build_tree()
         self.tree_ = tree_builder.tree_
@@ -99,9 +94,7 @@ class FeatureTreeRegressorMixin(TreeRegressorMixin):
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        if self.criterion not in REG_CRITERION:
-            raise ValueError("criterion (%s) is not supported" % self.criterion)
-
+        # TODO(1.2): remove
         if self.criterion == "mse":
             warnings.warn(
                 "Criterion 'mse' was deprecated in v1.1 and will be "
@@ -109,19 +102,27 @@ class FeatureTreeRegressorMixin(TreeRegressorMixin):
                 "which is equivalent.",
                 FutureWarning,
             )
-        criterion = REG_CRITERION[self.criterion](y)
-        tree = Tree(feature_engineer, 1)
+        Criterion = check_option(REG_CRITERION, self.criterion, "criterion")
         return TreeBuilder(
             x,
             sample_weights,
             feature_engineer,
-            criterion,
-            tree,
+            Criterion(y),
+            Tree(feature_engineer, 1),
             random_state,
             max_depth=max_depth,
-            min_sample_split=self.min_samples_split,
-            min_sample_leaf=self.min_samples_leaf,
-            min_impurity_decrease=self.min_impurity_decrease,
+            min_sample_split=check_scalar(
+                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
+            ),
+            min_sample_leaf=check_scalar(
+                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
+            ),
+            min_impurity_decrease=check_scalar(
+                self.min_impurity_decrease,
+                "min_impurity_decrease",
+                numbers.Real,
+                min_val=0,
+            ),
         )
 
 
@@ -129,22 +130,27 @@ class FeatureTreeClassifierMixin(TreeClassifierMixin):
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        if self.criterion not in CLF_CRITERION:
-            raise ValueError("criterion (%s) is not supported" % self.criterion)
-
-        criterion = CLF_CRITERION[self.criterion](y, self.n_classes_)
-        tree = Tree(feature_engineer, self.n_classes_)
+        Criterion = check_option(CLF_CRITERION, self.criterion, "criterion")
         return TreeBuilder(
             x,
             sample_weights,
             feature_engineer,
-            criterion,
-            tree,
+            Criterion(y, self.n_classes_),
+            Tree(feature_engineer, self.n_classes_),
             random_state,
             max_depth=max_depth,
-            min_sample_split=self.min_samples_split,
-            min_sample_leaf=self.min_samples_leaf,
-            min_impurity_decrease=self.min_impurity_decrease,
+            min_sample_split=check_scalar(
+                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
+            ),
+            min_sample_leaf=check_scalar(
+                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
+            ),
+            min_impurity_decrease=check_scalar(
+                self.min_impurity_decrease,
+                "min_impurity_decrease",
+                numbers.Real,
+                min_val=0,
+            ),
         )
 
 
@@ -152,7 +158,7 @@ class DynamicTreeMixin:
     def _wrap_feature_engineer(self, feature_engineer):
         if hasattr(self, "alpha") and self.alpha is not None:
             if self.alpha == 0.0:
-                raise ValueError("alpha == 0.0 is not supported.")
+                raise ValueError("alpha == 0.0, must be != 0")
 
             return DynamicTreeFeatureEngineer(feature_engineer, self.alpha)
 
@@ -188,20 +194,24 @@ class BaseShapeletTree(BaseFeatureTree):
         self.metric_params = metric_params
 
     def _get_feature_engineer(self, n_samples):
-        if (
-            self.min_shapelet_size < 0
-            or self.min_shapelet_size > self.max_shapelet_size
-        ):
-            raise ValueError(
-                "min_shapelet_size {0} <= 0 or {0} > {1}".format(
-                    self.min_shapelet_size, self.max_shapelet_size
-                )
-            )
-        if self.max_shapelet_size > 1:
-            raise ValueError("max_shapelet_size %d > 1" % self.max_shapelet_size)
+        check_scalar(
+            self.max_shapelet_size,
+            "max_shapelet_size",
+            numbers.Real,
+            min_val=self.min_shapelet_size,
+            max_val=1.0,
+        )
+        check_scalar(
+            self.min_shapelet_size,
+            "min_shapelet_size",
+            numbers.Real,
+            min_val=0.0,
+            max_val=self.max_shapelet_size,
+        )
+        check_scalar(self.n_shapelets, "n_shapelets", numbers.Integral, min_val=1)
 
-        max_shapelet_size = int(self.n_timesteps_in_ * self.max_shapelet_size)
-        min_shapelet_size = int(self.n_timesteps_in_ * self.min_shapelet_size)
+        max_shapelet_size = math.ceil(self.n_timesteps_in_ * self.max_shapelet_size)
+        min_shapelet_size = math.ceil(self.n_timesteps_in_ * self.min_shapelet_size)
         if min_shapelet_size < 2:
             # NOTE: To ensure that the same random_seed generates the same shapelets
             # in future versions we keep the limit of 2 timesteps for a shapelet as long
@@ -215,13 +225,12 @@ class BaseShapeletTree(BaseFeatureTree):
             else:
                 min_shapelet_size = 2
 
-        distance_measure = _SUBSEQUENCE_DISTANCE_MEASURE.get(self.metric, None)
-        if distance_measure is None:
-            raise ValueError("invalid distance measure (%r)" % self.metric)
-        metric_params = self.metric_params or {}
-
+        DistanceMeasure = check_option(
+            _SUBSEQUENCE_DISTANCE_MEASURE, self.metric, "metric"
+        )
+        metric_params = self.metric_params if self.metric_params is not None else {}
         return RandomShapeletFeatureEngineer(
-            distance_measure(**metric_params),
+            DistanceMeasure(**metric_params),
             min_shapelet_size,
             max_shapelet_size,
             self.n_shapelets,
@@ -363,7 +372,6 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     def __init__(
         self,
         *,
-        n_shapelets=1,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -428,7 +436,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            n_shapelets=n_shapelets,
+            n_shapelets=1,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -440,9 +448,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        if self.criterion not in REG_CRITERION:
-            raise ValueError("criterion (%s) is not supported" % self.criterion)
-
+        # TODO(1.2): remove
         if self.criterion == "mse":
             warnings.warn(
                 "Criterion 'mse' was deprecated in v1.1 and will be "
@@ -450,20 +456,27 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
                 "which is equivalent.",
                 FutureWarning,
             )
-
-        criterion = REG_CRITERION[self.criterion](y)
-        tree = Tree(feature_engineer, 1)
+        Criterion = check_option(REG_CRITERION, self.criterion, "criterion")
         return ExtraTreeBuilder(
             x,
             sample_weights,
             feature_engineer,
-            criterion,
-            tree,
+            Criterion(y),
+            Tree(feature_engineer, 1),
             random_state,
             max_depth=max_depth,
-            min_sample_split=self.min_samples_split,
-            min_sample_leaf=self.min_samples_leaf,
-            min_impurity_decrease=self.min_impurity_decrease,
+            min_sample_split=check_scalar(
+                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
+            ),
+            min_sample_leaf=check_scalar(
+                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
+            ),
+            min_impurity_decrease=check_scalar(
+                self.min_impurity_decrease,
+                "min_impurity_decrease",
+                numbers.Real,
+                min_val=0,
+            ),
         )
 
 
@@ -692,22 +705,27 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        if self.criterion not in CLF_CRITERION:
-            raise ValueError("criterion (%s) is not supported" % self.criterion)
-
-        criterion = CLF_CRITERION[self.criterion](y, self.n_classes_)
-        tree = Tree(feature_engineer, self.n_classes_)
+        Criterion = check_option(CLF_CRITERION, self.criterion, "criterion")
         return ExtraTreeBuilder(
             x,
             sample_weights,
             feature_engineer,
-            criterion,
-            tree,
+            Criterion(y, self.n_classes_),
+            Tree(feature_engineer, self.n_classes_),
             random_state,
             max_depth=max_depth,
-            min_sample_split=self.min_samples_split,
-            min_sample_leaf=self.min_samples_leaf,
-            min_impurity_decrease=self.min_impurity_decrease,
+            min_sample_split=check_scalar(
+                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
+            ),
+            min_sample_leaf=check_scalar(
+                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
+            ),
+            min_impurity_decrease=check_scalar(
+                self.min_impurity_decrease,
+                "min_impurity_decrease",
+                numbers.Real,
+                min_val=0,
+            ),
         )
 
 
@@ -767,20 +785,25 @@ class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
         else:
             kernel_size = self.kernel_size
 
-        if self.sampling in _SAMPLING_METHOD:
-            sampling_params = (
-                {} if self.sampling_params is None else self.sampling_params
-            )
-            weight_sampler = _SAMPLING_METHOD[self.sampling](**sampling_params)
-        else:
-            raise ValueError("sampling (%r) is not supported." % self.sampling)
+        WeightSampler = check_option(_SAMPLING_METHOD, self.sampling, "sampling")
+        sampling_params = {} if self.sampling_params is None else self.sampling_params
         return RocketFeatureEngineer(
-            int(self.n_kernels),
-            weight_sampler,
+            check_scalar(self.n_kernels, "n_kernels", numbers.Integral, min_val=1),
+            WeightSampler(**sampling_params),
             np.array(kernel_size, dtype=int),
-            float(self.bias_prob),
-            float(self.padding_prob),
-            float(self.normalize_prob),
+            check_scalar(
+                self.bias_prob, "bias_prob", numbers.Real, min_val=0, max_val=1
+            ),
+            check_scalar(
+                self.padding_prob, "padding_prob", numbers.Real, min_val=0, max_val=1
+            ),
+            check_scalar(
+                self.normalize_prob,
+                "normalize_prob",
+                numbers.Real,
+                min_val=0,
+                max_val=1,
+            ),
         )
 
 
@@ -1052,42 +1075,73 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
     def _get_feature_engineer(self, n_samples):
         if isinstance(self.summarizer, list):
             if not all(hasattr(func, "__call__") for func in self.summarizer):
-                raise ValueError("summarizer (%r) is not supported")
+                raise ValueError(
+                    "summarizer must be list of callable or str, got %r"
+                    % self.summarizer
+                )
             summarizer = PyFuncSummarizer(self.summarizer)
         else:
-            summarizer = _SUMMARIZER.get(self.summarizer)()
-            if summarizer is None:
-                raise ValueError("summarizer (%r) is not supported." % self.summarizer)
+            summarizer = check_option(_SUMMARIZER, self.summarizer, "summarizer")()
 
         if self.n_intervals == "sqrt":
             n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
         elif self.n_intervals == "log":
             n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
         elif isinstance(self.n_intervals, numbers.Integral):
-            n_intervals = self.n_intervals
+            n_intervals = check_scalar(
+                self.n_intervals,
+                "n_intervals",
+                numbers.Integral,
+                min_val=1,
+                max_val=self.n_timesteps_in_,
+            )
         elif isinstance(self.n_intervals, numbers.Real):
-            if not 0.0 < self.n_intervals < 1.0:
-                raise ValueError("n_intervals must be between 0.0 and 1.0")
-            n_intervals = math.floor(self.n_intervals * self.n_timesteps_in_)
-            # TODO: ensure that no interval is smaller than 2
+            n_intervals = math.ceil(
+                check_scalar(
+                    self.n_intervals,
+                    "n_intervals",
+                    numbers.Real,
+                    min_val=0,
+                    max_val=1,
+                    include_boundaries="right",
+                )
+                * self.n_timesteps_in_
+            )
         else:
-            raise ValueError("n_intervals (%r) is not supported" % self.n_intervals)
+            raise TypeError(
+                "n_intervals must be 'sqrt', 'log', float or int, got %r"
+                % type(self.n_intervals).__qualname__
+            )
 
         if self.intervals == "fixed":
             return IntervalFeatureEngineer(n_intervals, summarizer)
         elif self.intervals == "sample":
-            if not 0.0 < self.sample_size < 1.0:
-                raise ValueError("sample_size must be between 0.0 and 1.0")
-
-            sample_size = math.floor(n_intervals * self.sample_size)
+            sample_size = math.floor(
+                check_scalar(
+                    self.sample_size, "sample_size", numbers.Real, min_val=0, max_val=1
+                )
+                * n_intervals
+            )
             return RandomFixedIntervalFeatureEngineer(
                 n_intervals, summarizer, sample_size
             )
         elif self.intervals == "random":
-            if not 0.0 <= self.min_size < self.max_size:
-                raise ValueError("min_size must be between 0.0 and max_size")
-            if not self.min_size < self.max_size <= 1.0:
-                raise ValueError("max_size must be between min_size and 1.0")
+            check_scalar(
+                self.max_size,
+                "self.max_size",
+                numbers.Real,
+                min_val=self.min_size,
+                max_val=1.0,
+                include_boundaries="right",
+            )
+            check_scalar(
+                self.min_size,
+                "self.min_size",
+                numbers.Real,
+                min_val=0.0,
+                max_val=self.max_size,
+                include_boundaries="right",
+            )
 
             min_size = int(self.min_size * self.n_timesteps_in_)
             max_size = int(self.max_size * self.n_timesteps_in_)
@@ -1101,7 +1155,10 @@ class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
                 n_intervals, summarizer, min_size, max_size
             )
         else:
-            raise ValueError("intervals (%r) is unsupported." % self.intervals)
+            raise ValueError(
+                "intervals must be 'fixed', 'sample' or 'random', got %r"
+                % self.intervals
+            )
 
 
 class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
@@ -1351,23 +1408,30 @@ class BasePivotTree(BaseFeatureTree, metaclass=ABCMeta):
         self.random_state = random_state
 
     def _get_feature_engineer(self, n_samples):
-        if isinstance(self.n_pivot, str):
-            if self.n_pivot == "sqrt":
-                n_pivot = math.ceil(math.sqrt(n_samples))
-            elif self.n_pivot == "log":
-                n_pivot = math.ceil(math.log2(n_samples))
-            else:
-                raise ValueError("invalid n_pivot (%s)" % self.n_pivot)
+        if self.n_pivot == "sqrt":
+            n_pivot = math.ceil(math.sqrt(n_samples))
+        elif self.n_pivot == "log":
+            n_pivot = math.ceil(math.log2(n_samples))
         elif isinstance(self.n_pivot, numbers.Integral):
-            n_pivot = self.n_pivot
+            n_pivot = check_scalar(
+                self.n_pivot, "n_pivot", numbers.Integral, min_val=1, max_val=n_samples
+            )
         elif isinstance(self.n_pivot, numbers.Real):
-            if not 0 < self.n_pivot <= 1.0:
-                raise ValueError(
-                    "invalid n_pivots, got %d expected in range [0, 1]" % self.n_pivot
+            n_pivot = math.ceil(
+                n_samples
+                * check_scalar(
+                    self.n_pivot,
+                    "n_pivot",
+                    numbers.Real,
+                    min_val=0,
+                    max_val=1,
+                    include_boundaries="right",
                 )
-            n_pivot = math.ceil(self.n_pivot * n_samples)
+            )
         else:
-            raise ValueError("invalid n_pivot (%r)" % self.n_pivot)
+            raise ValueError(
+                "n_pivot must be 'sqrt', 'log', int or float, got %r" % self.n_pivot
+            )
         metrics = [_DISTANCE_MEASURE["dtw"](r) for r in np.linspace(0.1, 0.4, 8)]
         return PivotFeatureEngineer(
             n_pivot, [_DISTANCE_MEASURE["euclidean"]()] + metrics

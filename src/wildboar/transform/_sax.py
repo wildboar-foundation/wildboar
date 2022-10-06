@@ -1,11 +1,14 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import numbers
+
 import numpy as np
 from scipy.stats import norm, uniform
 from sklearn.base import TransformerMixin
+from sklearn.utils.validation import check_scalar
 
-from wildboar.utils.validation import check_array
+from wildboar.utils.validation import check_array, check_option
 
 from ..base import BaseEstimator
 from . import IntervalTransform
@@ -103,9 +106,7 @@ class SAX(TransformerMixin, BaseEstimator):
 
     def fit(self, x, y=None):
         x = self._validate_data(x, dtype=float)
-        if self.binning not in _BINNING:
-            raise ValueError("binning (%s) not supported." % self.binning)
-
+        self.binning_ = check_option(_BINNING, self.binning, "binning")
         self.paa_ = PAA(n_intervals=self.n_intervals, window=self.window).fit(x)
         return self
 
@@ -113,9 +114,7 @@ class SAX(TransformerMixin, BaseEstimator):
         x = self._validate_data(x, reset=False, dtype=float)
         x_paa = self.paa_.transform(x)
 
-        bins = _BINNING[self.binning](
-            _percentiles(self.n_bins), x, estimate=self.estimate
-        )
+        bins = self.binning_(_percentiles(self.n_bins), x, estimate=self.estimate)
         x_out = np.empty(x_paa.shape, dtype=np.min_scalar_type(self.n_bins))
         for i, (x_i, bin_i) in enumerate(zip(x_paa, bins)):
             x_out[i] = np.digitize(x_i, bin_i)
@@ -127,7 +126,7 @@ class SAX(TransformerMixin, BaseEstimator):
 
         x = check_array(x, dtype=np.min_scalar_type(self.n_bins))
         x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
-        bins = _BINNING[self.binning](_percentiles(self.n_bins), estimate=self.estimate)
+        bins = self.binning_(_percentiles(self.n_bins), estimate=self.estimate)
         bins = np.hstack([bins[0], (bins[:-1] + bins[1:]) / 2, bins[-1]])
 
         for i, (start, end) in enumerate(self.intervals_):
@@ -155,9 +154,13 @@ class PAA(TransformerMixin, BaseEstimator):
     def fit(self, x, y=None):
         x = self._validate_data(x, dtype=float)
         if self.window is not None:
-            if not 0 < self.window <= x.shape[-1]:
-                raise ValueError("invalid window size, got %d" % self.window)
-            n_intervals = x.shape[-1] // self.window
+            n_intervals = x.shape[-1] // check_scalar(
+                self.window,
+                "window",
+                numbers.Integral,
+                min_val=1,
+                max_val=self.n_timesteps_in_,
+            )
         else:
             n_intervals = self.n_intervals
 
