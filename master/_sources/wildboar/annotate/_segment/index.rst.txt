@@ -19,7 +19,7 @@ Functions
 
 
 
-.. py:function:: segment(x=None, mpi=None, *, n_segments=1, window=5, exclude=0.2, boundry=1.0, return_arc_curve=False)
+.. py:function:: segment(x=None, *, mpi=None, n_segments=1, window=0.1, exclude=0.2, boundry=1.0, return_arc_curve=False)
 
    Find change regimes in a time series.
 
@@ -29,8 +29,11 @@ Functions
    :type mpi: array-like of shape (n_samples, profile_size) or (profile_size), optional
    :param n_segments: The number of segmentations to identify
    :type n_segments: int, optional
-   :param window: The window size. Ignored if `mpi` is given.
-   :type window: int, optional
+   :param window: The window size. The window parameter is ignored if mpi is not None.
+
+                  - if float, a fraction of n_timestep
+                  - if int, the exact window size
+   :type window: int or float, optional
    :param exclude: The self-join exclusion for the matrix profile. Ignored if `mpi` is given.
    :type exclude: float, optional
    :param boundry: The region around an identified segmentation that is ignored when searching

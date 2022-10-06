@@ -15,6 +15,8 @@ Functions
 
    wildboar.utils.validation.check_X_y
    wildboar.utils.validation.check_array
+   wildboar.utils.validation.check_option
+   wildboar.utils.validation.check_type
 
 
 
@@ -88,5 +90,22 @@ Functions
 
    :returns: **array_converted** -- The converted and validated array.
    :rtype: object
+
+
+.. py:function:: check_option(dict, key, name)
+
+
+.. py:function:: check_type(x, name, target_type, required=True)
+
+   Check that the type of x is of a target type.
+
+   :param x: The object to check.
+   :type x: object
+   :param name: The name of the parameter.
+   :type name: str
+   :param target_type: The required type(s) of x.
+   :type target_type: type or tuple
+   :param required: If required=False, None is an allowed.
+   :type required: bool, optional
 
 

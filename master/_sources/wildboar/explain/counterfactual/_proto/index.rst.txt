@@ -445,7 +445,7 @@ Classes
       Return true if x is a counterfactual of label y
 
       :param x: The counterfactual sample
-      :type x: ndarray of shape (n_samples, n_timestep) or (n_timestep,)
+      :type x: ndarray of shape (n_timestep,)
       :param y: The counterfactual label
       :type y: object
 

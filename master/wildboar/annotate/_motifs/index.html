@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
-        <title>wildboar.annotate._motifs - Wildboar 1.1.0rc5.dev125+g67506fe7 documentation</title>
+        <title>wildboar.annotate._motifs - Wildboar 1.1.0rc5.dev127+g0ce05608 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev125+g67506fe7 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev127+g0ce05608 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -357,14 +357,21 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.annotate._motifs.motifs">
-<span class="sig-prename descclassname"><span class="pre">wildboar.annotate._motifs.</span></span><span class="sig-name descname"><span class="pre">motifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_motif</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L13-L168"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.annotate._motifs.motifs" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.annotate._motifs.</span></span><span class="sig-name descname"><span class="pre">motifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_motif</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L14-L195"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.annotate._motifs.motifs" title="Permalink to this definition">#</a></dt>
 <dd><p>Find motifs</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series</p></li>
 <li><p><strong>mp</strong> (<em>ndarray</em><em> or </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>profile_size</em><em>)</em><em>, </em><em>optional</em>) – The matrix profile. The matrix profile is computed if None.</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size of the matrix profile.</p></li>
+<li><p><strong>window</strong> (<em>&quot;auto&quot;</em><em>, </em><em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The window size of the matrix profile.</p>
+<ul>
+<li><p>if “auto” the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
+window of the matrix profile if mp is not None.</p></li>
+<li><p>if float, a fraction of n_timestep</p></li>
+<li><p>if int, the exact window size</p></li>
+</ul>
+</p></li>
 <li><p><strong>exclude</strong> (<em>float</em><em>, </em><em>optional</em>) – The size of the exclusion zone.</p></li>
 <li><p><strong>max_distance</strong> (<em>str</em><em>, </em><em>optional</em>) – The maximum distance between motifs.</p></li>
 <li><p><strong>max_matches</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of neighbours</p></li>

@@ -19,14 +19,18 @@ Classes
 
 
 
-.. py:class:: PivotTransform(n_pivot=1, *, metrics='all', random_state=None, n_jobs=None)
+.. py:class:: PivotTransform(n_pivots=1, *, metric_factories=None, random_state=None, n_jobs=None)
 
    Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    A transform using pivot time series and sampled distance metrics.
 
-   :param n_jobs: The number of jobs to run in parallel. None means 1 and
-                  -1 means using all processors.
-   :type n_jobs: int, optional
+   :param metric_factories: The distance metrics. A dictionary where key is:
+
+                            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
+                            - if callable, a function returning a list of ``DistanceMeasure``-objects
+
+                            and where value is a dict of parameters to the factory.
+   :type metric_factories: dict, optional
 
 
