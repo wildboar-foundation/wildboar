@@ -8,7 +8,7 @@ from sklearn.utils.validation import check_scalar
 
 from ..distance import _SUBSEQUENCE_DISTANCE_MEASURE
 from ..utils.validation import check_option
-from ._shapelet_fast import RandomShapeletFeatureEngineer
+from ._cshapelet import RandomShapeletFeatureEngineer
 from .base import BaseFeatureEngineerTransform
 
 

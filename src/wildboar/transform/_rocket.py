@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.utils.validation import _is_arraylike, check_scalar
 
 from ..utils.validation import check_option
-from ._rocket_fast import (
+from ._crocket import (
     NormalWeightSampler,
     RocketFeatureEngineer,
     ShapeletWeightSampler,

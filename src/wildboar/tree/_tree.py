@@ -11,6 +11,9 @@ import numpy as np
 from sklearn.utils import check_scalar
 
 from ..distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
+from ..transform._cpivot import PivotFeatureEngineer
+from ..transform._crocket import RocketFeatureEngineer
+from ..transform._cshapelet import RandomShapeletFeatureEngineer
 from ..transform._interval import (
     _SUMMARIZER,
     IntervalFeatureEngineer,
@@ -18,9 +21,7 @@ from ..transform._interval import (
     RandomFixedIntervalFeatureEngineer,
     RandomIntervalFeatureEngineer,
 )
-from ..transform._pivot import PivotFeatureEngineer
-from ..transform._rocket import _SAMPLING_METHOD, RocketFeatureEngineer
-from ..transform._shapelet import RandomShapeletFeatureEngineer
+from ..transform._rocket import _SAMPLING_METHOD
 from ..tree._ctree import (
     DynamicTreeFeatureEngineer,
     EntropyCriterion,

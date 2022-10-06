@@ -97,12 +97,12 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/transform/_feature.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.transform._shapelet_fast": {
-            "sources": ["src/wildboar/transform/_shapelet_fast.pyx"],
+        "wildboar.transform._cshapelet": {
+            "sources": ["src/wildboar/transform/_cshapelet.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.transform._rocket_fast": {
-            "sources": ["src/wildboar/transform/_rocket_fast.pyx"],
+        "wildboar.transform._crocket": {
+            "sources": ["src/wildboar/transform/_crocket.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.transform._cinterval": {
