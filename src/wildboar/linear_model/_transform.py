@@ -12,7 +12,6 @@ from sklearn.utils.extmath import softmax
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ..base import BaseEstimator
-from ..utils.validation import check_array
 
 
 class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
@@ -21,8 +20,7 @@ class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
         self.n_jobs = n_jobs
 
     def fit(self, x, y, sample_weight=None):
-        x = check_array(x, allow_3d=True)
-        y = check_array(y, ensure_2d=False)
+        x, y = self._validate_data(x, y, dtype=float, allow_3d=True)
         random_state = check_random_state(self.random_state)
         self.pipe_ = Pipeline(
             [
@@ -45,22 +43,22 @@ class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
 class TransformClassifierMixin:
     def predict(self, x):
         check_is_fitted(self)
-        x = check_array(x, allow_3d=True)
+        x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.predict(x)
 
     def predict_proba(self, x):
         check_is_fitted(self)
-        x = check_array(x, allow_3d=True)
+        x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.predict_proba(x)
 
     def predict_log_proba(self, x):
         check_is_fitted(self)
-        x = check_array(x, allow_3d=True)
+        x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.predict_log_proba(x)
 
     def decision_function(self, x):
         check_is_fitted(self)
-        x = check_array(x, allow_3d=True)
+        x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.decision_function(x)
 
     @property
@@ -71,12 +69,12 @@ class TransformClassifierMixin:
 class TransformRegressorMixin:
     def predict(self, x):
         check_is_fitted(self)
-        x = check_array(x, allow_3d=True)
+        x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.predict(x)
 
     def decision_function(self, x):
         check_is_fitted(self)
-        x = check_array(x, allow_3d=True)
+        x = self._validate_data(x, dtype=float, allow_3d=True)
         return self.pipe_.decision_function(x)
 
 
