@@ -23,9 +23,9 @@ New and changed models
 ----------------------
 
 Wildboar 1.1 introduces a large number of new models, explanations and visualizations. Among
-others we introduce :class:`ensemble.IntervalImportance` to highlight important temporal regions; 
-:class:`linear_model.RocketClassifier` and :class:`linear_model.RocketRegressor` for 
-state-of-the-art predictive performance using random convoultions. We have also been hard 
+others we introduce :class:`explain.IntervalImportance` :class:`explain.AmplitudeImportance` 
+to highlight important temporal regions; :class:`linear_model.RocketClassifier` and :class:`linear_model.RocketRegressor` 
+for state-of-the-art predictive performance using random convoultions. We have also been hard 
 at work adding support for :func:`distance.matrix_profile` and implemented motif and regime
 search in terms of it. We also add support for three new distance metrics, weighted, derivative
 and weighted derivative dynamic time warping.
@@ -43,7 +43,7 @@ Changelog
      
      - |Feature| :func:`annotate.motifs` added to find motifs in time series
 
-     - |Feature| :func:`annotate.segment`` added to segment time series
+     - |Feature| :func:`annotate.segment` added to segment time series
 
   .. grid-item-card::
 
@@ -131,9 +131,6 @@ Changelog
     - |Feature| The new :class:`ensemble.PivotForestClassifier` is a classifier that constructs
       an ensemble of pivot trees
 
-    - |Feature| The new :class:`ensemble.PivotForestRegressor` is a regressor that constructs
-      an ensemble of pivot trees
-
     - |Feature| The new :class:`ensemble.ProximityForestClassifier` is an ensemble of proximity trees.
 
 
@@ -150,6 +147,11 @@ Changelog
 
     - |Feature| The new :class:`transform.PivotTransform` transform time series using the distance to pivot time series
 
+    - |Feature| The new :class:`transform.SAX` transforms time series into discretized bins. The implementation is
+      efficient and compress the data to the smallest possible datatype.
+
+    - |Feature| The new :class:`transform.PAA` transform time series into mean bins.
+
   .. grid-item-card::
 
     :mod:`wildboar.explain`
@@ -157,6 +159,9 @@ Changelog
 
     - |Feature| The new :class:`explain.IntervalImportance` is an explanation that highlights
       important regions using permutation importances.
+
+    - |Feature| The new :class:`explain.AmplitudeImportance` is an explanation that highlights
+      important amplitude regions using SAX and permutation. 
 
     - |Enhancement| :class:`explain.counterfactual.ShapeletForestCounterfactual` now support multivariate time series.
 
@@ -168,7 +173,7 @@ Changelog
     - |Enhancement| :func:`explain.counterfactual.counterfactuals` now support a dictionary of `method_args`.
 
     - |API| The parameters `background_x` and `background_y` of :class:`explain.counterfactual.PrototypeCounterfactual`
-      has been renamed to `train_x` and `train_y`.
+      has been renamed to `train_x` and `train_y` and been deprecated in favor of `fit(estimator, x, y)`.
 
     - |API| The parameter `success` to :func:`explain.counterfactual.score` is deprecated and has been renamed to `valid`.
 
@@ -203,9 +208,6 @@ Changelog
     - |Feature| The new :class:`tree.PivotTreeClassifier` is a classifier that uses pivot 
       time series and distance thresholds to construct trees.
 
-    - |Feature| The new :class:`tree.PivotTreeRegressor` is a regressor that uses pivot 
-      time series and distance thresholds to construct trees.
-
     - |Feature| The new :class:`tree.ProximityTreeClassifier` is a classifier that construct
       a tree that acts as an ensemble of distance metrics.
 
@@ -224,6 +226,8 @@ Changelog
 
 Other improvements
 ------------------
+
+* We have improved testing, error messages and overall stability.
 
 * Binary builds for Apple ARM processors (M1 and M2)
 
