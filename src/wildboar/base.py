@@ -204,8 +204,8 @@ class ExplainerMixin:
     def fit_explain(self, estimator, x=None, y=None, **kwargs):
         return self.fit(estimator, x, y, **kwargs).explain(x, y)
 
-    def plot(self, x=None, y=None, ax=None, **kwargs):
-        """Plot the explanation
+    def plot(self, x=None, y=None, ax=None):
+        """Plot the explanation.
 
         Returns
         -------
@@ -222,6 +222,8 @@ class ExplainerMixin:
 
 class CounterfactualMixin:
     """Mixin class for counterfactual explainer."""
+
+    _estimator_type = "counterfactual"
 
     @deprecated(
         "transform(x, y) has been deprecated in 1.1 and will be removed in 1.2. "
@@ -249,3 +251,38 @@ class CounterfactualMixin:
         from .explain.counterfactual import score
 
         return np.mean(-score(x, self.explain(x, y)))
+
+
+def is_counterfactual(estimator):
+    """Check if estimator is a counterfactual explainer
+
+    Parameters
+    ----------
+    estimator : object
+        The estimator
+
+    Returns
+    -------
+    bool
+        True if the estimator probably is a counterfactual explainer
+    """
+    return (
+        hasattr(estimator, "explain")
+        and hasattr(type(estimator), "_estimator_type")
+        and type(estimator)._estimator_type == "counterfacutal"
+    )
+
+
+def is_explainer(estimator):
+    """Check if estimator is an explainer
+
+    Parameters
+    ----------
+    estimator : object
+        The estimator
+
+    Returns
+    -------
+    bool
+        True if the estimator probably is an explainer"""
+    return hasattr(estimator, "explain")
