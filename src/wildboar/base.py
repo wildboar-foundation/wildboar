@@ -195,7 +195,8 @@ class ExplainerMixin:
         if self.n_dims_in_ > 1 and not allow_3d:
             raise ValueError(
                 "The explainer does not permit 3darrays as input but the estimator is "
-                "fitted with a 3darray of shape (?, %d, ?)." % self.n_dims_in_
+                "fitted with a 3darray of shape (?, %d, %d)."
+                % (self.n_dims_in_, self.n_timesteps_in_)
             )
 
         return estimator
