@@ -1,9 +1,12 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+from functools import partial
+
 import numpy as np
 
 from .. import iseos
+from ..transform._sax import piecewice_aggregate_approximation
 from ..utils.validation import check_array, check_option
 
 __all__ = [
@@ -119,4 +122,7 @@ _PREPROCESS = {
     "minmax_scale": minmax_scale,
     "maxabs_scale": maxabs_scale,
     "truncate": truncate,
+    "downsample": piecewice_aggregate_approximation,
+    "downsample-25": partial(piecewice_aggregate_approximation, n_intervals=0.25),
+    "downsample-50": partial(piecewice_aggregate_approximation, n_intervals=0.5),
 }
