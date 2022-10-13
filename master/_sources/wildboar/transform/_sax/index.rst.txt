@@ -14,8 +14,11 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.transform._sax.Binning
+   wildboar.transform._sax.NormalBinning
    wildboar.transform._sax.PAA
    wildboar.transform._sax.SAX
+   wildboar.transform._sax.UniformBinning
 
 
 
@@ -29,13 +32,31 @@ Functions
 
 
 
+.. py:class:: Binning(n_bins)
+
+   .. py:method:: get_thresholds(x=None, estimate=False)
+
+
+   .. py:method:: scale(x)
+      :abstractmethod:
+
+
+
+.. py:class:: NormalBinning(n_bins)
+
+   Bases: :py:obj:`Binning`
+
+   .. py:method:: scale(x)
+
+
+
 .. py:class:: PAA(n_intervals='sqrt', window=None)
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
    Peicewise aggregate approximation
 
-   .. py:property:: intervals_
+   .. py:property:: intervals
 
 
    .. py:method:: fit(x, y=None)
@@ -84,7 +105,7 @@ Functions
                       ``binning="uniform"``
    :type estimate: bool, optional
 
-   .. py:property:: intervals_
+   .. py:property:: intervals
 
 
    .. py:method:: fit(x, y=None)
@@ -94,6 +115,14 @@ Functions
 
 
    .. py:method:: transform(x)
+
+
+
+.. py:class:: UniformBinning(n_bins)
+
+   Bases: :py:obj:`Binning`
+
+   .. py:method:: scale(x)
 
 
 

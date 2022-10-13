@@ -14,11 +14,20 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.explain._importance.AmplitudeImportance
    wildboar.explain._importance.Domain
    wildboar.explain._importance.FrequencyDomain
    wildboar.explain._importance.IntervalImportance
    wildboar.explain._importance.TimeDomain
 
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain._importance.plot_importances
 
 
 
@@ -29,6 +38,64 @@ Attributes
 
    wildboar.explain._importance.Importance
    wildboar.explain._importance.matplotlib_missing
+
+
+.. py:class:: AmplitudeImportance(scoring=None, n_intervals='sqrt', window=None, binning='normal', n_bins=4, n_repeat=1, random_state=None)
+
+   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
+   Compute the importance of equi-probable horizontal time series intervals by
+   permuting the values between each horizontal interval. The implementation uses
+   :class:`transform.SAX` to discretize the time series and then for each bin permute
+   the samples along that bin.
+
+   Paramters
+   ---------
+
+   sax_ : SAX
+       The SAX transformation.
+
+   baseline_score_ : float or dict
+       The baseline score.
+
+   importances_ : float or dict
+       The importances of each vertical bin.
+
+
+   .. py:method:: fit(estimator, x, y, sample_weight=None)
+
+
+   .. py:method:: plot(x=None, y=None, *, ax=None, n_samples=100, scoring=None, preprocess=True, k=None, show_bins=False, show_grid=True)
+
+      Plot the importances. If x is given, the importances are plotted over the
+      samples optionally labeling each sample using the supplied labels. If x is
+      not give, the importances are plotted as one or more boxplots.
+
+      :param x: The samples
+      :type x: array-like of shape (n_samples, n_timesteps), optional
+      :param y: The labels
+      :type y: array-like of shape (n_samples, ), optional
+      :param ax: Axes to plot. If ax is set, x is None and scoring is None, the number of
+                 axes must be the same as the number of scorers.
+      :type ax: Axes, optional
+      :param scoring: The scoring to plot if multiple scorers were used when fitting.
+      :type scoring: str, optional
+      :param preprocess: Preprocess the time series to align with the bins, ignored if x is not None.
+      :type preprocess: bool, optional
+      :param k: The number of top bins to plot, ignored if x is not None.
+
+                - if int, the specified number of bins are shown
+                - if float, a fraction of the number of bins are shown
+      :type k: int or float, optional
+      :param show_bins: Annotate the plot with the index of the bin, ignored if x is not None.
+      :type show_bins: bool, optional
+      :param show_grid: Annotate the plot with the bin thresholds, ignored if x is not None.
+      :type show_grid: bool, optional
+
+      :returns: * **ax** (*Axis*) -- The axis
+                * **mappable** (*ScalarMappable, optional*) -- Return the mappable used to plot the colorbar.
+                  Only returned if ax is not None and x is not None.
+
 
 
 .. py:class:: Domain
@@ -63,7 +130,7 @@ Attributes
    .. py:method:: inverse_transform(x)
 
 
-   .. py:method:: plot_samples(x, y=None, ax=None, **kwargs)
+   .. py:method:: plot_samples(x, y=None, ax=None, n_samples=None, **kwargs)
 
 
    .. py:method:: randomize(x, start, end, random_state=None)
@@ -73,7 +140,7 @@ Attributes
 
 
 
-.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', domain='time', verbose=False, random_state=None)
+.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, domain='time', verbose=False, random_state=None)
 
    Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
@@ -99,6 +166,9 @@ Attributes
 
                        - if int, exact number of intervals.
    :type n_intervals: str, optional
+   :param window: The window size. If specicied, n_intervals is ignored and the number of
+                  intervals is computed such that each interval is (at least) of size window.
+   :type window: int, optional
    :param domain: Compute the importance in the time or frequency domain.
    :type domain: {"time", "frequency"}, optional
    :param verbose: Show extra progress information.
@@ -116,9 +186,9 @@ Attributes
    .. py:method:: fit(estimator, x, y, sample_weight=None)
 
 
-   .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, top_k=None, n_samples=None, **kwargs)
+   .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, k=None, n_samples=100, show_grid=True, domain_args=None)
 
-      Plot the explanation
+      Plot the explanation.
 
       :returns: **ax** -- The axes object
       :rtype: Axes
@@ -132,7 +202,7 @@ Attributes
    .. py:method:: inverse_transform(x)
 
 
-   .. py:method:: plot_samples(x, y=None, ax=None, **kwargs)
+   .. py:method:: plot_samples(x, y=None, ax=None, n_samples=None, **kwargs)
 
 
    .. py:method:: randomize(x, start, end, random_state=None)
@@ -140,6 +210,9 @@ Attributes
 
    .. py:method:: transform(x)
 
+
+
+.. py:function:: plot_importances(importances, ax=None, labels=None)
 
 
 .. py:data:: Importance

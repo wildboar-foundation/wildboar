@@ -142,7 +142,7 @@ Functions
 
    Peicewise aggregate approximation
 
-   .. py:property:: intervals_
+   .. py:property:: intervals
 
 
    .. py:method:: fit(x, y=None)
@@ -275,7 +275,7 @@ Functions
                       ``binning="uniform"``
    :type estimate: bool, optional
 
-   .. py:property:: intervals_
+   .. py:property:: intervals
 
 
    .. py:method:: fit(x, y=None)

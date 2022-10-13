@@ -78,7 +78,7 @@ Attributes
 
 
 
-.. py:function:: plot_frequency_domain(x, y=None, *, ax=None, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
+.. py:function:: plot_frequency_domain(x, y=None, *, ax=None, n_samples=100, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
 
    Plot the samples in the freqency domain
 
@@ -98,18 +98,37 @@ Attributes
    :type cmap: str, optional
 
 
-.. py:function:: plot_time_domain(x, y=None, *, ax=None, alpha=0.5, linewidth=0.5, zorder=-1, cmap='Dark2')
+.. py:function:: plot_time_domain(x, y=None, *, n_samples=100, ax=None, alpha=0.5, linewidth=0.5, zorder=-1, cmap='Dark2', show_legend=8)
 
    Plot the samples in the time domain
 
    :param x: The samples
    :type x: array-like of shape (n_sample, n_timestep)
-   :param y: The labels, by default None
+   :param y: The labels
    :type y: array-like of shape (n_samples, ), optional
-   :param ax: The matplotlib Axes-object, by default None
+   :param n_samples: The maximum number of samples to plot. If n_samples is larger than the number
+                     of samples in x or None, all samples are plotted.
+   :type n_samples: int, optional
+   :param ax: The matplotlib Axes-object
    :type ax: Axes, optional
-   :param cmap: The colormap, by default "Dark2"
+   :param alpha: The opacity of the samples.
+   :type alpha: float, optional
+   :param linewidth: The width of the sample lines.
+   :type linewidth: float, optional
+   :param zorder: The order where the samples are plotted. By default we plot the samples
+                  at -1.
+   :type zorder: int, optional
+   :param cmap: The colormap used to colorize samples according to its label.
    :type cmap: str, optional
+   :param show_legend: Whether the legend of labels are show.
+
+                       - if bool, show the legend if y is not None
+                       - if int, show the legend if the number of labels are lower than the
+                         show_legend parameter value
+   :type show_legend: bool or int, optional
+
+   :returns: **ax** -- The axes object that has been plotted.
+   :rtype: Axes
 
 
 .. py:data:: matplotlib_missing

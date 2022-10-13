@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Version 1.0" href="v1.0.html" /><link rel="prev" title="What’s new" href="../whatsnew.html" />
 
     <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
-        <title>Version 1.1 - Wildboar 1.1.0rc5.dev127+g0ce05608 documentation</title>
+        <title>Version 1.1 - Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev127+g0ce05608 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -361,9 +361,9 @@ future; or a feature will be removed in the future.</p></li>
 <section id="new-and-changed-models">
 <h3>New and changed models<a class="headerlink" href="#new-and-changed-models" title="Permalink to this heading">#</a></h3>
 <p>Wildboar 1.1 introduces a large number of new models, explanations and visualizations. Among
-others we introduce <code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.IntervalImportance</span></code> to highlight important temporal regions;
-<a class="reference internal" href="../../wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketClassifier</span></code></a> and <a class="reference internal" href="../../wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketRegressor</span></code></a> for
-state-of-the-art predictive performance using random convoultions. We have also been hard
+others we introduce <a class="reference internal" href="../../wildboar/explain/index.html#wildboar.explain.IntervalImportance" title="wildboar.explain.IntervalImportance"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.IntervalImportance</span></code></a> <a class="reference internal" href="../../wildboar/explain/index.html#wildboar.explain.AmplitudeImportance" title="wildboar.explain.AmplitudeImportance"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.AmplitudeImportance</span></code></a>
+to highlight important temporal regions; <a class="reference internal" href="../../wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketClassifier</span></code></a> and <a class="reference internal" href="../../wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketRegressor</span></code></a>
+for state-of-the-art predictive performance using random convoultions. We have also been hard
 at work adding support for <a class="reference internal" href="../../wildboar/distance/index.html#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.matrix_profile()</span></code></a> and implemented motif and regime
 search in terms of it. We also add support for three new distance metrics, weighted, derivative
 and weighted derivative dynamic time warping.</p>
@@ -380,7 +380,7 @@ and weighted derivative dynamic time warping.</p>
 <div class="sd-card-body docutils">
 <ul class="simple">
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> <a class="reference internal" href="../../wildboar/annotate/index.html#wildboar.annotate.motifs" title="wildboar.annotate.motifs"><code class="xref py py-func docutils literal notranslate"><span class="pre">annotate.motifs()</span></code></a> added to find motifs in time series</p></li>
-<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> <code class="xref py py-func docutils literal notranslate"><span class="pre">annotate.segment`()</span></code> added to segment time series</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> <a class="reference internal" href="../../wildboar/annotate/index.html#wildboar.annotate.segment" title="wildboar.annotate.segment"><code class="xref py py-func docutils literal notranslate"><span class="pre">annotate.segment()</span></code></a> added to segment time series</p></li>
 </ul>
 </div>
 </div>
@@ -462,8 +462,6 @@ an ensemble of interval trees</p></li>
 an ensemble of interval trees</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/ensemble/index.html#wildboar.ensemble.PivotForestClassifier" title="wildboar.ensemble.PivotForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.PivotForestClassifier</span></code></a> is a classifier that constructs
 an ensemble of pivot trees</p></li>
-<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.PivotForestRegressor</span></code> is a regressor that constructs
-an ensemble of pivot trees</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier" title="wildboar.ensemble.ProximityForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ProximityForestClassifier</span></code></a> is an ensemble of proximity trees.</p></li>
 </ul>
 </div>
@@ -480,6 +478,9 @@ an ensemble of pivot trees</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform" title="wildboar.transform.RandomShapeletTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.RandomShapeletTransform</span></code></a> transform time series using the distance to random shapelets</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/transform/index.html#wildboar.transform.IntervalTransform" title="wildboar.transform.IntervalTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.IntervalTransform</span></code></a> transform time series using interval features</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/transform/index.html#wildboar.transform.PivotTransform" title="wildboar.transform.PivotTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.PivotTransform</span></code></a> transform time series using the distance to pivot time series</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/transform/index.html#wildboar.transform.SAX" title="wildboar.transform.SAX"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.SAX</span></code></a> transforms time series into discretized bins. The implementation is
+efficient and compress the data to the smallest possible datatype.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/transform/index.html#wildboar.transform.PAA" title="wildboar.transform.PAA"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.PAA</span></code></a> transform time series into mean bins.</p></li>
 </ul>
 </div>
 </div>
@@ -493,13 +494,15 @@ an ensemble of pivot trees</p></li>
 <ul class="simple">
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/explain/index.html#wildboar.explain.IntervalImportance" title="wildboar.explain.IntervalImportance"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.IntervalImportance</span></code></a> is an explanation that highlights
 important regions using permutation importances.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/explain/index.html#wildboar.explain.AmplitudeImportance" title="wildboar.explain.AmplitudeImportance"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.AmplitudeImportance</span></code></a> is an explanation that highlights
+important amplitude regions using SAX and permutation.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual" title="wildboar.explain.counterfactual.ShapeletForestCounterfactual"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.counterfactual.ShapeletForestCounterfactual</span></code></a> now support multivariate time series.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.ShapeletForestCounterfactual" title="wildboar.explain.counterfactual.ShapeletForestCounterfactual"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.counterfactual.ShapeletForestCounterfactual</span></code></a> now support the <cite>verbose</cite> argument.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> The <cite>method</cite> argument of <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.counterfactuals" title="wildboar.explain.counterfactual.counterfactuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">explain.counterfactual.counterfactuals()</span></code></a> defaults to <cite>best</cite>.
 The effect is the same as for <cite>infer</cite>, which has been deprecated.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.counterfactuals" title="wildboar.explain.counterfactual.counterfactuals"><code class="xref py py-func docutils literal notranslate"><span class="pre">explain.counterfactual.counterfactuals()</span></code></a> now support a dictionary of <cite>method_args</cite>.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The parameters <cite>background_x</cite> and <cite>background_y</cite> of <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.PrototypeCounterfactual" title="wildboar.explain.counterfactual.PrototypeCounterfactual"><code class="xref py py-class docutils literal notranslate"><span class="pre">explain.counterfactual.PrototypeCounterfactual</span></code></a>
-has been renamed to <cite>train_x</cite> and <cite>train_y</cite>.</p></li>
+has been renamed to <cite>train_x</cite> and <cite>train_y</cite> and been deprecated in favor of <cite>fit(estimator, x, y)</cite>.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The parameter <cite>success</cite> to <a class="reference internal" href="../../wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.score" title="wildboar.explain.counterfactual.score"><code class="xref py py-func docutils literal notranslate"><span class="pre">explain.counterfactual.score()</span></code></a> is deprecated and has been renamed to <cite>valid</cite>.</p></li>
 </ul>
 </div>
@@ -537,8 +540,6 @@ trees using interval features.</p></li>
 trees using interval features.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/tree/index.html#wildboar.tree.PivotTreeClassifier" title="wildboar.tree.PivotTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.PivotTreeClassifier</span></code></a> is a classifier that uses pivot
 time series and distance thresholds to construct trees.</p></li>
-<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <code class="xref py py-class docutils literal notranslate"><span class="pre">tree.PivotTreeRegressor</span></code> is a regressor that uses pivot
-time series and distance thresholds to construct trees.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier" title="wildboar.tree.ProximityTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ProximityTreeClassifier</span></code></a> is a classifier that construct
 a tree that acts as an ensemble of distance metrics.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> The new <a class="reference internal" href="../../wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier" title="wildboar.tree.RocketTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketTreeClassifier</span></code></a> is a classifier that construct
@@ -559,6 +560,7 @@ and <a class="reference internal" href="../../wildboar/tree/index.html#wildboar.
 <section id="other-improvements">
 <h3>Other improvements<a class="headerlink" href="#other-improvements" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
+<li><p>We have improved testing, error messages and overall stability.</p></li>
 <li><p>Binary builds for Apple ARM processors (M1 and M2)</p></li>
 <li><p>Drop support for Python 3.7 and introduce support for Python 3.10</p></li>
 </ul>
