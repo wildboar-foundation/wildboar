@@ -1,6 +1,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import abc
 import numbers
 
 import numpy as np
@@ -18,33 +19,67 @@ def _percentiles(n_bins):
     return np.linspace(0, 1, num=n_bins, endpoint=False)[1:].reshape(1, -1)
 
 
-def _normal_bins(percentiles, x=None, estimate=True):
-    if estimate:
-        loc = np.mean(x, axis=1).reshape(-1, 1)
-        scale = np.std(x, axis=1).reshape(-1, 1)
-        return norm.ppf(percentiles, loc=loc, scale=scale)
-    else:
-        ppf = norm.ppf(percentiles)
-        if x is None:
-            return ppf.reshape(-1)
+class Binning(metaclass=abc.ABCMeta):
+    def __init__(self, n_bins) -> None:
+        self.n_bins = n_bins
+        self._percentiles = _percentiles(n_bins)
+
+    @abc.abstractmethod
+    def scale(self, x):
+        pass
+
+    def get_thresholds(self, x=None, estimate=False):
+        if estimate and x is None:
+            raise ValueError("if estimate=True, x cannot be None.")
+
+        return self._get_thresholds(x, estimate)
+
+    @abc.abstractmethod
+    def _get_thresholds(self, x):
+        pass
+
+
+class NormalBinning(Binning):
+    def scale(self, x):
+        # Avoid circular import
+        from ..datasets.preprocess import standardize
+
+        return standardize(x)
+
+    def _get_thresholds(self, x, estimate):
+        if estimate and x is not None:
+            loc = np.mean(x, axis=1).reshape(-1, 1)
+            scale = np.std(x, axis=1).reshape(-1, 1)
+            return norm.ppf(self._percentiles, loc=loc, scale=scale)
         else:
-            return np.repeat(ppf, x.shape[0], axis=0)
+            ppf = norm.ppf(self._percentiles)
+            if x is None:
+                return ppf.reshape(-1)
+            else:
+                return np.repeat(ppf, x.shape[0], axis=0)
 
 
-def _uniform_bins(percentiles, x=None, estimate=True):
-    if estimate:
-        loc = np.min(x, axis=1).reshape(-1, 1)
-        scale = np.max(x, axis=1).reshape(-1, 1) - loc
-        return uniform.ppf(percentiles, loc=loc, scale=scale)
-    else:
-        ppf = uniform.ppf(percentiles)
-        if x is None:
-            return ppf.reshape(-1)
+class UniformBinning(Binning):
+    def scale(self, x):
+        # Avoid circular import
+        from ..datasets.preprocess import minmax_scale
+
+        return minmax_scale(x)
+
+    def _get_thresholds(self, x, estimate):
+        if estimate and x is not None:
+            loc = np.min(x, axis=1).reshape(-1, 1)
+            scale = np.max(x, axis=1).reshape(-1, 1) - loc
+            return uniform.ppf(self._percentiles, loc=loc, scale=scale)
         else:
-            return np.repeat(ppf, x.shape[0], axis=0)
+            ppf = uniform.ppf(self._percentiles)
+            if x is None:
+                return ppf.reshape(-1)
+            else:
+                return np.repeat(ppf, x.shape[0], axis=0)
 
 
-_BINNING = {"normal": _normal_bins, "uniform": _uniform_bins}
+_BINNING = {"normal": NormalBinning, "uniform": UniformBinning}
 
 
 class SAX(TransformerMixin, BaseEstimator):
@@ -106,18 +141,18 @@ class SAX(TransformerMixin, BaseEstimator):
 
     def fit(self, x, y=None):
         x = self._validate_data(x, dtype=float)
-        self.binning_ = check_option(_BINNING, self.binning, "binning")
+        self.binning_ = check_option(_BINNING, self.binning, "binning")(self.n_bins)
+        self.bins_ = np.arange(self.n_bins, dtype=np.min_scalar_type(self.n_bins))
         self.paa_ = PAA(n_intervals=self.n_intervals, window=self.window).fit(x)
         return self
 
     def transform(self, x):
         x = self._validate_data(x, reset=False, dtype=float)
         x_paa = self.paa_.transform(x)
-
-        bins = self.binning_(_percentiles(self.n_bins), x, estimate=self.estimate)
+        thresholds = self.binning_.get_thresholds(x, estimate=self.estimate)
         x_out = np.empty(x_paa.shape, dtype=np.min_scalar_type(self.n_bins))
-        for i, (x_i, bin_i) in enumerate(zip(x_paa, bins)):
-            x_out[i] = np.digitize(x_i, bin_i)
+        for i, (sample, threshold) in enumerate(zip(x_paa, thresholds)):
+            x_out[i] = np.digitize(sample, threshold)
         return x_out
 
     def inverse_transform(self, x):
@@ -125,18 +160,20 @@ class SAX(TransformerMixin, BaseEstimator):
             raise ValueError("Unable to inverse_transform with estimate=True")
 
         x = check_array(x, dtype=np.min_scalar_type(self.n_bins))
-        x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
-        bins = self.binning_(_percentiles(self.n_bins), estimate=self.estimate)
-        bins = np.hstack([bins[0], (bins[:-1] + bins[1:]) / 2, bins[-1]])
+        thresholds = self.binning_.get_thresholds()
+        thresholds = np.hstack(
+            [thresholds[0], (thresholds[:-1] + thresholds[1:]) / 2, thresholds[-1]]
+        )
 
-        for i, (start, end) in enumerate(self.intervals_):
-            x_inverse[:, start:end] = bins[x[:, i], np.newaxis]
+        x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
+        for i, (start, end) in enumerate(self.intervals):
+            x_inverse[:, start:end] = thresholds[x[:, i], np.newaxis]
 
         return x_inverse
 
     @property
-    def intervals_(self):
-        return self.paa_.intervals_
+    def intervals(self):
+        return self.paa_.intervals
 
     def _more_tags(self):
         return {
@@ -178,13 +215,13 @@ class PAA(TransformerMixin, BaseEstimator):
         x = check_array(x, dtype=float)
 
         x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
-        for i, (start, end) in enumerate(self.intervals_):
+        for i, (start, end) in enumerate(self.intervals):
             x_inverse[:, start:end] = x[:, i].reshape(-1, 1)
 
         return x_inverse
 
     @property
-    def intervals_(self):
+    def intervals(self):
         return [
             (start, start + length)
             for (_, (start, length, _)) in self.interval_transform_.embedding_.features
