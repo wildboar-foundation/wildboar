@@ -104,6 +104,31 @@ class BaseEstimator(SklearnBaseEstimator):
                 f"is expecting {self.n_dims_in_} dimensions as input."
             )
 
+    def _validate_force_n_dims(self, X):
+        """Validate that X is valid in relation to the optional _force_n_dims attribute.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, m)
+            The array to validate.
+
+        Returns
+        -------
+        X : ndarray of shape (n_samples, self._force_n_dims, -1)
+            The array validated and reshaped
+        """
+        if hasattr(self, "_force_n_dims"):
+            X = np.asarray(X)
+            if X.ndim == 2:
+                return X.reshape(X.shape[0], self._force_n_dims, -1)
+            elif X.ndim == 3 and X.shape[1] != self._force_n_dims:
+                raise ValueError(
+                    f"{self.__class__.__name__} has _force_n_dims set to "
+                    f"{self._force_n_dims}, but X has {X.shape[1]} dimensions as input."
+                )
+
+        return X
+
     # We override sklearn but delegate to wildboar's check_array
     # and check_X_y
     def _validate_data(
@@ -125,6 +150,9 @@ class BaseEstimator(SklearnBaseEstimator):
 
         default_check_params = {"estimator": self}
         check_params = {**default_check_params, **check_params}
+
+        if not no_val_X:
+            X = self._validate_force_n_dims(X)
 
         if no_val_X and no_val_y:
             raise ValueError("Validation should be done on X, y or both.")

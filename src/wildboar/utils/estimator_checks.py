@@ -11,9 +11,14 @@ from sklearn.exceptions import SkipTestWarning
 from sklearn.utils._testing import (
     assert_allclose_dense_sparse,
     ignore_warnings,
+    raises,
     set_random_state,
 )
-from sklearn.utils.estimator_checks import _enforce_estimator_tags_y, _maybe_skip
+from sklearn.utils.estimator_checks import (
+    _enforce_estimator_tags_y,
+    _maybe_skip,
+    _safe_tags,
+)
 from sklearn.utils.estimator_checks import (
     _yield_all_checks as _yield_all_checks_sklearn,
 )
@@ -30,6 +35,10 @@ def _yield_all_checks(estimator):
 
     if hasattr(estimator, "estimator_params"):
         yield check_consistent_estimator_params
+
+    if "3darray" in _safe_tags(estimator, "X_types"):
+        yield check_force_n_dims_raises
+        yield check_force_n_dims
 
 
 def check_estimator(estimator, generate_only=False, ignore=None):
@@ -191,6 +200,10 @@ def _dummy_dataset():
     return X1, y1
 
 
+def _dataset_shape(*shape):
+    return np.arange(np.prod(shape)).reshape(*shape), np.zeros(shape[0])
+
+
 def check_consistent_estimator_params(name, estimator):
     x, y = _dummy_dataset()
     estimator = clone(estimator)
@@ -202,3 +215,47 @@ def check_consistent_estimator_params(name, estimator):
                 f"For {name} estimator_params are not equivalent "
                 "to the base estimators parameters"
             )
+
+
+def check_force_n_dims_raises(name, estimator):
+    X1, y1 = _dataset_shape(10, 3, 10)
+    X2, y2 = _dataset_shape(10, 10)
+
+    estimator = clone(estimator)
+    estimator._force_n_dims = 2
+    match = "has _force_n_dims set to 2"
+    err_msg = (
+        f"If _force_n_dims is set the {name} must reject "
+        "3d arrays with unsupported n_dims."
+    )
+
+    with raises(
+        ValueError,
+        match=match,
+        err_msg=err_msg,
+    ):
+        estimator.fit(X1, y1)
+
+    if has_fit_parameter(estimator, "check_input"):
+        with raises(ValueError, match=match, err_msg=err_msg):
+            estimator.fit(X1, y1, check_input=False)
+
+    del estimator._force_n_dims
+    estimator.fit(X2, y2)
+    estimator._force_n_dims = 2
+    for method in ["predict", "predict_proba", "decision_function", "transform"]:
+        if hasattr(estimator, method):
+            with raises(ValueError, match=match, err_msg=err_msg):
+                getattr(estimator, method)(X1)
+
+
+def check_force_n_dims(name, estimator):
+    X1, y1 = _dataset_shape(10, 3, 10)
+    X2, y2 = _dataset_shape(10, 3 * 10)
+    estimator = clone(estimator)
+    estimator.fit(X1, y1)
+
+    estimator._force_n_dims = 3
+    for method in ["predict", "predict_proba", "decision_function", "transform"]:
+        if hasattr(estimator, method):
+            getattr(estimator, method)(X2)
