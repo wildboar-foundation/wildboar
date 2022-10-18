@@ -407,15 +407,13 @@ def subsequence_match(
 
     check_type(exclude, "exclude", (numbers.Integral, numbers.Real), required=False)
     if isinstance(exclude, numbers.Integral):
-        check_scalar(exclude, "exclude", numbers.Integral, min_val=1, max_val=y.size)
+        check_scalar(exclude, "exclude", numbers.Integral, min_val=0)
     elif isinstance(exclude, numbers.Real):
         check_scalar(
             exclude,
             "exclude",
             numbers.Real,
             min_val=0,
-            max_val=1,
-            include_boundaries="right",
         )
         exclude = math.ceil(y.size * exclude)
 
@@ -828,7 +826,7 @@ def matrix_profile(
                 "y.shape[-1] > x.shape[-1]. If you want to compute the matrix profile "
                 "of the similarity join of YX, swap the order of inputs."
             )
-        exclude = exclude if exclude is not None else 0
+        exclude = exclude if exclude is not None else 0.0
     else:
         y = x
         exclude = exclude if exclude is not None else 0.2
@@ -858,15 +856,13 @@ def matrix_profile(
         window = math.ceil(window * y.shape[-1])
 
     if isinstance(exclude, numbers.Integral):
-        check_scalar(exclude, "exclude", numbers.Integral, min_val=1, max_val=window)
+        check_scalar(exclude, "exclude", numbers.Integral, min_val=1)
     elif isinstance(exclude, numbers.Real):
         check_scalar(
             exclude,
             "exclude",
             numbers.Real,
             min_val=0,
-            max_val=1,
-            include_boundaries="right",
         )
         exclude = math.ceil(window * exclude)
 
