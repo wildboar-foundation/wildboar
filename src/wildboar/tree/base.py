@@ -31,6 +31,8 @@ class BaseTree(BaseEstimator):
         check_is_fitted(self, attributes="tree_")
         if check_input:
             x = self._validate_data(x, dtype=float, reset=False)
+        else:
+            x = self._validate_force_n_dims(x)
 
         return self.tree_.decision_path(x)
 
@@ -38,8 +40,13 @@ class BaseTree(BaseEstimator):
         check_is_fitted(self, attributes="tree_")
         if check_input:
             x = self._validate_data(x, dtype=float, reset=False)
+        else:
+            x = self._validate_force_n_dims(x)
 
         return self.tree_.apply(x)
+
+    def _more_tags(self):
+        return {"X_types": ["2darray", "3darray"]}
 
 
 class TreeRegressorMixin(RegressorMixin):
@@ -74,8 +81,9 @@ class TreeRegressorMixin(RegressorMixin):
         if check_input:
             x, y = self._validate_data(x, y, allow_3d=True, dtype=float, y_numeric=True)
         else:
+            x = self._validate_force_n_dims(x)
             self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
-            self.n_features_in_ = self.n_timesteps_in_
+            self.n_features_in_ = self.n_timesteps_in_ * self.n_dims_in_
 
         random_state = check_random_state(self.random_state)
         if sample_weight is not None:
@@ -104,7 +112,9 @@ class TreeRegressorMixin(RegressorMixin):
         """
         check_is_fitted(self, ["tree_"])
         if check_input:
-            x = self._validate_data(x, dtype=float, reset=False)
+            x = self._validate_data(x, allow_3d=True, dtype=float, reset=False)
+        else:
+            x = self._validate_force_n_dims(x)
 
         return self.tree_.predict(x).reshape(-1)
 
@@ -142,8 +152,9 @@ class TreeClassifierMixin(ClassifierMixin):
             x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
             check_classification_targets(y)
         else:
+            x = self._validate_force_n_dims(x)
             self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
-            self.n_features_in_ = self.n_timesteps_in_
+            self.n_features_in_ = self.n_timesteps_in_ * self.n_dims_in_
 
         if hasattr(self, "class_weight") and self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
@@ -186,6 +197,7 @@ class TreeClassifierMixin(ClassifierMixin):
         y : ndarray of shape (n_samples,)
             The predicted classes.
         """
+        x = self._validate_force_n_dims(x)
         proba = self.predict_proba(x, check_input=check_input)
         return self.classes_.take(np.argmax(proba, axis=1), axis=0)
 
@@ -211,6 +223,8 @@ class TreeClassifierMixin(ClassifierMixin):
         """
         check_is_fitted(self, ["tree_"])
         if check_input:
-            x = self._validate_data(x, dtype=float, reset=False)
+            x = self._validate_data(x, allow_3d=True, dtype=float, reset=False)
+        else:
+            x = self._validate_force_n_dims(x)
 
         return self.tree_.predict(x)

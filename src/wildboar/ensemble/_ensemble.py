@@ -69,14 +69,11 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         validate_separately=False,
         **check_params,
     ):
-        new_check_params = {}
-        if "allow_3d" in check_params:
-            new_check_params["allow_3d"] = check_params["allow_3d"]
-
+        new_check_params = {"allow_3d": True}
         if "y_numeric" in check_params:
             new_check_params["y_numeric"] = check_params["y_numeric"]
 
-        return super()._validate_data(
+        out = super()._validate_data(
             x,
             y,
             reset=reset,
@@ -84,13 +81,38 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
             dtype=float,
             **new_check_params,
         )
+        no_val_X = isinstance(x, str) and x == "no_validation"
+        no_val_y = y is None or isinstance(y, str) and y == "no_validation"
+        if no_val_X:
+            return out
+        elif no_val_y:
+            x = out
+        else:
+            x, y = out
+
+        if self.n_dims_in_ > 1:
+            x = x.reshape(x.shape[0], -1)
+
+        if no_val_y:
+            return x
+        else:
+            return x, y
 
     def fit(self, x, y, sample_weight=None):
-        x, y = self._validate_data(x, y, allow_3d=True)
+        x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
         self._fit(
             x, y, self.max_samples, self.max_depth, sample_weight, check_input=False
         )
         return self
+
+    def _make_estimator(self, append=True, random_state=None):
+        estimator = super()._make_estimator(append, random_state)
+        if self.n_dims_in_ > 1:
+            estimator._force_n_dims = self.n_dims_in_
+        return estimator
+
+    def _more_tags(self):
+        return {"X_types": ["2darray", "3darray"]}
 
 
 class ForestMixin:
@@ -154,7 +176,7 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         self.class_weight = class_weight
 
     def fit(self, x, y, sample_weight=None):
-        x, y = self._validate_data(x, y, allow_3d=True)
+        x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
 
         if self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
@@ -585,7 +607,7 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
         )
 
     def fit(self, x, y, sample_weight=None):
-        x, y = self._validate_data(x, y, allow_3d=True, y_numeric=True)
+        x, y = self._validate_data(x, y, allow_3d=True, dtype=float, y_numeric=True)
 
         super()._fit(x, y, self.max_samples, self.max_depth, sample_weight)
         return self
@@ -635,7 +657,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
         sample_weight=None,
         check_input=False,
     ):
-        return super()._fit(X, y, max_samples, max_depth, sample_weight, check_input)
+        return super()._fit(X, y, max_samples, max_depth, sample_weight, False)
 
     def _parallel_args(self):
         return {"prefer": "threads"}
@@ -1048,7 +1070,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         return self
 
     def fit_transform(self, x, y=None, sample_weight=None):
-        x = self._validate_data(x, allow_3d=True)
+        x = self._validate_data(x, allow_3d=True, dtype=float)
         random_state = check_random_state(self.random_state)
         y = random_state.uniform(size=x.shape[0])
         super().fit(x, y, sample_weight=sample_weight)
@@ -1220,7 +1242,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         return {"prefer": "threads"}
 
     def fit(self, x, y=None, sample_weight=None):
-        x = self._validate_data(x, allow_3d=True)
+        x = self._validate_data(x, allow_3d=True, dtype=float)
         random_state = check_random_state(self.random_state)
 
         rnd_y = random_state.uniform(size=x.shape[0])
@@ -1258,9 +1280,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         self.max_samples_ = max_samples
         if self.contamination == "auto":
             self.offset_ = -0.5
-        elif self.contamination in ["auc", "prc"] or hasattr(
-            self.contamination, "__call__"
-        ):
+        elif self.contamination in ["auc", "prc"] or callable(self.contamination):
             if y is None:
                 raise ValueError(
                     "contamination cannot be computed without training labels"
@@ -1333,7 +1353,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
     def score_samples(self, x):
         check_is_fitted(self)
-        x = self._validate_data(x, reset=False, allow_3d=True)
+        x = self._validate_data(x, reset=False, allow_3d=True, dtype=float)
         return _score_samples(x, self.estimators_, self.max_samples_)
 
     def _oob_score_samples(self, x):
