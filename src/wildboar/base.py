@@ -84,7 +84,7 @@ class BaseEstimator(SklearnBaseEstimator):
             self.n_dims_in_ = n_dims
 
             # Set n_features_in_ for compatibility with scikit-learn
-            self.n_features_in_ = n_timesteps
+            self.n_features_in_ = n_timesteps * n_dims
             return
 
         if not hasattr(self, "n_timesteps_in_") and not hasattr(self, "n_dims_in_"):
