@@ -99,7 +99,7 @@ class FeatureTreeRegressorMixin(TreeRegressorMixin):
         if self.criterion == "mse":
             warnings.warn(
                 "Criterion 'mse' was deprecated in v1.1 and will be "
-                "removed in version 1.2. Use `criterion='squared_error'` "
+                "removed in version 1.2. Use criterion='squared_error' "
                 "which is equivalent.",
                 FutureWarning,
             )
@@ -453,7 +453,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         if self.criterion == "mse":
             warnings.warn(
                 "Criterion 'mse' was deprecated in v1.1 and will be "
-                "removed in version 1.2. Use `criterion='squared_error'` "
+                "removed in version 1.2. Use criterion='squared_error' "
                 "which is equivalent.",
                 FutureWarning,
             )

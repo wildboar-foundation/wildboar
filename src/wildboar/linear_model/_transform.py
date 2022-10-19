@@ -106,7 +106,7 @@ class TransformRidgeClassifierCV(
         if self.normalize != "deprecated":
             warnings.warn(
                 "normalize is deprecated since 1.1 and will be removed in 1.2",
-                DeprecationWarning,
+                FutureWarning,
             )
 
         return RidgeClassifierCV(

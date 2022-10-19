@@ -548,7 +548,7 @@ class JSONRepository(Repository):
         for bundle_json in json["bundles"]:
             key = _validate_bundle_key(bundle_json["key"])
             if key in bundles:
-                warnings.warn("duplicate dataset %s (ignoring)" % key)
+                warnings.warn("duplicate dataset %s (ignoring)" % key, UserWarning)
 
             version = _validate_version(bundle_json["version"])
             tag = bundle_json.get("tag")
@@ -564,7 +564,8 @@ class JSONRepository(Repository):
                 if not isinstance(arrays, list):
                     warnings.warn(
                         "'arrays' should be list, not %r. Using defaults."
-                        % type(arrays).__qualname__
+                        % type(arrays).__qualname__,
+                        UserWarning,
                     )
                     arrays = None
 
@@ -573,7 +574,8 @@ class JSONRepository(Repository):
                 if not isinstance(description, str):
                     warnings.warn(
                         "'description' should be str, not %r. Using defaults."
-                        % type(description).__qualname__
+                        % type(description).__qualname__,
+                        UserWarning,
                     )
                     description = None
 

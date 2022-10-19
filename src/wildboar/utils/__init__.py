@@ -93,7 +93,7 @@ def _soft_dependency_error(e=None, package=None, context=None, warning=False):
         f"required package."
     )
     if warning:
-        warnings.warn(msg)
+        warnings.warn(msg, UserWarning)
     else:
         if e is not None:
             raise ModuleNotFoundError(msg) from e
