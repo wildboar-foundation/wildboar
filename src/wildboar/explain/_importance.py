@@ -408,7 +408,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
                     linestyle="dashed",
                     linewidth=0.5,
                     dashes=(5, 5),
-                    zorder=-100,
+                    zorder=-2,
                 )
 
         for o in order:
@@ -420,7 +420,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
                 1,
                 alpha=0.2,
                 color=cmap(norm(importances[o])),
-                zorder=100,
+                zorder=1,
             )
 
         xticks = [start for start, _ in self.intervals_]
@@ -720,7 +720,7 @@ class AmplitudeImportance(ExplainerMixin, BaseEstimator):
                     linestyle="dashed",
                     linewidth=0.5,
                     dashes=(5, 5),
-                    zorder=-100,
+                    zorder=-2,
                 )
 
         for i in order:
@@ -740,7 +740,7 @@ class AmplitudeImportance(ExplainerMixin, BaseEstimator):
                 0,
                 1,
                 alpha=0.3,
-                zorder=100,
+                zorder=1,
                 color=cmap(norm(importances[i])),
                 label="%i" % i,
             )

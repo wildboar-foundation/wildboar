@@ -132,6 +132,7 @@ def plot_time_domain(
             loc="best",
             ncol=(len(labels) // 3) + 1,
         )
+        legend.set_zorder(100)
         ax.add_artist(legend)
 
     ax.set_xlim([0, x.shape[-1] - 1])
