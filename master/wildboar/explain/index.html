@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.explain.counterfactual" href="counterfactual/index.html" /><link rel="prev" title="wildboar.ensemble" href="../ensemble/index.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
-        <title>wildboar.explain - Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</title>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>wildboar.explain - Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -267,6 +267,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
@@ -374,6 +375,8 @@
 permuting the values between each horizontal interval. The implementation uses
 <code class="xref py py-class docutils literal notranslate"><span class="pre">transform.SAX</span></code> to discretize the time series and then for each bin permute
 the samples along that bin.</p>
+<section id="paramters">
+<h4>Paramters<a class="headerlink" href="#paramters" title="Permalink to this heading">#</a></h4>
 <dl class="simple">
 <dt><a href="#id1"><span class="problematic" id="id2">sax_</span></a><span class="classifier">SAX</span></dt><dd><p>The SAX transformation.</p>
 </dd>
@@ -423,6 +426,7 @@ Only returned if ax is not None and x is not None.</p></li>
 </dl>
 </dd></dl>
 
+</section>
 </dd></dl>
 
 <dl class="py class">
@@ -572,11 +576,7 @@ by <cite>np.random</cite>.</p></li>
 <li><a class="reference internal" href="#wildboar.explain.IntervalImportance.plot"><code class="docutils literal notranslate"><span class="pre">IntervalImportance.plot()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.explain.AmplitudeImportance">AmplitudeImportance</a><ul>
-<li><a class="reference internal" href="#wildboar.explain.AmplitudeImportance.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.explain.AmplitudeImportance.plot">plot</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#wildboar.explain.AmplitudeImportance">AmplitudeImportance</a></li>
 <li><a class="reference internal" href="#wildboar.explain.IntervalImportance">IntervalImportance</a><ul>
 <li><a class="reference internal" href="#wildboar.explain.IntervalImportance.importances_">importances_</a></li>
 <li><a class="reference internal" href="#wildboar.explain.IntervalImportance.explain">explain</a></li>

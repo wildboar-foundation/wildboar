@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.utils.plot" href="../plot/index.html" /><link rel="prev" title="wildboar.utils.decorators" href="../decorators/index.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
-        <title>wildboar.utils.estimator_checks - Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</title>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>wildboar.utils.estimator_checks - Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -267,6 +267,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
@@ -355,6 +356,12 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_estimator" title="wildboar.utils.estimator_checks.check_estimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_estimator</span></code></a>(estimator[, generate_only, ignore])</p></td>
 <td><p>Check if estimator adheres to scikit-learn (and wildboar) conventions.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_force_n_dims" title="wildboar.utils.estimator_checks.check_force_n_dims"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_force_n_dims</span></code></a>(name, estimator)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_force_n_dims_raises" title="wildboar.utils.estimator_checks.check_force_n_dims_raises"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_force_n_dims_raises</span></code></a>(name, estimator)</p></td>
+<td><p></p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order" title="wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_sample_weights_invariance_samples_order</span></code></a>(name, ...)</p></td>
 <td><p></p></td>
 </tr>
@@ -363,12 +370,12 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_consistent_estimator_params">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_consistent_estimator_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L194-L204"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_consistent_estimator_params" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_consistent_estimator_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L207-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_consistent_estimator_params" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_estimator">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L35-L114"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_estimator" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L44-L123"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_estimator" title="Permalink to this definition">#</a></dt>
 <dd><p>Check if estimator adheres to scikit-learn (and wildboar) conventions.</p>
 <p>This method delegates to <cite>check_estimator</cite> in scikit-learn but monkey-patches
 the estimator with tags to skip some tests related to performance.</p>
@@ -396,6 +403,16 @@ When <cite>True</cite>, <cite>check_estimator</cite> returns a generator that yi
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_force_n_dims">
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_force_n_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L252-L261"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_force_n_dims" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_force_n_dims_raises">
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_force_n_dims_raises</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L220-L249"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_force_n_dims_raises" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order">
@@ -468,9 +485,13 @@ When <cite>True</cite>, <cite>check_estimator</cite> returns a generator that yi
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_consistent_estimator_params"><code class="docutils literal notranslate"><span class="pre">check_consistent_estimator_params()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_estimator"><code class="docutils literal notranslate"><span class="pre">check_estimator()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_force_n_dims"><code class="docutils literal notranslate"><span class="pre">check_force_n_dims()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_force_n_dims_raises"><code class="docutils literal notranslate"><span class="pre">check_force_n_dims_raises()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order"><code class="docutils literal notranslate"><span class="pre">check_sample_weights_invariance_samples_order()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_consistent_estimator_params">check_consistent_estimator_params</a></li>
 <li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_estimator">check_estimator</a></li>
+<li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_force_n_dims">check_force_n_dims</a></li>
+<li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_force_n_dims_raises">check_force_n_dims_raises</a></li>
 <li><a class="reference internal" href="#wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order">check_sample_weights_invariance_samples_order</a></li>
 </ul>
 </li>

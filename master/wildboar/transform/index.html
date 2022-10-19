@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.transform.catch22" href="catch22/index.html" /><link rel="prev" title="wildboar.model_selection.outlier" href="../model_selection/outlier/index.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/>
-        <title>wildboar.transform - Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</title>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
+        <title>wildboar.transform - Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -267,6 +267,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
@@ -371,19 +372,22 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.IntervalTransform" title="wildboar.transform.IntervalTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></p></td>
 <td><p>Embed a time series as a collection of features per interval.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.PAA" title="wildboar.transform.PAA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PAA</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.MatrixProfileTransform" title="wildboar.transform.MatrixProfileTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatrixProfileTransform</span></code></a></p></td>
+<td><p>Transform each time series in a dataset to its MatrixProfile similarity self-join</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.PAA" title="wildboar.transform.PAA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PAA</span></code></a></p></td>
 <td><p>Peicewise aggregate approximation</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.PivotTransform" title="wildboar.transform.PivotTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PivotTransform</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.PivotTransform" title="wildboar.transform.PivotTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PivotTransform</span></code></a></p></td>
 <td><p>A transform using pivot time series and sampled distance metrics.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.RandomShapeletTransform" title="wildboar.transform.RandomShapeletTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletTransform</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.RandomShapeletTransform" title="wildboar.transform.RandomShapeletTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletTransform</span></code></a></p></td>
 <td><p>Transform a time series to the distances to a selection of random shapelets.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.RocketTransform" title="wildboar.transform.RocketTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketTransform</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.RocketTransform" title="wildboar.transform.RocketTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketTransform</span></code></a></p></td>
 <td><p>Transform a time series using random convolution features</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.SAX" title="wildboar.transform.SAX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SAX</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.SAX" title="wildboar.transform.SAX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SAX</span></code></a></p></td>
 <td><p>Symbolic aggregate approximation</p></td>
 </tr>
 </tbody>
@@ -494,6 +498,78 @@ by <cite>np.random</cite>.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.transform.MatrixProfileTransform">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">MatrixProfileTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L13-L125"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <a class="reference internal" href="../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
+<p>Transform each time series in a dataset to its MatrixProfile similarity self-join</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">MatrixProfileTransform</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">MatrixProfileTransform</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – </p></li>
+<li><p><strong>size</strong> (<em>the exact subsequence</em>) – </p></li>
+<li><p><strong>0.1</strong> (<em>by default</em>) – </p></li>
+<li><p><strong>float</strong> (<em>- if</em>) – </p></li>
+<li><p><strong>n_timestep</strong> (<em>a fraction of</em>) – </p></li>
+<li><p><strong>int</strong> (<em>- if</em>) – </p></li>
+<li><p><strong>size</strong> – </p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The size of the exclusion zone. The default exclusion zone is 0.2</p>
+<ul>
+<li><p>if float, expressed as a fraction of the windows size</p></li>
+<li><p>if int, exact size (0 &lt; exclude)</p></li>
+</ul>
+</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of jobs to use when computing the</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.MatrixProfileTransform.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L49-L66"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform.fit" title="Permalink to this definition">#</a></dt>
+<dd><p>Fit the matrix profile. Sets the expected input dimensions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)         or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – The samples</p></li>
+<li><p><strong>y</strong> (<em>ignored</em>) – The optional labels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>self</strong></p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a fitted instance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.transform.MatrixProfileTransform.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L68-L122"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform.transform" title="Permalink to this definition">#</a></dt>
+<dd><p>Transform the samples to their MatrixProfile self-join.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)         or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – The samples</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>mp</strong> – The matrix matrix profile of each sample</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples, n_timestep)         or (n_samples, n_dims, n_timesteps)</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -820,6 +896,11 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.transform.FeatureTransform"><code class="docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform.IntervalTransform"><code class="docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.transform.MatrixProfileTransform"><code class="docutils literal notranslate"><span class="pre">MatrixProfileTransform</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.transform.MatrixProfileTransform.fit"><code class="docutils literal notranslate"><span class="pre">MatrixProfileTransform.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.transform.MatrixProfileTransform.transform"><code class="docutils literal notranslate"><span class="pre">MatrixProfileTransform.transform()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.transform.PAA"><code class="docutils literal notranslate"><span class="pre">PAA</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.transform.PAA.intervals"><code class="docutils literal notranslate"><span class="pre">PAA.intervals</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform.PAA.fit"><code class="docutils literal notranslate"><span class="pre">PAA.fit()</span></code></a></li>
@@ -847,6 +928,11 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 <li><a class="reference internal" href="#wildboar.transform.symbolic_aggregate_approximation"><code class="docutils literal notranslate"><span class="pre">symbolic_aggregate_approximation()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform.FeatureTransform">FeatureTransform</a></li>
 <li><a class="reference internal" href="#wildboar.transform.IntervalTransform">IntervalTransform</a></li>
+<li><a class="reference internal" href="#wildboar.transform.MatrixProfileTransform">MatrixProfileTransform</a><ul>
+<li><a class="reference internal" href="#wildboar.transform.MatrixProfileTransform.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.transform.MatrixProfileTransform.transform">transform</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.transform.PAA">PAA</a><ul>
 <li><a class="reference internal" href="#wildboar.transform.PAA.intervals">intervals</a></li>
 <li><a class="reference internal" href="#wildboar.transform.PAA.fit">fit</a></li>

@@ -26,6 +26,7 @@ Classes
    wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler
    wildboar.explain.counterfactual._proto.TargetEvaluator
    wildboar.explain.counterfactual._proto.UniformPrototypeSampler
+   wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform
 
 
 
@@ -47,13 +48,13 @@ Classes
 
       Move the sample o towards p
 
-      :param o: An array
+      :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
-      :param p: An array
+      :param p: An array, the time series to move towards
       :type p: ndarray of shape (n_timestep,)
 
       :returns: **ndarray**
-      :rtype: an array
+      :rtype: an array, the result of moving o closer to p
 
 
 
@@ -74,13 +75,13 @@ Classes
 
       Move the sample o towards p
 
-      :param o: An array
+      :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
-      :param p: An array
+      :param p: An array, the time series to move towards
       :type p: ndarray of shape (n_timestep,)
 
       :returns: **ndarray**
-      :rtype: an array
+      :rtype: an array, the result of moving o closer to p
 
 
 
@@ -190,13 +191,13 @@ Classes
 
       Move the sample o towards p
 
-      :param o: An array
+      :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
-      :param p: An array
+      :param p: An array, the time series to move towards
       :type p: ndarray of shape (n_timestep,)
 
       :returns: **ndarray**
-      :rtype: an array
+      :rtype: an array, the result of moving o closer to p
 
 
 
@@ -226,7 +227,7 @@ Classes
    :type probability: float
 
 
-.. py:class:: PrototypeCounterfactual(*, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
+.. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, verbose=False)
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
@@ -264,14 +265,11 @@ Classes
    Crate a new model agnostic counterfactual explainer.
 
    :param metric: The metric used to move the samples
-   :type metric: {'euclidean', 'dtw'}, optional
-   :param metric_params: Optional parameters to the metric
-
-                         If 'dtw':
-
-                             r : int or float, optional
-                                 The warping window size
-   :type metric_params: dict, optional
+   :type metric: {'euclidean', 'dtw', 'wdtw'}, optional
+   :param r: The warping window size, if metric='dtw' or metric='wdtw'
+   :type r: float, optional
+   :param g: Penalty control for weighted DTW, if metric='wdtw'
+   :type g: float, optional
    :param max_iter: The maximum number of iterations
    :type max_iter: int, optional
    :param step_size: The step size when moving samples toward class prototypes
@@ -294,16 +292,10 @@ Classes
                   - if 'nearest_shapelet' a prototype shapelet is sampled from the
                     closest n prototypes
    :type method: {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
-   :param method_params: Additional parameters to the method
-
-                         If 'shapelet' or 'nearest_shapelet'
-
-                             min_shapelet_size : float, optional
-                                 Minimum shapelet size.
-
-                             max_shapelet_size : float, optional
-                                 Maximum shapelet size.
-   :type method_params: dict, optional
+   :param min_shapelet_size: Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type max_shapelet_size: float, optional
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
@@ -483,5 +475,19 @@ Classes
       :returns: **prototype** -- A prototype of the counterfactual label
       :rtype: ndarray of shape (n_timestep,)
 
+
+
+.. py:class:: WeightedDynamicTimeWarpTransform(gamma, r=1, g=0.05)
+
+   Bases: :py:obj:`DynamicTimeWarpTransform`
+
+   Transform a sample by moving it closer using the dtw alignment matrix
+
+   Construct a new transformer
+
+   :param gamma: The strength of the move, where values close to 0 means that the
+                 sample is moved less and values closer to 1 mean that the sample
+                 is moved more.
+   :type gamma: float
 
 

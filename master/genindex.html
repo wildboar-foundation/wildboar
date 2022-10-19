@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <meta name="generator" content="sphinx-5.2.3, furo 2022.09.29"/><title>Index - Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</title>
+    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/><title>Index - Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -136,7 +136,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">Wildboar 1.1.0rc5.dev135+gb6d45741 documentation</div></a>
+      <a href="index.html"><div class="brand">Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -265,6 +265,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="wildboar/linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="wildboar/metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="wildboar/model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="wildboar/model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
@@ -510,6 +511,10 @@
 </li>
         <li><a href="wildboar/utils/estimator_checks/index.html#wildboar.utils.estimator_checks.check_estimator">check_estimator() (in module wildboar.utils.estimator_checks)</a>
 </li>
+        <li><a href="wildboar/utils/estimator_checks/index.html#wildboar.utils.estimator_checks.check_force_n_dims">check_force_n_dims() (in module wildboar.utils.estimator_checks)</a>
+</li>
+        <li><a href="wildboar/utils/estimator_checks/index.html#wildboar.utils.estimator_checks.check_force_n_dims_raises">check_force_n_dims_raises() (in module wildboar.utils.estimator_checks)</a>
+</li>
         <li><a href="wildboar/utils/validation/index.html#wildboar.utils.validation.check_option">check_option() (in module wildboar.utils.validation)</a>
 </li>
         <li><a href="wildboar/utils/estimator_checks/index.html#wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order">check_sample_weights_invariance_samples_order() (in module wildboar.utils.estimator_checks)</a>
@@ -518,8 +523,6 @@
 </li>
         <li><a href="wildboar/utils/validation/index.html#wildboar.utils.validation.check_X_y">check_X_y() (in module wildboar.utils.validation)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="wildboar/explain/counterfactual/_proto/index.html#wildboar.explain.counterfactual._proto.PrototypeCounterfactual.classes_">classes_ (wildboar.explain.counterfactual._proto.PrototypeCounterfactual attribute)</a>
 
         <ul>
@@ -532,6 +535,8 @@
           <li><a href="wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier.classes_">(wildboar.tree.ShapeletTreeClassifier attribute)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="wildboar/datasets/index.html#wildboar.datasets.clear_cache">clear_cache() (in module wildboar.datasets)</a>
 
         <ul>
@@ -542,8 +547,18 @@
         </ul></li>
         <li><a href="wildboar/tree/_tree/index.html#wildboar.tree._tree.CLF_CRITERION">CLF_CRITERION (in module wildboar.tree._tree)</a>
 </li>
-        <li><a href="wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.counterfactuals">counterfactuals() (in module wildboar.explain.counterfactual)</a>
+        <li><a href="wildboar/metrics/index.html#wildboar.metrics.compactness_score">compactness_score() (in module wildboar.metrics)</a>
+
+        <ul>
+          <li><a href="wildboar/metrics/_counterfactual/index.html#wildboar.metrics._counterfactual.compactness_score">(in module wildboar.metrics._counterfactual)</a>
 </li>
+        </ul></li>
+        <li><a href="wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.counterfactuals">counterfactuals() (in module wildboar.explain.counterfactual)</a>
+
+        <ul>
+          <li><a href="wildboar/explain/counterfactual/_helper/index.html#wildboar.explain.counterfactual._helper.counterfactuals">(in module wildboar.explain.counterfactual._helper)</a>
+</li>
+        </ul></li>
     </ul></td>
   </tr></table>
 </section>
@@ -771,11 +786,15 @@
 </li>
           <li><a href="wildboar/linear_model/index.html#wildboar.linear_model.KernelLogisticRegression.fit">(wildboar.linear_model.KernelLogisticRegression method)</a>
 </li>
+          <li><a href="wildboar/transform/_matrix_profile/index.html#wildboar.transform._matrix_profile.MatrixProfileTransform.fit">(wildboar.transform._matrix_profile.MatrixProfileTransform method)</a>
+</li>
           <li><a href="wildboar/transform/_sax/index.html#wildboar.transform._sax.PAA.fit">(wildboar.transform._sax.PAA method)</a>
 </li>
           <li><a href="wildboar/transform/_sax/index.html#wildboar.transform._sax.SAX.fit">(wildboar.transform._sax.SAX method)</a>
 </li>
           <li><a href="wildboar/transform/base/index.html#wildboar.transform.base.BaseFeatureEngineerTransform.fit">(wildboar.transform.base.BaseFeatureEngineerTransform method)</a>
+</li>
+          <li><a href="wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.fit">(wildboar.transform.MatrixProfileTransform method)</a>
 </li>
           <li><a href="wildboar/transform/index.html#wildboar.transform.PAA.fit">(wildboar.transform.PAA method)</a>
 </li>
@@ -1112,6 +1131,12 @@
         </ul></li>
         <li><a href="wildboar/distance/index.html#wildboar.distance.matrix_profile">matrix_profile() (in module wildboar.distance)</a>
 </li>
+        <li><a href="wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform">MatrixProfileTransform (class in wildboar.transform)</a>
+
+        <ul>
+          <li><a href="wildboar/transform/_matrix_profile/index.html#wildboar.transform._matrix_profile.MatrixProfileTransform">(class in wildboar.transform._matrix_profile)</a>
+</li>
+        </ul></li>
         <li><a href="wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.maxabs_scale">maxabs_scale() (in module wildboar.datasets.preprocess)</a>
 </li>
         <li><a href="wildboar/explain/counterfactual/_proto/index.html#wildboar.explain.counterfactual._proto.MetricTransform">MetricTransform (class in wildboar.explain.counterfactual._proto)</a>
@@ -1162,6 +1187,8 @@
 </li>
           <li><a href="wildboar/explain/counterfactual/index.html#module-wildboar.explain.counterfactual">wildboar.explain.counterfactual</a>
 </li>
+          <li><a href="wildboar/explain/counterfactual/_helper/index.html#module-wildboar.explain.counterfactual._helper">wildboar.explain.counterfactual._helper</a>
+</li>
           <li><a href="wildboar/explain/counterfactual/_nn/index.html#module-wildboar.explain.counterfactual._nn">wildboar.explain.counterfactual._nn</a>
 </li>
           <li><a href="wildboar/explain/counterfactual/_proto/index.html#module-wildboar.explain.counterfactual._proto">wildboar.explain.counterfactual._proto</a>
@@ -1178,6 +1205,10 @@
 </li>
           <li><a href="wildboar/linear_model/_transform/index.html#module-wildboar.linear_model._transform">wildboar.linear_model._transform</a>
 </li>
+          <li><a href="wildboar/metrics/index.html#module-wildboar.metrics">wildboar.metrics</a>
+</li>
+          <li><a href="wildboar/metrics/_counterfactual/index.html#module-wildboar.metrics._counterfactual">wildboar.metrics._counterfactual</a>
+</li>
           <li><a href="wildboar/model_selection/index.html#module-wildboar.model_selection">wildboar.model_selection</a>
 </li>
           <li><a href="wildboar/model_selection/_cv/index.html#module-wildboar.model_selection._cv">wildboar.model_selection._cv</a>
@@ -1187,6 +1218,8 @@
           <li><a href="wildboar/transform/index.html#module-wildboar.transform">wildboar.transform</a>
 </li>
           <li><a href="wildboar/transform/_interval/index.html#module-wildboar.transform._interval">wildboar.transform._interval</a>
+</li>
+          <li><a href="wildboar/transform/_matrix_profile/index.html#module-wildboar.transform._matrix_profile">wildboar.transform._matrix_profile</a>
 </li>
           <li><a href="wildboar/transform/_pivot/index.html#module-wildboar.transform._pivot">wildboar.transform._pivot</a>
 </li>
@@ -1373,8 +1406,6 @@
         </ul></li>
         <li><a href="wildboar/utils/plot/index.html#wildboar.utils.plot.plot_frequency_domain">plot_frequency_domain() (in module wildboar.utils.plot)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="wildboar/explain/_importance/index.html#wildboar.explain._importance.plot_importances">plot_importances() (in module wildboar.explain._importance)</a>
 </li>
         <li><a href="wildboar/explain/_importance/index.html#wildboar.explain._importance.Domain.plot_samples">plot_samples() (wildboar.explain._importance.Domain method)</a>
@@ -1385,6 +1416,8 @@
           <li><a href="wildboar/explain/_importance/index.html#wildboar.explain._importance.TimeDomain.plot_samples">(wildboar.explain._importance.TimeDomain method)</a>
 </li>
         </ul></li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="wildboar/utils/plot/index.html#wildboar.utils.plot.plot_time_domain">plot_time_domain() (in module wildboar.utils.plot)</a>
 </li>
         <li><a href="wildboar/ensemble/_ensemble/index.html#wildboar.ensemble._ensemble.IsolationShapeletForest.predict">predict() (wildboar.ensemble._ensemble.IsolationShapeletForest method)</a>
@@ -1425,6 +1458,14 @@
         </ul></li>
         <li><a href="wildboar/explain/counterfactual/_proto/index.html#wildboar.explain.counterfactual._proto.PrototypeSampler">PrototypeSampler (class in wildboar.explain.counterfactual._proto)</a>
 </li>
+        <li><a href="wildboar/explain/counterfactual/index.html#wildboar.explain.counterfactual.proximity">proximity() (in module wildboar.explain.counterfactual)</a>
+</li>
+        <li><a href="wildboar/metrics/index.html#wildboar.metrics.proximity_score">proximity_score() (in module wildboar.metrics)</a>
+
+        <ul>
+          <li><a href="wildboar/metrics/_counterfactual/index.html#wildboar.metrics._counterfactual.proximity_score">(in module wildboar.metrics._counterfactual)</a>
+</li>
+        </ul></li>
         <li><a href="wildboar/ensemble/index.html#wildboar.ensemble.ProximityForestClassifier">ProximityForestClassifier (class in wildboar.ensemble)</a>
 
         <ul>
@@ -1694,11 +1735,15 @@
 </li>
           <li><a href="wildboar/explain/_importance/index.html#wildboar.explain._importance.TimeDomain.transform">(wildboar.explain._importance.TimeDomain method)</a>
 </li>
+          <li><a href="wildboar/transform/_matrix_profile/index.html#wildboar.transform._matrix_profile.MatrixProfileTransform.transform">(wildboar.transform._matrix_profile.MatrixProfileTransform method)</a>
+</li>
           <li><a href="wildboar/transform/_sax/index.html#wildboar.transform._sax.PAA.transform">(wildboar.transform._sax.PAA method)</a>
 </li>
           <li><a href="wildboar/transform/_sax/index.html#wildboar.transform._sax.SAX.transform">(wildboar.transform._sax.SAX method)</a>
 </li>
           <li><a href="wildboar/transform/base/index.html#wildboar.transform.base.BaseFeatureEngineerTransform.transform">(wildboar.transform.base.BaseFeatureEngineerTransform method)</a>
+</li>
+          <li><a href="wildboar/transform/index.html#wildboar.transform.MatrixProfileTransform.transform">(wildboar.transform.MatrixProfileTransform method)</a>
 </li>
           <li><a href="wildboar/transform/index.html#wildboar.transform.PAA.transform">(wildboar.transform.PAA method)</a>
 </li>
@@ -1711,10 +1756,10 @@
 </li>
         <li><a href="wildboar/linear_model/_transform/index.html#wildboar.linear_model._transform.TransformRidgeClassifierCV">TransformRidgeClassifierCV (class in wildboar.linear_model._transform)</a>
 </li>
-        <li><a href="wildboar/linear_model/_transform/index.html#wildboar.linear_model._transform.TransformRidgeCV">TransformRidgeCV (class in wildboar.linear_model._transform)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="wildboar/linear_model/_transform/index.html#wildboar.linear_model._transform.TransformRidgeCV">TransformRidgeCV (class in wildboar.linear_model._transform)</a>
+</li>
         <li><a href="wildboar/tree/_tree/index.html#wildboar.tree._tree.ExtraShapeletTreeClassifier.tree_">tree_ (wildboar.tree._tree.ExtraShapeletTreeClassifier attribute)</a>
 
         <ul>
@@ -1781,6 +1826,12 @@
   <h2>V</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="wildboar/metrics/index.html#wildboar.metrics.validity_score">validity_score() (in module wildboar.metrics)</a>
+
+        <ul>
+          <li><a href="wildboar/metrics/_counterfactual/index.html#wildboar.metrics._counterfactual.validity_score">(in module wildboar.metrics._counterfactual)</a>
+</li>
+        </ul></li>
         <li><a href="wildboar/datasets/_repository/index.html#wildboar.datasets._repository.JSONRepository.version">version (wildboar.datasets._repository.JSONRepository property)</a>
 
         <ul>
@@ -1806,6 +1857,8 @@
         <li><a href="wildboar/distance/dtw/index.html#wildboar.distance.dtw.wdtw_distance">wdtw_distance() (in module wildboar.distance.dtw)</a>
 </li>
         <li><a href="wildboar/tree/_ptree/index.html#wildboar.tree._ptree.wdtw_factory">wdtw_factory() (in module wildboar.tree._ptree)</a>
+</li>
+        <li><a href="wildboar/explain/counterfactual/_proto/index.html#wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform">WeightedDynamicTimeWarpTransform (class in wildboar.explain.counterfactual._proto)</a>
 </li>
         <li>
     wildboar
@@ -1927,6 +1980,13 @@
 </li>
         </ul></li>
         <li>
+    wildboar.explain.counterfactual._helper
+
+        <ul>
+          <li><a href="wildboar/explain/counterfactual/_helper/index.html#module-wildboar.explain.counterfactual._helper">module</a>
+</li>
+        </ul></li>
+        <li>
     wildboar.explain.counterfactual._nn
 
         <ul>
@@ -1985,6 +2045,20 @@
 </li>
         </ul></li>
         <li>
+    wildboar.metrics
+
+        <ul>
+          <li><a href="wildboar/metrics/index.html#module-wildboar.metrics">module</a>
+</li>
+        </ul></li>
+        <li>
+    wildboar.metrics._counterfactual
+
+        <ul>
+          <li><a href="wildboar/metrics/_counterfactual/index.html#module-wildboar.metrics._counterfactual">module</a>
+</li>
+        </ul></li>
+        <li>
     wildboar.model_selection
 
         <ul>
@@ -2017,6 +2091,13 @@
 
         <ul>
           <li><a href="wildboar/transform/_interval/index.html#module-wildboar.transform._interval">module</a>
+</li>
+        </ul></li>
+        <li>
+    wildboar.transform._matrix_profile
+
+        <ul>
+          <li><a href="wildboar/transform/_matrix_profile/index.html#module-wildboar.transform._matrix_profile">module</a>
 </li>
         </ul></li>
         <li>

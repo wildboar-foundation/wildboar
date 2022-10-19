@@ -1,0 +1,61 @@
+:orphan:
+
+:py:mod:`wildboar.metrics._counterfactual`
+==========================================
+
+.. py:module:: wildboar.metrics._counterfactual
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.metrics._counterfactual.compactness_score
+   wildboar.metrics._counterfactual.proximity_score
+   wildboar.metrics._counterfactual.validity_score
+
+
+
+.. py:function:: compactness_score(x_true, x_counterfactuals, *, rtol=1e-05, atol=1e-08)
+
+   Return the compactness of the counterfactuals as measured by the
+   fraction of changed timesteps. The fewer timesteps have changed between the original
+   and the counterfactual, the lower the score.
+
+   :param x_true: The true samples
+   :type x_true: array-like of shape (n_samples, n_timesteps)     or (n_samples, n_dims, n_timeteps)
+   :param x_counterfactuals: The counterfactual samples
+   :type x_counterfactuals: array-like of shape (n_samples, n_timesteps)     or (n_samples, n_dims, n_timeteps)
+   :param rtol: Parameter to `np.isclose`.
+   :type rtol: float, optional
+   :param atol: Parameter to `np.isclose`.
+   :type atol: float, optional
+
+
+.. py:function:: proximity_score(x_true, x_counterfactuals, metric='euclidean', metric_params=None)
+
+   Compute the proximity score of the counterfactuals using the provided metric.
+
+   The closer the counterfactual is to the original, the lower the score.
+
+   :param x_true: The true samples
+   :type x_true: array-like of shape (n_samples, n_timestep)
+   :param x_counterfactuals: The counterfactual samples
+   :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
+   :param metric: The scoring metric
+
+                  - if str use metrics from scikit-learn or wildboar
+   :type metric: str or callable, optional
+
+   :returns: **score** -- The scores
+   :rtype: ndarray or dict
+
+
+.. py:function:: validity_score(y_counterfactual, y_pred)
+
+

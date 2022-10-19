@@ -24,6 +24,7 @@ Functions
 .. autoapisummary::
 
    wildboar.explain.counterfactual.counterfactuals
+   wildboar.explain.counterfactual.proximity
    wildboar.explain.counterfactual.score
 
 
@@ -53,7 +54,7 @@ Functions
 
 
 
-.. py:class:: PrototypeCounterfactual(*, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
+.. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, verbose=False)
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
@@ -91,14 +92,11 @@ Functions
    Crate a new model agnostic counterfactual explainer.
 
    :param metric: The metric used to move the samples
-   :type metric: {'euclidean', 'dtw'}, optional
-   :param metric_params: Optional parameters to the metric
-
-                         If 'dtw':
-
-                             r : int or float, optional
-                                 The warping window size
-   :type metric_params: dict, optional
+   :type metric: {'euclidean', 'dtw', 'wdtw'}, optional
+   :param r: The warping window size, if metric='dtw' or metric='wdtw'
+   :type r: float, optional
+   :param g: Penalty control for weighted DTW, if metric='wdtw'
+   :type g: float, optional
    :param max_iter: The maximum number of iterations
    :type max_iter: int, optional
    :param step_size: The step size when moving samples toward class prototypes
@@ -121,16 +119,10 @@ Functions
                   - if 'nearest_shapelet' a prototype shapelet is sampled from the
                     closest n prototypes
    :type method: {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
-   :param method_params: Additional parameters to the method
-
-                         If 'shapelet' or 'nearest_shapelet'
-
-                             min_shapelet_size : float, optional
-                                 Minimum shapelet size.
-
-                             max_shapelet_size : float, optional
-                                 Maximum shapelet size.
-   :type method_params: dict, optional
+   :param min_shapelet_size: Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type max_shapelet_size: float, optional
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
@@ -196,7 +188,7 @@ Functions
 
 
 
-.. py:function:: counterfactuals(estimator, x, y, *, train_x=None, train_y=None, method='best', scoring=None, valid_scoring=False, random_state=None, method_args=None)
+.. py:function:: counterfactuals(estimator, x, y, *, train_x=None, train_y=None, method='best', scoring='deprecated', valid_scoring='deprecated', proximity=None, random_state=None, method_args=None)
 
    Compute a single counterfactual example for each sample
 
@@ -220,8 +212,17 @@ Functions
    :type method: str or BaseCounterfactual, optional
    :param scoring: The scoring function to determine the similarity between the counterfactual
                    sample and the original sample
+
+                   .. deprecated:: 1.1
+                       ``scoring`` was renamed to ``proximity`` in 1.1 and will be removed in 1.2.
    :type scoring: str, callable, list or dict, optional
-   :param valid_scoring: Only compute score for successful counterfactuals
+   :param proximity: The scoring function to determine the similarity between the counterfactual
+                     sample and the original sample
+   :type proximity: str, callable, list or dict, optional
+   :param valid_scoring: Only compute score for successful counterfactuals.
+
+                         .. deprecated:: 1.1
+                             ``valid_scoring`` will be removed in 1.2.
    :type valid_scoring: bool, optional
    :param random_state: The pseudo random number generator to ensure stable result
    :type random_state: RandomState or int, optional
@@ -235,9 +236,9 @@ Functions
              * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Return score of the counterfactual transform, if ``scoring`` is not None
 
 
-.. py:function:: score(x_true, x_counterfactuals, metric='euclidean', valid=None, success=None)
+.. py:function:: proximity(x_true, x_counterfactuals, metric='euclidean')
 
-   Compute the score for the counterfactuals
+   Compute the proximity of the counterfactuals.
 
    :param x_true: The true samples
    :type x_true: array-like of shape (n_samples, n_timestep)
@@ -250,12 +251,13 @@ Functions
                     the name of the metric and the value an ndarray of scores
                   - if dict compute all metrics and return a dict where the key is
                     the key and the value an ndarray of scores
-                  - if callable
+                  - if callable, a function of two arrays returning a float
    :type metric: str, callable, list or dict, optional
-   :param valid: Indicator matrix of successful counterfactual transformations
-   :type valid: ndarray of shape (n_samples)
 
    :returns: **score** -- The scores
    :rtype: ndarray or dict
+
+
+.. py:function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
 
 

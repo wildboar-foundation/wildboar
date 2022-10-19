@@ -16,6 +16,7 @@ Subpackages
    ensemble/index.rst
    explain/index.rst
    linear_model/index.rst
+   metrics/index.rst
    model_selection/index.rst
    transform/index.rst
    tree/index.rst
