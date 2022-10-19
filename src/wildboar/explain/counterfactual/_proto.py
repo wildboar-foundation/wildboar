@@ -13,7 +13,13 @@ from sklearn.utils.validation import check_is_fitted, check_random_state, check_
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
-from ...distance.dtw import dtw_distance, dtw_mapping
+from ...distance.dtw import (
+    dtw_alignment,
+    dtw_distance,
+    dtw_mapping,
+    wdtw_alignment,
+    wdtw_distance,
+)
 from ...utils.validation import check_option
 
 
@@ -44,31 +50,32 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
 
     def __init__(
         self,
-        *,
         metric="euclidean",
-        metric_params=None,
+        *,
+        r=1.0,
+        g=0.05,
         max_iter=100,
         step_size=0.1,
         n_prototypes="auto",
         target="auto",
         method="sample",
-        method_params=None,
-        random_state=None
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
+        random_state=None,
+        verbose=False,
     ):
         """Crate a new model agnostic counterfactual explainer.
 
         Parameters
         ----------
-        metric : {'euclidean', 'dtw'}, optional
+        metric : {'euclidean', 'dtw', 'wdtw'}, optional
             The metric used to move the samples
 
-        metric_params : dict, optional
-            Optional parameters to the metric
+        r : float, optional
+            The warping window size, if metric='dtw' or metric='wdtw'
 
-            If 'dtw':
-
-                r : int or float, optional
-                    The warping window size
+        g : float, optional
+            Penalty control for weighted DTW, if metric='wdtw'
 
         max_iter : int, optional
             The maximum number of iterations
@@ -97,29 +104,27 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
             - if 'nearest_shapelet' a prototype shapelet is sampled from the
               closest n prototypes
 
-        method_params : dict, optional
-            Additional parameters to the method
+        min_shapelet_size : float, optional
+            Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
 
-            If 'shapelet' or 'nearest_shapelet'
-
-                min_shapelet_size : float, optional
-                    Minimum shapelet size.
-
-                max_shapelet_size : float, optional
-                    Maximum shapelet size.
+        max_shapelet_size : float, optional
+            Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
 
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
         """
         self.random_state = random_state
         self.metric = metric
-        self.metric_params = metric_params
+        self.r = r
+        self.g = g
         self.max_iter = max_iter
         self.step_size = step_size
         self.n_prototypes = n_prototypes
         self.method = method
-        self.method_params = method_params
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
         self.target = target
+        self.verbose = verbose
 
     def fit(self, estimator, x, y):
         if x is None or y is None:
@@ -127,6 +132,16 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
 
         estimator = self._validate_estimator(estimator)
         x, y = self._validate_data(x, y, reset=False, dtype=float)
+
+        metric_params = {}
+        if self.metric in ["dtw", "wdtw"]:
+            metric_params["r"] = check_scalar(
+                self.r, "r", numbers.Real, min_val=0, max_val=1
+            )
+        if self.metric == ["wdtw"]:
+            metric_params["g"] = check_scalar(
+                self.g, "g", numbers.Real, min_val=0, include_boundaries="neither"
+            )
 
         random_state = check_random_state(self.random_state)
         metric_transform = check_option(_METRIC_TRANSFORM, self.metric, "metric")(
@@ -138,7 +153,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
                 max_val=1,
                 include_boundaries="right",
             ),
-            **(self.metric_params or {})
+            **metric_params,
         )
         Sampler = check_option(_PROTOTYPE_SAMPLER, self.method, "method")
 
@@ -156,6 +171,28 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
                 include_boundaries="right",
             )
             self.target_ = ProbabilityEvaluator(self.estimator_, target)
+
+        if self.method in ["shapelet", "nearest_shapelet"]:
+            min_shapelet_size = check_scalar(
+                self.min_shapelet_size,
+                "min_shapelet_size",
+                numbers.Real,
+                min_val=0,
+                max_val=self.max_shapelet_size,
+            )
+            max_shapelet_size = check_scalar(
+                self.max_shapelet_size,
+                "max_shapelet_size",
+                numbers.Real,
+                min_val=min_shapelet_size,
+                max_val=1.0,
+            )
+            method_params = {
+                "min_shapelet_size": min_shapelet_size,
+                "max_shapelet_size": max_shapelet_size,
+            }
+        else:
+            method_params = {}
 
         self.partitions_ = {}
         for c in self.classes_:
@@ -186,7 +223,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
                 n_prototypes,
                 metric_transform,
                 random_state,
-                **(self.method_params or {})
+                **method_params,
             )
 
     def explain(self, x, y):
@@ -203,8 +240,19 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         o = x.copy()
         n_iter = 0
         while not self.target_.is_counterfactual(o, y) and n_iter < self.max_iter:
+            if self.verbose and n_iter % (self.max_iter // 10) == 0:
+                print(f"Running {n_iter}/{self.max_iter}...")
+
             o = sampler.sample_move(o)
             n_iter += 1
+
+        if self.verbose:
+            print(f"Completed after {n_iter} iterations.")
+            if n_iter == self.max_iter:
+                print(
+                    "The counterfactual explain reached max_iter, increase step_size "
+                    "or max_iter for convergence."
+                )
         return o
 
     def _more_tags():
@@ -310,8 +358,7 @@ class PrototypeSampler(abc.ABC):
         self.random_state.shuffle(prototype_indices)
         self.prototype_indices = prototype_indices[:n_prototypes]
 
-    @property
-    def _random_index(self):
+    def _get_random_index(self):
         """Return a random index in the initial prototype sample
 
         Returns
@@ -322,7 +369,7 @@ class PrototypeSampler(abc.ABC):
             self.random_state.randint(self.prototype_indices.shape[0])
         ]
 
-    def _random_indices(self, n):
+    def _get_random_indices(self, n):
         """Return n random indices from the initial prototype sample
 
         Parameters
@@ -393,7 +440,7 @@ class UniformPrototypeSampler(PrototypeSampler):
     """Sample a prototype uniformly at random from the initial prototype sample"""
 
     def sample(self, _o):
-        return self.x[self._random_index]
+        return self.x[self._get_random_index()]
 
 
 class KNearestPrototypeSampler(PrototypeSampler):
@@ -409,6 +456,13 @@ class KNearestPrototypeSampler(PrototypeSampler):
             dtw = partial(dtw_distance, r=self.metric_transform.r)
             self.nearest_neighbors = NearestNeighbors(
                 metric=dtw, n_neighbors=n_prototypes
+            )
+        elif isinstance(self.metric_transform, WeightedDynamicTimeWarpTransform):
+            wdtw = partial(
+                wdtw_distance, r=self.metric_transform.r, g=self.metric_transform.g
+            )
+            self.nearest_neighbors = NearestNeighbors(
+                metric=wdtw, n_neighbors=n_prototypes
             )
         else:
             raise ValueError("unsupported metric")
@@ -472,20 +526,8 @@ class ShapeletPrototypeSampler(PrototypeSampler):
             The maximum shapelet size
         """
         super().__init__(x, y, n_prototypes, metric_transform, random_state)
-        self.min_shapelet_size = check_scalar(
-            min_shapelet_size,
-            "min_shapelet_size",
-            numbers.Real,
-            min_val=0,
-            max_val=max_shapelet_size,
-        )
-        self.max_shapelet_size = check_scalar(
-            max_shapelet_size,
-            "max_shapelet_size",
-            numbers.Real,
-            min_val=min_shapelet_size,
-            max_val=1.0,
-        )
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
 
     def sample_shapelet(self, p):
         """Sample a shapelet from x
@@ -512,7 +554,7 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         return p[start_index : (start_index + shapelet_length)]
 
     def sample(self, _o):
-        return self.sample_shapelet(self.x[self._random_index])
+        return self.sample_shapelet(self.x[self._get_random_index()])
 
     def move(self, o, p):
         """Move the best matching shapelet of the  counterfactual sample towards
@@ -537,6 +579,9 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         elif isinstance(self.metric_transform, DynamicTimeWarpTransform):
             metric = "dtw"
             metric_params = {"r": self.metric_transform.r}
+        elif isinstance(self.metric_transform, WeightedDynamicTimeWarpTransform):
+            metric = "wdtw"
+            metric_params = {"r": self.metric_transform.r, "g": self.metric_transform.g}
         else:
             raise ValueError("unsupported metric")
 
@@ -615,13 +660,14 @@ class MetricTransform(abc.ABC):
         Parameters
         ----------
         o : ndarray of shape (n_timestep,)
-            An array
+            An array, the time series to move
+
         p : ndarray of shape (n_timestep,)
-            An array
+            An array, the time series to move towards
 
         Returns
         -------
-        ndarray : an array
+        ndarray : an array, the result of moving o closer to p
         """
         pass
 
@@ -638,21 +684,34 @@ class DynamicTimeWarpTransform(MetricTransform):
 
     def __init__(self, gamma, r=1.0):
         super().__init__(gamma)
-        self.r = check_scalar(r, "r", numbers.Real, min_val=0, max_val=1)
+        self.r = r
 
     def move(self, o, p):
-        _, indices = dtw_mapping(o, p, r=self.r, return_index=True)
+        _, indices = dtw_mapping(alignment=self._get_alignment(o, p), return_index=True)
         result = o * (1 - self.gamma)
         weight = np.ones(o.shape[0]) * (1 - self.gamma)
-        for _, j in zip(*indices):
+        for j in indices[1]:
             result[j] += self.gamma * p[j]
             weight[j] += self.gamma
         return result / weight
+
+    def _get_alignment(self, o, p):
+        return dtw_alignment(o, p, r=self.r)
+
+
+class WeightedDynamicTimeWarpTransform(DynamicTimeWarpTransform):
+    def __init__(self, gamma, r=1, g=0.05):
+        super().__init__(gamma, r)
+        self.g = g
+
+    def _get_alignment(self, o, p):
+        return wdtw_alignment(o, p, r=self.r, g=self.g)
 
 
 _METRIC_TRANSFORM = {
     "euclidean": EuclideanTransform,
     "dtw": DynamicTimeWarpTransform,
+    "wdtw": WeightedDynamicTimeWarpTransform,
 }
 
 _PROTOTYPE_SAMPLER = {
