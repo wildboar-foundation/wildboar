@@ -36,6 +36,8 @@ def _shapelet_transform(shapelet, x, start_index, theta):
     shapelet_diff = x_shapelet - shapelet
     dist = np.linalg.norm(shapelet_diff)
     if dist == 0:
+        # If the distance between the shapelets is zero, we move it in a random
+        # direction towards the distance threshold.
         x_shapelet = np.random.uniform(shapelet.shape)
         shapelet_diff = x_shapelet - shapelet
         dist = np.linalg.norm(shapelet_diff)
