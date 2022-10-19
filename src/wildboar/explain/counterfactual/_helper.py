@@ -221,13 +221,12 @@ def counterfactuals(
     else:
         valid_scoring = False
 
+    if valid_scoring:
+        x = x[valid]
+        x_counterfactuals = x_counterfactuals[valid]
+
     if scoring is not None:
-        sc = _proximity(
-            x,
-            x_counterfactuals,
-            metric=proximity,
-            valid=valid if valid_scoring else None,
-        )
+        sc = _proximity(x, x_counterfactuals, metric=proximity)
         return x_counterfactuals, valid, sc
     else:
         return x_counterfactuals, valid
