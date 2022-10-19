@@ -2,6 +2,7 @@
 # License: BSD 3 clause
 
 from ._interval import FeatureTransform, IntervalTransform
+from ._matrix_profile import MatrixProfileTransform
 from ._pivot import PivotTransform
 from ._rocket import RocketTransform
 from ._sax import (
@@ -22,4 +23,5 @@ __all__ = [
     "FeatureTransform",
     "SAX",
     "PAA",
+    "MatrixProfileTransform",
 ]

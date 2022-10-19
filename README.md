@@ -33,6 +33,7 @@ It is currently maintained by Isak Samsten
 |                                                                                   | ``IntervalForestClassifier``     | ``IntervalForestRegressor``     |                                  |            | Motif discovery             |                             |
 |                                                                                   | ``ProximityTreeClassifier``      |                                 |                                  |            | ``SAX``                     |                             |
 |                                                                                   | ``ProximityForestClassifier``    |                                 |                                  |            | ``PAA``                     |                             |
+|                                                                                   |                                  |                                 |                                  |            | ``MatrixProfileTransform``  |                             |
 
 See the [documentation](https://isaksamsten.github.io/wildboar/master/examples.html) for examples.
 
