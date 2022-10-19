@@ -6,6 +6,7 @@ import numbers
 import warnings
 
 import numpy as np
+from sklearn.metrics.pairwise import paired_distances as sklearn_paired_distances
 from sklearn.utils.deprecation import deprecated
 from sklearn.utils.validation import _is_arraylike, check_scalar
 
@@ -646,6 +647,48 @@ def paired_distance(
         distance_measure,
         n_jobs,
     )
+
+
+def mean_paired_distance(x, y, *, metric="euclidean", metric_params=None):
+    """Return the paired distance between x and y. For 3d-arrays, return the mean
+    paired distance between the dimensions.
+
+    Parameters
+    ----------
+
+
+    """
+    x = check_array(x, allow_3d=True, input_name="x")
+    y = check_array(y, allow_3d=True, input_name="y")
+
+    if x.ndim != y.ndim:
+        raise ValueError("both x and y must have the same rank")
+
+    if x.ndim == 2:
+        if metric in _DISTANCE_MEASURE:
+            return paired_distance(x, y, metric=metric, metric_params=metric_params)
+        else:
+            return sklearn_paired_distances(x, y, metric=metric)
+    elif x.ndim == 3:
+        if metric in _DISTANCE_MEASURE:
+            return np.mean(
+                [
+                    paired_distance(
+                        x, y, metric=metric, metric_params=metric_params, dim=dim
+                    )
+                    for dim in range(x.shape[1])
+                ]
+            )
+        else:
+            return np.mean(
+                [
+                    sklearn_paired_distances(x[:, i, :], y[:, i, :], metric=metric)
+                    for i in range(x.shape[1])
+                ],
+                axis=0,
+            )
+    else:
+        raise ValueError("invalid rank, %d > 3" % x.ndim)
 
 
 @array_or_scalar
