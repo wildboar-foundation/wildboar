@@ -89,7 +89,7 @@ Changelog
      - |Feature| Support for Derivative (Weighted) dynamic time warping.
      
      - |Enhancement| The function :func:`distance.pairwise_subsequence_distance` generalizes the
-       former `distance`-function and add support for ``n_jobs``.
+       former `distance`-function and adds support for ``n_jobs``.
      
      - |Enhancement| The function :func:`distance.paired_subsequence_distance` expands the 
        use-case for the former `distance`-function.
@@ -109,6 +109,8 @@ Changelog
      - |Feature| The new :func:`distance.dtw.wdtw_alignment` for weighted DTW alignments.
 
      - |API| All functions in :mod:`distance.dtw` now require keyword arguments for optional parameters.
+
+     - |Enhancement| All DTW metrics will now default to ``r=1.0`` instead of ``r=0.0``.
 
 
   .. grid-item-card::

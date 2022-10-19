@@ -1037,7 +1037,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     cdef Py_ssize_t cost_size
     cdef double r
 
-    def __cinit__(self, double r=0):
+    def __cinit__(self, double r=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
         self.X_buffer = NULL
@@ -1414,7 +1414,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     cdef Py_ssize_t cost_size
 
 
-    def __cinit__(self, double r=0):
+    def __cinit__(self, double r=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
         self.cost = NULL
@@ -1537,7 +1537,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
     cdef Py_ssize_t warp_width
     cdef double r
     
-    def __cinit__(self, double r=0, *args, **kwargs):
+    def __cinit__(self, double r=1.0, *args, **kwargs):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
         self.cost = NULL
@@ -1621,7 +1621,7 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double *d_x
     cdef double *d_y
 
-    def __cinit__(self, double r=0):
+    def __cinit__(self, double r=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.d_x = NULL
         self.d_y = NULL
@@ -1672,7 +1672,7 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double g
     cdef double *weights
 
-    def __cinit__(self, double r=0, double g=0.05):
+    def __cinit__(self, double r=1.0, double g=0.05):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.weights = NULL
         self.g = g
@@ -1727,7 +1727,7 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double *weights
     cdef double g
 
-    def __cinit__(self, double r=0, double g=0.05):
+    def __cinit__(self, double r=1.0, double g=0.05):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.weights = NULL
         self.g = g
