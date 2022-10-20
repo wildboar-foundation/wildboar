@@ -276,9 +276,9 @@ class CounterfactualMixin:
         score : float
             The closensess of fit.
         """
-        from .explain.counterfactual import score
+        from .metrics import proximity_score
 
-        return np.mean(-score(x, self.explain(x, y)))
+        return proximity_score(x, self.explain(x, y))
 
 
 def is_counterfactual(estimator):
