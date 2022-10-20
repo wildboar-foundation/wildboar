@@ -38,6 +38,7 @@ def _shapelet_transform(shapelet, x, start_index, theta):
     if dist == 0:
         # If the distance between the shapelets is zero, we move it in a random
         # direction towards the distance threshold.
+        # TODO: ensure that this uses a consistent random_seed for repeatable runs.
         x_shapelet = np.random.uniform(shapelet.shape)
         shapelet_diff = x_shapelet - shapelet
         dist = np.linalg.norm(shapelet_diff)
@@ -172,7 +173,10 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
     def _validate_estimator(self, estimator, allow_3d=False):
         if not isinstance(estimator, BaseShapeletForestClassifier):
-            raise ValueError("unsupported estimator, got %r" % estimator)
+            raise ValueError(
+                "estimator must be ShapeletForestClassifier, not %r"
+                % type(estimator).__qualname__
+            )
 
         return super()._validate_estimator(estimator, allow_3d)
 
@@ -304,9 +308,6 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
             else:
                 raise ValueError("invalid path")
         return x
-
-    def _more_tags():
-        return {"X_types": []}
 
 
 # class IncrementalTreeLabelTransform(CounterfactualTransformer):
