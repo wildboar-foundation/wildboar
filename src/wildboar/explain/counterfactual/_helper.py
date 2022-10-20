@@ -80,9 +80,15 @@ def _best_counterfactional(estimator):
     BaseCounterfactual
         The counterfactual transformer
     """
-    if isinstance(estimator, (ShapeletForestClassifier, ExtraShapeletTreesClassifier)):
+    if (
+        isinstance(estimator, (ShapeletForestClassifier, ExtraShapeletTreesClassifier))
+        and estimator.metric == "euclidean"
+    ):
         return ShapeletForestCounterfactual
-    elif isinstance(estimator, KNeighborsClassifier):
+    elif isinstance(estimator, KNeighborsClassifier) and (
+        estimator.metric == "euclidean"
+        or (estimator.metric == "minkowski" and estimator.p == 2)
+    ):
         return KNeighborsCounterfactual
     else:
         return PrototypeCounterfactual
