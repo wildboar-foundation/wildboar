@@ -6,7 +6,7 @@ from functools import partial
 from unittest.case import SkipTest
 
 import numpy as np
-from sklearn.base import clone
+from sklearn.base import clone, is_classifier, is_regressor
 from sklearn.exceptions import SkipTestWarning
 from sklearn.utils._testing import (
     assert_allclose_dense_sparse,
@@ -24,24 +24,61 @@ from sklearn.utils.estimator_checks import (
 )
 from sklearn.utils.validation import has_fit_parameter
 
+from ..base import is_counterfactual, is_explainer
 
-def _yield_all_checks(estimator):
+
+def _yield_classifier_test(estimator):
     if has_fit_parameter(estimator, "sample_weight"):
-        if hasattr(estimator, "bootstrap"):
-            estimator.bootstrap = False
-
         yield partial(check_sample_weights_invariance_samples_order, kind="ones")
         yield partial(check_sample_weights_invariance_samples_order, kind="zeros")
 
-    if hasattr(estimator, "estimator_params"):
-        yield check_consistent_estimator_params
 
-    if "3darray" in _safe_tags(estimator, "X_types"):
-        yield check_force_n_dims_raises
-        yield check_force_n_dims
+def _yield_regressor_checks(estimator):
+    pass
 
 
-def check_estimator(estimator, generate_only=False, ignore=None):
+def _yield_transform_checks(estimator):
+    pass
+
+
+def _yield_explainer_checks(estimator):
+    pass
+
+
+def _yield_all_checks(estimator):
+
+    if is_classifier(estimator):
+        for check in _yield_classifier_test(estimator):
+            yield check
+
+    if is_regressor(estimator):
+        pass
+    #     for check in _yield_regressor_checks(estimator):
+    #         yield check
+
+    if hasattr(estimator, "transform"):
+        pass
+    #     for check in _yield_transform_checks(estimator):
+    #         yield check
+
+    if is_explainer(estimator):
+        pass
+    #     for check in _yield_explainer_checks(estimator):
+    #         yield check
+
+    if is_counterfactual(estimator):
+        pass
+
+    if not is_explainer(estimator):
+        if hasattr(estimator, "estimator_params"):
+            yield check_consistent_estimator_params
+
+        if "3darray" in _safe_tags(estimator, "X_types"):
+            yield check_force_n_dims_raises
+            yield check_force_n_dims
+
+
+def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False):
     """Check if estimator adheres to scikit-learn (and wildboar) conventions.
 
     This method delegates to `check_estimator` in scikit-learn but monkey-patches
@@ -67,6 +104,9 @@ def check_estimator(estimator, generate_only=False, ignore=None):
     ignore : list, optional
         Ignore the checks in the list.
 
+    skip_scikit : bool, optional
+        Skip all scikit-learn tests.
+
     Returns
     -------
     checks_generator : generator
@@ -81,37 +121,42 @@ def check_estimator(estimator, generate_only=False, ignore=None):
     name = type(estimator).__name__
 
     def checks_generator():
-        if estimator is not None:
-            if hasattr(estimator, "_more_tags"):
-                _more_tags = estimator._more_tags().copy()
-                _more_tags.update({"poor_score": True})
+        if not skip_scikit:
+            if estimator is not None:
+                if hasattr(estimator, "_more_tags"):
+                    _more_tags = estimator._more_tags().copy()
+                    _more_tags.update({"poor_score": True})
 
-            old_more_tags = estimator.__class__._more_tags
+                old_more_tags = estimator.__class__._more_tags
 
-            def _new_more_tags_skip_low_score(self):
-                return _more_tags
+                def _new_more_tags_skip_low_score(self):
+                    return _more_tags
 
-            # Monkey-patch the estimator to always have the tag "poor_score" set
-            # to true. We have specific tests in wildboar for testing performance.
-            setattr(estimator.__class__, "_more_tags", _new_more_tags_skip_low_score)
+                # Monkey-patch the estimator to always have the tag "poor_score" set
+                # to true. We have specific tests in wildboar for testing performance.
+                setattr(
+                    estimator.__class__, "_more_tags", _new_more_tags_skip_low_score
+                )
 
-        for check in _yield_all_checks_sklearn(estimator):
-            check_name = (
-                check.func.__name__ if isinstance(check, partial) else check.__name__
-            )
+            for check in _yield_all_checks_sklearn(estimator):
+                check_name = (
+                    check.func.__name__
+                    if isinstance(check, partial)
+                    else check.__name__
+                )
 
-            # Silently ignore any scikit-learn tess in the ignore list
-            if check_name not in ignore:
-                check = _maybe_skip(estimator, check)
-                yield estimator, partial(check, name)
+                # Silently ignore any scikit-learn tess in the ignore list
+                if check_name not in ignore:
+                    check = _maybe_skip(estimator, check)
+                    yield estimator, partial(check, name)
+
+            if estimator is not None:
+                # Reset the old _more_tags() method
+                setattr(estimator.__class__, "_more_tags", old_more_tags)
 
         for check in _yield_all_checks(estimator):
             check = _maybe_skip(estimator, check)
             yield estimator, partial(check, name)
-
-        if estimator is not None:
-            # Reset the old _more_tags() method
-            setattr(estimator.__class__, "_more_tags", old_more_tags)
 
     if generate_only:
         return checks_generator()
@@ -131,6 +176,10 @@ def check_sample_weights_invariance_samples_order(name, estimator_orig, kind="on
     # to removing corresponding samples.
     estimator1 = clone(estimator_orig)
     estimator2 = clone(estimator_orig)
+    if hasattr(estimator_orig, "bootstrap"):
+        estimator1.bootstrap = False
+        estimator2.bootstrap = False
+
     set_random_state(estimator1, random_state=0)
     set_random_state(estimator2, random_state=0)
 
