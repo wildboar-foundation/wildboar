@@ -1,6 +1,7 @@
 import warnings
 
 import numpy as np
+from sklearn.base import clone
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.utils.validation import check_is_fitted
 
@@ -203,7 +204,7 @@ def counterfactuals(
 
         explainer = Explainer(**method_args)
     else:
-        explainer = method
+        explainer = clone(method)
 
     if random_state is not None and "random_state" in explainer.get_params():
         explainer.set_params(random_state=random_state)
