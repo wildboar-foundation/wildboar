@@ -244,7 +244,7 @@ class ExplainerMixin:
 
         plot_time_domain(self.explain(x, y), y, ax=ax)
 
-    def _more_tags():
+    def _more_tags(self):
         return {"requires_estimator": True}
 
 
