@@ -5,11 +5,22 @@ import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.exceptions import NotFittedError
 from sklearn.neighbors import KNeighborsClassifier
 
 from wildboar.datasets import load_dataset
 from wildboar.ensemble import ShapeletForestClassifier
-from wildboar.explain.counterfactual import PrototypeCounterfactual, counterfactuals
+from wildboar.explain.counterfactual import (
+    KNeighborsCounterfactual,
+    PrototypeCounterfactual,
+    ShapeletForestCounterfactual,
+    counterfactuals,
+)
+from wildboar.utils.estimator_checks import check_estimator
+
+
+def test_estimator_check_shapelet_forest_counterfactual():
+    check_estimator(ShapeletForestCounterfactual(), skip_scikit=True)
 
 
 @pytest.mark.parametrize(
@@ -29,7 +40,7 @@ from wildboar.explain.counterfactual import PrototypeCounterfactual, counterfact
         ),
         pytest.param(
             RandomForestClassifier(random_state=123),
-            np.array([3.062681783939084, 8.38541221454514]),
+            np.array([3.401708, 7.8155463]),
         ),
     ],
 )
@@ -66,8 +77,21 @@ def test_counterfactuals_prototype():
         method=method,
         train_x=x_train,
         train_y=y_train,
-        scoring="euclidean",
+        proximity="euclidean",
         random_state=123,
     )
-    expected_score = np.array([0.8731226473373813, 6.270890036587185])
+    expected_score = np.array([2.3592611, 6.2593162])
     assert_almost_equal(actual_score, expected_score)
+
+
+@pytest.mark.parametrize(
+    "counterfactual, estimator",
+    [
+        (ShapeletForestCounterfactual(), ShapeletForestClassifier()),
+        (KNeighborsCounterfactual(), KNeighborsClassifier()),
+        (PrototypeCounterfactual(), ShapeletForestClassifier()),
+    ],
+)
+def test_counterfactual_not_fitted_estimator(counterfactual, estimator):
+    with pytest.raises(NotFittedError):
+        counterfactual.fit(estimator, np.zeros((3, 3)), np.ones(3))

@@ -159,6 +159,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
 
         self.estimator_ = deepcopy(estimator)
         self.classes_ = np.unique(y)
+        self.random_state_ = random_state.randint(np.iinfo(np.int32).max)
         if self.target == "auto":
             self.target_ = PredictEvaluator(self.estimator_)
         else:
@@ -217,25 +218,31 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
                     % self.n_prototypes
                 )
 
+            prototype_indicies = np.arange(x_partition.shape[0])
+            random_state.shuffle(prototype_indicies)
+            prototype_indicies = prototype_indicies[:n_prototypes]
             self.partitions_[c] = Sampler(
                 x_partition,
                 c,
-                n_prototypes,
+                prototype_indicies,
                 metric_transform,
-                random_state,
                 **method_params,
             )
 
     def explain(self, x, y):
         check_is_fitted(self)
+        random_state = check_random_state(self.random_state_)
         x, y = self._validate_data(x, y, reset=False, dtype=float)
         counterfactuals = np.empty(x.shape, dtype=x.dtype)
         for i in range(x.shape[0]):
-            counterfactuals[i] = self._transform_sample(x[i], y[i])
+            counterfactuals[i] = self._transform_sample(
+                x[i], y[i], random_state.randint(np.iinfo(np.int32).max)
+            )
 
         return counterfactuals
 
-    def _transform_sample(self, x, y):
+    def _transform_sample(self, x, y, random_state):
+        random_state = check_random_state(random_state)
         sampler = self.partitions_[y]
         o = x.copy()
         n_iter = 0
@@ -243,7 +250,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
             if self.verbose and n_iter % (self.max_iter // 10) == 0:
                 print(f"Running {n_iter}/{self.max_iter}...")
 
-            o = sampler.sample_move(o)
+            o = sampler.sample_move(o, random_state)
             n_iter += 1
 
         if self.verbose:
@@ -329,7 +336,7 @@ class ProbabilityEvaluator(TargetEvaluator):
 
 
 class PrototypeSampler(abc.ABC):
-    def __init__(self, x, y, n_prototypes, metric_transform, random_state):
+    def __init__(self, x, y, prototype_indices, metric_transform):
         """Sample and refine counterfactuals
 
         Parameters
@@ -349,16 +356,12 @@ class PrototypeSampler(abc.ABC):
         random_state : RandomState
             The random number generator.
         """
-        self.random_state = random_state
         self.x = x
         self.y = y
         self.metric_transform = metric_transform
-        self.n_prototypes = n_prototypes
-        prototype_indices = np.arange(x.shape[0])
-        self.random_state.shuffle(prototype_indices)
-        self.prototype_indices = prototype_indices[:n_prototypes]
+        self.prototype_indices = prototype_indices
 
-    def _get_random_index(self):
+    def _get_random_index(self, random_state):
         """Return a random index in the initial prototype sample
 
         Returns
@@ -366,27 +369,11 @@ class PrototypeSampler(abc.ABC):
         int : an index
         """
         return self.prototype_indices[
-            self.random_state.randint(self.prototype_indices.shape[0])
+            random_state.randint(self.prototype_indices.shape[0])
         ]
 
-    def _get_random_indices(self, n):
-        """Return n random indices from the initial prototype sample
-
-        Parameters
-        ----------
-        n : int
-            The number of idices to return
-
-        Returns
-        -------
-        ndarray : indices
-        """
-        n = min(self.n_prototypes - 1, max(1, n))
-        self.random_state.shuffle(self.prototype_indices)
-        return self.prototype_indices[:n]
-
     @abc.abstractmethod
-    def sample(self, o):
+    def sample(self, o, random_state):
         """Sample an example
 
         Parameters
@@ -419,7 +406,7 @@ class PrototypeSampler(abc.ABC):
         """
         return self.metric_transform.move(o, p)
 
-    def sample_move(self, o):
+    def sample_move(self, o, random_state):
         """Sampla a prototype and move the counterfactual towards the prototype
 
         Parameters
@@ -432,22 +419,23 @@ class PrototypeSampler(abc.ABC):
         new_counterfactual : ndarray of shape (n_timestep,)
             The new counterfactual moved towards the prototype
         """
-        p = self.sample(o)
+        p = self.sample(o, random_state)
         return self.move(o, p)
 
 
 class UniformPrototypeSampler(PrototypeSampler):
     """Sample a prototype uniformly at random from the initial prototype sample"""
 
-    def sample(self, _o):
-        return self.x[self._get_random_index()]
+    def sample(self, _o, random_state):
+        return self.x[self._get_random_index(random_state)]
 
 
 class KNearestPrototypeSampler(PrototypeSampler):
     """Sample a prototype among the samples closest to the current counterfactual"""
 
-    def __init__(self, x, y, n_prototypes, metric_transform, random_state):
-        super().__init__(x, y, n_prototypes, metric_transform, random_state)
+    def __init__(self, x, y, prototype_indicies, metric_transform):
+        super().__init__(x, y, prototype_indicies, metric_transform)
+        n_prototypes = prototype_indicies.size
         if isinstance(self.metric_transform, EuclideanTransform):
             self.nearest_neighbors = NearestNeighbors(
                 metric="euclidean", n_neighbors=n_prototypes
@@ -469,7 +457,7 @@ class KNearestPrototypeSampler(PrototypeSampler):
 
         self.nearest_neighbors.fit(x)
 
-    def nearest_index(self, o):
+    def nearest_index(self, o, random_state):
         """Return the index of the closest sample
 
         Parameters
@@ -484,10 +472,10 @@ class KNearestPrototypeSampler(PrototypeSampler):
         nearest = self.nearest_neighbors.kneighbors(
             o.reshape(1, -1), return_distance=False
         ).reshape(-1)
-        return nearest[self.random_state.randint(nearest.shape[0])]
+        return nearest[random_state.randint(nearest.shape[0])]
 
-    def sample(self, o):
-        return self.x[self.nearest_index(o)]
+    def sample(self, o, random_state):
+        return self.x[self.nearest_index(o, random_state)]
 
 
 class ShapeletPrototypeSampler(PrototypeSampler):
@@ -497,9 +485,8 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         self,
         x,
         y,
-        n_prototypes,
+        prototype_indicies,
         metric_transform,
-        random_state,
         min_shapelet_size=0,
         max_shapelet_size=1,
     ):
@@ -525,11 +512,11 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         max_shapelet_size : float
             The maximum shapelet size
         """
-        super().__init__(x, y, n_prototypes, metric_transform, random_state)
+        super().__init__(x, y, prototype_indicies, metric_transform)
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
-    def sample_shapelet(self, p):
+    def sample_shapelet(self, p, random_state):
         """Sample a shapelet from x
 
         Parameters
@@ -547,14 +534,14 @@ class ShapeletPrototypeSampler(PrototypeSampler):
             min(2, n_timestep), math.ceil(n_timestep * self.min_shapelet_size)
         )
         max_shapelet_size = math.ceil(n_timestep * self.max_shapelet_size)
-        shapelet_length = self.random_state.randint(
-            min_shapelet_size, max_shapelet_size
-        )
-        start_index = self.random_state.randint(0, n_timestep - shapelet_length)
+        shapelet_length = random_state.randint(min_shapelet_size, max_shapelet_size)
+        start_index = random_state.randint(0, n_timestep - shapelet_length)
         return p[start_index : (start_index + shapelet_length)]
 
-    def sample(self, _o):
-        return self.sample_shapelet(self.x[self._get_random_index()])
+    def sample(self, _o, random_state):
+        return self.sample_shapelet(
+            self.x[self._get_random_index(random_state)], random_state
+        )
 
     def move(self, o, p):
         """Move the best matching shapelet of the  counterfactual sample towards
@@ -610,29 +597,27 @@ class KNearestShapeletPrototypeSampler(PrototypeSampler):
         self,
         x,
         y,
-        n_prototypes,
+        prototype_indicies,
         metric_transform,
-        random_state,
         min_shapelet_size=0,
         max_shapelet_size=1,
     ):
-        super().__init__(x, y, n_prototypes, metric_transform, random_state)
+        super().__init__(x, y, prototype_indicies, metric_transform)
         self.nearest_sampler = KNearestPrototypeSampler(
-            x, y, n_prototypes, metric_transform, random_state
+            x, y, prototype_indicies, metric_transform
         )
         self.shapelet_sampler = ShapeletPrototypeSampler(
             x,
             y,
-            n_prototypes,
+            prototype_indicies,
             metric_transform,
-            random_state,
             min_shapelet_size,
             max_shapelet_size,
         )
 
-    def sample(self, o):
-        p = self.nearest_sampler.nearest_index(o)
-        return self.shapelet_sampler.sample_shapelet(self.x[p])
+    def sample(self, o, random_state):
+        p = self.nearest_sampler.nearest_index(o, random_state)
+        return self.shapelet_sampler.sample_shapelet(self.x[p], random_state)
 
     def move(self, o, p):
         return self.shapelet_sampler.move(o, p)
