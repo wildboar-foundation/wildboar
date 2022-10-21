@@ -30,7 +30,7 @@ class BaseTree(BaseEstimator):
     def decision_path(self, x, check_input=True):
         check_is_fitted(self, attributes="tree_")
         if check_input:
-            x = self._validate_data(x, dtype=float, reset=False)
+            x = self._validate_data(x, dtype=float, allow_3d=True, reset=False)
         else:
             x = self._validate_force_n_dims(x)
 
@@ -39,7 +39,7 @@ class BaseTree(BaseEstimator):
     def apply(self, x, check_input=True):
         check_is_fitted(self, attributes="tree_")
         if check_input:
-            x = self._validate_data(x, dtype=float, reset=False)
+            x = self._validate_data(x, dtype=float, allow_3d=True, reset=False)
         else:
             x = self._validate_force_n_dims(x)
 
@@ -197,7 +197,6 @@ class TreeClassifierMixin(ClassifierMixin):
         y : ndarray of shape (n_samples,)
             The predicted classes.
         """
-        x = self._validate_force_n_dims(x)
         proba = self.predict_proba(x, check_input=check_input)
         return self.classes_.take(np.argmax(proba, axis=1), axis=0)
 
