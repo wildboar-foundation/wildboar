@@ -4,6 +4,7 @@
 import math
 import numbers
 from abc import ABCMeta, abstractmethod
+from ensurepip import bootstrap
 
 import numpy as np
 from joblib import Parallel, delayed
@@ -1140,7 +1141,6 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         min_samples_split=2,
         max_samples="auto",
         contamination="auto",
-        contamination_set="training",
         warm_start=False,
         metric="euclidean",
         metric_params=None,
@@ -1171,33 +1171,30 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         max_samples : float or int
             The number of samples to draw to train each base estimator
 
-        contamination : str, float or callable
+        contamination : {'roc_auc', 'average_precision'}, float or callable
             The strategy for computing the offset (see `offset_`)
 
-            - if 'auto' ``offset_=-0.5``
-            - if 'auc' ``offset_`` is computed as the offset that maximizes the
-              area under ROC in the training or out-of-bag set
-              (see ``contamination_set``).
-            - if 'prc' ``offset_`` is computed as the offset that maximizes the
-              area under PRC in the training or out-of-bag set
-              (see ``contamination_set``)
+            - if 'auto', `offset_=-0.5`
+
+            - if 'roc_auc', `offset_` is computed as the offset that maximizes the area
+              under ROC.
+
+            - if 'average_precision' ``offset_`` is computed as the offset that
+              maximizes the area under PRC.
+
             - if callable ``offset_`` is computed as the offset that maximizes the score
-              computed by the callable in training or out-of-bag set
-              (see ``contamination_set``)
-            - if float ``offset_`` is computed as the c:th percentile of scores in the
-              training or out-of-bag set (see ``contamination_set``)
+              computed by the callable.
 
-            Setting contamination to either 'auc' or 'prc' require that `y` is passed
-            to `fit`.
+            - if float ``offset_`` is computed as the c:th percentile of scores.
 
-        contamination_set : {'training', 'oob'}, optional
-            Compute the ``offset_`` from either the out-of-bag samples or the training
-            samples.'oob' require `bootstrap=True`.
+            Setting contamination to either 'roc_auc' or 'average_precision' require
+            that `y` is passed to `fit`.
+
+            If `bootstrap=True`, out-of-bag samples are used for computing the scores.
 
         warm_start : bool, optional
-            When set to True, reuse the solution of the previous call to fit
-            and add more estimators to the ensemble, otherwise, just fit
-            a whole new ensemble.
+            When set to True, reuse the solution of the previous call to fit and add
+            more estimators to the ensemble, otherwise, just fit a whole new ensemble.
 
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Set the metric used to compute the distance between shapelet and time series
@@ -1232,7 +1229,6 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         self.max_shapelet_size = max_shapelet_size
         self.min_samples_split = min_samples_split
         self.contamination = contamination
-        self.contamination_set = contamination_set
         self.max_samples = max_samples
 
     def _set_oob_score(self, x, y):
@@ -1251,7 +1247,8 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
                 max_samples = min(x.shape[0], 256)
             else:
                 raise ValueError(
-                    "max_samples must be 'auto', got %r." % self.max_samples
+                    "max_samples must be 'auto', int or float, got %r."
+                    % self.max_samples
                 )
         elif isinstance(self.max_samples, numbers.Integral):
             max_samples = min(self.max_samples, x.shape[0])
@@ -1275,6 +1272,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
             max_samples=max_samples,
             max_depth=max_depth,
             sample_weight=sample_weight,
+            check_input=False,
         )
 
         self.max_samples_ = max_samples
@@ -1286,12 +1284,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
                     "contamination cannot be computed without training labels"
                 )
 
-            if self.contamination_set == "oob":
-                if not self.bootstrap:
-                    raise ValueError(
-                        "contamination cannot be computed from oob-samples "
-                        "unless bootstrap is set to true"
-                    )
+            if self.bootstrap:
                 scores = self._oob_score_samples(x)
             else:
                 scores = self.score_samples(x)
@@ -1307,34 +1300,17 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
                 score = threshold_score(y, scores, self.contamination)
                 best_threshold = np.argmax(score)
                 thresholds = scores
+
             self.offset_ = thresholds[best_threshold]
         elif isinstance(self.contamination, numbers.Real):
-            check_scalar(
-                self.contamination,
-                "contamination",
-                numbers.Real,
-                min_val=0,
-                max_val=1.0,
-                include_boundaries="right",
-            )
-            if self.contamination_set == "training":
-                self.offset_ = np.percentile(
-                    self.score_samples(x), 100.0 * self.contamination
-                )
-            elif self.contamination_set == "oob":
-                if not self.bootstrap:
-                    raise ValueError(
-                        "contamination cannot be computed from oob-samples "
-                        "unless bootstrap is set to True"
-                    )
-                self.offset_ = np.percentile(
-                    self._oob_score_samples(x), 100.0 * self.contamination
-                )
+            if not 0 < self.contamination <= 0.5:
+                raise ValueError("contamination must be in (0, 0.5]")
+            if self.bootstrap:
+                scores = self._oob_score_samples(x)
             else:
-                raise ValueError(
-                    "contamination_set must be 'oob' or 'training', got %r."
-                    % self.contamination_set
-                )
+                scores = self.score_samples(x)
+
+            self.offset_ = np.percentile(scores, 100.0 * self.contamination)
         else:
             raise ValueError(
                 "contamination must be 'roc', 'prc', callable or float, got %r."
@@ -1343,9 +1319,21 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
         return self
 
+    def fit_predict(self, X, y=None):
+        # We don't allow y to be used if the contamination is computed using the
+        # labels of the training data unless its computed for the oob samples.
+        if (
+            self.contamination != "auto"
+            or not isinstance(self.contamination, numbers.Real)
+        ) and not bootstrap:
+            return self.fit(X).predict(X)
+
+        return self.fit(X, y).predict(X)
+
     def predict(self, x):
-        is_inlier = np.ones(x.shape[0])
-        is_inlier[self.decision_function(x) < 0] = -1
+        decision = self.decision_function(x)
+        is_inlier = np.ones(decision.shape[0], dtype=int)
+        is_inlier[decision < 0] = -1
         return is_inlier
 
     def decision_function(self, x):
@@ -1360,17 +1348,23 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         n_samples = x.shape[0]
         score_samples = np.zeros((n_samples,))
 
+        # We need to make this more efficient
         for i in range(x.shape[0]):
             estimators = []
             for estimator, samples in zip(self.estimators_, self.estimators_samples_):
                 if i not in samples:
                     estimators.append(estimator)
-            score_samples[i] = _score_samples(
-                x[i].reshape((1, self.n_dims_, self.n_timestep_)),
-                estimators,
-                self.max_samples_,
-            )
+            score_samples[i] = _score_samples(x[[i]], estimators, self.max_samples_)
         return score_samples
+
+    def _more_tags(self):
+        return {
+            "_xfail_checks": {
+                "check_sample_weights_invariance": (
+                    "zero sample_weight is not equivalent to removing samples"
+                ),
+            }
+        }
 
 
 def _score_samples(x, estimators, max_samples):
@@ -1379,8 +1373,8 @@ def _score_samples(x, estimators, max_samples):
     depths = np.zeros(x.shape[0], order="F")
 
     for tree in estimators:
-        leaves_index = tree.apply(x)
-        node_indicator = tree.decision_path(x)
+        leaves_index = tree.apply(x, check_input=False)
+        node_indicator = tree.decision_path(x, check_input=False)
         n_samples_leaf = tree.tree_.n_node_samples[leaves_index]
 
         depths += (
@@ -1388,8 +1382,10 @@ def _score_samples(x, estimators, max_samples):
             + _average_path_length(n_samples_leaf)
             - 1.0
         )
-    scores = 2 ** (
-        -depths / (len(estimators) * _average_path_length(np.array([max_samples])))
+
+    denominator = len(estimators) * _average_path_length(np.array([max_samples]))
+    scores = 2 ** -np.divide(
+        depths, denominator, out=np.ones_like(depths), where=denominator != 0
     )
     return -scores
 

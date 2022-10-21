@@ -32,6 +32,9 @@ def _yield_classifier_test(estimator):
         yield partial(check_sample_weights_invariance_samples_order, kind="ones")
         yield partial(check_sample_weights_invariance_samples_order, kind="zeros")
 
+    # if not _safe_tags(estimator).get("poor_score", False):
+    #     yield check_decent_score
+
 
 def _yield_regressor_checks(estimator):
     pass
