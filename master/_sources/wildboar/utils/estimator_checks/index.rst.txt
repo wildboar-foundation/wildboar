@@ -24,7 +24,7 @@ Functions
 .. py:function:: check_consistent_estimator_params(name, estimator)
 
 
-.. py:function:: check_estimator(estimator, generate_only=False, ignore=None)
+.. py:function:: check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False)
 
    Check if estimator adheres to scikit-learn (and wildboar) conventions.
 
@@ -46,6 +46,8 @@ Functions
    :type generate_only: bool, default=False
    :param ignore: Ignore the checks in the list.
    :type ignore: list, optional
+   :param skip_scikit: Skip all scikit-learn tests.
+   :type skip_scikit: bool, optional
 
    :returns: **checks_generator** -- Generator that yields (estimator, check) tuples. Returned when
              `generate_only=True`.

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.utils.plot" href="../plot/index.html" /><link rel="prev" title="wildboar.utils.decorators" href="../decorators/index.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>wildboar.utils.estimator_checks - Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</title>
+        <title>wildboar.utils.estimator_checks - Wildboar 1.1.0rc5.dev157+g3882ad91 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev148+gbd8f82d7 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev157+g3882ad91 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -353,7 +353,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_consistent_estimator_params" title="wildboar.utils.estimator_checks.check_consistent_estimator_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_consistent_estimator_params</span></code></a>(name, estimator)</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_estimator" title="wildboar.utils.estimator_checks.check_estimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_estimator</span></code></a>(estimator[, generate_only, ignore])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_estimator" title="wildboar.utils.estimator_checks.check_estimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_estimator</span></code></a>(estimator[, generate_only, ignore, ...])</p></td>
 <td><p>Check if estimator adheres to scikit-learn (and wildboar) conventions.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.utils.estimator_checks.check_force_n_dims" title="wildboar.utils.estimator_checks.check_force_n_dims"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_force_n_dims</span></code></a>(name, estimator)</p></td>
@@ -370,12 +370,12 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_consistent_estimator_params">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_consistent_estimator_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L207-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_consistent_estimator_params" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_consistent_estimator_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L259-L269"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_consistent_estimator_params" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_estimator">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L44-L123"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_estimator" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_estimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generate_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_scikit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L84-L171"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_estimator" title="Permalink to this definition">#</a></dt>
 <dd><p>Check if estimator adheres to scikit-learn (and wildboar) conventions.</p>
 <p>This method delegates to <cite>check_estimator</cite> in scikit-learn but monkey-patches
 the estimator with tags to skip some tests related to performance.</p>
@@ -392,6 +392,7 @@ When <cite>True</cite>, <cite>check_estimator</cite> returns a generator that yi
 (estimator, check) tuples. The check is run by calling
 <cite>check(estimator)</cite>.</p></li>
 <li><p><strong>ignore</strong> (<em>list</em><em>, </em><em>optional</em>) – Ignore the checks in the list.</p></li>
+<li><p><strong>skip_scikit</strong> (<em>bool</em><em>, </em><em>optional</em>) – Skip all scikit-learn tests.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -406,12 +407,12 @@ When <cite>True</cite>, <cite>check_estimator</cite> returns a generator that yi
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_force_n_dims">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_force_n_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L252-L261"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_force_n_dims" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_force_n_dims</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L304-L313"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_force_n_dims" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.estimator_checks.check_force_n_dims_raises">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_force_n_dims_raises</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L220-L249"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_force_n_dims_raises" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.estimator_checks.</span></span><span class="sig-name descname"><span class="pre">check_force_n_dims_raises</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/estimator_checks.py#L272-L301"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.estimator_checks.check_force_n_dims_raises" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">

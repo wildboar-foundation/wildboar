@@ -85,7 +85,7 @@ Classes
 
 
 
-.. py:class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+.. py:class:: KNearestPrototypeSampler(x, y, prototype_indicies, metric_transform)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -104,7 +104,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: nearest_index(o)
+   .. py:method:: nearest_index(o, random_state)
 
       Return the index of the closest sample
 
@@ -115,7 +115,7 @@ Classes
       :rtype: an index
 
 
-   .. py:method:: sample(o)
+   .. py:method:: sample(o, random_state)
 
       Sample an example
 
@@ -127,7 +127,7 @@ Classes
 
 
 
-.. py:class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
+.. py:class:: KNearestShapeletPrototypeSampler(x, y, prototype_indicies, metric_transform, min_shapelet_size=0, max_shapelet_size=1)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -161,7 +161,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(o)
+   .. py:method:: sample(o, random_state)
 
       Sample an example
 
@@ -306,7 +306,7 @@ Classes
 
 
 
-.. py:class:: PrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+.. py:class:: PrototypeSampler(x, y, prototype_indices, metric_transform)
 
    Bases: :py:obj:`abc.ABC`
 
@@ -339,7 +339,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(o)
+   .. py:method:: sample(o, random_state)
       :abstractmethod:
 
       Sample an example
@@ -351,7 +351,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample_move(o)
+   .. py:method:: sample_move(o, random_state)
 
       Sampla a prototype and move the counterfactual towards the prototype
 
@@ -363,7 +363,7 @@ Classes
 
 
 
-.. py:class:: ShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
+.. py:class:: ShapeletPrototypeSampler(x, y, prototype_indicies, metric_transform, min_shapelet_size=0, max_shapelet_size=1)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -398,7 +398,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(_o)
+   .. py:method:: sample(_o, random_state)
 
       Sample an example
 
@@ -409,7 +409,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample_shapelet(p)
+   .. py:method:: sample_shapelet(p, random_state)
 
       Sample a shapelet from x
 
@@ -446,7 +446,7 @@ Classes
 
 
 
-.. py:class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+.. py:class:: UniformPrototypeSampler(x, y, prototype_indices, metric_transform)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -465,7 +465,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: sample(_o)
+   .. py:method:: sample(_o, random_state)
 
       Sample an example
 

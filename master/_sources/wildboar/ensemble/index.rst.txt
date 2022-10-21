@@ -245,7 +245,7 @@ Classes
    An ensemble of interval tree regressors.
 
 
-.. py:class:: IsolationShapeletForest(*, n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', contamination_set='training', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
+.. py:class:: IsolationShapeletForest(*, n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
 
    Bases: :py:obj:`sklearn.base.OutlierMixin`, :py:obj:`ForestMixin`, :py:obj:`BaseBagging`
 
@@ -309,28 +309,26 @@ Classes
    :type max_samples: float or int
    :param contamination: The strategy for computing the offset (see `offset_`)
 
-                         - if 'auto' ``offset_=-0.5``
-                         - if 'auc' ``offset_`` is computed as the offset that maximizes the
-                           area under ROC in the training or out-of-bag set
-                           (see ``contamination_set``).
-                         - if 'prc' ``offset_`` is computed as the offset that maximizes the
-                           area under PRC in the training or out-of-bag set
-                           (see ``contamination_set``)
-                         - if callable ``offset_`` is computed as the offset that maximizes the score
-                           computed by the callable in training or out-of-bag set
-                           (see ``contamination_set``)
-                         - if float ``offset_`` is computed as the c:th percentile of scores in the
-                           training or out-of-bag set (see ``contamination_set``)
+                         - if 'auto', `offset_=-0.5`
 
-                         Setting contamination to either 'auc' or 'prc' require that `y` is passed
-                         to `fit`.
-   :type contamination: str, float or callable
-   :param contamination_set: Compute the ``offset_`` from either the out-of-bag samples or the training
-                             samples.'oob' require `bootstrap=True`.
-   :type contamination_set: {'training', 'oob'}, optional
-   :param warm_start: When set to True, reuse the solution of the previous call to fit
-                      and add more estimators to the ensemble, otherwise, just fit
-                      a whole new ensemble.
+                         - if 'roc_auc', `offset_` is computed as the offset that maximizes the area
+                           under ROC.
+
+                         - if 'average_precision' ``offset_`` is computed as the offset that
+                           maximizes the area under PRC.
+
+                         - if callable ``offset_`` is computed as the offset that maximizes the score
+                           computed by the callable.
+
+                         - if float ``offset_`` is computed as the c:th percentile of scores.
+
+                         Setting contamination to either 'roc_auc' or 'average_precision' require
+                         that `y` is passed to `fit`.
+
+                         If `bootstrap=True`, out-of-bag samples are used for computing the scores.
+   :type contamination: {'roc_auc', 'average_precision'}, float or callable
+   :param warm_start: When set to True, reuse the solution of the previous call to fit and add
+                      more estimators to the ensemble, otherwise, just fit a whole new ensemble.
    :type warm_start: bool, optional
    :param metric: Set the metric used to compute the distance between shapelet and time series
    :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
@@ -363,6 +361,21 @@ Classes
 
       :returns: **self** -- Fitted estimator.
       :rtype: object
+
+
+   .. py:method:: fit_predict(X, y=None)
+
+      Perform fit on X and returns labels for X.
+
+      Returns -1 for outliers and 1 for inliers.
+
+      :param X: The input samples.
+      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
+      :param y: Not used, present for API consistency by convention.
+      :type y: Ignored
+
+      :returns: **y** -- 1 for inliers, -1 for outliers.
+      :rtype: ndarray of shape (n_samples,)
 
 
    .. py:method:: predict(x)
