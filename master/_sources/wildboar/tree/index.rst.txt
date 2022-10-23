@@ -35,7 +35,7 @@ Classes
 
 
 
-.. py:class:: ExtraShapeletTreeClassifier(*, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
+.. py:class:: ExtraShapeletTreeClassifier(*, n_shapelets=1, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
    Bases: :py:obj:`ShapeletTreeClassifier`
 
@@ -50,6 +50,8 @@ Classes
 
       :type: Tree
 
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
    :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
                      leaves are pure or until all leaves contain less than `min_samples_split`
                      samples
@@ -88,7 +90,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. py:class:: ExtraShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
+.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
    Bases: :py:obj:`ShapeletTreeRegressor`
 
@@ -103,6 +105,8 @@ Classes
 
       :type: Tree
 
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
    :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
                      leaves are pure or until all leaves contain less than `min_samples_split`
                      samples
@@ -515,7 +519,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
+.. py:class:: ShapeletTreeClassifier(*, n_shapelets='warn', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
 
@@ -605,7 +609,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
+.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 

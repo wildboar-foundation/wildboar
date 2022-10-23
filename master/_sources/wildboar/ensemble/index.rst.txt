@@ -245,7 +245,7 @@ Classes
    An ensemble of interval tree regressors.
 
 
-.. py:class:: IsolationShapeletForest(*, n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
+.. py:class:: IsolationShapeletForest(*, n_shapelets='log2', n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
 
    Bases: :py:obj:`sklearn.base.OutlierMixin`, :py:obj:`ForestMixin`, :py:obj:`BaseBagging`
 
@@ -363,21 +363,6 @@ Classes
       :rtype: object
 
 
-   .. py:method:: fit_predict(X, y=None)
-
-      Perform fit on X and returns labels for X.
-
-      Returns -1 for outliers and 1 for inliers.
-
-      :param X: The input samples.
-      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
-      :param y: Not used, present for API consistency by convention.
-      :type y: Ignored
-
-      :returns: **y** -- 1 for inliers, -1 for outliers.
-      :rtype: ndarray of shape (n_samples,)
-
-
    .. py:method:: predict(x)
 
 
@@ -419,7 +404,7 @@ Classes
    An ensemble of rocket tree regressors.
 
 
-.. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
+.. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets='warn', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseShapeletForestClassifier`
 
@@ -570,7 +555,7 @@ Classes
 
 
 
-.. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets='warn', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
