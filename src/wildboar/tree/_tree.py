@@ -174,7 +174,7 @@ class BaseShapeletTree(BaseFeatureTree):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        n_shapelets=10,
+        n_shapelets="warn",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         metric="euclidean",
@@ -209,7 +209,6 @@ class BaseShapeletTree(BaseFeatureTree):
             min_val=0.0,
             max_val=self.max_shapelet_size,
         )
-        check_scalar(self.n_shapelets, "n_shapelets", numbers.Integral, min_val=1)
 
         max_shapelet_size = math.ceil(self.n_timesteps_in_ * self.max_shapelet_size)
         min_shapelet_size = math.ceil(self.n_timesteps_in_ * self.min_shapelet_size)
@@ -226,6 +225,38 @@ class BaseShapeletTree(BaseFeatureTree):
             else:
                 min_shapelet_size = 2
 
+        # TODO(1.2): change the default value
+        if self.n_shapelets == "warn":
+            warnings.warn(
+                "The default value of n_shapelets will change from 10 to 'log2' in 1.2",
+                FutureWarning,
+            )
+            n_shapelets = 10
+        elif isinstance(self.n_shapelets, str) or callable(self.n_shapelets):
+            if min_shapelet_size < max_shapelet_size:
+                possible_shapelets = sum(
+                    self.n_timesteps_in_ - curr_len + 1
+                    for curr_len in range(min_shapelet_size, max_shapelet_size)
+                )
+            else:
+                possible_shapelets = self.n_timesteps_in_ - min_shapelet_size + 1
+
+            if self.n_shapelets == "log2":
+                n_shapelets = int(np.log2(possible_shapelets))
+            elif self.n_shapelets == "sqrt":
+                n_shapelets = int(np.sqrt(possible_shapelets))
+            elif callable(self.n_shapelets):
+                n_shapelets = max(1, self.n_shapelets(possible_shapelets))
+            else:
+                raise ValueError(
+                    "n_shapelets must be 'log2', 'sqrt' or callable, got %r"
+                    % self.n_shapelets
+                )
+        else:
+            n_shapelets = check_scalar(
+                self.n_shapelets, "n_shapelets", numbers.Integral, min_val=1
+            )
+
         DistanceMeasure = check_option(
             _SUBSEQUENCE_DISTANCE_MEASURE, self.metric, "metric"
         )
@@ -234,7 +265,7 @@ class BaseShapeletTree(BaseFeatureTree):
             DistanceMeasure(**metric_params),
             min_shapelet_size,
             max_shapelet_size,
-            self.n_shapelets,
+            n_shapelets,
         )
 
 
@@ -258,7 +289,7 @@ class ShapeletTreeRegressor(
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        n_shapelets=10,
+        n_shapelets="warn",
         min_shapelet_size=0,
         max_shapelet_size=1,
         alpha=None,
@@ -373,6 +404,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     def __init__(
         self,
         *,
+        n_shapelets=1,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -387,6 +419,9 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         """
         Parameters
         ----------
+        n_shapelets : int, optional
+            The number of shapelets to sample at each node.
+
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
@@ -437,7 +472,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            n_shapelets=1,
+            n_shapelets=n_shapelets,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -508,7 +543,7 @@ class ShapeletTreeClassifier(
     def __init__(
         self,
         *,
-        n_shapelets=10,
+        n_shapelets="warn",
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -627,6 +662,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
     def __init__(
         self,
         *,
+        n_shapelets=1,
         max_depth=None,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
@@ -642,6 +678,9 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         """
         Parameters
         ----------
+        n_shapelets : int, optional
+            The number of shapelets to sample at each node.
+
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
@@ -693,7 +732,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            n_shapelets=1,
+            n_shapelets=n_shapelets,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,

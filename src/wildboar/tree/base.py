@@ -70,8 +70,7 @@ class TreeRegressorMixin(RegressorMixin):
             single class carrying a negative weight in either child node.
 
         check_input : bool, optional
-            Allow to bypass several input checking. Don't use this parameter unless you
-            know what you do.
+            Allow to bypass several input checks
 
         Returns
         -------
@@ -131,7 +130,7 @@ class TreeClassifierMixin(ClassifierMixin):
             The training time series.
 
         y : array-like of shape (n_samples,)
-            The target values (class labels) as integers
+            The target values
 
         sample_weight : array-like of shape (n_samples,)
             If `None`, then samples are equally weighted. Splits that would create child
@@ -140,8 +139,7 @@ class TreeClassifierMixin(ClassifierMixin):
             single class carrying a negative weight in either child node.
 
         check_input : bool, optional
-            Allow to bypass several input checking. Don't use this parameter unless you
-            know what you do.
+            Allow to bypass several input checks.
 
         Returns
         -------

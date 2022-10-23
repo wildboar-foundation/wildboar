@@ -4,7 +4,6 @@
 import math
 import numbers
 from abc import ABCMeta, abstractmethod
-from ensurepip import bootstrap
 
 import numpy as np
 from joblib import Parallel, delayed
@@ -266,7 +265,7 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        n_shapelets=10,
+        n_shapelets="warn",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         metric="euclidean",
@@ -320,7 +319,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         self,
         n_estimators=100,
         *,
-        n_shapelets=10,
+        n_shapelets="warn",
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -684,7 +683,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        n_shapelets=10,
+        n_shapelets="warn",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         metric="euclidean",
@@ -738,7 +737,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         self,
         n_estimators=100,
         *,
-        n_shapelets=10,
+        n_shapelets="warn",
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -1133,6 +1132,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
     def __init__(
         self,
         *,
+        n_shapelets="log",
         n_estimators=100,
         bootstrap=False,
         n_jobs=None,
@@ -1217,12 +1217,14 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
             random_state=random_state,
         )
         self.estimator_params = (
+            "n_shapelets",
             "min_samples_split",
             "min_shapelet_size",
             "max_shapelet_size",
             "metric",
             "metric_params",
         )
+        self.n_shapelets = n_shapelets
         self.metric = metric
         self.metric_params = metric_params
         self.min_shapelet_size = min_shapelet_size
@@ -1325,7 +1327,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         if (
             self.contamination != "auto"
             or not isinstance(self.contamination, numbers.Real)
-        ) and not bootstrap:
+        ) and not self.bootstrap:
             return self.fit(X).predict(X)
 
         return self.fit(X, y).predict(X)
