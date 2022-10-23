@@ -246,7 +246,7 @@ class BaseShapeletTree(BaseFeatureTree):
             elif self.n_shapelets == "sqrt":
                 n_shapelets = int(np.sqrt(possible_shapelets))
             elif callable(self.n_shapelets):
-                n_shapelets = max(1, self.n_shapelets(possible_shapelets))
+                n_shapelets = int(self.n_shapelets(possible_shapelets))
             else:
                 raise ValueError(
                     "n_shapelets must be 'log2', 'sqrt' or callable, got %r"
@@ -265,7 +265,7 @@ class BaseShapeletTree(BaseFeatureTree):
             DistanceMeasure(**metric_params),
             min_shapelet_size,
             max_shapelet_size,
-            n_shapelets,
+            max(1, n_shapelets),
         )
 
 

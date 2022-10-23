@@ -19,7 +19,7 @@ def load_test_dataset():
 
 def test_fit_predict_score_sample():
     X_train, X_test, y_train, y_test = load_test_dataset()
-    isf = IsolationShapeletForest(random_state=0)
+    isf = IsolationShapeletForest(n_shapelets=1, random_state=0)
     isf.fit(X_train)
 
     expected_score_samples = [

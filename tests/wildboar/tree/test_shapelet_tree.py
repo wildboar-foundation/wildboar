@@ -58,15 +58,15 @@ def test_invalid_params(estimator, invalid_params):
 
 
 def test_check_estimator():
-    check_estimator(ShapeletTreeClassifier())
-    check_estimator(ShapeletTreeRegressor())
-    check_estimator(ExtraShapeletTreeClassifier())
-    check_estimator(ExtraShapeletTreeRegressor())
+    check_estimator(ShapeletTreeClassifier(n_shapelets=10))
+    check_estimator(ShapeletTreeRegressor(n_shapelets=10))
+    check_estimator(ExtraShapeletTreeClassifier(n_shapelets=10))
+    check_estimator(ExtraShapeletTreeRegressor(n_shapelets=10))
 
 
 def test_shapelet_tree_apply():
     x_train, x_test, y_train, y_test = load_gun_point(False)
-    f = ShapeletTreeClassifier(random_state=123)
+    f = ShapeletTreeClassifier(n_shapelets=10, random_state=123)
     f.fit(x_test, y_test)
     actual_apply = f.apply(x_train)
     expected_apply = np.array(
@@ -130,7 +130,7 @@ def test_shapelet_tree_apply():
 
 def test_shapelet_tree_decision_path():
     x_train, x_test, y_train, y_test = load_gun_point(False)
-    f = ShapeletTreeClassifier(random_state=123)
+    f = ShapeletTreeClassifier(n_shapelets=10, random_state=123)
     f.fit(x_test, y_test)
     actual_decision_path = f.decision_path(x_train)
 
@@ -2252,7 +2252,9 @@ def test_shapelet_tree_decision_path():
 )
 def test_extra_tree_classifier(criterion, expected_left, expected_right, threshold):
     x, y = load_gun_point()
-    f = ExtraShapeletTreeClassifier(criterion=criterion, random_state=123)
+    f = ExtraShapeletTreeClassifier(
+        n_shapelets=1, criterion=criterion, random_state=123
+    )
     f.fit(x, y)
     assert (f.predict(x) == y).sum() == 191
     assert_equal(f.tree_.left, expected_left)
@@ -2263,7 +2265,9 @@ def test_extra_tree_classifier(criterion, expected_left, expected_right, thresho
 
 def test_extra_tree_regressor():
     x, y = load_gun_point()
-    f = ExtraShapeletTreeRegressor(criterion="mse", random_state=123)
+    f = ExtraShapeletTreeRegressor(
+        n_shapelets=1, criterion="squared_error", random_state=123
+    )
     f.fit(x, y.astype(float))
     assert_almost_equal(f.tree_.threshold[0], 2.3858733725835246)
     assert_almost_equal(f.tree_.threshold[6], 7.163849443826518)

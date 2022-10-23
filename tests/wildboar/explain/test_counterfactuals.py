@@ -56,7 +56,7 @@ def test_counterfactuals_best(clf, expected_score):
         method="best",
         train_x=x_train,
         train_y=y_train,
-        scoring="euclidean",
+        proximity="euclidean",
         random_state=123,
     )
     assert_almost_equal(actual_score, expected_score)
