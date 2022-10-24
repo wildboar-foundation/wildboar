@@ -9,21 +9,109 @@ import numpy as np
 from sklearn import clone
 from sklearn.cluster import DBSCAN, OPTICS, KMeans
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.kernel_approximation import Nystroem
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, pairwise_distances
 from sklearn.neighbors import NearestNeighbors
-from sklearn.utils import check_random_state, check_scalar
+from sklearn.utils import check_random_state
+from sklearn.utils.validation import _is_arraylike, check_is_fitted
 
-from ..linear_model import KernelLogisticRegression
+from ..transform import IntervalTransform
 from ..utils import _soft_dependency_error
 from ..utils.validation import check_array, check_option, check_X_y
 
 __all__ = [
+    "KernelLogisticRegression",
     "kmeans_outliers",
     "density_outliers",
     "minority_outliers",
     "majority_outliers",
     "emmott_outliers",
 ]
+
+
+class KernelLogisticRegression(LogisticRegression):
+    """A simple kernel logistic implementation using a Nystroem kernel approximation
+
+    See Also
+    --------
+    wildboar.datasets.outlier.EmmottLabeler : Synthetic outlier dataset construction
+
+    """
+
+    def __init__(
+        self,
+        kernel=None,
+        *,
+        kernel_params=None,
+        n_components=100,
+        penalty="l2",
+        dual=False,
+        tol=1e-4,
+        C=1.0,
+        fit_intercept=True,
+        intercept_scaling=1,
+        class_weight=None,
+        random_state=None,
+        solver="lbfgs",
+        max_iter=100,
+        multi_class="auto",
+        verbose=0,
+        warm_start=False,
+        n_jobs=None,
+        l1_ratio=None,
+    ):
+        """
+        Parameters
+        ----------
+        kernel : str, optional
+            The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
+            for kernels. The default kernel is 'rbf'.
+
+        kernel_params : dict, optional
+            Parameters to the kernel function.
+
+        n_components : int, optional
+            Number of features to construct
+        """
+        super().__init__(
+            penalty=penalty,
+            dual=dual,
+            tol=tol,
+            C=C,
+            fit_intercept=fit_intercept,
+            intercept_scaling=intercept_scaling,
+            class_weight=class_weight,
+            random_state=random_state,
+            solver=solver,
+            max_iter=max_iter,
+            multi_class=multi_class,
+            verbose=verbose,
+            warm_start=warm_start,
+            n_jobs=n_jobs,
+            l1_ratio=l1_ratio,
+        )
+        self.kernel = kernel
+        self.kernel_params = kernel_params
+        self.n_components = n_components
+
+    def fit(self, x, y, sample_weight=None):
+        random_state = check_random_state(self.random_state)
+        kernel = self.kernel or "rbf"
+        n_components = min(x.shape[0], self.n_components)
+        self.nystroem_ = Nystroem(
+            kernel=kernel,
+            kernel_params=self.kernel_params,
+            n_components=n_components,
+            random_state=random_state.randint(np.iinfo(np.int32).max),
+        )
+        self.nystroem_.fit(x)
+        super().fit(self.nystroem_.transform(x), y, sample_weight=sample_weight)
+        return self
+
+    def decision_function(self, x):
+        check_is_fitted(self)
+        return super().decision_function(self.nystroem_.transform(x))
 
 
 def kmeans_outliers(
@@ -76,18 +164,12 @@ def kmeans_outliers(
     )
 
     k_means_.fit(x)
-    _, count = np.unique(k_means_.labels_, return_counts=True)
-    min_sample = _min_samples(x.shape[0], n_outliers)
-
-    invalid_clusters = np.where(count < min_sample)
-
     centroid_distance = pairwise_distances(
         k_means_.cluster_centers_, metric="euclidean"
     )
 
     # skip self matches and invalid clusters
     centroid_distance[centroid_distance == 0] = np.nan
-    centroid_distance[invalid_clusters] = np.nan
 
     if np.all(np.isnan(centroid_distance)):
         raise ValueError("There are no valid clusters.")
@@ -97,17 +179,12 @@ def kmeans_outliers(
         warnings.simplefilter("ignore", category=RuntimeWarning)
         outlier_cluster_ = np.nanargmax(np.nanmean(centroid_distance, axis=1))
 
-    outlier_indices = np.where(k_means_.labels_ == outlier_cluster_)[0]
-    inliers_indices = np.where(k_means_.labels_ != outlier_cluster_)[0]
-
-    random_state.shuffle(outlier_indices)
     return _make_outlier_arrays(
         x,
-        n_outliers=_n_outliers(
-            n_outliers, outlier_indices.shape[0], inliers_indices.shape[0]
-        ),
-        outlier_indicies=outlier_indices,
-        inlier_indicies=inliers_indices,
+        n_outliers=n_outliers,
+        outlier_indicies=np.where(k_means_.labels_ == outlier_cluster_)[0],
+        inlier_indicies=np.where(k_means_.labels_ != outlier_cluster_)[0],
+        random_state=random_state,
     )
 
 
@@ -176,21 +253,12 @@ def density_outliers(
     elif not np.any(label == -1):
         raise ValueError("There are no outlier points.")
 
-    outlier_indicies = np.where(estimator.labels_ == -1)[0]
-    inlier_indicies = np.where(estimator.labels_ != -1)[0]
-    if outlier_indicies.shape[0] < _min_samples(inlier_indicies.shape[0], n_outliers):
-        raise ValueError(
-            "There are not enough outliers, got %d." % outlier_indicies.shape[0]
-        )
-
-    check_random_state(random_state).shuffle(outlier_indicies)
     return _make_outlier_arrays(
         x,
-        n_outliers=_n_outliers(
-            n_outliers, outlier_indicies.shape[0], inlier_indicies.shape[0]
-        ),
-        outlier_indicies=outlier_indicies,
-        inlier_indicies=inlier_indicies,
+        n_outliers=n_outliers,
+        outlier_indicies=np.where(estimator.labels_ == -1)[0],
+        inlier_indicies=np.where(estimator.labels_ != -1)[0],
+        random_state=check_random_state(random_state),
     )
 
 
@@ -228,21 +296,13 @@ def majority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     if len(labels) < 2:
         raise ValueError("Two labels are required, got %r" % len(labels))
 
-    outlier_label_ = labels[labels != labels[np.argmax(counts)]]
-    random_state = check_random_state(random_state)
-
-    outlier_indicator = np.isin(y, outlier_label_)
-    outlier_indicies = outlier_indicator.nonzero()[0]
-    inlier_indicies = (~outlier_indicator).nonzero()[0]
-    random_state.shuffle(outlier_indicies)
-
+    outlier_indicator = np.isin(y, labels[labels != labels[np.argmax(counts)]])
     return _make_outlier_arrays(
         x,
-        n_outliers=_n_outliers(
-            n_outliers, outlier_indicies.shape[0], inlier_indicies.shape[0]
-        ),
-        outlier_indicies=outlier_indicies,
-        inlier_indicies=inlier_indicies,
+        n_outliers=n_outliers,
+        outlier_indicies=outlier_indicator.nonzero()[0],
+        inlier_indicies=(~outlier_indicator).nonzero()[0],
+        random_state=check_random_state(random_state),
     )
 
 
@@ -284,28 +344,13 @@ def minority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     if len(labels) < 2:
         raise ValueError("Two labels are required, got %r" % len(labels))
 
-    min_label = np.argmin(label_count)
-
-    min_samples = _min_samples(x.shape[0] - label_count[min_label], n_outliers)
-    if label_count[min_label] < min_samples:
-        raise ValueError(
-            "Not enough samples of the minority class, got %d" % label_count[min_label]
-        )
-
-    outlier_label_ = labels[min_label]
-    random_state = check_random_state(random_state)
-
-    outlier_indicies = np.where(y == outlier_label_)[0]
-    random_state.shuffle(outlier_indicies)
-    inlier_indicies = np.where(y != outlier_label_)[0]
-
+    outlier_label = labels[np.argmin(label_count)]
     return _make_outlier_arrays(
         x,
-        n_outliers=_n_outliers(
-            n_outliers, outlier_indicies.shape[0], inlier_indicies.shape[0]
-        ),
-        outlier_indicies=outlier_indicies,
-        inlier_indicies=inlier_indicies,
+        n_outliers=n_outliers,
+        outlier_indicies=np.where(y == outlier_label)[0],
+        inlier_indicies=np.where(y != outlier_label)[0],
+        random_state=check_random_state(random_state),
     )
 
 
@@ -316,6 +361,7 @@ def emmott_outliers(
     n_outliers=None,
     confusion_estimator=None,
     difficulty_estimator=None,
+    transform="interval",
     difficulty="simplest",
     scale=None,
     variation="tight",
@@ -356,6 +402,14 @@ def emmott_outliers(
         ``predict_proba``. Defaults to a kernel logistic regression model with
         a RBF-kernel.
 
+    transform : 'interval' or Transform, optional
+        Transform x before the confusion and difficulty estimator.
+
+        - if None, no transformation is applied.
+        - if 'interval', use the :class:`transform.IntervalTransform` with default
+          parameters.
+        - otherwise, use the supplied transform
+
     difficulty : {'any', 'simplest', 'hardest'}, int or array-like, optional
         The difficulty of the outlier points quantized according to scale. The value
         should be in the range ``[1, len(scale)]`` with lower difficulty denoting
@@ -366,10 +420,12 @@ def emmott_outliers(
         - if 'simplest' the simplest n_outliers are selected
         - if 'hardest' the hardest n_outliers are selected
 
-    scale : array-like, optional
+    scale : int or array-like, optional
         The scale of quantized difficulty scores. Defaults to ``[0, 0.16, 0.3, 0.5]``.
         Scores (which are probabilities in the range [0, 1]) are fit into the ranges
         using ``np.digitize(difficulty, scale)``.
+
+        - if int, use `scale` percentiles based in the difficulty scores.
 
     variation : {'tight', 'dispersed'}, optional
         Selection procedure for sampling outlier samples. If ``difficulty="simplest"``
@@ -423,9 +479,29 @@ def emmott_outliers(
     random_state = check_random_state(random_state)
     n_classes = np.unique(y).shape[0]
 
+    if transform == "interval":
+        transform = IntervalTransform()
+    elif transform is not None:
+        transform = clone(transform)
+
+    if transform is not None:
+        transform.fit(x)
+
     if n_classes > 2:
+        if confusion_estimator is None:
+            confusion_estimator = RandomForestClassifier(n_jobs=-1, oob_score=True)
+        else:
+            confusion_estimator = clone(confusion_estimator)
+
+        _set_random_states(
+            confusion_estimator, random_state.randint(np.iinfo(np.int32).max)
+        )
         outlier_label = _emmott_multiclass_outlier_class(
-            x, y, confusion_estimator, random_state, n_classes
+            x,
+            y,
+            confusion_estimator=confusion_estimator,
+            transform=transform,
+            n_labels=n_classes,
         )
     elif n_classes == 2:
         labels, counts = np.unique(y, return_counts=True)
@@ -434,38 +510,37 @@ def emmott_outliers(
         raise ValueError("Two labels are required, got %r" % n_classes)
 
     outlier_indicator = np.isin(y, outlier_label)
-    if np.sum(outlier_indicator) < _min_samples(
-        x.shape[0] - outlier_indicator.shape[0], n_outliers
-    ):
-        raise ValueError(
-            "Not enough samples of the minority class, got %d"
-            % np.sum(outlier_indicator)
-        )
-
     y_new = np.ones(x.shape[0], dtype=int)
     y_new[outlier_indicator] = -1
 
     if difficulty_estimator is None:
         difficulty_estimator = KernelLogisticRegression(
-            kernel="poly", max_iter=1000, random_state=random_state
+            kernel="poly",
+            max_iter=1000,
+            random_state=random_state.randint(np.iinfo(np.int32).max),
         )
     else:
         difficulty_estimator = clone(difficulty_estimator)
-        _set_random_states(difficulty_estimator, random_state)
+        _set_random_states(
+            difficulty_estimator, random_state.randint(np.iinfo(np.int32).max)
+        )
 
     outliers_indices = np.where(y_new == -1)[0]
     inlier_indices = np.where(y_new == 1)[0]
     x_outliers = x[outliers_indices]
     y_outliers = y_new[outliers_indices]
 
-    difficulty_estimate = _emmott_estimate_difficulty(x, y_new, difficulty_estimator)
+    difficulty_estimate = _emmott_estimate_difficulty(
+        x, y_new, difficulty_estimator=difficulty_estimator, transform=transform
+    )
     difficulty_estimate = difficulty_estimate[outliers_indices].reshape(-1)
 
-    n_outliers_ = _n_outliers(n_outliers, y_outliers.shape[0], inlier_indices.shape[0])
+    outlier_fraction = y_outliers.shape[0] / x.shape[0]
+    if outlier_fraction > n_outliers:
+        n_outliers_ = min(
+            y_outliers.shape[0], math.ceil(n_outliers * inlier_indices.size)
+        )
 
-    if n_outliers_ < y_outliers.shape[0]:
-        scale = scale if scale is not None else _DEFAULT_EMMOTT_SCALE
-        difficulty_scores = np.digitize(difficulty_estimate, scale)
         if isinstance(difficulty, str):
             if difficulty == "any":
                 outlier_selector = np.arange(0, difficulty_estimate.shape[0])
@@ -483,25 +558,42 @@ def emmott_outliers(
                     % difficulty
                 )
         else:
-            outlier_selector = np.isin(difficulty_scores, difficulty)
-            min_samples = _min_samples(inlier_indices.shape[0], n_outliers)
-            if np.sum(outlier_selector) < min_samples:
-                scores, counts = np.unique(difficulty_scores, return_counts=True)
-                raise ValueError(
-                    "Not enough samples (%d) with the requested "
-                    "difficulty %s, available %s"
-                    % (
-                        min_samples,
-                        difficulty,
-                        ", ".join(["%d: %d" % (s, c) for s, c in zip(scores, counts)]),
-                    )
+            if scale is None:
+                scale = _DEFAULT_EMMOTT_SCALE
+            elif isinstance(scale, numbers.Integral):
+                scale = np.percentile(
+                    difficulty_estimate, np.linspace(0, 100, scale, endpoint=False)
                 )
-        x_outliers = x_outliers[outlier_selector]
+            elif _is_arraylike(scale):
+                scale = np.array(scale)
+            else:
+                raise ValueError(
+                    "scale must be int or array-like, not %r" % type(scale).__qualname__
+                )
+            difficulty_scores = np.digitize(difficulty_estimate, scale)
+            difficulties = np.unique(difficulty_scores)
+            if difficulty not in difficulties:
+                options = ", ".join([str(d) for d in difficulties[:-1]])
+                raise ValueError(
+                    f"difficulty must be {options} or {difficulties[-1]}, "
+                    f"got {difficulty}"
+                )
+            outlier_selector = np.isin(difficulty_scores, difficulty)
 
-    variation = check_option(_EMMOTT_VARIATION, variation, "variation")
-    outlier_sampled = variation(
-        x_outliers, n_outliers_, random_state.randint(np.iinfo(np.int32).max)
-    )
+        x_outliers = x_outliers[outlier_selector]
+        variation = check_option(_EMMOTT_VARIATION, variation, "variation")
+        outlier_sampled = variation(
+            x_outliers, n_outliers_, random_state.randint(np.iinfo(np.int32).max)
+        )
+    else:
+        outlier_sampled = np.arange(y_outliers.shape[0])
+
+    if outlier_sampled.shape[0] / x.shape[0] < n_outliers:
+        n_inliers = math.ceil(
+            outlier_sampled.shape[0] / n_outliers - outlier_sampled.shape[0]
+        )
+        random_state.shuffle(inlier_indices)
+        inlier_indices = inlier_indices[:n_inliers]
 
     return (
         np.concatenate([x[inlier_indices], x_outliers[outlier_sampled]], axis=0),
@@ -509,58 +601,44 @@ def emmott_outliers(
     )
 
 
-def _make_outlier_arrays(x, *, n_outliers, outlier_indicies, inlier_indicies):
+def _make_outlier_arrays(
+    x, *, n_outliers, outlier_indicies, inlier_indicies, random_state
+):
+    random_state.shuffle(outlier_indicies)
+    random_state.shuffle(inlier_indicies)
+    outlier_fraction = outlier_indicies.size / x.shape[0]
+    if outlier_fraction < n_outliers:
+        n_inliers = math.ceil(
+            outlier_indicies.size / n_outliers - outlier_indicies.size
+        )
+        n_outliers = outlier_indicies.size
+    elif outlier_fraction > n_outliers:
+        n_outliers = min(
+            outlier_indicies.size, math.ceil(n_outliers * inlier_indicies.size)
+        )
+        n_inliers = inlier_indicies.size
+    else:
+        n_outliers = outlier_indicies.size
+        n_inliers = inlier_indicies.size
+
     x_outlier = x[outlier_indicies[:n_outliers]]
-    x_inlier = x[inlier_indicies]
+    x_inlier = x[inlier_indicies[:n_inliers]]
     x = np.concatenate([x_outlier, x_inlier], axis=0)
     y = np.ones(x.shape[0])
     y[: x_outlier.shape[0]] = -1
     return x, y
 
 
-def _min_samples(n_samples, n_outliers):
-    if n_outliers is None:
-        return 1
-    else:
-        return n_samples * check_scalar(
-            n_outliers,
-            "n_outliers",
-            numbers.Real,
-            min_val=0,
-            max_val=1,
-            include_boundaries="right",
-        )
-
-
-def _n_outliers(n_outliers, total_outliers, n_inliers):
-    if n_outliers is None:
-        return total_outliers
-    elif isinstance(n_outliers, numbers.Real):
-        return min(
-            total_outliers,
-            math.ceil(
-                check_scalar(
-                    n_outliers,
-                    "n_outliers",
-                    numbers.Real,
-                    min_val=0,
-                    max_val=1,
-                    include_boundaries="right",
-                )
-                * n_inliers
-            ),
-        )
-    else:
-        raise TypeError(
-            "n_outlier must be float, not %r" % type(n_outliers).__qualname__
-        )
-
-
 def _emmott_estimate_difficulty(
     x,
     y_new,
+    *,
     difficulty_estimator,
+    transform=None,
 ):
+    if transform is not None:
+        x = transform.transform(x)
+
     difficulty_estimator.fit(x, y_new)
     if hasattr(difficulty_estimator, "oob_decision_function_"):
         difficulty_estimate = difficulty_estimator.oob_decision_function_
@@ -574,14 +652,9 @@ def _emmott_estimate_difficulty(
     return difficulty_estimate
 
 
-def _emmott_multiclass_outlier_class(
-    x, y, confusion_estimator, random_state, n_classes
-):
-    if confusion_estimator is None:
-        confusion_estimator = RandomForestClassifier(n_jobs=-1, oob_score=True)
-    else:
-        confusion_estimator = clone(confusion_estimator)
-    _set_random_states(confusion_estimator, random_state)
+def _emmott_multiclass_outlier_class(x, y, *, confusion_estimator, transform, n_labels):
+    if transform is not None:
+        transform.transform(x)
 
     confusion_estimator.fit(x, y)
     try:
@@ -592,21 +665,22 @@ def _emmott_multiclass_outlier_class(
                 np.argmax(confusion_estimator.oob_decision_function_, axis=1)
             ]
         else:
-            y_pred = confusion_estimator.predict(x)
+            y_pred = confusion_estimator.predict(transform.transform(x))
+
         cm = confusion_matrix(y, y_pred)  # TODO: use probabilities
         graph = nx.Graph()
-        classes = confusion_estimator.classes_
-        graph.add_nodes_from(classes)
-        for i in range(n_classes):
-            for j in range(n_classes):
+        labels = confusion_estimator.classes_
+        graph.add_nodes_from(labels)
+        for i in range(n_labels):
+            for j in range(n_labels):
                 if i != j:
-                    graph.add_edge(classes[i], classes[j], weight=cm[i][j] + cm[j][i])
+                    graph.add_edge(labels[i], labels[j], weight=cm[i][j] + cm[j][i])
 
         max_spanning_tree = nx.maximum_spanning_tree(graph, algorithm="kruskal")
         coloring = nx.algorithms.bipartite.color(max_spanning_tree)
         labeling = {1: [], 0: []}
-        for cls in classes:
-            labeling[coloring[cls]].append(cls)
+        for label in labels:
+            labeling[coloring[label]].append(label)
 
         zero = np.isin(y, labeling[0])
         one = np.isin(y, labeling[1])
@@ -615,7 +689,7 @@ def _emmott_multiclass_outlier_class(
             outlier_label = np.array(labeling[0])
         else:
             outlier_label = np.array(labeling[1])
-    except ImportError as e:
+    except ModuleNotFoundError as e:
         _soft_dependency_error(e, package="networkx", context="emmott_outlier")
 
     return outlier_label
