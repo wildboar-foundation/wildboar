@@ -1321,16 +1321,16 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
         return self
 
-    # def fit_predict(self, X, y=None):
-    #     # We don't allow y to be used if the contamination is computed using the
-    #     # labels of the training data unless its computed for the oob samples.
-    #     if (
-    #         self.contamination != "auto"
-    #         or not isinstance(self.contamination, numbers.Real)
-    #     ) and not self.bootstrap:
-    #         return self.fit(X).predict(X)
+    def fit_predict(self, X, y=None):
+        # We don't allow y to be used if the contamination is computed using the
+        # labels of the training data unless its computed for the oob samples.
+        if (
+            self.contamination != "auto"
+            or not isinstance(self.contamination, numbers.Real)
+        ) and not self.bootstrap:
+            return self.fit(X).predict(X)
 
-    #     return self.fit(X, y).predict(X)
+        return self.fit(X, y).predict(X)
 
     def predict(self, x):
         decision = self.decision_function(x)
