@@ -13,7 +13,14 @@ from ._proto import PrototypeCounterfactual
 from ._sf import ShapeletForestCounterfactual
 
 
-def _proximity(x_true, x_counterfactuals, metric="euclidean"):
+def _proximity(
+    x_true,
+    x_counterfactuals,
+    normalize=False,
+    kernel_width=None,
+    metric="euclidean",
+    metric_params=None,
+):
     """Compute the proximity of the counterfactuals.
 
     Parameters
@@ -24,19 +31,19 @@ def _proximity(x_true, x_counterfactuals, metric="euclidean"):
     x_counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
 
-    metric : str, callable, list or dict, optional
+    normalize : bool, optional
+        Normalize the scores in the range 0 to 1, such that 1 indicates that the
+        original and counterfactuals are exactly the same.
+
+    metric : str or callable, optional
         The scoring metric
 
-        - if str use metrics from scikit-learn
-        - if list compute all metrics and return a dict where the key is
-          the name of the metric and the value an ndarray of scores
-        - if dict compute all metrics and return a dict where the key is
-          the key and the value an ndarray of scores
-        - if callable, a function of two arrays returning a float
+    metric_params : dict, optional
+        Parameters to the metric
 
     Returns
     -------
-    score : ndarray or dict
+    score : ndarray
         The scores
     """
     x_true = check_array(x_true, allow_3d=True, input_name="x_true")
@@ -44,23 +51,17 @@ def _proximity(x_true, x_counterfactuals, metric="euclidean"):
         x_counterfactuals, allow_3d=True, input_name="x_counterfactuals"
     )
 
-    if isinstance(metric, str) or hasattr(metric, "__call__"):
-        return mean_paired_distance(x_true, x_counterfactuals, metric=metric)
-    else:
-        sc = {}
-        if isinstance(metric, dict):
-            for key, value in metric.items():
-                sc[key] = mean_paired_distance(x_true, x_counterfactuals, metric=value)
+    distance = mean_paired_distance(
+        x_true, x_counterfactuals, metric=metric, metric_params=metric_params
+    )
 
-        elif isinstance(metric, list):
-            for item in metric:
-                sc[item] = mean_paired_distance(x_true, x_counterfactuals, metric=item)
+    if kernel_width is None:
+        kernel_width = np.sqrt(x_true.shape[-1]) * 0.75
 
-        else:
-            raise ValueError(
-                "metric should be str, callable, list or dict, got %r" % metric
-            )
-        return sc
+    if normalize:
+        distance = np.sqrt(np.exp(-(distance ** 2) / kernel_width ** 2))
+
+    return distance
 
 
 _COUNTERFACTUALS = {

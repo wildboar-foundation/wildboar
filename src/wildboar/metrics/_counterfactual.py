@@ -1,11 +1,50 @@
 import numpy as np
+from sklearn import clone
 from sklearn.metrics import accuracy_score
+from sklearn.neighbors import LocalOutlierFactor
 
-from ..distance import mean_paired_distance
+from ..explain.counterfactual import proximity
 from ..utils.validation import check_array
 
 
-def proximity_score(x_true, x_counterfactuals, metric="euclidean", metric_params=None):
+def plausability_score(X_plausible, X_counterfactuals, estimator=None):
+    """Compute the plausibility of the generated counterfactuals.
+
+    Parameters
+    ----------
+    X_plausible : array-like of shape (n_samples, n_timesteps)
+        The plausible time series, typically the training or testing samples.
+
+    X_counterfactuals : array-like of shape (m_samples, n_timesteps)
+        The counterfactuals generated
+
+    estimator : Estimator, optional
+        The outlier estimator.
+
+    Returns
+    -------
+    score : float
+        The mean plausability. Larger score is better, negative scores indicate many
+        outliers.
+    """
+    if estimator is None:
+        estimator = LocalOutlierFactor(n_neighbors=1, novelty=True)
+    else:
+        estimator = clone(estimator)
+
+    X_plausible = check_array(X_plausible, allow_3d=True)
+    X_counterfactuals = check_array(X_counterfactuals, allow_3d=True)
+    return np.mean(estimator.fit(X_plausible).decision_function(X_counterfactuals))
+
+
+def proximity_score(
+    x_true,
+    x_counterfactuals,
+    normalize=False,
+    kernel_width=None,
+    metric="euclidean",
+    metric_params=None,
+):
     """Compute the proximity score of the counterfactuals using the provided metric.
 
     The closer the counterfactual is to the original, the lower the score.
@@ -18,6 +57,9 @@ def proximity_score(x_true, x_counterfactuals, metric="euclidean", metric_params
     x_counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
 
+    normalize : bool, optional
+        Normalize the score in [0, 1], with 1 indicating perfect proximity.
+
     metric : str or callable, optional
         The scoring metric
 
@@ -25,22 +67,25 @@ def proximity_score(x_true, x_counterfactuals, metric="euclidean", metric_params
 
     Returns
     -------
-    score : ndarray or dict
-        The scores
+    score : float
+        The mean proximity.
+
+        - if normalize=True, higher score is better.
+        - if normalize=False, lower score is better.
     """
     x_true = check_array(x_true, allow_3d=True)
     x_counterfactuals = check_array(x_counterfactuals, allow_3d=True)
 
-    if isinstance(metric, str) or callable(metric):
-        return np.mean(
-            mean_paired_distance(
-                x_true, x_counterfactuals, metric=metric, metric_params=metric_params
-            )
+    return np.mean(
+        proximity(
+            x_true,
+            x_counterfactuals,
+            normalize=normalize,
+            kernel_width=kernel_width,
+            metric=metric,
+            metric_params=metric_params,
         )
-    else:
-        raise TypeError(
-            "metric should be str or callable, not %r" % type(metric).__qualname__
-        )
+    )
 
 
 def compactness_score(x_true, x_counterfactuals, *, rtol=1.0e-5, atol=1.0e-8):
@@ -63,6 +108,11 @@ def compactness_score(x_true, x_counterfactuals, *, rtol=1.0e-5, atol=1.0e-8):
 
     atol : float, optional
         Parameter to `np.isclose`.
+
+    Returns
+    -------
+    score : float
+        The compactness score. Lower score indicates more compact counterfactuals.
     """
     x_true = check_array(x_true, allow_3d=True)
     x_counterfactuals = check_array(x_counterfactuals, allow_3d=True)
@@ -75,5 +125,21 @@ def compactness_score(x_true, x_counterfactuals, *, rtol=1.0e-5, atol=1.0e-8):
     return 1 - np.mean(np.isclose(x_counterfactuals, x_true, rtol=rtol, atol=atol))
 
 
-def validity_score(y_counterfactual, y_pred):
-    return accuracy_score(y_counterfactual, y_pred)
+def validity_score(y_pred, y_counterfactual, sample_weight=None):
+    """Compute the number counterfactuals that have the desired label.
+
+    Parameters
+    ----------
+    y_pred : array-like of shape (n_samples, )
+        The desired label
+    y_counterfactual : array-like of shape (n_samples, )
+        The predicted label
+    sample_weight : array-like of shape (n_samples, ), optional
+        The sample weight
+
+    Returns
+    -------
+    score : float
+        The fraction of counterfactuals with the correct label. Larger is better.
+    """
+    return accuracy_score(y_pred, y_counterfactual, sample_weight=sample_weight)
