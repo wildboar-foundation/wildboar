@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="wildboar.explain" href="../explain/index.html" /><link rel="prev" title="wildboar.distance.dtw" href="../distance/dtw/index.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>wildboar.ensemble - Wildboar 1.1.0rc5.dev160+g904588ed documentation</title>
+        <title>wildboar.ensemble - Wildboar 1.1.0rc5.dev165+gbd2560f9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev160+g904588ed documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev165+gbd2560f9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -736,6 +736,27 @@ sample weighting.</p></li>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.IsolationShapeletForest.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/ensemble/_ensemble.py#L1324-L1333"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.IsolationShapeletForest.fit_predict" title="Permalink to this definition">#</a></dt>
+<dd><p>Perform fit on X and returns labels for X.</p>
+<p>Returns -1 for outliers and 1 for inliers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The input samples.</p></li>
+<li><p><strong>y</strong> (<em>Ignored</em>) – Not used, present for API consistency by convention.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>y</strong> – 1 for inliers, -1 for outliers.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="wildboar.ensemble.IsolationShapeletForest.predict">
 <span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/ensemble/_ensemble.py#L1335-L1339"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.IsolationShapeletForest.predict" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -1062,6 +1083,7 @@ by <cite>np.random</cite>.</p></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.offset_"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.offset_</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.decision_function"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.decision_function()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.fit"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.fit_predict"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.fit_predict()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.predict"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.predict()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.score_samples"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.score_samples()</span></code></a></li>
 </ul>
@@ -1098,6 +1120,7 @@ by <cite>np.random</cite>.</p></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.offset_">offset_</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.decision_function">decision_function</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.fit_predict">fit_predict</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.predict">predict</a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest.score_samples">score_samples</a></li>
 </ul>

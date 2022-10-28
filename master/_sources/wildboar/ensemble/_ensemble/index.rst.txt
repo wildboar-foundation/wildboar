@@ -421,6 +421,21 @@ Classes
       :rtype: object
 
 
+   .. py:method:: fit_predict(X, y=None)
+
+      Perform fit on X and returns labels for X.
+
+      Returns -1 for outliers and 1 for inliers.
+
+      :param X: The input samples.
+      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
+      :param y: Not used, present for API consistency by convention.
+      :type y: Ignored
+
+      :returns: **y** -- 1 for inliers, -1 for outliers.
+      :rtype: ndarray of shape (n_samples,)
+
+
    .. py:method:: predict(x)
 
 

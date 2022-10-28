@@ -7,6 +7,14 @@
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets.outlier.KernelLogisticRegression
+
+
 
 Functions
 ~~~~~~~~~
@@ -18,6 +26,66 @@ Functions
    wildboar.datasets.outlier.kmeans_outliers
    wildboar.datasets.outlier.majority_outliers
    wildboar.datasets.outlier.minority_outliers
+
+
+
+.. py:class:: KernelLogisticRegression(kernel=None, *, kernel_params=None, n_components=100, penalty='l2', dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, class_weight=None, random_state=None, solver='lbfgs', max_iter=100, multi_class='auto', verbose=0, warm_start=False, n_jobs=None, l1_ratio=None)
+
+   Bases: :py:obj:`sklearn.linear_model.LogisticRegression`
+
+   A simple kernel logistic implementation using a Nystroem kernel approximation
+
+   .. seealso::
+
+      :obj:`wildboar.datasets.outlier.EmmottLabeler`
+          Synthetic outlier dataset construction
+
+   :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
+                  for kernels. The default kernel is 'rbf'.
+   :type kernel: str, optional
+   :param kernel_params: Parameters to the kernel function.
+   :type kernel_params: dict, optional
+   :param n_components: Number of features to construct
+   :type n_components: int, optional
+
+   .. py:method:: decision_function(x)
+
+      Predict confidence scores for samples.
+
+      The confidence score for a sample is proportional to the signed
+      distance of that sample to the hyperplane.
+
+      :param X: The data matrix for which we want to get the confidence scores.
+      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
+
+      :returns: **scores** -- Confidence scores per `(n_samples, n_classes)` combination. In the
+                binary case, confidence score for `self.classes_[1]` where >0 means
+                this class would be predicted.
+      :rtype: ndarray of shape (n_samples,) or (n_samples, n_classes)
+
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      Fit the model according to the given training data.
+
+      :param X: Training vector, where `n_samples` is the number of samples and
+                `n_features` is the number of features.
+      :type X: {array-like, sparse matrix} of shape (n_samples, n_features)
+      :param y: Target vector relative to X.
+      :type y: array-like of shape (n_samples,)
+      :param sample_weight: Array of weights that are assigned to individual samples.
+                            If not provided, then each sample is given unit weight.
+
+                            .. versionadded:: 0.17
+                               *sample_weight* support to LogisticRegression.
+      :type sample_weight: array-like of shape (n_samples,) default=None
+
+      :returns: Fitted estimator.
+      :rtype: self
+
+      .. rubric:: Notes
+
+      The SAGA solver supports both float64 and float32 bit arrays.
 
 
 
@@ -48,7 +116,7 @@ Functions
              * **y_outlier** (*ndarray of shape (n_inliers + n_outliers, )*) -- The inliers (labeled as 1) and outlier (labled as -1)
 
 
-.. py:function:: emmott_outliers(x, y, *, n_outliers=None, confusion_estimator=None, difficulty_estimator=None, difficulty='simplest', scale=None, variation='tight', random_state=None)
+.. py:function:: emmott_outliers(x, y, *, n_outliers=None, confusion_estimator=None, difficulty_estimator=None, transform='interval', difficulty='simplest', scale=None, variation='tight', random_state=None)
 
    Create a synthetic outlier detection dataset from a labeled classification
    dataset using the method described by Emmott et.al. (2013).
@@ -78,6 +146,13 @@ Functions
                                 ``predict_proba``. Defaults to a kernel logistic regression model with
                                 a RBF-kernel.
    :type difficulty_estimator: object, optional
+   :param transform: Transform x before the confusion and difficulty estimator.
+
+                     - if None, no transformation is applied.
+                     - if 'interval', use the :class:`transform.IntervalTransform` with default
+                       parameters.
+                     - otherwise, use the supplied transform
+   :type transform: 'interval' or Transform, optional
    :param difficulty: The difficulty of the outlier points quantized according to scale. The value
                       should be in the range ``[1, len(scale)]`` with lower difficulty denoting
                       simpler outliers. If an array is given, multiple difficulties can be
@@ -90,7 +165,9 @@ Functions
    :param scale: The scale of quantized difficulty scores. Defaults to ``[0, 0.16, 0.3, 0.5]``.
                  Scores (which are probabilities in the range [0, 1]) are fit into the ranges
                  using ``np.digitize(difficulty, scale)``.
-   :type scale: array-like, optional
+
+                 - if int, use `scale` percentiles based in the difficulty scores.
+   :type scale: int or array-like, optional
    :param variation: Selection procedure for sampling outlier samples. If ``difficulty="simplest"``
                      or ``difficulty="hardest"``, this parameter has no effect.
 

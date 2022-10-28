@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.datasets.preprocess" href="../preprocess/index.html" /><link rel="prev" title="wildboar.datasets.filter" href="../filter/index.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>wildboar.datasets.outlier - Wildboar 1.1.0rc5.dev160+g904588ed documentation</title>
+        <title>wildboar.datasets.outlier - Wildboar 1.1.0rc5.dev165+gbd2560f9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev160+g904588ed documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev165+gbd2560f9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -345,6 +345,18 @@
 <span id="wildboar-datasets-outlier"></span><h1><a class="reference internal" href="#module-wildboar.datasets.outlier" title="wildboar.datasets.outlier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><a class="headerlink" href="#module-wildboar.datasets.outlier" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.outlier.KernelLogisticRegression" title="wildboar.datasets.outlier.KernelLogisticRegression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KernelLogisticRegression</span></code></a></p></td>
+<td><p>A simple kernel logistic implementation using a Nystroem kernel approximation</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 <section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
@@ -368,6 +380,80 @@
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.datasets.outlier.KernelLogisticRegression">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">KernelLogisticRegression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'l2'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intercept_scaling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solver</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'lbfgs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warm_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l1_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.KernelLogisticRegression" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.linear_model.LogisticRegression</span></code></p>
+<p>A simple kernel logistic implementation using a Nystroem kernel approximation</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.datasets.outlier.EmmottLabeler</span></code></dt><dd><p>Synthetic outlier dataset construction</p>
+</dd>
+</dl>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>kernel</strong> (<em>str</em><em>, </em><em>optional</em>) – The kernel function to use. See <cite>sklearn.metrics.pairwise.kernel_metric</cite>
+for kernels. The default kernel is ‘rbf’.</p></li>
+<li><p><strong>kernel_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – Parameters to the kernel function.</p></li>
+<li><p><strong>n_components</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of features to construct</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.outlier.KernelLogisticRegression.decision_function">
+<span class="sig-name descname"><span class="pre">decision_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.KernelLogisticRegression.decision_function" title="Permalink to this definition">#</a></dt>
+<dd><p>Predict confidence scores for samples.</p>
+<p>The confidence score for a sample is proportional to the signed
+distance of that sample to the hyperplane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data matrix for which we want to get the confidence scores.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>scores</strong> – Confidence scores per <cite>(n_samples, n_classes)</cite> combination. In the
+binary case, confidence score for <cite>self.classes_[1]</cite> where &gt;0 means
+this class would be predicted.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (n_samples,) or (n_samples, n_classes)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.datasets.outlier.KernelLogisticRegression.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.KernelLogisticRegression.fit" title="Permalink to this definition">#</a></dt>
+<dd><p>Fit the model according to the given training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vector, where <cite>n_samples</cite> is the number of samples and
+<cite>n_features</cite> is the number of features.</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target vector relative to X.</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>) </em><em>default=None</em>) – <p>Array of weights that are assigned to individual samples.
+If not provided, then each sample is given unit weight.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 0.17: </span><em>sample_weight</em> support to LogisticRegression.</p>
+</div>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Fitted estimator.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The SAGA solver supports both float64 and float32 bit arrays.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.density_outliers">
 <span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">density_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dbscan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.density_outliers" title="Permalink to this definition">#</a></dt>
@@ -399,7 +485,7 @@ By default, all samples of the minority class is considered as outliers.</p></li
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.emmott_outliers">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">emmott_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confusion_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'simplest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.emmott_outliers" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">emmott_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confusion_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interval'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'simplest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.emmott_outliers" title="Permalink to this definition">#</a></dt>
 <dd><p>Create a synthetic outlier detection dataset from a labeled classification
 dataset using the method described by Emmott et.al. (2013).</p>
 <p>The Emmott labeler can reliably label both binary and multiclass datasets. For
@@ -426,6 +512,14 @@ random forest classifier.</p></li>
 <li><p><strong>difficulty_estimator</strong> (<em>object</em><em>, </em><em>optional</em>) – Estimator for sample difficulty. The difficulty estimator must support
 <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>. Defaults to a kernel logistic regression model with
 a RBF-kernel.</p></li>
+<li><p><strong>transform</strong> (<em>'interval'</em><em> or </em><em>Transform</em><em>, </em><em>optional</em>) – <p>Transform x before the confusion and difficulty estimator.</p>
+<ul>
+<li><p>if None, no transformation is applied.</p></li>
+<li><p>if ‘interval’, use the <code class="xref py py-class docutils literal notranslate"><span class="pre">transform.IntervalTransform</span></code> with default
+parameters.</p></li>
+<li><p>otherwise, use the supplied transform</p></li>
+</ul>
+</p></li>
 <li><p><strong>difficulty</strong> (<em>{'any'</em><em>, </em><em>'simplest'</em><em>, </em><em>'hardest'}</em><em>, </em><em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The difficulty of the outlier points quantized according to scale. The value
 should be in the range <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">len(scale)]</span></code> with lower difficulty denoting
 simpler outliers. If an array is given, multiple difficulties can be
@@ -436,9 +530,13 @@ included, e.g., <code class="docutils literal notranslate"><span class="pre">[1,
 <li><p>if ‘hardest’ the hardest n_outliers are selected</p></li>
 </ul>
 </p></li>
-<li><p><strong>scale</strong> (<em>array-like</em><em>, </em><em>optional</em>) – The scale of quantized difficulty scores. Defaults to <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">0.16,</span> <span class="pre">0.3,</span> <span class="pre">0.5]</span></code>.
+<li><p><strong>scale</strong> (<em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The scale of quantized difficulty scores. Defaults to <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">0.16,</span> <span class="pre">0.3,</span> <span class="pre">0.5]</span></code>.
 Scores (which are probabilities in the range [0, 1]) are fit into the ranges
-using <code class="docutils literal notranslate"><span class="pre">np.digitize(difficulty,</span> <span class="pre">scale)</span></code>.</p></li>
+using <code class="docutils literal notranslate"><span class="pre">np.digitize(difficulty,</span> <span class="pre">scale)</span></code>.</p>
+<ul>
+<li><p>if int, use <cite>scale</cite> percentiles based in the difficulty scores.</p></li>
+</ul>
+</p></li>
 <li><p><strong>variation</strong> (<em>{'tight'</em><em>, </em><em>'dispersed'}</em><em>, </em><em>optional</em>) – <p>Selection procedure for sampling outlier samples. If <code class="docutils literal notranslate"><span class="pre">difficulty=&quot;simplest&quot;</span></code>
 or <code class="docutils literal notranslate"><span class="pre">difficulty=&quot;hardest&quot;</span></code>, this parameter has no effect.</p>
 <ul>
@@ -666,12 +764,23 @@ if the minority class has to few samples.</p></li>
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KernelLogisticRegression"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KernelLogisticRegression.decision_function"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression.decision_function()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KernelLogisticRegression.fit"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression.fit()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.density_outliers"><code class="docutils literal notranslate"><span class="pre">density_outliers()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.emmott_outliers"><code class="docutils literal notranslate"><span class="pre">emmott_outliers()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.kmeans_outliers"><code class="docutils literal notranslate"><span class="pre">kmeans_outliers()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.majority_outliers"><code class="docutils literal notranslate"><span class="pre">majority_outliers()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.minority_outliers"><code class="docutils literal notranslate"><span class="pre">minority_outliers()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KernelLogisticRegression">KernelLogisticRegression</a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KernelLogisticRegression.decision_function">decision_function</a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KernelLogisticRegression.fit">fit</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.density_outliers">density_outliers</a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.emmott_outliers">emmott_outliers</a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.kmeans_outliers">kmeans_outliers</a></li>

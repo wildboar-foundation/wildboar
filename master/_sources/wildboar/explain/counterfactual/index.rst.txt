@@ -236,7 +236,7 @@ Functions
              * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Return score of the counterfactual transform, if ``scoring`` is not None
 
 
-.. py:function:: proximity(x_true, x_counterfactuals, metric='euclidean')
+.. py:function:: proximity(x_true, x_counterfactuals, normalize=False, kernel_width=None, metric='euclidean', metric_params=None)
 
    Compute the proximity of the counterfactuals.
 
@@ -244,18 +244,16 @@ Functions
    :type x_true: array-like of shape (n_samples, n_timestep)
    :param x_counterfactuals: The counterfactual samples
    :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
+   :param normalize: Normalize the scores in the range 0 to 1, such that 1 indicates that the
+                     original and counterfactuals are exactly the same.
+   :type normalize: bool, optional
    :param metric: The scoring metric
-
-                  - if str use metrics from scikit-learn
-                  - if list compute all metrics and return a dict where the key is
-                    the name of the metric and the value an ndarray of scores
-                  - if dict compute all metrics and return a dict where the key is
-                    the key and the value an ndarray of scores
-                  - if callable, a function of two arrays returning a float
-   :type metric: str, callable, list or dict, optional
+   :type metric: str or callable, optional
+   :param metric_params: Parameters to the metric
+   :type metric_params: dict, optional
 
    :returns: **score** -- The scores
-   :rtype: ndarray or dict
+   :rtype: ndarray
 
 
 .. py:function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)

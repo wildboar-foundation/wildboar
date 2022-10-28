@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>wildboar.explain._importance - Wildboar 1.1.0rc5.dev160+g904588ed documentation</title>
+        <title>wildboar.explain._importance - Wildboar 1.1.0rc5.dev165+gbd2560f9 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev160+g904588ed documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev165+gbd2560f9 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -353,17 +353,14 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.AmplitudeImportance" title="wildboar.explain._importance.AmplitudeImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmplitudeImportance</span></code></a></p></td>
 <td><p>Compute the importance of equi-probable horizontal time series intervals by</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain._importance.Domain" title="wildboar.explain._importance.Domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Domain</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain" title="wildboar.explain._importance.FrequencyDomain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrequencyDomain</span></code></a></p></td>
-<td><p></p></td>
-</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance" title="wildboar.explain._importance.IntervalImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalImportance</span></code></a></p></td>
-<td><p>Compute a model agnostic importance score for non-overlapping intervals in</p></td>
+<td><p>Compute a model agnostic importance score for non-overlapping intervals</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.TimeDomain" title="wildboar.explain._importance.TimeDomain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeDomain</span></code></a></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p></td>
+<td><p>Base class for all estimators in scikit-learn.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance" title="wildboar.explain._importance.ShapeletImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletImportance</span></code></a></p></td>
+<td><p>Compute the importance of shapelets by permuting instances with lowest distance.</p></td>
 </tr>
 </tbody>
 </table>
@@ -374,7 +371,13 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.plot_importances" title="wildboar.explain._importance.plot_importances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_importances</span></code></a>(importances[, ax, labels])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.fisher_yates_indices" title="wildboar.explain._importance.fisher_yates_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fisher_yates_indices</span></code></a>(n_samples, random_state)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain._importance.plot_importances" title="wildboar.explain._importance.plot_importances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_importances</span></code></a>(importances[, ax, labels])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.random_permute_indices" title="wildboar.explain._importance.random_permute_indices"><code class="xref py py-obj docutils literal notranslate"><span class="pre">random_permute_indices</span></code></a>(n_samples, random_state)</p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -397,8 +400,8 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain._importance.AmplitudeImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">AmplitudeImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L447-L758"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">AmplitudeImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L377-L653"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p>
 <p>Compute the importance of equi-probable horizontal time series intervals by
 permuting the values between each horizontal interval. The implementation uses
 <code class="xref py py-class docutils literal notranslate"><span class="pre">transform.SAX</span></code> to discretize the time series and then for each bin permute
@@ -412,15 +415,17 @@ the samples along that bin.</p>
 </dd>
 <dt><a href="#id5"><span class="problematic" id="id6">importances_</span></a><span class="classifier">float or dict</span></dt><dd><p>The importances of each vertical bin.</p>
 </dd>
+<dt><a href="#id7"><span class="problematic" id="id8">components_</span></a><span class="classifier">list</span></dt><dd><p>List of binning identifiers.</p>
+</dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.AmplitudeImportance.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L485-L572"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L453-L466"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.AmplitudeImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L595-L758"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L489-L653"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.plot" title="Permalink to this definition">#</a></dt>
 <dd><p>Plot the importances. If x is given, the importances are plotted over the
 samples optionally labeling each sample using the supplied labels. If x is
 not give, the importances are plotted as one or more boxplots.</p>
@@ -458,72 +463,10 @@ Only returned if ax is not None and x is not None.</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="wildboar.explain._importance.Domain">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">Domain</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L92-L110"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.Domain" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.Domain.intervals">
-<span class="sig-name descname"><span class="pre">intervals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L93-L94"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.Domain.intervals" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.Domain.inverse_transform">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L104-L106"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.Domain.inverse_transform" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.Domain.plot_samples">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plot_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L96-L98"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.Domain.plot_samples" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.Domain.randomize">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">randomize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L108-L110"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.Domain.randomize" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.Domain.transform">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L100-L102"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.Domain.transform" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="wildboar.explain._importance.FrequencyDomain">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">FrequencyDomain</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L129-L158"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.FrequencyDomain" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#wildboar.explain._importance.Domain" title="wildboar.explain._importance.Domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Domain</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.FrequencyDomain.intervals">
-<span class="sig-name descname"><span class="pre">intervals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L144-L146"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.FrequencyDomain.intervals" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.FrequencyDomain.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L151-L152"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.FrequencyDomain.inverse_transform" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.FrequencyDomain.plot_samples">
-<span class="sig-name descname"><span class="pre">plot_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L130-L142"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.FrequencyDomain.plot_samples" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.FrequencyDomain.randomize">
-<span class="sig-name descname"><span class="pre">randomize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L154-L158"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.FrequencyDomain.randomize" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.FrequencyDomain.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L148-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.FrequencyDomain.transform" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L167-L444"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
-<p>Compute a model agnostic importance score for non-overlapping intervals in
-the time or frequency domain by permuting the intervals among samples.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L156-L374"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p>
+<p>Compute a model agnostic importance score for non-overlapping intervals</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.importances_">
 <span class="sig-name descname"><span class="pre">importances_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.importances_" title="Permalink to this definition">#</a></dt>
@@ -532,6 +475,17 @@ function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>dict or Importance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.components_">
+<span class="sig-name descname"><span class="pre">components_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.components_" title="Permalink to this definition">#</a></dt>
+<dd><p>The interval start and end positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray of shape (n_intervals, 2)</p>
 </dd>
 </dl>
 </dd></dl>
@@ -564,17 +518,17 @@ by <cite>np.random</cite>.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.explain">
-<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L329-L334"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.explain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L265-L271"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.explain" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L233-L327"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L258-L263"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L336-L444"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L273-L374"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.plot" title="Permalink to this definition">#</a></dt>
 <dd><p>Plot the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -589,34 +543,71 @@ by <cite>np.random</cite>.</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="wildboar.explain._importance.TimeDomain">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">TimeDomain</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L113-L126"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.TimeDomain" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#wildboar.explain._importance.Domain" title="wildboar.explain._importance.Domain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Domain</span></code></a></p>
+<dt class="sig sig-object py" id="wildboar.explain._importance.PermuteImportance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">PermuteImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L91-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.PermuteImportance" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
+<p>Base class for all estimators in scikit-learn.</p>
+<p class="rubric">Notes</p>
+<p>All estimators should specify all the parameters that can be set
+at the class level in their <code class="docutils literal notranslate"><span class="pre">__init__</span></code> as explicit keyword
+arguments (no <code class="docutils literal notranslate"><span class="pre">*args</span></code> or <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">ShapeletImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L656-L857"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p>
+<p>Compute the importance of shapelets by permuting instances with lowest distance.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.components">
+<span class="sig-name descname"><span class="pre">components</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.components" title="Permalink to this definition">#</a></dt>
+<dd><p>The shapelets</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.TimeDomain.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L120-L121"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.TimeDomain.inverse_transform" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.explain">
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L728-L766"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.explain" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.TimeDomain.plot_samples">
-<span class="sig-name descname"><span class="pre">plot_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L114-L115"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.TimeDomain.plot_samples" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L712-L726"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.TimeDomain.randomize">
-<span class="sig-name descname"><span class="pre">randomize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L123-L126"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.TimeDomain.randomize" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain._importance.TimeDomain.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L117-L118"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.TimeDomain.transform" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L768-L853"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.plot" title="Permalink to this definition">#</a></dt>
+<dd><p>Plot the explanation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ax</strong> – The axes object</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Axes</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="wildboar.explain._importance.fisher_yates_indices">
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">fisher_yates_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L860-L863"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.fisher_yates_indices" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="wildboar.explain._importance.plot_importances">
-<span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">plot_importances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L22-L34"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.plot_importances" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">plot_importances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">importances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L38-L50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.plot_importances" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.explain._importance.random_permute_indices">
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">random_permute_indices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_samples</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L866-L874"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.random_permute_indices" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py data">
@@ -682,71 +673,47 @@ by <cite>np.random</cite>.</p></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.AmplitudeImportance.plot"><code class="docutils literal notranslate"><span class="pre">AmplitudeImportance.plot()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain"><code class="docutils literal notranslate"><span class="pre">Domain</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.intervals"><code class="docutils literal notranslate"><span class="pre">Domain.intervals()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.inverse_transform"><code class="docutils literal notranslate"><span class="pre">Domain.inverse_transform()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.plot_samples"><code class="docutils literal notranslate"><span class="pre">Domain.plot_samples()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.randomize"><code class="docutils literal notranslate"><span class="pre">Domain.randomize()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.transform"><code class="docutils literal notranslate"><span class="pre">Domain.transform()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain"><code class="docutils literal notranslate"><span class="pre">FrequencyDomain</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.intervals"><code class="docutils literal notranslate"><span class="pre">FrequencyDomain.intervals()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.inverse_transform"><code class="docutils literal notranslate"><span class="pre">FrequencyDomain.inverse_transform()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.plot_samples"><code class="docutils literal notranslate"><span class="pre">FrequencyDomain.plot_samples()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.randomize"><code class="docutils literal notranslate"><span class="pre">FrequencyDomain.randomize()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.transform"><code class="docutils literal notranslate"><span class="pre">FrequencyDomain.transform()</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance"><code class="docutils literal notranslate"><span class="pre">IntervalImportance</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.importances_"><code class="docutils literal notranslate"><span class="pre">IntervalImportance.importances_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.components_"><code class="docutils literal notranslate"><span class="pre">IntervalImportance.components_</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.explain"><code class="docutils literal notranslate"><span class="pre">IntervalImportance.explain()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.fit"><code class="docutils literal notranslate"><span class="pre">IntervalImportance.fit()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.plot"><code class="docutils literal notranslate"><span class="pre">IntervalImportance.plot()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain"><code class="docutils literal notranslate"><span class="pre">TimeDomain</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.inverse_transform"><code class="docutils literal notranslate"><span class="pre">TimeDomain.inverse_transform()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.plot_samples"><code class="docutils literal notranslate"><span class="pre">TimeDomain.plot_samples()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.randomize"><code class="docutils literal notranslate"><span class="pre">TimeDomain.randomize()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.transform"><code class="docutils literal notranslate"><span class="pre">TimeDomain.transform()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.PermuteImportance"><code class="docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance"><code class="docutils literal notranslate"><span class="pre">ShapeletImportance</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.components"><code class="docutils literal notranslate"><span class="pre">ShapeletImportance.components</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.explain"><code class="docutils literal notranslate"><span class="pre">ShapeletImportance.explain()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.fit"><code class="docutils literal notranslate"><span class="pre">ShapeletImportance.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.plot"><code class="docutils literal notranslate"><span class="pre">ShapeletImportance.plot()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#wildboar.explain._importance.fisher_yates_indices"><code class="docutils literal notranslate"><span class="pre">fisher_yates_indices()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.plot_importances"><code class="docutils literal notranslate"><span class="pre">plot_importances()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.random_permute_indices"><code class="docutils literal notranslate"><span class="pre">random_permute_indices()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.Importance"><code class="docutils literal notranslate"><span class="pre">Importance</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.matplotlib_missing"><code class="docutils literal notranslate"><span class="pre">matplotlib_missing</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.AmplitudeImportance">AmplitudeImportance</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain">Domain</a><ul>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.intervals">intervals</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.inverse_transform">inverse_transform</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.plot_samples">plot_samples</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.randomize">randomize</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.Domain.transform">transform</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain">FrequencyDomain</a><ul>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.intervals">intervals</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.inverse_transform">inverse_transform</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.plot_samples">plot_samples</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.randomize">randomize</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.FrequencyDomain.transform">transform</a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance">IntervalImportance</a><ul>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.importances_">importances_</a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.components_">components_</a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.explain">explain</a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.fit">fit</a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance.plot">plot</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain">TimeDomain</a><ul>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.inverse_transform">inverse_transform</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.plot_samples">plot_samples</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.randomize">randomize</a></li>
-<li><a class="reference internal" href="#wildboar.explain._importance.TimeDomain.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.PermuteImportance">PermuteImportance</a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance">ShapeletImportance</a><ul>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.components">components</a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.explain">explain</a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance.plot">plot</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#wildboar.explain._importance.fisher_yates_indices">fisher_yates_indices</a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.plot_importances">plot_importances</a></li>
+<li><a class="reference internal" href="#wildboar.explain._importance.random_permute_indices">random_permute_indices</a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.Importance">Importance</a></li>
 <li><a class="reference internal" href="#wildboar.explain._importance.matplotlib_missing">matplotlib_missing</a></li>
 </ul>

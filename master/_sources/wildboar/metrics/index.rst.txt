@@ -14,6 +14,7 @@ Functions
 .. autoapisummary::
 
    wildboar.metrics.compactness_score
+   wildboar.metrics.plausability_score
    wildboar.metrics.proximity_score
    wildboar.metrics.validity_score
 
@@ -34,8 +35,27 @@ Functions
    :param atol: Parameter to `np.isclose`.
    :type atol: float, optional
 
+   :returns: **score** -- The compactness score. Lower score indicates more compact counterfactuals.
+   :rtype: float
 
-.. py:function:: proximity_score(x_true, x_counterfactuals, metric='euclidean', metric_params=None)
+
+.. py:function:: plausability_score(X_plausible, X_counterfactuals, estimator=None)
+
+   Compute the plausibility of the generated counterfactuals.
+
+   :param X_plausible: The plausible time series, typically the training or testing samples.
+   :type X_plausible: array-like of shape (n_samples, n_timesteps)
+   :param X_counterfactuals: The counterfactuals generated
+   :type X_counterfactuals: array-like of shape (m_samples, n_timesteps)
+   :param estimator: The outlier estimator.
+   :type estimator: Estimator, optional
+
+   :returns: **score** -- The mean plausability. Larger score is better, negative scores indicate many
+             outliers.
+   :rtype: float
+
+
+.. py:function:: proximity_score(x_true, x_counterfactuals, normalize=False, kernel_width=None, metric='euclidean', metric_params=None)
 
    Compute the proximity score of the counterfactuals using the provided metric.
 
@@ -45,15 +65,32 @@ Functions
    :type x_true: array-like of shape (n_samples, n_timestep)
    :param x_counterfactuals: The counterfactual samples
    :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
+   :param normalize: Normalize the score in [0, 1], with 1 indicating perfect proximity.
+   :type normalize: bool, optional
    :param metric: The scoring metric
 
                   - if str use metrics from scikit-learn or wildboar
    :type metric: str or callable, optional
 
-   :returns: **score** -- The scores
-   :rtype: ndarray or dict
+   :returns: **score** -- The mean proximity.
+
+             - if normalize=True, higher score is better.
+             - if normalize=False, lower score is better.
+   :rtype: float
 
 
-.. py:function:: validity_score(y_counterfactual, y_pred)
+.. py:function:: validity_score(y_pred, y_counterfactual, sample_weight=None)
+
+   Compute the number counterfactuals that have the desired label.
+
+   :param y_pred: The desired label
+   :type y_pred: array-like of shape (n_samples, )
+   :param y_counterfactual: The predicted label
+   :type y_counterfactual: array-like of shape (n_samples, )
+   :param sample_weight: The sample weight
+   :type sample_weight: array-like of shape (n_samples, ), optional
+
+   :returns: **score** -- The fraction of counterfactuals with the correct label. Larger is better.
+   :rtype: float
 
 

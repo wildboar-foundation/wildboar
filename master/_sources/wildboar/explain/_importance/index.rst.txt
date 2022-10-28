@@ -15,10 +15,9 @@ Classes
 .. autoapisummary::
 
    wildboar.explain._importance.AmplitudeImportance
-   wildboar.explain._importance.Domain
-   wildboar.explain._importance.FrequencyDomain
    wildboar.explain._importance.IntervalImportance
-   wildboar.explain._importance.TimeDomain
+   wildboar.explain._importance.PermuteImportance
+   wildboar.explain._importance.ShapeletImportance
 
 
 
@@ -27,7 +26,9 @@ Functions
 
 .. autoapisummary::
 
+   wildboar.explain._importance.fisher_yates_indices
    wildboar.explain._importance.plot_importances
+   wildboar.explain._importance.random_permute_indices
 
 
 
@@ -42,7 +43,7 @@ Attributes
 
 .. py:class:: AmplitudeImportance(scoring=None, n_intervals='sqrt', window=None, binning='normal', n_bins=4, n_repeat=1, random_state=None)
 
-   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
    Compute the importance of equi-probable horizontal time series intervals by
    permuting the values between each horizontal interval. The implementation uses
@@ -61,8 +62,11 @@ Attributes
    importances_ : float or dict
        The importances of each vertical bin.
 
+   components_ : list
+       List of binning identifiers.
 
-   .. py:method:: fit(estimator, x, y, sample_weight=None)
+
+   .. py:method:: fit(estimator, X, y, sample_weight=None)
 
 
    .. py:method:: plot(x=None, y=None, *, ax=None, n_samples=100, scoring=None, preprocess=True, k=None, show_bins=False, show_grid=True)
@@ -98,54 +102,11 @@ Attributes
 
 
 
-.. py:class:: Domain
+.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, verbose=False, random_state=None)
 
-   .. py:method:: intervals(n, n_intervals)
+   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
-
-   .. py:method:: inverse_transform(x)
-      :abstractmethod:
-
-
-   .. py:method:: plot_samples(x, y=None, ax=None, n_samples=None, **kwargs)
-      :abstractmethod:
-
-
-   .. py:method:: randomize(x, start, end, random_state=None)
-      :abstractmethod:
-
-
-   .. py:method:: transform(x)
-      :abstractmethod:
-
-
-
-.. py:class:: FrequencyDomain
-
-   Bases: :py:obj:`Domain`
-
-   .. py:method:: intervals(n, n_intervals)
-
-
-   .. py:method:: inverse_transform(x)
-
-
-   .. py:method:: plot_samples(x, y=None, ax=None, n_samples=None, **kwargs)
-
-
-   .. py:method:: randomize(x, start, end, random_state=None)
-
-
-   .. py:method:: transform(x)
-
-
-
-.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, domain='time', verbose=False, random_state=None)
-
-   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
-
-   Compute a model agnostic importance score for non-overlapping intervals in
-   the time or frequency domain by permuting the intervals among samples.
+   Compute a model agnostic importance score for non-overlapping intervals
 
    .. attribute:: importances_
 
@@ -153,6 +114,12 @@ Attributes
       function.
 
       :type: dict or Importance
+
+   .. attribute:: components_
+
+      The interval start and end positions.
+
+      :type: ndarray of shape (n_intervals, 2)
 
    :param scoring: The scoring function. By default the estimators score function is used.
    :type scoring: str, list, dict or callable, optional
@@ -186,7 +153,7 @@ Attributes
    .. py:method:: fit(estimator, x, y, sample_weight=None)
 
 
-   .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, k=None, n_samples=100, show_grid=True, domain_args=None)
+   .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, k=None, n_samples=100, show_grid=True)
 
       Plot the explanation.
 
@@ -195,24 +162,53 @@ Attributes
 
 
 
-.. py:class:: TimeDomain
+.. py:class:: PermuteImportance(*, scoring=None, n_repeat=1, verbose=0, random_state=None)
 
-   Bases: :py:obj:`Domain`
+   Bases: :py:obj:`wildboar.base.BaseEstimator`
 
-   .. py:method:: inverse_transform(x)
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
 
 
-   .. py:method:: plot_samples(x, y=None, ax=None, n_samples=None, **kwargs)
+.. py:class:: ShapeletImportance(scoring=None, n_repeat=1, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
+
+   Compute the importance of shapelets by permuting instances with lowest distance.
+
+   .. attribute:: components
+
+      The shapelets
+
+      :type: ndarray
+
+   .. py:method:: explain(X, y=None, kernel_scale=0.25)
 
 
-   .. py:method:: randomize(x, start, end, random_state=None)
+   .. py:method:: fit(estimator, X, y, sample_weight=None)
 
 
-   .. py:method:: transform(x)
+   .. py:method:: plot(X=None, y=None, k=None, scoring=None, kernel_scale=0.25, ax=None)
 
+      Plot the explanation.
+
+      :returns: **ax** -- The axes object
+      :rtype: Axes
+
+
+
+.. py:function:: fisher_yates_indices(n_samples, random_state)
 
 
 .. py:function:: plot_importances(importances, ax=None, labels=None)
+
+
+.. py:function:: random_permute_indices(n_samples, random_state)
 
 
 .. py:data:: Importance

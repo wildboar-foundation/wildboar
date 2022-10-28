@@ -29,7 +29,7 @@ Classes
 
 .. py:class:: AmplitudeImportance(scoring=None, n_intervals='sqrt', window=None, binning='normal', n_bins=4, n_repeat=1, random_state=None)
 
-   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
    Compute the importance of equi-probable horizontal time series intervals by
    permuting the values between each horizontal interval. The implementation uses
@@ -48,8 +48,11 @@ Classes
    importances_ : float or dict
        The importances of each vertical bin.
 
+   components_ : list
+       List of binning identifiers.
 
-   .. py:method:: fit(estimator, x, y, sample_weight=None)
+
+   .. py:method:: fit(estimator, X, y, sample_weight=None)
 
 
    .. py:method:: plot(x=None, y=None, *, ax=None, n_samples=100, scoring=None, preprocess=True, k=None, show_bins=False, show_grid=True)
@@ -85,12 +88,11 @@ Classes
 
 
 
-.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, domain='time', verbose=False, random_state=None)
+.. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, verbose=False, random_state=None)
 
-   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+   Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
-   Compute a model agnostic importance score for non-overlapping intervals in
-   the time or frequency domain by permuting the intervals among samples.
+   Compute a model agnostic importance score for non-overlapping intervals
 
    .. attribute:: importances_
 
@@ -98,6 +100,12 @@ Classes
       function.
 
       :type: dict or Importance
+
+   .. attribute:: components_
+
+      The interval start and end positions.
+
+      :type: ndarray of shape (n_intervals, 2)
 
    :param scoring: The scoring function. By default the estimators score function is used.
    :type scoring: str, list, dict or callable, optional
@@ -131,7 +139,7 @@ Classes
    .. py:method:: fit(estimator, x, y, sample_weight=None)
 
 
-   .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, k=None, n_samples=100, show_grid=True, domain_args=None)
+   .. py:method:: plot(x=None, y=None, *, ax=None, scoring=None, k=None, n_samples=100, show_grid=True)
 
       Plot the explanation.
 
