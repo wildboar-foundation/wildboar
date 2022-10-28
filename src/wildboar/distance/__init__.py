@@ -48,7 +48,7 @@ _THRESHOLD = {
 
 
 def _validate_subsequence(y):
-    if isinstance(y, np.ndarray):
+    if isinstance(y, np.ndarray) and y.dtype != object:
         if y.ndim == 1:
             return [y.astype(float)]
         elif y.ndim == 2:
@@ -60,7 +60,6 @@ def _validate_subsequence(y):
                 )
             )
     else:
-
         if any(_is_arraylike(e) for e in y):
             y = [np.array(e, dtype=np.double) for e in y]
         else:

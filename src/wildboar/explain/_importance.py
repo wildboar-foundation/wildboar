@@ -10,11 +10,27 @@ import numpy as np
 from sklearn.metrics import check_scoring
 from sklearn.metrics._scorer import _check_multimetric_scoring, _MultimetricScorer
 from sklearn.model_selection._validation import _aggregate_score_dicts
-from sklearn.utils.validation import check_random_state, check_scalar
+from sklearn.utils.validation import check_is_fitted, check_random_state, check_scalar
 
 from ..base import BaseEstimator, ExplainerMixin
-from ..transform import SAX
+from ..distance import pairwise_subsequence_distance
+from ..transform import SAX, RandomShapeletTransform
 from ..utils.validation import check_array, check_option
+
+try:
+    from matplotlib.cm import ScalarMappable, get_cmap
+    from matplotlib.pylab import subplots
+
+    from ..utils.plot import MidpointNormalize, plot_time_domain
+except ModuleNotFoundError as e:
+    from ..utils import DependencyMissing
+
+    matplotlib_missing = DependencyMissing(e, package="matplotlib")
+    get_cmap = matplotlib_missing
+    ScalarMappable = matplotlib_missing
+    subplots = matplotlib_missing
+    MidpointNormalize = matplotlib_missing
+    plot_time_domain = matplotlib_missing
 
 Importance = namedtuple("Importance", ["mean", "std", "full"])
 
@@ -53,23 +69,6 @@ def _plot_single_importance(importance, ax, labels):
         patch.set_facecolor(cmap(i))
 
 
-try:
-    from matplotlib.cm import ScalarMappable, get_cmap
-    from matplotlib.pylab import subplots
-
-    from ..utils.plot import MidpointNormalize, plot_frequency_domain, plot_time_domain
-except ModuleNotFoundError as e:
-    from ..utils import DependencyMissing
-
-    matplotlib_missing = DependencyMissing(e, package="matplotlib")
-    get_cmap = matplotlib_missing
-    ScalarMappable = matplotlib_missing
-    subplots = matplotlib_missing
-    MidpointNormalize = matplotlib_missing
-    plot_frequency_domain = matplotlib_missing
-    plot_time_domain = matplotlib_missing
-
-
 def _intervals(n, n_intervals):
 
     for i in range(n_intervals):
@@ -89,84 +88,73 @@ def _unpack_scores(orig_score, perm_score):
     )
 
 
-class Domain(metaclass=ABCMeta):
-    def intervals(self, n, n_intervals):
-        return _intervals(n, n_intervals)
+class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
+    def __init__(self, *, scoring=None, n_repeat=1, verbose=0, random_state=None):
+        self.scoring = scoring
+        self.n_repeat = n_repeat
+        self.random_state = random_state
+        self.verbose = verbose
 
     @abstractmethod
-    def plot_samples(self, x, y=None, ax=None, n_samples=None, **kwargs):
+    def _yield_components(self):
+        pass
+
+    def _reset_component(self, X, component):
         pass
 
     @abstractmethod
-    def transform(self, x):
+    def _permute_component(self, X, component, random_state):
         pass
 
-    @abstractmethod
-    def inverse_transform(self, x):
-        pass
+    def _fit(self, estimator, X, y, random_state, sample_weight=None):
+        if callable(self.scoring):
+            scoring = self.scoring
+        elif self.scoring is None or isinstance(self.scoring, str):
+            scoring = check_scoring(estimator, self.scoring)
+        else:
+            scoring_dict = _check_multimetric_scoring(estimator, self.scoring)
+            scoring = _MultimetricScorer(**scoring_dict)
 
-    @abstractmethod
-    def randomize(self, x, start, end, random_state=None):
-        pass
+        self.components_ = np.array(list(self._yield_components()), dtype=object)
+        scores = []
+        for component in self.components_:
+            self._reset_component(X, component)
 
+            rep_scores = []
+            for rep in range(self.n_repeat):
+                X_perm = self._permute_component(X, component, random_state)
 
-class TimeDomain(Domain):
-    def plot_samples(self, x, y=None, ax=None, n_samples=None, **kwargs):
-        plot_time_domain(x, y=y, ax=ax, n_samples=n_samples)
+                if sample_weight is not None:
+                    score = scoring(estimator, X_perm, y, sample_weight=sample_weight)
+                else:
+                    score = scoring(estimator, X_perm, y)
 
-    def transform(self, x):
-        return x
+                rep_scores.append(score)
 
-    def inverse_transform(self, x):
-        return x
+            if isinstance(rep_scores[0], dict):
+                scores.append(_aggregate_score_dicts(rep_scores))
+            else:
+                scores.append(rep_scores)
 
-    def randomize(self, x, start, end, random_state=None):
-        if random_state is None:
-            random_state = np.random
-        random_state.shuffle(x[:, start:end])
+        if sample_weight is not None:
+            self.baseline_score_ = scoring(estimator, X, y, sample_weight=sample_weight)
+        else:
+            self.baseline_score_ = scoring(estimator, X, y)
 
-
-class FrequencyDomain(Domain):
-    def plot_samples(self, x, y=None, ax=None, n_samples=None, **kwargs):
-        jitter = kwargs.pop("jitter", False)
-        sample_spacing = kwargs.pop("sample_spacing", 1)
-        frequency = kwargs.pop("show_frequency", False)
-        plot_frequency_domain(
-            x,
-            y=y,
-            ax=ax,
-            n_samples=n_samples,
-            jitter=jitter,
-            sample_spacing=sample_spacing,
-            frequency=frequency,
-        )
-
-    def intervals(self, n, n_intervals):
-        for start, end in super().intervals(int(n // 2), n_intervals):
-            yield start + 1, end + 1
-
-    def transform(self, x):
-        return np.fft.fft(x, axis=1)
-
-    def inverse_transform(self, x):
-        return np.fft.ifft(x, axis=1).real
-
-    def randomize(self, x, start, end, random_state=None):
-        if random_state is None:
-            random_state = np.random
-        random_state.shuffle(x[:, start:end])
-        random_state.shuffle(x[:, end - 1 : start - 1 : -1])
+        if isinstance(self.baseline_score_, dict):
+            self.importances_ = {
+                name: _unpack_scores(
+                    self.baseline_score_[name],
+                    np.array([scores[i][name] for i in range(self.n_bins)]),
+                )
+                for name in self.baseline_score_
+            }
+        else:
+            self.importances_ = _unpack_scores(self.baseline_score_, np.array(scores))
 
 
-_PERMUTATION_DOMAIN = {
-    "time": TimeDomain,
-    "frequency": FrequencyDomain,
-}
-
-
-class IntervalImportance(ExplainerMixin, BaseEstimator):
-    """Compute a model agnostic importance score for non-overlapping intervals in
-    the time or frequency domain by permuting the intervals among samples.
+class IntervalImportance(ExplainerMixin, PermuteImportance):
+    """Compute a model agnostic importance score for non-overlapping intervals
 
     Attributes
     ----------
@@ -174,6 +162,9 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
     importances_ : dict or Importance
         The importance scores for each interval. If dict, one value per scoring
         function.
+
+    components_ : ndarray of shape (n_intervals, 2)
+        The interval start and end positions.
 
     """
 
@@ -184,7 +175,6 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
         n_repeat=5,
         n_intervals="sqrt",
         window=None,
-        domain="time",
         verbose=False,
         random_state=None,
     ):
@@ -222,21 +212,14 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
             - If `None`, the random number generator is the `RandomState` instance used
               by `np.random`.
         """
-        self.scoring = scoring
-        self.n_repeat = n_repeat
+        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
         self.n_intervals = n_intervals
         self.window = window
-        self.domain = domain
         self.verbose = verbose
-        self.random_state = random_state
 
-    def fit(self, estimator, x, y, sample_weight=None):
-        estimator = self._validate_estimator(estimator)
-        x, y = self._validate_data(x, y, reset=False, allow_3d=False)
-        random_state = check_random_state(self.random_state)
-
+    def _yield_components(self):
         if self.window is not None:
-            n_intervals = x.shape[-1] // check_scalar(
+            n_intervals = self.n_timesteps_in_ // check_scalar(
                 self.window,
                 "window",
                 numbers.Integral,
@@ -244,9 +227,9 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
                 max_val=self.n_timesteps_in_,
             )
         elif self.n_intervals == "sqrt":
-            n_intervals = math.ceil(math.sqrt(x.shape[-1]))
+            n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
         elif self.n_intervals == "log":
-            n_intervals = math.ceil(math.log2(x.shape[-1]))
+            n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
         elif isinstance(self.n_intervals, numbers.Integral):
             n_intervals = self.n_intervals
         elif isinstance(self.n_intervals, numbers.Real):
@@ -258,78 +241,32 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
                 max_val=1.0,
                 include_boundaries="right",
             )
-            n_intervals = math.ceil(x.shape[-1] * self.n_intervals)
+            n_intervals = math.ceil(self.n_timesteps_in_ * self.n_intervals)
         else:
             raise ValueError(
                 "n_intervals should either be 'sqrt', 'log', float or int, got %r"
                 % self.n_intervals
             )
+        return _intervals(self.n_timesteps_in_, n_intervals)
 
-        if callable(self.scoring):
-            scoring = self.scoring
-        elif self.scoring is None or isinstance(self.scoring, str):
-            scoring = check_scoring(estimator, self.scoring)
-        else:
-            scoring_dict = _check_multimetric_scoring(estimator, self.scoring)
-            scoring = _MultimetricScorer(**scoring_dict)
+    def _permute_component(self, X, component, random_state):
+        X_perm = X.copy()
+        start, end = component
+        random_state.shuffle(X_perm[:, start:end])
+        return X_perm
 
-        if isinstance(self.domain, str):
-            self.domain_ = check_option(_PERMUTATION_DOMAIN, self.domain, "domain")()
-        else:
-            self.domain_ = self.domain
-
-        x_transform = self.domain_.transform(x=x)
-        self.intervals_ = list(
-            self.domain_.intervals(x_transform.shape[-1], n_intervals)
-        )
-        scores = []
-        for iter, (start, end) in enumerate(self.intervals_):
-            if self.verbose:
-                print(f"Running iteration {iter + 1} of {len(self.intervals_)}.")
-            x_perm_transform = x_transform.copy()
-            rep_scores = []
-            for rep in range(self.n_repeat):
-                self.domain_.randomize(
-                    x_perm_transform, start, end, random_state=random_state
-                )
-                x_perm_inverse = self.domain_.inverse_transform(x_perm_transform)
-                if sample_weight is not None:
-                    score = scoring(
-                        estimator, x_perm_inverse, y, sample_weight=sample_weight
-                    )
-                else:
-                    score = scoring(estimator, x_perm_inverse, y)
-                rep_scores.append(score)
-
-            if isinstance(rep_scores[0], dict):
-                scores.append(_aggregate_score_dicts(rep_scores))
-            else:
-                scores.append(rep_scores)
-
-        if sample_weight is not None:
-            self.baseline_score_ = scoring(estimator, x, y, sample_weight=sample_weight)
-        else:
-            self.baseline_score_ = scoring(estimator, x, y)
-
-        if self.verbose:
-            print(f"Baseline score is: {self.baseline_score_}")
-
-        if isinstance(self.baseline_score_, dict):
-            self.importances_ = {
-                name: _unpack_scores(
-                    self.baseline_score_[name],
-                    np.array([scores[i][name] for i in range(n_intervals)]),
-                )
-                for name in self.baseline_score_
-            }
-        else:
-            self.importances_ = _unpack_scores(self.baseline_score_, np.array(scores))
+    def fit(self, estimator, x, y, sample_weight=None):
+        estimator = self._validate_estimator(estimator)
+        x, y = self._validate_data(x, y, reset=False, allow_3d=False)
+        random_state = check_random_state(self.random_state)
+        self._fit(estimator, x, y, random_state, sample_weight=sample_weight)
         return self
 
     def explain(self, x, y=None):
+        check_is_fitted(self)
         x = self._validate_data(x, reset=False)
         importances = np.empty(self.n_timesteps_in_, dtype=float)
-        for i, (start, end) in enumerate(self.intervals_):
+        for i, (start, end) in enumerate(self.components_):
             importances[start:end] = self.importances_.mean[i]
         return np.broadcast_to(importances, (x.shape[0], self.n_timesteps_in_))
 
@@ -343,8 +280,8 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
         k=None,
         n_samples=100,
         show_grid=True,
-        domain_args=None,
     ):
+        check_is_fitted(self)
         if isinstance(self.importances_, dict):
             importances = check_option(self.importances_, scoring, "scoring")
         else:
@@ -356,7 +293,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
             return plot_importances(
                 importances,
                 ax=ax,
-                labels=["(%d, %d)" % (start, end) for start, end in self.intervals_],
+                labels=["(%d, %d)" % (start, end) for start, end in self.components_],
             )
 
         importances = importances.mean
@@ -399,7 +336,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
         cmap = get_cmap("coolwarm")
 
         if show_grid:
-            for start, _ in self.intervals_:
+            for start, _ in self.components_:
                 ax.axvline(
                     start,
                     0,
@@ -412,7 +349,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
                 )
 
         for o in order:
-            start, end = self.intervals_[o]
+            start, end = self.components_[o]
             ax.axvspan(
                 start,
                 end,
@@ -423,19 +360,12 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
                 zorder=1,
             )
 
-        xticks = [start for start, _ in self.intervals_]
-        xticks.append(self.intervals_[-1][1])
+        xticks = [start for start, _ in self.components_]
+        xticks.append(self.components_[-1][1])
         ax.set_xticks(xticks)
         ax.tick_params(axis="x", labelrotation=-70)
 
-        self.domain_.plot_samples(
-            x,
-            y=y,
-            ax=ax,
-            n_samples=n_samples,
-            **(domain_args if domain_args is not None else {}),
-        )
-
+        plot_time_domain(x, y=y, n_samples=n_samples, ax=ax)
         mappable = ScalarMappable(cmap=cmap, norm=norm)
         if fig is not None:
             fig.colorbar(mappable)
@@ -444,7 +374,7 @@ class IntervalImportance(ExplainerMixin, BaseEstimator):
             return ax, mappable
 
 
-class AmplitudeImportance(ExplainerMixin, BaseEstimator):
+class AmplitudeImportance(ExplainerMixin, PermuteImportance):
     """Compute the importance of equi-probable horizontal time series intervals by
     permuting the values between each horizontal interval. The implementation uses
     :class:`transform.SAX` to discretize the time series and then for each bin permute
@@ -462,6 +392,9 @@ class AmplitudeImportance(ExplainerMixin, BaseEstimator):
     importances_ : float or dict
         The importances of each vertical bin.
 
+    components_ : list
+        List of binning identifiers.
+
     """
 
     def __init__(
@@ -474,101 +407,62 @@ class AmplitudeImportance(ExplainerMixin, BaseEstimator):
         n_repeat=1,
         random_state=None,
     ):
-        self.scoring = scoring
+        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
         self.n_intervals = n_intervals
         self.window = window
         self.binning = binning
         self.n_bins = n_bins
-        self.n_repeat = n_repeat
-        self.random_state = random_state
 
-    def fit(self, estimator, x, y, sample_weight=None):
+    def _yield_components(self):
+        return (b for b in range(self.n_bins))
+
+    def _permute_component(self, X, component, random_state):
+        X_perm = X.copy()
+        for i, j in random_permute_indices(X.shape[0], random_state):
+            xi = self.x_sax_[i, :]
+            xj = self.x_sax_[j, :]
+
+            i_indicies = np.where(xi == component)[0]
+            j_indicies = np.where(xj == component)[0]
+
+            if i_indicies.size < j_indicies.size:
+                j_indicies = random_state.choice(
+                    j_indicies, i_indicies.size, replace=False
+                )
+            elif i_indicies.size > j_indicies.size:
+                i_indicies = random_state.choice(
+                    i_indicies, j_indicies.size, replace=False
+                )
+
+            for i_idx, j_idx in zip(i_indicies, j_indicies):
+                i_start, i_end = self.sax_.intervals[i_idx]
+                j_start, j_end = self.sax_.intervals[j_idx]
+
+                if i_end - i_start < j_end - j_start:
+                    j_end -= 1
+                elif j_end - j_start < i_end - i_start:
+                    i_end -= 1
+
+                X_perm[i, i_start:i_end], X_perm[j, j_start:j_end] = (
+                    X_perm[j, j_start:j_end],
+                    X_perm[i, i_start:i_end],
+                )
+
+        return X_perm
+
+    def fit(self, estimator, X, y, sample_weight=None):
         estimator = self._validate_estimator(estimator)
-        x, y = self._validate_data(x, y, reset=False, allow_3d=False)
-
+        X, y = self._validate_data(X, y, reset=False, allow_3d=False)
         self.sax_ = SAX(
             n_intervals=self.n_intervals,
             window=self.window,
             binning=self.binning,
             n_bins=self.n_bins,
             estimate=True,
-        ).fit(x)
-
-        x_sax = self.sax_.transform(x)
-
-        if callable(self.scoring):
-            scoring = self.scoring
-        elif self.scoring is None or isinstance(self.scoring, str):
-            scoring = check_scoring(estimator, self.scoring)
-        else:
-            scoring_dict = _check_multimetric_scoring(estimator, self.scoring)
-            scoring = _MultimetricScorer(**scoring_dict)
-
+        ).fit(X)
+        self.x_sax_ = self.sax_.transform(X)
         random_state = check_random_state(self.random_state)
-        scores = []
-        for bin in range(self.n_bins):
-            rep_scores = []
-            for rep in range(self.n_repeat):
-                x_perm = x.copy()
-                for i in range(x_sax.shape[0] - 1, 0, -1):
-                    j = random_state.randint(0, i + 1)
-                    xi = x_sax[i, :]
-                    xj = x_sax[j, :]
-
-                    i_indicies = np.where(xi == bin)[0]
-                    j_indicies = np.where(xj == bin)[0]
-
-                    if i_indicies.size < j_indicies.size:
-                        j_indicies = random_state.choice(
-                            j_indicies, i_indicies.size, replace=False
-                        )
-                    elif i_indicies.size > j_indicies.size:
-                        i_indicies = random_state.choice(
-                            i_indicies, j_indicies.size, replace=False
-                        )
-
-                    for i_idx, j_idx in zip(i_indicies, j_indicies):
-                        i_start, i_end = self.sax_.intervals[i_idx]
-                        j_start, j_end = self.sax_.intervals[j_idx]
-
-                        if i_end - i_start < j_end - j_start:
-                            j_end -= 1
-                        elif j_end - j_start < i_end - i_start:
-                            i_end -= 1
-
-                        x_perm[i, i_start:i_end], x_perm[j, j_start:j_end] = (
-                            x_perm[j, j_start:j_end],
-                            x_perm[i, i_start:i_end],
-                        )
-
-                if sample_weight is not None:
-                    score = scoring(estimator, x_perm, y, sample_weight=sample_weight)
-                else:
-                    score = scoring(estimator, x_perm, y)
-
-                rep_scores.append(score)
-
-            if isinstance(rep_scores[0], dict):
-                scores.append(_aggregate_score_dicts(rep_scores))
-            else:
-                scores.append(rep_scores)
-
-        if sample_weight is not None:
-            self.baseline_score_ = scoring(estimator, x, y, sample_weight=sample_weight)
-        else:
-            self.baseline_score_ = scoring(estimator, x, y)
-
-        if isinstance(self.baseline_score_, dict):
-            self.importances_ = {
-                name: _unpack_scores(
-                    self.baseline_score_[name],
-                    np.array([scores[i][name] for i in range(self.n_bins)]),
-                )
-                for name in self.baseline_score_
-            }
-        else:
-            self.importances_ = _unpack_scores(self.baseline_score_, np.array(scores))
-
+        self._fit(estimator, X, y, random_state, sample_weight=sample_weight)
         return self
 
     def _validate_data_plot(self, x):
@@ -648,6 +542,7 @@ class AmplitudeImportance(ExplainerMixin, BaseEstimator):
             Return the mappable used to plot the colorbar.
             Only returned if ax is not None and x is not None.
         """
+        check_is_fitted(self)
         if x is None:
             if scoring is not None and isinstance(self.importances_, dict):
                 importances = check_option(self.importances_, scoring, "scoring")
@@ -756,3 +651,224 @@ class AmplitudeImportance(ExplainerMixin, BaseEstimator):
             return ax
         else:
             return ax, mappable
+
+
+class ShapeletImportance(ExplainerMixin, PermuteImportance):
+    """Compute the importance of shapelets by permuting instances with lowest distance.
+
+    Attributes
+    ----------
+    components : ndarray
+        The shapelets
+    """
+
+    def __init__(
+        self,
+        scoring=None,
+        n_repeat=1,
+        n_shapelets=10,
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
+        metric="euclidean",
+        metric_params=None,
+        random_state=None,
+    ):
+        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
+        self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
+        self.metric = metric
+        self.metric_params = metric_params
+
+    def _reset_component(self, X, component):
+        _, self._shapelet_idx = pairwise_subsequence_distance(
+            component,
+            X,
+            metric=self.metric,
+            metric_params=self.metric_params,
+            return_index=True,
+        )
+
+    def _yield_components(self):
+        for _dim, (_, shapelet) in self.shapelet_transform_.embedding_.features:
+            yield shapelet
+
+    def _permute_component(self, X, component, random_state):
+        X_perm = X.copy()
+        for i, j in random_permute_indices(X.shape[0], random_state):
+            i_shapelet_idx = self._shapelet_idx[i]
+            j_shapelet_idx = self._shapelet_idx[j]
+
+            (
+                X_perm[i, i_shapelet_idx : (i_shapelet_idx + component.size)],
+                X_perm[j, j_shapelet_idx : (j_shapelet_idx + component.size)],
+            ) = (
+                X_perm[j, j_shapelet_idx : (j_shapelet_idx + component.size)],
+                X_perm[i, i_shapelet_idx : (i_shapelet_idx + component.size)],
+            )
+
+        return X_perm
+
+    def fit(self, estimator, X, y, sample_weight=None):
+        self._validate_estimator(estimator)
+        X, y = self._validate_data(X, y, reset=False)
+
+        random_state = check_random_state(self.random_state)
+        self.shapelet_transform_ = RandomShapeletTransform(
+            n_shapelets=self.n_shapelets,
+            metric=self.metric,
+            min_shapelet_size=self.min_shapelet_size,
+            max_shapelet_size=self.max_shapelet_size,
+            random_state=random_state.randint(np.iinfo(np.int32).max),
+        ).fit(X)
+
+        self._fit(estimator, X, y, random_state, sample_weight=sample_weight)
+        return self
+
+    def explain(self, X, y=None, kernel_scale=0.25):
+        distances, indices = pairwise_subsequence_distance(
+            self.components_,
+            X,
+            metric=self.metric,
+            metric_params=self.metric_params,
+            return_index=True,
+        )
+
+        weights = self._distance_weight(distances, kernel_scale)
+        importances = self.importances_.mean
+
+        if y is None:
+            explanation = np.zeros((len(self.components_), X.shape[-1]), dtype=float)
+            for j, shapelet in enumerate(self.components_):
+                importance = importances[j]
+                for i in range(X.shape[0]):
+                    index = indices[i, j]
+                    weight = weights[i, j]
+                    explanation[j, index : (index + shapelet.size)] += (
+                        weight * importance
+                    )
+
+            return explanation / X.shape[0]
+        else:
+            labels, inv, counts = np.unique(y, return_inverse=True, return_counts=True)
+            explanation = np.zeros(
+                (len(self.components_), len(labels), X.shape[-1]), dtype=float
+            )
+            for j, shapelet in enumerate(self.components_):
+                importance = importances[j]
+                for i in range(X.shape[0]):
+                    index = indices[i, j]
+                    weight = weights[i, j]
+                    explanation[j, inv[i], index : (index + shapelet.size)] += (
+                        1 / counts[inv[i]] * weight * importance
+                    )
+
+            return explanation
+
+    def plot(self, X=None, y=None, k=None, scoring=None, kernel_scale=0.25, ax=None):
+        if X is None:
+            plot_importances(
+                self.importances_, ax=ax, labels=range(len(self.components_))
+            )
+
+        if isinstance(self.importances_, dict):
+            importances = check_option(self.importances_, scoring, "scoring")
+        else:
+            if scoring is not None and scoring != self.scoring:
+                raise ValueError(
+                    "scoring must be '%s', got %r" % (self.scoring, scoring)
+                )
+            importances = self.importances_
+
+        importances = importances.mean
+        order = np.argsort(importances)[::-1]
+
+        if k is None:
+            k = importances.size
+
+        if y is None:
+            explanation = self.explain(X, kernel_scale=kernel_scale)
+            if ax is None:
+                fig, ax = subplots()
+            else:
+                fig = None
+
+            mappable = ax.pcolormesh(explanation[order[:10]], cmap="coolwarm")
+            ax.set_yticks(np.arange(10) + 0.5, order[:10])
+            if fig is not None:
+                fig.colorbar(mappable)
+                return ax
+            else:
+                return ax, mappable
+        else:
+            explanation = self.explain(X, y, kernel_scale=kernel_scale)
+            distances, index = pairwise_subsequence_distance(
+                self.components_,
+                X,
+                metric=self.metric,
+                metric_params=self.metric_params,
+                return_index=True,
+            )
+            cmap = get_cmap("coolwarm")
+            norm = MidpointNormalize(
+                vmin=importances[:k].min(), vmax=importances[:k].max(), midpoint=0
+            )
+            labels, inv = np.unique(y, return_inverse=True)
+            if ax is None:
+                fig, ax = subplots(
+                    nrows=k,
+                    ncols=len(labels),
+                    figsize=(len(labels) * 4, k * 2.5),
+                    sharex=True,
+                    sharey=True,
+                )
+
+            weights = self._distance_weight(distances, 0.25)
+            for i in range(len(labels)):
+                for j in range(k):
+                    plot_time_domain(X[y == labels[i]], n_samples=5, ax=ax[j, i])
+
+            for i in range(0, X.shape[0]):
+                for j in range(k):
+                    # ax[j, inv[i]].plot(X_test[i], color="black", lw=0.5)
+                    order_j = order[j]
+                    ax[j, inv[i]].plot(
+                        np.arange(
+                            index[i, order_j],
+                            index[i, order_j] + self.components_[order_j].size,
+                        ),
+                        self.components_[order_j],
+                        linewidth=weights[i, order_j],
+                        color=cmap(norm(importances[order_j])),
+                    )
+
+            for i in range(len(labels)):
+                ax[0, i].set_title("Label=%r" % labels[i])
+
+            mappable = ScalarMappable(norm=norm, cmap=cmap)
+            if ax is not None:
+                # fig.colorbar(mappable, orientation="horizontal", ax=ax)
+                return ax
+            else:
+                return ax, mappable
+
+    def _distance_weight(self, distances, kernel_scale=0.25):
+        kernel_width = [np.sqrt(s.size) * kernel_scale for s in self.components_]
+        return np.sqrt(np.exp(-(distances ** 2) / np.array(kernel_width) ** 2))
+
+
+def fisher_yates_indices(n_samples, random_state):
+    for i in range(n_samples - 1, 0, -1):
+        j = random_state.randint(0, i + 1)
+        yield i, j
+
+
+def random_permute_indices(n_samples, random_state):
+    if n_samples % 2 != 0:
+        n_samples -= 1
+
+    indices = np.arange(n_samples)
+    random_state.shuffle(indices)
+    indices = indices.reshape(-1, 2)
+    for i in range(indices.shape[0]):
+        yield indices[i, 0], indices[i, 1]
