@@ -36,6 +36,25 @@ Importance = namedtuple("Importance", ["mean", "std", "full"])
 
 
 def plot_importances(importances, ax=None, labels=None):
+    """Plot the importances as a boxplot.
+
+    Paramters
+    ---------
+    importances : Importance or dict
+        The importances
+
+    ax : Axes, optional
+        The axes to plot. If importances is dict, ax must contain at least
+        len(importances) Axes objects.
+
+    labels : array-like, optional
+        The labels for the importances.
+
+    Returns
+    -------
+    ax : Axes
+        The plotted Axes.
+    """
     n_importances = len(importances) if isinstance(importances, dict) else 1
     if ax is None:
         _, ax = subplots(ncols=n_importances)
@@ -417,8 +436,11 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         return (b for b in range(self.n_bins))
 
     def _permute_component(self, X, component, random_state):
-        X_perm = X.copy()
-        for i, j in random_permute_indices(X.shape[0], random_state):
+        X_perm = np.empty_like(X)
+        idx = np.arange(X.shape[0])
+        random_state.shuffle(idx)
+        for i in range(X.shape[0]):
+            j = idx[i]
             xi = self.x_sax_[i, :]
             xj = self.x_sax_[j, :]
 
@@ -434,6 +456,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
                     i_indicies, j_indicies.size, replace=False
                 )
 
+            X_perm[i] = X[i]
             for i_idx, j_idx in zip(i_indicies, j_indicies):
                 i_start, i_end = self.sax_.intervals[i_idx]
                 j_start, j_end = self.sax_.intervals[j_idx]
@@ -443,10 +466,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
                 elif j_end - j_start < i_end - i_start:
                     i_end -= 1
 
-                X_perm[i, i_start:i_end], X_perm[j, j_start:j_end] = (
-                    X_perm[j, j_start:j_end],
-                    X_perm[i, i_start:i_end],
-                )
+                X_perm[i, i_start:i_end] = X[j, j_start:j_end]
 
         return X_perm
 
@@ -694,18 +714,19 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             yield shapelet
 
     def _permute_component(self, X, component, random_state):
-        X_perm = X.copy()
-        for i, j in random_permute_indices(X.shape[0], random_state):
+        X_perm = np.empty_like(X)
+        idx = np.arange(X.shape[0])
+        random_state.shuffle(idx)
+        for i in range(X.shape[0]):
+            j = idx[i]
+
             i_shapelet_idx = self._shapelet_idx[i]
             j_shapelet_idx = self._shapelet_idx[j]
-
-            (
-                X_perm[i, i_shapelet_idx : (i_shapelet_idx + component.size)],
-                X_perm[j, j_shapelet_idx : (j_shapelet_idx + component.size)],
-            ) = (
-                X_perm[j, j_shapelet_idx : (j_shapelet_idx + component.size)],
-                X_perm[i, i_shapelet_idx : (i_shapelet_idx + component.size)],
-            )
+            X_perm[j] = X[j]
+            if i != j:
+                X_perm[j, j_shapelet_idx : (j_shapelet_idx + component.size)] = X[
+                    i, i_shapelet_idx : (i_shapelet_idx + component.size)
+                ]
 
         return X_perm
 
@@ -793,8 +814,8 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             else:
                 fig = None
 
-            mappable = ax.pcolormesh(explanation[order[:10]], cmap="coolwarm")
-            ax.set_yticks(np.arange(10) + 0.5, order[:10])
+            mappable = ax.pcolormesh(explanation[order[:k]], cmap="coolwarm")
+            ax.set_yticks(np.arange(k) + 0.5, order[:k])
             if fig is not None:
                 fig.colorbar(mappable)
                 return ax
@@ -813,7 +834,9 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             norm = MidpointNormalize(
                 vmin=importances[:k].min(), vmax=importances[:k].max(), midpoint=0
             )
-            labels, inv = np.unique(y, return_inverse=True)
+            labels, inv, lbl_count = np.unique(
+                y, return_inverse=True, return_counts=True
+            )
             if ax is None:
                 fig, ax = subplots(
                     nrows=k,
@@ -826,11 +849,12 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             weights = self._distance_weight(distances, 0.25)
             for i in range(len(labels)):
                 for j in range(k):
-                    plot_time_domain(X[y == labels[i]], n_samples=5, ax=ax[j, i])
+                    plot_time_domain(
+                        X[y == labels[i]], n_samples=lbl_count[i], ax=ax[j, i]
+                    )
 
             for i in range(0, X.shape[0]):
                 for j in range(k):
-                    # ax[j, inv[i]].plot(X_test[i], color="black", lw=0.5)
                     order_j = order[j]
                     ax[j, inv[i]].plot(
                         np.arange(
@@ -847,7 +871,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
 
             mappable = ScalarMappable(norm=norm, cmap=cmap)
             if ax is not None:
-                # fig.colorbar(mappable, orientation="horizontal", ax=ax)
+                fig.colorbar(mappable, orientation="horizontal", ax=ax[-1, :])
                 return ax
             else:
                 return ax, mappable
@@ -855,20 +879,3 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
     def _distance_weight(self, distances, kernel_scale=0.25):
         kernel_width = [np.sqrt(s.size) * kernel_scale for s in self.components_]
         return np.sqrt(np.exp(-(distances ** 2) / np.array(kernel_width) ** 2))
-
-
-def fisher_yates_indices(n_samples, random_state):
-    for i in range(n_samples - 1, 0, -1):
-        j = random_state.randint(0, i + 1)
-        yield i, j
-
-
-def random_permute_indices(n_samples, random_state):
-    if n_samples % 2 != 0:
-        n_samples -= 1
-
-    indices = np.arange(n_samples)
-    random_state.shuffle(indices)
-    indices = indices.reshape(-1, 2)
-    for i in range(indices.shape[0]):
-        yield indices[i, 0], indices[i, 1]
