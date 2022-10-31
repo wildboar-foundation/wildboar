@@ -145,7 +145,7 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
             self.importances_ = {
                 name: _unpack_scores(
                     self.baseline_score_[name],
-                    np.array([scores[i][name] for i in range(self.n_bins)]),
+                    np.array([scores[i][name] for i in range(len(self.components_))]),
                 )
                 for name in self.baseline_score_
             }
