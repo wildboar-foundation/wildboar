@@ -26,9 +26,7 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.explain._importance.fisher_yates_indices
    wildboar.explain._importance.plot_importances
-   wildboar.explain._importance.random_permute_indices
 
 
 
@@ -202,13 +200,24 @@ Attributes
 
 
 
-.. py:function:: fisher_yates_indices(n_samples, random_state)
-
-
 .. py:function:: plot_importances(importances, ax=None, labels=None)
 
+   Plot the importances as a boxplot.
 
-.. py:function:: random_permute_indices(n_samples, random_state)
+   Paramters
+   ---------
+   importances : Importance or dict
+       The importances
+
+   ax : Axes, optional
+       The axes to plot. If importances is dict, ax must contain at least
+       len(importances) Axes objects.
+
+   labels : array-like, optional
+       The labels for the importances.
+
+   :returns: **ax** -- The plotted Axes.
+   :rtype: Axes
 
 
 .. py:data:: Importance
