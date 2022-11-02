@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>wildboar.metrics._counterfactual - Wildboar 1.1.0rc5.dev167+g4e9dae8a documentation</title>
+        <title>wildboar.metrics._counterfactual - Wildboar 1.1.0rc5.dev168+g7fcc6bd2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev167+g4e9dae8a documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev168+g7fcc6bd2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -367,7 +367,7 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.metrics._counterfactual.compactness_score">
-<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">compactness_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L91-L125"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.compactness_score" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">compactness_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L116-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.compactness_score" title="Permalink to this definition">#</a></dt>
 <dd><p>Return the compactness of the counterfactuals as measured by the
 fraction of changed timesteps. The fewer timesteps have changed between the original
 and the counterfactual, the lower the score.</p>
@@ -391,7 +391,7 @@ and the counterfactual, the lower the score.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.metrics._counterfactual.plausability_score">
-<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">plausability_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_plausible</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L10-L37"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.plausability_score" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">plausability_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X_plausible</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L12-L62"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.plausability_score" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the plausibility of the generated counterfactuals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -399,11 +399,17 @@ and the counterfactual, the lower the score.</p>
 <li><p><strong>X_plausible</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)</em>) – The plausible time series, typically the training or testing samples.</p></li>
 <li><p><strong>X_counterfactuals</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>m_samples</em><em>, </em><em>n_timesteps</em><em>)</em>) – The counterfactuals generated</p></li>
 <li><p><strong>estimator</strong> (<em>Estimator</em><em>, </em><em>optional</em>) – The outlier estimator.</p></li>
+<li><p><strong>method</strong> (<em>{'average'</em><em>, </em><em>'accuracy'}</em><em>, </em><em>optional</em>) – The score function.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>score</strong> – The mean plausability. Larger score is better, negative scores indicate many
-outliers.</p>
+<dd class="field-even"><p><p><strong>score</strong> – The plausability.</p>
+<ul class="simple">
+<li><p>if method=’average’, the mean score is returned, with larger score incicating
+better performance.</p></li>
+<li><p>if method=’accuracy’, the fraction of correctly predicted inliers is returned.</p></li>
+</ul>
+</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
@@ -413,7 +419,7 @@ outliers.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.metrics._counterfactual.proximity_score">
-<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">proximity_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L40-L88"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.proximity_score" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">proximity_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L65-L113"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.proximity_score" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the proximity score of the counterfactuals using the provided metric.</p>
 <p>The closer the counterfactual is to the original, the lower the score.</p>
 <dl class="field-list simple">
@@ -445,7 +451,7 @@ outliers.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.metrics._counterfactual.validity_score">
-<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">validity_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_counterfactual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L128-L145"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.validity_score" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.metrics._counterfactual.</span></span><span class="sig-name descname"><span class="pre">validity_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_counterfactual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L153-L170"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics._counterfactual.validity_score" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the number counterfactuals that have the desired label.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

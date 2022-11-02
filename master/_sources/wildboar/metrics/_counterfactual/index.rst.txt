@@ -41,7 +41,7 @@ Functions
    :rtype: float
 
 
-.. py:function:: plausability_score(X_plausible, X_counterfactuals, estimator=None)
+.. py:function:: plausability_score(X_plausible, X_counterfactuals, estimator=None, method='average')
 
    Compute the plausibility of the generated counterfactuals.
 
@@ -51,13 +51,19 @@ Functions
    :type X_counterfactuals: array-like of shape (m_samples, n_timesteps)
    :param estimator: The outlier estimator.
    :type estimator: Estimator, optional
+   :param method: The score function.
+   :type method: {'average', 'accuracy'}, optional
 
-   :returns: **score** -- The mean plausability. Larger score is better, negative scores indicate many
-             outliers.
+   :returns: **score** -- The plausability.
+
+             - if method='average', the mean score is returned, with larger score incicating
+               better performance.
+
+             - if method='accuracy', the fraction of correctly predicted inliers is returned.
    :rtype: float
 
 
-.. py:function:: proximity_score(x_true, x_counterfactuals, normalize=False, kernel_width=None, metric='euclidean', metric_params=None)
+.. py:function:: proximity_score(x_true, x_counterfactuals, normalize=False, kernel_scale=0.75, metric='euclidean', metric_params=None)
 
    Compute the proximity score of the counterfactuals using the provided metric.
 
