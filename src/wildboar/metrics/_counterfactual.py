@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 from sklearn import clone
 from sklearn.metrics import accuracy_score
@@ -7,7 +9,9 @@ from ..explain.counterfactual import proximity
 from ..utils.validation import check_array
 
 
-def plausability_score(X_plausible, X_counterfactuals, estimator=None):
+def plausability_score(
+    X_plausible, X_counterfactuals, estimator=None, method="average"
+):
     """Compute the plausibility of the generated counterfactuals.
 
     Parameters
@@ -21,27 +25,48 @@ def plausability_score(X_plausible, X_counterfactuals, estimator=None):
     estimator : Estimator, optional
         The outlier estimator.
 
+    method : {'average', 'accuracy'}, optional
+        The score function.
+
     Returns
     -------
     score : float
-        The mean plausability. Larger score is better, negative scores indicate many
-        outliers.
+        The plausability.
+
+        - if method='average', the mean score is returned, with larger score incicating
+          better performance.
+
+        - if method='accuracy', the fraction of correctly predicted inliers is returned.
     """
     if estimator is None:
-        estimator = LocalOutlierFactor(n_neighbors=1, novelty=True)
+        estimator = LocalOutlierFactor(
+            n_neighbors=math.ceil(np.sqrt(X_plausible.shape[0])), novelty=True
+        )
     else:
         estimator = clone(estimator)
 
     X_plausible = check_array(X_plausible, allow_3d=True)
     X_counterfactuals = check_array(X_counterfactuals, allow_3d=True)
-    return np.mean(estimator.fit(X_plausible).decision_function(X_counterfactuals))
+    if X_plausible.shape[-1] != X_counterfactuals.shape[-1]:
+        raise ValueError(
+            "X_plausible (%s) and X_counterfactuals (%s) must have the same number "
+            "of timesteps." % (X_plausible.shape, X_counterfactuals.shape)
+        )
+    estimator.fit(X_plausible)
+    y_true = np.broadcast_to(1, X_counterfactuals.shape[0])
+    if method == "average":
+        return np.mean(estimator.decision_function(X_counterfactuals))
+    elif method == "accuracy":
+        return accuracy_score(y_true, estimator.predict(X_counterfactuals))
+    else:
+        raise ValueError("method must be 'average', or 'accuracy', " "got %r" % method)
 
 
 def proximity_score(
     x_true,
     x_counterfactuals,
     normalize=False,
-    kernel_width=None,
+    kernel_scale=0.75,
     metric="euclidean",
     metric_params=None,
 ):
@@ -81,7 +106,7 @@ def proximity_score(
             x_true,
             x_counterfactuals,
             normalize=normalize,
-            kernel_width=kernel_width,
+            kernel_scale=kernel_scale,
             metric=metric,
             metric_params=metric_params,
         )
