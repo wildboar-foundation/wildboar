@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Supervised learning" href="../supervised.html" /><link rel="prev" title="Filtering" href="filter.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Outlier generation - Wildboar 1.1.0rc5.dev169+g7412b42d documentation</title>
+        <title>Outlier generation - Wildboar 1.1.0rc5.dev174+g6b7e48eb documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev169+g7412b42d documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev174+g6b7e48eb documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -618,7 +618,7 @@ div.rendered_html tbody tr:hover {
     <span class="n">density_outliers</span><span class="p">,</span>
     <span class="n">emmott_outliers</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">wildboar.embed</span> <span class="kn">import</span> <span class="n">IntervalEmbedding</span>
+<span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">IntervalTransform</span>
 <span class="kn">from</span> <span class="nn">wildboar.utils</span> <span class="kn">import</span> <span class="n">plot</span>
 </pre></div>
 </div>
@@ -627,7 +627,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;CBF&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -649,7 +649,7 @@ div.rendered_html tbody tr:hover {
 
     <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Time series&quot;</span><span class="p">)</span>
-    <span class="n">plot</span><span class="o">.</span><span class="n">plot_time_domain</span><span class="p">(</span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_outlier</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">)</span>
+    <span class="n">plot</span><span class="o">.</span><span class="n">plot_time_domain</span><span class="p">(</span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_outlier</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
 
@@ -657,7 +657,7 @@ div.rendered_html tbody tr:hover {
     <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
 
-    <span class="n">pipe</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">IntervalEmbedding</span><span class="p">(</span><span class="n">n_intervals</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span> <span class="n">PCA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">))</span>
+    <span class="n">pipe</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">IntervalTransform</span><span class="p">(</span><span class="n">n_intervals</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span> <span class="n">PCA</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">))</span>
     <span class="n">original_projection</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x_original</span><span class="p">,</span> <span class="n">y_original</span><span class="p">)</span>
     <span class="n">outlier_projection</span> <span class="o">=</span> <span class="n">pipe</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_outlier</span><span class="p">)</span>
     <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Dark2&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
@@ -686,7 +686,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">minority_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">minority_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
 <span class="n">plot_inlier_outlier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -763,7 +763,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">density_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">density_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 <span class="n">plot_inlier_outlier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -772,19 +772,42 @@ div.rendered_html tbody tr:hover {
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/guide_datasets_outlier_13_0.png" src="../../_images/guide_datasets_outlier_13_0.png" />
-</div>
+<div class="highlight"><pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In [8], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> x_outlier, y_outlier = density_outliers(x, y, n_outliers=0.05, eps=0.1, random_state=123)
+<span class="ansi-green-intense-fg ansi-bold">      2</span> plot_inlier_outlier(x, y, x_outlier, y_outlier)
+
+File <span class="ansi-green-fg">~/Projects/wildboar/src/wildboar/datasets/outlier.py:252</span>, in <span class="ansi-cyan-fg">density_outliers</span><span class="ansi-blue-fg">(x, y, n_outliers, method, eps, min_sample, metric, max_eps, random_state)</span>
+<span class="ansi-green-intense-fg ansi-bold">    250</span> label, count = np.unique(estimator.labels_, return_counts=True)
+<span class="ansi-green-intense-fg ansi-bold">    251</span> if len(count) == 1:
+<span class="ansi-green-fg">--&gt; 252</span>     raise ValueError(&#34;A single cluster was formed.&#34;)
+<span class="ansi-green-intense-fg ansi-bold">    253</span> elif not np.any(label == -1):
+<span class="ansi-green-intense-fg ansi-bold">    254</span>     raise ValueError(&#34;There are no outlier points.&#34;)
+
+<span class="ansi-red-fg">ValueError</span>: A single cluster was formed.
+</pre></div></div>
 </div>
 </section>
 <section id="EmottLabeler">
 <h2>EmottLabeler<a class="headerlink" href="#EmottLabeler" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="s2">&quot;simplest&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">,</span>
+    <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">scale</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">difficulty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">variation</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plot_inlier_outlier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span><span class="p">)</span>
-</pre></div>
+<br/></pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -794,20 +817,27 @@ div.rendered_html tbody tr:hover {
 <img alt="../../_images/guide_datasets_outlier_15_0.png" src="../../_images/guide_datasets_outlier_15_0.png" />
 </div>
 </div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="s2">&quot;simplest&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="s2">&quot;dispersed&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">,</span> <span class="n">variation</span><span class="o">=</span><span class="s2">&quot;dispersed&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">13532121</span><span class="p">)</span>
 <span class="n">plot_inlier_outlier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/guide_datasets_outlier_16_0.png" src="../../_images/guide_datasets_outlier_16_0.png" />
+</div>
+</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="s2">&quot;hardest&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="s2">&quot;simplest&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
 <span class="n">plot_inlier_outlier</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -820,7 +850,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">difficulty</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
@@ -836,17 +866,18 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">difficulty</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]):</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">difficulty</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]):</span>
     <span class="n">x_outlier</span><span class="p">,</span> <span class="n">y_outlier</span> <span class="o">=</span> <span class="n">emmott_outliers</span><span class="p">(</span>
         <span class="n">x</span><span class="p">,</span>
         <span class="n">y</span><span class="p">,</span>
-        <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
-        <span class="n">variation</span><span class="o">=</span><span class="s2">&quot;dispersed&quot;</span><span class="p">,</span>
+        <span class="n">n_outliers</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+        <span class="n">scale</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">variation</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
         <span class="n">difficulty</span><span class="o">=</span><span class="n">difficulty</span><span class="p">,</span>
         <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
     <span class="p">)</span>
@@ -862,6 +893,14 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="output_area docutils container">
 <img alt="../../_images/guide_datasets_outlier_19_0.png" src="../../_images/guide_datasets_outlier_19_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>
