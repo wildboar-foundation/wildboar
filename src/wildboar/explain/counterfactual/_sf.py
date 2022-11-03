@@ -11,14 +11,13 @@ from sklearn.metrics.pairwise import (
     paired_euclidean_distances,
     paired_manhattan_distances,
 )
+from sklearn.utils import check_random_state, resample
 from sklearn.utils.validation import check_is_fitted, check_scalar
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
 from ...ensemble._ensemble import BaseShapeletForestClassifier
-from ...utils.validation import check_option, check_type
-
-MIN_MATCHING_DISTANCE = 0.0001
+from ...utils.validation import check_option
 
 
 def _min_euclidean_distance(shapelet, x):
@@ -44,6 +43,30 @@ def _shapelet_transform(shapelet, x, start_index, theta):
         dist = np.linalg.norm(shapelet_diff)
 
     return shapelet + shapelet_diff / dist * theta
+
+
+def _path_transform(x, path, epsilon):
+    for direction, (dim, shapelet), threshold in path:
+        if x.ndim == 2:
+            x_dim = x[dim]
+        else:
+            x_dim = x
+
+        dist, location = _min_euclidean_distance(shapelet, x_dim)
+        if direction < 0:
+            if dist > threshold:
+                impute_shape = _shapelet_transform(
+                    shapelet, x_dim, location, threshold - epsilon
+                )
+                x_dim[location : location + len(shapelet)] = impute_shape
+        else:
+            while dist - threshold < 0:
+                impute_shape = _shapelet_transform(
+                    shapelet, x_dim, location, threshold + epsilon
+                )
+                x_dim[location : location + len(shapelet)] = impute_shape
+                dist, location = _min_euclidean_distance(shapelet, x_dim)
+    return x
 
 
 class PredictionPaths:
@@ -72,6 +95,17 @@ class PredictionPaths:
                 self._paths[self.classes[np.argmax(value[node_id])]].append(path)
 
         recurse(0, [])
+
+    def prune(self, max_paths, random_state):
+        self._paths = {
+            label: resample(
+                paths,
+                replace=False,
+                n_samples=math.ceil(len(paths) * max_paths),
+                random_state=random_state.randint(np.iinfo(np.int32).max),
+            )
+            for label, paths in self._paths.items()
+        }
 
     def __contains__(self, item):
         return item in self._paths
@@ -143,7 +177,8 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         cost="euclidean",
         aggregation="mean",
         epsilon=1.0,
-        batch_size=1,
+        batch_size=0.1,
+        max_paths=1.0,
         verbose=False,
         random_state=None,
     ):
@@ -153,14 +188,30 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         ----------
         cost : {"euclidean", "cosine", "manhattan"}, optional
             The cost function to determine the goodness of counterfactual
+
         aggregation : callable, optional
-            The aggregation function for the cost of multivariate counterfactuals, by
+            The aggregation function for the cost of multivariate counterfactuals.
+
         epsilon : float, optional
             Control the degree of change from the decision threshold
+
         batch_size : float, optional
             Batch size when evaluating the cost and predictions of
             counterfactual candidates. The default setting is to evaluate
             all counterfactual samples.
+
+            .. versionchanged :: 1.1
+                The default value changed to 0.1
+
+        max_paths : float, optional
+            Sample a fraction of the positive prediction paths.
+
+            .. versionadded :: 1.1
+                Add support for subsampling prediction paths.
+
+        verbose : boolean, optional
+            Print information to stdout during execution.
+
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
         """
@@ -169,6 +220,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         self.epsilon = epsilon
         self.random_state = random_state
         self.batch_size = batch_size
+        self.max_paths = max_paths
         self.verbose = verbose
 
     def _validate_estimator(self, estimator, allow_3d=False):
@@ -209,12 +261,40 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
         for base_estimator in self.estimator_.estimators_:
             self.paths_._append(base_estimator.tree_)
+
+        max_paths = check_scalar(
+            self.max_paths,
+            "max_paths",
+            numbers.Real,
+            min_val=0,
+            max_val=1,
+            include_boundaries="right",
+        )
+        self.paths_.prune(max_paths, check_random_state(self.random_state))
         return self
 
     def explain(self, x, y):
         check_is_fitted(self)
         x, y = self._validate_data(x, y, allow_3d=True, reset=False, dtype=float)
         counterfactuals = np.empty(x.shape)
+
+        batch_size = check_scalar(
+            self.batch_size,
+            "batch_size",
+            numbers.Real,
+            min_val=0,
+            max_val=1,
+            include_boundaries="right",
+        )
+
+        epsilon = check_scalar(
+            self.epsilon,
+            "epsilon",
+            numbers.Real,
+            min_val=0,
+            include_boundaries="neither",
+        )
+
         for i in range(x.shape[0]):
             if self.verbose:
                 print(
@@ -222,7 +302,10 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
                     f"The desired target label is {y[i]}."
                 )
 
-            t = self.candidates(x[i], y[i])
+            if y[i] not in self.paths_:
+                raise ValueError("unknown label, got %r" % y)
+
+            t = self._candidates(x[i], y[i], epsilon, batch_size, self.paths_[y[i]])
             if t is not None:
                 counterfactuals[i] = t
             else:
@@ -230,42 +313,11 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
         return counterfactuals
 
-    def candidates(self, x, y):
-        if y not in self.paths_:
-            raise ValueError("unknown label, got %r" % y)
-
-        prediction_paths = self.paths_[y]
+    def _candidates(self, x, y, epsilon, batch_size, prediction_paths):
         n_counterfactuals = len(prediction_paths)
-
-        check_type(self.batch_size, "batch_size", (numbers.Integral, numbers.Real))
-        if isinstance(self.batch_size, numbers.Integral):
-            batch_size = max(0, min(self.batch_size, n_counterfactuals))
-        elif isinstance(self.batch_size, numbers.Real):
-            batch_size = math.ceil(
-                n_counterfactuals
-                * check_scalar(
-                    self.batch_size,
-                    "batch_size",
-                    numbers.Real,
-                    min_val=0,
-                    max_val=1,
-                    include_boundaries="right",
-                )
-            )
-
         counterfactuals = np.empty((n_counterfactuals,) + x.shape)
         for i, path in enumerate(prediction_paths):
-            counterfactuals[i] = self._path_transform(
-                x.copy(),
-                path,
-                check_scalar(
-                    self.epsilon,
-                    "epsilon",
-                    numbers.Real,
-                    min_val=0,
-                    include_boundaries="neither",
-                ),
-            )
+            counterfactuals[i] = _path_transform(x.copy(), path, epsilon)
 
         # Note that the cost is ordered in increasing order; hence, if a
         # conversion is successful there can exist no other successful
@@ -274,6 +326,8 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         cost_sort = np.argsort(
             self.cost_(counterfactuals, x, aggregation=self.aggregation_)
         )
+
+        batch_size = math.ceil(n_counterfactuals * batch_size)
         for i in range(0, n_counterfactuals, batch_size):
             batch_cost = cost_sort[i : min(n_counterfactuals, i + batch_size)]
             batch_counterfactuals = counterfactuals[batch_cost]
@@ -283,31 +337,6 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
                 return batch_counterfactuals[0]
 
         return None
-
-    def _path_transform(self, x, path, epsilon):
-        for direction, (dim, shapelet), threshold in path:
-            if x.ndim == 2:
-                x_dim = x[dim]
-            else:
-                x_dim = x
-
-            dist, location = _min_euclidean_distance(shapelet, x_dim)
-            if direction < 0:
-                if dist > threshold:
-                    impute_shape = _shapelet_transform(
-                        shapelet, x_dim, location, threshold - epsilon
-                    )
-                    x_dim[location : location + len(shapelet)] = impute_shape
-            elif direction > 0:
-                while dist - threshold < 0:
-                    impute_shape = _shapelet_transform(
-                        shapelet, x_dim, location, threshold + epsilon
-                    )
-                    x_dim[location : location + len(shapelet)] = impute_shape
-                    dist, location = _min_euclidean_distance(shapelet, x_dim)
-            else:
-                raise ValueError("invalid path")
-        return x
 
 
 # class IncrementalTreeLabelTransform(CounterfactualTransformer):
