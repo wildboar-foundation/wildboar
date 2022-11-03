@@ -12,13 +12,11 @@ from sklearn.base import OutlierMixin
 from sklearn.ensemble import BaggingClassifier as SklearnBaggingClassifier
 from sklearn.ensemble import BaggingRegressor as SklearnBaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging as SklearnBaseBagging
-from sklearn.metrics import precision_recall_curve, roc_curve
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils import check_random_state, compute_sample_weight
 from sklearn.utils.validation import check_is_fitted, check_scalar
 
 from ..base import BaseEstimator
-from ..model_selection.outlier import threshold_score
 from ..tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
@@ -1132,7 +1130,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
     def __init__(
         self,
         *,
-        n_shapelets="log2",
+        n_shapelets=1,
         n_estimators=100,
         bootstrap=False,
         n_jobs=None,
@@ -1168,27 +1166,15 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
 
-        max_samples : float or int
+        max_samples : "auto", float or int, optional
             The number of samples to draw to train each base estimator
 
-        contamination : {'roc_auc', 'average_precision'}, float or callable
+        contamination : 'auto' or float, optional
             The strategy for computing the offset (see `offset_`)
 
             - if 'auto', `offset_=-0.5`
 
-            - if 'roc_auc', `offset_` is computed as the offset that maximizes the area
-              under ROC.
-
-            - if 'average_precision' ``offset_`` is computed as the offset that
-              maximizes the area under PRC.
-
-            - if callable ``offset_`` is computed as the offset that maximizes the score
-              computed by the callable.
-
             - if float ``offset_`` is computed as the c:th percentile of scores.
-
-            Setting contamination to either 'roc_auc' or 'average_precision' require
-            that `y` is passed to `fit`.
 
             If `bootstrap=True`, out-of-bag samples are used for computing the scores.
 
@@ -1280,30 +1266,6 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         self.max_samples_ = max_samples
         if self.contamination == "auto":
             self.offset_ = -0.5
-        elif self.contamination in ["auc", "prc"] or callable(self.contamination):
-            if y is None:
-                raise ValueError(
-                    "contamination cannot be computed without training labels"
-                )
-
-            if self.bootstrap:
-                scores = self._oob_score_samples(x)
-            else:
-                scores = self.score_samples(x)
-
-            if self.contamination == "auc":
-                fpr, tpr, thresholds = roc_curve(y, scores)
-                best_threshold = np.argmax(tpr - fpr)
-            elif self.contamination == "prc":
-                precision, recall, thresholds = precision_recall_curve(y, scores)
-                fscore = (2 * precision * recall) / (precision + recall)
-                best_threshold = np.argmax(fscore)
-            else:
-                score = threshold_score(y, scores, self.contamination)
-                best_threshold = np.argmax(score)
-                thresholds = scores
-
-            self.offset_ = thresholds[best_threshold]
         elif isinstance(self.contamination, numbers.Real):
             if not 0 < self.contamination <= 0.5:
                 raise ValueError("contamination must be in (0, 0.5]")
@@ -1315,22 +1277,10 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
             self.offset_ = np.percentile(scores, 100.0 * self.contamination)
         else:
             raise ValueError(
-                "contamination must be 'roc', 'prc', callable or float, got %r."
-                % self.contamination
+                "contamination must be 'auto' or float, got %r." % self.contamination
             )
 
         return self
-
-    def fit_predict(self, X, y=None):
-        # We don't allow y to be used if the contamination is computed using the
-        # labels of the training data unless its computed for the oob samples.
-        if (
-            self.contamination != "auto"
-            or not isinstance(self.contamination, numbers.Real)
-        ) and not self.bootstrap:
-            return self.fit(X).predict(X)
-
-        return self.fit(X, y).predict(X)
 
     def predict(self, x):
         decision = self.decision_function(x)
