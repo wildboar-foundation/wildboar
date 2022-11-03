@@ -5,12 +5,13 @@ from sklearn import clone
 from sklearn.metrics import accuracy_score
 from sklearn.neighbors import LocalOutlierFactor
 
+from ..distance import paired_distance, pairwise_distance
 from ..explain.counterfactual import proximity
 from ..utils.validation import check_array
 
 
 def plausability_score(
-    X_plausible, X_counterfactuals, estimator=None, method="average"
+    X_plausible, X_counterfactuals, estimator=None, method="accuracy"
 ):
     """Compute the plausibility of the generated counterfactuals.
 
@@ -36,7 +37,13 @@ def plausability_score(
         - if method='average', the mean score is returned, with larger score incicating
           better performance.
 
-        - if method='accuracy', the fraction of correctly predicted inliers is returned.
+        - if method='accuracy', the fraction of plausible counterfactuals are returned.
+
+    References
+    ----------
+    Delaney, E., Greene, D., & Keane, M. T. (2020).
+        Instance-based Counterfactual Explanations for Time Series Classification.
+        arXiv, 2009.13211v2.
     """
     if estimator is None:
         estimator = LocalOutlierFactor(
@@ -62,11 +69,89 @@ def plausability_score(
         raise ValueError("method must be 'average', or 'accuracy', " "got %r" % method)
 
 
+def relative_proximity_score(
+    X_native,
+    X_test,
+    X_counterfactual,
+    *,
+    y_native=None,
+    y_counterfactual=None,
+    metric="euclidean",
+    metric_params=None,
+):
+    """Relative proximity score captures the mean proximity of counterfactual and
+    test sample pairs over mean proximity of the closest native counterfactual. The
+    lower the score, the better.
+
+    Parameters
+    ----------
+    X_native : array-like of shape (n_natives, n_timesteps)
+        The native counterfactual candidates. If y_counterfactual is None, the full
+        array is considered as possible native counterfactuals.
+
+    X_test : array-like of shape (n_counterfactuals, n_timesteps)
+        The test samples.
+
+    X_counterfactuals : array-like of shape (n_counterfactuals, n_timesteps)
+        The counterfactual samples.
+
+    y_native : array-like of shape (n_natives, ), optional
+        The label of the native counterfactual candidates.
+
+    y_counterfactual : array-like of shape (n_counterfactuals, )
+        The desired counterfactual label.
+
+    Returns
+    -------
+    score : float
+        The relative proximity.
+
+    References
+    ----------
+    Smyth, B., & Keane, M. T. (2021).
+        A Few Good Counterfactuals: Generating Interpretable, Plausible and Diverse
+        Counterfactual Explanations. arXiv, 2101.09056v1.
+    """
+    X_native = check_array(X_native)
+    X_test = check_array(X_test)
+    X_counterfactual = check_array(X_counterfactual)
+
+    cf_dist = paired_distance(
+        X_test, X_counterfactual, metric=metric, metric_params=metric_params
+    ).mean()
+    if y_counterfactual is None:
+        native_dist = pairwise_distance(
+            X_native, X_test, metric=metric, metric_params=metric_params
+        )
+        return cf_dist / native_dist.min(axis=0).mean()
+    else:
+        if y_native is None:
+            raise ValueError("if y_counterfactual is give, y_native must also be given")
+
+        y_native = check_array(y_native, dtype=None)
+        y_counterfactual = check_array(y_counterfactual, dtype=None)
+        cf_labels = np.unique(y_counterfactual)
+        native_dist_sum = 0
+        for label in cf_labels:
+            X_native_cf_label = X_native[y_native == label]
+            if X_native_cf_label.shape[0] == 0:
+                raise ValueError(f"Not enough native samples with label={label}.")
+
+            native_dist = pairwise_distance(
+                X_native_cf_label,
+                X_test[y_counterfactual == label],
+                metric=metric,
+                metric_params=metric_params,
+            )
+            native_dist_sum += native_dist.min(axis=0).mean()
+
+        return cf_dist / (native_dist_sum / len(cf_labels))
+
+
 def proximity_score(
     x_true,
     x_counterfactuals,
     normalize=False,
-    kernel_scale=0.75,
     metric="euclidean",
     metric_params=None,
 ):
@@ -97,6 +182,16 @@ def proximity_score(
 
         - if normalize=True, higher score is better.
         - if normalize=False, lower score is better.
+
+    References
+    ----------
+    Delaney, E., Greene, D., & Keane, M. T. (2020).
+        Instance-based Counterfactual Explanations for Time Series Classification.
+        arXiv, 2009.13211v2.
+
+    Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+        Locally and globally explainable time series tweaking.
+        Knowledge and Information Systems, 62(5), 1671-1700.
     """
     x_true = check_array(x_true, allow_3d=True)
     x_counterfactuals = check_array(x_counterfactuals, allow_3d=True)
@@ -106,7 +201,6 @@ def proximity_score(
             x_true,
             x_counterfactuals,
             normalize=normalize,
-            kernel_scale=kernel_scale,
             metric=metric,
             metric_params=metric_params,
         )
@@ -138,6 +232,12 @@ def compactness_score(x_true, x_counterfactuals, *, rtol=1.0e-5, atol=1.0e-8):
     -------
     score : float
         The compactness score. Lower score indicates more compact counterfactuals.
+
+    References
+    ----------
+    Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+        Locally and globally explainable time series tweaking.
+        Knowledge and Information Systems, 62(5), 1671-1700.
     """
     x_true = check_array(x_true, allow_3d=True)
     x_counterfactuals = check_array(x_counterfactuals, allow_3d=True)
@@ -166,5 +266,15 @@ def validity_score(y_pred, y_counterfactual, sample_weight=None):
     -------
     score : float
         The fraction of counterfactuals with the correct label. Larger is better.
+
+    References
+    ----------
+    Delaney, E., Greene, D., & Keane, M. T. (2020).
+        Instance-based Counterfactual Explanations for Time Series Classification.
+        arXiv, 2009.13211v2.
+
+    Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+        Locally and globally explainable time series tweaking.
+        Knowledge and Information Systems, 62(5), 1671-1700.
     """
     return accuracy_score(y_pred, y_counterfactual, sample_weight=sample_weight)
