@@ -17,7 +17,6 @@ def _proximity(
     x_true,
     x_counterfactuals,
     normalize=False,
-    kernel_width=None,
     metric="euclidean",
     metric_params=None,
 ):
@@ -55,11 +54,8 @@ def _proximity(
         x_true, x_counterfactuals, metric=metric, metric_params=metric_params
     )
 
-    if kernel_width is None:
-        kernel_width = np.sqrt(x_true.shape[-1]) * 0.75
-
     if normalize:
-        distance = np.sqrt(np.exp(-(distance ** 2) / kernel_width ** 2))
+        distance = 1 / (1 + distance)
 
     return distance
 
