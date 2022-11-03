@@ -18,6 +18,7 @@ Functions
    wildboar.metrics._counterfactual.compactness_score
    wildboar.metrics._counterfactual.plausability_score
    wildboar.metrics._counterfactual.proximity_score
+   wildboar.metrics._counterfactual.relative_proximity_score
    wildboar.metrics._counterfactual.validity_score
 
 
@@ -40,8 +41,14 @@ Functions
    :returns: **score** -- The compactness score. Lower score indicates more compact counterfactuals.
    :rtype: float
 
+   .. rubric:: References
 
-.. py:function:: plausability_score(X_plausible, X_counterfactuals, estimator=None, method='average')
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
+
+
+.. py:function:: plausability_score(X_plausible, X_counterfactuals, estimator=None, method='accuracy')
 
    Compute the plausibility of the generated counterfactuals.
 
@@ -59,11 +66,17 @@ Functions
              - if method='average', the mean score is returned, with larger score incicating
                better performance.
 
-             - if method='accuracy', the fraction of correctly predicted inliers is returned.
+             - if method='accuracy', the fraction of plausible counterfactuals are returned.
    :rtype: float
 
+   .. rubric:: References
 
-.. py:function:: proximity_score(x_true, x_counterfactuals, normalize=False, kernel_scale=0.75, metric='euclidean', metric_params=None)
+   Delaney, E., Greene, D., & Keane, M. T. (2020).
+       Instance-based Counterfactual Explanations for Time Series Classification.
+       arXiv, 2009.13211v2.
+
+
+.. py:function:: proximity_score(x_true, x_counterfactuals, normalize=False, metric='euclidean', metric_params=None)
 
    Compute the proximity score of the counterfactuals using the provided metric.
 
@@ -86,6 +99,44 @@ Functions
              - if normalize=False, lower score is better.
    :rtype: float
 
+   .. rubric:: References
+
+   Delaney, E., Greene, D., & Keane, M. T. (2020).
+       Instance-based Counterfactual Explanations for Time Series Classification.
+       arXiv, 2009.13211v2.
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
+
+
+.. py:function:: relative_proximity_score(X_native, X_test, X_counterfactual, *, y_native=None, y_counterfactual=None, metric='euclidean', metric_params=None)
+
+   Relative proximity score captures the mean proximity of counterfactual and
+   test sample pairs over mean proximity of the closest native counterfactual. The
+   lower the score, the better.
+
+   :param X_native: The native counterfactual candidates. If y_counterfactual is None, the full
+                    array is considered as possible native counterfactuals.
+   :type X_native: array-like of shape (n_natives, n_timesteps)
+   :param X_test: The test samples.
+   :type X_test: array-like of shape (n_counterfactuals, n_timesteps)
+   :param X_counterfactuals: The counterfactual samples.
+   :type X_counterfactuals: array-like of shape (n_counterfactuals, n_timesteps)
+   :param y_native: The label of the native counterfactual candidates.
+   :type y_native: array-like of shape (n_natives, ), optional
+   :param y_counterfactual: The desired counterfactual label.
+   :type y_counterfactual: array-like of shape (n_counterfactuals, )
+
+   :returns: **score** -- The relative proximity.
+   :rtype: float
+
+   .. rubric:: References
+
+   Smyth, B., & Keane, M. T. (2021).
+       A Few Good Counterfactuals: Generating Interpretable, Plausible and Diverse
+       Counterfactual Explanations. arXiv, 2101.09056v1.
+
 
 .. py:function:: validity_score(y_pred, y_counterfactual, sample_weight=None)
 
@@ -100,5 +151,15 @@ Functions
 
    :returns: **score** -- The fraction of counterfactuals with the correct label. Larger is better.
    :rtype: float
+
+   .. rubric:: References
+
+   Delaney, E., Greene, D., & Keane, M. T. (2020).
+       Instance-based Counterfactual Explanations for Time Series Classification.
+       arXiv, 2009.13211v2.
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
 
 
