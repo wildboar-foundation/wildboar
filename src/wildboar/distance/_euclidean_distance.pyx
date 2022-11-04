@@ -95,6 +95,77 @@ cdef class EuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         )
 
 
+cdef class NormalizedEuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+
+    cdef double transient_distance(
+        self,
+        SubsequenceView *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        Py_ssize_t *return_index=NULL,
+    ) nogil:
+        return normalized_euclidean_distance(
+            dataset.get_sample(s.index, s.dim) + s.start,
+            s.length,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            return_index,
+        )
+
+    cdef double persistent_distance(
+        self,
+        Subsequence *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        Py_ssize_t *return_index=NULL,
+    ) nogil:
+        return normalized_euclidean_distance(
+            s.data,
+            s.length,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            return_index,
+        )
+
+    cdef Py_ssize_t transient_matches(
+        self,
+        SubsequenceView *v,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+       return normalized_euclidean_distance_matches(
+            dataset.get_sample(v.index, v.dim) + v.start,
+            v.length,
+            dataset.get_sample(index, v.dim),
+            dataset.n_timestep,
+            threshold,
+            distances,
+            indicies,
+        )
+
+    cdef Py_ssize_t persistent_matches(
+        self,
+        Subsequence *s,
+        Dataset dataset,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        return normalized_euclidean_distance_matches(
+            s.data,
+            s.length,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            threshold,
+            distances,
+            indicies,
+        )
+
+
 cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
     cdef double *X_buffer
 
@@ -381,16 +452,14 @@ cdef double normalized_euclidean_distance(
         inc_stats_init(&T_stats)
         inc_stats_init(&ST_stats)
         for j in range(s_length):
-            if dist >= min_dist:
-                break
-
             t = T[i + j]
             s = S[j]
             inc_stats_add(&S_stats, 1.0, s)
             inc_stats_add(&T_stats, 1.0, t)
             inc_stats_add(&ST_stats, 1.0, s - t)
-            dist = inc_stats_variance(&S_stats) + inc_stats_variance(&T_stats) + 1e-8
-            dist = inc_stats_variance(&ST_stats) / dist
+            dist = inc_stats_variance(&S_stats) + inc_stats_variance(&T_stats)
+            if dist > 0:
+                dist = inc_stats_variance(&ST_stats) / dist
 
         if dist < min_dist:
             min_dist = dist
@@ -398,6 +467,54 @@ cdef double normalized_euclidean_distance(
                 index[0] = i
 
     return sqrt(0.5 * min_dist)
+
+
+cdef Py_ssize_t normalized_euclidean_distance_matches(
+    double *S,
+    Py_ssize_t s_length,
+    double *T,
+    Py_ssize_t t_length,
+    double threshold,
+    double **distances,
+    Py_ssize_t **matches,
+) nogil except -1:
+    cdef double dist = 0
+    cdef Py_ssize_t capacity = 1
+    cdef Py_ssize_t tmp_capacity
+    cdef Py_ssize_t i, j
+    cdef double s, t
+    cdef IncStats S_stats, T_stats, ST_stats
+    cdef Py_ssize_t n_matches = 0
+
+    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
+    distances[0] = <double*> malloc(sizeof(double) * capacity)
+
+    threshold = threshold * threshold
+    for i in range(t_length - s_length + 1):
+        dist = 0
+        inc_stats_init(&S_stats)
+        inc_stats_init(&T_stats)
+        inc_stats_init(&ST_stats)
+        for j in range(s_length):
+            t = T[i + j]
+            s = S[j]
+            inc_stats_add(&S_stats, 1.0, s)
+            inc_stats_add(&T_stats, 1.0, t)
+            inc_stats_add(&ST_stats, 1.0, s - t)
+            dist = inc_stats_variance(&S_stats) + inc_stats_variance(&T_stats)
+            if dist > 0:
+                dist = inc_stats_variance(&ST_stats) / dist
+
+        dist = 0.5 * dist
+        if dist <= threshold:
+            tmp_capacity = capacity
+            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
+            matches[0][n_matches] = i
+            distances[0][n_matches] = sqrt(dist)
+            n_matches += 1
+
+    return n_matches
 
 
 cdef Py_ssize_t euclidean_distance_matches(

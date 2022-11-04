@@ -28,6 +28,7 @@ __all__ = [
 
 _SUBSEQUENCE_DISTANCE_MEASURE = {
     "euclidean": _euclidean_distance.EuclideanSubsequenceDistanceMeasure,
+    "normalized_euclidean": _euclidean_distance.NormalizedEuclideanSubsequenceDistanceMeasure,  # noqa: E501
     "scaled_euclidean": _euclidean_distance.ScaledEuclideanSubsequenceDistanceMeasure,
     "dtw": _dtw_distance.DtwSubsequenceDistanceMeasure,
     "scaled_dtw": _dtw_distance.ScaledDtwSubsequenceDistanceMeasure,
@@ -182,7 +183,7 @@ def pairwise_subsequence_distance(
         best match between each subsequence and time series
     """
     y = _validate_subsequence(y)
-    x = check_array(x, allow_3d=True, dtype=np.double)
+    x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
@@ -368,7 +369,7 @@ def subsequence_match(
     if len(y) > 1:
         raise ValueError("A single subsequence expected, got %d" % len(y))
     y = y[0]
-    x = check_array(x, allow_3d=True, dtype=np.double)
+    x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
     if y.shape[0] > x.shape[-1]:
         raise ValueError(
             "Invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
