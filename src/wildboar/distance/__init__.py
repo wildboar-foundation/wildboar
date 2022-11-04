@@ -36,6 +36,7 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
 
 _DISTANCE_MEASURE = {
     "euclidean": _euclidean_distance.EuclideanDistanceMeasure,
+    "normalized_euclidean": _euclidean_distance.NormalizedEuclideanDistanceMeasure,
     "dtw": _dtw_distance.DtwDistanceMeasure,
     "ddtw": _dtw_distance.DerivativeDtwDistanceMeasure,
     "wdtw": _dtw_distance.WeightedDtwDistanceMeasure,
@@ -742,7 +743,7 @@ def pairwise_distance(
         y = x
 
     if x is y:
-        x = check_array(x, allow_3d=True, dtype=np.double)
+        x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
         if not 0 >= dim < x.ndim:
             raise ValueError("dim must be 0 <= %d < %d" % (dim, x.ndim))
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)

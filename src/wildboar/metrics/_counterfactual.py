@@ -101,6 +101,17 @@ def relative_proximity_score(
     y_counterfactual : array-like of shape (n_counterfactuals, )
         The desired counterfactual label.
 
+    metric : str or callable, optional
+        The distance metric
+
+        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+
+    metric_params: dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
+
     Returns
     -------
     score : float
@@ -151,8 +162,7 @@ def relative_proximity_score(
 def proximity_score(
     x_true,
     x_counterfactuals,
-    normalize=False,
-    metric="euclidean",
+    metric="normalized_euclidean",
     metric_params=None,
 ):
     """Compute the proximity score of the counterfactuals using the provided metric.
@@ -167,21 +177,21 @@ def proximity_score(
     x_counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
 
-    normalize : bool, optional
-        Normalize the score in [0, 1], with 1 indicating perfect proximity.
-
     metric : str or callable, optional
-        The scoring metric
+        The distance metric
 
-        - if str use metrics from scikit-learn or wildboar
+        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+
+    metric_params: dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
 
     Returns
     -------
     score : float
         The mean proximity.
-
-        - if normalize=True, higher score is better.
-        - if normalize=False, lower score is better.
 
     References
     ----------
@@ -197,13 +207,7 @@ def proximity_score(
     x_counterfactuals = check_array(x_counterfactuals, allow_3d=True)
 
     return np.mean(
-        proximity(
-            x_true,
-            x_counterfactuals,
-            normalize=normalize,
-            metric=metric,
-            metric_params=metric_params,
-        )
+        proximity(x_true, x_counterfactuals, metric=metric, metric_params=metric_params)
     )
 
 

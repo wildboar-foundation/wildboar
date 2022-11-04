@@ -16,8 +16,7 @@ from ._sf import ShapeletForestCounterfactual
 def _proximity(
     x_true,
     x_counterfactuals,
-    normalize=False,
-    metric="euclidean",
+    metric="normalized_euclidean",
     metric_params=None,
 ):
     """Compute the proximity of the counterfactuals.
@@ -30,15 +29,16 @@ def _proximity(
     x_counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
 
-    normalize : bool, optional
-        Normalize the scores in the range 0 to 1, such that 1 indicates that the
-        original and counterfactuals are exactly the same.
-
     metric : str or callable, optional
-        The scoring metric
+        The distance metric
 
-    metric_params : dict, optional
-        Parameters to the metric
+        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+
+    metric_params: dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
 
     Returns
     -------
@@ -53,9 +53,6 @@ def _proximity(
     distance = mean_paired_distance(
         x_true, x_counterfactuals, metric=metric, metric_params=metric_params
     )
-
-    if normalize:
-        distance = 1 / (1 + distance)
 
     return distance
 

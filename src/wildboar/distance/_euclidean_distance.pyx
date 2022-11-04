@@ -14,6 +14,7 @@ from libc.stdlib cimport free, malloc
 
 from ..utils.data cimport Dataset
 from ..utils.misc cimport realloc_array
+from ..utils.stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_variance
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,
@@ -224,6 +225,19 @@ cdef class EuclideanDistanceMeasure(DistanceMeasure):
         return euclidean_distance(x, x_len, y, y_len, NULL)
 
 
+cdef class NormalizedEuclideanDistanceMeasure(EuclideanDistanceMeasure):
+
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return normalized_euclidean_distance(x, x_len, y, y_len, NULL)
+
+
 cdef double scaled_euclidean_distance(
     double *S,
     Py_ssize_t s_length,
@@ -346,6 +360,44 @@ cdef double euclidean_distance(
                 index[0] = i
 
     return sqrt(min_dist)
+
+# PTDS (https://stats.stackexchange.com/users/68112/ptds), 
+#   Definition of normalized Euclidean distance, URL (version: 2021-09-27): 
+#   https://stats.stackexchange.com/q/498753
+cdef double normalized_euclidean_distance(
+    double *S,
+    Py_ssize_t s_length,
+    double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t *index,
+) nogil:
+    cdef IncStats S_stats, T_stats, ST_stats
+    cdef double s, t, dist
+    cdef double min_dist = INFINITY
+    cdef Py_ssize_t i, j
+    for i in range(t_length - s_length + 1):
+        dist = 0
+        inc_stats_init(&S_stats)
+        inc_stats_init(&T_stats)
+        inc_stats_init(&ST_stats)
+        for j in range(s_length):
+            if dist >= min_dist:
+                break
+
+            t = T[i + j]
+            s = S[j]
+            inc_stats_add(&S_stats, 1.0, s)
+            inc_stats_add(&T_stats, 1.0, t)
+            inc_stats_add(&ST_stats, 1.0, s - t)
+            dist = inc_stats_variance(&S_stats) + inc_stats_variance(&T_stats) + 1e-8
+            dist = inc_stats_variance(&ST_stats) / dist
+
+        if dist < min_dist:
+            min_dist = dist
+            if index != NULL:
+                index[0] = i
+
+    return sqrt(0.5 * min_dist)
 
 
 cdef Py_ssize_t euclidean_distance_matches(
