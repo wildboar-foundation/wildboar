@@ -25,10 +25,16 @@ using the ``metric_params`` argument.
      - ``{}``
      -
 
+   * - Normalized Euclidean
+     - ``"normalized_euclidean"``
+     - ``{}``
+     - Euclidean distance, where length has been scaled to have unit norm.
+       Undefined cases result in 0.
+
    * - Scaled Euclidean
      - ``"scaled_euclidean"`` or ``"mass"``
      - ``{}``
-     - Normalized.
+     - Scales each subsequence to have zero mean and unit variance.
     
    * - Dynamic time warping
      - ``"dtw"``
@@ -70,7 +76,7 @@ using the ``metric_params`` argument.
    * - Weighted DTW
      - ``"wdtw"``
      - ``{"r": float, "g": float}``
-     - Window ``r`` in ``[0, 1]``. Phase difference penelty ``g``. Elastic.
+     - Window ``r`` in ``[0, 1]``. Phase difference penalty ``g``. Elastic.
 
    * - Derivative DTW
      - ``"ddtw"``
@@ -80,6 +86,6 @@ using the ``metric_params`` argument.
    * - Weighted Derivative DTW
      - ``"wddtw"``
      - ``{"r": float, "g": float}``
-     - Window ``r`` in ``[0, 1]``. Phase difference penelty ``g``. Elastic.
+     - Window ``r`` in ``[0, 1]``. Phase difference penalty ``g``. Elastic.
 
    
