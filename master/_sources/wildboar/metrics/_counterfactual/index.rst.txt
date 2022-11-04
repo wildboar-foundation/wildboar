@@ -76,7 +76,7 @@ Functions
        arXiv, 2009.13211v2.
 
 
-.. py:function:: proximity_score(x_true, x_counterfactuals, normalize=False, metric='euclidean', metric_params=None)
+.. py:function:: proximity_score(x_true, x_counterfactuals, metric='normalized_euclidean', metric_params=None)
 
    Compute the proximity score of the counterfactuals using the provided metric.
 
@@ -86,17 +86,17 @@ Functions
    :type x_true: array-like of shape (n_samples, n_timestep)
    :param x_counterfactuals: The counterfactual samples
    :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
-   :param normalize: Normalize the score in [0, 1], with 1 indicating perfect proximity.
-   :type normalize: bool, optional
-   :param metric: The scoring metric
+   :param metric: The distance metric
 
-                  - if str use metrics from scikit-learn or wildboar
+                  See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
    :type metric: str or callable, optional
+   :param metric_params: Parameters to the metric.
+
+                         Read more about the parameters in the
+                         :ref:`User guide <list_of_metrics>`.
+   :type metric_params: dict, optional
 
    :returns: **score** -- The mean proximity.
-
-             - if normalize=True, higher score is better.
-             - if normalize=False, lower score is better.
    :rtype: float
 
    .. rubric:: References
@@ -127,6 +127,15 @@ Functions
    :type y_native: array-like of shape (n_natives, ), optional
    :param y_counterfactual: The desired counterfactual label.
    :type y_counterfactual: array-like of shape (n_counterfactuals, )
+   :param metric: The distance metric
+
+                  See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+   :type metric: str or callable, optional
+   :param metric_params: Parameters to the metric.
+
+                         Read more about the parameters in the
+                         :ref:`User guide <list_of_metrics>`.
+   :type metric_params: dict, optional
 
    :returns: **score** -- The relative proximity.
    :rtype: float

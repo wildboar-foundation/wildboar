@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Explainability" href="explain.html" /><link rel="prev" title="Outlier detection" href="unsupervised/outlier_detection.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Distance metrics - Wildboar 1.1.0rc5.dev174+g6b7e48eb documentation</title>
+        <title>Distance metrics - Wildboar 1.1.0rc5.dev175+g73641397 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev174+g6b7e48eb documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev175+g73641397 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -409,22 +409,28 @@ using the <code class="docutils literal notranslate"><span class="pre">metric_pa
 <td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
 <td></td>
 </tr>
-<tr class="row-odd"><td><p>Dynamic time warping</p></td>
+<tr class="row-odd"><td><p>Normalized Euclidean</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;normalized_euclidean&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td><p>Euclidean distance, where length has been scaled to have unit norm.
+Undefined cases result in 0.</p></td>
+</tr>
+<tr class="row-even"><td><p>Dynamic time warping</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;dtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-even"><td><p>Weighted DTW</p></td>
+<tr class="row-odd"><td><p>Weighted DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;wdtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;g&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Phase difference penelty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Derivative DTW</p></td>
+<tr class="row-even"><td><p>Derivative DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;ddtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-even"><td><p>Weighted Derivative DTW</p></td>
+<tr class="row-odd"><td><p>Weighted Derivative DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;wddtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;g&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Phase difference penelty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>

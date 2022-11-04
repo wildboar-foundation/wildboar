@@ -55,6 +55,12 @@ using the ``metric_params`` argument.
      - ``"euclidean"``
      - ``{}``
      -
+    
+   * - Normalized Euclidean
+     - ``"normalized_euclidean"``
+     - ``{}``
+     - Euclidean distance, where length has been scaled to have unit norm.
+       Undefined cases result in 0.
 
    * - Dynamic time warping
      - ``"dtw"``
