@@ -85,16 +85,16 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cumulative_mean_std(
-            dataset.get_sample(index, dim=s.dim),
+            dataset.get_sample(index, s.dim),
             dataset.n_timestep,
             s.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, dim=s.dim),
+            dataset.get_sample(index, s.dim),
             dataset.n_timestep,
-            dataset.get_sample(s.index, dim=s.dim) + s.start,
+            dataset.get_sample(s.index, s.dim) + s.start,
             s.length,
             s.mean,
             s.std,
@@ -116,14 +116,14 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cumulative_mean_std(
-            dataset.get_sample(index, dim=s.dim),
+            dataset.get_sample(index, s.dim),
             dataset.n_timestep,
             s.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, dim=s.dim),
+            dataset.get_sample(index, s.dim),
             dataset.n_timestep,
             s.data,
             s.length,
@@ -151,16 +151,16 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         distances[0] = <double*> malloc(sizeof(double) * dataset.n_timestep - v.length + 1)
         indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * dataset.n_timestep - v.length + 1)
         cumulative_mean_std(
-            dataset.get_sample(index, dim=v.dim),
+            dataset.get_sample(index, v.dim),
             dataset.n_timestep,
             v.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, dim=v.dim),
+            dataset.get_sample(index, v.dim),
             dataset.n_timestep,
-            dataset.get_sample(v.index, dim=v.dim) + v.start,
+            dataset.get_sample(v.index, v.dim) + v.start,
             v.length,
             v.mean,
             v.std,
@@ -190,14 +190,14 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         distances[0] = <double*> malloc(sizeof(double) * dataset.n_timestep - s.length + 1)
         indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * dataset.n_timestep - s.length + 1)
         cumulative_mean_std(
-            dataset.get_sample(index, dim=s.dim),
+            dataset.get_sample(index, s.dim),
             dataset.n_timestep,
             s.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, dim=s.dim),
+            dataset.get_sample(index, s.dim),
             dataset.n_timestep,
             s.data,
             s.length,

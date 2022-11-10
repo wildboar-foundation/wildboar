@@ -6,13 +6,11 @@ import numbers
 import warnings
 
 import numpy as np
-from sklearn.metrics.pairwise import paired_distances as sklearn_paired_distances
-from sklearn.utils.deprecation import deprecated
 from sklearn.utils.validation import _is_arraylike, check_scalar
 
-from ..utils.decorators import array_or_scalar, singleton
+from ..utils import _safe_jagged_array
 from ..utils.validation import check_array, check_option, check_type
-from . import _distance, _dtw_distance, _euclidean_distance, _mass, _matrix_profile
+from . import _distance, _dtw, _mass, _matrix_profile, _metric
 
 __all__ = [
     "distance",
@@ -27,21 +25,31 @@ __all__ = [
 ]
 
 _SUBSEQUENCE_DISTANCE_MEASURE = {
-    "euclidean": _euclidean_distance.EuclideanSubsequenceDistanceMeasure,
-    "normalized_euclidean": _euclidean_distance.NormalizedEuclideanSubsequenceDistanceMeasure,  # noqa: E501
-    "scaled_euclidean": _euclidean_distance.ScaledEuclideanSubsequenceDistanceMeasure,
-    "dtw": _dtw_distance.DtwSubsequenceDistanceMeasure,
-    "scaled_dtw": _dtw_distance.ScaledDtwSubsequenceDistanceMeasure,
+    "euclidean": _metric.EuclideanSubsequenceDistanceMeasure,
+    "normalized_euclidean": _metric.NormalizedEuclideanSubsequenceDistanceMeasure,  # noqa: E501
+    "scaled_euclidean": _metric.ScaledEuclideanSubsequenceDistanceMeasure,
+    "dtw": _dtw.DtwSubsequenceDistanceMeasure,
+    "scaled_dtw": _dtw.ScaledDtwSubsequenceDistanceMeasure,
     "mass": _mass.ScaledMassSubsequenceDistanceMeasure,
+    "manhattan": _metric.ManhattanSubsequenceDistanceMeasure,
+    "minkowski": _metric.MinkowskiSubsequenceDistanceMeasure,
+    "chebyshev": _metric.ChebyshevSubsequenceDistanceMeasure,
+    "cosine": _metric.CosineSubsequenceDistanceMeasure,
+    "angular": _metric.AngularSubsequenceDistanceMeasure,
 }
 
 _DISTANCE_MEASURE = {
-    "euclidean": _euclidean_distance.EuclideanDistanceMeasure,
-    "normalized_euclidean": _euclidean_distance.NormalizedEuclideanDistanceMeasure,
-    "dtw": _dtw_distance.DtwDistanceMeasure,
-    "ddtw": _dtw_distance.DerivativeDtwDistanceMeasure,
-    "wdtw": _dtw_distance.WeightedDtwDistanceMeasure,
-    "wddtw": _dtw_distance.WeightedDerivativeDtwDistanceMeasure,
+    "euclidean": _metric.EuclideanDistanceMeasure,
+    "normalized_euclidean": _metric.NormalizedEuclideanDistanceMeasure,
+    "dtw": _dtw.DtwDistanceMeasure,
+    "ddtw": _dtw.DerivativeDtwDistanceMeasure,
+    "wdtw": _dtw.WeightedDtwDistanceMeasure,
+    "wddtw": _dtw.WeightedDerivativeDtwDistanceMeasure,
+    "manhattan": _metric.ManhattanDistanceMeasure,
+    "minkowski": _metric.MinkowskiDistanceMeasure,
+    "chebyshev": _metric.ChebyshevDistanceMeasure,
+    "cosine": _metric.CosineDistanceMeasure,
+    "angular": _metric.AngularDistanceMeasure,
 }
 
 _THRESHOLD = {
@@ -131,7 +139,15 @@ def _filter_by_max_dist(indicies, distances, max_dist):
     return indicies_tmp, distances_tmp
 
 
-@array_or_scalar(squeeze=True)
+def _format_return(x, y_dims, x_dims):
+    if x_dims == 1 and y_dims == 1 and x.size == 1:
+        return x.item()
+    elif x_dims == 1 or y_dims == 1:
+        return np.squeeze(x)
+    else:
+        return x
+
+
 def pairwise_subsequence_distance(
     y,
     x,
@@ -151,11 +167,12 @@ def pairwise_subsequence_distance(
 
         - if list, a list of array-like of shape (n_timestep, )
 
-    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+    x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
+    or (n_samples, n_dims, n_timestep)
         The input data
 
     dim : int, optional
-        The dim to search for shapelets
+        The dim to search for subsequence
 
      metric : str or callable, optional
         The distance metric
@@ -175,15 +192,25 @@ def pairwise_subsequence_distance(
     Returns
     -------
     dist : float, ndarray
-        An array of shape (n_subsequences, n_samples) with the minumum distance between
-        each subsequence and each sample.
+        The minumum distance. Return depends on input:
 
-    indices : int, ndarray
-        An array of shape (n_subsequences, n_samples) with the start position of the
-        best match between each subsequence and time series
+        - if len(y) > 1 and x.ndim > 1, return an array of shape
+          (n_samples, n_subsequences).
+        - if len(y) == 1, return an array of shape (n_samples, ).
+        - if x.ndim == 1, return an array of shape (n_subsequences, ).
+        - if x.ndim == 1 and len(y) == 1, return scalar.
+
+    indices : int, ndarray, optional
+         The start index of the minumum distance. Return dependes on input:
+
+        - if len(y) > 1 and x.ndim > 1, return an array of shape
+          (n_samples, n_subsequences).
+        - if len(y) == 1, return an array of shape (n_samples, ).
+        - if x.ndim == 1, return an array of shape (n_subsequences, ).
+        - if x.ndim == 1 and len(y) == 1, return scalar.
     """
     y = _validate_subsequence(y)
-    x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
@@ -194,18 +221,20 @@ def pairwise_subsequence_distance(
     metric_params = metric_params or {}
     min_dist, min_ind = _distance._pairwise_subsequence_distance(
         y,
-        x,
+        np.atleast_2d(x),
         dim,
         DistanceMeasure(**metric_params),
         n_jobs,
     )
     if return_index:
-        return min_dist, min_ind
+        return (
+            _format_return(min_dist, len(y), x.ndim),
+            _format_return(min_ind, len(y), x.ndim),
+        )
     else:
-        return min_dist
+        return _format_return(min_dist, len(y), x.ndim)
 
 
-@array_or_scalar(squeeze=True)
 def paired_subsequence_distance(
     y,
     x,
@@ -221,12 +250,13 @@ def paired_subsequence_distance(
 
     Parameters
     ----------
-    y : list or ndarray of shape (n_samples, n_timestep)
+    y : list or ndarray of shape (n_samples, m_timestep)
         Input time series.
 
-        - if list, a list of array-like of shape (n_timestep, )
+        - if list, a list of array-like of shape (m_timestep, )
 
-    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+    x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
+    or (n_samples, n_dims, n_timestep)
         The input data
 
     dim : int, optional
@@ -256,12 +286,12 @@ def paired_subsequence_distance(
         An array of shape (n_samples, ) with the minumum distance between the i:th
         subsequence and the i:th sample
 
-    indices : int, ndarray
+    indices : int, ndarray, optional
         An array of shape (n_samples, ) with the index of the best matching position
         of the i:th subsequence and the i:th sample
     """
     y = _validate_subsequence(y)
-    x = check_array(x, allow_3d=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
@@ -271,17 +301,26 @@ def paired_subsequence_distance(
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
+    n_samples = x.shape[0] if x.ndim > 1 else 1
+    if len(y) != n_samples:
+        raise ValueError(
+            "The number of subsequences and samples must be the same, got %d "
+            "subsequences and %d samples." % (len(y), n_samples)
+        )
+
     metric_params = metric_params if metric_params is not None else {}
     min_dist, min_ind = _distance._paired_subsequence_distance(
-        y, x, dim, DistanceMeasure(**metric_params)
+        y, np.atleast_2d(x), dim, DistanceMeasure(**metric_params)
     )
     if return_index:
-        return min_dist, min_ind
+        return (
+            _format_return(min_dist, len(y), x.ndim),
+            _format_return(min_ind, len(y), x.ndim),
+        )
     else:
-        return min_dist
+        return _format_return(min_dist, len(y), x.ndim)
 
 
-@singleton
 def subsequence_match(
     y,
     x,
@@ -310,7 +349,8 @@ def subsequence_match(
     y : array-like of shape (yn_timestep, )
         The subsequence
 
-    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+    x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
+    or (n_samples, n_dims, n_timestep)
         The input data
 
     threshold : str, float or callable, optional
@@ -356,20 +396,25 @@ def subsequence_match(
 
     Returns
     -------
-    indicies : list or ndarray
-        A list of shape (n_samples, ) of ndarray with start index of matching
-        subsequences. If only one sample is given, the return value is a single
-        array.
+    indicies : ndarray
+        The start index of matching subsequences. Return depends on input:
 
-    distance : list or ndarray
-        A list of shape (n_samples, ) of ndarray with distance at the matching position.
-        If only one sample is given, the return value is a single array.
+        - if x.ndim > 1, return an ndarray of shape (n_samples, )
+        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+
+        For each sample, the ndarray contains the .
+
+    distance : ndarray, optional
+        The distances of matching subsequences. Return depends on input:
+
+        - if x.ndim > 1, return an ndarray of shape (n_samples, )
+        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
     """
     y = _validate_subsequence(y)
     if len(y) > 1:
         raise ValueError("A single subsequence expected, got %d" % len(y))
     y = y[0]
-    x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
     if y.shape[0] > x.shape[-1]:
         raise ValueError(
             "Invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
@@ -421,7 +466,7 @@ def subsequence_match(
 
     indicies, distances = _distance._subsequence_match(
         y,
-        x,
+        np.atleast_2d(x),
         threshold,
         dim,
         DistanceMeasure(**metric_params),
@@ -438,12 +483,14 @@ def subsequence_match(
         indicies, distances = _filter_by_max_matches(indicies, distances, max_matches)
 
     if return_distance:
-        return indicies, distances
+        return (
+            _format_return(_safe_jagged_array(indicies), 1, x.ndim),
+            _format_return(_safe_jagged_array(distances), 1, x.ndim),
+        )
     else:
-        return indicies
+        return _format_return(_safe_jagged_array(indicies), 1, x.ndim)
 
 
-@singleton
 def paired_subsequence_match(
     y,
     x,
@@ -464,7 +511,7 @@ def paired_subsequence_match(
     y : list or ndarray of shape (n_samples, n_timestep)
         Input time series.
 
-        - if list, a list of array-like of shape (n_timestep, )
+        - if list, a list of array-like of shape (n_timestep, ) with length n_samples
 
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data
@@ -505,12 +552,19 @@ def paired_subsequence_match(
 
     Returns
     -------
-    indicies : list
-        A list of shape (n_samples, ) of ndarray with start index of matching
-        subsequences
+    indicies : ndarray
+        The start index of matching subsequences. Return depends on input:
 
-    distance : list
-        A list of shape (n_samples, ) of ndarray with distance at the matching position.
+        - if x.ndim > 1, return an ndarray of shape (n_samples, )
+        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+
+        For each sample, the ndarray contains the .
+
+    distance : ndarray, optional
+        The distances of matching subsequences. Return depends on input:
+
+        - if x.ndim > 1, return an ndarray of shape (n_samples, )
+        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, dtype=np.double)
@@ -572,12 +626,14 @@ def paired_subsequence_match(
         indicies, distances = _filter_by_max_matches(indicies, distances, max_matches)
 
     if return_distance:
-        return indicies, distances
+        return (
+            _format_return(_safe_jagged_array(indicies), len(y), x.ndim),
+            _format_return(_safe_jagged_array(distances), len(y), x.ndim),
+        )
     else:
-        return indicies
+        return _format_return(_safe_jagged_array(indicies), len(y), x.ndim)
 
 
-@array_or_scalar
 def paired_distance(
     x,
     y,
@@ -616,17 +672,20 @@ def paired_distance(
 
     Returns
     -------
-    dist : float or ndarray
-        An array of shape (n_samples, )
+    distance : ndarray
+        The distances. Return depends on input:
+
+        - if ndim > 1, return an ndarray of shape (n_samples, )
+        - if ndim == 1, return ndarray of shape (n_matches, ) or None
     """
-    x = check_array(x, allow_3d=True, dtype=np.double)
-    y = check_array(y, allow_3d=True, dtype=np.double)
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
+    y = check_array(y, allow_3d=True, ensure_2d=False, dtype=np.double)
     y = np.broadcast_to(y, x.shape)
     if x.ndim != y.ndim:
         raise ValueError(
             "x (%dD-array) and y (%dD-array) are not compatible." % (x.ndim, y.ndim)
         )
-    if x.shape[0] != y.shape[0]:
+    if x.ndim > 1 and y.ndim > 1 and x.shape[0] != y.shape[0]:
         raise ValueError("x and y must have the same number of samples.")
 
     if n_jobs is not None:
@@ -641,12 +700,16 @@ def paired_distance(
             % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
         )
 
-    return _distance._paired_distance(
-        x,
-        y,
-        dim,
-        distance_measure,
-        n_jobs,
+    return _format_return(
+        _distance._paired_distance(
+            np.atleast_2d(x),
+            np.atleast_2d(y),
+            dim,
+            distance_measure,
+            n_jobs,
+        ),
+        y.ndim,
+        x.ndim,
     )
 
 
@@ -666,33 +729,26 @@ def mean_paired_distance(x, y, *, metric="euclidean", metric_params=None):
         raise ValueError("both x and y must have the same rank")
 
     if x.ndim == 2:
-        if metric in _DISTANCE_MEASURE:
-            return paired_distance(x, y, metric=metric, metric_params=metric_params)
-        else:
-            return sklearn_paired_distances(x, y, metric=metric)
+        return paired_distance(x, y, metric=metric, metric_params=metric_params)
     elif x.ndim == 3:
-        if metric in _DISTANCE_MEASURE:
-            return np.mean(
-                [
-                    paired_distance(
-                        x, y, metric=metric, metric_params=metric_params, dim=dim
-                    )
-                    for dim in range(x.shape[1])
-                ]
+        if x.shape[1] != y.shape[1]:
+            raise ValueError(
+                "x.shape[1]=%d != y.shape[1]=%d" % (x.shape[1], y.shape[1])
             )
-        else:
-            return np.mean(
-                [
-                    sklearn_paired_distances(x[:, i, :], y[:, i, :], metric=metric)
-                    for i in range(x.shape[1])
-                ],
-                axis=0,
-            )
+
+        return np.mean(
+            [
+                paired_distance(
+                    x, y, metric=metric, metric_params=metric_params, dim=dim
+                )
+                for dim in range(x.shape[1])
+            ],
+            axis=0,
+        )
     else:
         raise ValueError("invalid rank, %d > 3" % x.ndim)
 
 
-@array_or_scalar
 def pairwise_distance(
     x,
     y=None,
@@ -734,7 +790,13 @@ def pairwise_distance(
     Returns
     -------
     dist : float or ndarray
-        An array of shape (y_samples, x_samples)
+        The distances. Return depends on input.
+
+        - if x.ndim > 1 and y is None, return array of shape (x_samples, x_samples)
+        - if x.ndim > 1 and y.ndim > 1, return array of shape (x_samples, y_samples)
+        - if x.ndim == 1 and y.ndim > 1, return array of shape (y_samples, )
+        - if y.ndim == 1 and x.ndim > 1, return array of shape (x_samples, )
+        - if x.ndim == 1 and y.ndim == 1, return scalar
     """
     DistanceMeasure = check_option(_DISTANCE_MEASURE, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
@@ -744,14 +806,18 @@ def pairwise_distance(
         y = x
 
     if x is y:
-        x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
+        x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
         if not 0 >= dim < x.ndim:
             raise ValueError("dim must be 0 <= %d < %d" % (dim, x.ndim))
+
+        if x.ndim == 1:
+            return 0.0
+
         return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
     else:
-        x = check_array(np.atleast_2d(x), allow_3d=True, dtype=np.double)
-        y = check_array(np.atleast_2d(y), allow_3d=True, dtype=np.double)
-        if x.ndim != y.ndim:
+        x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
+        y = check_array(y, allow_3d=True, ensure_2d=False, dtype=np.double)
+        if x.ndim != 1 and y.ndim != 1 and x.ndim != y.ndim:
             raise ValueError(
                 "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
             )
@@ -768,16 +834,19 @@ def pairwise_distance(
                 % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
             )
 
-        return _distance._pairwise_distance(
-            x,
-            y,
-            dim,
-            distance_measure,
-            n_jobs,
+        return _format_return(
+            _distance._pairwise_distance(
+                np.atleast_2d(x),
+                np.atleast_2d(y),
+                dim,
+                distance_measure,
+                n_jobs,
+            ),
+            y.ndim,
+            x.ndim,
         )
 
 
-@array_or_scalar(squeeze=True)
 def matrix_profile(
     x,
     y=None,
@@ -851,13 +920,12 @@ def matrix_profile(
         that includes motifs, discords and shapelets. In 2016 IEEE 16th international
         conference on data mining (ICDM)
     """
-    x = check_array(np.atleast_2d(x), allow_3d=True)
+    x = check_array(x, allow_3d=True, ensure_2d=False)
 
     if y is not None:
-        y = np.array(y)
-        if y.ndim == 1:
-            y = y.reshape(1, -1)
-        y = np.broadcast_to(check_array(y, allow_3d=True), x.shape)
+        y = check_array(y, allow_3d=True, ensure_2d=False)
+        if x.ndim > 1:
+            y = np.broadcast_to(y, x.shape)
 
         if x.ndim != y.ndim:
             raise ValueError("Both x and y must have the same dimensionality")
@@ -911,8 +979,8 @@ def matrix_profile(
         exclude = math.ceil(window * exclude)
 
     mp, mpi = _matrix_profile._paired_matrix_profile(
-        x,
-        y,
+        np.atleast_2d(x),
+        np.atleast_2d(y),
         window,
         dim,
         exclude,
@@ -920,173 +988,6 @@ def matrix_profile(
     )
 
     if return_index:
-        return mp, mpi
+        return _format_return(mp, 2, x.ndim), _format_return(mpi, 2, x.ndim)
     else:
-        return mp
-
-
-@deprecated(extra="Will be removed in 1.2")
-def distance(
-    y,
-    x,
-    *,
-    dim=0,
-    sample=None,
-    metric="euclidean",
-    metric_params=None,
-    subsequence_distance=True,
-    return_index=False,
-):
-    """Computes the distance between y and the samples of x
-
-    Parameters
-    ----------
-    x : array-like of shape (x_timestep, )
-        A 1-dimensional float array
-
-    y : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
-
-    dim : int, optional
-        The time series dimension to search
-
-    sample : int or array-like, optional
-        The samples to compare to
-
-        - if ``sample=None`` the distances to all samples in data is returned
-        - if sample is an int the distance to that sample is returned
-        - if sample is an array-like the distance to all samples in sample are returned
-        - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
-          returned
-        - otherwise an array is returned
-
-    metric : str or callable, optional
-        The distance metric
-
-        - if str use optimized implementations of the named distance measure
-        - if callable a function taking two arrays as input
-
-    metric_params: dict, optional
-        Parameters to the metric
-
-    subsequence_distance: bool, optional
-        - if True, compute the minimum subsequence distance
-        - if False, compute the distance between two arrays of the same length
-          unless the specified metric support unaligned arrays
-
-    return_index : bool, optional
-        - if True return the index of the best match. If there are many equally good
-          matches, the first match is returned.
-
-    Returns
-    -------
-    dist : float, ndarray
-        The smallest distance to each time series
-
-    indices : int, ndarray
-        The start position of the best match in each time series
-
-    See Also
-    --------
-    matches : find shapelets within a threshold
-
-    Examples
-    --------
-
-    >>> from wildboar.datasets import load_two_lead_ecg
-    >>> x, y = load_two_lead_ecg()
-    >>> _, i = distance(x[0, 10:20], x, sample=[0, 1, 2, 3, 5, 10],
-    ...                 metric="scaled_euclidean", return_index=True)
-    >>> i
-    [10 29  9 72 20 30]
-    """
-    x = (x[sample] if x.ndim > 1 else x.reshape(1, -1),)
-    if subsequence_distance:
-        return pairwise_subsequence_distance(
-            y.reshape(1, -1),
-            x,
-            dim=dim,
-            metric=metric,
-            metric_params=metric_params,
-            return_index=return_index,
-            n_jobs=None,
-        )
-    else:
-        return pairwise_distance(
-            y.reshape(1, -1),
-            x,
-            dim=dim,
-            metric=metric,
-            metric_params=metric_params,
-            n_jobs=None,
-        )
-
-
-@deprecated(extra="Will be removed in 1.2")
-def matches(
-    y,
-    x,
-    threshold,
-    *,
-    dim=0,
-    sample=None,
-    metric="euclidean",
-    metric_params=None,
-    return_distance=False,
-):
-    """Find matches
-
-    Parameters
-    ----------
-    y : array-like of shape (x_timestep, )
-        A 1-dimensional float array
-
-    x : array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
-        The collection of samples
-
-    threshold : float
-        The maximum threshold to consider a match
-
-    dim : int, optional
-        The time series dimension to search
-
-    sample : int or array-like, optional
-        The samples to compare to
-
-        - if ``sample=None`` the distances to all samples in data is returned
-        - if sample is an int the distance to that sample is returned
-        - if sample is an array-like the distance to all samples in sample are returned
-        - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
-          returned
-        - otherwise an array is returned
-
-    metric : str, optional
-        The distance metric
-
-    metric_params: dict, optional
-        Parameters to the metric
-
-    return_distance : bool, optional
-        - if `true` return the distance of the best match.
-
-    Returns
-    -------
-    dist : list
-        The distances of the matching positions
-
-    matches : list
-        The start position of the matches in each time series
-
-    Warnings
-    --------
-    'scaled_dtw' is not supported.
-    """
-    return subsequence_match(
-        y,
-        x[sample] if x.ndim > 1 else x.reshape(1, -1),
-        threshold,
-        dim=dim,
-        metric=metric,
-        metric_params=metric_params,
-        return_distance=return_distance,
-        n_jobs=None,
-    )
+        return _format_return(mp, 2, x.ndim)

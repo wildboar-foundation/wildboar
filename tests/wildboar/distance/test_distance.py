@@ -376,7 +376,7 @@ def test_subseqence_match_default(
 ):
     x, _ = load_gun_point()
     subsequence = x[0, 3:15]
-    actual_indicies, actual_dists = subsequence_match(
+    actual_indices, actual_dists = subsequence_match(
         subsequence,
         x[1:3],
         return_distance=True,
@@ -384,8 +384,11 @@ def test_subseqence_match_default(
         metric_params=metric_params,
     )
 
-    assert_almost_equal(actual_dists, expected_dists)
-    assert_equal(actual_indicies, expected_indicies)
+    for actual_dist, expected_dist in zip(actual_dists, expected_dists):
+        assert_almost_equal(actual_dist, expected_dist)
+
+    for actual_index, expected_index in zip(actual_indices, expected_indicies):
+        assert_equal(actual_index, expected_index)
 
 
 @pytest.mark.parametrize(
@@ -421,5 +424,8 @@ def test_subsequence_match_equivalent(left, right):
         metric_params=dict(r=0.0) if "dtw" in right else {},
     )
 
-    assert_almost_equal(left_distances, right_distances)
-    assert_equal(left_indicies, right_indicies)
+    for left_distance, right_distance in zip(left_distances, right_distances):
+        assert_almost_equal(left_distance, right_distance)
+
+    for left_index, right_index in zip(left_indicies, right_indicies):
+        assert_equal(left_index, right_index)

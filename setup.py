@@ -69,12 +69,12 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/distance/_distance.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.distance._euclidean_distance": {
-            "sources": ["src/wildboar/distance/_euclidean_distance.pyx"],
+        "wildboar.distance._metric": {
+            "sources": ["src/wildboar/distance/_metric.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.distance._dtw_distance": {
-            "sources": ["src/wildboar/distance/_dtw_distance.pyx"],
+        "wildboar.distance._dtw": {
+            "sources": ["src/wildboar/distance/_dtw.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.distance._mass": {

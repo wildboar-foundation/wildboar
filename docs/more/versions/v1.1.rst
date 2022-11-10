@@ -87,6 +87,10 @@ Changelog
      - |Feature| Support for Weighted dynamic time warping.
 
      - |Feature| Support for Derivative (Weighted) dynamic time warping.
+
+     - |Feature| Support for additional Lm distance metrics: minkowski, chebyshev, manhattan.
+
+     - |Feature| Support for cosine an angular distance.
      
      - |Enhancement| The function :func:`distance.pairwise_subsequence_distance` generalizes the
        former `distance`-function and adds support for ``n_jobs``.

@@ -1,9 +1,10 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
 import os
 import platform
 import warnings
+
+import numpy as np
 
 __all__ = [
     "os_cache_dir",
@@ -99,3 +100,9 @@ def _soft_dependency_error(e=None, package=None, context=None, warning=False):
             raise ModuleNotFoundError(msg) from e
         else:
             raise ModuleNotFoundError(msg)
+
+
+def _safe_jagged_array(lst):
+    arr = np.empty(len(lst), dtype=object)
+    arr[:] = lst
+    return arr

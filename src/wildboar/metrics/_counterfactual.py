@@ -139,8 +139,10 @@ def relative_proximity_score(
         if y_native is None:
             raise ValueError("if y_counterfactual is give, y_native must also be given")
 
-        y_native = check_array(y_native, dtype=None)
-        y_counterfactual = check_array(y_counterfactual, dtype=None)
+        y_native = check_array(y_native, ensure_2d=False, ravel_1d=True, dtype=None)
+        y_counterfactual = check_array(
+            y_counterfactual, ensure_2d=False, ravel_1d=True, dtype=None
+        )
         cf_labels = np.unique(y_counterfactual)
         native_dist_sum = 0
         for label in cf_labels:

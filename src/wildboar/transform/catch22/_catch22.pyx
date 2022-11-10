@@ -244,7 +244,7 @@ def histogram_mode_(np.ndarray x, int n_bins):
         for sample in range(x_in.n_samples):
             for dim in range(x_in.n_dims):
                 x_out_view[sample, dim] = histogram_mode(
-                    x_in.get_sample(sample, dim=dim),
+                    x_in.get_sample(sample, dim),
                     x_in.n_timestep, 
                     bin_count,
                     bin_edges, 

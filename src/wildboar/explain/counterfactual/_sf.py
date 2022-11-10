@@ -22,8 +22,8 @@ from ...utils.validation import check_option
 
 def _min_euclidean_distance(shapelet, x):
     return pairwise_subsequence_distance(
-        shapelet.reshape(1, -1),
-        x.reshape(1, -1),
+        shapelet.reshape(-1),
+        x.reshape(-1),
         dim=0,
         metric="euclidean",
         return_index=True,

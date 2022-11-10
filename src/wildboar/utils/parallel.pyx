@@ -38,7 +38,7 @@ cdef class MapSample(ForeachSample):
         cdef Py_ssize_t dim
         cdef double v
         for dim in range(self.x_in.n_dims):
-            self.result[sample, dim] = self.map(self.x_in.get_sample(sample, dim=dim))
+            self.result[sample, dim] = self.map(self.x_in.get_sample(sample, dim))
 
     cdef double map(self, double *sample) nogil:
         pass

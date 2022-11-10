@@ -269,7 +269,8 @@ def check_array(
         be triggered by a conversion.
 
     ravel_1d : bool, optional
-        Whether to ravel 1d arrays or column vectors.
+        Whether to ravel 1d arrays or column vectors, it the array is neither an
+        error is raised.
 
     ensure_2d : bool, optional
         Whether to raise a value error if array is not 2D.

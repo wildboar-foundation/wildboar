@@ -9,7 +9,7 @@ from sklearn.utils import check_scalar, deprecated
 
 from ..utils.validation import check_array
 from . import pairwise_distance
-from ._dtw_distance import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
+from ._dtw import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
 
 __all__ = [
     "dtw_alignment",
@@ -54,6 +54,8 @@ def dtw_distance(x, y, *, r=1.0):
     --------
     dtw_alignment : compute the dtw alignment matrix
     """
+    x = check_array(x, ravel_1d=True, ensure_2d=False)
+    y = check_array(y, ravel_1d=True, ensure_2d=False)
     return pairwise_distance(x, y, metric="dtw", metric_params={"r": r})
 
 
@@ -80,6 +82,8 @@ def ddtw_distance(x, y, *, r=1.0):
     --------
     dtw_distance : compute the dtw distance
     """
+    x = check_array(x, ravel_1d=True, ensure_2d=False)
+    y = check_array(y, ravel_1d=True, ensure_2d=False)
     return pairwise_distance(x, y, metric="ddtw", metric_params={"r": r})
 
 
@@ -109,6 +113,8 @@ def wdtw_distance(x, y, *, r=1.0, g=0.05):
     --------
     dtw_distance : compute the dtw distance
     """
+    x = check_array(x, ravel_1d=True, ensure_2d=False)
+    y = check_array(y, ravel_1d=True, ensure_2d=False)
     return pairwise_distance(x, y, metric="wdtw", metric_params={"r": r, "g": g})
 
 
@@ -138,6 +144,8 @@ def wddtw_distance(x, y, *, r=1.0, g=0.05):
     --------
     dtw_distance : compute the dtw distance
     """
+    x = check_array(x, ravel_1d=True, ensure_2d=False)
+    y = check_array(y, ravel_1d=True, ensure_2d=False)
     return pairwise_distance(x, y, metric="wddtw", metric_params={"r": r, "g": g})
 
 

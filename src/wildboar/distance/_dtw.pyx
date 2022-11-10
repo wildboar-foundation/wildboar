@@ -36,6 +36,18 @@ from ._distance cimport (
 from sklearn.utils.validation import check_scalar
 
 
+cdef struct DtwExtra:
+    double *lower
+    double *upper
+
+cdef struct Deque:
+    Py_ssize_t *queue
+    int size
+    int capacity
+    int front
+    int back
+
+
 cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
     c.capacity = capacity
     c.size = 0
@@ -1574,9 +1586,9 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
         Py_ssize_t dim,
     ) nogil:
         return self._distance(
-            x.get_sample(x_index, dim=dim),
+            x.get_sample(x_index, dim),
             x.n_timestep,
-            y.get_sample(y_index, dim=dim),
+            y.get_sample(y_index, dim),
             y.n_timestep,
         )
 

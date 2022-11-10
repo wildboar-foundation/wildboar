@@ -165,7 +165,7 @@ cdef class Tree:
             pivot.data[i] = <double*> malloc(sizeof(double) * dataset.n_timestep)
             memcpy(
                 pivot.data[i],
-                dataset.get_sample(pivots[i]),
+                dataset.get_sample(pivots[i], 0),
                 sizeof(double) * dataset.n_timestep
             )
 
@@ -270,7 +270,7 @@ cdef class Tree:
                     branch = find_min_branch(
                         <DistanceMeasure> self.distance_measures.get(pivot.distance_measure),
                         pivot.data,
-                        td.get_sample(i, dim=0),
+                        td.get_sample(i, 0),
                         pivot.length,
                         pivot.n_branches,
                     )

@@ -16,7 +16,6 @@ from ..utils cimport stats
 
 from copy import deepcopy
 
-from . import _dtw_distance, _euclidean_distance
 
 from ..utils.data cimport Dataset
 
@@ -91,7 +90,7 @@ cdef class SubsequenceDistanceMeasure:
         if s.data == NULL:
             return -1
 
-        cdef double *sample = dataset.get_sample(v.index, dim=v.dim) + v.start
+        cdef double *sample = dataset.get_sample(v.index, v.dim) + v.start
         cdef Py_ssize_t i
         for i in range(v.length):
             s.data[i] = sample[i]
@@ -139,21 +138,33 @@ cdef class SubsequenceDistanceMeasure:
 
     cdef double transient_distance(
         self,
-        SubsequenceView *v,
-        Dataset td,
+        SubsequenceView *s,
+        Dataset dataset,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
-        return NAN
+        return self._distance(
+            dataset.get_sample(s.index, s.dim) + s.start,
+            s.length,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            return_index,
+        )
 
     cdef double persistent_distance(
         self,
         Subsequence *s,
-        Dataset td,
+        Dataset dataset,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
-        return NAN
+        return self._distance(
+            s.data,
+            s.length,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            return_index,
+        )
 
     cdef Py_ssize_t transient_matches(
         self,
@@ -164,13 +175,51 @@ cdef class SubsequenceDistanceMeasure:
         double **distances,
         Py_ssize_t **indicies,
     ) nogil:
-        return -1
+        return self._matches(
+            dataset.get_sample(v.index, v.dim) + v.start,
+            v.length,
+            dataset.get_sample(index, v.dim),
+            dataset.n_timestep,
+            threshold,
+            distances,
+            indicies,
+        )
 
     cdef Py_ssize_t persistent_matches(
         self,
         Subsequence *s,
         Dataset dataset,
         Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        return self._matches(
+            s.data,
+            s.length,
+            dataset.get_sample(index, s.dim),
+            dataset.n_timestep,
+            threshold,
+            distances,
+            indicies,
+        )
+
+    cdef double _distance(
+        self,
+        double *s,
+        Py_ssize_t s_len,
+        double *x,
+        Py_ssize_t x_len,
+        Py_ssize_t *return_index=NULL,
+    ) nogil:
+        return NAN
+
+    cdef Py_ssize_t _matches(
+        self,
+        double *s,
+        Py_ssize_t s_len,
+        double *x,
+        Py_ssize_t x_len,
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
@@ -226,7 +275,12 @@ cdef class DistanceMeasure:
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil:
-        return NAN
+        return self._distance(
+            x.get_sample(x_index, dim),
+            x.n_timestep,
+            y.get_sample(y_index, dim),
+            y.n_timestep,
+        )
 
     cdef double _distance(
         self,

@@ -161,8 +161,8 @@ def motifs(
                 break
 
             match_idx, match_dist = subsequence_match(
-                x[i, candidate : candidate + window].reshape(1, -1),
-                x[i].reshape(1, -1),
+                x[i, candidate : candidate + window],
+                x[i],
                 threshold=max_distance,
                 metric="scaled_euclidean",
                 max_matches=max_neighbours,

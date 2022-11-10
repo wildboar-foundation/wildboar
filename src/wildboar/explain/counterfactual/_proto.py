@@ -235,6 +235,9 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         x, y = self._validate_data(x, y, reset=False, dtype=float)
         counterfactuals = np.empty(x.shape, dtype=x.dtype)
         for i in range(x.shape[0]):
+            if self.verbose:
+                print(f"Computing counterfactual for the {i}th sample.")
+
             counterfactuals[i] = self._transform_sample(
                 x[i], y[i], random_state.randint(np.iinfo(np.int32).max)
             )
@@ -574,8 +577,8 @@ class ShapeletPrototypeSampler(PrototypeSampler):
 
         # Find the best matching position in
         min_dist, best_match = pairwise_subsequence_distance(
-            p.reshape(1, -1),
-            o.reshape(1, -1),
+            p,
+            o,
             metric=metric,
             metric_params=metric_params,
             return_index=True,

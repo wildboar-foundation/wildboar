@@ -160,9 +160,9 @@ def _paired_matrix_profile(
     with nogil:
         for i in range(x_dataset.n_samples):
             _matrix_profile_stmp(
-                x_dataset.get_sample(i, dim=dim),
+                x_dataset.get_sample(i, dim),
                 x_dataset.n_timestep,
-                y_dataset.get_sample(i, dim=dim),
+                y_dataset.get_sample(i, dim),
                 y_dataset.n_timestep,
                 w,
                 exclude,
@@ -194,7 +194,7 @@ def moving_mean_std(np.ndarray x, Py_ssize_t window):
     cdef Py_ssize_t i
     for i in range(dataset.n_samples):
         cumulative_mean_std(
-            dataset.get_sample(i), 
+            dataset.get_sample(i, 0), 
             dataset.n_timestep, 
             window, 
             (<double*> means.data) + i * (dataset.n_timestep - window + 1), 

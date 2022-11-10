@@ -373,7 +373,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         self.summarizer.summarize_all(
             td.get_sample(sample, feature.dim) + interval.start,
             interval.length,
-            td_out.get_sample(out_sample) + out_feature * n_summarizers,
+            td_out.get_sample(out_sample, 0) + out_feature * n_summarizers,
         )
         return 0
 

@@ -4,6 +4,7 @@
 from functools import wraps
 
 import numpy as np
+from sklearn.utils.validation import _is_arraylike_not_scalar
 
 __all__ = [
     "array_or_scalar",
@@ -45,15 +46,17 @@ def array_or_scalar(optional_f=None, squeeze=True):
             else:
                 return x
 
-        wrap.__doc__ == f.__doc__
         return wrap
 
     return decorator(optional_f) if callable(optional_f) else decorator
 
 
 def _singleton(x):
-    if isinstance(x, list):
-        return _singleton(x[0]) if len(x) == 1 else x
+    if _is_arraylike_not_scalar(x):
+        if isinstance(x, np.ndarray) and x.size == 1:
+            return x.item()
+        else:
+            return x[0] if len(x) == 1 else x
     else:
         return x
 
@@ -71,7 +74,6 @@ def singleton(f):
         else:
             return _singleton(ret_vals)
 
-    wrap.__doc__ = f.__doc__
     return wrap
 
 

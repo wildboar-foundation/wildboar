@@ -106,6 +106,6 @@ cdef class Dataset:
             self.n_dims = 1
             self.dim_stride = 0
 
-    cdef double* get_sample(self, Py_ssize_t i, Py_ssize_t dim=0) nogil:
+    cdef double* get_sample(self, Py_ssize_t i, Py_ssize_t dim) nogil:
         cdef Py_ssize_t offset = self.sample_stride * i + self.dim_stride * dim
         return self.data + offset

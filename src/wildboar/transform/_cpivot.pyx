@@ -98,7 +98,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
         persistent_pivot.length = td.n_timestep
         memcpy(
             persistent_pivot.data, 
-            td.get_sample(pivot.sample, dim=transient.dim), 
+            td.get_sample(pivot.sample, transient.dim), 
             sizeof(double) * td.n_timestep
         )
         
@@ -125,7 +125,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     ) nogil:
         cdef PersitentPivot* pivot = <PersitentPivot*> feature.feature
         return (<DistanceMeasure>self.distance_measures.get(pivot.distance_measure))._distance(
-            td.get_sample(sample, dim=feature.dim),
+            td.get_sample(sample, feature.dim),
             td.n_timestep,
             pivot.data,
             td.n_timestep,
@@ -140,7 +140,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
     ) nogil:
-        td_out.get_sample(out_sample, dim=feature.dim)[out_feature] = self.transient_feature_value(
+        td_out.get_sample(out_sample, feature.dim)[out_feature] = self.transient_feature_value(
             feature, td, sample
         )
         return 0
@@ -154,7 +154,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
     ) nogil:
-        td_out.get_sample(out_sample, dim=feature.dim)[out_feature] = self.persistent_feature_value(
+        td_out.get_sample(out_sample, feature.dim)[out_feature] = self.persistent_feature_value(
             feature, td, sample
         )
         return 0

@@ -100,6 +100,27 @@ cdef class SubsequenceDistanceMeasure:
         Py_ssize_t **indicies,
     ) nogil
 
+    cdef double _distance(
+        self,
+        double *s,
+        Py_ssize_t s_len,
+        double *x,
+        Py_ssize_t x_len,
+        Py_ssize_t *return_index=*,
+    ) nogil
+
+    cdef Py_ssize_t _matches(
+        self,
+        double *s,
+        Py_ssize_t s_len,
+        double *x,
+        Py_ssize_t x_len,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil
+
+
 cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     pass
 

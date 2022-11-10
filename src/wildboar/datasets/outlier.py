@@ -11,11 +11,12 @@ from sklearn.cluster import DBSCAN, OPTICS, KMeans
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.kernel_approximation import Nystroem
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix, pairwise_distances
+from sklearn.metrics import confusion_matrix
 from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import check_random_state
 from sklearn.utils.validation import _is_arraylike, check_is_fitted
 
+from ..distance import pairwise_distance
 from ..transform import IntervalTransform
 from ..utils import _soft_dependency_error
 from ..utils.validation import check_array, check_option, check_X_y
@@ -164,9 +165,7 @@ def kmeans_outliers(
     )
 
     k_means_.fit(x)
-    centroid_distance = pairwise_distances(
-        k_means_.cluster_centers_, metric="euclidean"
-    )
+    centroid_distance = pairwise_distance(k_means_.cluster_centers_, metric="euclidean")
 
     # skip self matches and invalid clusters
     centroid_distance[centroid_distance == 0] = np.nan
