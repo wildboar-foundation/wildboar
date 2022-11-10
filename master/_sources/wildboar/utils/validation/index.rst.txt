@@ -53,7 +53,8 @@ Functions
    :param copy: Whether a forced copy will be triggered. If copy=False, a copy might
                 be triggered by a conversion.
    :type copy: bool, optional
-   :param ravel_1d: Whether to ravel 1d arrays or column vectors.
+   :param ravel_1d: Whether to ravel 1d arrays or column vectors, it the array is neither an
+                    error is raised.
    :type ravel_1d: bool, optional
    :param ensure_2d: Whether to raise a value error if array is not 2D.
    :type ensure_2d: bool, optional

@@ -48,26 +48,36 @@ Functions
        Knowledge and Information Systems, 62(5), 1671-1700.
 
 
-.. py:function:: plausability_score(X_plausible, X_counterfactuals, estimator=None, method='accuracy')
+.. py:function:: plausability_score(X_plausible, X_counterfactuals, *, y_plausible=None, y_counterfactual=None, estimator=None, method='accuracy', average=True)
 
    Compute the plausibility of the generated counterfactuals.
 
    :param X_plausible: The plausible time series, typically the training or testing samples.
    :type X_plausible: array-like of shape (n_samples, n_timesteps)
-   :param X_counterfactuals: The counterfactuals generated
+   :param X_counterfactuals: The generated counterfactuals.
    :type X_counterfactuals: array-like of shape (m_samples, n_timesteps)
+   :param y_plausible: The labels of the plausible samples.
+   :type y_plausible: array-like of shape (n_samples, ), optional
+   :param y_counterfactual: The desired label of the counterfactuals.
+   :type y_counterfactual: array-like of shape (m_samples, ), optional
    :param estimator: The outlier estimator.
    :type estimator: Estimator, optional
    :param method: The score function.
-   :type method: {'average', 'accuracy'}, optional
+   :type method: {'score', 'accuracy'}, optional
+   :param average: If True, return the average score for all labels in y_counterfactual;
+                   otherwise, return the score for the individual labels (ordered as np.unique)
+   :type average: bool, optional
 
    :returns: **score** -- The plausability.
 
-             - if method='average', the mean score is returned, with larger score incicating
+             - if method='scores', the mean score is returned, with larger score incicating
                better performance.
 
              - if method='accuracy', the fraction of plausible counterfactuals are returned.
-   :rtype: float
+
+             - if y_counterfactual is None and average=False, the scores or accuracy for each
+               counterfactual label is returned.
+   :rtype: ndarray or float
 
    .. rubric:: References
 
@@ -110,7 +120,7 @@ Functions
        Knowledge and Information Systems, 62(5), 1671-1700.
 
 
-.. py:function:: relative_proximity_score(X_native, X_test, X_counterfactual, *, y_native=None, y_counterfactual=None, metric='euclidean', metric_params=None)
+.. py:function:: relative_proximity_score(X_native, X_test, X_counterfactual, *, y_native=None, y_counterfactual=None, metric='euclidean', metric_params=None, average=True)
 
    Relative proximity score captures the mean proximity of counterfactual and
    test sample pairs over mean proximity of the closest native counterfactual. The
@@ -136,9 +146,12 @@ Functions
                          Read more about the parameters in the
                          :ref:`User guide <list_of_metrics>`.
    :type metric_params: dict, optional
+   :param average: Average the relative proximity of all labels in y_counterfactual.
+   :type average: bool, optional
 
-   :returns: **score** -- The relative proximity.
-   :rtype: float
+   :returns: **score** -- The relative proximity. If avarege=False and y_counterfactual is not None,
+             return the relative proximity for each counterfactual label.
+   :rtype: ndarray or float
 
    .. rubric:: References
 

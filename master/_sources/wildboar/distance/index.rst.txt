@@ -22,8 +22,6 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.distance.distance
-   wildboar.distance.matches
    wildboar.distance.matrix_profile
    wildboar.distance.paired_distance
    wildboar.distance.paired_subsequence_distance
@@ -32,95 +30,6 @@ Functions
    wildboar.distance.pairwise_subsequence_distance
    wildboar.distance.subsequence_match
 
-
-
-.. py:function:: distance(y, x, *, dim=0, sample=None, metric='euclidean', metric_params=None, subsequence_distance=True, return_index=False)
-
-   Computes the distance between y and the samples of x
-
-   :param x: A 1-dimensional float array
-   :type x: array-like of shape (x_timestep, )
-   :param y:
-   :type y: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
-   :param dim: The time series dimension to search
-   :type dim: int, optional
-   :param sample: The samples to compare to
-
-                  - if ``sample=None`` the distances to all samples in data is returned
-                  - if sample is an int the distance to that sample is returned
-                  - if sample is an array-like the distance to all samples in sample are returned
-                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
-                    returned
-                  - otherwise an array is returned
-   :type sample: int or array-like, optional
-   :param metric: The distance metric
-
-                  - if str use optimized implementations of the named distance measure
-                  - if callable a function taking two arrays as input
-   :type metric: str or callable, optional
-   :param metric_params: Parameters to the metric
-   :type metric_params: dict, optional
-   :param subsequence_distance:
-                                - if True, compute the minimum subsequence distance
-                                - if False, compute the distance between two arrays of the same length
-                                  unless the specified metric support unaligned arrays
-   :type subsequence_distance: bool, optional
-   :param return_index:
-                        - if True return the index of the best match. If there are many equally good
-                          matches, the first match is returned.
-   :type return_index: bool, optional
-
-   :returns: * **dist** (*float, ndarray*) -- The smallest distance to each time series
-             * **indices** (*int, ndarray*) -- The start position of the best match in each time series
-
-   .. seealso::
-
-      :obj:`matches`
-          find shapelets within a threshold
-
-   .. rubric:: Examples
-
-   >>> from wildboar.datasets import load_two_lead_ecg
-   >>> x, y = load_two_lead_ecg()
-   >>> _, i = distance(x[0, 10:20], x, sample=[0, 1, 2, 3, 5, 10],
-   ...                 metric="scaled_euclidean", return_index=True)
-   >>> i
-   [10 29  9 72 20 30]
-
-
-.. py:function:: matches(y, x, threshold, *, dim=0, sample=None, metric='euclidean', metric_params=None, return_distance=False)
-
-   Find matches
-
-   :param y: A 1-dimensional float array
-   :type y: array-like of shape (x_timestep, )
-   :param x: The collection of samples
-   :type x: array-like of shape (n_samples, n_timesteps) or (n_samples, n_dims, n_timesteps)
-   :param threshold: The maximum threshold to consider a match
-   :type threshold: float
-   :param dim: The time series dimension to search
-   :type dim: int, optional
-   :param sample: The samples to compare to
-
-                  - if ``sample=None`` the distances to all samples in data is returned
-                  - if sample is an int the distance to that sample is returned
-                  - if sample is an array-like the distance to all samples in sample are returned
-                  - if ``n_samples=1``, ``samples`` is an int or ``len(samples)==1`` a scalar is
-                    returned
-                  - otherwise an array is returned
-   :type sample: int or array-like, optional
-   :param metric: The distance metric
-   :type metric: str, optional
-   :param metric_params: Parameters to the metric
-   :type metric_params: dict, optional
-   :param return_distance:
-                           - if `true` return the distance of the best match.
-   :type return_distance: bool, optional
-
-   :returns: * **dist** (*list*) -- The distances of the matching positions
-             * **matches** (*list*) -- The start position of the matches in each time series
-
-   .. warning:: 'scaled_dtw' is not supported.
 
 
 .. py:function:: matrix_profile(x, y=None, *, window=5, dim=0, exclude=None, n_jobs=-1, return_index=False)
@@ -197,8 +106,11 @@ Functions
    :param n_jobs: The number of parallel jobs.
    :type n_jobs: int, optional
 
-   :returns: **dist** -- An array of shape (n_samples, )
-   :rtype: float or ndarray
+   :returns: **distance** -- The distances. Return depends on input:
+
+             - if ndim > 1, return an ndarray of shape (n_samples, )
+             - if ndim == 1, return ndarray of shape (n_matches, ) or None
+   :rtype: ndarray
 
 
 .. py:function:: paired_subsequence_distance(y, x, *, dim=0, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)
@@ -208,10 +120,10 @@ Functions
 
    :param y: Input time series.
 
-             - if list, a list of array-like of shape (n_timestep, )
-   :type y: list or ndarray of shape (n_samples, n_timestep)
+             - if list, a list of array-like of shape (m_timestep, )
+   :type y: list or ndarray of shape (n_samples, m_timestep)
    :param x: The input data
-   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+   :type x: ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
    :param dim: The dim to search for shapelets
    :type dim: int, optional
    :param metric: The distance metric
@@ -232,7 +144,7 @@ Functions
 
    :returns: * **dist** (*float, ndarray*) -- An array of shape (n_samples, ) with the minumum distance between the i:th
                subsequence and the i:th sample
-             * **indices** (*int, ndarray*) -- An array of shape (n_samples, ) with the index of the best matching position
+             * **indices** (*int, ndarray, optional*) -- An array of shape (n_samples, ) with the index of the best matching position
                of the i:th subsequence and the i:th sample
 
 
@@ -243,7 +155,7 @@ Functions
 
    :param y: Input time series.
 
-             - if list, a list of array-like of shape (n_timestep, )
+             - if list, a list of array-like of shape (n_timestep, ) with length n_samples
    :type y: list or ndarray of shape (n_samples, n_timestep)
    :param x: The input data
    :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
@@ -276,9 +188,16 @@ Functions
    :param n_jobs: The number of parallel jobs to run. Ignored
    :type n_jobs: int, optional
 
-   :returns: * **indicies** (*list*) -- A list of shape (n_samples, ) of ndarray with start index of matching
-               subsequences
-             * **distance** (*list*) -- A list of shape (n_samples, ) of ndarray with distance at the matching position.
+   :returns: * **indicies** (*ndarray*) -- The start index of matching subsequences. Return depends on input:
+
+               - if x.ndim > 1, return an ndarray of shape (n_samples, )
+               - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+
+               For each sample, the ndarray contains the .
+             * **distance** (*ndarray, optional*) -- The distances of matching subsequences. Return depends on input:
+
+               - if x.ndim > 1, return an ndarray of shape (n_samples, )
+               - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
 
 
 .. py:function:: pairwise_distance(x, y=None, *, dim=0, metric='euclidean', metric_params=None, n_jobs=None)
@@ -304,7 +223,13 @@ Functions
    :param n_jobs: The number of parallel jobs.
    :type n_jobs: int, optional
 
-   :returns: **dist** -- An array of shape (y_samples, x_samples)
+   :returns: **dist** -- The distances. Return depends on input.
+
+             - if x.ndim > 1 and y is None, return array of shape (x_samples, x_samples)
+             - if x.ndim > 1 and y.ndim > 1, return array of shape (x_samples, y_samples)
+             - if x.ndim == 1 and y.ndim > 1, return array of shape (y_samples, )
+             - if y.ndim == 1 and x.ndim > 1, return array of shape (x_samples, )
+             - if x.ndim == 1 and y.ndim == 1, return scalar
    :rtype: float or ndarray
 
 
@@ -317,8 +242,8 @@ Functions
              - if list, a list of array-like of shape (n_timestep, )
    :type y: list or ndarray of shape (n_subsequences, n_timestep)
    :param x: The input data
-   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-   :param dim:    The dim to search for shapelets
+   :type x: ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
+   :param dim:    The dim to search for subsequence
 
                metric : str or callable, optional
                   The distance metric
@@ -335,10 +260,20 @@ Functions
                           matches, the first match is returned.
    :type return_index: bool, optional
 
-   :returns: * **dist** (*float, ndarray*) -- An array of shape (n_subsequences, n_samples) with the minumum distance between
-               each subsequence and each sample.
-             * **indices** (*int, ndarray*) -- An array of shape (n_subsequences, n_samples) with the start position of the
-               best match between each subsequence and time series
+   :returns: * **dist** (*float, ndarray*) -- The minumum distance. Return depends on input:
+
+               - if len(y) > 1 and x.ndim > 1, return an array of shape
+                 (n_samples, n_subsequences).
+               - if len(y) == 1, return an array of shape (n_samples, ).
+               - if x.ndim == 1, return an array of shape (n_subsequences, ).
+               - if x.ndim == 1 and len(y) == 1, return scalar.
+             * **indices** (*int, ndarray, optional*) --  The start index of the minumum distance. Return dependes on input:
+
+               - if len(y) > 1 and x.ndim > 1, return an array of shape
+                 (n_samples, n_subsequences).
+               - if len(y) == 1, return an array of shape (n_samples, ).
+               - if x.ndim == 1, return an array of shape (n_subsequences, ).
+               - if x.ndim == 1 and len(y) == 1, return scalar.
 
 
 .. py:function:: subsequence_match(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, max_matches=None, exclude=None, return_distance=False, n_jobs=None)
@@ -356,7 +291,7 @@ Functions
    :param y: The subsequence
    :type y: array-like of shape (yn_timestep, )
    :param x: The input data
-   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+   :type x: ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
    :param threshold: The distance threshold used to consider a subsequence matching. If no threshold
                      is selected, `max_matches` defaults to 10.
 
@@ -392,10 +327,15 @@ Functions
    :param n_jobs: The number of parallel jobs to run. Ignored
    :type n_jobs: int, optional
 
-   :returns: * **indicies** (*list or ndarray*) -- A list of shape (n_samples, ) of ndarray with start index of matching
-               subsequences. If only one sample is given, the return value is a single
-               array.
-             * **distance** (*list or ndarray*) -- A list of shape (n_samples, ) of ndarray with distance at the matching position.
-               If only one sample is given, the return value is a single array.
+   :returns: * **indicies** (*ndarray*) -- The start index of matching subsequences. Return depends on input:
+
+               - if x.ndim > 1, return an ndarray of shape (n_samples, )
+               - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+
+               For each sample, the ndarray contains the .
+             * **distance** (*ndarray, optional*) -- The distances of matching subsequences. Return depends on input:
+
+               - if x.ndim > 1, return an ndarray of shape (n_samples, )
+               - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
 
 
