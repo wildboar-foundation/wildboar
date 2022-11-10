@@ -10,8 +10,25 @@ from ..explain.counterfactual import proximity
 from ..utils.validation import check_array
 
 
+def _estimate_plausability(estimator, X_counterfactuals, method):
+    if method == "score":
+        return np.mean(estimator.decision_function(X_counterfactuals))
+    elif method == "accuracy":
+        y_true = np.broadcast_to(1, X_counterfactuals.shape[0])
+        return accuracy_score(y_true, estimator.predict(X_counterfactuals))
+    else:
+        raise ValueError("method must be 'average', or 'accuracy', " "got %r" % method)
+
+
 def plausability_score(
-    X_plausible, X_counterfactuals, estimator=None, method="accuracy"
+    X_plausible,
+    X_counterfactuals,
+    *,
+    y_plausible=None,
+    y_counterfactual=None,
+    estimator=None,
+    method="accuracy",
+    average=True,
 ):
     """Compute the plausibility of the generated counterfactuals.
 
@@ -21,23 +38,36 @@ def plausability_score(
         The plausible time series, typically the training or testing samples.
 
     X_counterfactuals : array-like of shape (m_samples, n_timesteps)
-        The counterfactuals generated
+        The generated counterfactuals.
+
+    y_plausible : array-like of shape (n_samples, ), optional
+        The labels of the plausible samples.
+
+    y_counterfactual : array-like of shape (m_samples, ), optional
+        The desired label of the counterfactuals.
 
     estimator : Estimator, optional
         The outlier estimator.
 
-    method : {'average', 'accuracy'}, optional
+    method : {'score', 'accuracy'}, optional
         The score function.
+
+    average : bool, optional
+        If True, return the average score for all labels in y_counterfactual;
+        otherwise, return the score for the individual labels (ordered as np.unique)
 
     Returns
     -------
-    score : float
+    score : ndarray or float
         The plausability.
 
-        - if method='average', the mean score is returned, with larger score incicating
+        - if method='scores', the mean score is returned, with larger score incicating
           better performance.
 
         - if method='accuracy', the fraction of plausible counterfactuals are returned.
+
+        - if y_counterfactual is None and average=False, the scores or accuracy for each
+          counterfactual label is returned.
 
     References
     ----------
@@ -59,14 +89,41 @@ def plausability_score(
             "X_plausible (%s) and X_counterfactuals (%s) must have the same number "
             "of timesteps." % (X_plausible.shape, X_counterfactuals.shape)
         )
-    estimator.fit(X_plausible)
-    y_true = np.broadcast_to(1, X_counterfactuals.shape[0])
-    if method == "average":
-        return np.mean(estimator.decision_function(X_counterfactuals))
-    elif method == "accuracy":
-        return accuracy_score(y_true, estimator.predict(X_counterfactuals))
+    if y_counterfactual is None:
+        estimator.fit(X_plausible)
+        return _estimate_plausability(estimator, X_counterfactuals, method)
     else:
-        raise ValueError("method must be 'average', or 'accuracy', " "got %r" % method)
+        if y_plausible is None:
+            raise ValueError(
+                "if y_counterfactual is give, y_plausible must also be given"
+            )
+
+        y_plausible = check_array(
+            y_plausible, ensure_2d=False, ravel_1d=True, dtype=None
+        )
+        y_counterfactual = check_array(
+            y_counterfactual, ensure_2d=False, ravel_1d=True, dtype=None
+        )
+
+        labels = np.unique(y_counterfactual)
+        scores = []
+        for label in labels:
+            X_plausible_label = X_plausible[y_plausible == label]
+            if X_plausible_label.shape[0] == 0:
+                raise ValueError(f"Not enough plausable samples with label={label}.")
+
+            label_estimator = clone(estimator)
+            label_estimator.fit(X_plausible_label)
+            scores.append(
+                _estimate_plausability(
+                    label_estimator,
+                    X_counterfactuals[y_counterfactual == label],
+                    method,
+                )
+            )
+
+        scores = np.array(scores, dtype=float)
+        return scores.mean() if average else scores
 
 
 def relative_proximity_score(
@@ -78,6 +135,7 @@ def relative_proximity_score(
     y_counterfactual=None,
     metric="euclidean",
     metric_params=None,
+    average=True,
 ):
     """Relative proximity score captures the mean proximity of counterfactual and
     test sample pairs over mean proximity of the closest native counterfactual. The
@@ -112,10 +170,14 @@ def relative_proximity_score(
         Read more about the parameters in the
         :ref:`User guide <list_of_metrics>`.
 
+    average : bool, optional
+        Average the relative proximity of all labels in y_counterfactual.
+
     Returns
     -------
-    score : float
-        The relative proximity.
+    score : ndarray or float
+        The relative proximity. If avarege=False and y_counterfactual is not None,
+        return the relative proximity for each counterfactual label.
 
     References
     ----------
@@ -144,7 +206,7 @@ def relative_proximity_score(
             y_counterfactual, ensure_2d=False, ravel_1d=True, dtype=None
         )
         cf_labels = np.unique(y_counterfactual)
-        native_dist_sum = 0
+        native_dists = []
         for label in cf_labels:
             X_native_cf_label = X_native[y_native == label]
             if X_native_cf_label.shape[0] == 0:
@@ -156,9 +218,10 @@ def relative_proximity_score(
                 metric=metric,
                 metric_params=metric_params,
             )
-            native_dist_sum += native_dist.min(axis=0).mean()
+            native_dists.append(native_dist.min(axis=0).mean())
 
-        return cf_dist / (native_dist_sum / len(cf_labels))
+        native_dists = np.array(native_dists, dtype=float)
+        return cf_dist / (native_dists.mean() if average else native_dists)
 
 
 def proximity_score(
