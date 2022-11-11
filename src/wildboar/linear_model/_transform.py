@@ -24,8 +24,8 @@ class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
         random_state = check_random_state(self.random_state)
         self.pipe_ = Pipeline(
             [
-                ("transform", self._get_transform(random_state.randint(2 ** 31))),
-                ("estimator", self._get_estimator(random_state.randint(2 ** 31))),
+                ("transform", self._get_transform(random_state.randint(2**31))),
+                ("estimator", self._get_estimator(random_state.randint(2**31))),
             ],
         )
         self.pipe_.fit(x, y, estimator__sample_weight=sample_weight)
