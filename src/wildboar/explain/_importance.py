@@ -878,4 +878,4 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
 
     def _distance_weight(self, distances, kernel_scale=0.25):
         kernel_width = [np.sqrt(s.size) * kernel_scale for s in self.components_]
-        return np.sqrt(np.exp(-(distances ** 2) / np.array(kernel_width) ** 2))
+        return np.sqrt(np.exp(-(distances**2) / np.array(kernel_width) ** 2))
