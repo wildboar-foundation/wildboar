@@ -768,12 +768,8 @@ cdef Py_ssize_t dtw_subsequence_matches(
 cdef double dtw_distance(
     double *X,
     Py_ssize_t x_length,
-    double x_mean,
-    double x_std,
     double *Y,
     Py_ssize_t y_length,
-    double y_mean,
-    double y_std,
     Py_ssize_t r,
     double *cost,
     double *cost_prev,
@@ -810,16 +806,13 @@ cdef double dtw_distance(
     cdef double v
     cdef double w = 1.0
 
-    v = (X[0] - x_mean) / x_std
-    v -= (Y[0] - y_mean) / y_std
-
+    v = X[0] - Y[0]
     if weight_vector != NULL:
         w = weight_vector[0]
     
     cost_prev[0] = v * v * w
     for i in range(1, min(y_length, max(0, y_length - x_length) + r)):
-        v = (X[0] - x_mean) / x_std
-        v -= (Y[i] - y_mean) / y_std
+        v = X[0] - Y[i]
         if weight_vector != NULL:
             w = weight_vector[i - 1]
 
@@ -841,8 +834,8 @@ cdef double dtw_distance(
             else:
                 y = INFINITY
                 z = INFINITY
-            v = (X[i] - x_mean) / x_std
-            v -= (Y[j] - y_mean) / y_std
+
+            v = X[i] - Y[j]
             if weight_vector != NULL:
                 w = weight_vector[labs(i - j)]
 
@@ -1602,12 +1595,8 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
         cdef double dist = dtw_distance(
             x,
             x_len,
-            0.0,
-            1.0,
             y,
             y_len,
-            0.0,
-            1.0,
             self.warp_width,
             self.cost,
             self.cost_prev,
@@ -1665,12 +1654,8 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
         cdef double dist = dtw_distance(
             self.d_x,
             x_len - 2,
-            0.0,
-            1.0,
             self.d_y,
             y_len - 2,
-            0.0,
-            1.0,
             self.warp_width,
             self.cost,
             self.cost_prev,
@@ -1717,12 +1702,8 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
         cdef double dist = dtw_distance(
             x,
             x_len,
-            0.0,
-            1.0,
             y,
             y_len,
-            0.0,
-            1.0,
             self.warp_width,
             self.cost,
             self.cost_prev,
@@ -1786,12 +1767,8 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
         cdef double dist = dtw_distance(
             self.d_x,
             x_len - 2,
-            0.0,
-            1.0,
             self.d_y,
             y_len - 2,
-            0.0,
-            1.0,
             self.warp_width,
             self.cost,
             self.cost_prev,
