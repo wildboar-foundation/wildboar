@@ -10,7 +10,7 @@ from sklearn.utils.validation import _is_arraylike, check_scalar
 
 from ..utils import _safe_jagged_array
 from ..utils.validation import check_array, check_option, check_type
-from . import _distance, _dtw, _mass, _matrix_profile, _metric
+from . import _distance, _elastic, _mass, _matrix_profile, _metric
 
 __all__ = [
     "distance",
@@ -28,8 +28,8 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
     "euclidean": _metric.EuclideanSubsequenceDistanceMeasure,
     "normalized_euclidean": _metric.NormalizedEuclideanSubsequenceDistanceMeasure,  # noqa: E501
     "scaled_euclidean": _metric.ScaledEuclideanSubsequenceDistanceMeasure,
-    "dtw": _dtw.DtwSubsequenceDistanceMeasure,
-    "scaled_dtw": _dtw.ScaledDtwSubsequenceDistanceMeasure,
+    "dtw": _elastic.DtwSubsequenceDistanceMeasure,
+    "scaled_dtw": _elastic.ScaledDtwSubsequenceDistanceMeasure,
     "mass": _mass.ScaledMassSubsequenceDistanceMeasure,
     "manhattan": _metric.ManhattanSubsequenceDistanceMeasure,
     "minkowski": _metric.MinkowskiSubsequenceDistanceMeasure,
@@ -41,10 +41,10 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
 _DISTANCE_MEASURE = {
     "euclidean": _metric.EuclideanDistanceMeasure,
     "normalized_euclidean": _metric.NormalizedEuclideanDistanceMeasure,
-    "dtw": _dtw.DtwDistanceMeasure,
-    "ddtw": _dtw.DerivativeDtwDistanceMeasure,
-    "wdtw": _dtw.WeightedDtwDistanceMeasure,
-    "wddtw": _dtw.WeightedDerivativeDtwDistanceMeasure,
+    "dtw": _elastic.DtwDistanceMeasure,
+    "ddtw": _elastic.DerivativeDtwDistanceMeasure,
+    "wdtw": _elastic.WeightedDtwDistanceMeasure,
+    "wddtw": _elastic.WeightedDerivativeDtwDistanceMeasure,
     "manhattan": _metric.ManhattanDistanceMeasure,
     "minkowski": _metric.MinkowskiDistanceMeasure,
     "chebyshev": _metric.ChebyshevDistanceMeasure,

@@ -73,8 +73,8 @@ if __name__ == "__main__":
             "sources": ["src/wildboar/distance/_metric.pyx"],
             "include_dirs": include_dirs(),
         },
-        "wildboar.distance._dtw": {
-            "sources": ["src/wildboar/distance/_dtw.pyx"],
+        "wildboar.distance._elastic": {
+            "sources": ["src/wildboar/distance/_elastic.pyx"],
             "include_dirs": include_dirs(),
         },
         "wildboar.distance._mass": {

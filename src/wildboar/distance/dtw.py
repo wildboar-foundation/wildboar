@@ -9,7 +9,7 @@ from sklearn.utils import check_scalar, deprecated
 
 from ..utils.validation import check_array
 from . import pairwise_distance
-from ._dtw import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
+from ._elastic import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
 
 __all__ = [
     "dtw_alignment",
