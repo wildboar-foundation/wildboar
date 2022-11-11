@@ -1018,6 +1018,64 @@ def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r
     return sqrt(min_dist), cb
 
 
+cdef double lcss_distance(
+    double *X,
+    Py_ssize_t x_length,
+    double *Y,
+    Py_ssize_t y_length,
+    Py_ssize_t r,
+    double threshold,
+    double *cost,
+    double *cost_prev,
+    double *weight_vector = NULL,
+) nogil:
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t j_start
+    cdef Py_ssize_t j_stop
+    cdef double v
+    cdef double x, y, z
+    cdef double w = 1.0
+  
+    for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
+        cost_prev[i] = 0
+
+    if max(0, y_length - x_length) + r < y_length:
+        cost_prev[max(0, y_length - x_length) + r] = 0
+
+    for i in range(x_length):
+        j_start = max(0, i - max(0, x_length - y_length) - r + 1)
+        j_stop = min(y_length, i + max(0, y_length - x_length) + r)
+        if j_start > 0:
+            cost[j_start - 1] = 0
+
+        for j in range(j_start, j_stop):
+            x = cost_prev[j]
+            if j > 0:
+                y = cost_prev[j - 1]
+                z = cost[j - 1]
+            else:
+                y = 0
+                z = 0
+
+            v = X[i] - Y[j]
+            if weight_vector != NULL:
+                w = weight_vector[labs(i - j)]
+
+            v = sqrt(v * v)
+            if v <= threshold:
+                cost[j] = w + y
+            else:
+                cost[j] = max(z, x)
+
+        if j_stop < y_length:
+            cost[j_stop] = 0
+
+        cost, cost_prev = cost_prev, cost
+
+    return 1 - (cost_prev[y_length - 1] / min(x_length, y_length))
+
+
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
     if r == 1:
         return length - 1
@@ -1570,21 +1628,6 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
-    cdef double distance(
-        self,
-        Dataset x,
-        Py_ssize_t x_index,
-        Dataset y,
-        Py_ssize_t y_index,
-        Py_ssize_t dim,
-    ) nogil:
-        return self._distance(
-            x.get_sample(x_index, dim),
-            x.n_timestep,
-            y.get_sample(y_index, dim),
-            y.n_timestep,
-        )
-
     cdef double _distance(
         self,
         double *x,
@@ -1776,3 +1819,117 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
         )
 
         return sqrt(dist)
+
+cdef class LcssDistanceMeasure(DistanceMeasure):
+
+    cdef double *cost
+    cdef double *cost_prev
+    cdef Py_ssize_t warp_width
+    cdef double r
+    cdef double threshold
+    
+    def __cinit__(self, double r=1.0, double threshold=1.0, *args, **kwargs):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        check_scalar(threshold, "threshold", float, min_val=0)
+        self.r = r
+        self.threshold = threshold# * threshold
+        self.cost = NULL
+        self.cost_prev = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.threshold)
+
+    def __dealloc__(self):
+        self.__free()
+
+    cdef void __free(self) nogil:
+        if self.cost != NULL:
+            free(self.cost)
+            self.cost = NULL
+
+        if self.cost_prev != NULL:
+            free(self.cost_prev)
+            self.cost_prev = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        self.__free()
+        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
+        self.cost = <double*> malloc(sizeof(double) * n_timestep)
+        self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        cdef double dist = lcss_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.threshold,
+            self.cost,
+            self.cost_prev,
+        )
+
+        return dist
+
+    @property
+    def is_elastic(self):
+        return True
+
+
+cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
+
+    cdef double g
+    cdef double *weights
+
+    def __cinit__(self, double r=1.0, threshold=1.0, double g=0.05):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        check_scalar(threshold, "threshold", float, min_val=0.0)
+        self.weights = NULL
+        self.g = g
+        self.threshold = threshold
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.g)
+
+    cdef void __free(self) nogil:
+        LcssDistanceMeasure.__free(self)
+        if self.weights != NULL:
+            free(self.weights)
+            self.weights = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        LcssDistanceMeasure.reset(self, x, y)
+        cdef Py_ssize_t i
+        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+
+        self.weights = <double*> malloc(sizeof(double) * n_timestep)
+        for i in range(n_timestep):
+            self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len,
+    ) nogil:
+        cdef double dist = lcss_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.threshold,
+            self.cost,
+            self.cost_prev,
+            self.weights,
+        )
+
+        return dist

@@ -45,6 +45,8 @@ _DISTANCE_MEASURE = {
     "ddtw": _elastic.DerivativeDtwDistanceMeasure,
     "wdtw": _elastic.WeightedDtwDistanceMeasure,
     "wddtw": _elastic.WeightedDerivativeDtwDistanceMeasure,
+    "lcss": _elastic.LcssDistanceMeasure,
+    "wlcss": _elastic.WeightedLcssDistanceMeasure,
     "manhattan": _metric.ManhattanDistanceMeasure,
     "minkowski": _metric.MinkowskiDistanceMeasure,
     "chebyshev": _metric.ChebyshevDistanceMeasure,
