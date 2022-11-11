@@ -196,6 +196,52 @@ def _download_hash_file(cached_hash, hash_url, filename):
         f.write(response.text)
 
 
+_SIZE_NAMES = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+
+
+def _convert_size(byte_size, i=None):
+    import math
+
+    if byte_size == 0:
+        return 0, 0
+
+    if i is None:
+        i = int(math.floor(math.log(byte_size, 1024)))
+    p = math.pow(1024, i)
+    s = round(byte_size / p, 2)
+    return s, i
+
+
+def _print_progress(
+    current_iter,
+    max_iter,
+    *,
+    prefix="",
+    suffix="",
+    progress=None,
+    length=50,
+    fill="█",
+    unfill="-",
+    end="\r",
+    file=sys.stderr,
+):
+    def size_progress(current, total):
+        total_size, total_type = _convert_size(total)
+        current_size, _ = _convert_size(current, total_type)
+        return f" {current_size}/{total_size} {_SIZE_NAMES[total_type]}"
+
+    if progress is None:
+        progress = size_progress
+
+    progress = progress(float(current_iter), float(max_iter))
+    fill_size = int(length * current_iter // max_iter)
+    unfill_size = int(length - fill_size)
+    bar = fill * fill_size + unfill * unfill_size
+    print(f"\r{prefix}|{bar}|{progress}{suffix}", file=file, end=end)
+    if current_iter >= max_iter:
+        print(file=file)
+
+
 def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
     """Download the bundle
 
@@ -230,22 +276,25 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
         else:
             length = 0
             total_length = int(total_length)
+
+            if progress:
+                total_size, total_type = _convert_size(total_length)
+                print(
+                    f"Downloading {filename}.zip "
+                    f"({total_size} {_SIZE_NAMES[total_type]})",
+                    file=sys.stderr,
+                )
+
             for data in response.iter_content(chunk_size=4096):
                 length += len(data)
                 f.write(data)
-                done = int(50 * length / total_length)
-                if length % 100 == 0 and progress:
-                    sys.stderr.write(
-                        "\r[%s%s] %d/%d downloading %s"
-                        % (
-                            "=" * done,
-                            " " * (50 - done),
-                            length,
-                            total_length,
-                            filename,
-                        )
+                if progress:
+                    _print_progress(
+                        length,
+                        total_length,
+                        prefix="  ",
+                        unfill="-",
                     )
-                    sys.stderr.flush()
 
 
 class Repository(metaclass=ABCMeta):
