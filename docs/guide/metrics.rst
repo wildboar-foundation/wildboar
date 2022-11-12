@@ -68,6 +68,11 @@ using the ``metric_params`` argument.
      - Euclidean distance, where length has been scaled to have unit norm.
        Undefined cases result in 0.
 
+   * - Longest common subsequence
+     - ``"lcss"``
+     - ``{r: float, threshold: float}``
+     - Window ``r`` in ``[0, 1]``.  ``threshold > 0.0``.
+
    * - Dynamic time warping
      - ``"dtw"``
      - ``{"r": float}``
