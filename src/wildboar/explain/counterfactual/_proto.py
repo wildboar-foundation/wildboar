@@ -676,11 +676,16 @@ class DynamicTimeWarpTransform(MetricTransform):
 
     def move(self, o, p):
         _, indices = dtw_mapping(alignment=self._get_alignment(o, p), return_index=True)
+
+        # This a fast but somewhat crude approximation of DBA (as implemented) in
+        # dtw_average with sample_weight=[(1 - gamma), gamma] and init=0 but
+        # significantly faster to compute.
         result = o * (1 - self.gamma)
         weight = np.ones(o.shape[0]) * (1 - self.gamma)
-        for j in indices[1]:
-            result[j] += self.gamma * p[j]
-            weight[j] += self.gamma
+        for i, j in zip(indices[0], indices[1]):
+            result[i] += self.gamma * p[j]
+            weight[i] += self.gamma
+
         return result / weight
 
     def _get_alignment(self, o, p):
