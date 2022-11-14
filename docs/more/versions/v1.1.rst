@@ -91,6 +91,8 @@ Changelog
      - |Feature| Support for additional Lm distance metrics: minkowski, chebyshev, manhattan.
 
      - |Feature| Support for cosine an angular distance.
+
+     - |Feature| The function :func:`distance.dtw.dtw_average` to compute the DTW barycenter average.
      
      - |Enhancement| The function :func:`distance.pairwise_subsequence_distance` generalizes the
        former `distance`-function and adds support for ``n_jobs``.
