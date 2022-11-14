@@ -3,9 +3,11 @@
 
 import math
 import numbers
+from functools import partial
 
 import numpy as np
-from sklearn.utils import check_scalar, deprecated
+from sklearn.utils import check_random_state, check_scalar, deprecated
+from sklearn.utils.validation import _check_sample_weight, _is_arraylike
 
 from ..utils.validation import check_array
 from . import pairwise_distance
@@ -431,7 +433,7 @@ def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
             alignment, force_all_finite=False, order=None, input_name="alignment"
         )
 
-    indicator = np.zeros(alignment.shape).astype(bool)
+    indicator = np.zeros(alignment.shape, dtype=bool)
     i = alignment.shape[0] - 1
     j = alignment.shape[1] - 1
     while i > 0 or j > 0:
@@ -452,3 +454,246 @@ def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
         return indicator, indicator.nonzero()
     else:
         return indicator
+
+
+def dtw_average(
+    X,
+    *,
+    r=1.0,
+    g=None,
+    sample_weight=None,
+    init="random",
+    method="mm",
+    max_stable=5,
+    learning_rate=0.1,
+    decay=0.9,
+    tol=1e-5,
+    max_epoch=50,
+    return_cost=False,
+    verbose=False,
+    random_state=None,
+):
+    """Compute the DTW barycenter average (DBA).
+
+    Parameters
+    ----------
+    X : array-like of shape (n_samples, n_timestep)
+        The samples.
+
+    r : float, optional
+        The warping window as a fraction of n_timestep.
+
+    g : float, optional
+        If set, use the weighted DTW alignment with :math:`g` as penalty control.
+
+        .. math:: w(x)=\\frac{w_{max}}{1+e^{-g(x-m/2)}}
+
+    sample_weight : array-like of shape (n_samples, ), optional
+        The sample weight.
+
+    init : 'random' or array-like of shape (m_timestep, ), optional
+        The initial sample used for the average.
+
+    method : {'mm', 'ssg'}, optional
+        The method for computing the DBA.
+
+        - if 'mm', use the majorize-minimize mean algorithm [1], which is equivalent to
+          the DBA method in [2].
+
+        - if 'ssg', use the stochastic subgradient mean algorithm [1].
+
+    max_stable : int, optional
+        The maximum number of epoch where the average with lowest cost is unchanged
+        if method='ssg'.
+
+    learning_rate : float, optional
+        The learning rate, if method='ssg'.
+
+    decay : float, optional
+        The learning rate decay, if method='ssg'.
+
+    tol : float, optional
+        The minmum change in cost between two epochs, if method='mm'.
+
+    max_epoch : int, optional
+        The maximum number of epochs.
+
+    verbose : bool, optional
+        If set, show runtime information.
+
+    random_state : int or RandomState, optional
+        Pseudo-random number generator.
+
+    Returns
+    -------
+    mean : array-like of shape (m_timestep, ) or (n_timestep, )
+        The mean time series.
+
+    cost : float, optional
+        Return the cost of the average
+    """
+    X = check_array(X, ensure_min_samples=2)
+    r = check_scalar(r, "r", numbers.Real, min_val=0.0, max_val=1.0)
+    random_state = check_random_state(random_state)
+
+    if isinstance(init, str) and init == "random":
+        mean = X[random_state.randint(X.shape[0])].copy()
+    elif _is_arraylike(init):
+        mean = np.array(init, copy=True)
+    else:
+        raise ValueError(
+            "init must be array-like or 'random', not %r" % type(init).__qualname__
+        )
+
+    if sample_weight is not None:
+        sample_weight = _check_sample_weight(sample_weight, X)
+
+    if g is None:
+        distancefn = partial(pairwise_distance, metric="dtw", metric_params=dict(r=r))
+        alignmentfn = partial(dtw_alignment, r=r)
+    else:
+        g = check_scalar(g, "g", numbers.Real, min_val=0, include_boundaries="neither")
+        distancefn = partial(
+            pairwise_distance, metric="wdtw", metric_params=dict(r=r, g=g)
+        )
+        alignmentfn = partial(wdtw_alignment, r=r, g=g)
+
+    def costfn(mean, X):
+        cost = distancefn(mean, X)
+        if sample_weight is None:
+            return np.mean(cost)
+        else:
+            return np.average(cost, weights=sample_weight)
+
+    if method == "mm":
+        mean, cost = _mm_dtw_average(
+            mean,
+            X,
+            sample_weight=sample_weight,
+            max_epoch=max_epoch,
+            costfn=costfn,
+            alignmentfn=alignmentfn,
+            tol=tol,
+            verbose=verbose,
+        )
+    elif method == "ssg":
+        mean, cost = _ssg_dtw_average(
+            mean,
+            X,
+            sample_weight=sample_weight,
+            max_epoch=max_epoch,
+            max_stable=max_stable,
+            learning_rate=learning_rate,
+            decay=decay,
+            costfn=costfn,
+            alignmentfn=alignmentfn,
+            verbose=verbose,
+            random_state=random_state,
+        )
+    else:
+        raise ValueError("method must be 'mm' or 'ssg', got %r" % method)
+
+    if return_cost:
+        return mean, cost
+    else:
+        return mean
+
+
+# Implementation based on Stochastic Subgradient mean algorithm by:
+# David Schultz and Brijnesh J. Jain. (2016).
+#   Sample Mean Algorithms for Averaging in Dynamic Time Warping Spaces.
+#   Zenodo. https://doi.org/10.5281/zenodo.216233
+def _ssg_dtw_average(
+    mean,
+    X,
+    *,
+    sample_weight,
+    max_epoch,
+    learning_rate,
+    decay,
+    max_stable,
+    costfn,
+    alignmentfn,
+    verbose,
+    random_state,
+):
+    best_mean = None
+    order = np.arange(X.shape[0])
+    min_cost = np.inf
+    n_stable = 0
+
+    z = np.empty(mean.shape[0], dtype=float)
+    for epoch in range(max_epoch):
+        if n_stable > max_stable:
+            if verbose:
+                print(f"Completed at epoch={epoch} with cost={min_cost}.")
+            break
+
+        random_state.shuffle(order)
+        for i, o in enumerate(order):
+            z.fill(0)
+            align_m, align_x = dtw_mapping(alignment=alignmentfn(mean, X[o])).nonzero()
+
+            w = 1.0
+            if sample_weight is not None:
+                w = sample_weight[o]
+
+            for m, x in zip(align_m, align_x):
+                z[m] += mean[m] - X[o, x] * w
+
+            mean -= learning_rate * z
+
+            if epoch == 0:
+                learning_rate = decay**i * learning_rate
+
+        cost = costfn(mean, X)
+        if cost < min_cost:
+            if verbose:
+                print(
+                    f"New min cost={cost} at epoch={epoch} with "
+                    f"learning_rate={learning_rate}."
+                )
+
+            min_cost = cost
+            n_stable = 0
+            best_mean = mean.copy()
+        else:
+            n_stable += 1
+
+    return best_mean, min_cost
+
+
+# Implementation based on Majorize-Minimize mean algorithm by:
+# David Schultz and Brijnesh J. Jain. (2016).
+#   Sample Mean Algorithms for Averaging in Dynamic Time Warping Spaces.
+#   Zenodo. https://doi.org/10.5281/zenodo.216233
+def _mm_dtw_average(
+    mean, X, *, sample_weight, max_epoch, costfn, alignmentfn, tol, verbose
+):
+    prev_cost = np.inf
+    cost = costfn(mean, X)
+    z = np.empty(mean.shape[0], dtype=float)
+    V = np.empty(mean.shape[0], dtype=float)
+    for epoch in range(max_epoch):
+        z.fill(0)
+        V.fill(0)
+        for i in range(X.shape[0]):
+            align_m, align_x = dtw_mapping(alignment=alignmentfn(mean, X[i])).nonzero()
+            w = 1.0
+            if sample_weight is not None:
+                w = sample_weight[i]
+            for m, x in zip(align_m, align_x):
+                V[m] += w
+                z[m] += X[i, x] * w
+
+        mean = z / V
+
+        prev_cost = cost
+        cost = costfn(mean, X)
+
+        if abs(prev_cost - cost) < tol:
+            if verbose:
+                print(f"Complete at epoch={epoch} with cost={cost}.")
+            break
+
+    return mean, cost

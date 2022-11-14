@@ -5,7 +5,8 @@ import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal
 
-from wildboar.distance.dtw import dtw_alignment, dtw_mapping, jeong_weight
+from wildboar.datasets import load_two_lead_ecg
+from wildboar.distance.dtw import dtw_alignment, dtw_average, dtw_mapping, jeong_weight
 
 
 @pytest.mark.parametrize(
@@ -88,3 +89,12 @@ def test_dtw_mapping(expected_mapping, weight):
     y = np.array([5, 6, 7, 8])
     actual_mapping = dtw_mapping(alignment=dtw_alignment(x, y, weight=weight))
     assert_equal(actual_mapping, expected_mapping)
+
+
+@pytest.mark.parametrize(
+    "method, expected_cost", [("mm", 1.3472766992867564), ("ssg", 1.3477183253349283)]
+)
+def test_dtw_average(method, expected_cost):
+    X, _ = load_two_lead_ecg()
+    _, actual_cost = dtw_average(X[:3], method=method, return_cost=True, random_state=0)
+    assert_almost_equal(actual_cost, expected_cost)
