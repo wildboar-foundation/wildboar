@@ -18,7 +18,7 @@ cimport numpy as np
 
 import numpy as np
 
-from libc.math cimport INFINITY, exp, floor, sqrt
+from libc.math cimport INFINITY, exp, fabs, floor, sqrt
 from libc.stdlib cimport free, labs, malloc
 from libc.string cimport memcpy
 
@@ -1076,6 +1076,74 @@ cdef double lcss_distance(
     return 1 - (cost_prev[y_length - 1] / min(x_length, y_length))
 
 
+cdef double erp_distance(
+    double *X,
+    Py_ssize_t x_length,
+    double *Y,
+    Py_ssize_t y_length,
+    Py_ssize_t r,
+    double g,
+    double *gX,
+    double *gY,
+    double *cost,
+    double *cost_prev,
+) nogil:
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t j_start
+    cdef Py_ssize_t j_stop
+    cdef double v, x, y, z
+    cdef double gx_sum = 0
+    cdef double gy_sum = 0
+
+    for i in range(x_length):
+        v = fabs(X[i] - g)
+        gX[i] = v
+        gx_sum += v
+    
+    for i in range(y_length):
+        v = fabs(Y[i] - g)
+        gY[i] = v
+        gy_sum += v
+
+    for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
+        cost_prev[i] = gy_sum
+
+    if max(0, y_length - x_length) + r < y_length:
+        cost_prev[max(0, y_length - x_length) + r] = gy_sum
+
+    for i in range(x_length):
+        j_start = max(0, i - max(0, x_length - y_length) - r + 1)
+        j_stop = min(y_length, i + max(0, y_length - x_length) + r)
+        if j_start > 0:
+            cost[j_start - 1] = 0
+
+        for j in range(j_start, j_stop):
+            x = cost_prev[j]
+            if j > 0:
+                y = cost_prev[j - 1]
+                z = cost[j - 1]
+            else:
+                if i == 0:
+                    # top-left is 0
+                    y = 0 
+                else:
+                    # left column
+                    y = gx_sum 
+
+                z = gx_sum
+
+            v = fabs(X[i] - Y[j])
+            cost[j] = min(y + v, min(x + gX[i], z + gY[j]))
+
+        if j_stop < y_length:
+            cost[j_stop] = 0
+
+        cost, cost_prev = cost_prev, cost
+
+    return cost_prev[y_length - 1]
+
+
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
     if r == 1:
         return length - 1
@@ -1933,3 +2001,81 @@ cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
         )
 
         return dist
+
+
+cdef class ErpDistanceMeasure(DistanceMeasure):
+
+    cdef double *cost
+    cdef double *cost_prev
+    cdef double *gX
+    cdef double *gY
+
+    cdef Py_ssize_t warp_width
+    cdef double r
+    cdef double g
+    
+    def __cinit__(self, double r=1.0, double g=0.0, *args, **kwargs):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        check_scalar(g, "g", float, min_val=0)
+        self.r = r
+        self.g = g
+        self.cost = NULL
+        self.cost_prev = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.g)
+
+    def __dealloc__(self):
+        self.__free()
+
+    cdef void __free(self) nogil:
+        if self.cost != NULL:
+            free(self.cost)
+            self.cost = NULL
+
+        if self.cost_prev != NULL:
+            free(self.cost_prev)
+            self.cost_prev = NULL
+
+        if self.gX != NULL:
+            free(self.gX)
+            self.gX = NULL
+
+        if self.gY != NULL:
+            free(self.gY)
+            self.gY = NULL    
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        self.__free()
+        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
+        self.cost = <double*> malloc(sizeof(double) * n_timestep)
+        self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
+        self.gX = <double*> malloc(sizeof(double) * x.n_timestep)
+        self.gY = <double*> malloc(sizeof(double) * y.n_timestep)
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        cdef double dist = erp_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.g,
+            self.gX,
+            self.gY,
+            self.cost,
+            self.cost_prev,
+        )
+
+        return dist
+
+    @property
+    def is_elastic(self):
+        return True
