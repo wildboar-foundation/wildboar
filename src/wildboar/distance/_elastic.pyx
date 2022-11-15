@@ -25,6 +25,7 @@ from libc.string cimport memcpy
 from ..utils cimport stats
 from ..utils.data cimport Dataset
 from ..utils.misc cimport realloc_array
+from ..utils.stats cimport fast_mean_std
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,
@@ -1144,6 +1145,60 @@ cdef double erp_distance(
     return cost_prev[y_length - 1]
 
 
+cdef double edr_distance(
+    double *X,
+    Py_ssize_t x_length,
+    double *Y,
+    Py_ssize_t y_length,
+    Py_ssize_t r,
+    double threshold,
+    double *cost,
+    double *cost_prev,
+    double *weight_vector = NULL,
+) nogil:
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t j_start
+    cdef Py_ssize_t j_stop
+    cdef double v
+    cdef double x, y, z
+    cdef double w = 1.0
+  
+    for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
+        cost_prev[i] = 0
+
+    if max(0, y_length - x_length) + r < y_length:
+        cost_prev[max(0, y_length - x_length) + r] = 0
+
+    for i in range(x_length):
+        j_start = max(0, i - max(0, x_length - y_length) - r + 1)
+        j_stop = min(y_length, i + max(0, y_length - x_length) + r)
+        if j_start > 0:
+            cost[j_start - 1] = 0
+
+        for j in range(j_start, j_stop):
+            x = cost_prev[j]
+            if j > 0:
+                y = cost_prev[j - 1]
+                z = cost[j - 1]
+            else:
+                y = 0
+                z = 0
+
+            v = fabs(X[i] - Y[j])
+            if weight_vector != NULL:
+                w = weight_vector[labs(i - j)]
+
+            cost[j] = min(y + (0 if v < threshold else 1), x + 1, z + 1)
+
+        if j_stop < y_length:
+            cost[j_stop] = 0
+
+        cost, cost_prev = cost_prev, cost
+
+    return cost_prev[y_length - 1] / max(x_length, y_length)
+
+
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
     if r == 1:
         return length - 1
@@ -2075,6 +2130,127 @@ cdef class ErpDistanceMeasure(DistanceMeasure):
         )
 
         return dist
+
+    @property
+    def is_elastic(self):
+        return True
+
+
+cdef class EdrDistanceMeasure(DistanceMeasure):
+
+    cdef double *cost
+    cdef double *cost_prev
+    cdef double *std_x
+    cdef double *std_y
+
+    cdef Py_ssize_t warp_width
+    cdef double r
+    cdef double threshold
+    
+    def __cinit__(self, double r=1.0, double threshold=-INFINITY, *args, **kwargs):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        if threshold != -INFINITY:
+            check_scalar(threshold, "threshold", float, min_val=0)
+        self.r = r
+        self.threshold = threshold
+        self.cost = NULL
+        self.cost_prev = NULL
+        self.std_x = NULL
+        self.std_y = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.threshold)
+
+    def __dealloc__(self):
+        self.__free()
+
+    cdef void __free(self) nogil:
+        if self.cost != NULL:
+            free(self.cost)
+            self.cost = NULL
+
+        if self.cost_prev != NULL:
+            free(self.cost_prev)
+            self.cost_prev = NULL
+
+        if self.std_x != NULL:
+            free(self.std_x)
+            self.std_x = NULL
+
+        if self.std_y != NULL:
+            free(self.std_y)
+            self.std_y = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        self.__free()
+        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
+        self.cost = <double*> malloc(sizeof(double) * n_timestep)
+        self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
+        self.std_x = <double*> malloc(sizeof(double) * x.n_samples)
+        self.std_y = <double*> malloc(sizeof(double) * x.n_samples)
+        
+        cdef double mean, std
+        cdef Py_ssize_t i
+        if self.threshold == -INFINITY:
+            for i in range(x.n_samples):
+                fast_mean_std(x.get_sample(i, 0), x.n_timestep, &mean, &std)
+                self.std_x[i] = std
+
+            for i in range(y.n_samples):
+                fast_mean_std(y.get_sample(i, 0), y.n_timestep, &mean, &std)
+                self.std_y[i] = std
+
+    cdef double distance(
+        self,
+        Dataset x,
+        Py_ssize_t x_index,
+        Dataset y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+    ) nogil:
+        if self.threshold == -INFINITY:
+            threshold = max(self.std_x[x_index], self.std_y[y_index]) / 4.0
+        else:
+            threshold = self.threshold
+
+        return edr_distance(
+            x.get_sample(x_index, dim),
+            x.n_timestep,
+            y.get_sample(y_index, dim),
+            y.n_timestep,
+            self.warp_width,
+            threshold,
+            self.cost,
+            self.cost_prev,
+        )
+
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len,
+    ) nogil:
+        cdef double mean, std_x, std_y, threshold
+        if self.threshold == -INFINITY:
+            fast_mean_std(x, x_len, &mean, &std_x)
+            fast_mean_std(y, y_len, &mean, &std_y)
+            threshold = max(std_x, std_y) / 4.0
+        else:
+            threshold = self.threshold
+
+        return edr_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            threshold,
+            self.cost,
+            self.cost_prev,
+        )
 
     @property
     def is_elastic(self):

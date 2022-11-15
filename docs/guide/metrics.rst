@@ -78,6 +78,11 @@ using the ``metric_params`` argument.
      - ``{r: float, g: float}``
      - Window ``r`` in ``[0, 1]``. Gap penalty ``g``.
 
+   * - Edit distance for real sequences
+     - ``"edr"``
+     - ``{r: float, threshold: float}``
+     - Window ``r`` in ``[0, 1]``. Match ``threshold``. Default ``1/4*max(std(x), std(y))``. Elastic.
+
    * - Dynamic time warping
      - ``"dtw"``
      - ``{"r": float}``

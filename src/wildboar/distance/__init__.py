@@ -48,6 +48,7 @@ _DISTANCE_MEASURE = {
     "lcss": _elastic.LcssDistanceMeasure,
     "wlcss": _elastic.WeightedLcssDistanceMeasure,
     "erp": _elastic.ErpDistanceMeasure,
+    "edr": _elastic.EdrDistanceMeasure,
     "manhattan": _metric.ManhattanDistanceMeasure,
     "minkowski": _metric.MinkowskiDistanceMeasure,
     "chebyshev": _metric.ChebyshevDistanceMeasure,
