@@ -199,8 +199,8 @@ def density_outliers(
     max_eps=np.inf,
     random_state=None,
 ):
-    """Labels samples as outliers if a density cluster algorithm fail to assign them to a
-    cluster
+    """Labels samples as outliers if a density cluster algorithm fail to assign them to
+    a cluster
 
     Parameters
     ----------
