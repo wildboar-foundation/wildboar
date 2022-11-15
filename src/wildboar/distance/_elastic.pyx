@@ -1058,11 +1058,10 @@ cdef double lcss_distance(
                 y = 0
                 z = 0
 
-            v = X[i] - Y[j]
+            v = fabs(X[i] - Y[j])
             if weight_vector != NULL:
                 w = weight_vector[labs(i - j)]
 
-            v = sqrt(v * v)
             if v <= threshold:
                 cost[j] = w + y
             else:
