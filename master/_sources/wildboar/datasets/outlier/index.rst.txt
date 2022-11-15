@@ -91,8 +91,8 @@ Functions
 
 .. py:function:: density_outliers(x, y=None, *, n_outliers=0.05, method='dbscan', eps=2.0, min_sample=5, metric='euclidean', max_eps=np.inf, random_state=None)
 
-   Labels samples as outliers if a density cluster algorithm fail to assign them to a
-   cluster
+   Labels samples as outliers if a density cluster algorithm fail to assign them to
+   a cluster
 
    :param x: The input samples
    :type x: ndarray of shape (n_samples, n_timestep)

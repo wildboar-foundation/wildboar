@@ -73,6 +73,11 @@ using the ``metric_params`` argument.
      - ``{r: float, threshold: float}``
      - Window ``r`` in ``[0, 1]``.  ``threshold > 0.0``.
 
+   * - Edit distance with real penalty
+     - ``"erp"``
+     - ``{r: float, g: float}``
+     - Window ``r`` in ``[0, 1]``. Gap penalty ``g``.
+
    * - Dynamic time warping
      - ``"dtw"``
      - ``{"r": float}``
