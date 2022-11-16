@@ -1,6 +1,14 @@
 name: Build, test and upload to PyPI
 
-on: [push, pull_request]
+on:
+  push:
+    branches: 
+      - master
+      - 1.0.X
+      - 1.1.X
+
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
   build_wheels:
