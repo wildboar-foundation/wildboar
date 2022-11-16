@@ -76,12 +76,17 @@ using the ``metric_params`` argument.
    * - Edit distance with real penalty
      - ``"erp"``
      - ``{r: float, g: float}``
-     - Window ``r`` in ``[0, 1]``. Gap penalty ``g``.
+     - Window ``r`` in ``[0, 1]``. Gap penalty ``g``. Elastic.
 
    * - Edit distance for real sequences
      - ``"edr"``
      - ``{r: float, threshold: float}``
      - Window ``r`` in ``[0, 1]``. Match ``threshold``. Default ``1/4*max(std(x), std(y))``. Elastic.
+
+   * - Move-split-merge
+     - ``"msm"``
+     - ``{r: float, c: float}``
+     - Window ``r`` in ``[0, 1]``. Split/merge cost ``c``. Elastic. (Stefan, Athitsos, & Das, 2013s)
 
    * - Dynamic time warping
      - ``"dtw"``
@@ -103,4 +108,11 @@ using the ``metric_params`` argument.
      - ``{"r": float, "g": float}``
      - Window ``r`` in ``[0, 1]``. Phase difference penalty ``g``. Elastic.
 
-   
+
+References
+==========
+
+Stefan, A., Athitsos, V., & Das, G. (2013). 
+  The Move-Split-Merge Metric for Time Series. 
+  IEEE Transactions on Knowledge and Data Engineering, 25(6), 1425-1438.
+

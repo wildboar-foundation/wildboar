@@ -1198,6 +1198,65 @@ cdef double edr_distance(
     return cost_prev[y_length - 1] / max(x_length, y_length)
 
 
+cdef inline double _msm_cost(float x, float y, float z, float c) nogil:
+    if y <= x <= z or y >= x >= z:
+        return c
+    else:
+        return c + min(fabs(x - y), fabs(x - z))
+
+# Stefan, A., Athitsos, V., & Das, G. (2013). 
+#   The Move-Split-Merge Metric for Time Series. 
+#   IEEE Transactions on Knowledge and Data Engineering, 25(6), 1425-1438.
+cdef double msm_distance(
+    double *X,
+    Py_ssize_t x_length,
+    double *Y,
+    Py_ssize_t y_length,
+    Py_ssize_t r,
+    double c,
+    double *cost,
+    double *cost_prev,
+    double *cost_y,
+) nogil:
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t j_start
+    cdef Py_ssize_t j_stop
+
+    # Fill the first row
+    cost_prev[0] = fabs(X[0] - Y[0])
+    for i in range(1, min(y_length, max(0, y_length - x_length) + r)):
+        cost_prev[i] = cost_prev[i - 1] + _msm_cost(Y[i], Y[i - 1], X[0], c)
+
+    i = max(0, y_length - x_length) + r
+    if i < y_length:
+        cost_prev[i] = cost_prev[i - 1] + _msm_cost(Y[i], Y[i - 1], X[0], c)
+
+    # Fill the first column
+    cost_y[0] = cost_prev[0]
+    for i in range(1, x_length):
+        cost_y[i] = cost_y[i - 1] + _msm_cost(X[i], X[i - 1], Y[0], c)
+
+    for i in range(1, x_length):
+        j_start = max(1, i - max(0, x_length - y_length) - r + 1)
+        j_stop = min(y_length, i + max(0, y_length - x_length) + r)
+
+        cost[0] = cost_y[i]
+        for j in range(j_start, j_stop):
+            cost[j] = min(
+                cost_prev[j - 1] + fabs(X[i] - Y[j]),
+                cost_prev[j] + _msm_cost(X[i], X[i - 1], Y[j], c),    
+                cost[j - 1] + _msm_cost(Y[j], X[i], Y[j - 1], c),
+            )
+
+        if j_stop < y_length:
+            cost[j_stop] = 0
+
+        cost, cost_prev = cost_prev, cost
+
+    return cost_prev[y_length - 1]
+
+
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
     if r == 1:
         return length - 1
@@ -2249,6 +2308,76 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             threshold,
             self.cost,
             self.cost_prev,
+        )
+
+    @property
+    def is_elastic(self):
+        return True
+
+
+cdef class MsmDistanceMeasure(DistanceMeasure):
+
+    cdef double *cost
+    cdef double *cost_prev
+    cdef double *cost_y
+
+    cdef Py_ssize_t warp_width
+    cdef double r
+    cdef double c
+    
+    def __cinit__(self, double r=1.0, double c=1.0, *args, **kwargs):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        check_scalar(c, "c", float, min_val=0)
+        self.r = r
+        self.c = c
+        self.cost = NULL
+        self.cost_prev = NULL
+        self.cost_y = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.c)
+
+    def __dealloc__(self):
+        self.__free()
+
+    cdef void __free(self) nogil:
+        if self.cost != NULL:
+            free(self.cost)
+            self.cost = NULL
+
+        if self.cost_prev != NULL:
+            free(self.cost_prev)
+            self.cost_prev = NULL
+
+        if self.cost_y != NULL:
+            free(self.cost_y)
+            self.cost_y = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        self.__free()
+        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
+        self.cost = <double*> malloc(sizeof(double) * n_timestep)
+        self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
+        self.cost_y = <double*> malloc(sizeof(double) * x.n_timestep)
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return msm_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.c,
+            self.cost,
+            self.cost_prev,
+            self.cost_y,
         )
 
     @property
