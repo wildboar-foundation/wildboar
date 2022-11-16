@@ -92,7 +92,7 @@ Changelog
 
      - |Feature| Support for cosine an angular distance.
 
-     - |Feature| Support for LCSS, ERP and EDR distance.
+     - |Feature| Support for LCSS, ERP, EDR, and MSM distance.
 
      - |Feature| The function :func:`distance.dtw.dtw_average` to compute the DTW barycenter average.
      
