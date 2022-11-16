@@ -35,7 +35,32 @@ using the ``metric_params`` argument.
      - ``"scaled_euclidean"`` or ``"mass"``
      - ``{}``
      - Scales each subsequence to have zero mean and unit variance.
+
+   * - Manhattan
+     - ``"manhattan"``
+     - ``{}``
+     - 
     
+   * - Minkowski
+     - ``"minkowski"``
+     - ``{}``
+     - 
+
+   * - Chebyshev
+     - ``"chebyshev"``
+     - ``{}``
+     - 
+    
+   * - Cosine
+     - ``"cosine"``
+     - ``{}``
+     - 
+
+   * - Angular
+     - ``"angular"``
+     - ``{}``
+     - 
+
    * - Dynamic time warping
      - ``"dtw"``
      - ``{"r": float}``
@@ -68,25 +93,50 @@ using the ``metric_params`` argument.
      - Euclidean distance, where length has been scaled to have unit norm.
        Undefined cases result in 0.
 
-   * - Longest common subsequence
+   * - Manhattan
+     - ``"manhattan"``
+     - ``{}``
+     - 
+    
+   * - Minkowski
+     - ``"minkowski"``
+     - ``{}``
+     - 
+
+   * - Chebyshev
+     - ``"chebyshev"``
+     - ``{}``
+     - 
+    
+   * - Cosine
+     - ``"cosine"``
+     - ``{}``
+     - 
+
+   * - Angular
+     - ``"angular"``
+     - ``{}``
+     - 
+
+   * - Longest common subsequence [1]
      - ``"lcss"``
      - ``{r: float, threshold: float}``
-     - Window ``r`` in ``[0, 1]``.  ``threshold > 0.0``.
+     - Window ``r`` in ``[0, 1]``.  Match ``threshold``, default ``1``. Elastic.
 
-   * - Edit distance with real penalty
+   * - Edit distance with real penalty [2]
      - ``"erp"``
      - ``{r: float, g: float}``
-     - Window ``r`` in ``[0, 1]``. Gap penalty ``g``. Elastic.
+     - Window ``r`` in ``[0, 1]``. Gap penalty ``g``, default ``0``. Elastic.
 
-   * - Edit distance for real sequences
+   * - Edit distance for real sequences [3]
      - ``"edr"``
      - ``{r: float, threshold: float}``
-     - Window ``r`` in ``[0, 1]``. Match ``threshold``. Default ``1/4*max(std(x), std(y))``. Elastic.
+     - Window ``r`` in ``[0, 1]``. Match ``threshold``, default ``1/4*max(std(x), std(y))``. Elastic.
 
-   * - Move-split-merge
+   * - Move-split-merge [4]
      - ``"msm"``
      - ``{r: float, c: float}``
-     - Window ``r`` in ``[0, 1]``. Split/merge cost ``c``. Elastic. (Stefan, Athitsos, & Das, 2013s)
+     - Window ``r`` in ``[0, 1]``. Split/merge cost ``c``, default ``1``. Elastic.
 
    * - Dynamic time warping
      - ``"dtw"``
@@ -112,7 +162,19 @@ using the ``metric_params`` argument.
 References
 ==========
 
-Stefan, A., Athitsos, V., & Das, G. (2013). 
+[1] Hirschberg, D. (1977). 
+  Algorithms for the longest common subsequence problem. 
+  Journal of the ACM (JACM).
+
+[2] Chen, L., & Ng, R. (2004). 
+  On the Marriage of Lp-Norms and Edit Distance (30). 
+  Proceedings of the Thirtieth International Conference on Very Large Data Base.
+
+[3] Chen, L., Özsu, M. T., & Oria, V. (2005). 
+  Robust and fast similarity search for moving object trajectories. 
+  Proceedings from Proceedings of the International Conference on Management of Data
+
+[4] Stefan, A., Athitsos, V., & Das, G. (2013). 
   The Move-Split-Merge Metric for Time Series. 
   IEEE Transactions on Knowledge and Data Engineering, 25(6), 1425-1438.
 

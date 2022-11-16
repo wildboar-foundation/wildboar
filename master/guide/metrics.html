@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Explainability" href="explain.html" /><link rel="prev" title="Outlier detection" href="unsupervised/outlier_detection.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Distance metrics - Wildboar 1.1.0rc5.dev193+g5c625fefa documentation</title>
+        <title>Distance metrics - Wildboar 1.1.0rc5.dev194+gf0ae2045c documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev193+g5c625fefa documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.0rc5.dev194+gf0ae2045c documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -380,12 +380,37 @@ Undefined cases result in 0.</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
 <td><p>Scales each subsequence to have zero mean and unit variance.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Dynamic time warping</p></td>
+<tr class="row-odd"><td><p>Manhattan</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;manhattan&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Minkowski</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;minkowski&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Chebyshev</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;chebyshev&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Cosine</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;cosine&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Angular</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;angular&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Dynamic time warping</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;dtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>Scaled DTW</p></td>
+<tr class="row-odd"><td><p>Scaled DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;scaled_dtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code></p></td>
@@ -421,42 +446,67 @@ Undefined cases result in 0.</p></td>
 <td><p>Euclidean distance, where length has been scaled to have unit norm.
 Undefined cases result in 0.</p></td>
 </tr>
-<tr class="row-even"><td><p>Longest common subsequence</p></td>
+<tr class="row-even"><td><p>Manhattan</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;manhattan&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Minkowski</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;minkowski&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Chebyshev</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;chebyshev&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Cosine</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;cosine&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>Angular</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;angular&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>Longest common subsequence [1]</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;lcss&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{r:</span> <span class="pre">float,</span> <span class="pre">threshold:</span> <span class="pre">float}</span></code></p></td>
-<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.  <code class="docutils literal notranslate"><span class="pre">threshold</span> <span class="pre">&gt;</span> <span class="pre">0.0</span></code>.</p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>.  Match <code class="docutils literal notranslate"><span class="pre">threshold</span></code>, default <code class="docutils literal notranslate"><span class="pre">1</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Edit distance with real penalty</p></td>
+<tr class="row-even"><td><p>Edit distance with real penalty [2]</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;erp&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{r:</span> <span class="pre">float,</span> <span class="pre">g:</span> <span class="pre">float}</span></code></p></td>
-<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Gap penalty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Gap penalty <code class="docutils literal notranslate"><span class="pre">g</span></code>, default <code class="docutils literal notranslate"><span class="pre">0</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-even"><td><p>Edit distance for real sequences</p></td>
+<tr class="row-odd"><td><p>Edit distance for real sequences [3]</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;edr&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{r:</span> <span class="pre">float,</span> <span class="pre">threshold:</span> <span class="pre">float}</span></code></p></td>
-<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Match <code class="docutils literal notranslate"><span class="pre">threshold</span></code>. Default <code class="docutils literal notranslate"><span class="pre">1/4*max(std(x),</span> <span class="pre">std(y))</span></code>. Elastic.</p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Match <code class="docutils literal notranslate"><span class="pre">threshold</span></code>, default <code class="docutils literal notranslate"><span class="pre">1/4*max(std(x),</span> <span class="pre">std(y))</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Move-split-merge</p></td>
+<tr class="row-even"><td><p>Move-split-merge [4]</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;msm&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{r:</span> <span class="pre">float,</span> <span class="pre">c:</span> <span class="pre">float}</span></code></p></td>
-<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Split/merge cost <code class="docutils literal notranslate"><span class="pre">c</span></code>. Elastic. (Stefan, Athitsos, &amp; Das, 2013s)</p></td>
+<td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Split/merge cost <code class="docutils literal notranslate"><span class="pre">c</span></code>, default <code class="docutils literal notranslate"><span class="pre">1</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-even"><td><p>Dynamic time warping</p></td>
+<tr class="row-odd"><td><p>Dynamic time warping</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;dtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Weighted DTW</p></td>
+<tr class="row-even"><td><p>Weighted DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;wdtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;g&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Phase difference penalty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-even"><td><p>Derivative DTW</p></td>
+<tr class="row-odd"><td><p>Derivative DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;ddtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Elastic.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Weighted Derivative DTW</p></td>
+<tr class="row-even"><td><p>Weighted Derivative DTW</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&quot;wddtw&quot;</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">{&quot;r&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;g&quot;:</span> <span class="pre">float}</span></code></p></td>
 <td><p>Window <code class="docutils literal notranslate"><span class="pre">r</span></code> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. Phase difference penalty <code class="docutils literal notranslate"><span class="pre">g</span></code>. Elastic.</p></td>
@@ -467,7 +517,16 @@ Undefined cases result in 0.</p></td>
 <section id="references">
 <h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <dl class="simple">
-<dt>Stefan, A., Athitsos, V., &amp; Das, G. (2013).</dt><dd><p>The Move-Split-Merge Metric for Time Series.
+<dt>[1] Hirschberg, D. (1977).</dt><dd><p>Algorithms for the longest common subsequence problem.
+Journal of the ACM (JACM).</p>
+</dd>
+<dt>[2] Chen, L., &amp; Ng, R. (2004).</dt><dd><p>On the Marriage of Lp-Norms and Edit Distance (30).
+Proceedings of the Thirtieth International Conference on Very Large Data Base.</p>
+</dd>
+<dt>[3] Chen, L., Özsu, M. T., &amp; Oria, V. (2005).</dt><dd><p>Robust and fast similarity search for moving object trajectories.
+Proceedings from Proceedings of the International Conference on Management of Data</p>
+</dd>
+<dt>[4] Stefan, A., Athitsos, V., &amp; Das, G. (2013).</dt><dd><p>The Move-Split-Merge Metric for Time Series.
 IEEE Transactions on Knowledge and Data Engineering, 25(6), 1425-1438.</p>
 </dd>
 </dl>
