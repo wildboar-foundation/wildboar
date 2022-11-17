@@ -1257,6 +1257,96 @@ cdef double msm_distance(
     return cost_prev[y_length - 1]
 
 
+cdef double twe_distance(
+    double *X,
+    Py_ssize_t x_length,
+    double *Y,
+    Py_ssize_t y_length,
+    Py_ssize_t r,
+    double edit_penelty,
+    double stiffness,
+    double *cost,
+    double *cost_prev,
+) nogil:
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t j_start
+    cdef Py_ssize_t j_stop
+    cdef double v, x, y, del_x, del_y, match, penalty
+    cdef double up_left, left, up
+
+    for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
+        cost_prev[i] = INFINITY
+
+    i = max(0, y_length - x_length) + r
+    if i < y_length:
+        cost_prev[i] = INFINITY
+
+    penalty = edit_penelty + stiffness
+    for i in range(0, x_length):
+        j_start = max(0, i - max(0, x_length - y_length) - r + 1)
+        j_stop = min(y_length, i + max(0, y_length - x_length) + r)
+
+        if j_start > 0:
+            cost[j_start - 1] = 0
+
+        for j in range(j_start, j_stop):
+            up = cost_prev[j]
+            if j == 0:
+                left = INFINITY
+                if i == 0:
+                    up_left = 0
+                else:
+                    up_left = INFINITY
+            else:
+                left = cost[j - 1]
+                up_left = cost_prev[j - 1]
+
+            if i == 0:
+                x = 0
+                y = X[i]
+            else:
+                x = X[i - 1]
+                y = X[i]
+                
+            del_x = up + fabs(x - y) + penalty
+
+            if j == 0:
+                x = 0
+                y = Y[j]
+            else:
+                x = Y[j - 1]
+                y = Y[j]
+
+            del_y = left + fabs(x - y) + penalty
+            
+            if i == 0:
+                x = 0
+            else:
+                x = X[i - 1]
+            
+            if j == 0:
+                y = 0
+            else:
+                y = Y[j - 1]
+
+            match = (
+                up_left
+                + fabs(X[i] - Y[j]) 
+                + fabs(x - y)
+                + stiffness * 2 * fabs(i - j)
+            )
+
+            cost[j] = min(del_x, del_y, match)
+
+        if j_stop < y_length:
+            cost[j_stop] = 0
+
+        cost, cost_prev = cost_prev, cost
+
+    return cost_prev[y_length - 1]
+
+
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
     if r == 1:
         return length - 1
@@ -2378,6 +2468,78 @@ cdef class MsmDistanceMeasure(DistanceMeasure):
             self.cost,
             self.cost_prev,
             self.cost_y,
+        )
+
+    @property
+    def is_elastic(self):
+        return True
+
+
+cdef class TweDistanceMeasure(DistanceMeasure):
+
+    cdef double *cost
+    cdef double *cost_prev
+    cdef Py_ssize_t warp_width
+    cdef double r
+    cdef double edit_penelty
+    cdef double stiffness
+    
+    def __cinit__(
+        self, 
+        double r=1.0, 
+        double edit_penelty=1.0, 
+        stiffness=0.001, 
+        *args, 
+        **kwargs
+    ):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        check_scalar(edit_penelty, "edit_penelty", float, min_val=1.0)
+        check_scalar(stiffness, "stiffness", float, min_val=0)
+        self.r = r
+        self.edit_penelty = edit_penelty
+        self.stiffness = stiffness
+        self.cost = NULL
+        self.cost_prev = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.edit_penelty, self.stiffness)
+
+    def __dealloc__(self):
+        self.__free()
+
+    cdef void __free(self) nogil:
+        if self.cost != NULL:
+            free(self.cost)
+            self.cost = NULL
+
+        if self.cost_prev != NULL:
+            free(self.cost_prev)
+            self.cost_prev = NULL
+
+    cdef int reset(self, Dataset x, Dataset y) nogil:
+        self.__free()
+        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
+        self.cost = <double*> malloc(sizeof(double) * n_timestep)
+        self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
+
+    cdef double _distance(
+        self,
+        double *x,
+        Py_ssize_t x_len,
+        double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return twe_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.edit_penelty,
+            self.stiffness,
+            self.cost,
+            self.cost_prev,
         )
 
     @property
