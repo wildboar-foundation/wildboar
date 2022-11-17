@@ -80,6 +80,16 @@ def msm_factory(min_c=0.01, max_c=100, n=10):
     return [_DISTANCE_MEASURE["lcss"](c=c) for c in np.linspace(min_c, max_c, n)]
 
 
+def twe_factory(
+    min_penalty=0.00001, max_penalty=1.0, min_stiffness=0.0, max_stiffness=0.1, n=10
+):
+    return [
+        _DISTANCE_MEASURE["twe"](penalty=penalty, stiffness=stiffness)
+        for penalty in np.linspace(min_penalty, max_penalty, n)
+        for stiffness in np.linspace(min_stiffness, max_stiffness, n)
+    ]
+
+
 _METRIC_FACTORIES = {
     "euclidean": euclidean_factory,
     "dtw": dtw_factory,
@@ -91,6 +101,7 @@ _METRIC_FACTORIES = {
     "erp": erp_factory,
     "lcss": lcss_factory,
     "msm": msm_factory,
+    "twe": twe_factory,
 }
 
 
@@ -123,7 +134,14 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
     >>> from wildboar.datasets import load_dataset
     >>> from wildboar.tree import ProximityTreeClassifier
     >>> x, y = load_dataset("GunPoint")
-    >>> f = ProximityTreeClassifier(n_pivot=10, criterion="gini")
+    >>> f = ProximityTreeClassifier(
+    ...     n_pivot=10,
+    ...     metric_factories={
+    ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
+    ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
+    ...     },
+    ...     "max_criterion="gini"
+    ... )
     >>> f.fit(x, y)
 
     References
@@ -142,7 +160,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         criterion="entropy",
         pivot_sample="label",
         metric_sample="weighted",
-        metric_factories=None,
+        metric_factories="default",
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -165,13 +183,19 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         metric_sample : {"uniform", "weighted"}, optional
             The metric sampling method.
 
-        metric_factories : dict, optional
-            The distance metrics. A dictionary where key is:
+        metric_factories : "default", list or dict, optional
+            The distance metrics.
+
+            If dict, a dictionary where key is:
 
             - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
             - if callable, a function returning a list of ``DistanceMeasure``-objects
 
             and where value is a dict of parameters to the factory.
+
+            If list, a list of named factories or callables.
+
+            If "default", use the parameterization of (Lucas et.al, 2019)
 
         max_depth : int, optional
             The maximum tree depth.
@@ -214,7 +238,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         self.random_state = random_state
 
     def _fit(self, x, y, sample_weights, random_state):
-        if self.metric_factories is None:
+        if self.metric_factories == "default":
             std_x = np.std(x)
             metric_factories = {
                 "euclidean": None,
@@ -233,6 +257,13 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
                 },
                 "erp": {"min_g": 0, "max_g": 1.0, "n": 50},
                 "msm": {"min_c": 0.01, "max_c": 100, "n": 50},
+                "twe": {
+                    "min_penalty": 0.00001,
+                    "max_penalty": 1.0,
+                    "min_stiffness": 0.0,
+                    "max_stiffness": 0.1,
+                    "n": 20,
+                },
             }
         elif isinstance(self.metric_factories, dict):
             metric_factories = self.metric_factories
@@ -240,7 +271,8 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
             metric_factories = {key: None for key in self.metric_factories}
         else:
             raise TypeError(
-                "metric_factories must be dict or list, got %r" % self.metric_factories
+                "metric_factories must be 'default', dict or list, got %r"
+                % self.metric_factories
             )
 
         distance_measures, weights = make_metrics(metric_factories=metric_factories)
