@@ -50,6 +50,7 @@ _DISTANCE_MEASURE = {
     "erp": _elastic.ErpDistanceMeasure,
     "edr": _elastic.EdrDistanceMeasure,
     "msm": _elastic.MsmDistanceMeasure,
+    "twe": _elastic.TweDistanceMeasure,
     "manhattan": _metric.ManhattanDistanceMeasure,
     "minkowski": _metric.MinkowskiDistanceMeasure,
     "chebyshev": _metric.ChebyshevDistanceMeasure,
