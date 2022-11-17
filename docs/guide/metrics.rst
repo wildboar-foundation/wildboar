@@ -138,6 +138,12 @@ using the ``metric_params`` argument.
      - ``{r: float, c: float}``
      - Window ``r`` in ``[0, 1]``. Split/merge cost ``c``, default ``1``. Elastic.
 
+   * - Time Warp Edit distance [5]
+     - ``"twe"``
+     - ``{r: float, edit_penalty: float, stiffness: float}``
+     - Window ``r`` in ``[0, 1]``. Edit penalty (:math:`\lambda`), default ``1``.
+       Stiffness (:math:`\nu`), default ``0.001``.
+
    * - Dynamic time warping
      - ``"dtw"``
      - ``{"r": float}``
@@ -177,4 +183,8 @@ References
 [4] Stefan, A., Athitsos, V., & Das, G. (2013). 
   The Move-Split-Merge Metric for Time Series. 
   IEEE Transactions on Knowledge and Data Engineering, 25(6), 1425-1438.
+
+[5] Marteau, P.-F. (2008). 
+  Time warp edit distance with stiffness adjustment for time series matching. 
+  IEEE transactions on pattern analysis and machine intelligence, 31(2), 306-318.
 
