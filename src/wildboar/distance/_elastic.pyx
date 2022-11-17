@@ -1263,7 +1263,7 @@ cdef double twe_distance(
     double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
-    double edit_penelty,
+    double penalty,
     double stiffness,
     double *cost,
     double *cost_prev,
@@ -1272,7 +1272,7 @@ cdef double twe_distance(
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
     cdef Py_ssize_t j_stop
-    cdef double v, x, y, del_x, del_y, match, penalty
+    cdef double v, x, y, del_x, del_y, match
     cdef double up_left, left, up
 
     for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
@@ -1282,7 +1282,7 @@ cdef double twe_distance(
     if i < y_length:
         cost_prev[i] = INFINITY
 
-    penalty = edit_penelty + stiffness
+    penalty = penalty + stiffness
     for i in range(0, x_length):
         j_start = max(0, i - max(0, x_length - y_length) - r + 1)
         j_stop = min(y_length, i + max(0, y_length - x_length) + r)
@@ -2481,28 +2481,34 @@ cdef class TweDistanceMeasure(DistanceMeasure):
     cdef double *cost_prev
     cdef Py_ssize_t warp_width
     cdef double r
-    cdef double edit_penelty
+    cdef double penalty
     cdef double stiffness
     
     def __cinit__(
         self, 
         double r=1.0, 
-        double edit_penelty=1.0, 
+        double penalty=1.0, 
         stiffness=0.001, 
         *args, 
         **kwargs
     ):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        check_scalar(edit_penelty, "edit_penelty", float, min_val=1.0)
-        check_scalar(stiffness, "stiffness", float, min_val=0)
+        check_scalar(
+            penalty, 
+            "penalty", 
+            float, 
+            min_val=0.0, 
+            include_boundaries="neither"
+        )
+        check_scalar(stiffness, "stiffness", float, min_val=0.0)
         self.r = r
-        self.edit_penelty = edit_penelty
+        self.penalty = penalty
         self.stiffness = stiffness
         self.cost = NULL
         self.cost_prev = NULL
 
     def __reduce__(self):
-        return self.__class__, (self.r, self.edit_penelty, self.stiffness)
+        return self.__class__, (self.r, self.penalty, self.stiffness)
 
     def __dealloc__(self):
         self.__free()
@@ -2536,7 +2542,7 @@ cdef class TweDistanceMeasure(DistanceMeasure):
             y,
             y_len,
             self.warp_width,
-            self.edit_penelty,
+            self.penalty,
             self.stiffness,
             self.cost,
             self.cost_prev,
