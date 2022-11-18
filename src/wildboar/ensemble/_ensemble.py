@@ -1691,7 +1691,7 @@ class ProximityForestClassifier(BaseForestClassifier):
         n_pivot=1,
         pivot_sample="label",
         metric_sample="weighted",
-        metric_factories=None,
+        metric_factories="default",
         oob_score=False,
         max_depth=None,
         min_samples_split=2,
