@@ -21,6 +21,13 @@ construct ensembles of shapelet tree classifiers or regressors respectively. For
 variety of tasks, these estimators are excellent baseline methods.
 
 
+Proximity forest
+================
+Proximity Forest is an ensemble of highly randomized Proximity Trees. Whereas
+conventional decision trees branch on attribute values, and shapelet trees on distance
+thresholds, Proximity Trees is k-branching tree that branches on proximity of time
+series to one of k pivot time series.
+
 Embedding methods
 =================
 
