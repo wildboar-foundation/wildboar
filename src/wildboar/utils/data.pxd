@@ -3,15 +3,16 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
+from cython.view cimport memoryview
 
 
 cdef class Dataset:
+    cdef memoryview data
+
     cdef readonly Py_ssize_t n_samples  # the number of samples
     cdef readonly Py_ssize_t n_timestep  # the number of timesteps
     cdef readonly Py_ssize_t n_dims
 
-    cdef double *data  # the data
     cdef readonly Py_ssize_t sample_stride  # the stride for samples
     cdef readonly Py_ssize_t dim_stride  # the dimension stride
 

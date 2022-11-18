@@ -107,7 +107,7 @@ cdef class ShapeletWeightSampler(WeightSampler):
         cdef Py_ssize_t start
         cdef Py_ssize_t index
         cdef Py_ssize_t dim
-        cdef Py_ssize_t i, offset
+        cdef Py_ssize_t i
 
         start = rand_int(0, td.n_timestep - length, seed)
         index = samples[rand_int(0, n_samples, seed)]
@@ -116,15 +116,12 @@ cdef class ShapeletWeightSampler(WeightSampler):
         else:
             dim = 1
 
-        offset = (
-            index * td.sample_stride +
-            dim * td.dim_stride +
-            start
-        )
         mean[0] = 0
+        cdef double* data = td.get_sample(index, dim) + start
         for i in range(length):
-            weights[i] = td.data[offset + i]
+            weights[i] = data[i]
             mean[0] += weights[i]
+
         mean[0] /= length
 
 
@@ -314,9 +311,9 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             &max_val,
         )
         cdef Py_ssize_t feature_offset = feature_id * 2
-        cdef Py_ssize_t out_sample_offset = out_sample * td_out.sample_stride
-        td_out.data[out_sample_offset + feature_offset] = mean_val
-        td_out.data[out_sample_offset + feature_offset + 1] = max_val
+        cdef double* data = td_out.get_sample(out_sample, 0)
+        data[feature_offset] = mean_val
+        data[feature_offset + 1] = max_val
         return 0
 
     cdef Py_ssize_t persistent_feature_fill(

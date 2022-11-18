@@ -26,18 +26,13 @@ from ..utils.validation import check_array
 
 cdef double EPSILON = 1e-13
 
-cdef int _ts_view_update_statistics(SubsequenceView *v, Dataset td) nogil:
+cdef int _ts_view_update_statistics(SubsequenceView *v, double* sample) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
-    cdef Py_ssize_t shapelet_offset = (
-            v.index * td.sample_stride +
-            v.dim * td.dim_stride +
-            v.start
-    )
     cdef double ex = 0
     cdef double ex2 = 0
     cdef Py_ssize_t i
     for i in range(v.length):
-        current_value = td.data[shapelet_offset + i]
+        current_value = sample[i]
         ex += current_value
         ex2 += current_value ** 2
 
@@ -243,7 +238,7 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         )
         if err < 0:
             return err
-        _ts_view_update_statistics(v, dataset)
+        _ts_view_update_statistics(v, dataset.get_sample(v.index, v.dim) + v.start)
 
     cdef int from_array(
         self,

@@ -85,8 +85,8 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
-        cdef Py_ssize_t offset = td_out.sample_stride * out_sample + feature_id
-        td_out.data[offset] = self.distance_measure.transient_distance(
+        cdef double* data = td_out.get_sample(sample, 0)
+        data[feature_id] = self.distance_measure.transient_distance(
             <SubsequenceView*> feature.feature, dataset, sample
         )
         return 0
@@ -100,8 +100,8 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
-        cdef Py_ssize_t offset = td_out.sample_stride * out_sample + feature_id
-        td_out.data[offset] = self.distance_measure.persistent_distance(
+        cdef double* data = td_out.get_sample(sample, 0)
+        data[feature_id] = self.distance_measure.persistent_distance(
             <Subsequence*> feature.feature, dataset, sample
         )
         return 0

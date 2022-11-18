@@ -2,19 +2,21 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
-cimport numpy as np
-
-import warnings
-
 import numpy as np
+
+from cython.view cimport memoryview
+
+
+cdef extern from "Python.h":
+    cdef int PyBUF_STRIDES
+    cdef int PyBUF_C_CONTIGUOUS
 
 __all__ = [
     "Dataset",
     "check_dataset",
 ]
 
-def check_dataset(np.ndarray x, allow_1d=False, allow_2d=True, allow_3d=True):
+def check_dataset(x, allow_1d=False, allow_2d=True, allow_3d=True):
     """Ensure that x is a valid dataset.
 
     Parameters
@@ -58,7 +60,7 @@ def check_dataset(np.ndarray x, allow_1d=False, allow_2d=True, allow_3d=True):
 
 cdef class Dataset:
 
-    def __cinit__(self, np.ndarray data):
+    def __cinit__(self, arr):
         """Construct a new time series dataset from a ndarray. The ndarray must remain
         in scope for the lifetime of the dataset. The dataset is invalid once the
         ndarray has been garbage collected.
@@ -73,39 +75,42 @@ cdef class Dataset:
 
             Use `wildboar.utils.data.check_dataset` to ensure a valid array.
         """
-        if data.ndim < 2 or data.ndim > 3:
-            raise ValueError("ndim {0} < 2 or {0} > 3".format(data.ndim))
+        self.data = memoryview(arr, PyBUF_STRIDES & PyBUF_C_CONTIGUOUS)
+
+        if self.data.view.ndim < 2 or self.data.view.ndim > 3:
+            raise ValueError("ndim {0} < 2 or {0} > 3".format(self.data.view.ndim))
         
-        self.n_samples = <Py_ssize_t> data.shape[0]
-        self.n_timestep = <Py_ssize_t> data.shape[data.ndim - 1]
-        self.data = <double*> data.data
-        self.sample_stride = <Py_ssize_t> (data.strides[0] / <Py_ssize_t> data.itemsize)
+        self.n_samples = <Py_ssize_t> self.data.view.shape[0]
+        self.n_timestep = <Py_ssize_t> self.data.view.shape[self.data.view.ndim - 1]
+        self.sample_stride = <Py_ssize_t> (
+            self.data.view.strides[0] / <Py_ssize_t> self.data.view.itemsize
+        )
         
         cdef Py_ssize_t timestep_stride
         if self.n_timestep == 1:
             timestep_stride = 1
         else:
-            timestep_stride = <Py_ssize_t> (data.strides[data.ndim - 1] / <Py_ssize_t> data.itemsize)
+            timestep_stride = <Py_ssize_t> (
+                self.data.view.strides[self.data.view.ndim - 1] / <Py_ssize_t> self.data.view.itemsize
+            )
         
         if timestep_stride != 1:
             raise ValueError(
                 "timestep_stride is invalid (%d != 1)" % timestep_stride,
             )
-        if data.dtype != np.double:
-            raise ValueError(
-                "undexpected dtype (%r, require %r)" % (data.dtype, np.double)
-            )
 
-        if data.ndim == 3:
-            self.n_dims = <Py_ssize_t> data.shape[data.ndim - 2]
+        if self.data.view.ndim == 3:
+            self.n_dims = <Py_ssize_t> self.data.view.shape[self.data.view.ndim - 2]
             if self.n_dims == 1:
                 self.dim_stride = 1
             else:
-                self.dim_stride = <Py_ssize_t> (data.strides[data.ndim - 2] / <Py_ssize_t> data.itemsize)
+                self.dim_stride = <Py_ssize_t> (
+                    self.data.view.strides[self.data.view.ndim - 2] / <Py_ssize_t> self.data.view.itemsize
+                )
         else:
             self.n_dims = 1
             self.dim_stride = 0
 
     cdef double* get_sample(self, Py_ssize_t i, Py_ssize_t dim) nogil:
         cdef Py_ssize_t offset = self.sample_stride * i + self.dim_stride * dim
-        return self.data + offset
+        return <double*> self.data.view.buf + offset

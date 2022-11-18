@@ -3,10 +3,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
-import numpy as np
-
 from libc.math cimport INFINITY, NAN, sqrt
 from libc.stdlib cimport free, malloc
 

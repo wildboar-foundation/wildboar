@@ -3,8 +3,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
 from wildboar.utils.data cimport Dataset
 
 
