@@ -423,7 +423,7 @@ Classes
    An ensemble of interval tree classifiers.
 
 
-.. py:class:: ProximityForestClassifier(n_estimators=100, *, n_pivot=1, pivot_sample='label', metric_sample='weighted', metric_factories=None, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
+.. py:class:: ProximityForestClassifier(n_estimators=100, *, n_pivot=1, pivot_sample='label', metric_sample='weighted', metric_factories='default', oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`BaseForestClassifier`
 

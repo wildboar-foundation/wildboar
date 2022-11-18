@@ -25,13 +25,20 @@ Functions
 
    wildboar.tree._ptree.ddtw_factory
    wildboar.tree._ptree.dtw_factory
+   wildboar.tree._ptree.erp_factory
    wildboar.tree._ptree.euclidean_factory
+   wildboar.tree._ptree.lcss_factory
    wildboar.tree._ptree.make_metrics
+   wildboar.tree._ptree.msm_factory
+   wildboar.tree._ptree.rddtw_factory
+   wildboar.tree._ptree.rdtw_factory
+   wildboar.tree._ptree.twe_factory
+   wildboar.tree._ptree.wddtw_factory
    wildboar.tree._ptree.wdtw_factory
 
 
 
-.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories='default', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
 
@@ -42,7 +49,14 @@ Functions
    >>> from wildboar.datasets import load_dataset
    >>> from wildboar.tree import ProximityTreeClassifier
    >>> x, y = load_dataset("GunPoint")
-   >>> f = ProximityTreeClassifier(n_pivot=10, criterion="gini")
+   >>> f = ProximityTreeClassifier(
+   ...     n_pivot=10,
+   ...     metric_factories={
+   ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
+   ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
+   ...     },
+   ...     "max_criterion="gini"
+   ... )
    >>> f.fit(x, y)
 
    .. rubric:: References
@@ -59,13 +73,19 @@ Functions
    :type pivot_sample: {"label", "uniform"}, optional
    :param metric_sample: The metric sampling method.
    :type metric_sample: {"uniform", "weighted"}, optional
-   :param metric_factories: The distance metrics. A dictionary where key is:
+   :param metric_factories: The distance metrics.
+
+                            If dict, a dictionary where key is:
 
                             - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
                             - if callable, a function returning a list of ``DistanceMeasure``-objects
 
                             and where value is a dict of parameters to the factory.
-   :type metric_factories: dict, optional
+
+                            If list, a list of named factories or callables.
+
+                            If "default", use the parameterization of (Lucas et.al, 2019)
+   :type metric_factories: "default", list or dict, optional
    :param max_depth: The maximum tree depth.
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to consider a split.
@@ -89,18 +109,39 @@ Functions
    :type random_state: int or RandomState
 
 
-.. py:function:: ddtw_factory(min_r=0, max_r=0.25, n=10)
+.. py:function:: ddtw_factory()
 
 
-.. py:function:: dtw_factory(min_r=0, max_r=0.25, n=10)
+.. py:function:: dtw_factory()
+
+
+.. py:function:: erp_factory(min_g=0.0, max_g=1.0, n=10)
 
 
 .. py:function:: euclidean_factory()
 
 
+.. py:function:: lcss_factory(min_r=0.0, max_r=0.25, min_threshold=0, max_threshold=1.0, n=10)
+
+
 .. py:function:: make_metrics(metric_factories=None)
 
 
-.. py:function:: wdtw_factory(min_g=0.05, max_g=0.2, n=10)
+.. py:function:: msm_factory(min_c=0.01, max_c=100, n=10)
+
+
+.. py:function:: rddtw_factory(min_r=0, max_r=0.25, n=10)
+
+
+.. py:function:: rdtw_factory(min_r=0, max_r=0.25, n=10)
+
+
+.. py:function:: twe_factory(min_penalty=1e-05, max_penalty=1.0, min_stiffness=0.0, max_stiffness=0.1, n=10)
+
+
+.. py:function:: wddtw_factory(min_g=0.0, max_g=1.0, n=10)
+
+
+.. py:function:: wdtw_factory(min_g=0.0, max_g=1.0, n=10)
 
 
