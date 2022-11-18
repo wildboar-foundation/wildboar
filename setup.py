@@ -36,6 +36,13 @@ BUILD_ARGS = {
     },
 }
 
+DEFINE_MACRO_NUMPY_C_API = [
+    (
+        "NPY_NO_DEPRECATED_API",
+        "NPY_1_7_API_VERSION",
+    )
+]
+
 
 def _merge_build_options(options, build_args):
     for arg, value in build_args.items():
@@ -72,6 +79,7 @@ if __name__ == "__main__":
         "wildboar.distance._metric": {
             "sources": ["src/wildboar/distance/_metric.pyx"],
             "include_dirs": include_dirs(),
+            "define_macros": DEFINE_MACRO_NUMPY_C_API,
         },
         "wildboar.distance._elastic": {
             "sources": ["src/wildboar/distance/_elastic.pyx"],
