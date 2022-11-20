@@ -8,14 +8,11 @@
 
 import numpy as np
 
-cimport numpy as np
 from libc.math cimport INFINITY, NAN, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
 from ..distance._distance cimport DistanceMeasure
-
-from ..utils.data import check_dataset
 from ..utils.data cimport Dataset
 from ..utils.misc cimport CList, argsort, safe_realloc
 from ..utils.rand cimport (
@@ -62,16 +59,15 @@ cpdef Tree _make_tree(
     list distance_measures,
     Py_ssize_t n_labels,
     Py_ssize_t max_depth,
-    np.ndarray branch,
+    object branch,
     list pivots,
-    np.ndarray value,
+    object value,
 ):
     cdef Tree tree = Tree(distance_measures, n_labels, capacity=len(pivots) + 1)
     tree._max_depth = max_depth
     tree._node_count = len(pivots)
     cdef Py_ssize_t i, j, k
     cdef Pivot *pivot
-    cdef np.ndarray arr
     value = value.reshape(-1)
     for i in range(tree._node_count):
         if pivots[i] is not None:
@@ -236,7 +232,7 @@ cdef class Tree:
 
     @property
     def value(self):
-        cdef np.ndarray arr = np.empty(self._node_count * self._n_labels, dtype=float)
+        cdef object arr = np.empty(self._node_count * self._n_labels, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._n_labels * self._node_count):
             arr[i] = self._values[i]
@@ -250,10 +246,9 @@ cdef class Tree:
         if not isinstance(x, np.ndarray):
             raise ValueError("")
 
-        x = check_dataset(x)
         cdef Dataset td = Dataset(x)
-        cdef np.ndarray out = np.zeros((td.n_samples,), dtype=np.intp)
-        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
+        cdef object out = np.zeros((td.n_samples,), dtype=np.intp)
+        cdef Py_ssize_t[:] out_view = out
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         cdef Py_ssize_t branch
@@ -275,7 +270,7 @@ cdef class Tree:
                         pivot.n_branches,
                     )
                     node_index = self._branches[branch][node_index]
-                out_data[i] = node_index
+                out_view[i] = node_index
         return out
 
     def predict(self, object x):
@@ -292,11 +287,10 @@ cdef Py_ssize_t find_min_branch(
     Py_ssize_t n_branches,
 ) nogil:
     cdef double dist
-    cdef double min_dist
-    cdef Py_ssize_t i
-    cdef Py_ssize_t min_branch
+    cdef double min_dist = INFINITY
+    cdef Py_ssize_t min_branch = -1
 
-    min_dist = INFINITY
+    cdef Py_ssize_t i
     for i in range(n_branches):
         dist = distance_measure._distance(sample, n_timestep, pivots[i], n_timestep)
         if dist < min_dist:
@@ -307,8 +301,7 @@ cdef Py_ssize_t find_min_branch(
 
 cdef class Criterion:
 
-    cdef Py_ssize_t *labels
-    cdef Py_ssize_t label_stride
+    cdef const Py_ssize_t[:] labels
 
     cdef Py_ssize_t n_labels
     cdef double weighted_n_total
@@ -320,17 +313,10 @@ cdef class Criterion:
     cdef Py_ssize_t start
     cdef Py_ssize_t end
     cdef Py_ssize_t *samples
-    cdef double *sample_weight
+    cdef const double[:] sample_weight
 
-    def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
-        if y.dtype != np.intp:
-            raise ValueError("unexpected dtype (%r != %r)" % (y.dtype, np.intp))
-
-        if y.ndim != 1:
-            raise ValueError("unexpected dim (%r != 1)" % y.ndim)
-
-        self.labels = <Py_ssize_t*> y.data
-        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
+    def __cinit__(self, const Py_ssize_t[:] y, Py_ssize_t n_labels):
+        self.labels = y
         self.n_labels = n_labels
         self.weighted_label_count = <double*> calloc(n_labels, sizeof(double))
         self.weighted_n_branch = <double*> calloc(n_labels, sizeof(double))
@@ -344,7 +330,7 @@ cdef class Criterion:
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
-        double *sample_weight,
+        const double[:] sample_weight,
     ) nogil:
         self.start = start
         self.end = end
@@ -354,20 +340,19 @@ cdef class Criterion:
         memset(self.weighted_label_count, 0, sizeof(double) * self.n_labels)
         memset(self.label_count, 0, sizeof(Py_ssize_t) * self.n_labels)
         self.weighted_n_total = 0
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef double w = 1.0
         for i in range(start, end):
             j = self.samples[i]
-            p = j * self.label_stride
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
             self.weighted_n_total += w
-            self.weighted_label_count[self.labels[p]] += w
-            self.label_count[self.labels[p]] += 1
+            self.weighted_label_count[self.labels[j]] += w
+            self.label_count[self.labels[j]] += 1
 
     cdef void reset(self, double *samples_branch) nogil:
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef Py_ssize_t label, branch
         cdef double w = 1.0
         memset(
@@ -378,10 +363,9 @@ cdef class Criterion:
         memset(self.weighted_n_branch, 0, sizeof(double) * self.n_labels)
         for i in range(self.start, self.end):
             j = self.samples[i]
-            p = j * self.label_stride
-            label = self.labels[p]
+            label = self.labels[j]
             branch = (<Py_ssize_t>samples_branch[i])
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
             self.weighted_n_branch[branch] += w
@@ -469,17 +453,11 @@ cdef class DistanceMeasureSampler:
     cdef VoseRand vr
     cdef Py_ssize_t n_measures
 
-    def __cinit__(self, Py_ssize_t n_measures, np.ndarray weights=None):
+    def __cinit__(self, Py_ssize_t n_measures, const double[::1] weights=None):
         self.n_measures = n_measures
         if weights is not None:
-            if weights.dtype != np.double:
-                raise ValueError("unexpected dtype (%r != np.double)" % weights.dtype)
-            if weights.ndim != 1:
-                raise ValueError("unexpected dim (%r != 1)" % weights.ndim)
-            if weights.strides[0] // weights.itemsize != 1:
-                raise ValueError("unexpected stride")
-            vose_rand_init(&self.vr, weights.size)
-            vose_rand_precompute(&self.vr, <double*> weights.data)
+            vose_rand_init(&self.vr, weights.shape[0])
+            vose_rand_precompute(&self.vr, &weights[0])
 
     def __dealloc__(self):
         vose_rand_free(&self.vr)
@@ -518,8 +496,7 @@ cdef class PivotSampler:
 
     cdef Py_ssize_t sample(
         self,
-        Py_ssize_t *labels,
-        Py_ssize_t label_stride,
+        const Py_ssize_t[:] labels,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Py_ssize_t label,
@@ -533,8 +510,7 @@ cdef class LabelPivotSampler(PivotSampler):
 
     cdef Py_ssize_t sample(
         self,
-        Py_ssize_t *labels,
-        Py_ssize_t label_stride,
+        const Py_ssize_t[:] labels,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Py_ssize_t label,
@@ -542,14 +518,14 @@ cdef class LabelPivotSampler(PivotSampler):
         size_t *seed,
     ) nogil:
         cdef Py_ssize_t n_labels = rand_int(0, label_count[label], seed)
-        cdef Py_ssize_t i, p
+        cdef Py_ssize_t i, j
         cdef Py_ssize_t label_index = 0
         for i in range(n_samples):
-            p = samples[i] * label_stride
+            j = samples[i]
             if label_index == n_labels:
-                return samples[i]
+                return j
 
-            if labels[p] == label:
+            if labels[j] == label:
                 label_index += 1
 
         # This code is unreachable
@@ -559,8 +535,7 @@ cdef class UniformPivotSampler(PivotSampler):
 
     cdef Py_ssize_t sample(
         self,
-        Py_ssize_t *labels,
-        Py_ssize_t label_stride,
+        const Py_ssize_t[:] labels,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Py_ssize_t label,
@@ -581,7 +556,7 @@ cdef class TreeBuilder:
     cdef double n_weighted_samples
 
     cdef Py_ssize_t *samples
-    cdef double *sample_weights
+    cdef const double[:] sample_weights
 
     cdef double *samples_branch_buffer
     cdef double *samples_branch
@@ -598,8 +573,8 @@ cdef class TreeBuilder:
 
     def __cinit__(
         self,
-        np.ndarray x,
-        np.ndarray sample_weights,
+        object x,
+        const double[:] sample_weights,
         PivotSampler pivot_sampler,
         DistanceMeasureSampler distance_measure_sampler,
         Criterion criterion,
@@ -625,18 +600,7 @@ cdef class TreeBuilder:
         self.distance_measures = tree.distance_measures
         self.seed = random_state.randint(0, RAND_R_MAX)
 
-        if sample_weights is None:
-            self.sample_weights = NULL
-        else:
-            if sample_weights.dtype != np.double:
-                raise ValueError("unexpected dtype (%r != np.double)" % sample_weights.dtype)
-            if sample_weights.ndim != 1:
-                raise ValueError("unexpected dim (%r != 1)" % sample_weights.ndim)
-            if sample_weights.strides[0] // sample_weights.itemsize != 1:
-                raise ValueError("unexpected stride")
-
-            self.sample_weights = <double*> sample_weights.data
-
+        self.sample_weights = sample_weights
         self.samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.dataset.n_samples)
         self.samples_branch = <double*> malloc(sizeof(double) * self.dataset.n_samples)
         self.samples_branch_buffer = <double*> malloc(sizeof(double) * self.dataset.n_samples)
@@ -795,7 +759,7 @@ cdef class TreeBuilder:
 
         cdef Py_ssize_t label
         cdef Py_ssize_t pivot_index
-        cdef Py_ssize_t best_distance_measure
+        cdef Py_ssize_t best_distance_measure = -1
         cdef double impurity
         cdef double best_impurity
         cdef Split split
@@ -821,7 +785,6 @@ cdef class TreeBuilder:
                     if self.criterion.label_count[label] > 0:
                         split.pivot[pivot_index] = self.pivot_sampler.sample(
                             self.criterion.labels,
-                            self.criterion.label_stride,
                             self.samples + start,
                             n_samples,
                             label,
@@ -923,7 +886,7 @@ cdef class TreeBuilder:
     ) nogil:
         cdef Py_ssize_t i, j
         cdef Py_ssize_t pivot
-        cdef Py_ssize_t min_pivot
+        cdef Py_ssize_t min_pivot = -1
         cdef double min_dist = INFINITY
         cdef double dist
         for i in range(start, end):

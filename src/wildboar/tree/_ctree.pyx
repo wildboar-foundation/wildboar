@@ -5,10 +5,8 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
 import numpy as np
 
-cimport numpy as np
 from libc.math cimport INFINITY, NAN, ceil, exp, fabs, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
@@ -16,11 +14,10 @@ from libc.string cimport memcpy, memset
 from scipy.sparse import csr_matrix
 
 from ..distance._distance cimport DistanceMeasure
+
 from ..distance import _DISTANCE_MEASURE
 
 from ..transform._feature cimport Feature, FeatureEngineer
-
-from ..utils.data import check_dataset
 from ..utils.data cimport Dataset
 from ..utils.misc cimport CList, argsort, safe_realloc
 from ..utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
@@ -155,14 +152,14 @@ cdef class Criterion:
     cdef Py_ssize_t start
     cdef Py_ssize_t end
     cdef Py_ssize_t *samples
-    cdef double *sample_weight
+    cdef const double[:] sample_weight
 
     cdef void init(
         self,
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
-        double *sample_weights,
+        const double[:] sample_weights,
     ) nogil:
         self.start = start
         self.end = end
@@ -203,21 +200,14 @@ cdef class Criterion:
 
 cdef class ClassificationCriterion(Criterion):
 
-    cdef Py_ssize_t *labels
-    cdef Py_ssize_t label_stride
+    cdef const Py_ssize_t[:] labels
     cdef Py_ssize_t n_labels
     cdef double *sum_left
     cdef double *sum_right
     cdef double *sum_total
 
-    def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
-        if y.dtype != np.intp:
-            raise ValueError("unexpected dtype (%r != %r)" % (y.dtype, np.intp))
-
-        if y.ndim != 1:
-            raise ValueError("unexpected dim (%r != 1)" % y.ndim)
-        self.labels = <Py_ssize_t*> y.data
-        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
+    def __cinit__(self, const Py_ssize_t[:] y, Py_ssize_t n_labels):
+        self.labels = y
         self.n_labels = n_labels
         self.sum_left = <double*> calloc(n_labels, sizeof(double))
         self.sum_right = <double*> calloc(n_labels, sizeof(double))
@@ -233,23 +223,21 @@ cdef class ClassificationCriterion(Criterion):
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
-        double *sample_weights,
+        double[:] sample_weights,
     ) nogil:
         Criterion.init(self, start, end, samples, sample_weights)
         self.weighted_n_total = 0
 
         memset(self.sum_total, 0, self.n_labels * sizeof(double))
 
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef double w = 1.0
         for i in range(start, end):
             j = samples[i]
-            p = j * self.label_stride
-
-            if sample_weights != NULL:
+            if sample_weights is not None:
                 w = sample_weights[j]
 
-            self.sum_total[self.labels[p]] += w
+            self.sum_total[self.labels[j]] += w
             self.weighted_n_total += w
 
         self.reset()
@@ -261,17 +249,15 @@ cdef class ClassificationCriterion(Criterion):
         memcpy(self.sum_right, self.sum_total, self.n_labels * sizeof(double))
 
     cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef double w = 1.0
 
         for i in range(pos, new_pos):
             j = self.samples[i]
-            p = j * self.label_stride
-
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
-            self.sum_left[self.labels[p]] += w
+            self.sum_left[self.labels[j]] += w
             self.weighted_n_left += w
 
         self.weighted_n_right = self.weighted_n_total - self.weighted_n_left
@@ -355,20 +341,11 @@ cdef class RegressionCriterion(Criterion):
     cdef double sum_right
     cdef double sum_total
     cdef double sum_sq_total
-    cdef double *labels
-    cdef Py_ssize_t label_stride
+    cdef const double[:] labels
     cdef Py_ssize_t pos
 
-    def __cinit__(self, np.ndarray y):
-        if y.dtype != np.double:
-            raise ValueError("unexpected dtype (%r != np.double)" % y.dtype)
-
-        if y.ndim != 1:
-            raise ValueError("unexpected dim (%r != 1)" % y.ndim)        
-
-        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
-        self.labels = <double*> y.data
-
+    def __cinit__(self, const double[:] y):
+        self.labels = y
         self.sum_left = 0
         self.sum_right = 0
         self.sum_total = 0
@@ -379,24 +356,23 @@ cdef class RegressionCriterion(Criterion):
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
-        double *sample_weights,
+        double[:] sample_weights,
     ) nogil:
         Criterion.init(self, start, end, samples, sample_weights)
         self.sum_total = 0
         self.sum_sq_total = 0
         self.weighted_n_total = 0
 
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef double x
         cdef double w = 1.0
 
         for i in range(start, end):
             j = samples[i]
-            p = j * self.label_stride
-            if sample_weights != NULL:
+            if sample_weights is not None:
                 w = sample_weights[j]
 
-            x = w * self.labels[p]
+            x = w * self.labels[j]
             self.sum_total += x
             self.sum_sq_total += x * x
             self.weighted_n_total += w
@@ -414,16 +390,13 @@ cdef class RegressionCriterion(Criterion):
     cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t j
-        cdef Py_ssize_t p
         cdef double w = 1.0
         for i in range(pos, new_pos):
             j = self.samples[i]
-            p = j * self.label_stride
-
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
-            self.sum_left += w * self.labels[p]
+            self.sum_left += w * self.labels[j]
             self.weighted_n_left += w
 
         self.weighted_n_right = self.weighted_n_total - self.weighted_n_left
@@ -451,16 +424,14 @@ cdef class MSECriterion(RegressionCriterion):
         cdef double right_sq_sum = 0
         cdef double w = 1.0
         cdef double y
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
 
         for i in range(self.start, self.pos):
             j = self.samples[i]
-            p = self.label_stride * j
-
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
-            y = self.labels[p]
+            y = self.labels[j]
             left_sq_sum += w * y * y
         right_sq_sum = self.sum_sq_total - left_sq_sum
 
@@ -474,22 +445,22 @@ cpdef Tree _make_tree(
     Py_ssize_t n_labels,
     Py_ssize_t max_depth,
     list features,
-    np.ndarray threshold,
-    np.ndarray value,
-    np.ndarray left,
-    np.ndarray right,
-    np.ndarray impurity,
-    np.ndarray n_node_samples,
-    np.ndarray n_weighted_node_samples
+    object threshold,
+    object value,
+    object left,
+    object right,
+    object impurity,
+    object n_node_samples,
+    object n_weighted_node_samples
 ):
     cdef Tree tree = Tree(feature_engineer, n_labels, capacity=len(features) + 1)
     tree._max_depth = max_depth
     cdef Py_ssize_t node_count = len(features)
     cdef Py_ssize_t i
     cdef Py_ssize_t dim
-    cdef np.ndarray arr
+    cdef object arr
     cdef Feature *feature
-    cdef np.ndarray value_reshape = value.reshape(-1)
+    cdef object value_reshape = value.reshape(-1)
 
     tree._node_count = node_count
     for i in range(node_count):
@@ -599,7 +570,7 @@ cdef class Tree:
 
     @property
     def value(self):
-        cdef np.ndarray arr = np.empty(self._node_count * self._n_labels, dtype=float)
+        cdef object arr = np.empty(self._node_count * self._n_labels, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._n_labels * self._node_count):
             arr[i] = self._values[i]
@@ -622,7 +593,7 @@ cdef class Tree:
 
     @property
     def n_node_samples(self):
-        cdef np.ndarray arr = np.zeros(self._node_count, dtype=np.intp)
+        cdef object arr = np.zeros(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._n_node_samples[i]
@@ -630,7 +601,7 @@ cdef class Tree:
 
     @property
     def n_weighted_node_samples(self):
-        cdef np.ndarray arr = np.zeros(self._node_count, dtype=float)
+        cdef object arr = np.zeros(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._n_weighted_node_samples[i]
@@ -638,7 +609,7 @@ cdef class Tree:
 
     @property
     def left(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.intp)
+        cdef object arr = np.empty(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._left[i]
@@ -646,7 +617,7 @@ cdef class Tree:
 
     @property
     def right(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.intp)
+        cdef object arr = np.empty(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._right[i]
@@ -654,7 +625,7 @@ cdef class Tree:
 
     @property
     def threshold(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=float)
+        cdef object arr = np.empty(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._thresholds[i]
@@ -662,26 +633,22 @@ cdef class Tree:
 
     @property
     def impurity(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=float)
+        cdef object arr = np.empty(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._impurity[i]
         return arr
 
     def predict(self, object X):
-        cdef np.ndarray apply = self.apply(X)
-        cdef np.ndarray predict = np.take(self.value, apply, axis=0, mode="clip")
-        #if self._n_labels == 1:
-        #    predict = predict.reshape(X.shape[0])
-        return predict
+        cdef object apply = self.apply(X)
+        return np.take(self.value, apply, axis=0, mode="clip")
 
     def apply(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
-        X = check_dataset(X)
+
         cdef Dataset ts = Dataset(X)
-        cdef np.ndarray out = np.zeros((ts.n_samples,), dtype=np.intp)
-        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
+        cdef Py_ssize_t[:] out = np.zeros((ts.n_samples,), dtype=np.intp)
         cdef Feature *feature
         cdef double threshold, feature_value
         cdef Py_ssize_t node_index
@@ -700,19 +667,16 @@ cdef class Tree:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
-                out_data[i] = <Py_ssize_t> node_index
-        return out
+                out[i] = <Py_ssize_t> node_index
+
+        return out.base
 
     def decision_path(self, object X):
         if not isinstance(X, np.ndarray):
             raise ValueError(f"X should be np.ndarray, got {type(X)}")
-        X = check_dataset(X)
-        cdef Dataset ts = Dataset(X)
-        cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intc)
 
-        cdef int *out_data = <int*> out.data
-        cdef Py_ssize_t i_stride = <Py_ssize_t> out.strides[0] / <Py_ssize_t> out.itemsize
-        cdef Py_ssize_t n_stride = <Py_ssize_t> out.strides[1] / <Py_ssize_t> out.itemsize
+        cdef Dataset ts = Dataset(X)
+        cdef Py_ssize_t[:, :] out = np.zeros((ts.n_samples, self.node_count), dtype=int)
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         cdef Feature *feature
@@ -722,7 +686,7 @@ cdef class Tree:
             for i in range(ts.n_samples):
                 node_index = 0
                 while self._left[node_index] != -1:
-                    out_data[i * i_stride + node_index * n_stride] = 1
+                    out[i, node_index] = 1
                     threshold = self._thresholds[node_index]
                     feature = self._features[node_index]
                     feature_value = self.feature_engineer.persistent_feature_value(
@@ -732,7 +696,8 @@ cdef class Tree:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
-        return csr_matrix(out, dtype=bool)
+
+        return csr_matrix(out.base, dtype=bool)
 
     @property
     def node_count(self):
@@ -849,11 +814,8 @@ cdef class TreeBuilder:
     # the id (in Tree) of the current node
     cdef Py_ssize_t current_node_id
 
-    # the stride of the label array
-    cdef Py_ssize_t label_stride
-
     # the weight of the j:th sample
-    cdef double *sample_weights
+    cdef const double[:] sample_weights
 
     # the dataset of time series
     cdef Dataset td
@@ -878,8 +840,8 @@ cdef class TreeBuilder:
 
     def __cinit__(
         self,
-        np.ndarray X,
-        np.ndarray sample_weights,
+        object X,
+        const double[:] sample_weights,
         TreeFeatureEngineer feature_engineer,
         Criterion criterion,
         Tree tree,
@@ -926,18 +888,7 @@ cdef class TreeBuilder:
                     self.n_weighted_samples += 1.0
 
         self.n_samples = j
-
-        if sample_weights is None:
-            self.sample_weights = NULL
-        else:
-            if sample_weights.dtype != np.double:
-                raise ValueError("unexpected dtype (%r != np.double)" % sample_weights.dtype)
-            if sample_weights.ndim != 1:
-                raise ValueError("unexpected dim (%r != 1)" % sample_weights.ndim)
-            if sample_weights.strides[0] // sample_weights.itemsize != 1:
-                raise ValueError("unexpected stride")
-
-            self.sample_weights = <double*> sample_weights.data
+        self.sample_weights = sample_weights
 
     def __dealloc__(self):
         free(self.samples)
@@ -1189,7 +1140,6 @@ cdef class TreeBuilder:
     ) nogil:
         cdef Py_ssize_t i  # real index of samples (in `range(start, end)`)
         cdef Py_ssize_t j  # sample index (in `samples`)
-        cdef Py_ssize_t p  # label index (in `labels`)
         cdef Py_ssize_t pos
         cdef Py_ssize_t new_pos
         cdef double impurity

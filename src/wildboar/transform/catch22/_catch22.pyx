@@ -4,8 +4,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
 import numpy as np
 
 from libc.math cimport INFINITY, ceil, exp, fabs, floor, pow, sqrt
@@ -15,8 +13,6 @@ from libc.string cimport memcpy, memset
 from ...utils cimport stats
 from ...utils.data cimport Dataset
 from ...utils.parallel cimport MapSample
-
-from ...utils.data import check_dataset
 
 
 cdef extern from "catch22.h":
@@ -228,11 +224,10 @@ cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t
 
 # TODO: add functions availiable to python
 
-def histogram_mode_(np.ndarray x, int n_bins):
-    x = check_dataset(x)
+def histogram_mode_(object x, int n_bins):
     cdef Dataset x_in = Dataset(x)
     
-    cdef np.ndarray x_out = np.zeros((x_in.n_samples, x_in.n_dims))
+    cdef object x_out = np.zeros((x_in.n_samples, x_in.n_dims))
     cdef Py_ssize_t sample, dim
     cdef double[:, :] x_out_view = x_out
     cdef double *bin_edges = <double*> malloc(sizeof(double) * (n_bins + 1))

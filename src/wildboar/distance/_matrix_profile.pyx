@@ -4,8 +4,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
 import numpy as np
 
 from libc.math cimport INFINITY, sqrt
@@ -22,9 +20,6 @@ from ..utils.stats cimport (
     inc_stats_remove,
     inc_stats_variance,
 )
-
-from ..utils.data import check_dataset
-
 from ._mass cimport _mass_distance
 
 
@@ -135,15 +130,13 @@ cdef void _matrix_profile_stmp(
 
 
 def _paired_matrix_profile(
-    np.ndarray x,
-    np.ndarray y,
+    object x,
+    object y,
     Py_ssize_t w,
     Py_ssize_t dim, 
     Py_ssize_t exclude, 
     n_jobs,
 ):
-    x = check_dataset(x, allow_1d=True)
-    y = check_dataset(y, allow_1d=True)
     cdef Dataset x_dataset = Dataset(x)
     cdef Dataset y_dataset = Dataset(y)
     cdef Py_ssize_t profile_length = y_dataset.n_timestep - w + 1
@@ -154,8 +147,8 @@ def _paired_matrix_profile(
     cdef complex *x_buffer = <complex*> malloc(sizeof(complex) * x_dataset.n_timestep)
     cdef complex *y_buffer = <complex*> malloc(sizeof(complex) * x_dataset.n_timestep)
     
-    cdef np.ndarray mp = np.empty((x_dataset.n_samples, profile_length), dtype=np.double)
-    cdef np.ndarray mpi = np.empty((x_dataset.n_samples, profile_length), dtype=np.intp)
+    cdef double[:, :] mp = np.empty((x_dataset.n_samples, profile_length), dtype=np.double)
+    cdef Py_ssize_t[:, :] mpi = np.empty((x_dataset.n_samples, profile_length), dtype=np.intp)
     
     with nogil:
         for i in range(x_dataset.n_samples):
@@ -171,24 +164,23 @@ def _paired_matrix_profile(
                 x_buffer,
                 y_buffer,
                 dist_buffer,
-                (<double*> mp.data) + i * profile_length,
-                (<Py_ssize_t*> mpi.data) + i * profile_length,
+                &mp[i, 0],
+                &mpi[i, 0],
             )
     free(mean_x)
     free(std_x)
     free(dist_buffer)
     free(x_buffer)
     free(y_buffer)
-    return mp, mpi
+    return mp.base, mpi.base
 
 
-def moving_mean_std(np.ndarray x, Py_ssize_t window):
-    x = check_dataset(x, allow_1d=True)
+def moving_mean_std(object x, Py_ssize_t window):
     cdef Dataset dataset = Dataset(x)
-    cdef np.ndarray means = np.empty(
+    cdef double[:, :] means = np.empty(
         (dataset.n_samples, dataset.n_timestep - window + 1), dtype=np.double
     )
-    cdef np.ndarray std = np.empty(
+    cdef double[:, :] std = np.empty(
         (dataset.n_samples, dataset.n_timestep - window + 1), dtype=np.double
     )
     cdef Py_ssize_t i
@@ -197,8 +189,8 @@ def moving_mean_std(np.ndarray x, Py_ssize_t window):
             dataset.get_sample(i, 0), 
             dataset.n_timestep, 
             window, 
-            (<double*> means.data) + i * (dataset.n_timestep - window + 1), 
-            (<double*> std.data) + i * (dataset.n_timestep - window + 1),
+            &means[i, 0],
+            &std[i, 0]
         )
 
     return means, std

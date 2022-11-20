@@ -19,7 +19,6 @@ from ..tree._cptree import (
     WeightedDistanceMeasureSampler,
 )
 from ..tree.base import BaseTree, TreeClassifierMixin
-from ..utils.data import check_dataset
 from ..utils.validation import check_option
 
 _CLF_CRITERION = {
@@ -282,7 +281,6 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
             _DISTANCE_MEASURE_SAMPLER, self.metric_sample, "metric_sample"
         )
 
-        x = check_dataset(x)
         tree_builder = TreeBuilder(
             x,
             sample_weights,

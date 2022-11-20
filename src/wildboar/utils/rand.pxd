@@ -15,7 +15,7 @@ cdef void vose_rand_init(VoseRand *vr, Py_ssize_t n) nogil
 
 cdef void vose_rand_free(VoseRand *vr) nogil
 
-cdef void vose_rand_precompute(VoseRand *vr, double *p) nogil
+cdef void vose_rand_precompute(VoseRand *vr, const double *p) nogil
 
 cdef Py_ssize_t vose_rand_int(VoseRand *vr, size_t *seed) nogil
 

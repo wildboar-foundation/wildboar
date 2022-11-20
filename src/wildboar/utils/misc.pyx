@@ -8,7 +8,6 @@
 
 import numpy as np
 
-cimport numpy as np
 from libc.math cimport M_PI, cos, log, log2, sin, sqrt
 from libc.stdlib cimport realloc
 
@@ -148,17 +147,17 @@ cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1:
     ptr[0] = tmp
     return 0
 
-cdef np.ndarray to_ndarray_int(Py_ssize_t *arr, Py_ssize_t n):
+cdef object to_ndarray_int(Py_ssize_t *arr, Py_ssize_t n):
     cdef Py_ssize_t i
-    cdef np.ndarray out = np.zeros(n, dtype=int)
+    cdef object out = np.zeros(n, dtype=int)
     for i in range(n):
         out[i] = arr[i]
 
     return out
 
-cdef np.ndarray to_ndarray_double(double *arr, Py_ssize_t n):
+cdef object to_ndarray_double(double *arr, Py_ssize_t n):
     cdef Py_ssize_t i
-    cdef np.ndarray out = np.zeros(n, dtype=np.float32)
+    cdef object out = np.zeros(n, dtype=float)
     for i in range(n):
         out[i] = arr[i]
 

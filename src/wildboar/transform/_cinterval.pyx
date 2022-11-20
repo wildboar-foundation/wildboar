@@ -3,8 +3,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
 import numpy as np
 
 from libc.math cimport NAN
@@ -218,7 +216,7 @@ cdef class Catch22Summarizer(Summarizer):
 
 cdef class PyFuncSummarizer(Summarizer):
     cdef list func
-    cdef np.ndarray x_buffer
+    cdef object x_buffer
 
     def __cinit__(self, func):
         self.func = func
@@ -229,7 +227,7 @@ cdef class PyFuncSummarizer(Summarizer):
 
     cdef void reset(self, Dataset td) nogil:
         with gil:
-            self.x_buffer = np.ndarray(td.n_timestep)
+            self.x_buffer = np.empty(td.n_timestep, dtype=float)
 
     cdef void summarize_all(
             self,

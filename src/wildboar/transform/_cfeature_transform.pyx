@@ -3,7 +3,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
 from libc.stdlib cimport free, malloc
 
 from ..utils.data cimport Dataset
@@ -15,8 +14,6 @@ from copy import deepcopy
 
 import numpy as np
 from joblib import Parallel, delayed, effective_n_jobs
-
-from ..utils.data import check_dataset
 
 
 def clone_embedding(FeatureEngineer feature_engineer, features):
@@ -178,8 +175,7 @@ cdef class FeatureEmbedding:
             raise ValueError()
         return self.feature_engineer.persistent_feature_to_object(self._features[item])
 
-def feature_transform_fit(FeatureEngineer feature_engineer, np.ndarray x, object random_state):
-    x = check_dataset(x)
+def feature_transform_fit(FeatureEngineer feature_engineer, object x, object random_state):
     cdef Dataset td = Dataset(x)
     cdef Py_ssize_t i
     cdef Feature transient_feature
@@ -213,13 +209,12 @@ def feature_transform_fit(FeatureEngineer feature_engineer, np.ndarray x, object
 
     return embedding
 
-def feature_transform_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs=None):
-    x = check_dataset(x)
+def feature_transform_transform(FeatureEmbedding embedding, object x, n_jobs=None):
     cdef Dataset x_in = Dataset(x)
     cdef FeatureEngineer feature_engineer = embedding.feature_engineer
     cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(x_in)
     cdef Py_ssize_t n_features = feature_engineer.get_n_features(x_in)
-    cdef np.ndarray out = np.empty((x.shape[0], n_outputs))
+    out = np.empty((x.shape[0], n_outputs))
     cdef Dataset x_out = Dataset(out)
 
     n_jobs, feature_engineers, feature_offsets, batch_sizes = _partition_features(
@@ -237,15 +232,14 @@ def feature_transform_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs
     
     return out
 
-def feature_transform_fit_transform(FeatureEngineer feature_engineer, np.ndarray x, random_state, n_jobs=None):
-    x = check_dataset(x)
+def feature_transform_fit_transform(FeatureEngineer feature_engineer, object x, random_state, n_jobs=None):
     cdef Dataset x_in = Dataset(x)
     cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(x_in)
     cdef Py_ssize_t n_features = feature_engineer.get_n_features(x_in)
     cdef FeatureEmbedding embedding = FeatureEmbedding(
         feature_engineer, n_features
     )
-    cdef np.ndarray out = np.empty((x.shape[0], n_outputs))
+    out = np.empty((x.shape[0], n_outputs))
     cdef Dataset x_out = Dataset(out)
 
     n_jobs, feature_engineers, feature_offsets, batch_sizes = _partition_features(

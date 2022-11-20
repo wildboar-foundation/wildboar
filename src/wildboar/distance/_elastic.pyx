@@ -13,9 +13,6 @@
 #  - Rakthanmanon, et al., Searching and Mining Trillions of Time
 #    Series Subsequences under Dynamic Time Warping (2012)
 #  - http://www.cs.ucr.edu/~eamonn/UCRsuite.html
-
-cimport numpy as np
-
 import numpy as np
 
 from libc.math cimport INFINITY, exp, fabs, floor, sqrt
@@ -40,14 +37,6 @@ from sklearn.utils.validation import check_scalar
 cdef struct DtwExtra:
     double *lower
     double *upper
-
-cdef struct Deque:
-    Py_ssize_t *queue
-    int size
-    int capacity
-    int front
-    int back
-
 
 cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
     c.capacity = capacity
@@ -849,14 +838,21 @@ cdef double dtw_distance(
     return cost_prev[y_length - 1]
 
 
-cdef void _dtw_align(
-    double[:] X, 
-    double[:] Y, 
+def _dtw_alignment(
+    const double[:] X, 
+    const double[:] Y, 
     Py_ssize_t r, 
-    double[:] weights, 
-    double[:,:] out
-) nogil:
-    """Compute the warp alignment """
+    const double[:] weights, 
+    double[:, :] out = None
+):
+    if not 0 < r <= max(X.shape[0], Y.shape[0]):
+        raise ValueError("invalid r")
+
+    if out is None:
+        out = np.empty((X.shape[0], Y.shape[0]))
+    elif out.shape[0] < X.shape[0] or out.shape[1] < Y.shape[0]:
+        raise ValueError("out has wrong shape, got [%d, %d]" % out.shape)
+
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start, j_stop
@@ -904,119 +900,50 @@ cdef void _dtw_align(
         if j_stop < Y.shape[0]:
             out[i, j_stop] = INFINITY
 
-
-def _dtw_alignment(
-    np.ndarray x, 
-    np.ndarray y, 
-    Py_ssize_t r, 
-    np.ndarray weights=None, 
-    np.ndarray out=None
-):
-    """Computes that dtw alignment matrix
-
-    Parameters
-    ----------
-    x : ndarray of shape (x_size, )
-        The first array
-
-    y : ndarray of shape (y_size, )
-        The second array
-
-    r : int
-        The warping window size
-
-    out : ndarray of shape (x_size, y_size), optional
-        To avoid allocating a new array out can be reused
-
-    Returns
-    -------
-    alignment : ndarray of shape (x_size, y_size)
-        - if `out` is given, alignment is out
-
-        Contains the dtw alignment. Values outside the warping
-        window size is undefined.
-    """
-    if not 0 < r <= max(x.shape[0], y.shape[0]):
-        raise ValueError("invalid r")
-    cdef Py_ssize_t x_size = x.shape[0]
-    cdef Py_ssize_t y_size = y.shape[0]
-    if out is None:
-        out = np.empty((x_size, y_size))
-
-    if out.shape[0] < x_size or out.shape[1] < y_size:
-        raise ValueError("out has wrong shape, got [%d, %d]" (x_size, y_size))
-    _dtw_align(x, y, r, weights, out)
-    return out
+    return out.base
 
 
-def _dtw_envelop(np.ndarray x, Py_ssize_t r):
+def _dtw_envelop(double[::1] x, Py_ssize_t r):
     if not 0 < r <= x.shape[0]:
         raise ValueError("invalid r")
-
-    x = np.ascontiguousarray(x, dtype=float)
 
     cdef Deque du
     cdef Deque dl
     cdef Py_ssize_t length = x.shape[0]
-    cdef double *data = <double*> x.data
-    cdef np.ndarray lower = np.empty(length, dtype=float)
-    cdef np.ndarray upper = np.empty(length, dtype=float)
-    cdef double *lower_data = <double*> lower.data
-    cdef double *upper_data = <double*> upper.data
+    cdef double[:] lower = np.empty(length, dtype=float)
+    cdef double[:] upper = np.empty(length, dtype=float)
 
     deque_init(&dl, 2 * r + 2)
     deque_init(&du, 2 * r + 2)
-    find_min_max(data, length, r, lower_data, upper_data, &dl, &du)
+    find_min_max(&x[0], length, r, &lower[0], &upper[0], &dl, &du)
 
     deque_destroy(&dl)
     deque_destroy(&du)
-    return lower, upper
+    return lower.base, upper.base
 
 
-def _dtw_lb_keogh(np.ndarray x, np.ndarray lower, np.ndarray upper, Py_ssize_t r):
+def _dtw_lb_keogh(double[::1] x, double[::1] lower, double[::1] upper, Py_ssize_t r):
     if not 0 < r <= x.shape[0]:
         raise ValueError("invalid r")
-    x = np.ascontiguousarray(x, dtype=float)
-    lower = np.ascontiguousarray(lower, dtype=float)
-    upper = np.ascontiguousarray(upper, dtype=float)
+
     cdef Py_ssize_t i
     cdef Py_ssize_t length = x.shape[0]
-    cdef double *data = <double*> x.data
-    cdef double *lower_data
-    cdef double *upper_data
-    if lower.strides[0] / <Py_ssize_t> lower.itemsize == 1:
-        lower_data = <double*> lower.data
-    else:
-        lower_data = <double*> malloc(sizeof(double) * length)
-        for i in range(length):
-            lower_data[i] = lower[i]
-
-    if upper.strides[0] / <Py_ssize_t> lower.itemsize == 1:
-        upper_data = <double*> upper.data
-    else:
-        upper_data = <double*> malloc(sizeof(double) * length)
-        for i in range(length):
-            upper_data[i] = upper[i]
-    cdef np.ndarray cb = np.empty(length, dtype=float)
-    cdef double *cb_data = <double*> cb.data
+    cdef double[:] cb = np.empty(length, dtype=float)
     cdef double min_dist
     min_dist = cumulative_bound(
-        data, 
+        &x[0], 
         length, 
         0, 
         1, 
         0, 
         1, 
-        lower_data, 
-        upper_data, 
-        cb_data,
+        &lower[0],
+        &upper[0],
+        &cb[0],
         INFINITY,
     )
-    if <double*> upper.data != upper_data:
-        free(upper_data)
-    if <double*> lower.data != lower_data:
-        free(lower_data)
-    return sqrt(min_dist), cb
+
+    return sqrt(min_dist), cb.base
 
 
 cdef double lcss_distance(

@@ -7,8 +7,6 @@
 # License: BSD 3 clause
 
 import numpy as np
-
-cimport numpy as np
 from libc.math cimport NAN, sqrt
 from libc.stdlib cimport free, malloc
 
@@ -19,7 +17,6 @@ from copy import deepcopy
 
 from ..utils.data cimport Dataset
 
-from ..utils.data import check_dataset
 from ..utils.parallel import run_in_parallel
 from ..utils.validation import check_array
 
@@ -291,78 +288,7 @@ cdef class DistanceMeasure:
         return False
 
 
-cdef class FuncDistanceMeasure:
-    cdef object func
-    cdef np.ndarray x_buffer
-    cdef np.ndarray y_buffer
-    cdef bint _support_unaligned
-
-    def __cinit__(self, Py_ssize_t n_timestep, object func, bint support_unaligned=False):
-        self.n_timestep = n_timestep
-        self.func = func
-        self.x_buffer = np.empty(n_timestep, dtype=float)
-        self.y_buffer = np.empty(n_timestep, dtype=float)
-        self._support_unaligned = support_unaligned
-
-
-    def __reduce__(self):
-        return self.__class__, (self.n_timestep, self.func)
-
-
-    cdef double ts_copy_sub_distance(
-        self,
-        Subsequence *s,
-        Dataset td,
-        Py_ssize_t t_index,
-        Py_ssize_t *return_index=NULL,
-    ) nogil:
-        cdef Py_ssize_t i
-        cdef Py_ssize_t sample_offset = (
-            t_index * td.sample_stride + 
-            s.dim * td.dim_stride
-        )
-        with gil:
-            for i in range(td.n_timestep):
-                if i < s.length:
-                    self.x_buffer[i] = s.data[i]
-                self.y_buffer[i] = td.data[sample_offset + i]
-
-            return self.func(self.x_buffer[:s.length], self.y_buffer)
-
-    cdef double ts_view_sub_distance(
-        self,
-        SubsequenceView *v,
-        Dataset td,
-        Py_ssize_t t_index,
-    ) nogil:
-        cdef Py_ssize_t i
-        cdef Py_ssize_t sample_offset = (t_index * td.sample_stride +
-                                         v.dim * td.dim_stride)
-        cdef Py_ssize_t shapelet_offset = (v.index * td.sample_stride +
-                                           v.dim * td.dim_stride +
-                                           v.start)
-        with gil:
-            for i in range(td.n_timestep):
-                if i < v.length:
-                    self.x_buffer[i] = td.data[shapelet_offset + i]
-                self.y_buffer[i] = td.data[sample_offset + i]
-
-            return self.func(self.x_buffer[:v.length], self.y_buffer)
-
-    cdef double ts_copy_distance(
-        self,
-        Subsequence *s,
-        Dataset td,
-        Py_ssize_t t_index,
-    ) nogil:
-        return self.ts_copy_sub_distance(s, td, t_index)
-
-    cdef bint support_unaligned(self) nogil:
-        return self._support_unaligned
-
-
-
-cdef np.ndarray _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
+cdef object _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
     if n_matches > 0:
         match_array = np.empty(n_matches, dtype=np.intp)
         for i in range(n_matches):
@@ -372,7 +298,7 @@ cdef np.ndarray _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
         return None
 
 
-cdef np.ndarray _new_distance_array(
+cdef object _new_distance_array(
         double *distances, Py_ssize_t n_matches):
     if n_matches > 0:
         dist_array = np.empty(n_matches, dtype=np.double)
@@ -447,12 +373,11 @@ cdef class _PairwiseSubsequenceDistance:
 
 def _pairwise_subsequence_distance(
     list shapelets, 
-    np.ndarray x, 
+    object x, 
     int dim, 
     SubsequenceDistanceMeasure distance_measure,
     n_jobs,
 ):
-    x = check_dataset(x)
     dataset = Dataset(x)
     distances = np.empty((dataset.n_samples, len(shapelets)), dtype=np.double)
     min_indicies = np.empty((dataset.n_samples, len(shapelets)), dtype=np.intp)
@@ -470,38 +395,39 @@ def _pairwise_subsequence_distance(
 
 def _paired_subsequence_distance(
     list shapelets,
-    np.ndarray x,
+    object x,
     int dim,
     SubsequenceDistanceMeasure distance_measure
 ):
-    x = check_dataset(x)
     cdef Dataset dataset = Dataset(x)
-    cdef np.ndarray distances = np.empty(dataset.n_samples, dtype=np.double)
-    cdef np.ndarray min_indicies = np.empty(dataset.n_samples, dtype=np.intp)
     cdef Py_ssize_t i, min_index
     cdef double dist
     cdef Subsequence subsequence
+    distances = np.empty(dataset.n_samples, dtype=np.double)
+    min_indices = np.empty(dataset.n_samples, dtype=np.intp)
+
+    cdef double[:] distances_view = distances
+    cdef Py_ssize_t[:] min_indices_view = min_indices
     distance_measure.reset(dataset)
     for i in range(dataset.n_samples):
         distance_measure.from_array(&subsequence, (dim, shapelets[i]))
         with nogil:
             dist = distance_measure.persistent_distance(&subsequence, dataset, i, &min_index)
-        distance_measure.free_persistent(&subsequence)
-        distances[i] = dist
-        min_indicies[i] = min_index
+            distance_measure.free_persistent(&subsequence)
+            distances_view[i] = dist
+            min_indices_view[i] = min_index
 
-    return distances, min_indicies
+    return distances, min_indices
 
 
 def _subsequence_match(
-    np.ndarray y,
-    np.ndarray x,
+    object y,
+    object x,
     double threshold,
     int dim,
     SubsequenceDistanceMeasure distance_measure,
     n_jobs,
 ):
-    x = check_dataset(x)
     cdef Dataset dataset = Dataset(x)
     cdef double *distances 
     cdef Py_ssize_t *indicies
@@ -532,13 +458,12 @@ def _subsequence_match(
 
 def _paired_subsequence_match(
     list y,
-    np.ndarray x,
+    object x,
     double threshold,
     int dim,
     SubsequenceDistanceMeasure distance_measure,
     n_jobs,
 ):
-    x = check_dataset(x)
     cdef Dataset dataset = Dataset(x)
     cdef double *distances 
     cdef Py_ssize_t *indicies
@@ -569,17 +494,15 @@ def _paired_subsequence_match(
 
 
 def _pairwise_distance(
-    np.ndarray y,
-    np.ndarray x,
+    object y,
+    object x,
     Py_ssize_t dim,
     DistanceMeasure distance_measure,
     n_jobs,
 ):
-    y = check_dataset(y, allow_1d=True)
-    x = check_dataset(x, allow_1d=True)
     cdef Dataset y_dataset = Dataset(y)
     cdef Dataset x_dataset = Dataset(x)
-    cdef np.ndarray out = np.empty((y_dataset.n_samples, x_dataset.n_samples), dtype=np.double)
+    cdef object out = np.empty((y_dataset.n_samples, x_dataset.n_samples), dtype=np.double)
     cdef double[:, :] out_view = out
     cdef Py_ssize_t i, j
     cdef double dist
@@ -595,14 +518,13 @@ def _pairwise_distance(
 
 
 def _singleton_pairwise_distance(
-    np.ndarray x, 
+    object x, 
     Py_ssize_t dim, 
     DistanceMeasure distance_measure, 
     n_jobs
 ):
-    x = check_dataset(x)
     cdef Dataset dataset = Dataset(x)
-    cdef np.ndarray out = np.zeros((dataset.n_samples, dataset.n_samples), dtype=np.double)
+    cdef object out = np.zeros((dataset.n_samples, dataset.n_samples), dtype=np.double)
     cdef double[:, :] out_view = out
     cdef Py_ssize_t i, j
     cdef double dist
@@ -619,17 +541,15 @@ def _singleton_pairwise_distance(
 
 
 def _paired_distance(
-    np.ndarray y,
-    np.ndarray x,
+    object y,
+    object x,
     Py_ssize_t dim,
     DistanceMeasure distance_measure,
     n_jobs,
 ):
-    y = check_dataset(y, allow_1d=True)
-    x = check_dataset(x, allow_1d=True)
     cdef Dataset y_dataset = Dataset(y)
     cdef Dataset x_dataset = Dataset(x)
-    cdef np.ndarray out = np.empty(y_dataset.n_samples, dtype=np.double)
+    cdef object out = np.empty(y_dataset.n_samples, dtype=np.double)
     cdef double[:] out_view = out
     cdef Py_ssize_t i
 

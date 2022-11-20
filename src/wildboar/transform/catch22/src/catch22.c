@@ -1115,6 +1115,8 @@ double summaries_welch_rect(double *x, int length, int what, double *S, double *
                             int n_welch) {
     // angualr frequency and spectrum on that
     double *w = malloc(n_welch * sizeof(double));
+    w[0] = 0;
+    w[1] = 0;
     double *Sw = malloc(n_welch * sizeof(double));
 
     double PI = 3.14159265359;

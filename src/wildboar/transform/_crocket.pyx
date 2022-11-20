@@ -6,8 +6,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
 import numpy as np
 
 from libc.math cimport INFINITY, floor, log2, pow, sqrt
@@ -138,7 +136,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         self,
         Py_ssize_t n_kernels,
         WeightSampler weight_sampler,
-        np.ndarray kernel_size,
+        object kernel_size,
         double bias_prob,
         double padding_prob,
         double normalize_prob

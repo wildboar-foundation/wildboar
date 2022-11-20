@@ -1,4 +1,3 @@
-# cython: profile=True
 # cython: cdivision=True
 # cython: boundscheck=False
 # cython: wraparound=False
@@ -7,9 +6,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-import numpy as np
-
-cimport numpy as np
 cimport scipy.linalg.cython_blas as blas
 cimport scipy.linalg.cython_lapack as lapack
 from libc.math cimport INFINITY, M_PI, acos, fabs, pow, sqrt
@@ -1022,7 +1018,7 @@ cdef Py_ssize_t cosine_similarity_matches(
     for i in range(t_length - s_length + 1):
         prod = 0
         s_norm = 0
-        s_norm = 0
+        t_norm = 0
         for j in range(s_length):
             prod += T[i + j] * S[j]
             s_norm += pow(S[j], 2)
