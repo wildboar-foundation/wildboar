@@ -3,7 +3,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-from wildboar.utils.data cimport Dataset
+from wildboar.utils._data cimport Dataset
 
 
 cdef struct Feature:

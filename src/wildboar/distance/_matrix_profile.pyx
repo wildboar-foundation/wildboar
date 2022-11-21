@@ -9,9 +9,9 @@ import numpy as np
 from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
-from ..utils.data cimport Dataset
-from ..utils.rand cimport RAND_R_MAX, shuffle
-from ..utils.stats cimport (
+from ..utils._data cimport Dataset
+from ..utils._rand cimport RAND_R_MAX, shuffle
+from ..utils._stats cimport (
     IncStats,
     cumulative_mean_std,
     find_min,

@@ -6,9 +6,9 @@
 from libc.math cimport INFINITY, NAN, sqrt
 from libc.stdlib cimport free, malloc
 
+from ..utils._data cimport Dataset
 from ..utils._fft cimport _pocketfft
-from ..utils.data cimport Dataset
-from ..utils.stats cimport (
+from ..utils._stats cimport (
     IncStats,
     cumulative_mean_std,
     find_min,

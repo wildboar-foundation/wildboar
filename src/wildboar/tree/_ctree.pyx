@@ -18,9 +18,9 @@ from ..distance._distance cimport DistanceMeasure
 from ..distance import _DISTANCE_MEASURE
 
 from ..transform._feature cimport Feature, FeatureEngineer
-from ..utils.data cimport Dataset
-from ..utils.misc cimport CList, argsort, safe_realloc
-from ..utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
+from ..utils._data cimport Dataset
+from ..utils._misc cimport CList, argsort, safe_realloc
+from ..utils._rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
 cdef double FEATURE_THRESHOLD = 1e-7

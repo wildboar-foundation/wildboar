@@ -19,10 +19,9 @@ from libc.math cimport INFINITY, exp, fabs, floor, sqrt
 from libc.stdlib cimport free, labs, malloc
 from libc.string cimport memcpy
 
-from ..utils cimport stats
-from ..utils.data cimport Dataset
-from ..utils.misc cimport realloc_array
-from ..utils.stats cimport fast_mean_std
+from ..utils._data cimport Dataset
+from ..utils._misc cimport realloc_array
+from ..utils._stats cimport fast_mean_std
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,

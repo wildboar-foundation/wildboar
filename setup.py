@@ -52,47 +52,14 @@ if __name__ == "__main__":
         build_args["libraries"].append("m")
 
     extensions = {
-        "wildboar.utils.misc": {
-            "sources": ["src/wildboar/utils/misc.pyx"],
+        "wildboar.distance.*": {
+            "sources": ["src/wildboar/distance/*.pyx"],
         },
-        "wildboar.distance._distance": {
-            "sources": ["src/wildboar/distance/_distance.pyx"],
+        "wildboar.tree.*": {
+            "sources": ["src/wildboar/tree/*.pyx"],
         },
-        "wildboar.distance._metric": {
-            "sources": ["src/wildboar/distance/_metric.pyx"],
-        },
-        "wildboar.distance._elastic": {
-            "sources": ["src/wildboar/distance/_elastic.pyx"],
-        },
-        "wildboar.distance._mass": {
-            "sources": ["src/wildboar/distance/_mass.pyx"],
-        },
-        "wildboar.distance._matrix_profile": {
-            "sources": ["src/wildboar/distance/_matrix_profile.pyx"],
-        },
-        "wildboar.tree._ctree": {
-            "sources": ["src/wildboar/tree/_ctree.pyx"],
-        },
-        "wildboar.tree._cptree": {
-            "sources": ["src/wildboar/tree/_cptree.pyx"],
-        },
-        "wildboar.transform._feature": {
-            "sources": ["src/wildboar/transform/_feature.pyx"],
-        },
-        "wildboar.transform._cshapelet": {
-            "sources": ["src/wildboar/transform/_cshapelet.pyx"],
-        },
-        "wildboar.transform._crocket": {
-            "sources": ["src/wildboar/transform/_crocket.pyx"],
-        },
-        "wildboar.transform._cinterval": {
-            "sources": ["src/wildboar/transform/_cinterval.pyx"],
-        },
-        "wildboar.transform._cpivot": {
-            "sources": ["src/wildboar/transform/_cpivot.pyx"],
-        },
-        "wildboar.transform._cfeature_transform": {
-            "sources": ["src/wildboar/transform/_cfeature_transform.pyx"],
+        "wildboar.transform.*": {
+            "sources": ["src/wildboar/transform/*.pyx"],
         },
         "wildboar.transform.catch22._catch22": {
             "sources": [
@@ -108,18 +75,7 @@ if __name__ == "__main__":
             ],
             "include_dirs": ["src/wildboar/utils/_fft/src/"],
         },
-        "wildboar.utils.stats": {
-            "sources": ["src/wildboar/utils/stats.pyx"],
-        },
-        "wildboar.utils.rand": {
-            "sources": ["src/wildboar/utils/rand.pyx"],
-        },
-        "wildboar.utils.data": {
-            "sources": ["src/wildboar/utils/data.pyx"],
-        },
-        "wildboar.utils.parallel": {
-            "sources": ["src/wildboar/utils/parallel.pyx"],
-        },
+        "wildboar.utils.*": {"sources": ["src/wildboar/utils/*.pyx"]},
     }
     ext_modules = [
         Extension(name, **_merge_build_options(name, options, build_args))

@@ -6,7 +6,7 @@
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 
-from ..utils.data cimport Dataset
+from ..utils._data cimport Dataset
 
 
 cdef class FeatureEngineer:

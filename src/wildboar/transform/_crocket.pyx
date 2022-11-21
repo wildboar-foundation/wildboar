@@ -12,9 +12,9 @@ from libc.math cimport INFINITY, floor, log2, pow, sqrt
 from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 
-from ..utils.data cimport Dataset
-from ..utils.misc cimport to_ndarray_int
-from ..utils.rand cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
+from ..utils._data cimport Dataset
+from ..utils._misc cimport to_ndarray_int
+from ..utils._rand cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
 from ._feature cimport Feature, FeatureEngineer
 
 

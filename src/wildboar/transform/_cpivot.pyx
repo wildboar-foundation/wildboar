@@ -8,9 +8,9 @@ from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 
 from ..distance._distance cimport DistanceMeasure
-from ..utils.data cimport Dataset
-from ..utils.misc cimport CList, to_ndarray_double
-from ..utils.rand cimport RAND_R_MAX, rand_int, shuffle
+from ..utils._data cimport Dataset
+from ..utils._misc cimport CList, to_ndarray_double
+from ..utils._rand cimport RAND_R_MAX, rand_int, shuffle
 
 from ..distance import _DISTANCE_MEASURE
 

@@ -10,9 +10,9 @@ from libc.math cimport INFINITY, ceil, exp, fabs, floor, pow, sqrt
 from libc.stdlib cimport free, malloc, qsort
 from libc.string cimport memcpy, memset
 
-from ...utils cimport stats
-from ...utils.data cimport Dataset
-from ...utils.parallel cimport MapSample
+from ...utils cimport _stats
+from ...utils._data cimport Dataset
+from ...utils._parallel cimport MapSample
 
 
 cdef extern from "catch22.h":
@@ -121,8 +121,8 @@ cdef double local_mean_std(double *x, Py_ssize_t n, Py_ssize_t lag) nogil:
     if n <= lag:
         return 0.0
 
-    cdef stats.IncStats inc_stats
-    stats.inc_stats_init(&inc_stats)
+    cdef _stats.IncStats inc_stats
+    _stats.inc_stats_init(&inc_stats)
     cdef Py_ssize_t i, j
     cdef double lag_sum
     for i in range(n - lag):
@@ -130,11 +130,11 @@ cdef double local_mean_std(double *x, Py_ssize_t n, Py_ssize_t lag) nogil:
         for j in range(lag):
             lag_sum += x[i + j]
 
-        stats.inc_stats_add(
+        _stats.inc_stats_add(
             &inc_stats, 1.0, x[i + lag] - lag_sum / lag
         )
 
-    return sqrt(stats.inc_stats_variance(&inc_stats, True))
+    return sqrt(_stats.inc_stats_variance(&inc_stats, True))
 
 
 cdef double hrv_classic_pnn(double *x, Py_ssize_t n, double pnn) nogil:
@@ -152,7 +152,7 @@ cdef double hrv_classic_pnn(double *x, Py_ssize_t n, double pnn) nogil:
 
 
 cdef double above_mean_stretch(double *x, Py_ssize_t n) nogil:
-    cdef double mean = stats.mean(x, n)
+    cdef double mean = _stats.mean(x, n)
     cdef double stretch = 0
     cdef double longest = 0
     cdef Py_ssize_t i
@@ -206,7 +206,7 @@ cdef double local_mean_tauresrat(double *x, double *ac, Py_ssize_t n, Py_ssize_t
         lag_ac[i] = x[i + lag] - lag_sum / lag
 
     lag_out = 0
-    stats.auto_correlation(lag_ac, n - lag, lag_ac)
+    _stats.auto_correlation(lag_ac, n - lag, lag_ac)
     while lag_ac[lag_out] > 0 and lag_out < n - lag:
         lag_out += 1
     free(lag_ac)

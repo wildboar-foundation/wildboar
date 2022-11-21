@@ -8,10 +8,10 @@ import numpy as np
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 
-from ..utils cimport stats
-from ..utils.data cimport Dataset
-from ..utils.misc cimport to_ndarray_double
-from ..utils.rand cimport RAND_R_MAX, rand_int, shuffle
+from ..utils cimport _stats
+from ..utils._data cimport Dataset
+from ..utils._misc cimport to_ndarray_double
+from ..utils._rand cimport RAND_R_MAX, rand_int, shuffle
 from ._feature cimport Feature, FeatureEngineer
 from .catch22 cimport _catch22
 
@@ -40,7 +40,7 @@ cdef class Summarizer:
 
 cdef class MeanSummarizer(Summarizer):
     cdef double summarize(self, Py_ssize_t i, double *x, Py_ssize_t length) nogil:
-        return stats.mean(x, length)
+        return _stats.mean(x, length)
         
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -48,7 +48,7 @@ cdef class MeanSummarizer(Summarizer):
 
 cdef class VarianceSummarizer(Summarizer):
     cdef double summarize(self, Py_ssize_t i, double *x, Py_ssize_t length) nogil:
-        return stats.variance(x, length)
+        return _stats.variance(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -56,7 +56,7 @@ cdef class VarianceSummarizer(Summarizer):
 
 cdef class SlopeSummarizer(Summarizer):
     cdef double summarize(self, Py_ssize_t i, double *x, Py_ssize_t length) nogil:
-        return stats.slope(x, length)
+        return _stats.slope(x, length)
 
     cdef Py_ssize_t n_outputs(self) nogil:
         return 1
@@ -65,11 +65,11 @@ cdef class SlopeSummarizer(Summarizer):
 cdef class MeanVarianceSlopeSummarizer(Summarizer):
     cdef double summarize(self, Py_ssize_t i, double *x, Py_ssize_t length) nogil:
         if i == 0:
-            return stats.mean(x, length)
+            return _stats.mean(x, length)
         elif i == 1:
-            return stats.variance(x, length)
+            return _stats.variance(x, length)
         elif i == 2:
-            return stats.slope(x, length)
+            return _stats.slope(x, length)
         else:
             return NAN
 
@@ -109,7 +109,7 @@ cdef class Catch22Summarizer(Summarizer):
             free(self.window)
         
         cdef Py_ssize_t n_timestep = td.n_timestep
-        cdef Py_ssize_t welch_length = stats.next_power_of_2(n_timestep)
+        cdef Py_ssize_t welch_length = _stats.next_power_of_2(n_timestep)
         self.ac = <double*> malloc(sizeof(double) * n_timestep)
         self.window = <double*> malloc(sizeof(double)* n_timestep);
         self.welch_f = <double*> malloc(sizeof(double) * welch_length )
@@ -151,10 +151,10 @@ cdef class Catch22Summarizer(Summarizer):
         cdef int n_welch = -1
         
         if i == 15 or i == 20:    
-            n_welch = stats.welch(
+            n_welch = _stats.welch(
                 x, 
                 length, 
-                stats.next_power_of_2(length), 
+                _stats.next_power_of_2(length), 
                 1.0, 
                 self.window, 
                 length, 
@@ -162,7 +162,7 @@ cdef class Catch22Summarizer(Summarizer):
                 self.welch_f
             )
         if i == 2 or i == 3 or i == 8 or i == 10 or i == 12:
-            stats.auto_correlation(x, length, self.ac)
+            _stats.auto_correlation(x, length, self.ac)
 
         if i == 0:
             return _catch22.histogram_mode5(x, length, self.bin_count, self.bin_edges)

@@ -5,9 +5,9 @@
 
 from libc.stdlib cimport free, malloc
 
-from ..utils.data cimport Dataset
-from ..utils.misc cimport safe_realloc
-from ..utils.rand cimport RAND_R_MAX
+from ..utils._data cimport Dataset
+from ..utils._misc cimport safe_realloc
+from ..utils._rand cimport RAND_R_MAX
 from ._feature cimport Feature, FeatureEngineer
 
 from copy import deepcopy

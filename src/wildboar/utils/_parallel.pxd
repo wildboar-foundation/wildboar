@@ -3,7 +3,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-from .data cimport Dataset
+from . cimport Dataset
 
 
 cdef class ForeachSample:

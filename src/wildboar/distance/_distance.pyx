@@ -10,14 +10,14 @@ import numpy as np
 from libc.math cimport NAN, sqrt
 from libc.stdlib cimport free, malloc
 
-from ..utils cimport stats
+from ..utils cimport _stats
 
 from copy import deepcopy
 
 
-from ..utils.data cimport Dataset
+from ..utils._data cimport Dataset
 
-from ..utils.parallel import run_in_parallel
+from ..utils._parallel import run_in_parallel
 from ..utils.validation import check_array
 
 

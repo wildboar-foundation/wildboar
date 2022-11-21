@@ -11,8 +11,8 @@ from ..distance._distance cimport (
     SubsequenceDistanceMeasure,
     SubsequenceView,
 )
-from ..utils.data cimport Dataset
-from ..utils.rand cimport RAND_R_MAX, rand_int
+from ..utils._data cimport Dataset
+from ..utils._rand cimport RAND_R_MAX, rand_int
 from ._feature cimport Feature, FeatureEngineer
 
 

@@ -11,9 +11,9 @@ cimport scipy.linalg.cython_lapack as lapack
 from libc.math cimport INFINITY, M_PI, acos, fabs, pow, sqrt
 from libc.stdlib cimport free, malloc
 
-from ..utils.data cimport Dataset
-from ..utils.misc cimport realloc_array
-from ..utils.stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_variance
+from ..utils._data cimport Dataset
+from ..utils._misc cimport realloc_array
+from ..utils._stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_variance
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,
