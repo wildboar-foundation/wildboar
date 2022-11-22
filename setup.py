@@ -45,7 +45,7 @@ if __name__ == "__main__":
     if build_args is None:
         raise RuntimeError("%s is not a valid build type" % build_type)
 
-    if os.getenv("WILDBOAR_BUILD_WERROR", 1):
+    if os.getenv("WILDBOAR_BUILD_WERROR", "1") != "0":
         build_args["extra_compile_args"].append("-Werror")
 
     if os.name == "posix":

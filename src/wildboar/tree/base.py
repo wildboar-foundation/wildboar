@@ -220,7 +220,9 @@ class TreeClassifierMixin(ClassifierMixin):
         """
         check_is_fitted(self, ["tree_"])
         if check_input:
-            x = self._validate_data(x, allow_3d=True, dtype=float, reset=False)
+            x = self._validate_data(
+                x, ensure_ts_array=True, allow_3d=True, dtype=float, reset=False
+            )
         else:
             x = self._validate_force_n_dims(x)
 

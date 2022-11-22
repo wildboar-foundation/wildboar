@@ -224,10 +224,10 @@ def check_array(
     copy=False,
     ravel_1d=False,
     ensure_2d=True,
+    ensure_ts_array=False,
     allow_3d=False,
     allow_nd=False,
     force_all_finite=True,
-    force_ts_array=False,
     ensure_min_samples=1,
     ensure_min_timesteps=1,
     ensure_min_dims=1,
@@ -324,7 +324,7 @@ def check_array(
         accept_sparse=False,
         accept_large_sparse=False,
         dtype=dtype,
-        order=None if force_ts_array else None,
+        order=None if ensure_ts_array else None,
         copy=copy,
         force_all_finite=False,
         ensure_2d=ensure_2d,
@@ -401,10 +401,10 @@ def check_array(
         if force_all_finite and np.isposinf(array).any():
             raise ValueError(f"Input {padded_input_name}contains infinity.")
 
-    return _force_ts_array(array) if force_ts_array else array
+    return _ensure_ts_array(array) if ensure_ts_array else array
 
 
-def _force_ts_array(array):
+def _ensure_ts_array(array):
     """Force the array to (1) have ndim=3 (n_samples, n_dims, n_timesteps) and
     (2) have the final dimension contiguous in memory, and (3) have dtype=float.
 

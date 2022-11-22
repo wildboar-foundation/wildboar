@@ -11,7 +11,7 @@ from ..distance._distance cimport (
     SubsequenceDistanceMeasure,
     SubsequenceView,
 )
-from ..utils._data cimport Dataset
+from ..utils cimport TSArray
 from ..utils._rand cimport RAND_R_MAX, rand_int
 from ._feature cimport Feature, FeatureEngineer
 
@@ -28,8 +28,8 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
-    cdef Py_ssize_t reset(self, Dataset dataset) nogil:
-        self.distance_measure.reset(dataset)
+    cdef Py_ssize_t reset(self, TSArray X) nogil:
+        self.distance_measure.reset(X)
         return 1
 
     cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
@@ -45,13 +45,13 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
 
     cdef Py_ssize_t init_persistent_feature(
         self, 
-        Dataset dataset,
+        TSArray X,
         Feature *transient, 
         Feature *persistent
     ) nogil:
         cdef SubsequenceView *v = <SubsequenceView*> transient.feature
         cdef Subsequence *s = <Subsequence*> malloc(sizeof(Subsequence))
-        self.distance_measure.init_persistent(dataset, v, s)
+        self.distance_measure.init_persistent(X, v, s)
         persistent.dim = transient.dim
         persistent.feature = s
         return 1
@@ -59,50 +59,48 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     cdef double transient_feature_value(
         self,
         Feature *feature,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t sample
     ) nogil:
         return self.distance_measure.transient_distance(
-            <SubsequenceView*> feature.feature, dataset, sample
+            <SubsequenceView*> feature.feature, X, sample
         )
 
     cdef double persistent_feature_value(
         self,
         Feature *feature,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t sample
     ) nogil:
         return self.distance_measure.persistent_distance(
-            <Subsequence*> feature.feature, dataset, sample
+            <Subsequence*> feature.feature, X, sample
         )
 
     cdef Py_ssize_t transient_feature_fill(
         self, 
         Feature *feature, 
-        Dataset dataset, 
+        TSArray X, 
         Py_ssize_t sample,
-        Dataset td_out,
+        double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
-        cdef double* data = td_out.get_sample(sample, 0)
-        data[feature_id] = self.distance_measure.transient_distance(
-            <SubsequenceView*> feature.feature, dataset, sample
+        out[out_sample, feature_id] = self.distance_measure.transient_distance(
+            <SubsequenceView*> feature.feature, X, sample
         )
         return 0
 
     cdef Py_ssize_t persistent_feature_fill(
         self, 
         Feature *feature, 
-        Dataset dataset, 
+        TSArray X, 
         Py_ssize_t sample,
-        Dataset td_out,
+        double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
-        cdef double* data = td_out.get_sample(sample, 0)
-        data[feature_id] = self.distance_measure.persistent_distance(
-            <Subsequence*> feature.feature, dataset, sample
+        out[out_sample, feature_id] = self.distance_measure.persistent_distance(
+            <Subsequence*> feature.feature, X, sample
         )
         return 0
 
@@ -127,13 +125,13 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
         super().__init__(distance_measure, min_shapelet_size, max_shapelet_size)
         self.n_shapelets = n_shapelets
 
-    cdef Py_ssize_t get_n_features(self, Dataset dataset) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
         return self.n_shapelets
 
     cdef Py_ssize_t next_feature(
         self,
         Py_ssize_t feature_id,
-        Dataset dataset, 
+        TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
@@ -151,16 +149,16 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
         shapelet_length = rand_int(
             self.min_shapelet_size, self.max_shapelet_size, random_seed)
         shapelet_start = rand_int(
-            0, dataset.n_timestep - shapelet_length, random_seed)
+            0, X.shape[2] - shapelet_length, random_seed)
         shapelet_index = samples[rand_int(0, n_samples, random_seed)]
-        if dataset.n_dims > 1:
-            shapelet_dim = rand_int(0, dataset.n_dims, random_seed)
+        if X.shape[1] > 1:
+            shapelet_dim = rand_int(0, X.shape[1], random_seed)
         else:
             shapelet_dim = 0
 
         transient.dim = shapelet_dim
         self.distance_measure.init_transient(
-            dataset,
+            X,
             v,
             shapelet_index,
             shapelet_start,

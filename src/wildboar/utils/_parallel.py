@@ -1,47 +1,7 @@
-# cython: language_level=3
-
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-from abc import ABCMeta, abstractmethod
-from copy import deepcopy
-
-import numpy as np
 from joblib import Parallel, delayed, effective_n_jobs
-
-
-cdef class ForeachSample:
-
-    def __cinit__(self, Dataset x, *args, **kwargs):
-        self.x_in = x
-    
-    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
-        cdef Py_ssize_t i, dim
-        with nogil:
-            for i in range(offset, offset + batch_size):
-                self.work(i)
-
-    cdef void work(self, Py_ssize_t sample) nogil:
-        pass
-
-    @property
-    def n_work(self):
-        return self.x_in.n_samples
-
-
-cdef class MapSample(ForeachSample):
-
-    def __cinit__(self, Dataset x, double[:, :] result, *args, **kwargs):
-        self.result = result
-
-    cdef void work(self, Py_ssize_t sample) nogil:
-        cdef Py_ssize_t dim
-        cdef double v
-        for dim in range(self.x_in.n_dims):
-            self.result[sample, dim] = self.map(self.x_in.get_sample(sample, dim))
-
-    cdef double map(self, double *sample) nogil:
-        pass
 
 
 def partition_n_jobs(n_jobs, n):

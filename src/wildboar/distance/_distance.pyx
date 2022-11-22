@@ -14,8 +14,7 @@ from ..utils cimport _stats
 
 from copy import deepcopy
 
-
-from ..utils._data cimport Dataset
+from ..utils cimport TSArray
 
 from ..utils._parallel import run_in_parallel
 from ..utils.validation import check_array
@@ -23,7 +22,7 @@ from ..utils.validation import check_array
 
 cdef double EPSILON = 1e-13
 
-cdef int _ts_view_update_statistics(SubsequenceView *v, double* sample) nogil:
+cdef int _ts_view_update_statistics(SubsequenceView *v, const double* sample) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef double ex = 0
     cdef double ex2 = 0
@@ -44,12 +43,12 @@ cdef int _ts_view_update_statistics(SubsequenceView *v, double* sample) nogil:
 
 cdef class SubsequenceDistanceMeasure:
 
-    cdef int reset(self, Dataset dataset) nogil:
+    cdef int reset(self, TSArray X) nogil:
         pass
 
     cdef int init_transient(
         self,
-        Dataset td,
+        TSArray X,
         SubsequenceView *v,
         Py_ssize_t index,
         Py_ssize_t start,
@@ -66,10 +65,7 @@ cdef class SubsequenceDistanceMeasure:
         return 0
 
     cdef int init_persistent(
-        self,
-        Dataset dataset,
-        SubsequenceView* v,
-        Subsequence* s,
+        self, TSArray X, SubsequenceView* v, Subsequence* s
     ) nogil:
         s.dim = v.dim
         s.length = v.length
@@ -82,7 +78,7 @@ cdef class SubsequenceDistanceMeasure:
         if s.data == NULL:
             return -1
 
-        cdef double *sample = dataset.get_sample(v.index, v.dim) + v.start
+        cdef const double *sample = &X[v.index, v.dim, v.start]
         cdef Py_ssize_t i
         for i in range(v.length):
             s.data[i] = sample[i]
@@ -97,11 +93,7 @@ cdef class SubsequenceDistanceMeasure:
             v.data = NULL
         return 0
 
-    cdef int from_array(
-        self,
-        Subsequence *v,
-        object obj,
-    ):
+    cdef int from_array(self, Subsequence *v, object obj):
         dim, arr = obj
         v.dim = dim
         v.length = arr.shape[0]
@@ -117,10 +109,7 @@ cdef class SubsequenceDistanceMeasure:
             v.data[i] = arr[i]
         return 0 
 
-    cdef object to_array(
-        self, 
-        Subsequence *s
-    ):
+    cdef object to_array(self, Subsequence *s):
         cdef Py_ssize_t j
         arr = np.empty(s.length, dtype=float)
         for j in range(s.length):
@@ -130,48 +119,48 @@ cdef class SubsequenceDistanceMeasure:
 
     cdef double transient_distance(
         self,
-        SubsequenceView *s,
-        Dataset dataset,
+        SubsequenceView *v,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
         return self._distance(
-            dataset.get_sample(s.index, s.dim) + s.start,
-            s.length,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[v.index, v.dim, v.start],
+            v.length,
+            &X[index, v.dim, 0],
+            X.shape[0],
             return_index,
         )
 
     cdef double persistent_distance(
         self,
-        Subsequence *s,
-        Dataset dataset,
+        Subsequence *v,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
         return self._distance(
-            s.data,
-            s.length,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            v.data,
+            v.length,
+            &X[index, v.dim, 0],
+            X.shape[0],
             return_index,
         )
 
     cdef Py_ssize_t transient_matches(
         self,
         SubsequenceView *v,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
     ) nogil:
         return self._matches(
-            dataset.get_sample(v.index, v.dim) + v.start,
+            &X[v.index, v.dim, v.start],
             v.length,
-            dataset.get_sample(index, v.dim),
-            dataset.n_timestep,
+            &X[index, v.dim, 0],
+            X.shape[0],
             threshold,
             distances,
             indicies,
@@ -180,7 +169,7 @@ cdef class SubsequenceDistanceMeasure:
     cdef Py_ssize_t persistent_matches(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -189,8 +178,8 @@ cdef class SubsequenceDistanceMeasure:
         return self._matches(
             s.data,
             s.length,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[0],
             threshold,
             distances,
             indicies,
@@ -198,9 +187,9 @@ cdef class SubsequenceDistanceMeasure:
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -208,9 +197,9 @@ cdef class SubsequenceDistanceMeasure:
 
     cdef Py_ssize_t _matches(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         double threshold,
         double **distances,
@@ -223,7 +212,7 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef int init_transient(
         self,
-        Dataset dataset,
+        TSArray X,
         SubsequenceView *v,
         Py_ssize_t index,
         Py_ssize_t start,
@@ -231,11 +220,11 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         Py_ssize_t dim,
     ) nogil:
         cdef int err = SubsequenceDistanceMeasure.init_transient(
-            self, dataset, v, index, start, length, dim
+            self, X, v, index, start, length, dim
         )
         if err < 0:
             return err
-        _ts_view_update_statistics(v, dataset.get_sample(v.index, v.dim) + v.start)
+        _ts_view_update_statistics(v, &X[v.index, v.dim, v.start])
 
     cdef int from_array(
         self,
@@ -256,29 +245,29 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 cdef class DistanceMeasure:
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
+    cdef int reset(self, TSArray x, TSArray y) nogil:
         return 0
 
     cdef double distance(
         self,
-        Dataset x,
+        TSArray x,
         Py_ssize_t x_index,
-        Dataset y,
+        TSArray y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil:
         return self._distance(
-            x.get_sample(x_index, dim),
-            x.n_timestep,
-            y.get_sample(y_index, dim),
-            y.n_timestep,
+            &x[x_index, dim, 0],
+            x.shape[2],
+            &y[y_index, dim, 0],
+            y.shape[2],
         )
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         return NAN
@@ -311,7 +300,7 @@ cdef object _new_distance_array(
 
 cdef class _PairwiseSubsequenceDistance:
 
-    cdef Dataset dataset
+    cdef TSArray X
     cdef Py_ssize_t[:, :] min_indices
     cdef double[:, :] distances,
     cdef Subsequence **shapelets
@@ -322,10 +311,10 @@ cdef class _PairwiseSubsequenceDistance:
         self, 
         double[:, :] distances,
         Py_ssize_t[:, :] min_indices,
-        Dataset dataset, 
+        TSArray X, 
         SubsequenceDistanceMeasure distance_measure
     ):
-        self.dataset = dataset
+        self.X = X
         self.distances = distances
         self.min_indices = min_indices
         self.distance_measure = distance_measure
@@ -352,7 +341,7 @@ cdef class _PairwiseSubsequenceDistance:
 
     @property
     def n_work(self):
-        return self.dataset.n_samples
+        return self.X.shape[0]
 
     def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
         cdef Py_ssize_t i, j, min_index
@@ -360,12 +349,12 @@ cdef class _PairwiseSubsequenceDistance:
         cdef double distance
         cdef SubsequenceDistanceMeasure distance_measure = deepcopy(self.distance_measure)
         with nogil:
-            distance_measure.reset(self.dataset)
+            distance_measure.reset(self.X)
             for i in range(offset, offset + batch_size):
                 for j in range(self.n_shapelets):
                     s = self.shapelets[j]
                     distance = distance_measure.persistent_distance(
-                        s, self.dataset, i, &min_index
+                        s, self.X, i, &min_index
                     )
                     self.distances[i, j] = distance
                     self.min_indices[i, j] = min_index
@@ -373,21 +362,21 @@ cdef class _PairwiseSubsequenceDistance:
 
 def _pairwise_subsequence_distance(
     list shapelets, 
-    object x, 
+    TSArray x, 
     int dim, 
     SubsequenceDistanceMeasure distance_measure,
     n_jobs,
 ):
-    dataset = Dataset(x)
-    distances = np.empty((dataset.n_samples, len(shapelets)), dtype=np.double)
-    min_indicies = np.empty((dataset.n_samples, len(shapelets)), dtype=np.intp)
+    n_samples = x.shape[0]
+    distances = np.empty((n_samples, len(shapelets)), dtype=np.double)
+    min_indicies = np.empty((n_samples, len(shapelets)), dtype=np.intp)
     subsequence_distance = _PairwiseSubsequenceDistance(
         distances,
         min_indicies,
-        dataset,
+        x,
         distance_measure,
     )
-    distance_measure.reset(dataset)
+    distance_measure.reset(x) # TODO: Move to _PairwiseSubsequenceDistance
     subsequence_distance.set_shapelets(shapelets, dim)
     run_in_parallel(subsequence_distance, n_jobs=n_jobs, require="sharedmem")
     return distances, min_indicies
@@ -395,40 +384,38 @@ def _pairwise_subsequence_distance(
 
 def _paired_subsequence_distance(
     list shapelets,
-    object x,
+    TSArray x,
     int dim,
     SubsequenceDistanceMeasure distance_measure
 ):
-    cdef Dataset dataset = Dataset(x)
+    cdef Py_ssize_t n_samples = x.shape[0]
     cdef Py_ssize_t i, min_index
     cdef double dist
     cdef Subsequence subsequence
-    distances = np.empty(dataset.n_samples, dtype=np.double)
-    min_indices = np.empty(dataset.n_samples, dtype=np.intp)
+    cdef double[:] distances = np.empty(n_samples, dtype=np.double)
+    cdef Py_ssize_t[:] min_indices = np.empty(n_samples, dtype=np.intp)
 
-    cdef double[:] distances_view = distances
-    cdef Py_ssize_t[:] min_indices_view = min_indices
-    distance_measure.reset(dataset)
-    for i in range(dataset.n_samples):
+    distance_measure.reset(x)
+    for i in range(n_samples):
         distance_measure.from_array(&subsequence, (dim, shapelets[i]))
         with nogil:
-            dist = distance_measure.persistent_distance(&subsequence, dataset, i, &min_index)
+            dist = distance_measure.persistent_distance(&subsequence, x, i, &min_index)
             distance_measure.free_persistent(&subsequence)
-            distances_view[i] = dist
-            min_indices_view[i] = min_index
+            distances[i] = dist
+            min_indices[i] = min_index
 
-    return distances, min_indices
+    return distances.base, min_indices.base
 
 
 def _subsequence_match(
     object y,
-    object x,
+    TSArray x,
     double threshold,
     int dim,
     SubsequenceDistanceMeasure distance_measure,
     n_jobs,
 ):
-    cdef Dataset dataset = Dataset(x)
+    cdef Py_ssize_t n_samples = x.shape[0]
     cdef double *distances 
     cdef Py_ssize_t *indicies
     cdef Py_ssize_t i, n_matches
@@ -437,12 +424,12 @@ def _subsequence_match(
     cdef list indicies_list = []
 
     cdef Subsequence subsequence
-    distance_measure.reset(dataset)
+    distance_measure.reset(x)
     distance_measure.from_array(&subsequence, (dim, y))
-    for i in range(dataset.n_samples):
+    for i in range(x.shape[0]):
         n_matches = distance_measure.persistent_matches(
             &subsequence,
-            dataset,
+            x,
             i,
             threshold,
             &distances,
@@ -458,13 +445,13 @@ def _subsequence_match(
 
 def _paired_subsequence_match(
     list y,
-    object x,
+    TSArray x,
     double threshold,
     int dim,
     SubsequenceDistanceMeasure distance_measure,
     n_jobs,
 ):
-    cdef Dataset dataset = Dataset(x)
+    cdef Py_ssize_t n_samples = x.shape[0]
     cdef double *distances 
     cdef Py_ssize_t *indicies
     cdef Py_ssize_t i, n_matches
@@ -473,12 +460,12 @@ def _paired_subsequence_match(
     cdef list indicies_list = []
 
     cdef Subsequence subsequence
-    distance_measure.reset(dataset)
-    for i in range(dataset.n_samples):
+    distance_measure.reset(x)
+    for i in range(n_samples):
         distance_measure.from_array(&subsequence, (dim, y[i]))
         n_matches = distance_measure.persistent_matches(
             &subsequence,
-            dataset,
+            x,
             i,
             threshold,
             &distances,
@@ -494,69 +481,67 @@ def _paired_subsequence_match(
 
 
 def _pairwise_distance(
-    object y,
-    object x,
+    TSArray y,
+    TSArray x,
     Py_ssize_t dim,
     DistanceMeasure distance_measure,
     n_jobs,
 ):
-    cdef Dataset y_dataset = Dataset(y)
-    cdef Dataset x_dataset = Dataset(x)
-    cdef object out = np.empty((y_dataset.n_samples, x_dataset.n_samples), dtype=np.double)
-    cdef double[:, :] out_view = out
+    cdef:
+        Py_ssize_t y_samples = y.shape[0]
+        Py_ssize_t x_samples = x.shape[0]
+
+    cdef double[:, :] out = np.empty((y_samples, x_samples), dtype=float)
     cdef Py_ssize_t i, j
     cdef double dist
 
     with nogil:
-        distance_measure.reset(y_dataset, x_dataset)
-        for i in range(y_dataset.n_samples):
-            for j in range(x_dataset.n_samples):
-                dist = distance_measure.distance(y_dataset, i, x_dataset, j, dim)
-                out_view[i, j] = dist
+        distance_measure.reset(y, x)
+        for i in range(y_samples):
+            for j in range(x_samples):
+                dist = distance_measure.distance(y, i, x, j, dim)
+                out[i, j] = dist
 
-    return out
+    return out.base
 
 
 def _singleton_pairwise_distance(
-    object x, 
+    TSArray x, 
     Py_ssize_t dim, 
     DistanceMeasure distance_measure, 
     n_jobs
 ):
-    cdef Dataset dataset = Dataset(x)
-    cdef object out = np.zeros((dataset.n_samples, dataset.n_samples), dtype=np.double)
-    cdef double[:, :] out_view = out
+    cdef Py_ssize_t n_samples = x.shape[0]
+    cdef double[:, :] out = np.zeros((n_samples, n_samples), dtype=float)
     cdef Py_ssize_t i, j
     cdef double dist
 
     with nogil:
-        distance_measure.reset(dataset, dataset)
-        for i in range(dataset.n_samples):
-            for j in range(i + 1, dataset.n_samples):
-                dist = distance_measure.distance(dataset, i, dataset, j, dim)
-                out_view[i, j] = dist
-                out_view[j, i] = dist
+        distance_measure.reset(x, x)
+        for i in range(n_samples):
+            for j in range(i + 1, n_samples):
+                dist = distance_measure.distance(x, i, x, j, dim)
+                out[i, j] = dist
+                out[j, i] = dist
 
-    return out
+    return out.base
 
 
 def _paired_distance(
-    object y,
-    object x,
+    TSArray y,
+    TSArray x,
     Py_ssize_t dim,
     DistanceMeasure distance_measure,
     n_jobs,
 ):
-    cdef Dataset y_dataset = Dataset(y)
-    cdef Dataset x_dataset = Dataset(x)
-    cdef object out = np.empty(y_dataset.n_samples, dtype=np.double)
-    cdef double[:] out_view = out
+    cdef Py_ssize_t n_samples = y.shape[0]
+    cdef double[:] out = np.empty(n_samples, dtype=np.double)
     cdef Py_ssize_t i
 
     with nogil:
-        distance_measure.reset(y_dataset, x_dataset)
-        for i in range(y_dataset.n_samples):
-            dist = distance_measure.distance(y_dataset, i, x_dataset, i, dim)
-            out_view[i] = dist
+        distance_measure.reset(y, x)
+        for i in range(n_samples):
+            dist = distance_measure.distance(y, i, x, i, dim)
+            out[i] = dist
 
-    return out
+    return out.base

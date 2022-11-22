@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-double _covariance(double *x, double *y, int length) {
+double _covariance(const double *x, const double *y, int length) {
     double sum_x = 0.0;
     double sum_y = 0.0;
     double sum_xy = 0.0;
@@ -37,7 +37,7 @@ double _covariance(double *x, double *y, int length) {
     return sum_xy / (k - 1);
 }
 
-double _mean(double *x, int length) {
+double _mean(const double *x, int length) {
     double v = 0;
     for (int i = 0; i < length; i++) {
         v += x[i];
@@ -81,7 +81,7 @@ double _quantile(double *x_sorted, int length, double quant) {
     return value;
 }
 
-void histcount(double *x, int size, int n_bins, int *bin_count, double *bin_edges) {
+void histcount(const double *x, int size, int n_bins, int *bin_count, double *bin_edges) {
     double min_val = INFINITY;
     double max_val = -INFINITY;
     memset(bin_count, 0, sizeof(int) * n_bins);
@@ -112,7 +112,7 @@ void histcount(double *x, int size, int n_bins, int *bin_count, double *bin_edge
     }
 }
 
-double histogram_mode(double *x, int length, int *hist_counts, double *bin_edges,
+double histogram_mode(const double *x, int length, int *hist_counts, double *bin_edges,
                       int n_bins) {
     histcount(x, length, n_bins, hist_counts, bin_edges);
 
@@ -133,7 +133,7 @@ double histogram_mode(double *x, int length, int *hist_counts, double *bin_edges
     return out;
 }
 
-void histbinassign(double *x, const int length, double *bin_edges, int n_edges,
+void histbinassign(const double *x, const int length, double *bin_edges, int n_edges,
                    int *bin) {
     for (int i = 0; i < length; i++) {
         bin[i] = 0;
@@ -145,7 +145,7 @@ void histbinassign(double *x, const int length, double *bin_edges, int n_edges,
         }
     }
 }
-void histcount_edges(double *x, int length, double *bin_edges, int n_edges,
+void histcount_edges(const double *x, int length, double *bin_edges, int n_edges,
                      int *histcounts) {
     memset(histcounts, 0, sizeof(int) * n_edges);
     for (int i = 0; i < length; i++) {
@@ -158,7 +158,7 @@ void histcount_edges(double *x, int length, double *bin_edges, int n_edges,
     }
 }
 
-double histogram_ami_even(double *x, int length, int tau, int n_bins) {
+double histogram_ami_even(const double *x, int length, int tau, int n_bins) {
     double *x_lag = malloc((length - tau) * sizeof(double));
     double *x_pad = malloc((length - tau) * sizeof(double));
 
@@ -256,7 +256,7 @@ double histogram_ami_even(double *x, int length, int tau, int n_bins) {
     return ami;
 }
 
-int _is_constant(double *x, int length) {
+int _is_constant(const double *x, int length) {
     for (int i = 0; i < length; i++) {
         if (x[i] != x[0]) {
             return 0;
@@ -265,7 +265,7 @@ int _is_constant(double *x, int length) {
     return 1;
 }
 
-int _co_firstzero(double *ac, const int length, const int max_tau) {
+int _co_firstzero(const double *ac, const int length, const int max_tau) {
     int ind = 0;
     while (ac[ind] > 0 && ind < max_tau) {
         ind += 1;
@@ -273,7 +273,7 @@ int _co_firstzero(double *ac, const int length, const int max_tau) {
     return ind;
 }
 
-void _sb_coarsegrain(double *x, int length, const int num_groups, int *labels) {
+void _sb_coarsegrain(const double *x, int length, const int num_groups, int *labels) {
     double *x_sorted = malloc(length * sizeof(double));
     memcpy(x_sorted, x, length * sizeof(double));
     _sort_double(x_sorted, length);
@@ -300,7 +300,7 @@ void _sb_coarsegrain(double *x, int length, const int num_groups, int *labels) {
     free(quantile_threshold);
 }
 
-double transition_matrix_ac_sumdiagcov(double *x, double *ac, int length,
+double transition_matrix_ac_sumdiagcov(const double *x, double *ac, int length,
                                        int n_groups) {
     if (_is_constant(x, length)) {
         return NAN;
@@ -1111,7 +1111,7 @@ void _cumsum(double *x, int size, double *out) {
     }
 }
 
-double summaries_welch_rect(double *x, int length, int what, double *S, double *f,
+double summaries_welch_rect(const double *x, int length, int what, double *S, double *f,
                             int n_welch) {
     // angualr frequency and spectrum on that
     double *w = malloc(n_welch * sizeof(double));
@@ -1180,7 +1180,7 @@ void _subset(int *x, int *y, int start, int end) {
     return;
 }
 
-double motif_three_quantile_hh(double *x, int size) {
+double motif_three_quantile_hh(const double *x, int size) {
     int tmp_idx, r_idx;
     int dynamic_idx;
     int alphabet_size = 3;
@@ -1338,7 +1338,7 @@ double _norm(double *x, int length) {
     return sqrt(out);
 }
 
-double fluct_anal_2_50_1_logi_prop_r1(double *y, int size, int lag, int how) {
+double fluct_anal_2_50_1_logi_prop_r1(const double *y, int size, int lag, int how) {
     // generate log spaced tau vector
     double linLow = log(5);
     double linHigh = log(size / 2);

@@ -4,9 +4,9 @@
 # License: BSD 3 clause
 
 cdef void _mass_distance(
-    double *x,
+    const double *x,
     Py_ssize_t x_length,
-    double *y,
+    const double *y,
     Py_ssize_t y_length,
     double mean,
     double std,

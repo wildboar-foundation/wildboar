@@ -24,31 +24,31 @@ cdef double inc_stats_n_samples(IncStats *inc_stats) nogil
 cdef double inc_stats_sum(IncStats *inc_stats) nogil
 
 cdef void cumulative_mean_std(
-    double *x,
+    const double *x,
     Py_ssize_t x_length, 
     Py_ssize_t y_length, 
     double *x_mean, 
     double *x_std
 ) nogil
 
-cdef double find_min(double *x, Py_ssize_t n, Py_ssize_t *min_index=*) nogil
+cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=*) nogil
 
-cdef double mean(double *x, Py_ssize_t length) nogil
+cdef double mean(const double *x, Py_ssize_t length) nogil
 
-cdef double variance(double *x, Py_ssize_t length) nogil
+cdef double variance(const double *x, Py_ssize_t length) nogil
 
-cdef double slope(double *x, Py_ssize_t length) nogil
+cdef double slope(const double *x, Py_ssize_t length) nogil
 
-cdef double covariance(double *x, double *y, Py_ssize_t length) nogil
+cdef double covariance(const double *x, const double *y, Py_ssize_t length) nogil
 
-cdef void auto_correlation(double *x, Py_ssize_t n, double *out) nogil
+cdef void auto_correlation(const double *x, Py_ssize_t n, double *out) nogil
 
-cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil
+cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex *fft) nogil
 
 cdef Py_ssize_t next_power_of_2(Py_ssize_t n) nogil
 
 cdef int welch(
-    double *x, 
+    const double *x, 
     Py_ssize_t size, 
     int NFFT, 
     double Fs, 
@@ -60,7 +60,7 @@ cdef int welch(
 
 
 cdef void fast_mean_std(
-    double* data,
+    const double* data,
     Py_ssize_t length,
     double *mean,
     double* std,

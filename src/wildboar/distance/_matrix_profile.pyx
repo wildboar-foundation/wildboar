@@ -9,7 +9,7 @@ import numpy as np
 from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
-from ..utils._data cimport Dataset
+from ..utils cimport TSArray
 from ..utils._rand cimport RAND_R_MAX, shuffle
 from ..utils._stats cimport (
     IncStats,
@@ -26,9 +26,9 @@ from ._mass cimport _mass_distance
 cdef double EPSILON = 1e-13
 
 cdef void _matrix_profile_stmp(
-    double *x,
+    const double *x,
     Py_ssize_t x_length,
-    double *y,
+    const double *y,
     Py_ssize_t y_length,
     Py_ssize_t window,
     Py_ssize_t exclude,
@@ -130,33 +130,31 @@ cdef void _matrix_profile_stmp(
 
 
 def _paired_matrix_profile(
-    object x,
-    object y,
+    TSArray X,
+    TSArray Y,
     Py_ssize_t w,
     Py_ssize_t dim, 
     Py_ssize_t exclude, 
     n_jobs,
 ):
-    cdef Dataset x_dataset = Dataset(x)
-    cdef Dataset y_dataset = Dataset(y)
-    cdef Py_ssize_t profile_length = y_dataset.n_timestep - w + 1
+    cdef Py_ssize_t profile_length = Y.shape[2] - w + 1
     cdef Py_ssize_t i
-    cdef double *mean_x = <double*> malloc(sizeof(double) * x_dataset.n_timestep)
-    cdef double *std_x = <double*> malloc(sizeof(double) * x_dataset.n_timestep)
-    cdef double *dist_buffer = <double*> malloc(sizeof(double) * x_dataset.n_timestep)
-    cdef complex *x_buffer = <complex*> malloc(sizeof(complex) * x_dataset.n_timestep)
-    cdef complex *y_buffer = <complex*> malloc(sizeof(complex) * x_dataset.n_timestep)
+    cdef double *mean_x = <double*> malloc(sizeof(double) * X.shape[2])
+    cdef double *std_x = <double*> malloc(sizeof(double) * X.shape[2])
+    cdef double *dist_buffer = <double*> malloc(sizeof(double) * X.shape[2])
+    cdef complex *x_buffer = <complex*> malloc(sizeof(complex) * X.shape[2])
+    cdef complex *y_buffer = <complex*> malloc(sizeof(complex) * X.shape[2])
     
-    cdef double[:, :] mp = np.empty((x_dataset.n_samples, profile_length), dtype=np.double)
-    cdef Py_ssize_t[:, :] mpi = np.empty((x_dataset.n_samples, profile_length), dtype=np.intp)
+    cdef double[:, :] mp = np.empty((X.shape[0], profile_length), dtype=np.double)
+    cdef Py_ssize_t[:, :] mpi = np.empty((X.shape[0], profile_length), dtype=np.intp)
     
     with nogil:
-        for i in range(x_dataset.n_samples):
+        for i in range(X.shape[0]):
             _matrix_profile_stmp(
-                x_dataset.get_sample(i, dim),
-                x_dataset.n_timestep,
-                y_dataset.get_sample(i, dim),
-                y_dataset.n_timestep,
+                &X[i, dim, 0],
+                X.shape[2],
+                &Y[i, dim, 0],
+                Y.shape[2],
                 w,
                 exclude,
                 mean_x, 
@@ -173,24 +171,3 @@ def _paired_matrix_profile(
     free(x_buffer)
     free(y_buffer)
     return mp.base, mpi.base
-
-
-def moving_mean_std(object x, Py_ssize_t window):
-    cdef Dataset dataset = Dataset(x)
-    cdef double[:, :] means = np.empty(
-        (dataset.n_samples, dataset.n_timestep - window + 1), dtype=np.double
-    )
-    cdef double[:, :] std = np.empty(
-        (dataset.n_samples, dataset.n_timestep - window + 1), dtype=np.double
-    )
-    cdef Py_ssize_t i
-    for i in range(dataset.n_samples):
-        cumulative_mean_std(
-            dataset.get_sample(i, 0), 
-            dataset.n_timestep, 
-            window, 
-            &means[i, 0],
-            &std[i, 0]
-        )
-
-    return means, std

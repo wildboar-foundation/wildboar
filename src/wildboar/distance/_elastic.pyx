@@ -19,7 +19,7 @@ from libc.math cimport INFINITY, exp, fabs, floor, sqrt
 from libc.stdlib cimport free, labs, malloc
 from libc.string cimport memcpy
 
-from ..utils._data cimport Dataset
+from ..utils cimport TSArray
 from ..utils._misc cimport realloc_array
 from ..utils._stats cimport fast_mean_std
 from ._distance cimport (
@@ -99,7 +99,7 @@ cdef Py_ssize_t deque_size(Deque *c) nogil:
 
 
 cdef void find_min_max(
-    double *T,
+    const double *T,
     Py_ssize_t length,
     Py_ssize_t r,
     double *lower,
@@ -159,10 +159,10 @@ cdef inline double dist(double x, double y) nogil:
 
 
 cdef double constant_lower_bound(
-    double *S,
+    const double *S,
     double s_mean,
     double s_std,
-    double *T,
+    const double *T,
     double t_mean,
     double t_std,
     Py_ssize_t length,
@@ -228,7 +228,7 @@ cdef double constant_lower_bound(
 
 
 cdef double cumulative_bound(
-    double *T,
+    const double *T,
     Py_ssize_t length,
     double mean,
     double std,
@@ -263,7 +263,7 @@ cdef double cumulative_bound(
 
 
 cdef inline double inner_scaled_dtw(
-    double *S,
+    const double *S,
     int s_length,
     double s_mean,
     double s_std,
@@ -347,11 +347,11 @@ cdef inline double inner_scaled_dtw(
 
 
 cdef double scaled_dtw_distance(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
     double s_mean,
     double s_std,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t r,
     double *X_buffer,
@@ -479,11 +479,11 @@ cdef double scaled_dtw_distance(
 
 
 cdef Py_ssize_t scaled_dtw_matches(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
     double s_mean,
     double s_std,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t r,
     double *X_buffer,
@@ -623,9 +623,9 @@ cdef Py_ssize_t scaled_dtw_matches(
 
 
 cdef double inner_dtw_subsequence(
-    double *S,
+    const double *S,
     int s_length,
-    double *T,
+    const double *T,
     int r,
     double *cost,
     double *cost_prev,
@@ -679,9 +679,9 @@ cdef double inner_dtw_subsequence(
 
 
 cdef double dtw_subsequence_distance(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t r,
     double *cost,
@@ -711,9 +711,9 @@ cdef double dtw_subsequence_distance(
 
 
 cdef Py_ssize_t dtw_subsequence_matches(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t r,
     double *cost,
@@ -755,9 +755,9 @@ cdef Py_ssize_t dtw_subsequence_matches(
 
 
 cdef double dtw_distance(
-    double *X,
+    const double *X,
     Py_ssize_t x_length,
-    double *Y,
+    const double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
     double *cost,
@@ -902,7 +902,7 @@ def _dtw_alignment(
     return out.base
 
 
-def _dtw_envelop(double[::1] x, Py_ssize_t r):
+def _dtw_envelop(const double[::1] x, Py_ssize_t r):
     if not 0 < r <= x.shape[0]:
         raise ValueError("invalid r")
 
@@ -921,7 +921,7 @@ def _dtw_envelop(double[::1] x, Py_ssize_t r):
     return lower.base, upper.base
 
 
-def _dtw_lb_keogh(double[::1] x, double[::1] lower, double[::1] upper, Py_ssize_t r):
+def _dtw_lb_keogh(const double[::1] x, double[::1] lower, double[::1] upper, Py_ssize_t r):
     if not 0 < r <= x.shape[0]:
         raise ValueError("invalid r")
 
@@ -946,9 +946,9 @@ def _dtw_lb_keogh(double[::1] x, double[::1] lower, double[::1] upper, Py_ssize_
 
 
 cdef double lcss_distance(
-    double *X,
+    const double *X,
     Py_ssize_t x_length,
-    double *Y,
+    const double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
     double threshold,
@@ -1003,9 +1003,9 @@ cdef double lcss_distance(
 
 
 cdef double erp_distance(
-    double *X,
+    const double *X,
     Py_ssize_t x_length,
-    double *Y,
+    const double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
     double g,
@@ -1071,9 +1071,9 @@ cdef double erp_distance(
 
 
 cdef double edr_distance(
-    double *X,
+    const double *X,
     Py_ssize_t x_length,
-    double *Y,
+    const double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
     double threshold,
@@ -1134,9 +1134,9 @@ cdef inline double _msm_cost(float x, float y, float z, float c) nogil:
 #   The Move-Split-Merge Metric for Time Series. 
 #   IEEE Transactions on Knowledge and Data Engineering, 25(6), 1425-1438.
 cdef double msm_distance(
-    double *X,
+    const double *X,
     Py_ssize_t x_length,
-    double *Y,
+    const double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
     double c,
@@ -1184,9 +1184,9 @@ cdef double msm_distance(
 
 
 cdef double twe_distance(
-    double *X,
+    const double *X,
     Py_ssize_t x_length,
-    double *Y,
+    const double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
     double penalty,
@@ -1346,9 +1346,9 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     def __reduce__(self):
         return self.__class__, (self.r, )
 
-    cdef int reset(self, Dataset dataset) nogil:
+    cdef int reset(self, TSArray X) nogil:
         self._free()
-        cdef Py_ssize_t n_timestep = dataset.n_timestep
+        cdef Py_ssize_t n_timestep = X.shape[2]
         self.cost_size = _compute_warp_width(n_timestep, self.r) * 2 + 1
         self.X_buffer = <double*> malloc(sizeof(double) * n_timestep * 2)
         self.lower = <double*> malloc(sizeof(double) * n_timestep)
@@ -1376,15 +1376,15 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     cdef double transient_distance(
         self,
         SubsequenceView *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.lower,
             self.upper,
@@ -1393,12 +1393,12 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         )
 
         return scaled_dtw_distance(
-            dataset.get_sample(s.index, s.dim) + s.start,
+            &X[s.index, s.dim, s.start],
             s.length,
             s.mean,
             s.std if s.std != 0.0 else 1.0,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.X_buffer,
             self.cost,
@@ -1416,37 +1416,16 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     cdef double persistent_distance(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
-        cdef double *s_lower
-        cdef double *s_upper
-        cdef DtwExtra *extra
+        cdef DtwExtra *extra = <DtwExtra*> s.extra
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
-        if s.extra != NULL:
-            extra = <DtwExtra*> s.extra
-            s_lower = extra[0].lower
-            s_upper = extra[0].upper
-        else:
-            with gil: print("********* ERROR ***********")
-            s_lower = <double*> malloc(sizeof(double) * s.length)
-            s_upper = <double*> malloc(sizeof(double) * s.length)
-
-            find_min_max(
-                s.data,
-                s.length,
-                warp_width,
-                s_lower,
-                s_upper,
-                &self.dl,
-                &self.du,
-            )
-
         find_min_max(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.lower,
             self.upper,
@@ -1459,14 +1438,14 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
             s.length,
             s.mean,
             s.std if s.std != 0.0 else 1.0,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.X_buffer,
             self.cost,
             self.cost_prev,
-            s_lower,
-            s_upper,
+            extra[0].lower,
+            extra[0].upper,
             self.lower,
             self.upper,
             self.cb,
@@ -1474,9 +1453,6 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
             self.cb_2,
             return_index,
         )
-        if s.extra == NULL:
-            free(s_lower)
-            free(s_upper)
 
         return distance
 
@@ -1484,7 +1460,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     cdef Py_ssize_t transient_matches(
         self,
         SubsequenceView *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -1493,8 +1469,8 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.lower,
             self.upper,
@@ -1503,12 +1479,12 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         )
 
         return scaled_dtw_matches(
-            dataset.get_sample(s.index, s.dim) + s.start,
+            &X[s.index, s.dim, s.start],
             s.length,
             s.mean,
             s.std if s.std != 0.0 else 1.0,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.X_buffer,
             self.cost,
@@ -1528,7 +1504,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
     cdef Py_ssize_t persistent_matches(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -1540,8 +1516,8 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
         find_min_max(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.lower,
             self.upper,
@@ -1554,8 +1530,8 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
             s.length,
             s.mean,
             s.std if s.std != 0.0 else 1.0,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.X_buffer,
             self.cost,
@@ -1574,7 +1550,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
 
     cdef int init_transient(
         self,
-        Dataset dataset,
+        TSArray X,
         SubsequenceView *t,
         Py_ssize_t index,
         Py_ssize_t start,
@@ -1582,7 +1558,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         Py_ssize_t dim,
     ) nogil:
         cdef int err = ScaledSubsequenceDistanceMeasure.init_transient(
-            self, dataset, t, index, start, length, dim
+            self, X, t, index, start, length, dim
         )
         if err < 0:
             return err
@@ -1592,7 +1568,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         dtw_extra.upper = <double*> malloc(sizeof(double) * length)
         cdef Py_ssize_t warp_width = _compute_warp_width(length, self.r)
         find_min_max(
-            dataset.get_sample(index, dim) + start,
+            &X[index, dim, start],
             length,
             warp_width,
             dtw_extra.lower,
@@ -1629,13 +1605,11 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
 
     cdef int init_persistent(
         self,
-        Dataset dataset,
+        TSArray X,
         SubsequenceView* v,
         Subsequence* s,
     ) nogil:
-        cdef int err = ScaledSubsequenceDistanceMeasure.init_persistent(
-            self, dataset, v, s
-        )
+        cdef int err = ScaledSubsequenceDistanceMeasure.init_persistent(self, X, v, s)
         if err == -1:
             return -1
 
@@ -1681,9 +1655,9 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         self.cost_prev = NULL
         self.cost_size = 0
 
-    cdef int reset(self, Dataset dataset) nogil:
+    cdef int reset(self, TSArray X) nogil:
         self._free()
-        cdef Py_ssize_t n_timestep = dataset.n_timestep
+        cdef Py_ssize_t n_timestep = X.shape[2]
         self.cost_size = _compute_warp_width(n_timestep, self.r) * 2 + 1
         self.cost = <double*> malloc(sizeof(double) * self.cost_size)
         self.cost_prev = <double*> malloc(sizeof(double) * self.cost_size)
@@ -1707,7 +1681,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     cdef double persistent_distance(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -1716,8 +1690,8 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         return dtw_subsequence_distance(
             s.data,
             s.length,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.cost,
             self.cost_prev,
@@ -1727,16 +1701,16 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     cdef double transient_distance(
         self,
         SubsequenceView *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         return dtw_subsequence_distance(
-            dataset.get_sample(s.index, s.dim) + s.start,
+            &X[s.index, s.dim, s.start],
             s.length,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.cost,
             self.cost_prev,
@@ -1746,7 +1720,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     cdef Py_ssize_t transient_matches(
         self,
         SubsequenceView *v,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -1754,10 +1728,10 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     ) nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(v.length, self.r)
         return dtw_subsequence_matches(
-            dataset.get_sample(v.index, v.dim) + v.start,
+            &X[v.index, v.dim, v.start],
             v.length,
-            dataset.get_sample(index, v.dim),
-            dataset.n_timestep,
+            &X[index, v.dim, 0],
+            X.shape[2],
             warp_width,
             self.cost,
             self.cost_prev,
@@ -1769,7 +1743,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     cdef Py_ssize_t persistent_matches(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -1779,8 +1753,8 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         return dtw_subsequence_matches(
             s.data,
             s.length,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             warp_width,
             self.cost,
             self.cost_prev,
@@ -1818,18 +1792,18 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         cdef double dist = dtw_distance(
@@ -1849,7 +1823,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
         return True
 
 
-cdef void average_slope(double *q, Py_ssize_t len, double *d) nogil:
+cdef void average_slope(const double *q, Py_ssize_t len, double *d) nogil:
     cdef Py_ssize_t i, j
     j = 0
     for i in range(1, len - 1):
@@ -1877,16 +1851,16 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
             free(self.d_y)
             self.d_y = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
-        DtwDistanceMeasure.reset(self, x, y)
-        self.d_x = <double*> malloc(sizeof(double) * x.n_timestep - 2)
-        self.d_y = <double*> malloc(sizeof(double) * y.n_timestep - 2)
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
+        DtwDistanceMeasure.reset(self, Y, X)
+        self.d_x = <double*> malloc(sizeof(double) * X.shape[2] - 2) # TODO: shape <= 2?
+        self.d_y = <double*> malloc(sizeof(double) * Y.shape[2] - 2)
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len,
     ) nogil:
         average_slope(x, x_len, self.d_x)
@@ -1923,10 +1897,10 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
             free(self.weights)
             self.weights = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
-        DtwDistanceMeasure.reset(self, x, y)
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
+        DtwDistanceMeasure.reset(self, X, Y)
         cdef Py_ssize_t i
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
 
         self.weights = <double*> malloc(sizeof(double) * n_timestep)
         for i in range(n_timestep):
@@ -1934,9 +1908,9 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len,
     ) nogil:
         cdef double dist = dtw_distance(
@@ -1984,22 +1958,22 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
             free(self.weights)
             self.weights = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
-        DtwDistanceMeasure.reset(self, x, y)
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
+        DtwDistanceMeasure.reset(self, X, Y)
         cdef Py_ssize_t i
-        cdef Py_ssize_t n_timestep = max(x.n_timestep - 2, y.n_timestep - 2)
+        cdef Py_ssize_t n_timestep = max(X.shape[2] - 2, Y.shape[2] - 2)
 
-        self.d_x = <double*> malloc(sizeof(double) * x.n_timestep - 2)
-        self.d_y = <double*> malloc(sizeof(double) * y.n_timestep - 2)
+        self.d_x = <double*> malloc(sizeof(double) * Y.shape[2] - 2)
+        self.d_y = <double*> malloc(sizeof(double) * Y.shape[2] - 2)
         self.weights = <double*> malloc(sizeof(double) * n_timestep)
         for i in range(0, n_timestep):
             self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len,
     ) nogil:
         average_slope(x, x_len, self.d_x)
@@ -2048,18 +2022,18 @@ cdef class LcssDistanceMeasure(DistanceMeasure):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         cdef double dist = lcss_distance(
@@ -2101,10 +2075,10 @@ cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
             free(self.weights)
             self.weights = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
-        LcssDistanceMeasure.reset(self, x, y)
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
+        LcssDistanceMeasure.reset(self, X, Y)
         cdef Py_ssize_t i
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
 
         self.weights = <double*> malloc(sizeof(double) * n_timestep)
         for i in range(n_timestep):
@@ -2112,9 +2086,9 @@ cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len,
     ) nogil:
         cdef double dist = lcss_distance(
@@ -2174,20 +2148,20 @@ cdef class ErpDistanceMeasure(DistanceMeasure):
             free(self.gY)
             self.gY = NULL    
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
-        self.gX = <double*> malloc(sizeof(double) * x.n_timestep)
-        self.gY = <double*> malloc(sizeof(double) * y.n_timestep)
+        self.gX = <double*> malloc(sizeof(double) * X.shape[2])
+        self.gY = <double*> malloc(sizeof(double) * Y.shape[2])
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         cdef double dist = erp_distance(
@@ -2255,31 +2229,31 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             free(self.std_y)
             self.std_y = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
-        self.std_x = <double*> malloc(sizeof(double) * x.n_samples)
-        self.std_y = <double*> malloc(sizeof(double) * x.n_samples)
+        self.std_x = <double*> malloc(sizeof(double) * X.shape[0])
+        self.std_y = <double*> malloc(sizeof(double) * X.shape[0])
         
         cdef double mean, std
         cdef Py_ssize_t i
         if self.threshold == -INFINITY:
-            for i in range(x.n_samples):
-                fast_mean_std(x.get_sample(i, 0), x.n_timestep, &mean, &std)
+            for i in range(X.shape[0]):
+                fast_mean_std(&X[i, 0, 0], X.shape[2], &mean, &std)
                 self.std_x[i] = std
 
-            for i in range(y.n_samples):
-                fast_mean_std(y.get_sample(i, 0), y.n_timestep, &mean, &std)
+            for i in range(Y.shape[0]):
+                fast_mean_std(&Y[i, 0, 0], Y.shape[2], &mean, &std)
                 self.std_y[i] = std
 
     cdef double distance(
         self,
-        Dataset x,
+        TSArray X,
         Py_ssize_t x_index,
-        Dataset y,
+        TSArray Y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil:
@@ -2289,10 +2263,10 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             threshold = self.threshold
 
         return edr_distance(
-            x.get_sample(x_index, dim),
-            x.n_timestep,
-            y.get_sample(y_index, dim),
-            y.n_timestep,
+            &X[x_index, dim, 0],
+            X.shape[2],
+            &Y[y_index, dim, 0],
+            Y.shape[2],
             self.warp_width,
             threshold,
             self.cost,
@@ -2302,9 +2276,9 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len,
     ) nogil:
         cdef double mean, std_x, std_y, threshold
@@ -2369,19 +2343,19 @@ cdef class MsmDistanceMeasure(DistanceMeasure):
             free(self.cost_y)
             self.cost_y = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
-        self.cost_y = <double*> malloc(sizeof(double) * x.n_timestep)
+        self.cost_y = <double*> malloc(sizeof(double) * X.shape[2])
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         return msm_distance(
@@ -2448,18 +2422,18 @@ cdef class TweDistanceMeasure(DistanceMeasure):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, Dataset x, Dataset y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(x.n_timestep, y.n_timestep)
+        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         return twe_distance(

@@ -13,7 +13,7 @@ from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 
 from ..distance._distance cimport DistanceMeasure
-from ..utils._data cimport Dataset
+from ..utils cimport TSArray
 from ..utils._misc cimport CList, argsort, safe_realloc
 from ..utils._rand cimport (
     RAND_R_MAX,
@@ -141,7 +141,7 @@ cdef class Tree:
         Py_ssize_t branch,
         Py_ssize_t n_samples,
         double n_weighted_samples,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t *pivots,
         Py_ssize_t distance_measure,
         Py_ssize_t n_split,
@@ -153,21 +153,20 @@ cdef class Tree:
 
         cdef Pivot *pivot = <Pivot*> malloc(sizeof(Pivot))
         pivot.n_branches = n_split + 1
-        pivot.length = dataset.n_timestep
+        pivot.length = X.shape[2]
         pivot.distance_measure = distance_measure
         pivot.data = <double**> malloc(sizeof(double*) * pivot.n_branches)
         cdef Py_ssize_t i
         for i in range(pivot.n_branches):
-            pivot.data[i] = <double*> malloc(sizeof(double) * dataset.n_timestep)
+            pivot.data[i] = <double*> malloc(sizeof(double) * X.shape[2])
             memcpy(
-                pivot.data[i],
-                dataset.get_sample(pivots[i], 0),
-                sizeof(double) * dataset.n_timestep
+                pivot.data[i], &X[pivots[i], 0, 0], sizeof(double) * X.shape[2]
             )
 
         self._pivots[node_id] = pivot
         if parent != -1:
             self._branches[branch][parent] = node_id
+
         self._node_count += 1
         return node_id
 
@@ -242,13 +241,8 @@ cdef class Tree:
     def max_depth(self):
         return self._max_depth
 
-    def apply(self, object x):
-        if not isinstance(x, np.ndarray):
-            raise ValueError("")
-
-        cdef Dataset td = Dataset(x)
-        cdef object out = np.zeros((td.n_samples,), dtype=np.intp)
-        cdef Py_ssize_t[:] out_view = out
+    def apply(self, TSArray X):
+        cdef Py_ssize_t[:] out = np.zeros((X.shape[0],), dtype=np.intp)
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         cdef Py_ssize_t branch
@@ -256,33 +250,32 @@ cdef class Tree:
 
         with nogil:
             for i in range(self.distance_measures.size):
-                (<DistanceMeasure>self.distance_measures.get(i)).reset(td, td)
+                (<DistanceMeasure>self.distance_measures.get(i)).reset(X, X)
 
-            for i in range(td.n_samples):
+            for i in range(X.shape[0]):
                 node_index = 0
                 while self._branches[0][node_index] != -1:
                     pivot = self._pivots[node_index]
                     branch = find_min_branch(
                         <DistanceMeasure> self.distance_measures.get(pivot.distance_measure),
                         pivot.data,
-                        td.get_sample(i, 0),
+                        &X[i, 0, 0],
                         pivot.length,
                         pivot.n_branches,
                     )
                     node_index = self._branches[branch][node_index]
-                out_view[i] = node_index
-        return out
+                out[i] = node_index
 
-    def predict(self, object x):
-        if not isinstance(x, np.ndarray):
-            raise ValueError("")
-        return np.take(self.value, self.apply(x), axis=0, mode="clip")
+        return out.base
+
+    def predict(self, TSArray X):
+        return np.take(self.value, self.apply(X), axis=0, mode="clip")
 
 
 cdef Py_ssize_t find_min_branch(
     DistanceMeasure distance_measure,
     double **pivots,
-    double *sample,
+    const double *sample,
     Py_ssize_t n_timestep,
     Py_ssize_t n_branches,
 ) nogil:
@@ -563,7 +556,7 @@ cdef class TreeBuilder:
     cdef Py_ssize_t *pivot_buffer
     cdef Py_ssize_t *branch_count
 
-    cdef Dataset dataset
+    cdef TSArray X
     cdef CList distance_measures
     cdef readonly Tree tree
     cdef Criterion criterion
@@ -573,7 +566,7 @@ cdef class TreeBuilder:
 
     def __cinit__(
         self,
-        object x,
+        TSArray X,
         const double[:] sample_weights,
         PivotSampler pivot_sampler,
         DistanceMeasureSampler distance_measure_sampler,
@@ -592,7 +585,7 @@ cdef class TreeBuilder:
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
 
-        self.dataset = Dataset(x)
+        self.X = X
         self.criterion = criterion
         self.tree = tree
         self.distance_measure_sampler = distance_measure_sampler
@@ -601,9 +594,9 @@ cdef class TreeBuilder:
         self.seed = random_state.randint(0, RAND_R_MAX)
 
         self.sample_weights = sample_weights
-        self.samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.dataset.n_samples)
-        self.samples_branch = <double*> malloc(sizeof(double) * self.dataset.n_samples)
-        self.samples_branch_buffer = <double*> malloc(sizeof(double) * self.dataset.n_samples)
+        self.samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.X.shape[0])
+        self.samples_branch = <double*> malloc(sizeof(double) * self.X.shape[0])
+        self.samples_branch_buffer = <double*> malloc(sizeof(double) * self.X.shape[0])
 
         self.pivot_buffer = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.criterion.n_labels)
         self.branch_count = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.criterion.n_labels)
@@ -620,7 +613,7 @@ cdef class TreeBuilder:
         cdef Py_ssize_t i, j
         j = 0
         self.n_weighted_samples = 0.0
-        for i in range(self.dataset.n_samples):
+        for i in range(self.X.shape[0]):
             if sample_weights is None or sample_weights[i] != 0.0:
                 self.samples[j] = i
                 j += 1
@@ -632,7 +625,7 @@ cdef class TreeBuilder:
         self.n_samples = j
 
         for i in range(self.distance_measures.size):
-            (<DistanceMeasure>self.distance_measures.get(i)).reset(self.dataset, self.dataset)
+            (<DistanceMeasure>self.distance_measures.get(i)).reset(self.X, self.X)
 
     def __dealloc__(self):
         free(self.samples)
@@ -702,7 +695,7 @@ cdef class TreeBuilder:
                 branch,
                 n_node_samples,
                 self.criterion.weighted_n_total,
-                self.dataset,
+                self.X,
                 split.pivot,
                 split.distance_measure,
                 split.n_split,
@@ -895,7 +888,7 @@ cdef class TreeBuilder:
             for pivot in range(n_branches):
                 dist = (
                     <DistanceMeasure>self.distance_measures.get(distance_measure)
-                ).distance(self.dataset, pivots[pivot], self.dataset, j, 0)
+                ).distance(self.X, pivots[pivot], self.X, j, 0)
                 if dist < min_dist:
                     min_dist = dist
                     min_pivot = pivot
