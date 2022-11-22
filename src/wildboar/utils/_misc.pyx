@@ -11,6 +11,8 @@ import numpy as np
 from libc.math cimport M_PI, cos, log, log2, sin, sqrt
 from libc.stdlib cimport realloc
 
+from ..utils cimport TSArray
+
 
 cdef extern from "Python.h":
   cdef void* PyList_GET_ITEM(list, Py_ssize_t index) nogil
@@ -162,3 +164,7 @@ cdef object to_ndarray_double(double *arr, Py_ssize_t n):
         out[i] = arr[i]
 
     return out
+
+
+def _test_ts_array(TSArray arr):
+    return arr[0, 0, 0]

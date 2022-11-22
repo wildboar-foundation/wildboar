@@ -87,7 +87,7 @@ cdef class BatchFitTransform(Batch):
         cdef Py_ssize_t i, j
         cdef FeatureEngineer feature_engineer = self.feature_engineers[job_id]
         feature_engineer.reset(self.x_in)
-        cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.x_in.n_samples)
+        cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.x_in.shape[0])
         cdef Feature transient_feature
         cdef Feature *persistent_feature
 
@@ -227,7 +227,7 @@ def feature_transform_transform(FeatureEmbedding embedding, TSArray X, n_jobs=No
         for jobid in range(n_jobs)
     )
     
-    return out
+    return out.base
 
 def feature_transform_fit_transform(FeatureEngineer feature_engineer, TSArray X, random_state, n_jobs=None):
     cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(X)
@@ -249,4 +249,4 @@ def feature_transform_fit_transform(FeatureEngineer feature_engineer, TSArray X,
         for jobid in range(n_jobs)
     )
 
-    return embedding, out
+    return embedding, out.base

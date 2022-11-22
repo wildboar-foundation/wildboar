@@ -8,7 +8,7 @@ from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
 from ..base import BaseEstimator
-from ..utils.validation import _num_timesteps
+from ..utils.validation import _check_ts_array, _num_timesteps
 
 
 class BaseTree(BaseEstimator):
@@ -27,21 +27,33 @@ class BaseTree(BaseEstimator):
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
 
+    def _validate_not_check_input(self, x, reset=True):
+        x = self._validate_force_n_dims(x)
+        if reset:
+            self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
+            self.n_features_in_ = self.n_timesteps_in_ * self.n_dims_in_
+
+        return _check_ts_array(x)
+
     def decision_path(self, x, check_input=True):
         check_is_fitted(self, attributes="tree_")
         if check_input:
-            x = self._validate_data(x, dtype=float, allow_3d=True, reset=False)
+            x = self._validate_data(
+                x, dtype=float, ensure_ts_array=True, allow_3d=True, reset=False
+            )
         else:
-            x = self._validate_force_n_dims(x)
+            x = self._validate_not_check_input(x, reset=False)
 
         return self.tree_.decision_path(x)
 
     def apply(self, x, check_input=True):
         check_is_fitted(self, attributes="tree_")
         if check_input:
-            x = self._validate_data(x, dtype=float, allow_3d=True, reset=False)
+            x = self._validate_data(
+                x, dtype=float, ensure_ts_array=True, allow_3d=True, reset=False
+            )
         else:
-            x = self._validate_force_n_dims(x)
+            x = self._validate_not_check_input(x, reset=False)
 
         return self.tree_.apply(x)
 
@@ -78,11 +90,11 @@ class TreeRegressorMixin(RegressorMixin):
         self: object
         """
         if check_input:
-            x, y = self._validate_data(x, y, allow_3d=True, dtype=float, y_numeric=True)
+            x, y = self._validate_data(
+                x, y, allow_3d=True, ensure_ts_array=True, dtype=float, y_numeric=True
+            )
         else:
-            x = self._validate_force_n_dims(x)
-            self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
-            self.n_features_in_ = self.n_timesteps_in_ * self.n_dims_in_
+            x = self._validate_not_check_input(x)
 
         random_state = check_random_state(self.random_state)
         if sample_weight is not None:
@@ -111,9 +123,11 @@ class TreeRegressorMixin(RegressorMixin):
         """
         check_is_fitted(self, ["tree_"])
         if check_input:
-            x = self._validate_data(x, allow_3d=True, dtype=float, reset=False)
+            x = self._validate_data(
+                x, allow_3d=True, ensure_ts_array=True, dtype=float, reset=False
+            )
         else:
-            x = self._validate_force_n_dims(x)
+            x = self._validate_not_check_input(x, reset=False)
 
         return self.tree_.predict(x).reshape(-1)
 
@@ -147,12 +161,12 @@ class TreeClassifierMixin(ClassifierMixin):
         self: object
         """
         if check_input:
-            x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
+            x, y = self._validate_data(
+                x, y, allow_3d=True, ensure_ts_array=True, dtype=float
+            )
             check_classification_targets(y)
         else:
-            x = self._validate_force_n_dims(x)
-            self.n_timesteps_in_, self.n_dims_in_ = _num_timesteps(x)
-            self.n_features_in_ = self.n_timesteps_in_ * self.n_dims_in_
+            x = self._validate_not_check_input(x)
 
         if hasattr(self, "class_weight") and self.class_weight is not None:
             class_weight = compute_sample_weight(self.class_weight, y)
@@ -224,6 +238,6 @@ class TreeClassifierMixin(ClassifierMixin):
                 x, ensure_ts_array=True, allow_3d=True, dtype=float, reset=False
             )
         else:
-            x = self._validate_force_n_dims(x)
+            x = self._validate_not_check_input(x, reset=False)
 
         return self.tree_.predict(x)

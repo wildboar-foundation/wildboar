@@ -1,5 +1,8 @@
 # cython: language_level=3
 # cython: boundscheck=False
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause

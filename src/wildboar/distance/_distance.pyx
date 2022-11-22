@@ -128,7 +128,7 @@ cdef class SubsequenceDistanceMeasure:
             &X[v.index, v.dim, v.start],
             v.length,
             &X[index, v.dim, 0],
-            X.shape[0],
+            X.shape[2],
             return_index,
         )
 
@@ -143,7 +143,7 @@ cdef class SubsequenceDistanceMeasure:
             v.data,
             v.length,
             &X[index, v.dim, 0],
-            X.shape[0],
+            X.shape[2],
             return_index,
         )
 
@@ -160,7 +160,7 @@ cdef class SubsequenceDistanceMeasure:
             &X[v.index, v.dim, v.start],
             v.length,
             &X[index, v.dim, 0],
-            X.shape[0],
+            X.shape[2],
             threshold,
             distances,
             indicies,
@@ -179,7 +179,7 @@ cdef class SubsequenceDistanceMeasure:
             s.data,
             s.length,
             &X[index, s.dim, 0],
-            X.shape[0],
+            X.shape[2],
             threshold,
             distances,
             indicies,

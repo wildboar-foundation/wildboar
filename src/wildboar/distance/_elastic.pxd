@@ -1,3 +1,5 @@
+# cython: language_level=3
+
 # Authors: Isak Samsten
 # License: BSD 3 clause
 

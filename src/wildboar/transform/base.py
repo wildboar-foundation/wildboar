@@ -8,6 +8,7 @@ from sklearn.base import TransformerMixin
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ..base import BaseEstimator
+from ..utils.validation import _check_ts_array
 from ._cfeature_transform import (
     feature_transform_fit,
     feature_transform_fit_transform,
@@ -59,7 +60,9 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         """
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
         self.embedding_ = feature_transform_fit(
-            self._get_feature_engineer(), x, check_random_state(self.random_state)
+            self._get_feature_engineer(),
+            _check_ts_array(x),
+            check_random_state(self.random_state),
         )
         return self
 
@@ -79,7 +82,9 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         """
         check_is_fitted(self, attributes="embedding_")
         x = self._validate_data(x, reset=False, allow_3d=True, dtype=np.double)
-        return feature_transform_transform(self.embedding_, x, self.n_jobs)
+        return feature_transform_transform(
+            self.embedding_, _check_ts_array(x), self.n_jobs
+        )
 
     def fit_transform(self, x, y=None):
         """Fit the embedding and return the transform of x.
@@ -101,7 +106,7 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
         embedding, x_out = feature_transform_fit_transform(
             self._get_feature_engineer(),
-            x,
+            _check_ts_array(x),
             check_random_state(self.random_state),
             self.n_jobs,
         )
