@@ -45,8 +45,11 @@ if __name__ == "__main__":
     if build_args is None:
         raise RuntimeError("%s is not a valid build type" % build_type)
 
-    if os.getenv("WILDBOAR_BUILD_WERROR", "1") != "0":
-        build_args["extra_compile_args"].append("-Werror")
+    extra_compile_args = os.getenv("WILDBOAR_EXTRA_COMPILE_ARGS")
+    if extra_compile_args is not None:
+        import re
+
+        build_args["extra_compile_args"].extend(re.split(r"\s+", extra_compile_args))
 
     if os.name == "posix":
         build_args["libraries"].append("m")
