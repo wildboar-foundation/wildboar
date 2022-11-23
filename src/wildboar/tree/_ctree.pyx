@@ -669,7 +669,7 @@ cdef class Tree:
         return out.base
 
     def decision_path(self, TSArray X):
-        cdef Py_ssize_t[:, :] out = np.zeros((X.shape[0], self.node_count), dtype=int)
+        cdef Py_ssize_t[:, :] out = np.zeros((X.shape[0], self.node_count), dtype=np.intp)
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         cdef Feature *feature
