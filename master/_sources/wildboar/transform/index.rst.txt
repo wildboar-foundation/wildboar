@@ -33,21 +33,10 @@ Classes
    wildboar.transform.FeatureTransform
    wildboar.transform.IntervalTransform
    wildboar.transform.MatrixProfileTransform
-   wildboar.transform.PAA
    wildboar.transform.PivotTransform
    wildboar.transform.RandomShapeletTransform
    wildboar.transform.RocketTransform
-   wildboar.transform.SAX
 
-
-
-Functions
-~~~~~~~~~
-
-.. autoapisummary::
-
-   wildboar.transform.piecewice_aggregate_approximation
-   wildboar.transform.symbolic_aggregate_approximation
 
 
 
@@ -192,25 +181,6 @@ Functions
 
 
 
-.. py:class:: PAA(n_intervals='sqrt', window=None)
-
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
-
-   Peicewise aggregate approximation
-
-   .. py:property:: intervals
-
-
-   .. py:method:: fit(x, y=None)
-
-
-   .. py:method:: inverse_transform(x)
-
-
-   .. py:method:: transform(x)
-
-
-
 .. py:class:: PivotTransform(n_pivots=1, *, metric_factories=None, random_state=None, n_jobs=None)
 
    Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
@@ -293,104 +263,5 @@ Functions
    :type n_jobs: int, optional
    :param random_state: The psuodo-random number generator.
    :type random_state: int or RandomState, optional
-
-
-.. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate=True)
-
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
-
-   Symbolic aggregate approximation
-
-   :param x: The input data.
-   :type x: array-like of shape (n_samples, n_timestep)
-   :param n_intervals: The number of intervals to use for the transform.
-
-                       - if "log", the number of intervals is ``log2(n_timestep)``.
-                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-                       - if int, the number of intervals is ``n_intervals``.
-                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
-                           ``0 < n_intervals < 1``.
-   :type n_intervals: str, optional
-   :param window: The window size. If ``window`` is set, the value of ``n_intervals`` has no
-                  effect.
-   :type window: int, optional
-   :param n_bins: The number of bins.
-   :type n_bins: int, optional
-   :param binning: The bin construction. By default the bins are defined according to the
-                   normal distribution. Possible values are ``"normal"`` for normally
-                   distributed bins or ``"uniform"`` for uniformly distributed bins.
-   :type binning: str, optional
-   :param estimate: Estimate the distribution parameters for the binning from data.
-
-                    If ``estimate=False``, it is assumed that each time series are:
-
-                    - preprocessed using :func:`datasets.preprocess.normalize` when
-                      ``binning="normal"``.
-
-                    - preprocessed using :func:`datasets.preprocess.minmax_scale`. when
-                      ``binning="uniform"``
-   :type estimate: bool, optional
-
-   .. py:property:: intervals
-
-
-   .. py:method:: fit(x, y=None)
-
-
-   .. py:method:: inverse_transform(x)
-
-
-   .. py:method:: transform(x)
-
-
-
-.. py:function:: piecewice_aggregate_approximation(x, *, n_intervals='sqrt', window=None)
-
-   Peicewise aggregate approximation
-
-   :param x: The input data.
-   :type x: array-like of shape (n_samples, n_timestep)
-   :param n_intervals: The number of intervals to use for the transform.
-
-                       - if "log", the number of intervals is ``log2(n_timestep)``.
-                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-                       - if int, the number of intervals is ``n_intervals``.
-                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
-                           ``0 < n_intervals < 1``.
-   :type n_intervals: str, optional
-   :param window: The window size. If ``window`` is set, the value of ``n_intervals`` has no
-                  effect.
-   :type window: int, optional
-
-   :returns: **paa** -- The symbolic aggregate approximation
-   :rtype: ndarray of shape (n_samples, n_intervals)
-
-
-.. py:function:: symbolic_aggregate_approximation(x, *, n_intervals='sqrt', window=None, n_bins=4, binning='normal')
-
-   Symbolic aggregate approximation
-
-   :param x: The input data.
-   :type x: array-like of shape (n_samples, n_timestep)
-   :param n_intervals: The number of intervals to use for the transform.
-
-                       - if "log", the number of intervals is ``log2(n_timestep)``.
-                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-                       - if int, the number of intervals is ``n_intervals``.
-                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
-                           ``0 < n_intervals < 1``.
-   :type n_intervals: str, optional
-   :param window: The window size. If ``window`` is set, the value of ``n_intervals`` has no
-                  effect.
-   :type window: int, optional
-   :param n_bins: The number of bins.
-   :type n_bins: int, optional
-   :param binning: The bin construction. By default the bins are defined according to the
-                   normal distribution. Possible values are ``"normal"`` for normally
-                   distributed bins or ``"uniform"`` for uniformly distributed bins.
-   :type binning: str, optional
-
-   :returns: **sax** -- The symbolic aggregate approximation
-   :rtype: ndarray of shape (n_samples, n_intervals)
 
 
