@@ -11,11 +11,11 @@ from wildboar.utils.estimator_checks import check_estimator
 
 def test_check_estimator():
     check_estimator(
-        ShapeletForestClassifier(n_estimators=10),
+        ShapeletForestClassifier(n_shapelets=10, n_estimators=10),
         ignore=["check_sample_weights_invariance"],
     )
     check_estimator(
-        ShapeletForestRegressor(n_estimators=10),
+        ShapeletForestRegressor(n_shapelets=10, n_estimators=10),
         ignore=["check_sample_weights_invariance"],
     )
 
