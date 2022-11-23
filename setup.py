@@ -7,7 +7,7 @@ from setuptools.extension import Extension
 
 BUILD_ARGS = {
     "default": {
-        "extra_compile_args": ["-O2"],
+        "extra_compile_args": ["-O3"],
         "extra_link_args": [],
         "libraries": [],
     },
@@ -26,14 +26,31 @@ BUILD_ARGS = {
 }
 
 
-def _merge_build_options(name, options, build_args):
-    for arg, value in build_args.items():
-        if arg in options:
-            options[arg].extend(value)
-        else:
-            options[arg] = value
+def make_extension(name, extension, defaults):
 
-    return options
+    include_dirs = extension.get("include_dirs", [])
+    if "include_np" in extension:
+        import numpy
+
+        include_dirs.append(numpy.get_include())
+
+    libraries = extension.get("libraries", [])
+    libraries.extend(defaults["libraries"])
+
+    extra_compile_args = extension.get("extra_compile_args", [])
+    extra_compile_args.extend(defaults["extra_compile_args"])
+
+    extra_link_args = extension.get("extra_link_args", [])
+    extra_link_args.extend(defaults["extra_compile_args"])
+
+    return Extension(
+        name,
+        sources=extension["sources"],
+        include_dirs=include_dirs,
+        libraries=libraries,
+        extra_compile_args=extra_compile_args,
+        extra_link_args=extra_link_args,
+    )
 
 
 if __name__ == "__main__":
@@ -45,11 +62,13 @@ if __name__ == "__main__":
     if build_args is None:
         raise RuntimeError("%s is not a valid build type" % build_type)
 
-    extra_compile_args = os.getenv("WILDBOAR_EXTRA_COMPILE_ARGS")
-    if extra_compile_args is not None:
+    external_extra_compile_args = os.getenv("WILDBOAR_EXTRA_COMPILE_ARGS")
+    if external_extra_compile_args is not None:
         import re
 
-        build_args["extra_compile_args"].extend(re.split(r"\s+", extra_compile_args))
+        build_args["extra_compile_args"].extend(
+            re.split(r"\s+", external_extra_compile_args)
+        )
 
     if os.name == "posix":
         build_args["libraries"].append("m")
@@ -81,7 +100,7 @@ if __name__ == "__main__":
         "wildboar.utils.*": {"sources": ["src/wildboar/utils/*.pyx"]},
     }
     ext_modules = [
-        Extension(name, **_merge_build_options(name, options, build_args))
+        make_extension(name, options, build_args)
         for name, options in extensions.items()
     ]
 
