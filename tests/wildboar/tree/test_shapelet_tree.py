@@ -42,8 +42,8 @@ SHAPELET_TREE_INVALID_PARAMS = [
 @pytest.mark.parametrize(
     "estimator, invalid_params",
     [
-        (ShapeletTreeClassifier(), SHAPELET_TREE_INVALID_PARAMS),
-        (ShapeletTreeRegressor(), SHAPELET_TREE_INVALID_PARAMS),
+        (ShapeletTreeClassifier(n_shapelets=10), SHAPELET_TREE_INVALID_PARAMS),
+        (ShapeletTreeRegressor(n_shapelets=10), SHAPELET_TREE_INVALID_PARAMS),
         (ExtraShapeletTreeClassifier(), EXTRA_SHAPELET_TREE_INVALID_PARAMS),
         (ExtraShapeletTreeRegressor(), EXTRA_SHAPELET_TREE_INVALID_PARAMS),
     ],
