@@ -27,7 +27,7 @@ def test_estimator_check_shapelet_forest_counterfactual():
     "clf, expected_score",
     [
         pytest.param(
-            ShapeletForestClassifier(n_estimators=10, random_state=123),
+            ShapeletForestClassifier(n_shapelets=10, n_estimators=10, random_state=123),
             np.array([1.0216381495890032, 5.925046545971925]),
         ),
         pytest.param(
@@ -66,7 +66,7 @@ def test_counterfactuals_prototype():
     x_train, x_test, y_train, y_test = load_dataset(
         "GunPoint", repository="wildboar/ucr-tiny", merge_train_test=False
     )
-    clf = ShapeletForestClassifier(n_estimators=10, random_state=123)
+    clf = ShapeletForestClassifier(n_shapelets=10, n_estimators=10, random_state=123)
     clf.fit(x_train, y_train)
 
     method = PrototypeCounterfactual(method="shapelet", metric="euclidean")
@@ -87,7 +87,7 @@ def test_counterfactuals_prototype():
 @pytest.mark.parametrize(
     "counterfactual, estimator",
     [
-        (ShapeletForestCounterfactual(), ShapeletForestClassifier()),
+        (ShapeletForestCounterfactual(), ShapeletForestClassifier(n_shapelets=10)),
         (KNeighborsCounterfactual(), KNeighborsClassifier()),
         (PrototypeCounterfactual(), ShapeletForestClassifier()),
     ],
