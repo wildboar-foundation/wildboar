@@ -1,0 +1,36 @@
+:orphan:
+
+:py:mod:`wildboar.transform._pivot`
+===================================
+
+.. py:module:: wildboar.transform._pivot
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.transform._pivot.PivotTransform
+
+
+
+
+.. py:class:: PivotTransform(n_pivots=1, *, metric_factories=None, random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+
+   A transform using pivot time series and sampled distance metrics.
+
+   :param metric_factories: The distance metrics. A dictionary where key is:
+
+                            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
+                            - if callable, a function returning a list of ``DistanceMeasure``-objects
+
+                            and where value is a dict of parameters to the factory.
+   :type metric_factories: dict, optional
+
+

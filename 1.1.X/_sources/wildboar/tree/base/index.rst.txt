@@ -19,9 +19,9 @@ Classes
 
 
 
-.. py:class:: BaseTree(*, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
+.. py:class:: BaseTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
 
-   Bases: :py:obj:`sklearn.base.BaseEstimator`
+   Bases: :py:obj:`wildboar.base.BaseEstimator`
 
    Base class for tree based estimators.
 
@@ -36,23 +36,22 @@ Classes
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`
 
-   Mixin for classifation trees.
+   Mixin for classification trees.
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
-      Fit a shapelet tree regressor from the training set
+      Fit a classification tree.
 
       :param x: The training time series.
       :type x: array-like of shape (n_samples, n_timesteps)
-      :param y: The target values (class labels) as integers
-      :type y: array-like of shape (n_samples,) or (n_samples, n_classes)
+      :param y: The target values
+      :type y: array-like of shape (n_samples,)
       :param sample_weight: If `None`, then samples are equally weighted. Splits that would create child
                             nodes with net zero or negative weight are ignored while searching for a
                             split in each node. Splits are also ignored if they would result in any
                             single class carrying a negative weight in either child node.
       :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
-                          know what you do.
+      :param check_input: Allow to bypass several input checks.
       :type check_input: bool, optional
 
       :returns: **self**
@@ -97,7 +96,7 @@ Classes
 
    Mixin for regression trees.
 
-   .. py:method:: fit(X, y, sample_weight=None, check_input=True)
+   .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
       Fit a shapelet tree regressor from the training set
 
@@ -110,8 +109,7 @@ Classes
                             split in each node. Splits are also ignored if they would result in any
                             single class carrying a negative weight in either child node.
       :type sample_weight: array-like of shape (n_samples,)
-      :param check_input: Allow to bypass several input checking. Don't use this parameter unless you
-                          know what you do.
+      :param check_input: Allow to bypass several input checks
       :type check_input: bool, optional
 
       :returns: **self**

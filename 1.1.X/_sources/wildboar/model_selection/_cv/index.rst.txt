@@ -32,23 +32,21 @@ Classes
       Instead, the inlier samples are shuffled and new outlier samples
       are inserted in the training and test sets repeatedly.
 
-      Construct a new cross-validator
+   :param n_splits: The maximum number of splits.
 
-      :param n_splits: The maximum number of splits.
+                    - if None, the number of splits is determined by the number of
+                      outliers as, `total_n_outliers/(n_inliers * n_outliers)`
 
-                       - if None, the number of splits is determined by the number of
-                         outliers as, `total_n_outliers/(n_inliers * n_outliers)`
-
-                       - if int, the number of splits is an upper-bound
-      :type n_splits: int, optional
-      :param test_size: The size of the test set.
-      :type test_size: float, optional
-      :param n_outlier: The fraction of outliers in the training and test sets.
-      :type n_outlier: float, optional
-      :param shuffle: Shuffle the training indicies in each iteration.
-      :type shuffle: bool, optional
-      :param random_state: The psudo-random number generator
-      :type random_state: int or RandomState, optional
+                    - if int, the number of splits is an upper-bound
+   :type n_splits: int, optional
+   :param test_size: The size of the test set.
+   :type test_size: float, optional
+   :param n_outlier: The fraction of outliers in the training and test sets.
+   :type n_outlier: float, optional
+   :param shuffle: Shuffle the training indicies in each iteration.
+   :type shuffle: bool, optional
+   :param random_state: The psudo-random number generator
+   :type random_state: int or RandomState, optional
 
    .. py:method:: __repr__()
 

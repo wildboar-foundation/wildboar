@@ -35,7 +35,7 @@ Changelog
 ---------
 
 - |Fix| Adress a serious issue in tree._tree_builder.Tree where platform dependent
-integer sizes were used.
+  integer sizes were used.
 
 Version 1.0.9
 =============

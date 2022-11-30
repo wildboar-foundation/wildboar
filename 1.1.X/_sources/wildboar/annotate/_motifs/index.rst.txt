@@ -19,7 +19,7 @@ Functions
 
 
 
-.. py:function:: motifs(x, mp=None, window=None, exclude=0.2, max_distance='best', max_neighbours=10, min_neighbours=1, max_motif=1, return_distance=False)
+.. py:function:: motifs(x, mp=None, *, window='auto', exclude=0.2, max_distance='best', max_neighbours=10, min_neighbours=1, max_motif=1, return_distance=False)
 
    Find motifs
 
@@ -28,7 +28,12 @@ Functions
    :param mp: The matrix profile. The matrix profile is computed if None.
    :type mp: ndarray or shape (n_samples, profile_size), optional
    :param window: The window size of the matrix profile.
-   :type window: int, optional
+
+                  - if "auto" the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
+                    window of the matrix profile if mp is not None.
+                  - if float, a fraction of n_timestep
+                  - if int, the exact window size
+   :type window: "auto", int or float, optional
    :param exclude: The size of the exclusion zone.
    :type exclude: float, optional
    :param max_distance: The maximum distance between motifs.

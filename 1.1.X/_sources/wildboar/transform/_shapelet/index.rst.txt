@@ -1,0 +1,62 @@
+:orphan:
+
+:py:mod:`wildboar.transform._shapelet`
+======================================
+
+.. py:module:: wildboar.transform._shapelet
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.transform._shapelet.RandomShapeletTransform
+
+
+
+
+.. py:class:: RandomShapeletTransform(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+
+   Transform a time series to the distances to a selection of random shapelets.
+
+   .. attribute:: embedding_
+
+      The underlying embedding object.
+
+      :type: Embedding
+
+   .. rubric:: References
+
+   Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
+       Ultra-fast shapelets for time series classification.
+       arXiv preprint arXiv:1503.05018 (2015).
+
+   :param n_shapelets: The number of shapelets in the resulting transform
+   :type n_shapelets: int, optional
+   :param metric: Distance metric used to identify the best shapelet.
+
+                  See ``distance._SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of
+                  supported metrics.
+   :type metric: str, optional
+   :param metric_params: Parameters for the distance measure.
+
+                         Read more about the parameters in the
+                         :ref:`User guide <list_of_subsequence_metrics>`.
+   :type metric_params: dict, optional
+   :param min_shapelet_size: Minimum shapelet size.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: Maximum shapelet size.
+   :type max_shapelet_size: float, optional
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
+   :param random_state: The psudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+

@@ -26,6 +26,7 @@ Classes
    wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler
    wildboar.explain.counterfactual._proto.TargetEvaluator
    wildboar.explain.counterfactual._proto.UniformPrototypeSampler
+   wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform
 
 
 
@@ -47,13 +48,13 @@ Classes
 
       Move the sample o towards p
 
-      :param o: An array
+      :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
-      :param p: An array
+      :param p: An array, the time series to move towards
       :type p: ndarray of shape (n_timestep,)
 
       :returns: **ndarray**
-      :rtype: an array
+      :rtype: an array, the result of moving o closer to p
 
 
 
@@ -74,17 +75,17 @@ Classes
 
       Move the sample o towards p
 
-      :param o: An array
+      :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
-      :param p: An array
+      :param p: An array, the time series to move towards
       :type p: ndarray of shape (n_timestep,)
 
       :returns: **ndarray**
-      :rtype: an array
+      :rtype: an array, the result of moving o closer to p
 
 
 
-.. py:class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+.. py:class:: KNearestPrototypeSampler(x, y, prototype_indicies, metric_transform)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -103,7 +104,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: nearest_index(o)
+   .. py:method:: nearest_index(o, random_state)
 
       Return the index of the closest sample
 
@@ -114,7 +115,7 @@ Classes
       :rtype: an index
 
 
-   .. py:method:: sample(o)
+   .. py:method:: sample(o, random_state)
 
       Sample an example
 
@@ -126,7 +127,7 @@ Classes
 
 
 
-.. py:class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
+.. py:class:: KNearestShapeletPrototypeSampler(x, y, prototype_indicies, metric_transform, min_shapelet_size=0, max_shapelet_size=1)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -160,7 +161,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(o)
+   .. py:method:: sample(o, random_state)
 
       Sample an example
 
@@ -190,13 +191,13 @@ Classes
 
       Move the sample o towards p
 
-      :param o: An array
+      :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
-      :param p: An array
+      :param p: An array, the time series to move towards
       :type p: ndarray of shape (n_timestep,)
 
       :returns: **ndarray**
-      :rtype: an array
+      :rtype: an array, the result of moving o closer to p
 
 
 
@@ -226,9 +227,9 @@ Classes
    :type probability: float
 
 
-.. py:class:: PrototypeCounterfactual(*, train_x, train_y, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
+.. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, verbose=False)
 
-   Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
+   Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
    Model agnostic approach for constructing counterfactual explanations
 
@@ -263,19 +264,12 @@ Classes
 
    Crate a new model agnostic counterfactual explainer.
 
-   :param train_x: The background data from which prototypes are sampled
-   :type train_x: array-like of shape (n_samples, n_timestep)
-   :param train_y: The background label from which prototypes are sampled
-   :type train_y: array-like of shape (n_samples,)
    :param metric: The metric used to move the samples
-   :type metric: {'euclidean', 'dtw'}, optional
-   :param metric_params: Optional parameters to the metric
-
-                         If 'dtw':
-
-                             r : int or float, optional
-                                 The warping window size
-   :type metric_params: dict, optional
+   :type metric: {'euclidean', 'dtw', 'wdtw'}, optional
+   :param r: The warping window size, if metric='dtw' or metric='wdtw'
+   :type r: float, optional
+   :param g: Penalty control for weighted DTW, if metric='wdtw'
+   :type g: float, optional
    :param max_iter: The maximum number of iterations
    :type max_iter: int, optional
    :param step_size: The step size when moving samples toward class prototypes
@@ -298,45 +292,21 @@ Classes
                   - if 'nearest_shapelet' a prototype shapelet is sampled from the
                     closest n prototypes
    :type method: {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
-   :param method_params: Additional parameters to the method
-
-                         If 'shapelet' or 'nearest_shapelet'
-
-                             min_shapelet_size : float, optional
-                                 Minimum shapelet size.
-
-                             max_shapelet_size : float, optional
-                                 Maximum shapelet size.
-   :type method_params: dict, optional
+   :param min_shapelet_size: Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type max_shapelet_size: float, optional
    :param random_state: Pseudo-random number for consistency between different runs
    :type random_state: RandomState or int, optional
 
-   .. py:method:: fit(estimator)
-
-      Fit the counterfactual to a given estimator
-
-      :param estimator: An estimator for which counterfactual explanations are produced
-      :type estimator: object
-
-      :rtype: self
+   .. py:method:: explain(x, y)
 
 
-   .. py:method:: transform(x, y)
-
-      Transform the i:th sample in x to a sample that would be labeled as the i:th
-       label in y
-
-      :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep) # noqa: E501
-      :param y: The desired label of the counterfactual sample
-      :type y: array-like of shape (n_samples,)
-
-      :returns: **counterfactuals** -- The counterfactual for each sample.
-      :rtype: ndarray of same shape as x
+   .. py:method:: fit(estimator, x, y)
 
 
 
-.. py:class:: PrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+.. py:class:: PrototypeSampler(x, y, prototype_indices, metric_transform)
 
    Bases: :py:obj:`abc.ABC`
 
@@ -369,7 +339,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(o)
+   .. py:method:: sample(o, random_state)
       :abstractmethod:
 
       Sample an example
@@ -381,7 +351,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample_move(o)
+   .. py:method:: sample_move(o, random_state)
 
       Sampla a prototype and move the counterfactual towards the prototype
 
@@ -393,7 +363,7 @@ Classes
 
 
 
-.. py:class:: ShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
+.. py:class:: ShapeletPrototypeSampler(x, y, prototype_indicies, metric_transform, min_shapelet_size=0, max_shapelet_size=1)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -428,7 +398,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample(_o)
+   .. py:method:: sample(_o, random_state)
 
       Sample an example
 
@@ -439,7 +409,7 @@ Classes
       :rtype: ndarray of shape (n_timestep,)
 
 
-   .. py:method:: sample_shapelet(p)
+   .. py:method:: sample_shapelet(p, random_state)
 
       Sample a shapelet from x
 
@@ -467,7 +437,7 @@ Classes
       Return true if x is a counterfactual of label y
 
       :param x: The counterfactual sample
-      :type x: ndarray of shape (n_samples, n_timestep) or (n_timestep,)
+      :type x: ndarray of shape (n_timestep,)
       :param y: The counterfactual label
       :type y: object
 
@@ -476,7 +446,7 @@ Classes
 
 
 
-.. py:class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+.. py:class:: UniformPrototypeSampler(x, y, prototype_indices, metric_transform)
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -495,7 +465,7 @@ Classes
    :param random_state: The random number generator.
    :type random_state: RandomState
 
-   .. py:method:: sample(_o)
+   .. py:method:: sample(_o, random_state)
 
       Sample an example
 
@@ -505,5 +475,19 @@ Classes
       :returns: **prototype** -- A prototype of the counterfactual label
       :rtype: ndarray of shape (n_timestep,)
 
+
+
+.. py:class:: WeightedDynamicTimeWarpTransform(gamma, r=1, g=0.05)
+
+   Bases: :py:obj:`DynamicTimeWarpTransform`
+
+   Transform a sample by moving it closer using the dtw alignment matrix
+
+   Construct a new transformer
+
+   :param gamma: The strength of the move, where values close to 0 means that the
+                 sample is moved less and values closer to 1 mean that the sample
+                 is moved more.
+   :type gamma: float
 
 

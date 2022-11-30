@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.explain.counterfactual.base" href="base/index.html" /><link rel="prev" title="wildboar.explain" href="../index.html" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.linear_model" href="../../linear_model/index.html" /><link rel="prev" title="wildboar.explain" href="../index.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>wildboar.explain.counterfactual - Wildboar 1.1.0rc4 documentation</title>
@@ -169,96 +169,116 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">wildboar tutorial</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../guide.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../guide/basics.html">Time series</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/datasets.html">Datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/supervised.html">Supervised learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/unsupervised.html">Unsupervised learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/metrics.html">Distance metrics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/explain.html">Explainability</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/repositories.html">Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/preprocess.html">Preprocessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/filter.html">Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/outlier.html">Outlier generation</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/linear_models.html">Linear models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/tree_models.html">Decision trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/ensemble_models.html">Ensemble models</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/pattern_discovery.html">Pattern discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/outlier_detection.html">Outlier detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../guide/metrics.html">Distance metrics</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/explain.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/counterfactuals.html">Counterfactual explanations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/importance.html">Interval permutation importance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/motif.html">Motif discovery</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/segment.html">Segmentation</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/embeddings.html">Embeddings</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/embedding/interval.html">Interval</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/embedding/rocket.html">Rocket</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/embedding/shapelet.html">Shapelets</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/transform.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/interval.html">Interval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/rocket.html">Rocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/sax.html">Symbolic aggregate approximation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/shapelet.html">Shapelets</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/explainability/counterfactuals.html">Comparing counterfactals</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/classifier_comparision.html">Comparing classifiers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/miss_classification_analysis.html">Miss-classification analysis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/shapelet_forest_vs_shapelet_extra_trees.html">Shapelet forests and extremly randomized shapelet trees</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/matrix_profile.html">Matrix profile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/outlier_detection.html">Outlier detection</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../../../more.html">More</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../../more.html">More</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../more/versions/v1.1.html">Version 1.1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../more/versions/v1.0.html">Version 1.0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../more/versions/older.html">Older versions</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../more/contributing.html">Developer’s guide</a></li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../../index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../../index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../embed/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../embed/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.catch22</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../embed/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
-<li class="toctree-l3 current has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l4 current has-children current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l5"><a class="reference internal" href="base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.base</span></code></a></li>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../transform/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../transform/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
@@ -313,14 +333,6 @@
         <article role="main">
           <section id="module-wildboar.explain.counterfactual">
 <span id="wildboar-explain-counterfactual"></span><h1><a class="reference internal" href="#module-wildboar.explain.counterfactual" title="wildboar.explain.counterfactual"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><a class="headerlink" href="#module-wildboar.explain.counterfactual" title="Permalink to this heading">#</a></h1>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></a></li>
-</ul>
-</div>
-</section>
 <section id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading">#</a></h2>
 <section id="classes">
@@ -346,11 +358,14 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.counterfactuals" title="wildboar.explain.counterfactual.counterfactuals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">counterfactuals</span></code></a>(estimator, x, y, *[, method, scoring, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.counterfactuals" title="wildboar.explain.counterfactual.counterfactuals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">counterfactuals</span></code></a>(estimator, x, y, *[, train_x, ...])</p></td>
 <td><p>Compute a single counterfactual example for each sample</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.score" title="wildboar.explain.counterfactual.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(x_true, x_counterfactuals[, metric, valid, success])</p></td>
-<td><p>Compute the score for the counterfactuals</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.proximity" title="wildboar.explain.counterfactual.proximity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">proximity</span></code></a>(x_true, x_counterfactuals[, metric, ...])</p></td>
+<td><p>Compute the proximity of the counterfactuals.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual.score" title="wildboar.explain.counterfactual.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(x_true, x_counterfactuals[, metric, success])</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -358,7 +373,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.KNeighborsCounterfactual">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">KNeighborsCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_nn.py#L12-L100"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="base/index.html#wildboar.explain.counterfactual.base.BaseCounterfactual" title="wildboar.explain.counterfactual.base.BaseCounterfactual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base.BaseCounterfactual</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.CounterfactualMixin</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Fit a counterfactual explainer to a k-nearest neighbors classifier</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.KNeighborsCounterfactual.explainer_">
@@ -378,21 +393,21 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual.KNeighborsCounterfactual.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_nn.py#L46-L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual.KNeighborsCounterfactual.explain">
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_nn.py#L84-L97"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.explain" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual.KNeighborsCounterfactual.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.transform" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual.KNeighborsCounterfactual.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_nn.py#L46-L82"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.PrototypeCounterfactual">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">PrototypeCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_prototypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_proto.py#L26-L269"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="base/index.html#wildboar.explain.counterfactual.base.BaseCounterfactual" title="wildboar.explain.counterfactual.base.BaseCounterfactual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base.BaseCounterfactual</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">PrototypeCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_prototypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_proto.py#L26-L269"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.CounterfactualMixin</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Model agnostic approach for constructing counterfactual explanations</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.PrototypeCounterfactual.estimator_">
@@ -447,18 +462,9 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>train_x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The background data from which prototypes are sampled</p></li>
-<li><p><strong>train_y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The background label from which prototypes are sampled</p></li>
-<li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'dtw'}</em><em>, </em><em>optional</em>) – The metric used to move the samples</p></li>
-<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Optional parameters to the metric</p>
-<p>If ‘dtw’:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>r<span class="classifier">int or float, optional</span></dt><dd><p>The warping window size</p>
-</dd>
-</dl>
-</div></blockquote>
-</p></li>
+<li><p><strong>metric</strong> (<em>{'euclidean'</em><em>, </em><em>'dtw'</em><em>, </em><em>'wdtw'}</em><em>, </em><em>optional</em>) – The metric used to move the samples</p></li>
+<li><p><strong>r</strong> (<em>float</em><em>, </em><em>optional</em>) – The warping window size, if metric=’dtw’ or metric=’wdtw’</p></li>
+<li><p><strong>g</strong> (<em>float</em><em>, </em><em>optional</em>) – Penalty control for weighted DTW, if metric=’wdtw’</p></li>
 <li><p><strong>max_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of iterations</p></li>
 <li><p><strong>step_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The step size when moving samples toward class prototypes</p></li>
 <li><p><strong>n_prototypes</strong> (<em>int</em><em>, </em><em>float</em><em> or </em><em>str</em><em>, </em><em>optional</em>) – The number of initial prototypes to sample from</p></li>
@@ -480,64 +486,28 @@ prototypes</p></li>
 closest n prototypes</p></li>
 </ul>
 </p></li>
-<li><p><strong>method_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Additional parameters to the method</p>
-<p>If ‘shapelet’ or ‘nearest_shapelet’</p>
-<blockquote>
-<div><dl class="simple">
-<dt>min_shapelet_size<span class="classifier">float, optional</span></dt><dd><p>Minimum shapelet size.</p>
-</dd>
-<dt>max_shapelet_size<span class="classifier">float, optional</span></dt><dd><p>Maximum shapelet size.</p>
-</dd>
-</dl>
-</div></blockquote>
-</p></li>
+<li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum shapelet size, if method=’shapelet’ or ‘nearest_shapelet’</p></li>
+<li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum shapelet size, if method=’shapelet’ or ‘nearest_shapelet’</p></li>
 <li><p><strong>random_state</strong> (<em>RandomState</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Pseudo-random number for consistency between different runs</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual.PrototypeCounterfactual.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_proto.py#L129-L230"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.fit" title="Permalink to this definition">#</a></dt>
-<dd><p>Fit the counterfactual to a given estimator</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>estimator</strong> (<em>object</em>) – An estimator for which counterfactual explanations are produced</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>self</p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual.PrototypeCounterfactual.explain">
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_proto.py#L232-L245"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.explain" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual.PrototypeCounterfactual.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.transform" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Transform the i:th sample in x to a sample that would be labeled as the i:th</dt><dd><p>label in y</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dimension</em><em>, </em><em>n_timestep</em><em>) </em><em># noqa: E501</em>) – The samples to generate counterfactual explanations for</p></li>
-<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual sample</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>counterfactuals</strong> – The counterfactual for each sample.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of same shape as x</p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual.PrototypeCounterfactual.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_proto.py#L129-L230"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.fit" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.ShapeletForestCounterfactual">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">ShapeletForestCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L145-L339"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="base/index.html#wildboar.explain.counterfactual.base.BaseCounterfactual" title="wildboar.explain.counterfactual.base.BaseCounterfactual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base.BaseCounterfactual</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">ShapeletForestCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L145-L339"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.CounterfactualMixin</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Counterfactual explanations for shapelet forest classifiers</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.paths_">
@@ -571,35 +541,40 @@ transformations. In 2018 IEEE International Conference on Data Mining (ICDM)</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>cost</strong> (<em>{&quot;euclidean&quot;</em><em>, </em><em>&quot;cosine&quot;</em><em>, </em><em>&quot;manhattan&quot;}</em><em>, </em><em>optional</em>) – The cost function to determine the goodness of counterfactual</p></li>
-<li><p><strong>aggregation</strong> (<em>callable</em><em>, </em><em>optional</em>) – The aggregation function for the cost of multivariate counterfactuals, by</p></li>
+<li><p><strong>aggregation</strong> (<em>callable</em><em>, </em><em>optional</em>) – The aggregation function for the cost of multivariate counterfactuals.</p></li>
 <li><p><strong>epsilon</strong> (<em>float</em><em>, </em><em>optional</em>) – Control the degree of change from the decision threshold</p></li>
-<li><p><strong>batch_size</strong> (<em>float</em><em>, </em><em>optional</em>) – Batch size when evaluating the cost and predictions of
+<li><p><strong>batch_size</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>Batch size when evaluating the cost and predictions of
 counterfactual candidates. The default setting is to evaluate
-all counterfactual samples.</p></li>
+all counterfactual samples.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.1: </span>The default value changed to 0.1</p>
+</div>
+</p></li>
+<li><p><strong>max_paths</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>Sample a fraction of the positive prediction paths.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.1: </span>Add support for subsampling prediction paths.</p>
+</div>
+</p></li>
+<li><p><strong>verbose</strong> (<em>boolean</em><em>, </em><em>optional</em>) – Print information to stdout during execution.</p></li>
 <li><p><strong>random_state</strong> (<em>RandomState</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – Pseudo-random number for consistency between different runs</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.candidates">
-<span class="sig-name descname"><span class="pre">candidates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.candidates" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.explain">
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L276-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.explain" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L235-L274"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual.ShapeletForestCounterfactual.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_sf.py#L235-L274"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual.counterfactuals">
-<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">counterfactuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_helper.py#L92-L233"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">counterfactuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'deprecated'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'deprecated'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_helper.py#L92-L233"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.counterfactuals" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute a single counterfactual example for each sample</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -607,26 +582,37 @@ all counterfactual samples.</p></li>
 <li><p><strong>estimator</strong> (<em>object</em>) – The estimator used to compute the counterfactual example</p></li>
 <li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The data samples to fit counterfactuals to</p></li>
 <li><p><strong>y</strong> (<em>array-like broadcast to shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The desired label of the counterfactual</p></li>
-<li><p><strong>method</strong> (<em>str</em><em> or </em><a class="reference internal" href="base/index.html#wildboar.explain.counterfactual.base.BaseCounterfactual" title="wildboar.explain.counterfactual.base.BaseCounterfactual"><em>BaseCounterfactual</em></a><em>, </em><em>optional</em>) – <p>The method to generate counterfactual explanations</p>
+<li><p><strong>method</strong> (<em>str</em><em> or </em><em>BaseCounterfactual</em><em>, </em><em>optional</em>) – <p>The method to generate counterfactual explanations</p>
 <ul>
 <li><p>if ‘best’, infer the most appropriate counterfactual explanation method
 based on the estimator</p>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 1.1.0.</span></p>
 </div>
-<p>The default parameter value is changed to ‘best’</p>
 </li>
 <li><p>if str, select counterfactual explainer from named collection. See
 <code class="docutils literal notranslate"><span class="pre">_COUNTERFACTUALS.keys()</span></code> for a list of valid values.</p></li>
 <li><p>if, BaseCounterfactual use the supplied counterfactual</p></li>
 </ul>
 </p></li>
-<li><p><strong>scoring</strong> (<em>str</em><em>, </em><em>callable</em><em>, </em><em>list</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – The scoring function to determine the similarity between the counterfactual
+<li><p><strong>scoring</strong> (<em>str</em><em>, </em><em>callable</em><em>, </em><em>list</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – <p>The scoring function to determine the similarity between the counterfactual
+sample and the original sample</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.1: </span><code class="docutils literal notranslate"><span class="pre">scoring</span></code> was renamed to <code class="docutils literal notranslate"><span class="pre">proximity</span></code> in 1.1 and will be removed in 1.2.</p>
+</div>
+</p></li>
+<li><p><strong>proximity</strong> (<em>str</em><em>, </em><em>callable</em><em>, </em><em>list</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – The scoring function to determine the similarity between the counterfactual
 sample and the original sample</p></li>
-<li><p><strong>valid_scoring</strong> (<em>bool</em><em>, </em><em>optional</em>) – Only compute score for successful counterfactuals</p></li>
+<li><p><strong>valid_scoring</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>Only compute score for successful counterfactuals.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.1: </span><code class="docutils literal notranslate"><span class="pre">valid_scoring</span></code> will be removed in 1.2.</p>
+</div>
+</p></li>
 <li><p><strong>random_state</strong> (<em>RandomState</em><em> or </em><em>int</em><em>, </em><em>optional</em>) – The pseudo random number generator to ensure stable result</p></li>
 <li><p><strong>method_args</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Optional arguments to the counterfactual explainer.</p>
-<p>..versionadded :: 1.1.0</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.1.0.</span></p>
+</div>
 </p></li>
 </ul>
 </dd>
@@ -642,35 +628,36 @@ sample and the original sample</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual.score">
-<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.score" title="Permalink to this definition">#</a></dt>
-<dd><p>Compute the score for the counterfactuals</p>
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual.proximity">
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">proximity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normalized_euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual/_helper.py#L16-L57"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.proximity" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the proximity of the counterfactuals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x_true</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The true samples</p></li>
 <li><p><strong>x_counterfactuals</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The counterfactual samples</p></li>
-<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>callable</em><em>, </em><em>list</em><em> or </em><em>dict</em><em>, </em><em>optional</em>) – <p>The scoring metric</p>
-<ul>
-<li><p>if str use metrics from scikit-learn</p></li>
-<li><p>if list compute all metrics and return a dict where the key is
-the name of the metric and the value an ndarray of scores</p></li>
-<li><p>if dict compute all metrics and return a dict where the key is
-the key and the value an ndarray of scores</p></li>
-<li><p>if callable</p></li>
-</ul>
+<li><p><strong>metric</strong> (<em>str</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – <p>The distance metric</p>
+<p>See <code class="docutils literal notranslate"><span class="pre">_DISTANCE_MEASURE.keys()</span></code> for a list of supported metrics.</p>
 </p></li>
-<li><p><strong>valid</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>)</em>) – Indicator matrix of successful counterfactual transformations</p></li>
+<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Parameters to the metric.</p>
+<p>Read more about the parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>score</strong> – The scores</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray or dict</p>
+<dd class="field-odd"><p>ndarray</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.explain.counterfactual.score">
+<span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual.</span></span><span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x_counterfactuals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/explain/counterfactual.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual.score" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
 
 </section>
 </section>
@@ -681,12 +668,12 @@ the key and the value an ndarray of scores</p></li>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="base/index.html">
+          <a class="next-page" href="../../linear_model/index.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></div>
+                <div class="title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -734,14 +721,13 @@ the key and the value an ndarray of scores</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.explainer_"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual.explainer_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.explain"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual.explain()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual.fit()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.transform"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual.transform()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual"><code class="docutils literal notranslate"><span class="pre">PrototypeCounterfactual</span></code></a><ul>
@@ -749,23 +735,23 @@ the key and the value an ndarray of scores</p></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.classes_"><code class="docutils literal notranslate"><span class="pre">PrototypeCounterfactual.classes_</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.partitions_"><code class="docutils literal notranslate"><span class="pre">PrototypeCounterfactual.partitions_</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.target_"><code class="docutils literal notranslate"><span class="pre">PrototypeCounterfactual.target_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.explain"><code class="docutils literal notranslate"><span class="pre">PrototypeCounterfactual.explain()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.fit"><code class="docutils literal notranslate"><span class="pre">PrototypeCounterfactual.fit()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.transform"><code class="docutils literal notranslate"><span class="pre">PrototypeCounterfactual.transform()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual"><code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactual</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.paths_"><code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactual.paths_</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.candidates"><code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactual.candidates()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.explain"><code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactual.explain()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit"><code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactual.fit()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.transform"><code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactual.transform()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.counterfactuals"><code class="docutils literal notranslate"><span class="pre">counterfactuals()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.proximity"><code class="docutils literal notranslate"><span class="pre">proximity()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.score"><code class="docutils literal notranslate"><span class="pre">score()</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual">KNeighborsCounterfactual</a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.explainer_">explainer_</a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.explain">explain</a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.KNeighborsCounterfactual.transform">transform</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual">PrototypeCounterfactual</a><ul>
@@ -773,18 +759,18 @@ the key and the value an ndarray of scores</p></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.classes_">classes_</a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.partitions_">partitions_</a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.target_">target_</a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.explain">explain</a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.PrototypeCounterfactual.transform">transform</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual">ShapeletForestCounterfactual</a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.paths_">paths_</a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.candidates">candidates</a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.explain">explain</a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual.ShapeletForestCounterfactual.transform">transform</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.counterfactuals">counterfactuals</a></li>
+<li><a class="reference internal" href="#wildboar.explain.counterfactual.proximity">proximity</a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual.score">score</a></li>
 </ul>
 </li>

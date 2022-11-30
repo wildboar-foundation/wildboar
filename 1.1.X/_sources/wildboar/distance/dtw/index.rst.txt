@@ -195,28 +195,21 @@ Functions
 
    Weighting described by Jeong et. al. (2011) using g as the penalty control.
 
-       .. math:: w(x)=
-   rac{w_{max}}{1+e^{-g(x-m/2)}},
+   .. math:: w(x)=\frac{1}{1+e^{-g(x-m/2)}}
 
-       Parameters
-       ----------
-       n : int
-           The number of weights.
+   :param n: The number of weights.
+   :type n: int
+   :param g: Penalty control.
+   :type g: float, optional
 
-       g : float or array-like of shape (max(x_timestep, y_timestep), ), optional
-           Penalty control.
+   :returns: **weight** -- The weights
+   :rtype: ndarray of shape (n, )
 
-       Returns
-       -------
-       weight : ndarray of shape (n, )
-           The weights
+   .. rubric:: References
 
-       References
-       ----------
-       Jeong, Y., Jeong, M., Omitaomu, O. (2021)
-           Weighted dynamic time warping for time series classification.
-           Pattern Recognition 44, 2231-2240
-
+   Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+       Weighted dynamic time warping for time series classification.
+       Pattern Recognition 44, 2231-2240
 
 
 .. py:function:: wddtw_distance(x, y, *, r=1.0, g=0.05)
@@ -245,38 +238,27 @@ Functions
 
    Weighted dynamic time warping alignment
 
-       Parameters
-       ----------
-       x : array-like of shape (x_timestep,)
-           The first time series
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,)
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep,)
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+   :param g: Weighting described by Jeong et. al. (2011) using :math:`g` as penalty control.
 
-       y : array-like of shape (y_timestep,)
-           The second time series
+             .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}},
+   :type g: float, optional
+   :param out: Store the warping path in this array.
+   :type out: array-like of shape (x_timestep, y_timestep), optional
 
-       r : float, optional
-           The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :returns: **alignment** -- The dynamic time warping alignment matrix
+   :rtype: ndarray of shape (x_timestep, y_timestep)
 
+   .. rubric:: References
 
-       g : float, optional
-           Weighting described by Jeong et. al. (2011) using g as penalty control.
-
-           .. math:: w(x)=
-   rac{w_{max}}{1+e^{-g(x-m/2)}},
-
-       out : array-like of shape (x_timestep, y_timestep), optional
-           Store the warping path in this array.
-
-       Returns
-       -------
-       alignment : ndarray of shape (x_timestep, y_timestep)
-           The dynamic time warping alignment matrix
-
-       References
-       ----------
-       Jeong, Y., Jeong, M., Omitaomu, O. (2021)
-           Weighted dynamic time warping for time series classification.
-           Pattern Recognition 44, 2231-2240
-
+   Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+       Weighted dynamic time warping for time series classification.
+       Pattern Recognition 44, 2231-2240
 
 
 .. py:function:: wdtw_distance(x, y, *, r=1.0, g=0.05)

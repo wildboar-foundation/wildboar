@@ -53,69 +53,16 @@ Attributes
 
       :type: int or array-like
 
-   .. attribute:: Construct a bundle
-
-
-
-   .. attribute::
-
-
-
-      :type: param key: A unique key of the bundle
-
-   .. attribute::
-
-
-
-      :type: type key: str
-
-   .. attribute::
-
-
-
-      :type: param version: The version of the bundle
-
-   .. attribute::
-
-
-
-      :type: type version: str
-
-   .. attribute::
-
-
-
-      :type: param name: Human-readable name of the bundle
-
-   .. attribute::
-
-
-
-      :type: type name: str
-
-   .. attribute::
-
-
-
-      :type: param description: Description of the bundle
-
-   .. attribute::
-
-
-
-      :type: type description: str
-
-   .. attribute::
-
-
-
-      :type: param arrays: The arrays of the dataset
-
-   .. attribute::
-
-
-
-      :type: type arrays: list
+   :param key: A unique key of the bundle
+   :type key: str
+   :param version: The version of the bundle
+   :type version: str
+   :param name: Human-readable name of the bundle
+   :type name: str
+   :param description: Description of the bundle
+   :type description: str
+   :param arrays: The arrays of the dataset
+   :type arrays: list
 
    .. py:method:: get_collection(collection)
 
@@ -208,8 +155,6 @@ Attributes
    Bases: :py:obj:`Bundle`
 
    bundle of numpy binary files
-
-   Construct a bundle
 
    :param key: A unique key of the bundle
    :type key: str

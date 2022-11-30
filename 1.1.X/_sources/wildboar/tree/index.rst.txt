@@ -35,185 +35,62 @@ Classes
 
 
 
-.. py:class:: ExtraShapeletTreeClassifier(*, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
+.. py:class:: ExtraShapeletTreeClassifier(*, n_shapelets=1, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
    Bases: :py:obj:`ShapeletTreeClassifier`
 
    An extra shapelet tree classifier.
 
    Extra shapelet trees are constructed by sampling a distance threshold
-   uniformly in the range [min(dist), max(dist)].
+   uniformly in the range ``[min(dist), max(dist)]``.
 
    .. attribute:: tree_
 
-
+      The tree representation
 
       :type: Tree
 
-   .. attribute:: Construct a extra shapelet tree regressor
-
-
-
-   .. attribute::
-
-      leaves are pure or until all leaves contain less than `min_samples_split`
-      samples
-
-      :type: param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
-
-   .. attribute::
-
-
-
-      :type: type max_depth: int, optional
-
-   .. attribute::
-
-
-
-      :type: param min_samples_split: The minimum number of samples to split an internal node
-
-   .. attribute::
-
-
-
-      :type: type min_samples_split: int, optional
-
-   .. attribute::
-
-
-
-      :type: param min_samples_leaf: The minimum number of samples in a leaf
-
-   .. attribute::
-
-
-
-      :type: type min_samples_leaf: int, optional
-
-   .. attribute::
-
-
-
-      :type: param criterion: The criterion used to evaluate the utility of a split
-
-   .. attribute::
-
-
-
-      :type: type criterion: {"entropy", "gini"}, optional
-
-   .. attribute::
-
-      equal to this value
-
-      :type: param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
-
-   .. attribute::
-
-
-
-      :type: type min_impurity_decrease: float, optional
-
-   .. attribute::
-
-      as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
-
-      :type: param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
-
-   .. attribute::
-
-
-
-      :type: type min_shapelet_size: float, optional
-
-   .. attribute::
-
-      as `ceil(X.shape[-1] * max_shapelet_size)`.
-
-      :type: param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
-
-   .. attribute::
-
-
-
-      :type: type max_shapelet_size: float, optional
-
-   .. attribute::
-
-
-
-      :type: param metric: Distance metric used to identify the best shapelet.
-
-   .. attribute::
-
-
-
-      :type: type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
-
-   .. attribute::
-
-
-
-      :type: param metric_params: Parameters for the distance measure
-
-   .. attribute::
-
-
-
-      :type: type metric_params: dict, optional
-
-   .. attribute::
-
-
-
-      - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-        for interoperability with `sklearn`.
-
-      :type: param force_dim: Force the number of dimensions.
-
-   .. attribute::
-
-
-
-      :type: type force_dim: int, optional
-
-   .. attribute::
-
-
-
-      - if dict, weights on the form {label: weight}
-      - if "balanced" each class weight inversely proportional to the class
-        frequency
-      - if None, each class has equal weight
-
-      :type: param class_weight: Weights associated with the labels
-
-   .. attribute::
-
-
-
-      :type: type class_weight: dict or "balanced", optional
-
-   .. attribute::
-
-
-
-      - If `int`, `random_state` is the seed used by the random number generator;
-      - If `RandomState` instance, `random_state` is the random number generator;
-      - If `None`, the random number generator is the `RandomState` instance used
-        by `np.random`.
-
-      :type: param random_state:
-
-   .. attribute::
-
-
-
-      :type: type random_state: int or RandomState
-
-
-.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"entropy", "gini"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as ``min(ceil(X.shape[-1] * min_shapelet_size), 2)``.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as ``ceil(X.shape[-1] * max_shapelet_size)``.
+   :type max_shapelet_size: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+   :type metric: {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
+   :param metric_params: Parameters for the distance measure
+   :type metric_params: dict, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator;
+                        - If `RandomState` instance, `random_state` is the random number generator;
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
+
+
+.. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
    Bases: :py:obj:`ShapeletTreeRegressor`
 
@@ -224,240 +101,251 @@ Classes
 
    .. attribute:: tree_
 
-
+      The internal tree representation
 
       :type: Tree
 
-   .. attribute:: Construct a extra shapelet tree regressor
-
-
-
-   .. attribute::
-
-      leaves are pure or until all leaves contain less than `min_samples_split`
-      samples
-
-      :type: param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
-
-   .. attribute::
-
-
-
-      :type: type max_depth: int, optional
-
-   .. attribute::
-
-
-
-      :type: param min_samples_split: The minimum number of samples to split an internal node
-
-   .. attribute::
-
-
-
-      :type: type min_samples_split: int, optional
-
-   .. attribute::
-
-
-
-      :type: param min_samples_leaf: The minimum number of samples in a leaf
-
-   .. attribute::
-
-
-
-      :type: type min_samples_leaf: int, optional
-
-   .. attribute::
-
-
-
-      :type: param criterion: The criterion used to evaluate the utility of a split
-
-   .. attribute::
-
-
-
-      :type: type criterion: {"mse"}, optional
-
-   .. attribute::
-
-      equal to this value
-
-      :type: param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
-
-   .. attribute::
-
-
-
-      :type: type min_impurity_decrease: float, optional
-
-   .. attribute::
-
-
-
-      :type: param n_shapelets: The number of shapelets to sample at each node.
-
-   .. attribute::
-
-
-
-      :type: type n_shapelets: int, optional
-
-   .. attribute::
-
-      as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
-
-      :type: param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
-
-   .. attribute::
-
-
-
-      :type: type min_shapelet_size: float, optional
-
-   .. attribute::
-
-      as `ceil(X.shape[-1] * max_shapelet_size)`.
-
-      :type: param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
-
-   .. attribute::
-
-
-
-      :type: type max_shapelet_size: float, optional
-
-   .. attribute::
-
-
-
-      :type: param metric: Distance metric used to identify the best shapelet.
-
-   .. attribute::
-
-
-
-      :type: type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
-
-   .. attribute::
-
-
-
-      :type: param metric_params: Parameters for the distance measure
-
-   .. attribute::
-
-
-
-      :type: type metric_params: dict, optional
-
-   .. attribute::
-
-
-
-      - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-        for interoperability with `sklearn`.
-
-      :type: param force_dim: Force the number of dimensions.
-
-   .. attribute::
-
-
-
-      :type: type force_dim: int, optional
-
-   .. attribute::
-
-
-
-      - If `int`, `random_state` is the seed used by the random number generator;
-      - If `RandomState` instance, `random_state` is the random number generator;
-      - If `None`, the random number generator is the `RandomState` instance used
-        by `np.random`.
-
-      :type: param random_state:
-
-   .. attribute::
-
-
-
-      :type: type random_state: int or RandomState
-
-
-.. py:class:: IntervalTreeClassifier(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, class_weight=None, random_state=None)
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+
+                     .. deprecated:: 1.0
+                         Criterion "mse" was deprecated in v1.1 and will be removed in
+                         version 1.2. Use `criterion="squared_error"` which is equivalent.
+   :type criterion: {"mse"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as `ceil(X.shape[-1] * max_shapelet_size)`.
+   :type max_shapelet_size: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+   :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
+   :param metric_params: Parameters for the distance measure
+   :type metric_params: dict, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator;
+                        - If `RandomState` instance, `random_state` is the random number generator;
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
+
+
+.. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
-   Mixin for classification trees.
+   An interval based tree classifier.
 
-   :param n_kernels: The number of kernels to inspect at each node.
-   :type n_kernels: int, optional
-   :param max_depth: The maxium depth.
+   .. attribute:: tree_
+
+      The internal tree structure.
+
+      :type: Tree
+
+   :param n_intervals: The number of intervals to partition the time series into.
+
+                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
+                       - if int, the number of intervals is ``n_intervals``.
+                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
+                         ``0 < n_intervals < 1``.
+   :type n_intervals: {"log", "sqrt"}, int or float, optional
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples.
    :type max_depth: int, optional
-   :param min_samples_split: The minimum number of samples required to split.
+   :param min_samples_split: The minimum number of samples to split an internal node.
    :type min_samples_split: int, optional
-   :param force_dim: Force reshaping of input data.
-   :type force_dim: int, optional
-   :param random_state: The psudo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf.
+   :type min_samples_leaf: int, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value.
+   :type min_impurity_decrease: float, optional
+   :param criterion: The criterion used to evaluate the utility of a split.
+   :type criterion: {"entropy", "gini"}, optional
+   :param intervals:
+                     - if "fixed", `n_intervals` non-overlapping intervals.
+                     - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
+                     - if "random", `n_intervals` possibly overlapping intervals of randomly
+                       sampled in ``[min_size * n_timestep, max_size * n_timestep]``
+   :type intervals: {"fixed", "sample", "random"}, optional
+   :param sample_size: The fraction of intervals to sample at each node. Ignored unless
+                       ``intervals="sample"``.
+   :type sample_size: float, optional
+   :param min_size: The minmum interval size. Ignored unless ``intervals="random"``.
+   :type min_size: float, optional
+   :param max_size: The maximum interval size. Ignored unless ``intervals="random"``.
+   :type max_size: float, optional
+   :param summarizer: The summarization of each interval.
+
+                      - if list, a list of callables accepting a numpy array returing a float.
+                      - if str, a predified summarized. See
+                        :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
+                        summarizers.
+   :type summarizer: list or str, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: IntervalTreeRegressor(n_interval='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='auto', force_dim=None, random_state=None)
+.. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
-   Mixin for regression trees.
+   An interval based tree regressor.
 
-   :param n_kernels: The number of kernels to inspect at each node.
-   :type n_kernels: int, optional
-   :param max_depth: The maxium depth.
+   .. attribute:: tree_
+
+      The internal tree structure.
+
+      :type: Tree
+
+   :param n_intervals: The number of intervals to partition the time series into.
+
+                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
+                       - if int, the number of intervals is ``n_intervals``.
+                       - if float, the number of intervals is ``n_intervals * n_timestep``, with
+                         ``0 < n_intervals < 1``.
+   :type n_intervals: {"log", "sqrt"}, int or float, optional
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples.
    :type max_depth: int, optional
-   :param min_samples_split: The minimum number of samples required to split.
+   :param min_samples_split: The minimum number of samples to split an internal node.
    :type min_samples_split: int, optional
-   :param force_dim: Force reshaping of input data.
-   :type force_dim: int, optional
-   :param random_state: The psudo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf.
+   :type min_samples_leaf: int, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value.
+   :type min_impurity_decrease: float, optional
+   :param criterion: The criterion used to evaluate the utility of a split.
+
+                     .. deprecated:: 1.0
+                         Criterion "mse" was deprecated in v1.1 and will be removed in
+                         version 1.2. Use `criterion="squared_error"` which is equivalent.
+   :type criterion: {"squared_error"}, optional
+   :param intervals:
+                     - if "fixed", `n_intervals` non-overlapping intervals.
+                     - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
+                     - if "random", `n_intervals` possibly overlapping intervals of randomly
+                       sampled in ``[min_size * n_timestep, max_size * n_timestep]``
+   :type intervals: {"fixed", "sample", "random"}, optional
+   :param sample_size: The fraction of intervals to sample at each node. Ignored unless
+                       ``intervals="sample"``.
+   :type sample_size: float, optional
+   :param min_size: The minmum interval size. Ignored unless ``intervals="random"``.
+   :type min_size: float, optional
+   :param max_size: The maximum interval size. Ignored unless ``intervals="random"``.
+   :type max_size: float, optional
+   :param summarizer: The summarization of each interval.
+
+                      - if list, a list of callables accepting a numpy array returing a float.
+                      - if str, a predified summarized. See
+                        :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
+                        summarizers.
+   :type summarizer: list or str, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, force_dim=None, random_state=None)
+.. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
-   Mixin for classification trees.
+   A tree classifier that uses pivot time series.
 
-   :param n_kernels: The number of kernels to inspect at each node.
-   :type n_kernels: int, optional
-   :param max_depth: The maxium depth.
+
+   .. attribute:: tree_
+
+      The internal tree representation
+
+      :type: Tree
+
+   :param n_pivot: The number of pivot time series to sample at each node.
+   :type n_pivot: str or int, optional
+   :param metrics: The metrics to sample from. Currently, we only support "all".
+   :type metrics: str, optional
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples.
    :type max_depth: int, optional
-   :param min_samples_split: The minimum number of samples required to split.
+   :param min_samples_split: The minimum number of samples to split an internal node.
    :type min_samples_split: int, optional
-   :param force_dim: Force reshaping of input data.
-   :type force_dim: int, optional
-   :param random_state: The psudo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf.
+   :type min_samples_leaf: int, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value.
+   :type min_impurity_decrease: float, optional
+   :param criterion: The criterion used to evaluate the utility of a split.
+   :type criterion: {"entropy", "gini"}, optional
+   :param class_weight: Weights associated with the labels.
+
+                        - if dict, weights on the form {label: weight}.
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency.
+                        - if None, each class has equal weight.
+   :type class_weight: dict or "balanced", optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories=None, force_dim=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories='default', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
 
-   A proximity tree defines a k-branching tree based on pivot-time series.
+   A classifier that uses a k-branching tree based on pivot-time series.
 
    .. rubric:: Examples
 
    >>> from wildboar.datasets import load_dataset
    >>> from wildboar.tree import ProximityTreeClassifier
    >>> x, y = load_dataset("GunPoint")
-   >>> f = ProximityTreeClassifier(n_pivot=10, criterion="gini")
+   >>> f = ProximityTreeClassifier(
+   ...     n_pivot=10,
+   ...     metric_factories={
+   ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
+   ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
+   ...     },
+   ...     "max_criterion="gini"
+   ... )
    >>> f.fit(x, y)
 
    .. rubric:: References
 
-   Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O’Neill, Nayyar Zaidi,
-   Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
+   Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi,     Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
        Proximity forest: an effective and scalable distance-based classifier for time
        series. Data Mining and Knowledge Discovery
 
@@ -469,13 +357,19 @@ Classes
    :type pivot_sample: {"label", "uniform"}, optional
    :param metric_sample: The metric sampling method.
    :type metric_sample: {"uniform", "weighted"}, optional
-   :param metric_factories: The distance metrics. A dictionary where key is:
+   :param metric_factories: The distance metrics.
 
-                            - str: a named distance factory (``_DISTANCE_FACTORIES.keys()``)
-                            - callable, a function returning a list of ``DistanceMeasure``-objects
+                            If dict, a dictionary where key is:
+
+                            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
+                            - if callable, a function returning a list of ``DistanceMeasure``-objects
 
                             and where value is a dict of parameters to the factory.
-   :type metric_factories: dict, optional
+
+                            If list, a list of named factories or callables.
+
+                            If "default", use the parameterization of (Lucas et.al, 2019)
+   :type metric_factories: "default", list or dict, optional
    :param max_depth: The maximum tree depth.
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to consider a split.
@@ -484,51 +378,163 @@ Classes
    :type min_samples_leaf: int, optional
    :param min_impurity_decrease: The minimum impurity decrease to build a sub-tree.
    :type min_impurity_decrease: float, optional
-   :param class_weight: The class weights.
-   :type class_weight: array-like of shape (n_labels, ) or "balanced", optional
-   :param random_state: The pseudo random number generator.
-   :type random_state: int or RandomState, optional
+   :param class_weight: Weights associated with the labels.
+
+                        - if dict, weights on the form {label: weight}.
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency.
+                        - if None, each class has equal weight.
+   :type class_weight: dict or "balanced", optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, class_weight=None, random_state=None)
+.. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, class_weight=None, random_state=None)
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
-   Mixin for classification trees.
+   A tree classifier that uses random convolutions as features.
 
-   :param n_kernels: The number of kernels to inspect at each node.
+   .. attribute:: tree_
+
+      The internal tree representation.
+
+      :type: Tree
+
+   :param n_kernels: The number of kernels to sample at each node.
    :type n_kernels: int, optional
-   :param max_depth: The maxium depth.
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples.
    :type max_depth: int, optional
-   :param min_samples_split: The minimum number of samples required to split.
+   :param min_samples_split: The minimum number of samples to split an internal node.
    :type min_samples_split: int, optional
-   :param force_dim: Force reshaping of input data.
-   :type force_dim: int, optional
-   :param random_state: The psudo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf.
+   :type min_samples_leaf: int, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value.
+   :type min_impurity_decrease: float, optional
+   :param criterion: The criterion used to evaluate the utility of a split.
+   :type criterion: {"entropy", "gini"}, optional
+   :param sampling: The sampling of convolutional filters.
+
+                    - if "normal", sample filter according to a normal distribution with
+                      ``mean`` and ``scale``.
+
+                    - if "uniform", sample filter according to a uniform distribution with
+                      ``lower`` and ``upper``.
+
+                    - if "shapelet", sample filters as subsequences in the training data.
+   :type sampling: {"normal", "uniform", "shapelet"}, optional
+   :param sampling_params: The parameters for the sampling.
+
+                           - if "normal", ``{"mean": float, "scale": float}``, defaults to
+                              ``{"mean": 0, "scale": 1}``.
+
+                           - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+                              ``{"lower": -1, "upper": 1}``.
+   :type sampling_params: dict, optional
+   :param kernel_size: The kernel size.
+
+                       - if (min_size, max_size), all kernel sizes between
+                         ``min_size * n_timestep`` and ``max_size * n_timestep``
+
+                       - if array-like, all defined kernel sizes.
+   :type kernel_size: (min_size, max_size) or array-like, optional
+   :param bias_prob: The probability of using a bias term.
+   :type bias_prob: float, optional
+   :param normalize_prob: The probability of performing normalization.
+   :type normalize_prob: float, optional
+   :param padding_prob: The probability of padding with zeros.
+   :type padding_prob: float, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='mse', sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, force_dim=None, random_state=None)
+.. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, random_state=None)
 
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
-   Mixin for regression trees.
+   A tree regressor that uses random convolutions as features.
 
-   :param n_kernels: The number of kernels to inspect at each node.
+   .. attribute:: tree_
+
+      The internal tree representation.
+
+      :type: Tree
+
+   :param n_kernels: The number of kernels to sample at each node.
    :type n_kernels: int, optional
-   :param max_depth: The maxium depth.
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples.
    :type max_depth: int, optional
-   :param min_samples_split: The minimum number of samples required to split.
+   :param min_samples_split: The minimum number of samples to split an internal node.
    :type min_samples_split: int, optional
-   :param force_dim: Force reshaping of input data.
-   :type force_dim: int, optional
-   :param random_state: The psudo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf.
+   :type min_samples_leaf: int, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value.
+   :type min_impurity_decrease: float, optional
+   :param criterion: The criterion used to evaluate the utility of a split.
+   :type criterion: {"entropy", "gini"}, optional
+   :param sampling: The sampling of convolutional filters.
+
+                    - if "normal", sample filter according to a normal distribution with
+                      ``mean`` and ``scale``.
+
+                    - if "uniform", sample filter according to a uniform distribution with
+                      ``lower`` and ``upper``.
+
+                    - if "shapelet", sample filters as subsequences in the training data.
+   :type sampling: {"normal", "uniform", "shapelet"}, optional
+   :param sampling_params: The parameters for the sampling.
+
+                           - if "normal", ``{"mean": float, "scale": float}``, defaults to
+                              ``{"mean": 0, "scale": 1}``.
+
+                           - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+                              ``{"lower": -1, "upper": 1}``.
+   :type sampling_params: dict, optional
+   :param kernel_size: The kernel size.
+
+                       - if (min_size, max_size), all kernel sizes between
+                         ``min_size * n_timestep`` and ``max_size * n_timestep``
+
+                       - if array-like, all defined kernel sizes.
+   :type kernel_size: (min_size, max_size) or array-like, optional
+   :param bias_prob: The probability of using a bias term.
+   :type bias_prob: float, optional
+   :param normalize_prob: The probability of performing normalization.
+   :type normalize_prob: float, optional
+   :param padding_prob: The probability of padding with zeros.
+   :type padding_prob: float, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeClassifier(*, n_shapelets=10, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', force_dim=None, class_weight=None, random_state=None)
+.. py:class:: ShapeletTreeClassifier(*, n_shapelets='warn', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
-   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree classifier.
 
@@ -552,223 +558,140 @@ Classes
 
    .. seealso::
 
-      ShapeletTreeRegressor : A shapelet tree regressor.
-      ExtraShapeletTreeClassifier : An extra random shapelet tree classifier.
+      :obj:`ShapeletTreeRegressor`
+          A shapelet tree regressor.
 
-      Construct a shapelet tree classifier
+      :obj:`ExtraShapeletTreeClassifier`
+          An extra random shapelet tree classifier.
 
-      :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
-                        leaves are pure or until all leaves contain less than `min_samples_split`
-                        samples
-      :type max_depth: int, optional
-      :param min_samples_split: The minimum number of samples to split an internal node
-      :type min_samples_split: int, optional
-      :param min_samples_leaf: The minimum number of samples in a leaf
-      :type min_samples_leaf: int, optional
-      :param criterion: The criterion used to evaluate the utility of a split
-      :type criterion: {"entropy", "gini"}, optional
-      :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
-                                    equal to this value
-      :type min_impurity_decrease: float, optional
-      :param n_shapelets: The number of shapelets to sample at each node.
-      :type n_shapelets: int, optional
-      :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
-                                as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
-      :type min_shapelet_size: float, optional
-      :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
-                                as `ceil(X.shape[-1] * max_shapelet_size)`.
-      :type max_shapelet_size: float, optional
-      :param metric: Distance metric used to identify the best shapelet.
-      :type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
-      :param metric_params: Parameters for the distance measure
-      :type metric_params: dict, optional
-      :param force_dim: Force the number of dimensions.
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+   :type criterion: {"entropy", "gini"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as ``min(ceil(X.shape[-1] * min_shapelet_size), 2)``.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as ``ceil(X.shape[-1] * max_shapelet_size)``.
+   :type max_shapelet_size: float, optional
+   :param alpha: Dynamically decrease the number of sampled shapelets at each node according
+                 to the current depth.
 
-                        - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-                          for interoperability with `sklearn`.
-      :type force_dim: int, optional
-      :param class_weight: Weights associated with the labels
+                 .. math:`w = 1 - e^{-|alpha| * depth})`
 
-                           - if dict, weights on the form {label: weight}
-                           - if "balanced" each class weight inversely proportional to the class
-                             frequency
-                           - if None, each class has equal weight
-      :type class_weight: dict or "balanced", optional
-      :param random_state:
-                           - If `int`, `random_state` is the seed used by the random number generator;
-                           - If `RandomState` instance, `random_state` is the random number generator;
-                           - If `None`, the random number generator is the `RandomState` instance used
-                             by `np.random`.
-      :type random_state: int or RandomState
+                 - if :math:`alpha < 0`, the number of sampled shapelets decrease from
+                   ``n_shapelets`` towards 1 with increased depth.
+
+                   .. math:`n_shapelets * (1 - w)`
+
+                 - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
+                   towards ``n_shapelets`` with increased depth.
+
+                   .. math:`n_shapelets * w`
+
+                 - if ``None``, the number of sampled shapelets are the same independeth of
+                   depth.
+   :type alpha: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+   :type metric: {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
+   :param metric_params: Parameters for the distance measure
+   :type metric_params: dict, optional
+   :param class_weight: Weights associated with the labels
+
+                        - if dict, weights on the form {label: weight}
+                        - if "balanced" each class weight inversely proportional to the class
+                          frequency
+                        - if None, each class has equal weight
+   :type class_weight: dict or "balanced", optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator;
+                        - If `RandomState` instance, `random_state` is the random number generator;
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, criterion='mse', random_state=None)
+.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
-   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 
    A shapelet tree regressor.
 
    .. attribute:: tree_
 
-
+      The internal tree representation
 
       :type: Tree
 
-   .. attribute:: Construct a shapelet tree regressor
-
-
-
-   .. attribute::
-
-      leaves are pure or until all leaves contain less than `min_samples_split`
-      samples
-
-      :type: param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
-
-   .. attribute::
-
-
-
-      :type: type max_depth: int, optional
-
-   .. attribute::
-
-
-
-      :type: param min_samples_split: The minimum number of samples to split an internal node
-
-   .. attribute::
-
-
-
-      :type: type min_samples_split: int, optional
-
-   .. attribute::
-
-
-
-      :type: param min_samples_leaf: The minimum number of samples in a leaf
-
-   .. attribute::
-
-
-
-      :type: type min_samples_leaf: int, optional
-
-   .. attribute::
-
-
-
-      :type: param criterion: The criterion used to evaluate the utility of a split
-
-   .. attribute::
-
-
-
-      :type: type criterion: {"mse"}, optional
-
-   .. attribute::
-
-      equal to this value
-
-      :type: param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
-
-   .. attribute::
-
-
-
-      :type: type min_impurity_decrease: float, optional
-
-   .. attribute::
-
-
-
-      :type: param n_shapelets: The number of shapelets to sample at each node.
-
-   .. attribute::
-
-
-
-      :type: type n_shapelets: int, optional
-
-   .. attribute::
-
-      as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
-
-      :type: param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
-
-   .. attribute::
-
-
-
-      :type: type min_shapelet_size: float, optional
-
-   .. attribute::
-
-      as `ceil(X.shape[-1] * max_shapelet_size)`.
-
-      :type: param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
-
-   .. attribute::
-
-
-
-      :type: type max_shapelet_size: float, optional
-
-   .. attribute::
-
-
-
-      :type: param metric: Distance metric used to identify the best shapelet.
-
-   .. attribute::
-
-
-
-      :type: type metric: {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
-
-   .. attribute::
-
-
-
-      :type: param metric_params: Parameters for the distance measure
-
-   .. attribute::
-
-
-
-      :type: type metric_params: dict, optional
-
-   .. attribute::
-
-
-
-      - If int, force_dim reshapes the input to shape (n_samples, force_dim, -1)
-        for interoperability with `sklearn`.
-
-      :type: param force_dim: Force the number of dimensions.
-
-   .. attribute::
-
-
-
-      :type: type force_dim: int, optional
-
-   .. attribute::
-
-
-
-      - If `int`, `random_state` is the seed used by the random number generator;
-      - If `RandomState` instance, `random_state` is the random number generator;
-      - If `None`, the random number generator is the `RandomState` instance used
-        by `np.random`.
-
-      :type: param random_state:
-
-   .. attribute::
-
-
-
-      :type: type random_state: int or RandomState
+   :param max_depth: The maximum depth of the tree. If `None` the tree is expanded until all
+                     leaves are pure or until all leaves contain less than `min_samples_split`
+                     samples
+   :type max_depth: int, optional
+   :param min_samples_split: The minimum number of samples to split an internal node
+   :type min_samples_split: int, optional
+   :param min_samples_leaf: The minimum number of samples in a leaf
+   :type min_samples_leaf: int, optional
+   :param criterion: The criterion used to evaluate the utility of a split
+
+                     .. deprecated:: 1.0
+                         Criterion "mse" was deprecated in v1.1 and will be removed in
+                         version 1.2. Use `criterion="squared_error"` which is equivalent.
+   :type criterion: {"squared_error"}, optional
+   :param min_impurity_decrease: A split will be introduced only if the impurity decrease is larger than or
+                                 equal to this value
+   :type min_impurity_decrease: float, optional
+   :param n_shapelets: The number of shapelets to sample at each node.
+   :type n_shapelets: int, optional
+   :param min_shapelet_size: The minimum length of a sampled shapelet expressed as a fraction, computed
+                             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: The maximum length of a sampled shapelet, expressed as a fraction, computed
+                             as `ceil(X.shape[-1] * max_shapelet_size)`.
+   :type max_shapelet_size: float, optional
+   :param alpha: Dynamically decrease the number of sampled shapelets at each node according
+                 to the current depth.
+
+                 .. math:: w = 1 - e^{-|alpha| * depth}
+
+                 - if :math:`alpha < 0`, the number of sampled shapelets decrease from
+                   ``n_shapelets`` towards 1 with increased depth.
+
+                   .. math:: n_shapelets * (1 - w)
+
+                 - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
+                   towards ``n_shapelets`` with increased depth.
+
+                   .. math:: n_shapelets * w
+
+                 - if ``None``, the number of sampled shapelets are the same independeth of
+                   depth.
+   :type alpha: float, optional
+   :param metric: Distance metric used to identify the best shapelet.
+
+                  See ``distance._SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of
+                  supported metrics.
+   :type metric: str, optional
+   :param metric_params: Parameters for the distance measure.
+
+                         Read more about the parameters in the
+                         :ref:`User guide <list_of_subsequence_metrics>`.
+   :type metric_params: dict, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 

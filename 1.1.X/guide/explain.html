@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Examples" href="../examples.html" /><link rel="prev" title="Distance metrics" href="metrics.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Counterfactual explanations" href="explain/counterfactuals.html" /><link rel="prev" title="Distance metrics" href="metrics.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
         <title>Explainability - Wildboar 1.1.0rc4 documentation</title>
@@ -139,7 +139,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -169,96 +169,116 @@
 <li class="toctree-l1"><a class="reference internal" href="../tutorial.html">wildboar tutorial</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../guide.html">User guide</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basics.html">Time series</a></li>
-<li class="toctree-l2"><a class="reference internal" href="datasets.html">Datasets</a></li>
-<li class="toctree-l2"><a class="reference internal" href="supervised.html">Supervised learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="unsupervised.html">Unsupervised learning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="metrics.html">Distance metrics</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Explainability</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="datasets/repositories.html">Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets/preprocess.html">Preprocessing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets/filter.html">Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datasets/outlier.html">Outlier generation</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="supervised/linear_models.html">Linear models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="supervised/tree_models.html">Decision trees</a></li>
+<li class="toctree-l3"><a class="reference internal" href="supervised/ensemble_models.html">Ensemble models</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="unsupervised/pattern_discovery.html">Pattern discovery</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unsupervised/outlier_detection.html">Outlier detection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html">Distance metrics</a></li>
+<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">Explainability</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="explain/counterfactuals.html">Counterfactual explanations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="explain/importance.html">Interval permutation importance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/annotate/motif.html">Motif discovery</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/annotate/segment.html">Segmentation</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/embeddings.html">Embeddings</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/embedding/interval.html">Interval</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/embedding/rocket.html">Rocket</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/embedding/shapelet.html">Shapelets</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/transform.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/transform/interval.html">Interval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/transform/rocket.html">Rocket</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/transform/sax.html">Symbolic aggregate approximation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/transform/shapelet.html">Shapelets</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/explainability/counterfactuals.html">Comparing counterfactals</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/supervised/classifier_comparision.html">Comparing classifiers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/supervised/miss_classification_analysis.html">Miss-classification analysis</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/supervised/shapelet_forest_vs_shapelet_extra_trees.html">Shapelet forests and extremly randomized shapelet trees</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/unsupervised/matrix_profile.html">Matrix profile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../examples/notebooks/unsupervised/outlier_detection.html">Outlier detection</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../more.html">More</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../more/whatsnew.html">What’s new</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../more.html">More</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../more/whatsnew.html">What’s new</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../more/versions/v1.1.html">Version 1.1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../more/versions/v1.0.html">Version 1.0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../more/versions/older.html">Older versions</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../more/contributing.html">Developer’s guide</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../wildboar/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../wildboar/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../wildboar/annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/embed/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../wildboar/embed/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.catch22</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../wildboar/embed/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.embed.base</span></code></a></li>
-</ul>
-</li>
 <li class="toctree-l3"><a class="reference internal" href="../wildboar/ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4 has-children"><a class="reference internal" href="../wildboar/explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l5"><a class="reference internal" href="../wildboar/explain/counterfactual/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l4"><a class="reference internal" href="../wildboar/explain/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.base</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../wildboar/explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../wildboar/linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../wildboar/metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../wildboar/transform/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../wildboar/transform/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../wildboar/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../wildboar/utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../wildboar/utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../wildboar/utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../wildboar/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../wildboar/version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
@@ -305,7 +325,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -313,103 +333,8 @@
         <article role="main">
           <section id="explainability">
 <h1>Explainability<a class="headerlink" href="#explainability" title="Permalink to this heading">#</a></h1>
-<section id="counterfactual-explanations">
-<h2>Counterfactual explanations<a class="headerlink" href="#counterfactual-explanations" title="Permalink to this heading">#</a></h2>
-<p>wildboar can explain predictions of nearest neighbors classifiers and shapelet forest classifiers
-using counterfactual samples. In this scenario, counterfactuals are samples that
-are transformed such that the labeling of the sample changes. For instance,
-we might want to explain what changes are required to transforms a sample
-labeled as <cite>abnormal</cite> to <cite>normal</cite>. In this scenario, the normal sample would
-be the counterfactual sample.</p>
-<p>In wildboar, counterfactual explainers are in the module <code class="docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code>.
-The easiest way to generate counterfactuals is to use the function <code class="docutils literal notranslate"><span class="pre">counterfactuals</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactuals</span>
-</pre></div>
+<div class="toctree-wrapper compound">
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Currently, the classifiers that supports counterfactual explanations
-are <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code> and <code class="docutils literal notranslate"><span class="pre">KNearestNeighborsClassifier</span></code>
-from wildboar and scikit-learn respectively. Model agnostic counterfactual
-explanations can be provided for other estimators.</p>
-</div>
-<p>To have more control over the generation of counterfactual samples, the classes
-<code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual</span></code> and <code class="docutils literal notranslate"><span class="pre">ShapeletForestCounterfactuals</span></code> can be used.
-They implement the interface of <code class="docutils literal notranslate"><span class="pre">BaseCounterfactuals</span></code> which exposes two
-methods <code class="docutils literal notranslate"><span class="pre">fit(estimator)</span></code> and <code class="docutils literal notranslate"><span class="pre">transform(x,</span> <span class="pre">y)</span></code>, where the former fits
-a counterfactual explainer to an estimator and the latter transform the i:th sample
-of <cite>x</cite> to a sample labeled as the i:th label in <cite>y</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">KNeighborsCounterfactuals</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">KNeighborsCounterfactuals</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">counterfactual</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_desired</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactuals</span></code> only supports <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code> fit
-with the Euclidean distance.</p>
-</div>
-<section id="example">
-<h3>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h3>
-<p>In the following example, we explain the a nearest neighbors classifier and
-a shapelet forest classifier for the datasets <cite>TwoLeadECG</cite> and explaining samples
-classified as <cite>2.0</cite> if they instead where classified as <cite>1.0</cite> (in the legend
-denoted as <cite>abnormal</cite> and <cite>normal</cite> respectively).</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
-<span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
-<span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactuals</span>
-
-<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
-<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
-
-<span class="c1"># Change estimator to `KNeighborsClassifier(metric=&#39;euclidean&#39;)`</span>
-<span class="c1"># to generate k-nearest counterfactuals instead</span>
-<span class="n">estimator</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
-
-<span class="c1"># fit the estimator to the training data</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-
-<span class="c1"># only consider samples predicted as 2</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">==</span> <span class="mf">2.0</span><span class="p">]</span>
-
-<span class="c1"># generate counterfactuals for the samples classified as 2, instead labeled as 1</span>
-<span class="n">x_counterfactuals</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">counterfactuals</span><span class="p">(</span>
-    <span class="n">estimator</span><span class="p">,</span>
-    <span class="n">x_test</span><span class="p">,</span>
-    <span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># only consider the successful counterfactuals</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
-<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
-<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">score</span><span class="p">[</span><span class="n">valid</span><span class="p">])[:</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
-</pre></div>
-</div>
-<p>Plotting the first two counterfactual samples with the lowest score yields the following
-figure for the <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code>:</p>
-<figure class="align-default">
-<a class="reference internal image-reference" href="../_images/counterfactuals_nn.png"><img alt="../_images/counterfactuals_nn.png" src="../_images/counterfactuals_nn.png" style="width: 390.0px; height: 162.5px;" /></a>
-</figure>
-<p>and for the <code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code>:</p>
-<figure class="align-default">
-<a class="reference internal image-reference" href="../_images/counterfactuals_sf.png"><img alt="../_images/counterfactuals_sf.png" src="../_images/counterfactuals_sf.png" style="width: 390.0px; height: 162.5px;" /></a>
-</figure>
-<p>We can observe that the counterfactual explainer for nearest neighbors classifier
-tend to change larger parts of the time series, while the shapelet forest counterfactuals
-tend to have fewer and smaller changes.</p>
-</section>
-</section>
 </section>
 
         </article>
@@ -417,12 +342,12 @@ tend to have fewer and smaller changes.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../examples.html">
+          <a class="next-page" href="explain/counterfactuals.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Examples</div>
+                <div class="title">Counterfactual explanations</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -457,30 +382,8 @@ tend to have fewer and smaller changes.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Explainability</a><ul>
-<li><a class="reference internal" href="#counterfactual-explanations">Counterfactual explanations</a><ul>
-<li><a class="reference internal" href="#example">Example</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
