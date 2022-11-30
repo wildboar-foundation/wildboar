@@ -10,6 +10,7 @@ import numpy as np
 
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
+from numpy cimport uint32_t
 
 from ..utils cimport TSArray, _stats
 from ..utils._misc cimport to_ndarray_double
@@ -278,7 +279,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.n_intervals, self.summarizer)
 
-    cdef Py_ssize_t reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) nogil:
         self.summarizer.reset(X)
         return 0
 
@@ -295,7 +296,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,
-            size_t *seed,
+            uint32_t *seed,
     ) nogil:
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
         interval.length = X.shape[2] // self.n_intervals
@@ -434,7 +435,7 @@ cdef class RandomFixedIntervalFeatureEngineer(IntervalFeatureEngineer):
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,
-            size_t *seed,
+            uint32_t *seed,
     ) nogil:
         # reshuffle the feature_ids for each dimension
         if feature_id % self.n_random_interval == 0:
@@ -489,7 +490,7 @@ cdef class RandomIntervalFeatureEngineer(IntervalFeatureEngineer):
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,
-            size_t *seed,
+            uint32_t *seed,
     ) nogil:
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
 

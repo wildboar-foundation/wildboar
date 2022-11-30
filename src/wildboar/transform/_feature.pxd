@@ -3,6 +3,8 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+from numpy cimport uint32_t
+
 from wildboar.utils cimport TSArray
 
 
@@ -13,7 +15,7 @@ cdef struct Feature:
 
 cdef class FeatureEngineer:
 
-    cdef Py_ssize_t reset(self, TSArray X) nogil
+    cdef int reset(self, TSArray X) nogil
 
     cdef Py_ssize_t get_n_features(self, TSArray X) nogil
 
@@ -26,7 +28,7 @@ cdef class FeatureEngineer:
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
-        size_t *seed
+        uint32_t *seed
     ) nogil
 
     # Initialize a persisent feature from a transient feature

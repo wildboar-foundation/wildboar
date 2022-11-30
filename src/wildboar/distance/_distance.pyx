@@ -7,8 +7,10 @@
 # License: BSD 3 clause
 
 import numpy as np
+
 from libc.math cimport NAN, sqrt
 from libc.stdlib cimport free, malloc
+from numpy cimport float64_t, intp_t, ndarray
 
 from ..utils cimport _stats
 
@@ -111,9 +113,10 @@ cdef class SubsequenceDistanceMeasure:
 
     cdef object to_array(self, Subsequence *s):
         cdef Py_ssize_t j
-        arr = np.empty(s.length, dtype=float)
-        for j in range(s.length):
-            arr[j] = s.data[j]
+        cdef ndarray[float64_t] arr = np.empty(s.length, dtype=float)
+        with nogil:
+            for j in range(s.length):
+                arr[j] = s.data[j]
 
         return (s.dim, arr)
 
@@ -225,6 +228,7 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         if err < 0:
             return err
         _ts_view_update_statistics(v, &X[v.index, v.dim, v.start])
+        return 0
 
     cdef int from_array(
         self,
@@ -277,7 +281,7 @@ cdef class DistanceMeasure:
         return False
 
 
-cdef object _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
+cdef ndarray[intp_t] _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
     if n_matches > 0:
         match_array = np.empty(n_matches, dtype=np.intp)
         for i in range(n_matches):
@@ -287,8 +291,7 @@ cdef object _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):
         return None
 
 
-cdef object _new_distance_array(
-        double *distances, Py_ssize_t n_matches):
+cdef ndarray[intp_t] _new_distance_array(double *distances, Py_ssize_t n_matches):
     if n_matches > 0:
         dist_array = np.empty(n_matches, dtype=np.double)
         for i in range(n_matches):

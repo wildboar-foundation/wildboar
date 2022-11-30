@@ -5,13 +5,14 @@
 
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
+from numpy cimport uint32_t
 
 from ..utils cimport TSArray
 
 
 cdef class FeatureEngineer:
 
-    cdef Py_ssize_t reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) nogil:
         return 0
 
     cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
@@ -27,7 +28,7 @@ cdef class FeatureEngineer:
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
-        size_t *seed,
+        uint32_t *seed,
     ) nogil:
         return -1
 

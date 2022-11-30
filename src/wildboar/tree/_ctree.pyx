@@ -5,11 +5,13 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
+
 import numpy as np
 
 from libc.math cimport INFINITY, NAN, ceil, exp, fabs, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
+from numpy cimport uint32_t
 
 from scipy.sparse import csr_matrix
 
@@ -44,7 +46,7 @@ cdef class TreeFeatureEngineer:
     def __reduce__(self):
         return self.__class__, (self.feature_engineer, )
 
-    cdef Py_ssize_t reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) nogil:
         return self.feature_engineer.reset(X)
 
     cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) nogil:
@@ -57,7 +59,7 @@ cdef class TreeFeatureEngineer:
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         return self.feature_engineer.next_feature(
             feature_id, X, samples, n_samples, transient, seed
@@ -829,7 +831,7 @@ cdef class TreeBuilder:
     cdef TreeFeatureEngineer feature_engineer
     cdef Criterion criterion
     cdef Tree tree
-    cdef size_t random_seed
+    cdef uint32_t random_seed
 
     def __cinit__(
         self,

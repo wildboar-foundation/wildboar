@@ -8,6 +8,7 @@
 # License: BSD 3 clause
 
 from libc.stdlib cimport free, malloc
+from numpy cimport uint32_t
 
 from ..distance._distance cimport (
     Subsequence,
@@ -31,7 +32,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
-    cdef Py_ssize_t reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) nogil:
         self.distance_measure.reset(X)
         return 1
 
@@ -138,7 +139,7 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
-        size_t *random_seed
+        uint32_t *random_seed
     ) nogil:
         if feature_id >= self.n_shapelets:
             return -1

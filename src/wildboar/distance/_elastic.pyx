@@ -6,13 +6,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-# This implementation is heavily inspired by the UCRSuite.
-#
-# References
-#
-#  - Rakthanmanon, et al., Searching and Mining Trillions of Time
-#    Series Subsequences under Dynamic Time Warping (2012)
-#  - http://www.cs.ucr.edu/~eamonn/UCRsuite.html
 import numpy as np
 
 from libc.math cimport INFINITY, exp, fabs, floor, sqrt
@@ -262,7 +255,7 @@ cdef double cumulative_bound(
     return min_dist
 
 
-cdef inline double inner_scaled_dtw(
+cdef inline double inner_scaled_dtw_subsequence_distance(
     const double *S,
     int s_length,
     double s_mean,
@@ -345,8 +338,14 @@ cdef inline double inner_scaled_dtw(
         cost_prev = cost_tmp
     return cost_prev[k - 1]
 
-
-cdef double scaled_dtw_distance(
+# This implementation is heavily inspired by the UCRSuite.
+#
+# References
+#
+#  - Rakthanmanon, et al., Searching and Mining Trillions of Time
+#    Series Subsequences under Dynamic Time Warping (2012)
+#  - http://www.cs.ucr.edu/~eamonn/UCRsuite.html
+cdef double scaled_dtw_subsequence_distance(
     const double *S,
     Py_ssize_t s_length,
     double s_mean,
@@ -451,7 +450,7 @@ cdef double scaled_dtw_distance(
                             cb[s_length - 1] = cb_2[s_length - 1]
                             for k in range(s_length - 2, -1, -1):
                                 cb[k] = cb[k + 1] + cb_2[k]
-                        dist = inner_scaled_dtw(
+                        dist = inner_scaled_dtw_subsequence_distance(
                             S, 
                             s_length, 
                             s_mean,
@@ -592,7 +591,7 @@ cdef Py_ssize_t scaled_dtw_matches(
                             cb[s_length - 1] = cb_2[s_length - 1]
                             for k in range(s_length - 2, -1, -1):
                                 cb[k] = cb[k + 1] + cb_2[k]
-                        dist = inner_scaled_dtw(
+                        dist = inner_scaled_dtw_subsequence_distance(
                             S, 
                             s_length, 
                             s_mean,
@@ -622,7 +621,7 @@ cdef Py_ssize_t scaled_dtw_matches(
     return n_matches
 
 
-cdef double inner_dtw_subsequence(
+cdef double inner_dtw_subsequence_distance(
     const double *S,
     int s_length,
     const double *T,
@@ -693,7 +692,7 @@ cdef double dtw_subsequence_distance(
 
     cdef Py_ssize_t i
     for i in range(t_length - s_length + 1):
-        dist = inner_dtw_subsequence(
+        dist = inner_dtw_subsequence_distance(
             S,
             s_length, 
             T + i,
@@ -733,7 +732,7 @@ cdef Py_ssize_t dtw_subsequence_matches(
     distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(t_length - s_length + 1):
-        dist = inner_dtw_subsequence(
+        dist = inner_dtw_subsequence_distance(
             S,
             s_length, 
             T + i,
@@ -762,29 +761,8 @@ cdef double dtw_distance(
     Py_ssize_t r,
     double *cost,
     double *cost_prev,
-    double *weight_vector = NULL,
+    double *weight_vector,
 ) nogil:
-    """Dynamic time warping distance
-    
-    Parameters
-    ----------
-    X : data of x
-    x_length : length of x
-    x_mean : mean of array in x (if 0 ignored)
-    x_std : std of array in x (or 1)
-    Y : data of y
-    y_length : length of y
-    y_mean : mean of array in y (if 0 ignored)
-    y_std : std of array in y (or 1)
-    r : the warp window
-    cost : cost matrix (max(x_length, y_length))
-    cost_prev : cost matrix (max(x_length, y_length))
-    weight_vector : weight vector (max(x_length, y_length))
-
-    Returns
-    -------
-    distance : the distance
-    """
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
@@ -954,7 +932,7 @@ cdef double lcss_distance(
     double threshold,
     double *cost,
     double *cost_prev,
-    double *weight_vector = NULL,
+    double *weight_vector,
 ) nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -1079,7 +1057,7 @@ cdef double edr_distance(
     double threshold,
     double *cost,
     double *cost_prev,
-    double *weight_vector = NULL,
+    double *weight_vector,
 ) nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -1392,7 +1370,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
             &self.du,
         )
 
-        return scaled_dtw_distance(
+        return scaled_dtw_subsequence_distance(
             &X[s.index, s.dim, s.start],
             s.length,
             s.mean,
@@ -1433,7 +1411,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
             &self.du,
         )
 
-        cdef double distance = scaled_dtw_distance(
+        cdef double distance = scaled_dtw_subsequence_distance(
             s.data,
             s.length,
             s.mean,
@@ -1814,6 +1792,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
             self.warp_width,
             self.cost,
             self.cost_prev,
+            NULL,
         )
 
         return sqrt(dist)
@@ -1873,6 +1852,7 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
             self.warp_width,
             self.cost,
             self.cost_prev,
+            NULL,
         )
 
         return sqrt(dist)
@@ -2045,6 +2025,7 @@ cdef class LcssDistanceMeasure(DistanceMeasure):
             self.threshold,
             self.cost,
             self.cost_prev,
+            NULL,
         )
 
         return dist
@@ -2271,6 +2252,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             threshold,
             self.cost,
             self.cost_prev,
+            NULL,
         )
 
 
@@ -2298,6 +2280,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             threshold,
             self.cost,
             self.cost_prev,
+            NULL,
         )
 
     @property

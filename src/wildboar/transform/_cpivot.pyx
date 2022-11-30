@@ -10,11 +10,12 @@
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
+from numpy cimport uint32_t
 
 from ..distance._distance cimport DistanceMeasure
 from ..utils cimport TSArray
 from ..utils._misc cimport CList, to_ndarray_double
-from ..utils._rand cimport RAND_R_MAX, rand_int, shuffle
+from ..utils._rand cimport RAND_R_MAX, rand_int
 
 from ..distance import _DISTANCE_MEASURE
 
@@ -41,7 +42,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.n_pivots, self.distance_measures.py_list)
 
-    cdef Py_ssize_t reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) nogil:
         cdef Py_ssize_t i
         for i in range(self.distance_measures.size):
             (<DistanceMeasure>self.distance_measures.get(i)).reset(X, X)
@@ -60,7 +61,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,
-            size_t *seed,
+            uint32_t *seed,
     ) nogil:
         cdef TransientPivot *pivot = <TransientPivot*> malloc(sizeof(TransientPivot))
         pivot.sample = samples[rand_int(0, n_samples, seed)]

@@ -336,7 +336,6 @@ cdef class AngularSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         return n_matches
 
 
-
 cdef class EuclideanDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
@@ -425,7 +424,6 @@ cdef class AngularDistanceMeasure(DistanceMeasure):
         Py_ssize_t y_len
     ) nogil:
         return acos(cosine_similarity(x, x_len, y, y_len, NULL)) / M_PI
-
 
 
 cdef double scaled_euclidean_distance(

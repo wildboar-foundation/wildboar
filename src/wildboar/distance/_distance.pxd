@@ -2,6 +2,7 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
+from numpy cimport float64_t, ndarray
 
 from ..utils cimport TSArray
 

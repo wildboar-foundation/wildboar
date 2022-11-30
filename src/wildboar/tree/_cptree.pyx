@@ -11,6 +11,7 @@ import numpy as np
 from libc.math cimport INFINITY, NAN, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
+from numpy cimport uint32_t
 
 from ..distance._distance cimport DistanceMeasure
 from ..utils cimport TSArray
@@ -459,7 +460,7 @@ cdef class DistanceMeasureSampler:
         self,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         pass
 
@@ -469,7 +470,7 @@ cdef class UniformDistanceMeasureSampler(DistanceMeasureSampler):
         self,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         return rand_int(0, self.n_measures, seed)
 
@@ -480,7 +481,7 @@ cdef class WeightedDistanceMeasureSampler(DistanceMeasureSampler):
         self,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         return vose_rand_int(&self.vr, seed)
 
@@ -494,7 +495,7 @@ cdef class PivotSampler:
         Py_ssize_t n_samples,
         Py_ssize_t label,
         Py_ssize_t *label_count,
-        size_t *seed,
+        uint32_t *seed,
     ) nogil:
         pass
 
@@ -508,7 +509,7 @@ cdef class LabelPivotSampler(PivotSampler):
         Py_ssize_t n_samples,
         Py_ssize_t label,
         Py_ssize_t *label_count,
-        size_t *seed,
+        uint32_t *seed,
     ) nogil:
         cdef Py_ssize_t n_labels = rand_int(0, label_count[label], seed)
         cdef Py_ssize_t i, j
@@ -533,7 +534,7 @@ cdef class UniformPivotSampler(PivotSampler):
         Py_ssize_t n_samples,
         Py_ssize_t label,
         Py_ssize_t *label_count,
-        size_t *seed,
+        uint32_t *seed,
     ) nogil:
         return samples[rand_int(0, n_samples, seed)]
 
@@ -562,7 +563,7 @@ cdef class TreeBuilder:
     cdef Criterion criterion
     cdef DistanceMeasureSampler distance_measure_sampler
     cdef PivotSampler pivot_sampler
-    cdef size_t seed
+    cdef uint32_t seed
 
     def __cinit__(
         self,

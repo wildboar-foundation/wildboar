@@ -11,6 +11,7 @@ import numpy as np
 from libc.math cimport INFINITY, floor, log2, pow, sqrt
 from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
+from numpy cimport uint32_t
 
 from ..utils cimport TSArray
 from ..utils._misc cimport to_ndarray_int
@@ -36,7 +37,7 @@ cdef class WeightSampler:
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         pass
 
@@ -57,7 +58,7 @@ cdef class NormalWeightSampler(WeightSampler):
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Py_ssize_t i
         mean[0] = 0
@@ -85,7 +86,7 @@ cdef class UniformWeightSampler(WeightSampler):
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Py_ssize_t i
         mean[0] = 0
@@ -105,7 +106,7 @@ cdef class ShapeletWeightSampler(WeightSampler):
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Py_ssize_t start
         cdef Py_ssize_t index
@@ -185,7 +186,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
         cdef Py_ssize_t i

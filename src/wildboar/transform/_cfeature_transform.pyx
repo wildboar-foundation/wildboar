@@ -2,8 +2,8 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
 from libc.stdlib cimport free, malloc
+from numpy cimport uint32_t
 
 from ..utils cimport TSArray
 from ..utils._misc cimport safe_realloc
@@ -83,7 +83,7 @@ cdef class BatchTransform(Batch):
 
 cdef class BatchFitTransform(Batch):
 
-    def __call__(self, Py_ssize_t job_id, Py_ssize_t feature_offset, Py_ssize_t batch_size, size_t seed):
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t feature_offset, Py_ssize_t batch_size, uint32_t seed):
         cdef Py_ssize_t i, j
         cdef FeatureEngineer feature_engineer = self.feature_engineers[job_id]
         feature_engineer.reset(self.x_in)
@@ -184,7 +184,7 @@ def feature_transform_fit(FeatureEngineer feature_engineer, TSArray X, object ra
     cdef FeatureEmbedding embedding = FeatureEmbedding(
         feature_engineer, feature_engineer.get_n_features(X),
     )
-    cdef size_t seed = random_state.randint(0, RAND_R_MAX)
+    cdef uint32_t seed = random_state.randint(0, RAND_R_MAX)
     
     with nogil:
         for i in range(X.shape[0]):

@@ -13,7 +13,7 @@ from libc.math cimport INFINITY, sqrt
 from libc.stdlib cimport free, malloc
 
 from ..utils cimport TSArray
-from ..utils._rand cimport RAND_R_MAX, shuffle
+from ..utils._rand cimport RAND_R_MAX
 from ..utils._stats cimport (
     IncStats,
     cumulative_mean_std,

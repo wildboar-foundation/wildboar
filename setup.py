@@ -27,12 +27,10 @@ BUILD_ARGS = {
 
 
 def make_extension(name, extension, defaults):
+    import numpy
 
     include_dirs = extension.get("include_dirs", [])
-    if "include_np" in extension:
-        import numpy
-
-        include_dirs.append(numpy.get_include())
+    include_dirs.append(numpy.get_include())
 
     libraries = extension.get("libraries", [])
     libraries.extend(defaults["libraries"])
@@ -50,6 +48,7 @@ def make_extension(name, extension, defaults):
         libraries=libraries,
         extra_compile_args=extra_compile_args,
         extra_link_args=extra_link_args,
+        define_macros=[("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")],
     )
 
 
