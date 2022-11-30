@@ -6,17 +6,16 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
 import numpy as np
 
 from libc.math cimport INFINITY, floor, log2, pow, sqrt
 from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
+from numpy cimport uint32_t
 
-from ..utils.data cimport Dataset
-from ..utils.misc cimport to_ndarray_int
-from ..utils.rand cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
+from ..utils cimport TSArray
+from ..utils._misc cimport to_ndarray_int
+from ..utils._rand cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
 from ._feature cimport Feature, FeatureEngineer
 
 
@@ -32,15 +31,16 @@ cdef class WeightSampler:
 
     cdef void sample(
         self,
-        Dataset td,
+        TSArray X,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         pass
+
 
 cdef class NormalWeightSampler(WeightSampler):
     cdef double mean
@@ -52,20 +52,22 @@ cdef class NormalWeightSampler(WeightSampler):
 
     cdef void sample(
         self,
-        Dataset td,
+        TSArray X,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Py_ssize_t i
         mean[0] = 0
         for i in range(length):
             weights[i] = rand_normal(self.mean, self.scale, seed)
             mean[0] += weights[i]
+
         mean[0] = mean[0] / length
+
 
 cdef class UniformWeightSampler(WeightSampler):
 
@@ -78,53 +80,52 @@ cdef class UniformWeightSampler(WeightSampler):
 
     cdef void sample(
         self,
-        Dataset td,
+        TSArray X,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Py_ssize_t i
         mean[0] = 0
         for i in range(length):
             weights[i] = rand_uniform(self.lower, self.upper, seed)
             mean[0] += weights[i]
+
         mean[0] = mean[0] / length
+
 
 cdef class ShapeletWeightSampler(WeightSampler):
     cdef void sample(
         self,
-        Dataset td,
+        TSArray X,
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double *weights,
         Py_ssize_t length,
         double *mean,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Py_ssize_t start
         cdef Py_ssize_t index
         cdef Py_ssize_t dim
-        cdef Py_ssize_t i, offset
+        cdef Py_ssize_t i
 
-        start = rand_int(0, td.n_timestep - length, seed)
+        start = rand_int(0, X.shape[2] - length, seed)
         index = samples[rand_int(0, n_samples, seed)]
-        if td.n_dims > 1:
-            dim = rand_int(0, td.n_dims, seed)
+        if X.shape[1] > 1:
+            dim = rand_int(0, X.shape[1], seed)
         else:
             dim = 1
 
-        offset = (
-            index * td.sample_stride +
-            dim * td.dim_stride +
-            start
-        )
         mean[0] = 0
+        cdef const double *data = &X[index, dim, start]
         for i in range(length):
-            weights[i] = td.data[offset + i]
+            weights[i] = data[i]
             mean[0] += weights[i]
+
         mean[0] /= length
 
 
@@ -141,7 +142,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         self,
         Py_ssize_t n_kernels,
         WeightSampler weight_sampler,
-        np.ndarray kernel_size,
+        object kernel_size,
         double bias_prob,
         double padding_prob,
         double normalize_prob
@@ -172,20 +173,20 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
     def __dealloc__(self):
         free(self.kernel_size)
 
-    cdef Py_ssize_t get_n_features(self, Dataset td) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
         return self.n_kernels
 
-    cdef Py_ssize_t get_n_outputs(self, Dataset td) nogil:
-        return self.get_n_features(td) * 2
+    cdef Py_ssize_t get_n_outputs(self, TSArray X) nogil:
+        return self.get_n_features(X) * 2
 
     cdef Py_ssize_t next_feature(
         self,
         Py_ssize_t feature_id,
-        Dataset td, 
+        TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
         cdef Py_ssize_t i
@@ -194,7 +195,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         cdef double* weight = <double*> malloc(sizeof(double) * length)
 
         self.weight_sampler.sample(
-            td, samples, n_samples, weight, length, &mean, seed
+            X, samples, n_samples, weight, length, &mean, seed
         )
         if rand_uniform(0, 1, seed) < self.normalize_prob:
             for i in range(length):
@@ -202,7 +203,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
 
         rocket.length = length
         rocket.dilation = <Py_ssize_t> floor(
-            pow(2, rand_uniform(0, log2((td.n_timestep - 1) / (rocket.length - 1)), seed))
+            pow(2, rand_uniform(0, log2((X.shape[2] - 1) / (rocket.length - 1)), seed))
         )
         rocket.padding = 0
         if rand_uniform(0, 1, seed) < self.padding_prob:
@@ -215,8 +216,8 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         if rand_uniform(0, 1, seed) < self.bias_prob:
             rocket.bias = rand_uniform(-1, 1, seed)
 
-        if td.n_dims > 1:
-            transient.dim = rand_int(0, td.n_dims, seed)
+        if X.shape[1] > 1:
+            transient.dim = rand_int(0, X.shape[1], seed)
         else:
             transient.dim = 0
 
@@ -237,7 +238,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
 
     cdef Py_ssize_t init_persistent_feature(
         self, 
-        Dataset td,
+        TSArray X,
         Feature *transient, 
         Feature *persistent
     ) nogil:
@@ -262,7 +263,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
     cdef double transient_feature_value(
         self,
         Feature *feature,
-        Dataset td,
+        TSArray X,
         Py_ssize_t sample
     ) nogil:
         cdef double mean_val, max_val
@@ -273,8 +274,8 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             rocket.bias,
             rocket.weight,
             rocket.length,
-            td.get_sample(sample, feature.dim),
-            td.n_timestep,
+            &X[sample, feature.dim, 0],
+            X.shape[2],
             &mean_val,
             &max_val,
         )
@@ -286,17 +287,17 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
     cdef double persistent_feature_value(
         self,
         Feature *feature,
-        Dataset td,
+        TSArray X,
         Py_ssize_t sample
     ) nogil:
-        return self.transient_feature_value(feature, td, sample)
+        return self.transient_feature_value(feature, X, sample)
 
     cdef Py_ssize_t transient_feature_fill(
         self, 
         Feature *feature, 
-        Dataset td, 
+        TSArray X, 
         Py_ssize_t sample,
-        Dataset td_out,
+        double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
@@ -308,28 +309,27 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             rocket.bias,
             rocket.weight,
             rocket.length,
-            td.get_sample(sample, feature.dim),
-            td.n_timestep,
+            &X[sample, feature.dim, 0],
+            X.shape[2],
             &mean_val,
             &max_val,
         )
         cdef Py_ssize_t feature_offset = feature_id * 2
-        cdef Py_ssize_t out_sample_offset = out_sample * td_out.sample_stride
-        td_out.data[out_sample_offset + feature_offset] = mean_val
-        td_out.data[out_sample_offset + feature_offset + 1] = max_val
+        out[out_sample, feature_offset] = mean_val
+        out[out_sample, feature_offset + 1] = max_val
         return 0
 
     cdef Py_ssize_t persistent_feature_fill(
         self, 
         Feature *feature, 
-        Dataset td, 
+        TSArray X, 
         Py_ssize_t sample,
-        Dataset td_out,
+        double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t out_feature,
     ) nogil:
         return self.transient_feature_fill(
-            feature, td, sample, td_out, out_sample, out_feature
+            feature, X, sample, out, out_sample, out_feature
         )
 
     cdef object persistent_feature_to_object(self, Feature *feature):
@@ -374,7 +374,7 @@ cdef void apply_convolution(
     double bias,
     double *weight,
     Py_ssize_t length,
-    double* x,
+    const double* x,
     Py_ssize_t x_length,
     double* mean_val,
     double* max_val

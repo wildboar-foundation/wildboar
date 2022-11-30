@@ -2,21 +2,18 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
-cimport numpy as np
 from libc.stdlib cimport free, malloc
+from numpy cimport uint32_t
 
-from ..utils.data cimport Dataset
-from ..utils.misc cimport safe_realloc
-from ..utils.rand cimport RAND_R_MAX
+from ..utils cimport TSArray
+from ..utils._misc cimport safe_realloc
+from ..utils._rand cimport RAND_R_MAX
 from ._feature cimport Feature, FeatureEngineer
 
 from copy import deepcopy
 
 import numpy as np
 from joblib import Parallel, delayed, effective_n_jobs
-
-from ..utils.data import check_dataset
 
 
 def clone_embedding(FeatureEngineer feature_engineer, features):
@@ -55,14 +52,14 @@ cdef class Batch:
 
     cdef list feature_engineers
     cdef FeatureEmbedding embedding
-    cdef Dataset x_out
-    cdef Dataset x_in
+    cdef double[:, :] x_out
+    cdef TSArray x_in
 
     def __init__(self, list feature_engineers, FeatureEmbedding embedding):
         self.feature_engineers = feature_engineers
         self.embedding = embedding
 
-    cdef void init(self, Dataset x_in, Dataset x_out):
+    cdef void init(self, TSArray x_in, double[:, :] x_out):
         self.x_in = x_in
         self.x_out = x_out
 
@@ -73,7 +70,7 @@ cdef class BatchTransform(Batch):
         cdef FeatureEngineer feature_engineer = self.feature_engineers[job_id]
         feature_engineer.reset(self.x_in)
         with nogil:
-            for i in range(self.x_in.n_samples):
+            for i in range(self.x_in.shape[0]):
                 for j in range(batch_size):
                     feature_engineer.persistent_feature_fill(
                         self.embedding.get_feature(feature_offset + j),
@@ -86,16 +83,16 @@ cdef class BatchTransform(Batch):
 
 cdef class BatchFitTransform(Batch):
 
-    def __call__(self, Py_ssize_t job_id, Py_ssize_t feature_offset, Py_ssize_t batch_size, size_t seed):
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t feature_offset, Py_ssize_t batch_size, uint32_t seed):
         cdef Py_ssize_t i, j
         cdef FeatureEngineer feature_engineer = self.feature_engineers[job_id]
         feature_engineer.reset(self.x_in)
-        cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.x_in.n_samples)
+        cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.x_in.shape[0])
         cdef Feature transient_feature
         cdef Feature *persistent_feature
 
         with nogil:
-            for i in range(self.x_in.n_samples):
+            for i in range(self.x_in.shape[0]):
                 samples[i] = i
 
             for j in range(batch_size):
@@ -103,7 +100,7 @@ cdef class BatchFitTransform(Batch):
                     feature_offset + j,
                     self.x_in,
                     samples,
-                    self.x_in.n_samples,
+                    self.x_in.shape[0],
                     &transient_feature,
                     &seed,
                 )
@@ -112,7 +109,7 @@ cdef class BatchFitTransform(Batch):
                     self.x_in, &transient_feature, persistent_feature
                 )
                 self.embedding.set_feature(feature_offset + j, persistent_feature)
-                for i in range(self.x_in.n_samples):
+                for i in range(self.x_in.shape[0]):
                     feature_engineer.transient_feature_fill(
                         &transient_feature,
                         self.x_in,
@@ -178,55 +175,50 @@ cdef class FeatureEmbedding:
             raise ValueError()
         return self.feature_engineer.persistent_feature_to_object(self._features[item])
 
-def feature_transform_fit(FeatureEngineer feature_engineer, np.ndarray x, object random_state):
-    x = check_dataset(x)
-    cdef Dataset td = Dataset(x)
+def feature_transform_fit(FeatureEngineer feature_engineer, TSArray X, object random_state):
     cdef Py_ssize_t i
     cdef Feature transient_feature
     cdef Feature *persistent_feature
-    cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * td.n_samples)
-    feature_engineer.reset(td)
+    cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * X.shape[0])
+    feature_engineer.reset(X)
     cdef FeatureEmbedding embedding = FeatureEmbedding(
-        feature_engineer, feature_engineer.get_n_features(td),
+        feature_engineer, feature_engineer.get_n_features(X),
     )
-    cdef size_t seed = random_state.randint(0, RAND_R_MAX)
+    cdef uint32_t seed = random_state.randint(0, RAND_R_MAX)
     
     with nogil:
-        for i in range(td.n_samples):
+        for i in range(X.shape[0]):
             samples[i] = i
         
-        for i in range(feature_engineer.get_n_features(td)):
+        for i in range(feature_engineer.get_n_features(X)):
             persistent_feature = <Feature*> malloc(sizeof(Feature))
             feature_engineer.next_feature(
                 i,
-                td,
+                X,
                 samples,
-                td.n_samples,
+                X.shape[0],
                 &transient_feature,
                 &seed,
             )
             feature_engineer.init_persistent_feature(
-                td, &transient_feature, persistent_feature
+                X, &transient_feature, persistent_feature
             )
             feature_engineer.free_transient_feature(&transient_feature)
             embedding.set_feature(i, persistent_feature)
 
     return embedding
 
-def feature_transform_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs=None):
-    x = check_dataset(x)
-    cdef Dataset x_in = Dataset(x)
+def feature_transform_transform(FeatureEmbedding embedding, TSArray X, n_jobs=None):
     cdef FeatureEngineer feature_engineer = embedding.feature_engineer
-    cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(x_in)
-    cdef Py_ssize_t n_features = feature_engineer.get_n_features(x_in)
-    cdef np.ndarray out = np.empty((x.shape[0], n_outputs))
-    cdef Dataset x_out = Dataset(out)
+    cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(X)
+    cdef Py_ssize_t n_features = feature_engineer.get_n_features(X)
+    cdef double[:, :] out = np.empty((X.shape[0], n_outputs))
 
     n_jobs, feature_engineers, feature_offsets, batch_sizes = _partition_features(
         n_jobs, n_features, feature_engineer
     )
     cdef BatchTransform transform = BatchTransform(feature_engineers, embedding)
-    transform.init(x_in, x_out)
+    transform.init(X, out)
 
     Parallel(n_jobs=n_jobs, require="sharedmem")(
         delayed(transform)(
@@ -235,18 +227,13 @@ def feature_transform_transform(FeatureEmbedding embedding, np.ndarray x, n_jobs
         for jobid in range(n_jobs)
     )
     
-    return out
+    return out.base
 
-def feature_transform_fit_transform(FeatureEngineer feature_engineer, np.ndarray x, random_state, n_jobs=None):
-    x = check_dataset(x)
-    cdef Dataset x_in = Dataset(x)
-    cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(x_in)
-    cdef Py_ssize_t n_features = feature_engineer.get_n_features(x_in)
-    cdef FeatureEmbedding embedding = FeatureEmbedding(
-        feature_engineer, n_features
-    )
-    cdef np.ndarray out = np.empty((x.shape[0], n_outputs))
-    cdef Dataset x_out = Dataset(out)
+def feature_transform_fit_transform(FeatureEngineer feature_engineer, TSArray X, random_state, n_jobs=None):
+    cdef Py_ssize_t n_outputs = feature_engineer.get_n_outputs(X)
+    cdef Py_ssize_t n_features = feature_engineer.get_n_features(X)
+    cdef FeatureEmbedding embedding = FeatureEmbedding(feature_engineer, n_features)
+    cdef double[:, :] out = np.empty((X.shape[0], n_outputs))
 
     n_jobs, feature_engineers, feature_offsets, batch_sizes = _partition_features(
         n_jobs, n_features, feature_engineer
@@ -254,7 +241,7 @@ def feature_transform_fit_transform(FeatureEngineer feature_engineer, np.ndarray
     seeds = random_state.randint(0, RAND_R_MAX, size=n_jobs)
 
     cdef BatchFitTransform fit_transform = BatchFitTransform(feature_engineers, embedding)
-    fit_transform.init(x_in, x_out)
+    fit_transform.init(X, out)
     Parallel(n_jobs=n_jobs, require="sharedmem")(
         delayed(fit_transform)(
             jobid, feature_offsets[jobid], batch_sizes[jobid], seeds[jobid]
@@ -262,4 +249,4 @@ def feature_transform_fit_transform(FeatureEngineer feature_engineer, np.ndarray
         for jobid in range(n_jobs)
     )
 
-    return embedding, out
+    return embedding, out.base

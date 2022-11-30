@@ -32,7 +32,6 @@ from ..tree._ctree import (
     TreeBuilder,
     TreeFeatureEngineer,
 )
-from ..utils.data import check_dataset
 from ..utils.validation import check_option
 from .base import BaseTree, TreeClassifierMixin, TreeRegressorMixin
 
@@ -72,7 +71,6 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
         feature_engineer = self._wrap_feature_engineer(
             self._get_feature_engineer(self.n_timesteps_in_)
         )
-        x = check_dataset(x)
         tree_builder = self._get_tree_builder(
             x,
             y,

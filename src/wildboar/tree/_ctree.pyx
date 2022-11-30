@@ -8,22 +8,21 @@
 
 import numpy as np
 
-cimport numpy as np
 from libc.math cimport INFINITY, NAN, ceil, exp, fabs, log2
 from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
+from numpy cimport uint32_t
 
 from scipy.sparse import csr_matrix
 
 from ..distance._distance cimport DistanceMeasure
+
 from ..distance import _DISTANCE_MEASURE
 
 from ..transform._feature cimport Feature, FeatureEngineer
-
-from ..utils.data import check_dataset
-from ..utils.data cimport Dataset
-from ..utils.misc cimport CList, argsort, safe_realloc
-from ..utils.rand cimport RAND_R_MAX, rand_int, rand_uniform
+from ..utils cimport TSArray
+from ..utils._misc cimport CList, argsort, safe_realloc
+from ..utils._rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
 cdef double FEATURE_THRESHOLD = 1e-7
@@ -47,32 +46,32 @@ cdef class TreeFeatureEngineer:
     def __reduce__(self):
         return self.__class__, (self.feature_engineer, )
 
-    cdef Py_ssize_t reset(self, Dataset td) nogil:
-        return self.feature_engineer.reset(td)
+    cdef int reset(self, TSArray X) nogil:
+        return self.feature_engineer.reset(X)
 
-    cdef Py_ssize_t get_n_features(self, Dataset td, Py_ssize_t depth) nogil:
-        return self.feature_engineer.get_n_features(td)
+    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) nogil:
+        return self.feature_engineer.get_n_features(X)
 
     cdef Py_ssize_t next_feature(
         self,
         Py_ssize_t feature_id,
-        Dataset td, 
+        TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         Feature *transient,
-        size_t *seed
+        uint32_t *seed
     ) nogil:
         return self.feature_engineer.next_feature(
-            feature_id, td, samples, n_samples, transient, seed
+            feature_id, X, samples, n_samples, transient, seed
         )
 
     cdef Py_ssize_t init_persistent_feature(
         self, 
-        Dataset td,
+        TSArray X,
         Feature *transient, 
         Feature *persistent
     ) nogil:
-        return self.feature_engineer.init_persistent_feature(td, transient, persistent)
+        return self.feature_engineer.init_persistent_feature(X, transient, persistent)
     
     cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
         return self.feature_engineer.free_transient_feature(feature)
@@ -83,41 +82,41 @@ cdef class TreeFeatureEngineer:
     cdef double transient_feature_value(
         self,
         Feature *feature,
-        Dataset td,
+        TSArray X,
         Py_ssize_t sample
     ) nogil:
-        return self.feature_engineer.transient_feature_value(feature, td, sample)
+        return self.feature_engineer.transient_feature_value(feature, X, sample)
 
     cdef double persistent_feature_value(
         self,
         Feature *feature,
-        Dataset td,
+        TSArray X,
         Py_ssize_t sample
     ) nogil:
-        return self.feature_engineer.persistent_feature_value(feature, td, sample)
+        return self.feature_engineer.persistent_feature_value(feature, X, sample)
     
     cdef void transient_feature_values(
         self, 
         Feature *feature, 
-        Dataset td, 
+        TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
     ) nogil:
         self.feature_engineer.transient_feature_values(
-            feature, td, samples, n_samples, values
+            feature, X, samples, n_samples, values
         )
     
     cdef void persistent_feature_values(
         self, 
         Feature *feature, 
-        Dataset td, 
+        TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
     ) nogil:
         self.feature_engineer.persistent_feature_values(
-            feature, td, samples, n_samples, values
+            feature, X, samples, n_samples, values
         )
 
     cdef object persistent_feature_to_object(self, Feature *feature):
@@ -138,8 +137,8 @@ cdef class DynamicTreeFeatureEngineer(TreeFeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.feature_engineer, self.alpha)
 
-    cdef Py_ssize_t get_n_features(self, Dataset td, Py_ssize_t depth) nogil:
-        cdef Py_ssize_t n_features = self.feature_engineer.get_n_features(td)
+    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) nogil:
+        cdef Py_ssize_t n_features = self.feature_engineer.get_n_features(X)
         cdef double weight = 1.0 - exp(-fabs(self.alpha) * depth)
         if self.alpha < 0:
             weight = 1 - weight
@@ -155,14 +154,14 @@ cdef class Criterion:
     cdef Py_ssize_t start
     cdef Py_ssize_t end
     cdef Py_ssize_t *samples
-    cdef double *sample_weight
+    cdef const double[:] sample_weight
 
     cdef void init(
         self,
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
-        double *sample_weights,
+        const double[:] sample_weights,
     ) nogil:
         self.start = start
         self.end = end
@@ -203,21 +202,14 @@ cdef class Criterion:
 
 cdef class ClassificationCriterion(Criterion):
 
-    cdef Py_ssize_t *labels
-    cdef Py_ssize_t label_stride
+    cdef const Py_ssize_t[:] labels
     cdef Py_ssize_t n_labels
     cdef double *sum_left
     cdef double *sum_right
     cdef double *sum_total
 
-    def __cinit__(self, np.ndarray y, Py_ssize_t n_labels):
-        if y.dtype != np.intp:
-            raise ValueError("unexpected dtype (%r != %r)" % (y.dtype, np.intp))
-
-        if y.ndim != 1:
-            raise ValueError("unexpected dim (%r != 1)" % y.ndim)
-        self.labels = <Py_ssize_t*> y.data
-        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
+    def __cinit__(self, const Py_ssize_t[:] y, Py_ssize_t n_labels):
+        self.labels = y
         self.n_labels = n_labels
         self.sum_left = <double*> calloc(n_labels, sizeof(double))
         self.sum_right = <double*> calloc(n_labels, sizeof(double))
@@ -233,23 +225,21 @@ cdef class ClassificationCriterion(Criterion):
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
-        double *sample_weights,
+        double[:] sample_weights,
     ) nogil:
         Criterion.init(self, start, end, samples, sample_weights)
         self.weighted_n_total = 0
 
         memset(self.sum_total, 0, self.n_labels * sizeof(double))
 
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef double w = 1.0
         for i in range(start, end):
             j = samples[i]
-            p = j * self.label_stride
-
-            if sample_weights != NULL:
+            if sample_weights is not None:
                 w = sample_weights[j]
 
-            self.sum_total[self.labels[p]] += w
+            self.sum_total[self.labels[j]] += w
             self.weighted_n_total += w
 
         self.reset()
@@ -261,17 +251,15 @@ cdef class ClassificationCriterion(Criterion):
         memcpy(self.sum_right, self.sum_total, self.n_labels * sizeof(double))
 
     cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef double w = 1.0
 
         for i in range(pos, new_pos):
             j = self.samples[i]
-            p = j * self.label_stride
-
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
-            self.sum_left[self.labels[p]] += w
+            self.sum_left[self.labels[j]] += w
             self.weighted_n_left += w
 
         self.weighted_n_right = self.weighted_n_total - self.weighted_n_left
@@ -355,20 +343,11 @@ cdef class RegressionCriterion(Criterion):
     cdef double sum_right
     cdef double sum_total
     cdef double sum_sq_total
-    cdef double *labels
-    cdef Py_ssize_t label_stride
+    cdef const double[:] labels
     cdef Py_ssize_t pos
 
-    def __cinit__(self, np.ndarray y):
-        if y.dtype != np.double:
-            raise ValueError("unexpected dtype (%r != np.double)" % y.dtype)
-
-        if y.ndim != 1:
-            raise ValueError("unexpected dim (%r != 1)" % y.ndim)        
-
-        self.label_stride = <Py_ssize_t> y.strides[0] / <Py_ssize_t> y.itemsize
-        self.labels = <double*> y.data
-
+    def __cinit__(self, const double[:] y):
+        self.labels = y
         self.sum_left = 0
         self.sum_right = 0
         self.sum_total = 0
@@ -379,24 +358,23 @@ cdef class RegressionCriterion(Criterion):
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *samples,
-        double *sample_weights,
+        double[:] sample_weights,
     ) nogil:
         Criterion.init(self, start, end, samples, sample_weights)
         self.sum_total = 0
         self.sum_sq_total = 0
         self.weighted_n_total = 0
 
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
         cdef double x
         cdef double w = 1.0
 
         for i in range(start, end):
             j = samples[i]
-            p = j * self.label_stride
-            if sample_weights != NULL:
+            if sample_weights is not None:
                 w = sample_weights[j]
 
-            x = w * self.labels[p]
+            x = w * self.labels[j]
             self.sum_total += x
             self.sum_sq_total += x * x
             self.weighted_n_total += w
@@ -414,16 +392,13 @@ cdef class RegressionCriterion(Criterion):
     cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t j
-        cdef Py_ssize_t p
         cdef double w = 1.0
         for i in range(pos, new_pos):
             j = self.samples[i]
-            p = j * self.label_stride
-
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
-            self.sum_left += w * self.labels[p]
+            self.sum_left += w * self.labels[j]
             self.weighted_n_left += w
 
         self.weighted_n_right = self.weighted_n_total - self.weighted_n_left
@@ -451,16 +426,14 @@ cdef class MSECriterion(RegressionCriterion):
         cdef double right_sq_sum = 0
         cdef double w = 1.0
         cdef double y
-        cdef Py_ssize_t i, j, p
+        cdef Py_ssize_t i, j
 
         for i in range(self.start, self.pos):
             j = self.samples[i]
-            p = self.label_stride * j
-
-            if self.sample_weight != NULL:
+            if self.sample_weight is not None:
                 w = self.sample_weight[j]
 
-            y = self.labels[p]
+            y = self.labels[j]
             left_sq_sum += w * y * y
         right_sq_sum = self.sum_sq_total - left_sq_sum
 
@@ -474,22 +447,22 @@ cpdef Tree _make_tree(
     Py_ssize_t n_labels,
     Py_ssize_t max_depth,
     list features,
-    np.ndarray threshold,
-    np.ndarray value,
-    np.ndarray left,
-    np.ndarray right,
-    np.ndarray impurity,
-    np.ndarray n_node_samples,
-    np.ndarray n_weighted_node_samples
+    object threshold,
+    object value,
+    object left,
+    object right,
+    object impurity,
+    object n_node_samples,
+    object n_weighted_node_samples
 ):
     cdef Tree tree = Tree(feature_engineer, n_labels, capacity=len(features) + 1)
     tree._max_depth = max_depth
     cdef Py_ssize_t node_count = len(features)
     cdef Py_ssize_t i
     cdef Py_ssize_t dim
-    cdef np.ndarray arr
+    cdef object arr
     cdef Feature *feature
-    cdef np.ndarray value_reshape = value.reshape(-1)
+    cdef object value_reshape = value.reshape(-1)
 
     tree._node_count = node_count
     for i in range(node_count):
@@ -599,7 +572,7 @@ cdef class Tree:
 
     @property
     def value(self):
-        cdef np.ndarray arr = np.empty(self._node_count * self._n_labels, dtype=float)
+        cdef object arr = np.empty(self._node_count * self._n_labels, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._n_labels * self._node_count):
             arr[i] = self._values[i]
@@ -622,7 +595,7 @@ cdef class Tree:
 
     @property
     def n_node_samples(self):
-        cdef np.ndarray arr = np.zeros(self._node_count, dtype=np.intp)
+        cdef object arr = np.zeros(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._n_node_samples[i]
@@ -630,7 +603,7 @@ cdef class Tree:
 
     @property
     def n_weighted_node_samples(self):
-        cdef np.ndarray arr = np.zeros(self._node_count, dtype=float)
+        cdef object arr = np.zeros(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._n_weighted_node_samples[i]
@@ -638,7 +611,7 @@ cdef class Tree:
 
     @property
     def left(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.intp)
+        cdef object arr = np.empty(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._left[i]
@@ -646,7 +619,7 @@ cdef class Tree:
 
     @property
     def right(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=np.intp)
+        cdef object arr = np.empty(self._node_count, dtype=np.intp)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._right[i]
@@ -654,7 +627,7 @@ cdef class Tree:
 
     @property
     def threshold(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=float)
+        cdef object arr = np.empty(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._thresholds[i]
@@ -662,77 +635,64 @@ cdef class Tree:
 
     @property
     def impurity(self):
-        cdef np.ndarray arr = np.empty(self._node_count, dtype=float)
+        cdef object arr = np.empty(self._node_count, dtype=float)
         cdef Py_ssize_t i
         for i in range(self._node_count):
             arr[i] = self._impurity[i]
         return arr
 
     def predict(self, object X):
-        cdef np.ndarray apply = self.apply(X)
-        cdef np.ndarray predict = np.take(self.value, apply, axis=0, mode="clip")
-        #if self._n_labels == 1:
-        #    predict = predict.reshape(X.shape[0])
-        return predict
+        cdef object apply = self.apply(X)
+        return np.take(self.value, apply, axis=0, mode="clip")
 
-    def apply(self, object X):
-        if not isinstance(X, np.ndarray):
-            raise ValueError(f"X should be np.ndarray, got {type(X)}")
-        X = check_dataset(X)
-        cdef Dataset ts = Dataset(X)
-        cdef np.ndarray out = np.zeros((ts.n_samples,), dtype=np.intp)
-        cdef Py_ssize_t *out_data = <Py_ssize_t*> out.data
+    def apply(self, TSArray X):
+        cdef Py_ssize_t[:] out = np.zeros((X.shape[0],), dtype=np.intp)
         cdef Feature *feature
         cdef double threshold, feature_value
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         with nogil:
-            self.feature_engineer.reset(ts)
-            for i in range(ts.n_samples):
+            self.feature_engineer.reset(X)
+            for i in range(X.shape[0]):
                 node_index = 0
                 while self._left[node_index] != -1:
                     threshold = self._thresholds[node_index]
                     feature = self._features[node_index]
                     feature_value = self.feature_engineer.persistent_feature_value(
-                        feature, ts, i
+                        feature, X, i
                     )
                     if feature_value <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
-                out_data[i] = <Py_ssize_t> node_index
-        return out
 
-    def decision_path(self, object X):
-        if not isinstance(X, np.ndarray):
-            raise ValueError(f"X should be np.ndarray, got {type(X)}")
-        X = check_dataset(X)
-        cdef Dataset ts = Dataset(X)
-        cdef np.ndarray out = np.zeros((ts.n_samples, self.node_count), order="c", dtype=np.intc)
+                out[i] = <Py_ssize_t> node_index
 
-        cdef int *out_data = <int*> out.data
-        cdef Py_ssize_t i_stride = <Py_ssize_t> out.strides[0] / <Py_ssize_t> out.itemsize
-        cdef Py_ssize_t n_stride = <Py_ssize_t> out.strides[1] / <Py_ssize_t> out.itemsize
+        return out.base
+
+    def decision_path(self, TSArray X):
+        cdef Py_ssize_t[:, :] out = np.zeros((X.shape[0], self.node_count), dtype=np.intp)
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         cdef Feature *feature
         cdef double threshold, feature_value
         with nogil:
-            self.feature_engineer.reset(ts)
-            for i in range(ts.n_samples):
+            self.feature_engineer.reset(X)
+            for i in range(X.shape[0]):
                 node_index = 0
                 while self._left[node_index] != -1:
-                    out_data[i * i_stride + node_index * n_stride] = 1
+                    out[i, node_index] = 1
                     threshold = self._thresholds[node_index]
                     feature = self._features[node_index]
                     feature_value = self.feature_engineer.persistent_feature_value(
-                        feature, ts, i
+                        feature, X, i
                     )
                     if feature_value <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
-        return csr_matrix(out, dtype=bool)
+
+        return csr_matrix(out.base, dtype=bool)
 
     @property
     def node_count(self):
@@ -849,14 +809,11 @@ cdef class TreeBuilder:
     # the id (in Tree) of the current node
     cdef Py_ssize_t current_node_id
 
-    # the stride of the label array
-    cdef Py_ssize_t label_stride
-
     # the weight of the j:th sample
-    cdef double *sample_weights
+    cdef const double[:] sample_weights
 
     # the dataset of time series
-    cdef Dataset td
+    cdef TSArray X
 
     # the number of samples with non-zero weight
     cdef Py_ssize_t n_samples
@@ -874,12 +831,12 @@ cdef class TreeBuilder:
     cdef TreeFeatureEngineer feature_engineer
     cdef Criterion criterion
     cdef Tree tree
-    cdef size_t random_seed
+    cdef uint32_t random_seed
 
     def __cinit__(
         self,
-        np.ndarray X,
-        np.ndarray sample_weights,
+        TSArray X,
+        const double[:] sample_weights,
         TreeFeatureEngineer feature_engineer,
         Criterion criterion,
         Tree tree,
@@ -895,13 +852,13 @@ cdef class TreeBuilder:
         self.min_impurity_decrease = min_impurity_decrease
         self.random_seed = random_state.randint(0, RAND_R_MAX)
 
-        self.td = Dataset(X)
+        self.X = X
         self.feature_engineer = feature_engineer
         self.criterion = criterion
         self.tree = tree
 
         self.current_node_id = 0
-        self.n_samples = self.td.n_samples
+        self.n_samples = self.X.shape[0]
         self.samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.n_samples)
         self.samples_buffer = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.n_samples)
         self.feature_buffer = <double*> malloc(sizeof(double) * self.n_samples)
@@ -926,18 +883,7 @@ cdef class TreeBuilder:
                     self.n_weighted_samples += 1.0
 
         self.n_samples = j
-
-        if sample_weights is None:
-            self.sample_weights = NULL
-        else:
-            if sample_weights.dtype != np.double:
-                raise ValueError("unexpected dtype (%r != np.double)" % sample_weights.dtype)
-            if sample_weights.ndim != 1:
-                raise ValueError("unexpected dim (%r != 1)" % sample_weights.ndim)
-            if sample_weights.strides[0] // sample_weights.itemsize != 1:
-                raise ValueError("unexpected stride")
-
-            self.sample_weights = <double*> sample_weights.data
+        self.sample_weights = sample_weights
 
     def __dealloc__(self):
         free(self.samples)
@@ -952,7 +898,7 @@ cdef class TreeBuilder:
         cdef Py_ssize_t root_node_id
         cdef Py_ssize_t max_depth = 0
         with nogil:
-            self.feature_engineer.reset(self.td)
+            self.feature_engineer.reset(self.X)
             root_node_id = self._build_tree(
                 0,
                 self.n_samples,
@@ -1065,7 +1011,7 @@ cdef class TreeBuilder:
             # The persistent feature is freed by the Tree
             persistent_feature = <Feature*> malloc(sizeof(Feature))
             err = self.feature_engineer.init_persistent_feature(
-                self.td, &split.feature, persistent_feature
+                self.X, &split.feature, persistent_feature
             )
             self.feature_engineer.free_transient_feature(&split.feature)
             if err == -1:
@@ -1124,13 +1070,19 @@ cdef class TreeBuilder:
         best.split_point = 0
         best.feature.feature = NULL
 
-        for i in range(self.feature_engineer.get_n_features(self.td, depth)):
+        for i in range(self.feature_engineer.get_n_features(self.X, depth)):
             self.feature_engineer.next_feature(
-                i, self.td, self.samples + start, n_samples, &current_feature, &self.random_seed)
+                i, 
+                self.X, 
+                self.samples + start, 
+                n_samples, 
+                &current_feature, 
+                &self.random_seed
+            )
             
             self.feature_engineer.transient_feature_values(
                 &current_feature,
-                self.td,
+                self.X,
                 self.samples + start,
                 end - start,
                 self.feature_buffer + start,
@@ -1157,6 +1109,7 @@ cdef class TreeBuilder:
                 best.threshold = current_threshold
                 if best.feature.feature != NULL:
                     self.feature_engineer.free_transient_feature(&best.feature)
+
                 best.feature = current_feature
             else:
                 self.feature_engineer.free_transient_feature(&current_feature)
@@ -1189,7 +1142,6 @@ cdef class TreeBuilder:
     ) nogil:
         cdef Py_ssize_t i  # real index of samples (in `range(start, end)`)
         cdef Py_ssize_t j  # sample index (in `samples`)
-        cdef Py_ssize_t p  # label index (in `labels`)
         cdef Py_ssize_t pos
         cdef Py_ssize_t new_pos
         cdef double impurity

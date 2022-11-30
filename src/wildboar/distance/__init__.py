@@ -9,7 +9,7 @@ import numpy as np
 from sklearn.utils.validation import _is_arraylike, check_scalar
 
 from ..utils import _safe_jagged_array
-from ..utils.validation import check_array, check_option, check_type
+from ..utils.validation import _check_ts_array, check_array, check_option, check_type
 from . import _distance, _elastic, _mass, _matrix_profile, _metric
 
 __all__ = [
@@ -227,7 +227,7 @@ def pairwise_subsequence_distance(
     metric_params = metric_params or {}
     min_dist, min_ind = _distance._pairwise_subsequence_distance(
         y,
-        np.atleast_2d(x),
+        _check_ts_array(x),
         dim,
         DistanceMeasure(**metric_params),
         n_jobs,
@@ -316,7 +316,7 @@ def paired_subsequence_distance(
 
     metric_params = metric_params if metric_params is not None else {}
     min_dist, min_ind = _distance._paired_subsequence_distance(
-        y, np.atleast_2d(x), dim, DistanceMeasure(**metric_params)
+        y, _check_ts_array(x), dim, DistanceMeasure(**metric_params)
     )
     if return_index:
         return (
@@ -472,7 +472,7 @@ def subsequence_match(
 
     indicies, distances = _distance._subsequence_match(
         y,
-        np.atleast_2d(x),
+        _check_ts_array(x),
         threshold,
         dim,
         DistanceMeasure(**metric_params),
@@ -618,7 +618,7 @@ def paired_subsequence_match(
 
     indicies, distances = _distance._paired_subsequence_match(
         y,
-        x,
+        _check_ts_array(x),
         threshold,
         dim,
         DistanceMeasure(**metric_params),
@@ -708,8 +708,8 @@ def paired_distance(
 
     return _format_return(
         _distance._paired_distance(
-            np.atleast_2d(x),
-            np.atleast_2d(y),
+            _check_ts_array(x),
+            _check_ts_array(y),
             dim,
             distance_measure,
             n_jobs,
@@ -819,7 +819,9 @@ def pairwise_distance(
         if x.ndim == 1:
             return 0.0
 
-        return _distance._singleton_pairwise_distance(x, dim, distance_measure, n_jobs)
+        return _distance._singleton_pairwise_distance(
+            _check_ts_array(x), dim, distance_measure, n_jobs
+        )
     else:
         x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
         y = check_array(y, allow_3d=True, ensure_2d=False, dtype=np.double)
@@ -842,8 +844,8 @@ def pairwise_distance(
 
         return _format_return(
             _distance._pairwise_distance(
-                np.atleast_2d(x),
-                np.atleast_2d(y),
+                _check_ts_array(x),
+                _check_ts_array(y),
                 dim,
                 distance_measure,
                 n_jobs,
@@ -985,8 +987,8 @@ def matrix_profile(
         exclude = math.ceil(window * exclude)
 
     mp, mpi = _matrix_profile._paired_matrix_profile(
-        np.atleast_2d(x),
-        np.atleast_2d(y),
+        _check_ts_array(x),
+        _check_ts_array(y),
         window,
         dim,
         exclude,

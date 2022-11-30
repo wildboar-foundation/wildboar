@@ -1,4 +1,3 @@
-# cython: profile=True
 # cython: cdivision=True
 # cython: boundscheck=False
 # cython: wraparound=False
@@ -7,17 +6,14 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-import numpy as np
-
-cimport numpy as np
 cimport scipy.linalg.cython_blas as blas
 cimport scipy.linalg.cython_lapack as lapack
 from libc.math cimport INFINITY, M_PI, acos, fabs, pow, sqrt
 from libc.stdlib cimport free, malloc
 
-from ..utils.data cimport Dataset
-from ..utils.misc cimport realloc_array
-from ..utils.stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_variance
+from ..utils cimport TSArray
+from ..utils._misc cimport realloc_array
+from ..utils._stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_variance
 from ._distance cimport (
     DistanceMeasure,
     ScaledSubsequenceDistanceMeasure,
@@ -31,9 +27,9 @@ cdef class EuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -58,9 +54,9 @@ cdef class NormalizedEuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeas
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -95,28 +91,30 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
     def __reduce__(self):
         return self.__class__, ()
     
-    cdef int reset(self, Dataset dataset) nogil:
+    cdef int reset(self, TSArray X) nogil:
         if self.X_buffer != NULL:
-            free(self.X_buffer)        
-        self.X_buffer = <double*> malloc(sizeof(double) * dataset.n_timestep * 2)
+            free(self.X_buffer)
+
+        self.X_buffer = <double*> malloc(sizeof(double) * X.shape[2] * 2)
         if self.X_buffer == NULL:
             return -1
+
         return 0
 
     cdef double transient_distance(
         self,
         SubsequenceView *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
         return scaled_euclidean_distance(
-            dataset.get_sample(s.index, s.dim) + s.start,
+            &X[s.index, s.dim, s.start],
             s.length,
             s.mean,
             s.std if s.std != 0.0 else 1.0,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             self.X_buffer,
             return_index,
         )
@@ -124,7 +122,7 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
     cdef double persistent_distance(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -133,8 +131,8 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
             s.length,
             s.mean,
             s.std if s.std != 0.0 else 1.0,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             self.X_buffer,
             return_index,
         )
@@ -142,19 +140,19 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
     cdef Py_ssize_t transient_matches(
         self,
         SubsequenceView *v,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
     ) nogil:
         return scaled_euclidean_distance_matches(
-            dataset.get_sample(v.index, v.dim) + v.start,
+            &X[v.index, v.dim, v.start],
             v.length,
             v.mean,
             v.std if v.std != 0.0 else 1.0,
-            dataset.get_sample(index, v.dim),
-            dataset.n_timestep,
+            &X[index, v.dim, 0],
+            X.shape[2],
             self.X_buffer,
             threshold,
             distances,
@@ -164,7 +162,7 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
     cdef Py_ssize_t persistent_matches(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -175,8 +173,8 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
             s.length,
             s.mean,
             s.std if s.std != 0.0 else 1.0,
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             self.X_buffer,
             threshold,
             distances,
@@ -188,9 +186,9 @@ cdef class ManhattanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -222,9 +220,9 @@ cdef class MinkowskiSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -232,9 +230,9 @@ cdef class MinkowskiSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef Py_ssize_t _matches(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         double threshold,
         double **distances,
@@ -249,9 +247,9 @@ cdef class ChebyshevSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -276,9 +274,9 @@ cdef class CosineSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -309,9 +307,9 @@ cdef class AngularSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
@@ -338,14 +336,13 @@ cdef class AngularSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         return n_matches
 
 
-
 cdef class EuclideanDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         return euclidean_distance(x, x_len, y, y_len, NULL)
@@ -355,9 +352,9 @@ cdef class NormalizedEuclideanDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         return normalized_euclidean_distance(x, x_len, y, y_len, NULL)
@@ -366,9 +363,9 @@ cdef class NormalizedEuclideanDistanceMeasure(DistanceMeasure):
 cdef class ManhattanDistanceMeasure(DistanceMeasure):
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         return manhattan_distance(x, x_len, y, y_len, NULL)
@@ -385,9 +382,9 @@ cdef class MinkowskiDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil:
         return minkowski_distance(self.p, x, x_len, y, y_len, NULL)
@@ -396,46 +393,45 @@ cdef class MinkowskiDistanceMeasure(DistanceMeasure):
 cdef class ChebyshevDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
-            self,
-            double *x,
-            Py_ssize_t x_len,
-            double *y,
-            Py_ssize_t y_len
-        ) nogil:
-            return chebyshev_distance(x, x_len, y, y_len, NULL)
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return chebyshev_distance(x, x_len, y, y_len, NULL)
 
 
 cdef class CosineDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
-            self,
-            double *x,
-            Py_ssize_t x_len,
-            double *y,
-            Py_ssize_t y_len
-        ) nogil:
-            return 1 - cosine_similarity(x, x_len, y, y_len, NULL)
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return 1 - cosine_similarity(x, x_len, y, y_len, NULL)
 
 # https://en.wikipedia.org/wiki/Cosine_similarity#Angular_distance_and_similarity
 cdef class AngularDistanceMeasure(DistanceMeasure):
 
     cdef double _distance(
-            self,
-            double *x,
-            Py_ssize_t x_len,
-            double *y,
-            Py_ssize_t y_len
-        ) nogil:
-            return acos(cosine_similarity(x, x_len, y, y_len, NULL)) / M_PI
-
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return acos(cosine_similarity(x, x_len, y, y_len, NULL)) / M_PI
 
 
 cdef double scaled_euclidean_distance(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
     double s_mean,
     double s_std,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     double *X_buffer,
     Py_ssize_t *index,
@@ -501,7 +497,7 @@ cdef double inner_scaled_euclidean_distance(
     Py_ssize_t j,
     double mean,
     double std,
-    double *X,
+    const double *X,
     double *X_buffer,
     double min_dist,
 ) nogil:
@@ -524,9 +520,9 @@ cdef double inner_scaled_euclidean_distance(
 
 
 cdef double euclidean_distance(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil:
@@ -557,9 +553,9 @@ cdef double euclidean_distance(
 #   Definition of normalized Euclidean distance, URL (version: 2021-09-27): 
 #   https://stats.stackexchange.com/q/498753
 cdef double normalized_euclidean_distance(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil:
@@ -591,9 +587,9 @@ cdef double normalized_euclidean_distance(
 
 
 cdef Py_ssize_t normalized_euclidean_distance_matches(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     double threshold,
     double **distances,
@@ -636,9 +632,9 @@ cdef Py_ssize_t normalized_euclidean_distance_matches(
 
 
 cdef Py_ssize_t euclidean_distance_matches(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     double threshold,
     double **distances,
@@ -677,11 +673,11 @@ cdef Py_ssize_t euclidean_distance_matches(
 
 
 cdef Py_ssize_t scaled_euclidean_distance_matches(
-   double *S,
+   const double *S,
    Py_ssize_t s_length,
    double s_mean,
    double s_std,
-   double *T,
+   const double *T,
    Py_ssize_t t_length,
    double *X_buffer,
    double threshold,
@@ -758,9 +754,9 @@ cdef Py_ssize_t scaled_euclidean_distance_matches(
 
 
 cdef double manhattan_distance(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil:
@@ -787,9 +783,9 @@ cdef double manhattan_distance(
 
 
 cdef Py_ssize_t manhattan_distance_matches(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     double threshold,
     double **distances,
@@ -826,9 +822,9 @@ cdef Py_ssize_t manhattan_distance_matches(
 
 cdef double minkowski_distance(
     double p,
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil:
@@ -856,9 +852,9 @@ cdef double minkowski_distance(
 
 cdef Py_ssize_t minkowski_distance_matches(
     Py_ssize_t p,
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     double threshold,
     double **distances,
@@ -896,9 +892,9 @@ cdef Py_ssize_t minkowski_distance_matches(
 
 
 cdef double chebyshev_distance(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil:
@@ -927,9 +923,9 @@ cdef double chebyshev_distance(
 
 
 cdef Py_ssize_t chebyshev_distance_matches(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     double threshold,
     double **distances,
@@ -968,9 +964,9 @@ cdef Py_ssize_t chebyshev_distance_matches(
 
 
 cdef double cosine_similarity(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil:
@@ -1000,9 +996,9 @@ cdef double cosine_similarity(
 
 
 cdef Py_ssize_t cosine_similarity_matches(
-    double *S,
+    const double *S,
     Py_ssize_t s_length,
-    double *T,
+    const double *T,
     Py_ssize_t t_length,
     double threshold,
     double **distances,
@@ -1022,7 +1018,7 @@ cdef Py_ssize_t cosine_similarity_matches(
     for i in range(t_length - s_length + 1):
         prod = 0
         s_norm = 0
-        s_norm = 0
+        t_norm = 0
         for j in range(s_length):
             prod += T[i + j] * S[j]
             s_norm += pow(S[j], 2)

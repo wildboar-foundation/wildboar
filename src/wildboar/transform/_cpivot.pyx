@@ -1,20 +1,21 @@
 # cython: language_level=3
+# cython: boundscheck=False
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
-import numpy as np
-
 from libc.math cimport NAN
 from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
+from numpy cimport uint32_t
 
 from ..distance._distance cimport DistanceMeasure
-from ..utils.data cimport Dataset
-from ..utils.misc cimport CList, to_ndarray_double
-from ..utils.rand cimport RAND_R_MAX, rand_int, shuffle
+from ..utils cimport TSArray
+from ..utils._misc cimport CList, to_ndarray_double
+from ..utils._rand cimport RAND_R_MAX, rand_int
 
 from ..distance import _DISTANCE_MEASURE
 
@@ -41,31 +42,31 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.n_pivots, self.distance_measures.py_list)
 
-    cdef Py_ssize_t reset(self, Dataset td) nogil:
+    cdef int reset(self, TSArray X) nogil:
         cdef Py_ssize_t i
         for i in range(self.distance_measures.size):
-            (<DistanceMeasure>self.distance_measures.get(i)).reset(td, td)
+            (<DistanceMeasure>self.distance_measures.get(i)).reset(X, X)
         return 0
 
-    cdef Py_ssize_t get_n_features(self, Dataset td) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
         return self.n_pivots
 
-    cdef Py_ssize_t get_n_outputs(self, Dataset td) nogil:
-        return self.get_n_features(td)
+    cdef Py_ssize_t get_n_outputs(self, TSArray X) nogil:
+        return self.get_n_features(X)
 
     cdef Py_ssize_t next_feature(
             self,
             Py_ssize_t feature_id,
-            Dataset td,
+            TSArray X,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
             Feature *transient,
-            size_t *seed,
+            uint32_t *seed,
     ) nogil:
         cdef TransientPivot *pivot = <TransientPivot*> malloc(sizeof(TransientPivot))
         pivot.sample = samples[rand_int(0, n_samples, seed)]
         pivot.distance_measure = rand_int(0, self.distance_measures.size, seed)
-        transient.dim = rand_int(0, td.n_dims, seed)
+        transient.dim = rand_int(0, X.shape[1], seed)
         transient.feature = pivot
         return 0
 
@@ -86,20 +87,20 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
 
     cdef Py_ssize_t init_persistent_feature(
             self,
-            Dataset td,
+            TSArray X,
             Feature *transient,
             Feature *persistent
     ) nogil:
         cdef TransientPivot *pivot = <TransientPivot*> transient.feature
         cdef PersitentPivot *persistent_pivot = <PersitentPivot*> malloc(sizeof(PersitentPivot))
         
-        persistent_pivot.data = <double*> malloc(sizeof(double) * td.n_timestep)
+        persistent_pivot.data = <double*> malloc(sizeof(double) * X.shape[2])
         persistent_pivot.distance_measure = pivot.distance_measure
-        persistent_pivot.length = td.n_timestep
+        persistent_pivot.length = X.shape[2]
         memcpy(
             persistent_pivot.data, 
-            td.get_sample(pivot.sample, transient.dim), 
-            sizeof(double) * td.n_timestep
+            &X[pivot.sample, transient.dim, 0], 
+            sizeof(double) * X.shape[2]
         )
         
         persistent.dim = transient.dim
@@ -109,54 +110,50 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     cdef double transient_feature_value(
             self,
             Feature *feature,
-            Dataset td,
+            TSArray X,
             Py_ssize_t sample
     ) nogil:
         cdef TransientPivot* pivot = <TransientPivot*>feature.feature
         return (<DistanceMeasure>self.distance_measures.get(pivot.distance_measure)).distance(
-            td, sample, td, pivot.sample, feature.dim
+            X, sample, X, pivot.sample, feature.dim
         )
 
     cdef double persistent_feature_value(
             self,
             Feature *feature,
-            Dataset td,
+            TSArray X,
             Py_ssize_t sample
     ) nogil:
         cdef PersitentPivot* pivot = <PersitentPivot*> feature.feature
         return (<DistanceMeasure>self.distance_measures.get(pivot.distance_measure))._distance(
-            td.get_sample(sample, feature.dim),
-            td.n_timestep,
+            &X[sample, feature.dim, 0],
+            X.shape[2],
             pivot.data,
-            td.n_timestep,
+            X.shape[2],
         )
 
     cdef Py_ssize_t transient_feature_fill(
             self,
             Feature *feature,
-            Dataset td,
+            TSArray X,
             Py_ssize_t sample,
-            Dataset td_out,
+            double[:, :] out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
     ) nogil:
-        td_out.get_sample(out_sample, feature.dim)[out_feature] = self.transient_feature_value(
-            feature, td, sample
-        )
+        out[out_sample, out_feature] = self.transient_feature_value(feature, X, sample)
         return 0
 
     cdef Py_ssize_t persistent_feature_fill(
             self,
             Feature *feature,
-            Dataset td,
+            TSArray X,
             Py_ssize_t sample,
-            Dataset td_out,
+            double[:, :] out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
     ) nogil:
-        td_out.get_sample(out_sample, feature.dim)[out_feature] = self.persistent_feature_value(
-            feature, td, sample
-        )
+        out[out_sample, out_feature] = self.persistent_feature_value(feature, X, sample)
         return 0
 
     cdef object persistent_feature_to_object(self, Feature *feature):

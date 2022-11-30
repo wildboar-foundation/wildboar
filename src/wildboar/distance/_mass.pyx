@@ -1,18 +1,18 @@
 # cython: language_level=3
+# cython: boundscheck=False
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cimport numpy as np
-
-import numpy as np
-
 from libc.math cimport INFINITY, NAN, sqrt
 from libc.stdlib cimport free, malloc
 
+from ..utils cimport TSArray
 from ..utils._fft cimport _pocketfft
-from ..utils.data cimport Dataset
-from ..utils.stats cimport (
+from ..utils._stats cimport (
     IncStats,
     cumulative_mean_std,
     find_min,
@@ -68,33 +68,34 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
             free(self.y_buffer)
             self.y_buffer = NULL
 
-    cdef int reset(self, Dataset dataset) nogil:
+    cdef int reset(self, TSArray X) nogil:
         self.__free() 
-        self.x_buffer = <complex*> malloc(sizeof(complex) * dataset.n_timestep)
-        self.y_buffer = <complex*> malloc(sizeof(complex) * dataset.n_timestep)
-        self.mean_x = <double*> malloc(sizeof(double) * dataset.n_timestep)
-        self.std_x = <double*> malloc(sizeof(double) * dataset.n_timestep)
-        self.dist_buffer = <double*> malloc(sizeof(double) * dataset.n_timestep)
+        cdef Py_ssize_t n_timestep = X.shape[2]
+        self.x_buffer = <complex*> malloc(sizeof(complex) * n_timestep)
+        self.y_buffer = <complex*> malloc(sizeof(complex) * n_timestep)
+        self.mean_x = <double*> malloc(sizeof(double) * n_timestep)
+        self.std_x = <double*> malloc(sizeof(double) * n_timestep)
+        self.dist_buffer = <double*> malloc(sizeof(double) * n_timestep)
         return 0
 
     cdef double transient_distance(
         self,
         SubsequenceView *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cumulative_mean_std(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             s.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
-            dataset.get_sample(s.index, s.dim) + s.start,
+            &X[index, s.dim, 0],
+            X.shape[2],
+            &X[index, s.dim, s.start],
             s.length,
             s.mean,
             s.std,
@@ -105,26 +106,26 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
             self.dist_buffer,
         )
         return find_min(
-            self.dist_buffer, dataset.n_timestep - s.length + 1, return_index
+            self.dist_buffer, X.shape[2] - s.length + 1, return_index
         )
 
     cdef double persistent_distance(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
     ) nogil:
         cumulative_mean_std(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             s.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             s.data,
             s.length,
             s.mean,
@@ -136,34 +137,34 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
             self.dist_buffer,
         )
         return find_min(
-            self.dist_buffer, dataset.n_timestep - s.length + 1, return_index
+            self.dist_buffer, X.shape[2] - s.length + 1, return_index
         )
 
     cdef Py_ssize_t transient_matches(
         self,
-        SubsequenceView *v,
-        Dataset dataset,
+        SubsequenceView *s,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
     ) nogil:
-        distances[0] = <double*> malloc(sizeof(double) * dataset.n_timestep - v.length + 1)
-        indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * dataset.n_timestep - v.length + 1)
+        distances[0] = <double*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
+        indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         cumulative_mean_std(
-            dataset.get_sample(index, v.dim),
-            dataset.n_timestep,
-            v.length,
+            &X[index, s.dim, 0],
+            X.shape[2],
+            s.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, v.dim),
-            dataset.n_timestep,
-            dataset.get_sample(v.index, v.dim) + v.start,
-            v.length,
-            v.mean,
-            v.std,
+            &X[index, s.dim, 0],
+            X.shape[2],
+            &X[index, s.dim, s.start],
+            s.length,
+            s.mean,
+            s.std,
             self.mean_x,
             self.std_x,
             self.x_buffer,
@@ -172,7 +173,7 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         )
         cdef Py_ssize_t i, j
         j = 0
-        for i in range(dataset.n_timestep - v.length + 1):
+        for i in range(X.shape[2] - s.length + 1):
             if distances[0][i] < threshold:
                 distances[0][j] = distances[0][i]
                 j += 1
@@ -181,24 +182,24 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
     cdef Py_ssize_t persistent_matches(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
     ) nogil:
-        distances[0] = <double*> malloc(sizeof(double) * dataset.n_timestep - s.length + 1)
-        indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * dataset.n_timestep - s.length + 1)
+        distances[0] = <double*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
+        indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         cumulative_mean_std(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             s.length,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            dataset.get_sample(index, s.dim),
-            dataset.n_timestep,
+            &X[index, s.dim, 0],
+            X.shape[2],
             s.data,
             s.length,
             s.mean,
@@ -211,18 +212,19 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         )
         cdef Py_ssize_t i, j
         j = 0
-        for i in range(dataset.n_timestep - s.length + 1):
+        for i in range(X.shape[2] - s.length + 1):
             if distances[0][i] < threshold:
                 distances[0][j] = distances[0][i]
                 indicies[0][j] = i
                 j += 1
         return j
+        
 
 
 cdef void _mass_distance(
-    double *x,
+    const double *x,
     Py_ssize_t x_length,
-    double *y,
+    const double *y,
     Py_ssize_t y_length,
     double mean,
     double std,

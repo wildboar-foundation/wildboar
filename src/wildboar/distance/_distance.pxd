@@ -2,10 +2,9 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
+from numpy cimport float64_t, ndarray
 
-cimport numpy as np
-
-from wildboar.utils.data cimport Dataset
+from ..utils cimport TSArray
 
 
 cdef struct SubsequenceView:
@@ -30,11 +29,11 @@ cdef struct Subsequence:
 
 cdef class SubsequenceDistanceMeasure:
 
-    cdef int reset(self, Dataset dataset) nogil
+    cdef int reset(self, TSArray X) nogil
 
     cdef int init_transient(
         self,
-        Dataset td,
+        TSArray X,
         SubsequenceView *v,
         Py_ssize_t index,
         Py_ssize_t start,
@@ -44,7 +43,7 @@ cdef class SubsequenceDistanceMeasure:
 
     cdef int init_persistent(
         self,
-        Dataset dataset,
+        TSArray X,
         SubsequenceView* v,
         Subsequence* s,
     ) nogil
@@ -67,7 +66,7 @@ cdef class SubsequenceDistanceMeasure:
     cdef double transient_distance(
         self,
         SubsequenceView *v,
-        Dataset td,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=*,
     ) nogil
@@ -75,7 +74,7 @@ cdef class SubsequenceDistanceMeasure:
     cdef double persistent_distance(
         self,
         Subsequence *s,
-        Dataset td,
+        TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=*,
     ) nogil
@@ -83,7 +82,7 @@ cdef class SubsequenceDistanceMeasure:
     cdef Py_ssize_t transient_matches(
         self,
         SubsequenceView *v,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -93,7 +92,7 @@ cdef class SubsequenceDistanceMeasure:
     cdef Py_ssize_t persistent_matches(
         self,
         Subsequence *s,
-        Dataset dataset,
+        TSArray X,
         Py_ssize_t index,
         double threshold,
         double **distances,
@@ -102,18 +101,18 @@ cdef class SubsequenceDistanceMeasure:
 
     cdef double _distance(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=*,
     ) nogil
 
     cdef Py_ssize_t _matches(
         self,
-        double *s,
+        const double *s,
         Py_ssize_t s_len,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
         double threshold,
         double **distances,
@@ -127,21 +126,21 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 cdef class DistanceMeasure:
 
-    cdef int reset(self, Dataset x, Dataset y) nogil
+    cdef int reset(self, TSArray X, TSArray Y) nogil
 
     cdef double distance(
         self,
-        Dataset x,
+        TSArray X,
         Py_ssize_t x_index,
-        Dataset y,
+        TSArray Y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil
 
     cdef double _distance(
         self,
-        double *x,
+        const double *x,
         Py_ssize_t x_len,
-        double *y,
+        const double *y,
         Py_ssize_t y_len
     ) nogil

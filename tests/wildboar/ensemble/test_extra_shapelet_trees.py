@@ -1,10 +1,15 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
+import numpy as np
 import pytest
 
 from wildboar.ensemble import ExtraShapeletTreesClassifier, ExtraShapeletTreesRegressor
 from wildboar.utils.estimator_checks import check_estimator
+
+
+def test_shap_for():
+    clf = ExtraShapeletTreesClassifier(n_estimators=1)
+    clf.fit(np.zeros((10, 10)), np.ones(10))
 
 
 def test_check_estimator():

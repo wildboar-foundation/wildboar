@@ -1,4 +1,7 @@
 # cython: language_level=3
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -16,7 +19,7 @@ from ._fft cimport _pocketfft
 cdef double EPSILON = 1e-13
 
 cdef void fast_mean_std(
-    double* data,
+    const double* data,
     Py_ssize_t length,
     double *mean,
     double* std,
@@ -89,7 +92,7 @@ cdef double inc_stats_variance(IncStats *self, bint sample=False) nogil:
         return var
 
 cdef void cumulative_mean_std(
-    double *x,
+    const double *x,
     Py_ssize_t x_length, 
     Py_ssize_t y_length, 
     double *x_mean, 
@@ -106,14 +109,14 @@ cdef void cumulative_mean_std(
             x_std[i - (y_length - 1)] = std 
             inc_stats_remove(&stats, 1.0, x[i - (y_length - 1)])
 
-cdef double mean(double *x, Py_ssize_t length) nogil:
+cdef double mean(const double *x, Py_ssize_t length) nogil:
     cdef double v = 0.0
     cdef Py_ssize_t i
     for i in range(length):
         v += x[i]
     return v / length
 
-cdef double variance(double *x, Py_ssize_t length) nogil:
+cdef double variance(const double *x, Py_ssize_t length) nogil:
     if length == 1:
         return 0.0
 
@@ -126,7 +129,7 @@ cdef double variance(double *x, Py_ssize_t length) nogil:
         sum += v * v
     return sum / length
 
-cdef double slope(double *x, Py_ssize_t length) nogil:
+cdef double slope(const double *x, Py_ssize_t length) nogil:
     if length == 1:
         return 0.0
     cdef double y_mean = (length + 1) / 2.0
@@ -145,7 +148,7 @@ cdef double slope(double *x, Py_ssize_t length) nogil:
     x_mean /= length
     return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
 
-cdef double find_min(double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) nogil:
+cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) nogil:
     cdef double min_val = INFINITY
     cdef Py_ssize_t i
 
@@ -157,7 +160,7 @@ cdef double find_min(double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) nogil:
 
     return min_val
 
-cdef double covariance(double *x, double *y, Py_ssize_t length) nogil:
+cdef double covariance(const double *x, const double *y, Py_ssize_t length) nogil:
     cdef:
         double sum_x = 0.0
         double sum_y = 0.0
@@ -183,7 +186,7 @@ cdef double covariance(double *x, double *y, Py_ssize_t length) nogil:
 
 
 
-cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) nogil:
+cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex *fft) nogil:
     cdef double avg = mean(x, n)
     cdef Py_ssize_t fft_length = n * 2 - 1
     cdef Py_ssize_t i
@@ -204,7 +207,7 @@ cdef void _auto_correlation(double *x, Py_ssize_t n, double *out, complex *fft) 
     for i in range(n):
         out[i] = (fft[i] / first).real
 
-cdef void auto_correlation(double *x, Py_ssize_t n, double *out) nogil:
+cdef void auto_correlation(const double *x, Py_ssize_t n, double *out) nogil:
     cdef Py_ssize_t fft_length = n * 2 - 1
     cdef complex *fft = <complex *> malloc(sizeof(complex) * fft_length)
     _auto_correlation(x, n, out, fft)
@@ -217,7 +220,7 @@ cdef Py_ssize_t next_power_of_2(Py_ssize_t n) nogil:
     return n << 1
 
 cdef int welch(
-    double *x, 
+    const double *x, 
     Py_ssize_t size, 
     int NFFT, 
     double Fs, 

@@ -10,6 +10,9 @@ from libc.math cimport log, sqrt
 from libc.stdlib cimport free, malloc
 
 
+cdef inline uint32_t DEFAULT_SEED = 1
+
+
 # https://jugit.fz-juelich.de/mlz/ransampl/-/blob/master/lib/ransampl.c
 cdef void vose_rand_init(VoseRand *vr, Py_ssize_t n) nogil:
     vr.prob = <double*> malloc(sizeof(double) * n)
@@ -72,7 +75,7 @@ cdef void vose_rand_precompute(VoseRand *vr, double *p) nogil:
     free(L)
 
 
-cdef Py_ssize_t vose_rand_int(VoseRand *vr, size_t *seed) nogil:
+cdef Py_ssize_t vose_rand_int(VoseRand *vr, uint32_t *seed) nogil:
     cdef double r1 = rand_uniform(0, 1, seed)
     cdef double r2 = rand_uniform(0, 1, seed)
     cdef Py_ssize_t i = <Py_ssize_t> (vr.n * r1)
@@ -81,13 +84,23 @@ cdef Py_ssize_t vose_rand_int(VoseRand *vr, size_t *seed) nogil:
     else:
         return vr.alias[i]
 
-cdef inline size_t rand_r(size_t *seed) nogil:
+# https://github.com/scikit-learn/scikit-learn/blob/
+#  433600e68fbb12e72d8c5e0707916f5603bb7057/sklearn/utils/_random.pxd#L26
+# TODO(1.2):
+# if (seed[0] == 0): seed[0] = DEFAULT_SEED
+#
+#    seed[0] ^= <uint32_t>(seed[0] << 13)
+#    seed[0] ^= <uint32_t>(seed[0] >> 17)
+#    seed[0] ^= <uint32_t>(seed[0] << 5)
+#    return seed[0] % ((<uint32_t>RAND_R_MAX) + 1)
+cdef inline uint32_t rand_r(uint32_t *seed) nogil:
     """Returns a pesudo-random number based on the seed."""
     seed[0] = seed[0] * 1103515245 + 12345
-    return seed[0] % (<size_t> RAND_R_MAX + 1)
+    return seed[0] % (<uint32_t> RAND_R_MAX + 1)
 
 
-cdef size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
+
+cdef int rand_int(int min_val, int max_val, uint32_t *seed) nogil:
     """Returns a pseudo-random number in the range [`min_val` `max_val`["""
     if min_val == max_val:
         return min_val
@@ -95,12 +108,12 @@ cdef size_t rand_int(size_t min_val, size_t max_val, size_t *seed) nogil:
         return min_val + rand_r(seed) % (max_val - min_val)
 
 
-cdef double rand_uniform(double low, double high, size_t *random_state) nogil:
+cdef double rand_uniform(double low, double high, uint32_t *random_state) nogil:
     """Generate a random double in the range [`low` `high`[."""
     return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
 
 
-cdef double rand_normal(double mu, double sigma, size_t *random_state) nogil:
+cdef double rand_normal(double mu, double sigma, uint32_t *random_state) nogil:
     cdef double x1, x2, w, _y1
     x1 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
     x2 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
@@ -116,7 +129,7 @@ cdef double rand_normal(double mu, double sigma, size_t *random_state) nogil:
     return mu + _y1 * sigma
 
 
-cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, size_t *seed) nogil:
+cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) nogil:
     cdef Py_ssize_t i, j
     for i in range(length - 1, 0, -1):
         j = rand_int(0, i, seed)

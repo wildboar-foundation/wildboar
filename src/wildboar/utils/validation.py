@@ -10,6 +10,13 @@ from sklearn.utils.validation import check_consistent_length
 
 import wildboar as wb
 
+__all__ = [
+    "check_type",
+    "check_option",
+    "check_array",
+    "check_X_y",
+]
+
 
 def check_type(x, name, target_type, required=True):
     """Check that the type of x is of a target type.
@@ -168,6 +175,7 @@ def check_X_y(
     order="C",
     copy=False,
     ensure_2d=True,
+    ensure_ts_array=False,
     allow_3d=False,
     allow_nd=False,
     force_all_finite=True,
@@ -200,6 +208,7 @@ def check_X_y(
         order=order,
         copy=copy,
         ensure_2d=ensure_2d,
+        ensure_ts_array=ensure_ts_array,
         dtype=dtype,
     )
 
@@ -224,6 +233,7 @@ def check_array(
     copy=False,
     ravel_1d=False,
     ensure_2d=True,
+    ensure_ts_array=False,
     allow_3d=False,
     allow_nd=False,
     force_all_finite=True,
@@ -257,7 +267,7 @@ def check_array(
         If dtype is a list of types, conversion on the first type is only
         performed if the dtype of the input is not in the list.
 
-    order : {'F', 'C'} or None, optional
+    order : {'F', 'C', 'T'} or None, optional
         Whether an array will be forced to be fortran or c-style.
         When order is None, then if copy=False, nothing is ensured
         about the memory layout of the output array; otherwise (copy=True)
@@ -319,12 +329,11 @@ def check_array(
         The converted and validated array.
 
     """
-
     check_params = dict(
         accept_sparse=False,
         accept_large_sparse=False,
         dtype=dtype,
-        order=order,
+        order=None if ensure_ts_array else order,
         copy=copy,
         force_all_finite=False,
         ensure_2d=ensure_2d,
@@ -401,4 +410,31 @@ def check_array(
         if force_all_finite and np.isposinf(array).any():
             raise ValueError(f"Input {padded_input_name}contains infinity.")
 
-    return array
+    return _check_ts_array(array) if ensure_ts_array else array
+
+
+def _check_ts_array(array):
+    """Force the array to (1) be 3D (n_samples, n_dims, n_timesteps) and
+    (2) have the final dimension contiguous in memory, and (3) have dtype=float.
+
+    Parameters
+    ----------
+    array : ndarray
+        The array
+
+    Returns
+    -------
+    tsarray : TSArray
+        A time series array
+
+    """
+    if array.ndim == 1:
+        array = array.reshape(1, 1, array.shape[0])
+    elif array.ndim == 2:
+        array = array.reshape(array.shape[0], 1, array.shape[1])
+
+    last_stride = array.strides[2] // array.itemsize
+    if last_stride != 1:
+        array = np.ascontiguousarray(array)
+
+    return array.astype(float, copy=False)
