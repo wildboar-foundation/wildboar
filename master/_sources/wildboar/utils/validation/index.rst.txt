@@ -20,10 +20,10 @@ Functions
 
 
 
-.. py:function:: check_X_y(x, y, *, dtype=float, order='C', copy=False, ensure_2d=True, allow_3d=False, allow_nd=False, force_all_finite=True, multi_output=False, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, allow_eos=False, y_numeric=False, y_contiguous=True, estimator=None)
+.. py:function:: check_X_y(x, y, *, dtype=float, order='C', copy=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite=True, multi_output=False, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, allow_eos=False, y_numeric=False, y_contiguous=True, estimator=None)
 
 
-.. py:function:: check_array(array, *, dtype='numeric', order='C', copy=False, ravel_1d=False, ensure_2d=True, allow_3d=False, allow_nd=False, force_all_finite=True, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, estimator=None, input_name='', allow_eos=False)
+.. py:function:: check_array(array, *, dtype='numeric', order='C', copy=False, ravel_1d=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite=True, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, estimator=None, input_name='', allow_eos=False)
 
    Delegate array validation to scikit-learn
    :func:`sklearn.utils.validation.check_array` with wildboar defaults and conventions.
@@ -49,7 +49,7 @@ Functions
                  about the memory layout of the output array; otherwise (copy=True)
                  the memory layout of the returned array is kept as close as possible
                  to the original array.
-   :type order: {'F', 'C'} or None, optional
+   :type order: {'F', 'C', 'T'} or None, optional
    :param copy: Whether a forced copy will be triggered. If copy=False, a copy might
                 be triggered by a conversion.
    :type copy: bool, optional
