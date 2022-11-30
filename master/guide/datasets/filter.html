@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Outlier generation" href="outlier.html" /><link rel="prev" title="Preprocessing" href="preprocess.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Filtering - Wildboar 1.1.0rc5.dev200+g81f3aead0 documentation</title>
+        <title>Filtering - Wildboar 1.1.0rc5.dev201+g6838b035e documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev200+g81f3aead0 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev201+g6838b035e documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -626,9 +626,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_datasets</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="n">load_datasets</span><span class="p">(</span><span class="s2">&quot;wildboar/ucr&quot;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n_samples&gt;200&quot;</span><span class="p">,</span> <span class="s2">&quot;n_timestep&lt;50&quot;</span><span class="p">]):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from wildboar.datasets import load_datasets
+for name, (x, y) in load_datasets(&quot;wildboar/ucr&quot;, filter=[&quot;n_samples&gt;200&quot;, &quot;n_timestep&lt;50&quot;]):
+    print(name)
 </pre></div>
 </div>
 </div>

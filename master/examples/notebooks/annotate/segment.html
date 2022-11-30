@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Distance" href="../../distance.html" /><link rel="prev" title="Motif discovery" href="motif.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Segmentation - Wildboar 1.1.0rc5.dev200+g81f3aead0 documentation</title>
+        <title>Segmentation - Wildboar 1.1.0rc5.dev201+g6838b035e documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev200+g81f3aead0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev201+g6838b035e documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -604,11 +604,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pylab as plt
 
-<span class="kn">from</span> <span class="nn">wildboar</span> <span class="kn">import</span> <span class="n">annotate</span>
-<span class="kn">from</span> <span class="nn">wildboar.utils.plot</span> <span class="kn">import</span> <span class="n">plot_time_domain</span>
+from wildboar import annotate
+from wildboar.utils.plot import plot_time_domain
 </pre></div>
 </div>
 </div>
@@ -617,8 +617,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;https://drive.google.com/uc?export=download&amp;id=1DYG3rwW_zpd-7lcgYeL0Y2nHtkr2Fi0O&quot;</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">20000</span><span class="p">:</span><span class="mi">30000</span><span class="p">]</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x = np.loadtxt(&quot;https://drive.google.com/uc?export=download&amp;id=1DYG3rwW_zpd-7lcgYeL0Y2nHtkr2Fi0O&quot;)
+x = x[20000:30000]
 </pre></div>
 </div>
 </div>
@@ -627,7 +627,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">segments</span> <span class="o">=</span> <span class="n">annotate</span><span class="o">.</span><span class="n">segment</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">n_segments</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>segments = annotate.segment(x=x, n_segments=3, window=200)
 </pre></div>
 </div>
 </div>
@@ -636,11 +636,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plot_time_domain</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(figsize=(12, 4), sharex=True)
+plot_time_domain(x, ax=ax)
 
-<span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">segments</span><span class="p">:</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">segment</span><span class="p">,</span> <span class="n">segment</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;dashed&quot;</span><span class="p">)</span>
+for segment in segments:
+    ax.axvspan(segment, segment + 1, 0, 1, color=&quot;gray&quot;, alpha=0.9, linestyle=&quot;dashed&quot;)
 </pre></div>
 </div>
 </div>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Interval permutation importance" href="importance.html" /><link rel="prev" title="Explainability" href="../explain.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Counterfactual explanations - Wildboar 1.1.0rc5.dev200+g81f3aead0 documentation</title>
+        <title>Counterfactual explanations - Wildboar 1.1.0rc5.dev201+g6838b035e documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev200+g81f3aead0 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.0rc5.dev201+g6838b035e documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -606,7 +606,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactuals</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from wildboar.explain.counterfactual import counterfactuals
 <br/></pre></div>
 </div>
 </div>
@@ -616,11 +616,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">KNeighborsCounterfactual</span>
-<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+import matplotlib.pylab as plt
+from wildboar.datasets import load_dataset
+from wildboar.explain.counterfactual import KNeighborsCounterfactual
+from sklearn.neighbors import KNeighborsClassifier
 <br/></pre></div>
 </div>
 </div>
@@ -629,9 +629,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">,</span> <span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">clf</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
-<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x_train, x_test, y_train, y_test = load_dataset(&quot;GunPoint&quot;, merge_train_test=False)
+clf = KNeighborsClassifier(n_neighbors=5, metric=&quot;euclidean&quot;)
+clf.fit(x_train, y_train)
 <br/></pre></div>
 </div>
 </div>
@@ -646,11 +646,11 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">KNeighborsCounterfactual</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">)</span>
-<span class="n">c</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">]</span>
-<span class="n">y_cf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">counterfactual</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_cf</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>c = KNeighborsCounterfactual(random_state=123)
+c.fit(clf)
+x_test = x_test[y_test != 1]
+y_cf = np.ones(x_test.shape[0])
+counterfactual = c.explain(x_test, y_cf)
 <br/></pre></div>
 </div>
 </div>
@@ -658,9 +658,9 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">counterfactual</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;original&quot;</span><span class="p">,</span> <span class="s2">&quot;counterfactual&quot;</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(x_test[0])
+plt.plot(counterfactual[0])
+plt.legend([&quot;original&quot;, &quot;counterfactual&quot;])
 <br/></pre></div>
 </div>
 </div>
@@ -691,13 +691,13 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.metrics</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">proximity_score</span><span class="p">,</span>
-    <span class="n">relative_proximity_score</span><span class="p">,</span>
-    <span class="n">validity_score</span><span class="p">,</span>
-    <span class="n">plausability_score</span><span class="p">,</span>
-    <span class="n">compactness_score</span><span class="p">,</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from wildboar.metrics import (
+    proximity_score,
+    relative_proximity_score,
+    validity_score,
+    plausability_score,
+    compactness_score,
+)
 <br/></pre></div>
 </div>
 </div>
@@ -705,7 +705,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">proximity_score</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">counterfactual</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>proximity_score(x_test, counterfactual)
 </pre></div>
 </div>
 </div>
@@ -722,7 +722,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">validity_score</span><span class="p">(</span><span class="n">y_cf</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">counterfactual</span><span class="p">))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>validity_score(y_cf, clf.predict(counterfactual))
 <br/></pre></div>
 </div>
 </div>
@@ -739,7 +739,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plausability_score</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">counterfactual</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plausability_score(x_train, counterfactual)
 <br/></pre></div>
 </div>
 </div>
@@ -756,7 +756,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">compactness_score</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">counterfactual</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>compactness_score(x_test, counterfactual)
 <br/></pre></div>
 </div>
 </div>
@@ -773,7 +773,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">relative_proximity_score</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">counterfactual</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>relative_proximity_score(x_train[y_train == 1], x_test, counterfactual)
 <br/></pre></div>
 </div>
 </div>
@@ -794,10 +794,10 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
-<span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
-<span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="n">counterfactuals</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
+from sklearn.model_selection import train_test_split
+from wildboar.ensemble import ShapeletForestClassifier
+from wildboar.explain.counterfactual import counterfactuals
 <br/></pre></div>
 </div>
 </div>
@@ -805,27 +805,27 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;TwoLeadECG&quot;</span><span class="p">)</span>
-<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
-    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span>
-<span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x, y = load_dataset(&quot;TwoLeadECG&quot;)
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y, test_size=0.1, random_state=123
+)
 
-<span class="n">estimator</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span> <span class="n">n_shapelets</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">==</span> <span class="mf">2.0</span><span class="p">]</span>
-<span class="n">x_counterfactuals</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">proximity</span> <span class="o">=</span> <span class="n">counterfactuals</span><span class="p">(</span>
-    <span class="n">estimator</span><span class="p">,</span>
-    <span class="n">x_test</span><span class="p">,</span>
-    <span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">proximity</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
-<span class="p">)</span>
+estimator = ShapeletForestClassifier(random_state=123, n_shapelets=10, n_jobs=-1, metric=&quot;euclidean&quot;)
+estimator.fit(x_train, y_train)
+x_test = x_test[y_test == 2.0]
+x_counterfactuals, valid, proximity = counterfactuals(
+    estimator,
+    x_test,
+    1.0,
+    proximity=&quot;euclidean&quot;,
+    random_state=123,
+)
 
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
-<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
-<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">proximity</span><span class="p">[</span><span class="n">valid</span><span class="p">])[:</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">x_counterfactuals</span> <span class="o">=</span> <span class="n">x_counterfactuals</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
-<span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+x_test = x_test[valid]
+x_counterfactuals = x_counterfactuals[valid]
+i = np.argsort(proximity[valid])[:2]
+x_counterfactuals = x_counterfactuals[i, :]
+x_test = x_test[i, :]
 <br/></pre></div>
 </div>
 </div>
@@ -834,8 +834,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_counterfactuals</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(x_test[0])
+plt.plot(x_counterfactuals[0])
 <br/></pre></div>
 </div>
 </div>
@@ -859,7 +859,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plausability_score</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_counterfactuals</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plausability_score(x_train, x_counterfactuals)
 </pre></div>
 </div>
 </div>
@@ -876,7 +876,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">relative_proximity_score</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">x_counterfactuals</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>relative_proximity_score(x_train[y_train == 1], x_test, x_counterfactuals)
 </pre></div>
 </div>
 </div>
@@ -893,7 +893,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">proximity_score</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">x_counterfactuals</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>proximity_score(x_test, x_counterfactuals)
 </pre></div>
 </div>
 </div>

@@ -575,8 +575,8 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_distance</span><span class="p">,</span> <span class="n">paired_distance</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>from wildboar.datasets import load_dataset
+from wildboar.distance import pairwise_distance, paired_distance
 </pre></div>
 </div>
 </div>
@@ -585,7 +585,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x, _ = load_dataset(&quot;GunPoint&quot;)
 </pre></div>
 </div>
 </div>
@@ -594,7 +594,7 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pairwise_distance(x[0:3], x[0:3])
 </pre></div>
 </div>
 </div>
@@ -614,7 +614,7 @@ array([[0.        , 4.62126068, 4.84338669],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;ddtw&quot;</span><span class="p">,</span> <span class="n">metric_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>pairwise_distance(x[0], x[1], metric=&quot;ddtw&quot;, metric_params={&quot;r&quot;: 0.5})
 </pre></div>
 </div>
 </div>
@@ -632,7 +632,7 @@ array([[0.        , 4.62126068, 4.84338669],
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;dtw&quot;</span><span class="p">,</span> <span class="n">metric_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">})</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>paired_distance(x[0:3], x[1:4], metric=&quot;dtw&quot;, metric_params={&quot;r&quot;: 0.5})
 </pre></div>
 </div>
 </div>
