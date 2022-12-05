@@ -146,10 +146,8 @@ def motifs(
         motif_index = []
         if callable(max_distance):
             cutoff = max_distance(mp[i])
-        for j in range(max_motif):
-            if len(motif_index) > max_motif:
-                break
 
+        while len(motif_index) < max_motif and not np.all(np.isinf(mp)):
             candidate = np.argmin(mp[i])
             if mp[i, candidate] > cutoff:
                 break
