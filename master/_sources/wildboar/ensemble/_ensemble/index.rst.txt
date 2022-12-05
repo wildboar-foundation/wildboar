@@ -38,7 +38,7 @@ Classes
 
 
 
-.. py:class:: BaggingClassifier(base_estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, class_weight=None, warm_start=False, n_jobs=None, random_state=None, verbose=0)
+.. py:class:: BaggingClassifier(estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, class_weight=None, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
    Bases: :py:obj:`BaseBagging`, :py:obj:`sklearn.ensemble.BaggingClassifier`
 
@@ -70,7 +70,7 @@ Classes
 
 
 
-.. py:class:: BaggingRegressor(base_estimator=None, n_estimators=100, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0)
+.. py:class:: BaggingRegressor(estimator, n_estimators=100, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
    Bases: :py:obj:`BaseBagging`, :py:obj:`sklearn.ensemble.BaggingRegressor`
 
@@ -102,7 +102,7 @@ Classes
 
 
 
-.. py:class:: BaseBagging(base_estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0)
+.. py:class:: BaseBagging(estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
    Bases: :py:obj:`wildboar.base.BaseEstimator`, :py:obj:`sklearn.ensemble._bagging.BaseBagging`
 
@@ -134,12 +134,12 @@ Classes
 
 
 
-.. py:class:: BaseForestClassifier(base_estimator, n_estimators=100, estimator_params=tuple(), *, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
+.. py:class:: BaseForestClassifier(estimator, n_estimators=100, estimator_params=tuple(), *, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`ForestMixin`, :py:obj:`BaggingClassifier`
 
 
-.. py:class:: BaseForestRegressor(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. py:class:: BaseForestRegressor(*, estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`ForestMixin`, :py:obj:`BaggingRegressor`
 
@@ -152,7 +152,7 @@ Classes
    arguments (no ``*args`` or ``**kwargs``).
 
 
-.. py:class:: BaseShapeletForestClassifier(base_estimator, n_estimators=100, estimator_params=tuple(), oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
+.. py:class:: BaseShapeletForestClassifier(estimator, n_estimators=100, estimator_params=tuple(), oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`BaseForestClassifier`
 
@@ -164,7 +164,7 @@ Classes
       instead.
 
 
-.. py:class:: BaseShapeletForestRegressor(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. py:class:: BaseShapeletForestRegressor(*, estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestRegressor`
 
