@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Segmentation" href="segment.html" /><link rel="prev" title="Annotate" href="../../annotate.html" />
 
     <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>Motif discovery - Wildboar 1.1.1.dev210+gf6259a645 documentation</title>
+        <title>Motif discovery - Wildboar 1.1.1.dev211+g4a48072a2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev210+gf6259a645 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev211+g4a48072a2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -608,7 +608,7 @@ div.rendered_html tbody tr:hover {
 import matplotlib.pylab as plt
 
 from wildboar.distance import matrix_profile
-from wildboar.annotate import motifs, regimes
+from wildboar.annotate import motifs
 from wildboar.utils.plot import plot_time_domain
 </pre></div>
 </div>
@@ -649,7 +649,7 @@ plot_time_domain(mp, ax=ax[1])
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;AxesSubplot:&gt;
+&lt;AxesSubplot: &gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -661,14 +661,14 @@ plot_time_domain(mp, ax=ax[1])
 </div>
 <p>Finally, we find the top motifs.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>motif_ind = motifs(
     x,
     mp=mp,
     max_distance=0.5,
-    max_motif=6,
+    max_motif=5,
     min_neighbours=2,
     max_neighbours=5,
     exclude=0.2,
@@ -678,23 +678,50 @@ plot_time_domain(mp, ax=ax[1])
 </div>
 <p>And, plot the motifs and their neighbors.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(figsize=(12, 4), sharex=True)
 plot_time_domain(x, ax=ax)
-cmap = plt.get_cmap(&quot;Dark2&quot;, 3)
+cmap = plt.get_cmap(&quot;Dark2&quot;, 5)
 for c, ind in enumerate(motif_ind):
+    first = ind[0]
     for i in ind:
         ax.plot(np.arange(i, i + 200), x[i : i + 200], color=cmap(c))
+    ax.annotate(f&quot;{c}&quot;, xy=(first, x[first]), xytext=(first, x[first] - 2000), arrowprops=dict(arrowstyle=&quot;-&gt;&quot;, connectionstyle=&quot;arc3&quot;))
 </pre></div>
 </div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x7f382caa7d60&gt;
+</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../../_images/examples_notebooks_annotate_motif_11_0.png" src="../../../_images/examples_notebooks_annotate_motif_11_0.png" />
+<img alt="../../../_images/examples_notebooks_annotate_motif_11_1.png" src="../../../_images/examples_notebooks_annotate_motif_11_1.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
 </div>
 </div>
 </section>
