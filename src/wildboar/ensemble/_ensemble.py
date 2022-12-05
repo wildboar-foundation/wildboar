@@ -44,7 +44,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         n_jobs=None,
         random_state=None,
         verbose=0,
-        base_estimator="depreacted",
+        base_estimator="deprecated",
     ):
         super().__init__(
             estimator=estimator,
