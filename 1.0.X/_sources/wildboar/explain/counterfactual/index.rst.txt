@@ -149,26 +149,8 @@ Functions
 
    .. py:method:: fit(estimator)
 
-      Fit the counterfactual to a given estimator
-
-      :param estimator: An estimator for which counterfactual explanations are produced
-      :type estimator: object
-
-      :rtype: self
-
 
    .. py:method:: transform(x, y)
-
-      Transform the i:th sample in x to a sample that would be labeled as the i:th label in y
-
-      :param x: The samples to generate counterfactual explanations for
-      :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dimension, n_timestep)
-      :param y: The desired label of the counterfactual sample
-      :type y: array-like of shape (n_samples,)
-
-      :returns: * **counterfactuals** (*ndarray of same shape as x*) -- The counterfactual for each sample. If success[i] == False, then
-                  the value of counterfactuals[i] is undefined.
-                * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
 
 
 
