@@ -7,6 +7,6 @@ pre-commit
 black==22.10.0
 isort
 cython>=0.29.24
-setuptools_scm[toml]>=3.4
+setuptools_scm[toml]>=6.2
 setuptools>=48.0
 wheel
