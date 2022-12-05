@@ -34,7 +34,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
     @abstractmethod
     def __init__(
         self,
-        base_estimator=None,
+        estimator=None,
         n_estimators=10,
         *,
         max_samples=1.0,
@@ -44,8 +44,10 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         n_jobs=None,
         random_state=None,
         verbose=0,
+        base_estimator="deprecated",
     ):
         super().__init__(
+            estimator=estimator,
             base_estimator=base_estimator,
             n_estimators=n_estimators,
             max_samples=max_samples,
@@ -147,7 +149,7 @@ class ForestMixin:
 class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
     def __init__(
         self,
-        base_estimator=None,
+        estimator=None,
         n_estimators=10,
         *,
         max_samples=1.0,
@@ -158,10 +160,10 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         n_jobs=None,
         random_state=None,
         verbose=0,
+        base_estimator="deprecated",
     ):
-
         super().__init__(
-            base_estimator,
+            estimator=estimator,
             n_estimators=n_estimators,
             max_samples=max_samples,
             bootstrap=bootstrap,
@@ -170,6 +172,7 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
             n_jobs=n_jobs,
             random_state=random_state,
             verbose=verbose,
+            base_estimator=base_estimator,
         )
         self.class_weight = class_weight
 
@@ -195,7 +198,7 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
     @abstractmethod
     def __init__(
         self,
-        base_estimator,
+        estimator,
         n_estimators=100,
         estimator_params=tuple(),
         *,
@@ -212,7 +215,7 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=base_estimator,
+            estimator=estimator,
             n_estimators=n_estimators,
             bootstrap=bootstrap,
             n_jobs=n_jobs,
@@ -255,7 +258,7 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
     @abstractmethod
     def __init__(
         self,
-        base_estimator,
+        estimator,
         n_estimators=100,
         estimator_params=tuple(),
         oob_score=False,
@@ -276,7 +279,7 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=base_estimator,
+            estimator=estimator,
             estimator_params=estimator_params,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
@@ -418,7 +421,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
               by `np.random`.
         """
         super().__init__(
-            base_estimator=ShapeletTreeClassifier(),
+            estimator=ShapeletTreeClassifier(),
             estimator_params=(
                 "max_depth",
                 "n_shapelets",
@@ -546,7 +549,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
               by `np.random`.
         """
         super().__init__(
-            base_estimator=ExtraShapeletTreeClassifier(),
+            estimator=ExtraShapeletTreeClassifier(),
             estimator_params=(
                 "max_depth",
                 "min_impurity_decrease",
@@ -581,7 +584,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
     def __init__(
         self,
-        base_estimator=None,
+        estimator,
         n_estimators=100,
         *,
         max_samples=1.0,
@@ -591,9 +594,10 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
         n_jobs=None,
         random_state=None,
         verbose=0,
+        base_estimator="deprecated",
     ):
         super().__init__(
-            base_estimator,
+            estimator,
             n_estimators,
             max_samples=max_samples,
             bootstrap=bootstrap,
@@ -602,6 +606,7 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
             n_jobs=n_jobs,
             random_state=random_state,
             verbose=verbose,
+            base_estimator=base_estimator,
         )
 
     def fit(self, x, y, sample_weight=None):
@@ -616,7 +621,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
     def __init__(
         self,
         *,
-        base_estimator,
+        estimator,
         estimator_params=tuple(),
         oob_score=False,
         n_estimators=100,
@@ -631,7 +636,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=base_estimator,
+            estimator=estimator,
             n_estimators=n_estimators,
             bootstrap=bootstrap,
             n_jobs=n_jobs,
@@ -673,7 +678,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
     def __init__(
         self,
         *,
-        base_estimator,
+        estimator,
         estimator_params=tuple(),
         oob_score=False,
         n_estimators=100,
@@ -693,7 +698,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=base_estimator,
+            estimator=estimator,
             estimator_params=estimator_params,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
@@ -817,7 +822,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
               by `np.random`.
         """
         super().__init__(
-            base_estimator=ShapeletTreeRegressor(),
+            estimator=ShapeletTreeRegressor(),
             estimator_params=(
                 "max_depth",
                 "n_shapelets",
@@ -923,7 +928,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
               by `np.random`.
         """
         super().__init__(
-            base_estimator=ExtraShapeletTreeRegressor(),
+            estimator=ExtraShapeletTreeRegressor(),
             estimator_params=(
                 "max_depth",
                 "min_impurity_decrease",
@@ -1028,7 +1033,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
               by `np.random`.
         """
         super().__init__(
-            base_estimator=ExtraShapeletTreeRegressor(),
+            estimator=ExtraShapeletTreeRegressor(),
             estimator_params=(
                 "n_shapelets",
                 "max_depth",
@@ -1195,7 +1200,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
               by `np.random`.
         """
         super(IsolationShapeletForest, self).__init__(
-            base_estimator=ExtraShapeletTreeRegressor(),
+            estimator=ExtraShapeletTreeRegressor(),
             bootstrap=bootstrap,
             warm_start=warm_start,
             n_jobs=n_jobs,
@@ -1389,7 +1394,7 @@ class RockestRegressor(BaseForestRegressor):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=RocketTreeRegressor(),
+            estimator=RocketTreeRegressor(),
             estimator_params=(
                 "n_kernels",
                 "max_depth",
@@ -1455,7 +1460,7 @@ class RockestClassifier(BaseForestClassifier):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=RocketTreeClassifier(),
+            estimator=RocketTreeClassifier(),
             estimator_params=(
                 "n_kernels",
                 "max_depth",
@@ -1521,7 +1526,7 @@ class IntervalForestClassifier(BaseForestClassifier):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=IntervalTreeClassifier(),
+            estimator=IntervalTreeClassifier(),
             estimator_params=(
                 "n_intervals",
                 "intervals",
@@ -1584,7 +1589,7 @@ class IntervalForestRegressor(BaseForestRegressor):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=IntervalTreeRegressor(),
+            estimator=IntervalTreeRegressor(),
             estimator_params=(
                 "n_intervals",
                 "intervals",
@@ -1643,7 +1648,7 @@ class PivotForestClassifier(BaseForestClassifier):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=PivotTreeClassifier(),
+            estimator=PivotTreeClassifier(),
             estimator_params=(
                 "n_pivot",
                 "metrics",
@@ -1705,7 +1710,7 @@ class ProximityForestClassifier(BaseForestClassifier):
         random_state=None,
     ):
         super().__init__(
-            base_estimator=ProximityTreeClassifier(),
+            estimator=ProximityTreeClassifier(),
             estimator_params=(
                 "n_pivot",
                 "metric_factories",

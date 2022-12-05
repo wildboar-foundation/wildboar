@@ -1,9 +1,9 @@
 .. currentmodule:: wildboar
 
-.. _version-1-1:
+.. _version-1-2:
 
 ===========
-Version 1.1
+Version 1.2
 ===========
 
 .. include:: defs.hrst
@@ -26,6 +26,17 @@ New and changed models
 Changelog
 ---------
 
+.. grid:: 1
+
+  .. grid-item-card:: 
+    
+     :mod:`wildboar.ensemble`
+     ^^^
+     
+     - |API| Rename the constructor parameter ``base_estimator`` to ``estimator`` in 
+       :class:`ensemble.BaggingClassifier` and :class:`ensemble.BaggingRegressor`.
+       ``base_estimator`` is deprecated in 1.2 and will be removed in 1.4. Original
+       change in scikit-learn.
 
 Other improvements
 ------------------
