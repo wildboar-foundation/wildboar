@@ -25,6 +25,7 @@ __all__ = [
     "dtw_pairwise_distance",
     "dtw_lb_keogh",
     "jeong_weight",
+    "dtw_average",
 ]
 
 
