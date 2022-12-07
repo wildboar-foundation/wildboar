@@ -7,7 +7,7 @@ import numbers
 import numpy as np
 from scipy.stats import norm, uniform
 from sklearn.base import TransformerMixin
-from sklearn.utils.validation import check_scalar
+from sklearn.utils.validation import check_is_fitted, check_scalar
 
 from wildboar.utils.validation import check_array, check_option
 
@@ -147,6 +147,7 @@ class SAX(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, x):
+        check_is_fitted(self)
         x = self._validate_data(x, reset=False, dtype=float)
         x_paa = self.paa_.transform(x)
         thresholds = self.binning_.get_thresholds(x, estimate=self.estimate)
@@ -156,6 +157,7 @@ class SAX(TransformerMixin, BaseEstimator):
         return x_out
 
     def inverse_transform(self, x):
+        check_is_fitted(self)
         if self.estimate:
             raise ValueError("Unable to inverse_transform with estimate=True")
 
@@ -208,10 +210,12 @@ class PAA(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, x):
+        check_is_fitted(self)
         x = self._validate_data(x, dtype=float, reset=False)
         return self.interval_transform_.transform(x)
 
     def inverse_transform(self, x):
+        check_is_fitted(self)
         x = check_array(x, dtype=float)
 
         x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
