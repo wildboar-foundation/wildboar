@@ -1363,7 +1363,7 @@ def _average_path_length(n_samples_leaf):
     return average_path_length.reshape(n_samples_leaf_shape)
 
 
-class RockestRegressor(BaseForestRegressor):
+class RocketForestRegressor(BaseForestRegressor):
     """An ensemble of rocket tree regressors."""
 
     def __init__(
@@ -1376,7 +1376,7 @@ class RockestRegressor(BaseForestRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
         bias_prob=1.0,
@@ -1428,7 +1428,7 @@ class RockestRegressor(BaseForestRegressor):
         return {"prefer": "threads"}
 
 
-class RockestClassifier(BaseForestClassifier):
+class RocketForestClassifier(BaseForestClassifier):
     """An ensemble of rocket tree classifiers."""
 
     def __init__(
@@ -1441,7 +1441,7 @@ class RockestClassifier(BaseForestClassifier):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
         bias_prob=1.0,
