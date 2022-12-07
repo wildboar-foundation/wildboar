@@ -1,13 +1,11 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-import math
 import numbers
 
 import numpy as np
-from sklearn.utils.validation import _is_arraylike, check_scalar
+from sklearn.utils._param_validation import Interval, StrOptions
 
-from ..utils.validation import check_option
 from ._crocket import (
     NormalWeightSampler,
     RocketFeatureEngineer,
@@ -23,7 +21,70 @@ _SAMPLING_METHOD = {
 }
 
 
-class RocketTransform(BaseFeatureEngineerTransform):
+class RocketMixin:
+    _parameter_constraints: dict = {
+        "n_kernels": [
+            Interval(numbers.Integral, 1, None, closed="left"),
+        ],
+        "kernel_size": ["array-like", None],
+        "min_size": [
+            Interval(numbers.Real, 0, 1, closed="both"),
+            None,
+        ],
+        "max_size": [
+            Interval(numbers.Real, 0, 1, closed="both"),
+            None,
+        ],
+        "sampling": [StrOptions(_SAMPLING_METHOD.keys())],
+        "sampling_params": [dict, None],
+        "bias_prob": [Interval(numbers.Real, 0, 1, closed="both")],
+        "padding_prob": [Interval(numbers.Real, 0, 1, closed="both")],
+        "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
+    }
+
+    def _get_feature_engineer(self, n_samples):
+        if self.min_size is not None or self.max_size is not None:
+            if self.kernel_size is not None:
+                raise ValueError(
+                    f"Both min_size or max_size and kernel_size of "
+                    f"{type(self).__name__} cannot be set at the same time."
+                )
+
+            min_size = self.min_size if self.min_size is not None else 0
+            max_size = self.max_size if self.max_size is not None else 1
+
+            if min_size > max_size:
+                raise ValueError(
+                    f"The min_size parameter of {type(self).__name__} "
+                    "must be <= max_size."
+                )
+
+            max_size = int(self.n_timesteps_in_ * max_size)
+            min_size = int(self.n_timesteps_in_ * min_size)
+            if min_size < 2:
+                if self.n_timesteps_in_ < 2:
+                    min_size = 1
+                else:
+                    min_size = 2
+            kernel_size = np.arange(min_size, max_size)
+        elif self.kernel_size is None:
+            kernel_size = [7, 11, 13]
+        else:
+            kernel_size = self.kernel_size
+
+        WeightSampler = _SAMPLING_METHOD[self.sampling]
+        sampling_params = {} if self.sampling_params is None else self.sampling_params
+        return RocketFeatureEngineer(
+            self.n_kernels,
+            WeightSampler(**sampling_params),
+            np.array(kernel_size, dtype=int),
+            self.bias_prob,
+            self.padding_prob,
+            self.normalize_prob,
+        )
+
+
+class RocketTransform(RocketMixin, BaseFeatureEngineerTransform):
     """Transform a time series using random convolution features
 
     Attributes
@@ -39,6 +100,11 @@ class RocketTransform(BaseFeatureEngineerTransform):
         Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
     """
 
+    _parameter_constraints: dict = {
+        **RocketMixin._parameter_constraints,
+        **BaseFeatureEngineerTransform._parameter_constraints,
+    }
+
     def __init__(
         self,
         n_kernels=1000,
@@ -46,6 +112,8 @@ class RocketTransform(BaseFeatureEngineerTransform):
         sampling="normal",
         sampling_params=None,
         kernel_size=None,
+        min_size=None,
+        max_size=None,
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
@@ -56,119 +124,61 @@ class RocketTransform(BaseFeatureEngineerTransform):
         Parameters
         ----------
         n_kernels : int, optional
-            The number of kernels.
+            The number of kernels to sample at each node.
 
-        n_jobs : int, optional
-            The number of jobs to run in parallel. None means 1 and
-            -1 means using all processors.
+        sampling : {"normal", "uniform", "shapelet"}, optional
+            The sampling of convolutional filters.
 
-        random_state : int or RandomState, optional
-            The psuodo-random number generator.
+            - if "normal", sample filter according to a normal distribution with
+              ``mean`` and ``scale``.
+
+            - if "uniform", sample filter according to a uniform distribution with
+              ``lower`` and ``upper``.
+
+            - if "shapelet", sample filters as subsequences in the training data.
+
+        sampling_params : dict, optional
+            The parameters for the sampling.
+
+            - if "normal", ``{"mean": float, "scale": float}``, defaults to
+               ``{"mean": 0, "scale": 1}``.
+
+            - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+               ``{"lower": -1, "upper": 1}``.
+
+        kernel_size : array-like, optional
+            The kernel size, by default ``[7, 11, 13]``.
+
+        min_size : float, optional
+            The minimum timestep fraction to generate kernel sizes. If set,
+            ``kernel_size`` cannot be set.
+
+        max_size : float, optional
+            The maximum timestep fractio to generate kernel sizes, If set,
+            ``kernel_size`` cannot be set.
+
+        bias_prob : float, optional
+            The probability of using a bias term.
+
+        normalize_prob : float, optional
+            The probability of performing normalization.
+
+        padding_prob : float, optional
+            The probability of padding with zeros.
+
+        random_state : int or RandomState
+            - If `int`, `random_state` is the seed used by the random number generator
+            - If `RandomState` instance, `random_state` is the random number generator
+            - If `None`, the random number generator is the `RandomState` instance used
+              by `np.random`.
         """
-        super().__init__(n_jobs=n_jobs)
+        super().__init__(n_jobs=n_jobs, random_state=random_state)
         self.sampling = sampling
         self.sampling_params = sampling_params
         self.kernel_size = kernel_size
+        self.min_size = min_size
+        self.max_size = max_size
         self.bias_prob = bias_prob
         self.normalize_prob = normalize_prob
         self.padding_prob = padding_prob
         self.n_kernels = n_kernels
-        self.random_state = random_state
-
-    def _get_feature_engineer(self):
-        if self.kernel_size is None:
-            kernel_size = [7, 11, 13]
-        elif isinstance(self.kernel_size, tuple) and len(self.kernel_size) == 2:
-            min_size, max_size = self.kernel_size
-            check_scalar(
-                max_size,
-                "max_size (kernel_size[1])",
-                numbers.Real,
-                min_val=min_size,
-                max_val=1,
-            )
-            check_scalar(
-                min_size,
-                "min_size (kernel_size[0])",
-                numbers.Real,
-                min_val=0,
-                max_val=max_size,
-            )
-            max_size = math.ceil(self.n_timesteps_in_ * max_size)
-            min_size = math.ceil(self.n_timesteps_in_ * min_size)
-            if min_size < 2:
-                # TODO(1.2): Break backward
-                if self.n_timesteps_in_ < 2:
-                    min_size = 1
-                else:
-                    min_size = 2
-            kernel_size = np.arange(min_size, max_size)
-        elif _is_arraylike(self.kernel_size):
-            kernel_size = self.kernel_size
-        else:
-            raise TypeError(
-                "kernel_size must be array-like, got %s"
-                % type(self.kernel_size).__qualname__
-            )
-
-        weight_sampler = check_option(_SAMPLING_METHOD, self.sampling, "sampling")(
-            **({} if self.sampling_params is None else self.sampling_params)
-        )
-        return RocketFeatureEngineer(
-            check_scalar(self.n_kernels, "n_kernels", numbers.Integral, min_val=1),
-            weight_sampler,
-            np.array(kernel_size, dtype=int),
-            check_scalar(
-                self.bias_prob, "bias_prob", numbers.Real, min_val=0, max_val=1
-            ),
-            check_scalar(
-                self.padding_prob, "padding_prob", numbers.Real, min_val=0, max_val=1
-            ),
-            check_scalar(
-                self.normalize_prob, "bias_prob", numbers.Real, min_val=0, max_val=1
-            ),
-        )
-
-
-#
-# class ShacketEmbedding(BaseEmbedding):
-#     def __init__(
-#         self,
-#         n_kernels=1000,
-#         *,
-#         size=None,
-#         standardize=True,
-#         use_bias=False,
-#         n_jobs=None,
-#         random_state=None
-#     ):
-#         super().__init__(random_state=random_state, n_jobs=n_jobs)
-#         self.n_kernels = n_kernels
-#         self.standardize = standardize
-#         self.use_bias = use_bias
-#         self.size = size
-#
-#     def _get_feature_engineer(self):
-#         if self.size is None:
-#             size = [7, 11, 13]
-#         elif isinstance(self.size, tuple) and len(self.size) == 2:
-#             min_size, max_size = self.size
-#             if min_size < 0 or min_size > max_size:
-#                 raise ValueError(
-#                     "`min_size` {0} <= 0 or {0} > {1}".format(min_size, max_size)
-#                 )
-#             if max_size > 1:
-#                 raise ValueError("`max_size` {0} > 1".format(max_size))
-#             max_size = int(self.n_timesteps_in_ * max_size)
-#             min_size = int(self.n_timesteps_in_ * min_size)
-#             if min_size < 2:
-#                 min_size = 2
-#             size = np.arange(min_size, max_size)
-#         else:
-#             size = self.size
-#         return ShacketFeatureEngineer(
-#             int(self.n_kernels),
-#             np.array(size, dtype=int),
-#             bool(self.use_bias),
-#             bool(self.standardize),
-#         )

@@ -6,7 +6,8 @@ import numbers
 
 import numpy as np
 from scipy.stats import norm, uniform
-from sklearn.base import TransformerMixin
+from sklearn.base import TransformerMixin, check_is_fitted
+from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_scalar
 
 from wildboar.utils.validation import check_array, check_option
@@ -85,6 +86,19 @@ _BINNING = {"normal": NormalBinning, "uniform": UniformBinning}
 class SAX(TransformerMixin, BaseEstimator):
     """Symbolic aggregate approximation"""
 
+    _parameter_constraints: dict = {
+        "n_intervals": [
+            Interval(numbers.Integral, 1, None, closed="left"),
+            Interval(numbers.Real, 0, 1, closed="right"),
+            StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
+            callable,
+        ],
+        "window": [None, Interval(numbers.Integral, 1, None, closed="left")],
+        "n_bins": [Interval(numbers.Integral, 1, None, closed="left")],
+        "binning": [StrOptions({"normal", "uniform"})],
+        "estimate": ["boolean"],
+    }
+
     def __init__(
         self,
         *,
@@ -140,6 +154,7 @@ class SAX(TransformerMixin, BaseEstimator):
         self.estimate = estimate
 
     def fit(self, x, y=None):
+        self._validate_params()
         x = self._validate_data(x, dtype=float)
         self.binning_ = check_option(_BINNING, self.binning, "binning")(self.n_bins)
         self.bins_ = np.arange(self.n_bins, dtype=np.min_scalar_type(self.n_bins))
@@ -147,6 +162,7 @@ class SAX(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, x):
+        check_is_fitted(self)
         x = self._validate_data(x, reset=False, dtype=float)
         x_paa = self.paa_.transform(x)
         thresholds = self.binning_.get_thresholds(x, estimate=self.estimate)
@@ -184,11 +200,22 @@ class SAX(TransformerMixin, BaseEstimator):
 class PAA(TransformerMixin, BaseEstimator):
     """Peicewise aggregate approximation"""
 
+    _parameter_constraints: dict = {
+        "n_intervals": [
+            Interval(numbers.Integral, 1, None, closed="left"),
+            Interval(numbers.Real, 0, 1, closed="right"),
+            StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
+            callable,
+        ],
+        "window": [None, Interval(numbers.Integral, 1, None, closed="left")],
+    }
+
     def __init__(self, n_intervals="sqrt", window=None):
         self.n_intervals = n_intervals
         self.window = window
 
     def fit(self, x, y=None):
+        self._validate_params()
         x = self._validate_data(x, dtype=float)
         if self.window is not None:
             n_intervals = x.shape[-1] // check_scalar(
@@ -208,6 +235,7 @@ class PAA(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, x):
+        check_is_fitted(self)
         x = self._validate_data(x, dtype=float, reset=False)
         return self.interval_transform_.transform(x)
 
@@ -246,7 +274,7 @@ def symbolic_aggregate_approximation(
     n_intervals : str, optional
         The number of intervals to use for the transform.
 
-        - if "log", the number of intervals is ``log2(n_timestep)``.
+        - if "log2", the number of intervals is ``log2(n_timestep)``.
         - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
         - if int, the number of intervals is ``n_intervals``.
         - if float, the number of intervals is ``n_intervals * n_timestep``, with
@@ -286,7 +314,7 @@ def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
     n_intervals : str, optional
         The number of intervals to use for the transform.
 
-        - if "log", the number of intervals is ``log2(n_timestep)``.
+        - if "log2", the number of intervals is ``log2(n_timestep)``.
         - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
         - if int, the number of intervals is ``n_intervals``.
         - if float, the number of intervals is ``n_intervals * n_timestep``, with
