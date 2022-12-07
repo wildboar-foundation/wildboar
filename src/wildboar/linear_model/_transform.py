@@ -1,7 +1,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-import warnings
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
@@ -86,7 +85,6 @@ class TransformRidgeClassifierCV(
         *,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize="deprecated",
         scoring=None,
         cv=None,
         class_weight=None,
@@ -96,24 +94,16 @@ class TransformRidgeClassifierCV(
         super().__init__(random_state=random_state, n_jobs=n_jobs)
         self.alphas = alphas
         self.fit_intercept = fit_intercept
-        self.normalize = normalize
         self.scoring = scoring
         self.cv = cv
         self.class_weight = class_weight
         self.random_state = random_state
 
     def _get_estimator(self, random_state):
-        if self.normalize != "deprecated":
-            warnings.warn(
-                "normalize is deprecated since 1.1 and will be removed in 1.2",
-                FutureWarning,
-            )
-
         return RidgeClassifierCV(
             alphas=self.alphas,
             fit_intercept=self.fit_intercept,
             scoring=self.scoring,
-            normalize=self.normalize,
             cv=self.cv,
             class_weight=self.class_weight,
             store_cv_values=False,
@@ -134,7 +124,6 @@ class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEst
         *,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize=False,
         scoring=None,
         cv=None,
         gcv_mode=None,
@@ -144,7 +133,6 @@ class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEst
         super().__init__(random_state=random_state, n_jobs=n_jobs)
         self.alphas = np.asarray(alphas)
         self.fit_intercept = fit_intercept
-        self.normalize = normalize
         self.scoring = scoring
         self.cv = cv
         self.gcv_mode = gcv_mode
@@ -153,7 +141,6 @@ class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEst
         return RidgeCV(
             alphas=self.alphas,
             fit_intercept=self.fit_intercept,
-            normalize=self.normalize,
             scoring=self.scoring,
             cv=self.cv,
             gcv_mode=self.gcv_mode,

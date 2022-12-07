@@ -20,7 +20,6 @@ class RocketClassifier(TransformRidgeClassifierCV):
         padding_prob=0.5,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize="deprecated",
         scoring=None,
         cv=None,
         class_weight=None,
@@ -30,7 +29,6 @@ class RocketClassifier(TransformRidgeClassifierCV):
         super().__init__(
             alphas=alphas,
             fit_intercept=fit_intercept,
-            normalize=normalize,
             scoring=scoring,
             cv=cv,
             class_weight=class_weight,
@@ -68,7 +66,6 @@ class RocketRegressor(TransformRidgeCV):
         *,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize="deprecated",
         scoring=None,
         cv=None,
         gcv_mode=None,
@@ -78,7 +75,6 @@ class RocketRegressor(TransformRidgeCV):
         super().__init__(
             alphas=alphas,
             fit_intercept=fit_intercept,
-            normalize=normalize,
             scoring=scoring,
             cv=cv,
             gcv_mode=gcv_mode,

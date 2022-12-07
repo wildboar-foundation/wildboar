@@ -41,6 +41,14 @@ Changelog
 
   .. grid-item-card:: 
     
+     :mod:`wildboar.linear_model`
+     ^^^
+     
+     - |API| Remove the deprecated ``normalize`` parameter from :class:`linear_model.RocketClassifier` and
+       :class:`linear_model.RocketRegressor`.
+
+  .. grid-item-card:: 
+    
      :mod:`wildboar.transform`
      ^^^
 
