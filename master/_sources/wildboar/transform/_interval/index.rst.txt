@@ -15,6 +15,7 @@ Classes
 .. autoapisummary::
 
    wildboar.transform._interval.FeatureTransform
+   wildboar.transform._interval.IntervalMixin
    wildboar.transform._interval.IntervalTransform
 
 
@@ -45,9 +46,12 @@ Classes
        Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.
 
 
+.. py:class:: IntervalMixin
+
+
 .. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', n_jobs=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+   Bases: :py:obj:`IntervalMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Embed a time series as a collection of features per interval.
 
@@ -68,7 +72,7 @@ Classes
 
    :param n_intervals: The number of intervals to use for the transform.
 
-                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "log2", the number of intervals is ``log2(n_timestep)``.
                        - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
                        - if int, the number of intervals is ``n_intervals``.
                        - if float, the number of intervals is ``n_intervals * n_timestep``, with

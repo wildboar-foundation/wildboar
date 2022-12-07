@@ -14,14 +14,18 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.transform._pivot.PivotMixin
    wildboar.transform._pivot.PivotTransform
 
 
 
 
-.. py:class:: PivotTransform(n_pivots=1, *, metric_factories=None, random_state=None, n_jobs=None)
+.. py:class:: PivotMixin
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+
+.. py:class:: PivotTransform(n_pivots=1, *, metric_factories='default', random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`PivotMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    A transform using pivot time series and sampled distance metrics.
 

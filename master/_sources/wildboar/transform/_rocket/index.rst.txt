@@ -14,14 +14,18 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.transform._rocket.RocketMixin
    wildboar.transform._rocket.RocketTransform
 
 
 
 
-.. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
+.. py:class:: RocketMixin
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+
+.. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`RocketMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Transform a time series using random convolution features
 
@@ -38,12 +42,45 @@ Classes
        random convolutional kernels.
        Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
 
-   :param n_kernels: The number of kernels.
+   :param n_kernels: The number of kernels to sample at each node.
    :type n_kernels: int, optional
-   :param n_jobs: The number of jobs to run in parallel. None means 1 and
-                  -1 means using all processors.
-   :type n_jobs: int, optional
-   :param random_state: The psuodo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param sampling: The sampling of convolutional filters.
+
+                    - if "normal", sample filter according to a normal distribution with
+                      ``mean`` and ``scale``.
+
+                    - if "uniform", sample filter according to a uniform distribution with
+                      ``lower`` and ``upper``.
+
+                    - if "shapelet", sample filters as subsequences in the training data.
+   :type sampling: {"normal", "uniform", "shapelet"}, optional
+   :param sampling_params: The parameters for the sampling.
+
+                           - if "normal", ``{"mean": float, "scale": float}``, defaults to
+                              ``{"mean": 0, "scale": 1}``.
+
+                           - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+                              ``{"lower": -1, "upper": 1}``.
+   :type sampling_params: dict, optional
+   :param kernel_size: The kernel size, by default ``[7, 11, 13]``.
+   :type kernel_size: array-like, optional
+   :param min_size: The minimum timestep fraction to generate kernel sizes. If set,
+                    ``kernel_size`` cannot be set.
+   :type min_size: float, optional
+   :param max_size: The maximum timestep fractio to generate kernel sizes, If set,
+                    ``kernel_size`` cannot be set.
+   :type max_size: float, optional
+   :param bias_prob: The probability of using a bias term.
+   :type bias_prob: float, optional
+   :param normalize_prob: The probability of performing normalization.
+   :type normalize_prob: float, optional
+   :param padding_prob: The probability of padding with zeros.
+   :type padding_prob: float, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 

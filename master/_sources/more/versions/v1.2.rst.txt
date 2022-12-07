@@ -38,5 +38,18 @@ Changelog
        ``base_estimator`` is deprecated in 1.2 and will be removed in 1.4. Original
        change in scikit-learn.
 
+
+  .. grid-item-card:: 
+    
+     :mod:`wildboar.transform`
+     ^^^
+
+     - Rename the parameter value ``log`` for the parameter ``n_intervals``
+       in :class:`transform.IntervalTransform` to ``log2``. The old value is deprecated
+       and will be removed in 1.4.
+
 Other improvements
 ------------------
+
+- Remove all dependencies on deprecated Numpy APIs.
+- Migrate to the new scikit-learn parameter validation framework.

@@ -40,7 +40,7 @@ Functions
 
 .. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories='default', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
+   Bases: :py:obj:`wildboar.tree.base.BaseTreeClassifier`
 
    A classifier that uses a k-branching tree based on pivot-time series.
 
@@ -55,7 +55,7 @@ Functions
    ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
    ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
    ...     },
-   ...     "max_criterion="gini"
+   ...     criterion="gini"
    ... )
    >>> f.fit(x, y)
 

@@ -5,10 +5,10 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-5.3.0, furo 2022.09.29"/>
-        <title>wildboar.transform._interval - Wildboar 1.1.1.dev211+g4a48072a2 documentation</title>
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>wildboar.transform._interval - Wildboar 1.1.1.dev214+g30b7a6093 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
@@ -46,7 +46,7 @@
         
         You're reading the documentation for a development version.
         For the latest released version, please have a look at <a
-            href="../../../../1.1.X/index.html">1.1.0</a>.
+            href="../../../../1.1.X/index.html">1.1.1</a>.
         
     </aside>
 </div>
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev211+g4a48072a2 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev214+g30b7a6093 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -169,7 +169,7 @@
         <small>1.1.1</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -243,6 +243,7 @@
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../more.html">More</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../more/versions/v1.2.html">Version 1.2</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../more/versions/v1.1.html">Version 1.1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../more/versions/v1.0.html">Version 1.0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../more/versions/older.html">Older versions</a></li>
@@ -307,7 +308,7 @@
             <ul>
                 <li class="toctree-l2"><span class="reference internal">1.1.1</span></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../1.1.X/index.html">1.1.0</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../1.1.X/index.html">1.1.1</a></li>
             </ul>
         </li>
     </ul>
@@ -353,7 +354,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform._interval.FeatureTransform" title="wildboar.transform._interval.FeatureTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a></p></td>
 <td><p>Transform a time series as a number of features</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform._interval.IntervalTransform" title="wildboar.transform._interval.IntervalTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform._interval.IntervalMixin" title="wildboar.transform._interval.IntervalMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalMixin</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform._interval.IntervalTransform" title="wildboar.transform._interval.IntervalTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></p></td>
 <td><p>Embed a time series as a collection of features per interval.</p></td>
 </tr>
 </tbody>
@@ -361,7 +365,7 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._interval.FeatureTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">FeatureTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L214-L248"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.FeatureTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">FeatureTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L207-L246"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.FeatureTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.transform._interval.IntervalTransform" title="wildboar.transform._interval.IntervalTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></p>
 <p>Transform a time series as a number of features</p>
 <dl class="field-list simple">
@@ -388,9 +392,14 @@ Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="wildboar.transform._interval.IntervalMixin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalMixin</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L32-L109"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.IntervalMixin" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._interval.IntervalTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean_var_slope'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L32-L211"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.IntervalTransform" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="../base/index.html#wildboar.transform.base.BaseFeatureEngineerTransform" title="wildboar.transform.base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform.base.BaseFeatureEngineerTransform</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean_var_slope'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L112-L204"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.IntervalTransform" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wildboar.transform._interval.IntervalMixin" title="wildboar.transform._interval.IntervalMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalMixin</span></code></a>, <a class="reference internal" href="../base/index.html#wildboar.transform.base.BaseFeatureEngineerTransform" title="wildboar.transform.base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform.base.BaseFeatureEngineerTransform</span></code></a></p>
 <p>Embed a time series as a collection of features per interval.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
@@ -411,7 +420,7 @@ and the standard deviation.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
 <ul>
-<li><p>if “log”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
+<li><p>if “log2”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
 <li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
 <li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
 <li><p>if float, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span> <span class="pre">*</span> <span class="pre">n_timestep</span></code>, with
@@ -474,9 +483,7 @@ by <cite>np.random</cite>.</p></li>
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -498,8 +505,10 @@ by <cite>np.random</cite>.</p></li>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
 <li><a class="reference internal" href="#wildboar.transform._interval.FeatureTransform"><code class="docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.transform._interval.IntervalMixin"><code class="docutils literal notranslate"><span class="pre">IntervalMixin</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform._interval.IntervalTransform"><code class="docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform._interval.FeatureTransform">FeatureTransform</a></li>
+<li><a class="reference internal" href="#wildboar.transform._interval.IntervalMixin">IntervalMixin</a></li>
 <li><a class="reference internal" href="#wildboar.transform._interval.IntervalTransform">IntervalTransform</a></li>
 </ul>
 </li>

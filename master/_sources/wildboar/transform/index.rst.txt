@@ -78,7 +78,7 @@ Functions
 
 .. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', n_jobs=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+   Bases: :py:obj:`IntervalMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Embed a time series as a collection of features per interval.
 
@@ -99,7 +99,7 @@ Functions
 
    :param n_intervals: The number of intervals to use for the transform.
 
-                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "log2", the number of intervals is ``log2(n_timestep)``.
                        - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
                        - if int, the number of intervals is ``n_intervals``.
                        - if float, the number of intervals is ``n_intervals * n_timestep``, with
@@ -211,9 +211,9 @@ Functions
 
 
 
-.. py:class:: PivotTransform(n_pivots=1, *, metric_factories=None, random_state=None, n_jobs=None)
+.. py:class:: PivotTransform(n_pivots=1, *, metric_factories='default', random_state=None, n_jobs=None)
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+   Bases: :py:obj:`PivotMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    A transform using pivot time series and sampled distance metrics.
 
@@ -228,7 +228,7 @@ Functions
 
 .. py:class:: RandomShapeletTransform(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+   Bases: :py:obj:`ShapeletMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Transform a time series to the distances to a selection of random shapelets.
 
@@ -263,13 +263,17 @@ Functions
    :param n_jobs: The number of jobs to run in parallel. None means 1 and
                   -1 means using all processors.
    :type n_jobs: int, optional
-   :param random_state: The psudo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
-.. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
+.. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+   Bases: :py:obj:`RocketMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Transform a time series using random convolution features
 
@@ -286,13 +290,46 @@ Functions
        random convolutional kernels.
        Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
 
-   :param n_kernels: The number of kernels.
+   :param n_kernels: The number of kernels to sample at each node.
    :type n_kernels: int, optional
-   :param n_jobs: The number of jobs to run in parallel. None means 1 and
-                  -1 means using all processors.
-   :type n_jobs: int, optional
-   :param random_state: The psuodo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param sampling: The sampling of convolutional filters.
+
+                    - if "normal", sample filter according to a normal distribution with
+                      ``mean`` and ``scale``.
+
+                    - if "uniform", sample filter according to a uniform distribution with
+                      ``lower`` and ``upper``.
+
+                    - if "shapelet", sample filters as subsequences in the training data.
+   :type sampling: {"normal", "uniform", "shapelet"}, optional
+   :param sampling_params: The parameters for the sampling.
+
+                           - if "normal", ``{"mean": float, "scale": float}``, defaults to
+                              ``{"mean": 0, "scale": 1}``.
+
+                           - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+                              ``{"lower": -1, "upper": 1}``.
+   :type sampling_params: dict, optional
+   :param kernel_size: The kernel size, by default ``[7, 11, 13]``.
+   :type kernel_size: array-like, optional
+   :param min_size: The minimum timestep fraction to generate kernel sizes. If set,
+                    ``kernel_size`` cannot be set.
+   :type min_size: float, optional
+   :param max_size: The maximum timestep fractio to generate kernel sizes, If set,
+                    ``kernel_size`` cannot be set.
+   :type max_size: float, optional
+   :param bias_prob: The probability of using a bias term.
+   :type bias_prob: float, optional
+   :param normalize_prob: The probability of performing normalization.
+   :type normalize_prob: float, optional
+   :param padding_prob: The probability of padding with zeros.
+   :type padding_prob: float, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
 
 
 .. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate=True)
@@ -352,7 +389,7 @@ Functions
    :type x: array-like of shape (n_samples, n_timestep)
    :param n_intervals: The number of intervals to use for the transform.
 
-                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "log2", the number of intervals is ``log2(n_timestep)``.
                        - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
                        - if int, the number of intervals is ``n_intervals``.
                        - if float, the number of intervals is ``n_intervals * n_timestep``, with
@@ -374,7 +411,7 @@ Functions
    :type x: array-like of shape (n_samples, n_timestep)
    :param n_intervals: The number of intervals to use for the transform.
 
-                       - if "log", the number of intervals is ``log2(n_timestep)``.
+                       - if "log2", the number of intervals is ``log2(n_timestep)``.
                        - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
                        - if int, the number of intervals is ``n_intervals``.
                        - if float, the number of intervals is ``n_intervals * n_timestep``, with

@@ -146,7 +146,7 @@ Classes
 
 .. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', class_weight=None, random_state=None)
 
-   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
+   Bases: :py:obj:`wildboar.transform._interval.IntervalMixin`, :py:obj:`BaseFeatureTreeClassifier`
 
    An interval based tree classifier.
 
@@ -214,7 +214,7 @@ Classes
 
 .. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
 
-   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
+   Bases: :py:obj:`wildboar.transform._interval.IntervalMixin`, :py:obj:`BaseFeatureTreeRegressor`
 
    An interval based tree regressor.
 
@@ -279,7 +279,7 @@ Classes
 
 .. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, random_state=None)
 
-   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
+   Bases: :py:obj:`wildboar.transform._pivot.PivotMixin`, :py:obj:`BaseFeatureTreeClassifier`
 
    A tree classifier that uses pivot time series.
 
@@ -324,7 +324,7 @@ Classes
 
 .. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories='default', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
+   Bases: :py:obj:`wildboar.tree.base.BaseTreeClassifier`
 
    A classifier that uses a k-branching tree based on pivot-time series.
 
@@ -339,7 +339,7 @@ Classes
    ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
    ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
    ...     },
-   ...     "max_criterion="gini"
+   ...     criterion="gini"
    ... )
    >>> f.fit(x, y)
 
@@ -395,7 +395,7 @@ Classes
 
 .. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_sample_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, class_weight=None, random_state=None)
 
-   Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
+   Bases: :py:obj:`wildboar.transform._rocket.RocketMixin`, :py:obj:`BaseFeatureTreeClassifier`
 
    A tree classifier that uses random convolutions as features.
 
@@ -438,13 +438,14 @@ Classes
                            - if "uniform", ``{"lower": float, "upper": float}``, defaults to
                               ``{"lower": -1, "upper": 1}``.
    :type sampling_params: dict, optional
-   :param kernel_size: The kernel size.
-
-                       - if (min_size, max_size), all kernel sizes between
-                         ``min_size * n_timestep`` and ``max_size * n_timestep``
-
-                       - if array-like, all defined kernel sizes.
-   :type kernel_size: (min_size, max_size) or array-like, optional
+   :param kernel_size: The kernel size, by default ``[7, 11, 13]``.
+   :type kernel_size: array-like, optional
+   :param min_size: The minimum timestep fraction to generate kernel sizes. If set,
+                    ``kernel_size`` cannot be set.
+   :type min_size: float, optional
+   :param max_size: The maximum timestep fractio to generate kernel sizes, If set,
+                    ``kernel_size`` cannot be set.
+   :type max_size: float, optional
    :param bias_prob: The probability of using a bias term.
    :type bias_prob: float, optional
    :param normalize_prob: The probability of performing normalization.
@@ -468,7 +469,7 @@ Classes
 
 .. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, random_state=None)
 
-   Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
+   Bases: :py:obj:`wildboar.transform._rocket.RocketMixin`, :py:obj:`BaseFeatureTreeRegressor`
 
    A tree regressor that uses random convolutions as features.
 
@@ -511,13 +512,14 @@ Classes
                            - if "uniform", ``{"lower": float, "upper": float}``, defaults to
                               ``{"lower": -1, "upper": 1}``.
    :type sampling_params: dict, optional
-   :param kernel_size: The kernel size.
-
-                       - if (min_size, max_size), all kernel sizes between
-                         ``min_size * n_timestep`` and ``max_size * n_timestep``
-
-                       - if array-like, all defined kernel sizes.
-   :type kernel_size: (min_size, max_size) or array-like, optional
+   :param kernel_size: The kernel size, by default ``[7, 11, 13]``.
+   :type kernel_size: array-like, optional
+   :param min_size: The minimum timestep fraction to generate kernel sizes. If set,
+                    ``kernel_size`` cannot be set.
+   :type min_size: float, optional
+   :param max_size: The maximum timestep fractio to generate kernel sizes, If set,
+                    ``kernel_size`` cannot be set.
+   :type max_size: float, optional
    :param bias_prob: The probability of using a bias term.
    :type bias_prob: float, optional
    :param normalize_prob: The probability of performing normalization.
@@ -534,7 +536,7 @@ Classes
 
 .. py:class:: ShapeletTreeClassifier(*, n_shapelets='warn', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
-   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`wildboar.transform._shapelet.ShapeletMixin`, :py:obj:`BaseFeatureTreeClassifier`
 
    A shapelet tree classifier.
 
@@ -624,7 +626,7 @@ Classes
 
 .. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
-   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
+   Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`wildboar.transform._shapelet.ShapeletMixin`, :py:obj:`BaseFeatureTreeRegressor`
 
    A shapelet tree regressor.
 

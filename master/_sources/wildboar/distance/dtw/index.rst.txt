@@ -15,6 +15,7 @@ Functions
 
    wildboar.distance.dtw.ddtw_distance
    wildboar.distance.dtw.dtw_alignment
+   wildboar.distance.dtw.dtw_average
    wildboar.distance.dtw.dtw_distance
    wildboar.distance.dtw.dtw_envelop
    wildboar.distance.dtw.dtw_lb_keogh
@@ -79,6 +80,49 @@ Functions
    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
        Weighted dynamic time warping for time series classification.
        Pattern Recognition 44, 2231-2240
+
+
+.. py:function:: dtw_average(X, *, r=1.0, g=None, sample_weight=None, init='random', method='mm', max_stable=5, learning_rate=0.1, decay=0.9, tol=1e-05, max_epoch=50, return_cost=False, verbose=False, random_state=None)
+
+   Compute the DTW barycenter average (DBA).
+
+   :param X: The samples.
+   :type X: array-like of shape (n_samples, n_timestep)
+   :param r: The warping window as a fraction of n_timestep.
+   :type r: float, optional
+   :param g: If set, use the weighted DTW alignment with :math:`g` as penalty control.
+
+             .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}}
+   :type g: float, optional
+   :param sample_weight: The sample weight.
+   :type sample_weight: array-like of shape (n_samples, ), optional
+   :param init: The initial sample used for the average.
+   :type init: 'random' or array-like of shape (m_timestep, ), optional
+   :param method: The method for computing the DBA.
+
+                  - if 'mm', use the majorize-minimize mean algorithm [1], which is equivalent to
+                    the DBA method in [2].
+
+                  - if 'ssg', use the stochastic subgradient mean algorithm [1].
+   :type method: {'mm', 'ssg'}, optional
+   :param max_stable: The maximum number of epoch where the average with lowest cost is unchanged
+                      if method='ssg'.
+   :type max_stable: int, optional
+   :param learning_rate: The learning rate, if method='ssg'.
+   :type learning_rate: float, optional
+   :param decay: The learning rate decay, if method='ssg'.
+   :type decay: float, optional
+   :param tol: The minmum change in cost between two epochs, if method='mm'.
+   :type tol: float, optional
+   :param max_epoch: The maximum number of epochs.
+   :type max_epoch: int, optional
+   :param verbose: If set, show runtime information.
+   :type verbose: bool, optional
+   :param random_state: Pseudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+   :returns: * **mean** (*array-like of shape (m_timestep, ) or (n_timestep, )*) -- The mean time series.
+             * **cost** (*float, optional*) -- Return the cost of the average
 
 
 .. py:function:: dtw_distance(x, y, *, r=1.0)

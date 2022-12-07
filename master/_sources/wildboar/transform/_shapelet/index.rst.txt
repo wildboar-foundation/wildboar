@@ -15,13 +15,14 @@ Classes
 .. autoapisummary::
 
    wildboar.transform._shapelet.RandomShapeletTransform
+   wildboar.transform._shapelet.ShapeletMixin
 
 
 
 
 .. py:class:: RandomShapeletTransform(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
 
-   Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
+   Bases: :py:obj:`ShapeletMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Transform a time series to the distances to a selection of random shapelets.
 
@@ -56,7 +57,14 @@ Classes
    :param n_jobs: The number of jobs to run in parallel. None means 1 and
                   -1 means using all processors.
    :type n_jobs: int, optional
-   :param random_state: The psudo-random number generator.
-   :type random_state: int or RandomState, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                          by `np.random`.
+   :type random_state: int or RandomState
+
+
+.. py:class:: ShapeletMixin
 
 

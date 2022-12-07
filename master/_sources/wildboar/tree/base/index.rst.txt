@@ -13,8 +13,8 @@ Classes
 .. autoapisummary::
 
    wildboar.tree.base.BaseTree
-   wildboar.tree.base.TreeClassifierMixin
-   wildboar.tree.base.TreeRegressorMixin
+   wildboar.tree.base.BaseTreeClassifier
+   wildboar.tree.base.BaseTreeRegressor
 
 
 
@@ -32,9 +32,9 @@ Classes
 
 
 
-.. py:class:: TreeClassifierMixin
+.. py:class:: BaseTreeClassifier(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`BaseTree`
 
    Mixin for classification trees.
 
@@ -90,11 +90,11 @@ Classes
 
 
 
-.. py:class:: TreeRegressorMixin
+.. py:class:: BaseTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`
+   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`BaseTree`
 
-   Mixin for regression trees.
+   Mixin class for all regression estimators in scikit-learn.
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
