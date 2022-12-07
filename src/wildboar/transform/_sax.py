@@ -6,6 +6,7 @@ import numbers
 
 import numpy as np
 from scipy.stats import norm, uniform
+
 from sklearn.base import TransformerMixin, check_is_fitted
 from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_scalar
@@ -172,6 +173,7 @@ class SAX(TransformerMixin, BaseEstimator):
         return x_out
 
     def inverse_transform(self, x):
+        check_is_fitted(self)
         if self.estimate:
             raise ValueError("Unable to inverse_transform with estimate=True")
 
@@ -240,6 +242,7 @@ class PAA(TransformerMixin, BaseEstimator):
         return self.interval_transform_.transform(x)
 
     def inverse_transform(self, x):
+        check_is_fitted(self)
         x = check_array(x, dtype=float)
 
         x_inverse = np.empty((x.shape[0], self.n_timesteps_in_), dtype=float)
