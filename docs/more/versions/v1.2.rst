@@ -38,6 +38,11 @@ Changelog
        ``base_estimator`` is deprecated in 1.2 and will be removed in 1.4. Original
        change in scikit-learn.
 
+     - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
+       This change affect :class:`tree.RocketForestClassifier` and :class:`tree.RocketForestRegressor`. 
+
+     - |Fix| Fix a bug where ``sampling`` was incorrectly set for :class:`ensemble.RocketForestClassifier`
+       and :class:`ensemble.RocketForestRegressor`.
 
   .. grid-item-card:: 
     
@@ -52,9 +57,22 @@ Changelog
      :mod:`wildboar.transform`
      ^^^
 
-     - Rename the parameter value ``log`` for the parameter ``n_intervals``
+     - |Enhancement| Rename the parameter value ``log`` for the parameter ``n_intervals``
        in :class:`transform.IntervalTransform` to ``log2``. The old value is deprecated
        and will be removed in 1.4.
+
+     - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
+       This change affect :class:`transform.RocketTransform`.
+
+  .. grid-item-card:: 
+    
+     :mod:`wildboar.tree`
+     ^^^
+     
+     - |Fix| Correctly set ``min_samples_leaf`` in :class:`tree.RocketTreeClassifier` and :class:`RocketTreeRegressor`.
+
+     - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
+       This change affect :class:`tree.RocketTreeClassifier` and :class:`tree.RocketTreeRegressor`.
 
 Other improvements
 ------------------

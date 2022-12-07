@@ -761,12 +761,14 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
         *,
         max_depth=None,
         min_samples_split=2,
-        min_sample_leaf=1,
+        min_samples_leaf=1,
         min_impurity_decrease=0.0,
         criterion="entropy",
         sampling="normal",
         sampling_params=None,
         kernel_size=None,
+        min_size=None,
+        max_size=None,
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
@@ -855,7 +857,7 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
         super().__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
-            min_sample_leaf=min_sample_leaf,
+            min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
         )
         self.n_kernels = n_kernels
@@ -863,6 +865,8 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
         self.sampling = sampling
         self.sampling_params = sampling_params
         self.kernel_size = kernel_size
+        self.min_size = min_size
+        self.max_size = max_size
         self.bias_prob = bias_prob
         self.normalize_prob = normalize_prob
         self.padding_prob = padding_prob

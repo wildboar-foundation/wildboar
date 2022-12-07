@@ -1464,9 +1464,11 @@ class RocketForestRegressor(BaseForestRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
+        min_size=None,
+        max_size=None,
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
@@ -1485,6 +1487,8 @@ class RocketForestRegressor(BaseForestRegressor):
                 "min_samples_leaf",
                 "min_impurity_decrease",
                 "kernel_size",
+                "min_size",
+                "max_size",
                 "sampling",
                 "sampling_params",
                 "bias_prob",
@@ -1511,6 +1515,8 @@ class RocketForestRegressor(BaseForestRegressor):
         self.bias_prob = bias_prob
         self.normalize_prob = normalize_prob
         self.padding_prob = padding_prob
+        self.min_size = min_size
+        self.max_size = max_size
 
     def _parallel_args(self):
         return {"prefer": "threads"}
@@ -1534,9 +1540,11 @@ class RocketForestClassifier(BaseForestClassifier):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        sampling="auto",
+        sampling="normal",
         sampling_params=None,
         kernel_size=None,
+        min_size=None,
+        max_size=None,
         bias_prob=1.0,
         normalize_prob=1.0,
         padding_prob=0.5,
@@ -1556,6 +1564,8 @@ class RocketForestClassifier(BaseForestClassifier):
                 "min_samples_leaf",
                 "min_impurity_decrease",
                 "kernel_size",
+                "min_size",
+                "max_size",
                 "sampling",
                 "sampling_params",
                 "bias_prob",
@@ -1583,6 +1593,8 @@ class RocketForestClassifier(BaseForestClassifier):
         self.bias_prob = bias_prob
         self.normalize_prob = normalize_prob
         self.padding_prob = padding_prob
+        self.min_size = min_size
+        self.max_size = max_size
 
     def _parallel_args(self):
         return {"prefer": "threads"}
@@ -1602,7 +1614,7 @@ class IntervalForestClassifier(BaseForestClassifier):
         *,
         n_intervals="sqrt",
         intervals="fixed",
-        summarizer="auto",
+        summarizer="mean_var_std",
         sample_size=0.5,
         min_size=0.0,
         max_size=1.0,
