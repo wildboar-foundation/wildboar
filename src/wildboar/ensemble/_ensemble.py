@@ -4,6 +4,7 @@
 import math
 import numbers
 from abc import ABCMeta, abstractmethod
+from numbers import Integral, Real
 
 import numpy as np
 from joblib import Parallel, delayed
@@ -14,9 +15,11 @@ from sklearn.ensemble import BaggingRegressor as SklearnBaggingRegressor
 from sklearn.ensemble._bagging import BaseBagging as SklearnBaseBagging
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.utils import check_random_state, compute_sample_weight
+from sklearn.utils._param_validation import HasMethods, Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted, check_scalar
 
 from ..base import BaseEstimator
+from ..transform._shapelet import ShapeletMixin
 from ..tree import (
     ExtraShapeletTreeClassifier,
     ExtraShapeletTreeRegressor,
@@ -31,6 +34,26 @@ from ..tree._tree import RocketTreeClassifier, RocketTreeRegressor
 
 
 class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
+    _parameter_constraints: dict = {
+        "estimator": [HasMethods(["fit", "predict"]), None],
+        "n_estimators": [Interval(Integral, 1, None, closed="left")],
+        "max_samples": [
+            Interval(Integral, 1, None, closed="left"),
+            Interval(Real, 0, 1, closed="right"),
+        ],
+        "bootstrap": ["boolean"],
+        "oob_score": ["boolean"],
+        "warm_start": ["boolean"],
+        "n_jobs": [None, Integral],
+        "random_state": ["random_state"],
+        "verbose": ["verbose"],
+        "base_estimator": [
+            HasMethods(["fit", "predict"]),
+            StrOptions({"deprecated"}),
+            None,
+        ],
+    }
+
     @abstractmethod
     def __init__(
         self,
@@ -99,6 +122,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
             return x, y
 
     def fit(self, x, y, sample_weight=None):
+        self._validate_params()
         x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
         self._fit(
             x, y, self.max_samples, self.max_depth, sample_weight, check_input=False
@@ -116,6 +140,15 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
 
 
 class ForestMixin:
+    _parameter_constraints: dict = {
+        "n_estimators": [Interval(Integral, 1, None, closed="left")],
+        "bootstrap": ["boolean"],
+        "oob_score": ["boolean"],
+        "n_jobs": [Integral, None],
+        "random_state": ["random_state"],
+        "warm_start": ["boolean"],
+    }
+
     def apply(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, allow_3d=True, reset=False)
@@ -147,6 +180,9 @@ class ForestMixin:
 
 
 class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
+
+    _parameter_constraints: dict = {**BaseBagging._parameter_constraints}
+
     def __init__(
         self,
         estimator=None,
@@ -163,7 +199,7 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         base_estimator="deprecated",
     ):
         super().__init__(
-            estimator=estimator,
+            estimator=ShapeletTreeClassifier() if estimator is None else estimator,
             n_estimators=n_estimators,
             max_samples=max_samples,
             bootstrap=bootstrap,
@@ -177,6 +213,7 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         self.class_weight = class_weight
 
     def fit(self, x, y, sample_weight=None):
+        self._validate_params()
         x, y = self._validate_data(x, y, allow_3d=True, dtype=float)
 
         if self.class_weight is not None:
@@ -193,8 +230,6 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
 
 
 class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
-    """"""
-
     @abstractmethod
     def __init__(
         self,
@@ -315,6 +350,11 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
     >>> y_hat = f.predict(x)
 
     """
+
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **ShapeletTreeClassifier._parameter_constraints,
+    }
 
     def __init__(
         self,
@@ -471,6 +511,12 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 
     """
 
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **ExtraShapeletTreeClassifier._parameter_constraints,
+    }
+    _parameter_constraints.pop("n_shapelets")
+
     def __init__(
         self,
         n_estimators=100,
@@ -582,6 +628,9 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 
 
 class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
+
+    _parameter_constraints: dict = {**BaseBagging._parameter_constraints}
+
     def __init__(
         self,
         estimator,
@@ -597,8 +646,8 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
         base_estimator="deprecated",
     ):
         super().__init__(
-            estimator,
-            n_estimators,
+            estimator=ShapeletTreeRegressor() if estimator is None else estimator,
+            n_estimators=n_estimators,
             max_samples=max_samples,
             bootstrap=bootstrap,
             oob_score=oob_score,
@@ -736,6 +785,11 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
     >>> y_hat = f.predict(x)
     """
 
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **ShapeletTreeRegressor._parameter_constraints,
+    }
+
     def __init__(
         self,
         n_estimators=100,
@@ -871,6 +925,12 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
 
     """
 
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **ExtraShapeletTreeRegressor._parameter_constraints,
+    }
+    _parameter_constraints.pop("n_shapelets")
+
     def __init__(
         self,
         n_estimators=100,
@@ -969,6 +1029,12 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     ``<= n_estimators * 2^max_depth``
 
     """
+
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **ExtraShapeletTreeRegressor._parameter_constraints,
+        "sparse_output": ["boolean"],
+    }
 
     def __init__(
         self,
@@ -1132,11 +1198,23 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
     """
 
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **ShapeletMixin._parameter_constraints,
+        "contamination": [StrOptions({"auto"}), Interval(Real, 0, 0.5, closed="right")],
+        "max_samples": [
+            None,
+            Interval(Real, 0.0, 1.0, closed="right"),
+            Interval(Integral, 1, None, closed="left"),
+            StrOptions({"auto"}),
+        ],
+    }
+
     def __init__(
         self,
+        n_estimators=100,
         *,
         n_shapelets=1,
-        n_estimators=100,
         bootstrap=False,
         n_jobs=None,
         min_shapelet_size=0,
@@ -1368,8 +1446,13 @@ def _average_path_length(n_samples_leaf):
     return average_path_length.reshape(n_samples_leaf_shape)
 
 
-class RockestRegressor(BaseForestRegressor):
+class RocketForestRegressor(BaseForestRegressor):
     """An ensemble of rocket tree regressors."""
+
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **RocketTreeRegressor._parameter_constraints,
+    }
 
     def __init__(
         self,
@@ -1433,8 +1516,13 @@ class RockestRegressor(BaseForestRegressor):
         return {"prefer": "threads"}
 
 
-class RockestClassifier(BaseForestClassifier):
+class RocketForestClassifier(BaseForestClassifier):
     """An ensemble of rocket tree classifiers."""
+
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **RocketTreeClassifier._parameter_constraints,
+    }
 
     def __init__(
         self,
@@ -1503,6 +1591,11 @@ class RockestClassifier(BaseForestClassifier):
 class IntervalForestClassifier(BaseForestClassifier):
     """An ensemble of interval tree classifiers."""
 
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **IntervalTreeClassifier._parameter_constraints,
+    }
+
     def __init__(
         self,
         n_estimators=100,
@@ -1567,6 +1660,11 @@ class IntervalForestClassifier(BaseForestClassifier):
 class IntervalForestRegressor(BaseForestRegressor):
     """An ensemble of interval tree regressors."""
 
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **IntervalTreeRegressor._parameter_constraints,
+    }
+
     def __init__(
         self,
         n_estimators=100,
@@ -1629,6 +1727,11 @@ class IntervalForestRegressor(BaseForestRegressor):
 class PivotForestClassifier(BaseForestClassifier):
     """An ensemble of interval tree classifiers."""
 
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **PivotTreeClassifier._parameter_constraints,
+    }
+
     def __init__(
         self,
         n_estimators=100,
@@ -1688,6 +1791,11 @@ class ProximityForestClassifier(BaseForestClassifier):
         Proximity forest: an effective and scalable distance-based classifier for time
         series. Data Mining and Knowledge Discovery
     """
+
+    _parameter_constraints: dict = {
+        **ForestMixin._parameter_constraints,
+        **ProximityTreeClassifier._parameter_constraints,
+    }
 
     def __init__(
         self,

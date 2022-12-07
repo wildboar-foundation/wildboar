@@ -1,27 +1,14 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-import math
-import numbers
-import sys
 import warnings
-from abc import ABCMeta, abstractmethod
 
-import numpy as np
-from sklearn.utils import check_scalar
+from sklearn.utils._param_validation import StrOptions
 
-from ..distance import _DISTANCE_MEASURE, _SUBSEQUENCE_DISTANCE_MEASURE
-from ..transform._cpivot import PivotFeatureEngineer
-from ..transform._crocket import RocketFeatureEngineer
-from ..transform._cshapelet import RandomShapeletFeatureEngineer
-from ..transform._interval import (
-    _SUMMARIZER,
-    IntervalFeatureEngineer,
-    PyFuncSummarizer,
-    RandomFixedIntervalFeatureEngineer,
-    RandomIntervalFeatureEngineer,
-)
-from ..transform._rocket import _SAMPLING_METHOD
+from ..transform._interval import IntervalMixin
+from ..transform._pivot import PivotMixin
+from ..transform._rocket import RocketMixin
+from ..transform._shapelet import ShapeletMixin
 from ..tree._ctree import (
     DynamicTreeFeatureEngineer,
     EntropyCriterion,
@@ -33,41 +20,17 @@ from ..tree._ctree import (
     TreeFeatureEngineer,
 )
 from ..utils.validation import check_option
-from .base import BaseTree, TreeClassifierMixin, TreeRegressorMixin
+from .base import BaseTree, BaseTreeClassifier, BaseTreeRegressor
 
 CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}
-REG_CRITERION = {"mse": MSECriterion, "squared_error": MSECriterion}
+REG_CRITERION = {"squared_error": MSECriterion}
 
 
-class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
-    """Base class for trees using feature engineering."""
-
-    @abstractmethod
-    def _get_feature_engineer(self, n_samples):
-        """Get the feature engineer
-
-        Returns
-        -------
-
-        FeatureEngineer : the feature engineer
-        """
-
-    @abstractmethod
-    def _get_tree_builder(
-        self, x, y, sample_weights, feature_engineer, random_state, max_depth
-    ):
-        """Get the tree builder
-
-        Returns
-        -------
-
-        TreeBuilder : the tree builder
-        """
-
+class FeatureTreeMixin:
     def _wrap_feature_engineer(self, feature_engineer):
         return TreeFeatureEngineer(feature_engineer)
 
-    def _fit(self, x, y, sample_weights, random_state):
+    def _fit(self, x, y, sample_weights, max_depth, random_state):
         feature_engineer = self._wrap_feature_engineer(
             self._get_feature_engineer(self.n_timesteps_in_)
         )
@@ -77,31 +40,24 @@ class BaseFeatureTree(BaseTree, metaclass=ABCMeta):
             sample_weights,
             feature_engineer,
             random_state,
-            check_scalar(
-                sys.getrecursionlimit() if self.max_depth is None else self.max_depth,
-                "max_depth",
-                numbers.Integral,
-                min_val=1,
-                max_val=sys.getrecursionlimit(),
-            ),
+            max_depth,
         )
         tree_builder.build_tree()
         self.tree_ = tree_builder.tree_
 
 
-class FeatureTreeRegressorMixin(TreeRegressorMixin):
+class BaseFeatureTreeRegressor(FeatureTreeMixin, BaseTreeRegressor):
+    _parameter_constraints: dict = {
+        **BaseTree._parameter_constraints,
+        "criterion": [
+            StrOptions(REG_CRITERION.keys()),
+        ],
+    }
+
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        # TODO(1.2): remove
-        if self.criterion == "mse":
-            warnings.warn(
-                "Criterion 'mse' was deprecated in v1.1 and will be "
-                "removed in version 1.2. Use criterion='squared_error' "
-                "which is equivalent.",
-                FutureWarning,
-            )
-        Criterion = check_option(REG_CRITERION, self.criterion, "criterion")
+        Criterion = REG_CRITERION[self.criterion]
         return TreeBuilder(
             x,
             sample_weights,
@@ -110,26 +66,29 @@ class FeatureTreeRegressorMixin(TreeRegressorMixin):
             Tree(feature_engineer, 1),
             random_state,
             max_depth=max_depth,
-            min_sample_split=check_scalar(
-                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
-            ),
-            min_sample_leaf=check_scalar(
-                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
-            ),
-            min_impurity_decrease=check_scalar(
-                self.min_impurity_decrease,
-                "min_impurity_decrease",
-                numbers.Real,
-                min_val=0,
-            ),
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
         )
 
 
-class FeatureTreeClassifierMixin(TreeClassifierMixin):
+class BaseFeatureTreeClassifier(FeatureTreeMixin, BaseTreeClassifier):
+    _parameter_constraints: dict = {
+        **BaseTree._parameter_constraints,
+        "criterion": [
+            StrOptions(CLF_CRITERION.keys()),
+        ],
+        "class_weight": [
+            StrOptions({"balanced"}),
+            dict,
+            None,
+        ],
+    }
+
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        Criterion = check_option(CLF_CRITERION, self.criterion, "criterion")
+        Criterion = CLF_CRITERION[self.criterion]
         return TreeBuilder(
             x,
             sample_weights,
@@ -138,22 +97,16 @@ class FeatureTreeClassifierMixin(TreeClassifierMixin):
             Tree(feature_engineer, self.n_classes_),
             random_state,
             max_depth=max_depth,
-            min_sample_split=check_scalar(
-                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
-            ),
-            min_sample_leaf=check_scalar(
-                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
-            ),
-            min_impurity_decrease=check_scalar(
-                self.min_impurity_decrease,
-                "min_impurity_decrease",
-                numbers.Real,
-                min_val=0,
-            ),
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
         )
 
 
 class DynamicTreeMixin:
+
+    _parameter_constraints: dict = {"alpha": [float, None]}
+
     def _wrap_feature_engineer(self, feature_engineer):
         if hasattr(self, "alpha") and self.alpha is not None:
             if self.alpha == 0.0:
@@ -164,112 +117,7 @@ class DynamicTreeMixin:
         return TreeFeatureEngineer(feature_engineer)
 
 
-class BaseShapeletTree(BaseFeatureTree):
-    def __init__(
-        self,
-        *,
-        max_depth=None,
-        min_samples_split=2,
-        min_samples_leaf=1,
-        min_impurity_decrease=0.0,
-        n_shapelets="warn",
-        min_shapelet_size=0.0,
-        max_shapelet_size=1.0,
-        metric="euclidean",
-        metric_params=None,
-        random_state=None,
-    ):
-        super().__init__(
-            max_depth=max_depth,
-            min_samples_split=min_samples_split,
-            min_samples_leaf=min_samples_leaf,
-            min_impurity_decrease=min_impurity_decrease,
-        )
-        self.random_state = random_state
-        self.n_shapelets = n_shapelets
-        self.min_shapelet_size = min_shapelet_size
-        self.max_shapelet_size = max_shapelet_size
-        self.metric = metric
-        self.metric_params = metric_params
-
-    def _get_feature_engineer(self, n_samples):
-        check_scalar(
-            self.max_shapelet_size,
-            "max_shapelet_size",
-            numbers.Real,
-            min_val=self.min_shapelet_size,
-            max_val=1.0,
-        )
-        check_scalar(
-            self.min_shapelet_size,
-            "min_shapelet_size",
-            numbers.Real,
-            min_val=0.0,
-            max_val=self.max_shapelet_size,
-        )
-
-        max_shapelet_size = math.ceil(self.n_timesteps_in_ * self.max_shapelet_size)
-        min_shapelet_size = math.ceil(self.n_timesteps_in_ * self.min_shapelet_size)
-        if min_shapelet_size < 2:
-            # NOTE: To ensure that the same random_seed generates the same shapelets
-            # in future versions we keep the limit of 2 timesteps for a shapelet as long
-            # as the time series is at least 2 timesteps. Otherwise we fall back to 1
-            # timestep.
-            #
-            # TODO(1.2): consider breaking backwards compatibility and always limit to
-            #            1 timestep.
-            if self.n_timesteps_in_ < 2:
-                min_shapelet_size = 1
-            else:
-                min_shapelet_size = 2
-
-        # TODO(1.2): change the default value
-        if self.n_shapelets == "warn":
-            warnings.warn(
-                "The default value of n_shapelets will change from 10 to 'log2' in 1.2",
-                FutureWarning,
-            )
-            n_shapelets = 10
-        elif isinstance(self.n_shapelets, str) or callable(self.n_shapelets):
-            if min_shapelet_size < max_shapelet_size:
-                possible_shapelets = sum(
-                    self.n_timesteps_in_ - curr_len + 1
-                    for curr_len in range(min_shapelet_size, max_shapelet_size)
-                )
-            else:
-                possible_shapelets = self.n_timesteps_in_ - min_shapelet_size + 1
-
-            if self.n_shapelets == "log2":
-                n_shapelets = int(np.log2(possible_shapelets))
-            elif self.n_shapelets == "sqrt":
-                n_shapelets = int(np.sqrt(possible_shapelets))
-            elif callable(self.n_shapelets):
-                n_shapelets = int(self.n_shapelets(possible_shapelets))
-            else:
-                raise ValueError(
-                    "n_shapelets must be 'log2', 'sqrt' or callable, got %r"
-                    % self.n_shapelets
-                )
-        else:
-            n_shapelets = check_scalar(
-                self.n_shapelets, "n_shapelets", numbers.Integral, min_val=1
-            )
-
-        DistanceMeasure = check_option(
-            _SUBSEQUENCE_DISTANCE_MEASURE, self.metric, "metric"
-        )
-        metric_params = self.metric_params if self.metric_params is not None else {}
-        return RandomShapeletFeatureEngineer(
-            DistanceMeasure(**metric_params),
-            min_shapelet_size,
-            max_shapelet_size,
-            max(1, n_shapelets),
-        )
-
-
-class ShapeletTreeRegressor(
-    DynamicTreeMixin, FeatureTreeRegressorMixin, BaseShapeletTree
-):
+class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegressor):
     """A shapelet tree regressor.
 
     Attributes
@@ -279,6 +127,13 @@ class ShapeletTreeRegressor(
         The internal tree representation
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeRegressor._parameter_constraints,
+        **ShapeletMixin._parameter_constraints,
+        **DynamicTreeMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
 
     def __init__(
         self,
@@ -369,18 +224,18 @@ class ShapeletTreeRegressor(
             - If `None`, the random number generator is the `RandomState` instance used
               by `np.random`.
         """
-        super(ShapeletTreeRegressor, self).__init__(
+        super().__init__(
             max_depth=max_depth,
+            min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            min_samples_split=min_samples_split,
-            n_shapelets=n_shapelets,
-            min_shapelet_size=min_shapelet_size,
-            max_shapelet_size=max_shapelet_size,
-            metric=metric,
-            metric_params=metric_params,
-            random_state=random_state,
         )
+        self.random_state = random_state
+        self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
+        self.metric = metric
+        self.metric_params = metric_params
         self.criterion = criterion
         self.alpha = alpha
 
@@ -398,6 +253,9 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         The internal tree representation
 
     """
+
+    _parameter_constraints: dict = {**ShapeletTreeRegressor._parameter_constraints}
+    _parameter_constraints.pop("alpha")
 
     def __init__(
         self,
@@ -499,23 +357,14 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             Tree(feature_engineer, 1),
             random_state,
             max_depth=max_depth,
-            min_sample_split=check_scalar(
-                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
-            ),
-            min_sample_leaf=check_scalar(
-                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
-            ),
-            min_impurity_decrease=check_scalar(
-                self.min_impurity_decrease,
-                "min_impurity_decrease",
-                numbers.Real,
-                min_val=0,
-            ),
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
         )
 
 
 class ShapeletTreeClassifier(
-    DynamicTreeMixin, FeatureTreeClassifierMixin, BaseShapeletTree
+    DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeClassifier
 ):
     """A shapelet tree classifier.
 
@@ -537,6 +386,13 @@ class ShapeletTreeClassifier(
     ExtraShapeletTreeClassifier : An extra random shapelet tree classifier.
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeClassifier._parameter_constraints,
+        **ShapeletMixin._parameter_constraints,
+        **DynamicTreeMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
 
     def __init__(
         self,
@@ -627,18 +483,18 @@ class ShapeletTreeClassifier(
             - If `None`, the random number generator is the `RandomState` instance used
               by `np.random`.
         """
-        super(ShapeletTreeClassifier, self).__init__(
+        super().__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            n_shapelets=n_shapelets,
-            min_shapelet_size=min_shapelet_size,
-            max_shapelet_size=max_shapelet_size,
-            metric=metric,
-            metric_params=metric_params,
-            random_state=random_state,
         )
+        self.random_state = random_state
+        self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
+        self.metric = metric
+        self.metric_params = metric_params
         self.criterion = criterion
         self.class_weight = class_weight
         self.alpha = alpha
@@ -656,6 +512,9 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         The tree representation
 
     """
+
+    _parameter_constraints: dict = {**ShapeletTreeClassifier._parameter_constraints}
+    _parameter_constraints.pop("alpha")
 
     def __init__(
         self,
@@ -752,100 +611,13 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             Tree(feature_engineer, self.n_classes_),
             random_state,
             max_depth=max_depth,
-            min_sample_split=check_scalar(
-                self.min_samples_split, "min_samples_split", numbers.Real, min_val=2
-            ),
-            min_sample_leaf=check_scalar(
-                self.min_samples_leaf, "min_samples_leaf", numbers.Real, min_val=1
-            ),
-            min_impurity_decrease=check_scalar(
-                self.min_impurity_decrease,
-                "min_impurity_decrease",
-                numbers.Real,
-                min_val=0,
-            ),
+            min_sample_split=self.min_samples_split,
+            min_sample_leaf=self.min_samples_leaf,
+            min_impurity_decrease=self.min_impurity_decrease,
         )
 
 
-class BaseRocketTree(BaseFeatureTree, metaclass=ABCMeta):
-    def __init__(
-        self,
-        n_kernels=10,
-        *,
-        max_depth=None,
-        min_samples_split=2,
-        min_samples_leaf=1,
-        min_impurity_decrease=0.0,
-        criterion="entropy",
-        sampling="normal",
-        sampling_params=None,
-        kernel_size=None,
-        bias_prob=1.0,
-        normalize_prob=1.0,
-        padding_prob=0.5,
-        random_state=None,
-    ):
-        super().__init__(
-            max_depth=max_depth,
-            min_samples_split=min_samples_split,
-            min_samples_leaf=min_samples_leaf,
-            min_impurity_decrease=min_impurity_decrease,
-        )
-        self.n_kernels = n_kernels
-        self.criterion = criterion
-        self.sampling = sampling
-        self.sampling_params = sampling_params
-        self.kernels_size = kernel_size
-        self.bias_prob = bias_prob
-        self.normalize_prob = normalize_prob
-        self.padding_prob = padding_prob
-        self.random_state = random_state
-
-    def _get_feature_engineer(self, n_samples):
-        if self.kernel_size is None:
-            kernel_size = [7, 11, 13]
-        elif isinstance(self.kernel_size, tuple) and len(self.kernel_size) == 2:
-            min_size, max_size = self.kernel_size
-            if min_size < 0 or min_size > max_size:
-                raise ValueError(
-                    "`min_size` {0} <= 0 or {0} > {1}".format(min_size, max_size)
-                )
-            if max_size > 1:
-                raise ValueError("`max_size` {0} > 1".format(max_size))
-            max_size = int(self.n_timesteps_in_ * max_size)
-            min_size = int(self.n_timesteps_in_ * min_size)
-            if min_size < 2:
-                if self.n_timesteps_in_ < 2:
-                    min_size = 1
-                else:
-                    min_size = 2
-            kernel_size = np.arange(min_size, max_size)
-        else:
-            kernel_size = self.kernel_size
-
-        WeightSampler = check_option(_SAMPLING_METHOD, self.sampling, "sampling")
-        sampling_params = {} if self.sampling_params is None else self.sampling_params
-        return RocketFeatureEngineer(
-            check_scalar(self.n_kernels, "n_kernels", numbers.Integral, min_val=1),
-            WeightSampler(**sampling_params),
-            np.array(kernel_size, dtype=int),
-            check_scalar(
-                self.bias_prob, "bias_prob", numbers.Real, min_val=0, max_val=1
-            ),
-            check_scalar(
-                self.padding_prob, "padding_prob", numbers.Real, min_val=0, max_val=1
-            ),
-            check_scalar(
-                self.normalize_prob,
-                "normalize_prob",
-                numbers.Real,
-                min_val=0,
-                max_val=1,
-            ),
-        )
-
-
-class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
+class RocketTreeRegressor(RocketMixin, BaseFeatureTreeRegressor):
     """A tree regressor that uses random convolutions as features.
 
     Attributes
@@ -855,6 +627,12 @@ class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
         The internal tree representation.
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeRegressor._parameter_constraints,
+        **RocketMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
 
     def __init__(
         self,
@@ -917,13 +695,16 @@ class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
             - if "uniform", ``{"lower": float, "upper": float}``, defaults to
                ``{"lower": -1, "upper": 1}``.
 
-        kernel_size : (min_size, max_size) or array-like, optional
-            The kernel size.
+        kernel_size : array-like, optional
+            The kernel size, by default ``[7, 11, 13]``.
 
-            - if (min_size, max_size), all kernel sizes between
-              ``min_size * n_timestep`` and ``max_size * n_timestep``
+        min_size : float, optional
+            The minimum timestep fraction to generate kernel sizes. If set,
+            ``kernel_size`` cannot be set.
 
-            - if array-like, all defined kernel sizes.
+        max_size : float, optional
+            The maximum timestep fractio to generate kernel sizes, If set,
+            ``kernel_size`` cannot be set.
 
         bias_prob : float, optional
             The probability of using a bias term.
@@ -957,7 +738,7 @@ class RocketTreeRegressor(FeatureTreeRegressorMixin, BaseRocketTree):
         self.random_state = random_state
 
 
-class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
+class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
     """A tree classifier that uses random convolutions as features.
 
     Attributes
@@ -967,6 +748,12 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
         The internal tree representation.
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeClassifier._parameter_constraints,
+        **RocketMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
 
     def __init__(
         self,
@@ -1031,13 +818,16 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
             - if "uniform", ``{"lower": float, "upper": float}``, defaults to
                ``{"lower": -1, "upper": 1}``.
 
-        kernel_size : (min_size, max_size) or array-like, optional
-            The kernel size.
+        kernel_size : array-like, optional
+            The kernel size, by default ``[7, 11, 13]``.
 
-            - if (min_size, max_size), all kernel sizes between
-              ``min_size * n_timestep`` and ``max_size * n_timestep``
+        min_size : float, optional
+            The minimum timestep fraction to generate kernel sizes. If set,
+            ``kernel_size`` cannot be set.
 
-            - if array-like, all defined kernel sizes.
+        max_size : float, optional
+            The maximum timestep fractio to generate kernel sizes, If set,
+            ``kernel_size`` cannot be set.
 
         bias_prob : float, optional
             The probability of using a bias term.
@@ -1080,126 +870,7 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
         self.class_weight = class_weight
 
 
-class BaseIntervalTree(BaseFeatureTree, metaclass=ABCMeta):
-    def __init__(
-        self,
-        n_intervals="sqrt",
-        *,
-        max_depth=None,
-        min_samples_split=2,
-        min_samples_leaf=1,
-        min_impurity_decrease=0.0,
-        intervals="fixed",
-        sample_size=0.5,
-        min_size=0.0,
-        max_size=1.0,
-        summarizer="mean_var_slope",
-        random_state=None,
-    ):
-        super().__init__(
-            max_depth=max_depth,
-            min_samples_split=min_samples_split,
-            min_samples_leaf=min_samples_leaf,
-            min_impurity_decrease=min_impurity_decrease,
-        )
-        self.n_intervals = n_intervals
-        self.intervals = intervals
-        self.sample_size = sample_size
-        self.min_size = min_size
-        self.max_size = max_size
-        self.summarizer = summarizer
-        self.random_state = random_state
-
-    def _get_feature_engineer(self, n_samples):
-        if isinstance(self.summarizer, list):
-            if not all(hasattr(func, "__call__") for func in self.summarizer):
-                raise ValueError(
-                    "summarizer must be list of callable or str, got %r"
-                    % self.summarizer
-                )
-            summarizer = PyFuncSummarizer(self.summarizer)
-        else:
-            summarizer = check_option(_SUMMARIZER, self.summarizer, "summarizer")()
-
-        if self.n_intervals == "sqrt":
-            n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
-        elif self.n_intervals == "log":
-            n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
-        elif isinstance(self.n_intervals, numbers.Integral):
-            n_intervals = check_scalar(
-                self.n_intervals,
-                "n_intervals",
-                numbers.Integral,
-                min_val=1,
-                max_val=self.n_timesteps_in_,
-            )
-        elif isinstance(self.n_intervals, numbers.Real):
-            n_intervals = math.ceil(
-                check_scalar(
-                    self.n_intervals,
-                    "n_intervals",
-                    numbers.Real,
-                    min_val=0,
-                    max_val=1,
-                    include_boundaries="right",
-                )
-                * self.n_timesteps_in_
-            )
-        else:
-            raise TypeError(
-                "n_intervals must be 'sqrt', 'log', float or int, got %r"
-                % type(self.n_intervals).__qualname__
-            )
-
-        if self.intervals == "fixed":
-            return IntervalFeatureEngineer(n_intervals, summarizer)
-        elif self.intervals == "sample":
-            sample_size = math.floor(
-                check_scalar(
-                    self.sample_size, "sample_size", numbers.Real, min_val=0, max_val=1
-                )
-                * n_intervals
-            )
-            return RandomFixedIntervalFeatureEngineer(
-                n_intervals, summarizer, sample_size
-            )
-        elif self.intervals == "random":
-            check_scalar(
-                self.max_size,
-                "self.max_size",
-                numbers.Real,
-                min_val=self.min_size,
-                max_val=1.0,
-                include_boundaries="right",
-            )
-            check_scalar(
-                self.min_size,
-                "self.min_size",
-                numbers.Real,
-                min_val=0.0,
-                max_val=self.max_size,
-                include_boundaries="right",
-            )
-
-            min_size = int(self.min_size * self.n_timesteps_in_)
-            max_size = int(self.max_size * self.n_timesteps_in_)
-            if min_size < 2:
-                if self.n_timesteps_in_ < 2:
-                    min_size = 1
-                else:
-                    min_size = 2
-
-            return RandomIntervalFeatureEngineer(
-                n_intervals, summarizer, min_size, max_size
-            )
-        else:
-            raise ValueError(
-                "intervals must be 'fixed', 'sample' or 'random', got %r"
-                % self.intervals
-            )
-
-
-class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
+class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
     """An interval based tree classifier.
 
     Attributes
@@ -1209,6 +880,12 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
         The internal tree structure.
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeClassifier._parameter_constraints,
+        **IntervalMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
 
     def __init__(
         self,
@@ -1298,23 +975,23 @@ class IntervalTreeClassifier(FeatureTreeClassifierMixin, BaseIntervalTree):
               by `np.random`.
         """
         super().__init__(
-            n_intervals=n_intervals,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            intervals=intervals,
-            sample_size=sample_size,
-            min_size=min_size,
-            max_size=max_size,
-            summarizer=summarizer,
-            random_state=random_state,
         )
+        self.n_intervals = n_intervals
+        self.intervals = intervals
+        self.sample_size = sample_size
+        self.min_size = min_size
+        self.max_size = max_size
+        self.summarizer = summarizer
+        self.random_state = random_state
         self.class_weight = class_weight
         self.criterion = criterion
 
 
-class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
+class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
     """An interval based tree regressor.
 
     Attributes
@@ -1324,6 +1001,12 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
         The internal tree structure.
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeRegressor._parameter_constraints,
+        **IntervalMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
 
     def __init__(
         self,
@@ -1408,75 +1091,22 @@ class IntervalTreeRegressor(FeatureTreeRegressorMixin, BaseIntervalTree):
               by `np.random`.
         """
         super().__init__(
-            n_intervals=n_intervals,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            intervals=intervals,
-            sample_size=sample_size,
-            min_size=min_size,
-            max_size=max_size,
-            summarizer=summarizer,
-            random_state=random_state,
         )
+        self.n_intervals = n_intervals
+        self.intervals = intervals
+        self.sample_size = sample_size
+        self.min_size = min_size
+        self.max_size = max_size
+        self.summarizer = summarizer
+        self.random_state = random_state
         self.criterion = criterion
 
 
-class BasePivotTree(BaseFeatureTree, metaclass=ABCMeta):
-    def __init__(
-        self,
-        n_pivot="sqrt",
-        *,
-        max_depth=None,
-        min_samples_split=2,
-        min_samples_leaf=1,
-        min_impurity_decrease=0.0,
-        metrics="all",
-        random_state=None,
-    ):
-        super().__init__(
-            max_depth=max_depth,
-            min_samples_split=min_samples_split,
-            min_samples_leaf=min_samples_leaf,
-            min_impurity_decrease=min_impurity_decrease,
-        )
-        self.n_pivot = n_pivot
-        self.metrics = metrics
-        self.random_state = random_state
-
-    def _get_feature_engineer(self, n_samples):
-        if self.n_pivot == "sqrt":
-            n_pivot = math.ceil(math.sqrt(n_samples))
-        elif self.n_pivot == "log":
-            n_pivot = math.ceil(math.log2(n_samples))
-        elif isinstance(self.n_pivot, numbers.Integral):
-            n_pivot = check_scalar(
-                self.n_pivot, "n_pivot", numbers.Integral, min_val=1, max_val=n_samples
-            )
-        elif isinstance(self.n_pivot, numbers.Real):
-            n_pivot = math.ceil(
-                n_samples
-                * check_scalar(
-                    self.n_pivot,
-                    "n_pivot",
-                    numbers.Real,
-                    min_val=0,
-                    max_val=1,
-                    include_boundaries="right",
-                )
-            )
-        else:
-            raise ValueError(
-                "n_pivot must be 'sqrt', 'log', int or float, got %r" % self.n_pivot
-            )
-        metrics = [_DISTANCE_MEASURE["dtw"](r) for r in np.linspace(0.1, 0.4, 8)]
-        return PivotFeatureEngineer(
-            n_pivot, [_DISTANCE_MEASURE["euclidean"]()] + metrics
-        )
-
-
-class PivotTreeClassifier(FeatureTreeClassifierMixin, BasePivotTree):
+class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
     """A tree classifier that uses pivot time series.
 
 
@@ -1487,6 +1117,12 @@ class PivotTreeClassifier(FeatureTreeClassifierMixin, BasePivotTree):
         The internal tree representation
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeClassifier._parameter_constraints,
+        **PivotMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
 
     def __init__(
         self,
@@ -1543,13 +1179,13 @@ class PivotTreeClassifier(FeatureTreeClassifierMixin, BasePivotTree):
               by `np.random`.
         """
         super().__init__(
-            n_pivot=n_pivot,
-            metrics=metrics,
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
-            random_state=random_state,
         )
+        self.n_pivot = n_pivot
+        self.metrics = metrics
+        self.random_state = random_state
         self.criterion = criterion
         self.class_weight = class_weight

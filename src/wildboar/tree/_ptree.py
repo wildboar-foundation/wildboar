@@ -2,10 +2,9 @@
 # License: BSD 3 clause
 
 import numbers
-import sys
 
 import numpy as np
-from sklearn.utils import check_scalar
+from sklearn.utils._param_validation import Interval, StrOptions
 
 from ..distance import _DISTANCE_MEASURE
 from ..tree._cptree import (
@@ -18,7 +17,7 @@ from ..tree._cptree import (
     UniformPivotSampler,
     WeightedDistanceMeasureSampler,
 )
-from ..tree.base import BaseTree, TreeClassifierMixin
+from ..tree.base import BaseTree, BaseTreeClassifier
 from ..utils.validation import check_option
 
 _CLF_CRITERION = {
@@ -125,7 +124,7 @@ def make_metrics(metric_factories=None):
     return distance_measures, np.array(weights, dtype=np.double)
 
 
-class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
+class ProximityTreeClassifier(BaseTreeClassifier):
     """A classifier that uses a k-branching tree based on pivot-time series.
 
     Examples
@@ -139,7 +138,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
     ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
     ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
     ...     },
-    ...     "max_criterion="gini"
+    ...     criterion="gini"
     ... )
     >>> f.fit(x, y)
 
@@ -151,6 +150,33 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         series. Data Mining and Knowledge Discovery
 
     """
+
+    _parameter_constraints: dict = {
+        **BaseTree._parameter_constraints,
+        "n_pivot": [
+            Interval(numbers.Integral, 1, None, closed="left"),
+        ],
+        "criterion": [
+            StrOptions(_CLF_CRITERION.keys()),
+        ],
+        "pivot_sample": [
+            StrOptions(_PIVOT_SAMPLER.keys()),
+        ],
+        "metric_sample": [
+            StrOptions(_DISTANCE_MEASURE_SAMPLER.keys()),
+        ],
+        "metric_factories": [
+            StrOptions({"default"}),
+            list,
+            dict,
+        ],
+        "random_state": ["random_state"],
+        "class_weight": [
+            StrOptions({"balanced"}),
+            "array-like",
+            None,
+        ],
+    }
 
     def __init__(
         self,
@@ -236,7 +262,7 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
         self.class_weight = class_weight
         self.random_state = random_state
 
-    def _fit(self, x, y, sample_weights, random_state):
+    def _fit(self, x, y, sample_weights, max_depth, random_state):
         if self.metric_factories == "default":
             std_x = np.std(x)
             metric_factories = {
@@ -264,23 +290,15 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
                     "n": 20,
                 },
             }
-        elif isinstance(self.metric_factories, dict):
-            metric_factories = self.metric_factories
         elif isinstance(self.metric_factories, list):
             metric_factories = {key: None for key in self.metric_factories}
         else:
-            raise TypeError(
-                "metric_factories must be 'default', dict or list, got %r"
-                % self.metric_factories
-            )
+            metric_factories = self.metric_factories
 
         distance_measures, weights = make_metrics(metric_factories=metric_factories)
-        Criterion = check_option(_CLF_CRITERION, self.criterion, "criterion")
-        PivotSampler = check_option(_PIVOT_SAMPLER, self.pivot_sample, "pivot_sample")
-        DistanceMeasureSampler = check_option(
-            _DISTANCE_MEASURE_SAMPLER, self.metric_sample, "metric_sample"
-        )
-
+        Criterion = _CLF_CRITERION[self.criterion]
+        PivotSampler = _PIVOT_SAMPLER[self.pivot_sample]
+        DistanceMeasureSampler = _DISTANCE_MEASURE_SAMPLER[self.metric_sample]
         tree_builder = TreeBuilder(
             x,
             sample_weights,
@@ -289,28 +307,11 @@ class ProximityTreeClassifier(TreeClassifierMixin, BaseTree):
             Criterion(y, self.n_classes_),
             Tree(distance_measures, self.n_classes_),
             random_state,
-            max_depth=check_scalar(
-                sys.getrecursionlimit() if self.max_depth is None else self.max_depth,
-                "max_depth",
-                numbers.Integral,
-                min_val=1,
-                max_val=sys.getrecursionlimit(),
-            ),
-            n_features=check_scalar(
-                self.n_pivot, "n_pivot", numbers.Integral, min_val=1
-            ),
-            min_impurity_decrease=check_scalar(
-                self.min_impurity_decrease,
-                "min_impurity_decrease",
-                numbers.Real,
-                min_val=0,
-            ),
-            min_samples_split=check_scalar(
-                self.min_samples_split, "min_samples_split", numbers.Integral, min_val=2
-            ),
-            min_samples_leaf=check_scalar(
-                self.min_samples_leaf, "min_samples_leaf", numbers.Integral, min_val=1
-            ),
+            n_features=self.n_pivot,
+            max_depth=max_depth,
+            min_impurity_decrease=self.min_impurity_decrease,
+            min_samples_split=self.min_samples_split,
+            min_samples_leaf=self.min_samples_leaf,
         )
         tree_builder.build_tree()
         self.tree_ = tree_builder.tree

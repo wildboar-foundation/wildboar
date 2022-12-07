@@ -4,7 +4,6 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_array_equal, assert_equal
-from sklearn import clone
 
 from wildboar.datasets import load_gun_point
 from wildboar.tree import (
@@ -13,55 +12,26 @@ from wildboar.tree import (
     ShapeletTreeClassifier,
     ShapeletTreeRegressor,
 )
+from wildboar.utils._testing import (
+    assert_exhaustive_parameter_checks,
+    assert_parameter_checks,
+)
 from wildboar.utils.estimator_checks import check_estimator
-
-TREE_INVALID_PARAMS = [
-    ({"min_samples_leaf": 0.0}, ValueError, "min_samples_leaf == 0.0"),
-    ({"min_samples_split": 1}, ValueError, "min_samples_split == 1"),
-    ({"min_impurity_decrease": -0.1}, ValueError, "min_impurity_decrease == -0.1"),
-]
-
-EXTRA_SHAPELET_TREE_INVALID_PARAMS = [
-    ({"min_shapelet_size": -0.1}, ValueError, "min_shapelet_size == -0.1"),
-    ({"max_shapelet_size": 1.1}, ValueError, "max_shapelet_size == 1.1"),
-    (
-        {"min_shapelet_size": 0.3, "max_shapelet_size": 0.2},
-        ValueError,
-        "max_shapelet_size == 0.2",
-    ),
-]
-
-SHAPELET_TREE_INVALID_PARAMS = [
-    *TREE_INVALID_PARAMS,
-    *EXTRA_SHAPELET_TREE_INVALID_PARAMS,
-    ({"n_shapelets": -1}, ValueError, "n_shapelets == -1"),
-    ({"alpha": 0.0}, ValueError, "alpha == 0.0"),
-]
 
 
 @pytest.mark.parametrize(
-    "estimator, invalid_params",
+    "clf",
     [
-        (ShapeletTreeClassifier(n_shapelets=10), SHAPELET_TREE_INVALID_PARAMS),
-        (ShapeletTreeRegressor(n_shapelets=10), SHAPELET_TREE_INVALID_PARAMS),
-        (ExtraShapeletTreeClassifier(), EXTRA_SHAPELET_TREE_INVALID_PARAMS),
-        (ExtraShapeletTreeRegressor(), EXTRA_SHAPELET_TREE_INVALID_PARAMS),
+        ShapeletTreeClassifier(n_shapelets=10),
+        ShapeletTreeRegressor(n_shapelets=10),
+        ExtraShapeletTreeClassifier(n_shapelets=10),
+        ExtraShapeletTreeRegressor(n_shapelets=10),
     ],
 )
-def test_invalid_params(estimator, invalid_params):
-    for params, err_type, err_msg in invalid_params:
-        estimator_clone = clone(estimator)
-        estimator_clone.set_params(**params)
-        x, y = load_gun_point()
-        with pytest.raises(err_type, match=err_msg):
-            estimator_clone.fit(x, y)
-
-
-def test_check_estimator():
-    check_estimator(ShapeletTreeClassifier(n_shapelets=10))
-    check_estimator(ShapeletTreeRegressor(n_shapelets=10))
-    check_estimator(ExtraShapeletTreeClassifier(n_shapelets=10))
-    check_estimator(ExtraShapeletTreeRegressor(n_shapelets=10))
+def test_check_estimator(clf):
+    assert_exhaustive_parameter_checks(clf)
+    assert_parameter_checks(clf)
+    check_estimator(clf)
 
 
 def test_shapelet_tree_apply():

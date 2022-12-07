@@ -1,9 +1,14 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import sys
+from abc import ABCMeta, abstractmethod
+from numbers import Integral, Real
+
 import numpy as np
 from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.utils import check_random_state, compute_sample_weight
+from sklearn.utils._param_validation import Interval
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import _check_sample_weight, check_is_fitted
 
@@ -11,8 +16,18 @@ from ..base import BaseEstimator
 from ..utils.validation import _check_ts_array, _num_timesteps
 
 
-class BaseTree(BaseEstimator):
+class BaseTree(BaseEstimator, metaclass=ABCMeta):
     """Base class for tree based estimators."""
+
+    _parameter_constraints: dict = {
+        "max_depth": [
+            Interval(Integral, 1, sys.getrecursionlimit(), closed="left"),
+            None,
+        ],
+        "min_samples_split": [Interval(Integral, 2, None, closed="left")],
+        "min_samples_leaf": [Interval(Integral, 1, None, closed="left")],
+        "min_impurity_decrease": [Interval(Real, 0.0, None, closed="left")],
+    }
 
     def __init__(
         self,
@@ -34,6 +49,10 @@ class BaseTree(BaseEstimator):
             self.n_features_in_ = self.n_timesteps_in_ * self.n_dims_in_
 
         return _check_ts_array(x)
+
+    @abstractmethod
+    def _fit(self, X, y, sample_weight, max_depth, random_state):
+        pass
 
     def decision_path(self, x, check_input=True):
         check_is_fitted(self, attributes="tree_")
@@ -61,9 +80,7 @@ class BaseTree(BaseEstimator):
         return {"X_types": ["2darray", "3darray"]}
 
 
-class TreeRegressorMixin(RegressorMixin):
-    """Mixin for regression trees."""
-
+class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):
     def fit(self, x, y, sample_weight=None, check_input=True):
         """Fit a shapelet tree regressor from the training set
 
@@ -89,6 +106,7 @@ class TreeRegressorMixin(RegressorMixin):
 
         self: object
         """
+        self._validate_params()
         if check_input:
             x, y = self._validate_data(
                 x, y, allow_3d=True, ensure_ts_array=True, dtype=float, y_numeric=True
@@ -100,7 +118,13 @@ class TreeRegressorMixin(RegressorMixin):
         if sample_weight is not None:
             sample_weight = _check_sample_weight(sample_weight, x, dtype=float)
 
-        self._fit(x, y, sample_weight, random_state)
+        self._fit(
+            x,
+            y,
+            sample_weight,
+            min(self.max_depth or sys.getrecursionlimit(), sys.getrecursionlimit()),
+            random_state,
+        )
         return self
 
     def predict(self, x, check_input=True):
@@ -132,7 +156,7 @@ class TreeRegressorMixin(RegressorMixin):
         return self.tree_.predict(x).reshape(-1)
 
 
-class TreeClassifierMixin(ClassifierMixin):
+class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
     """Mixin for classification trees."""
 
     def fit(self, x, y, sample_weight=None, check_input=True):
@@ -160,6 +184,7 @@ class TreeClassifierMixin(ClassifierMixin):
 
         self: object
         """
+        self._validate_params()
         if check_input:
             x, y = self._validate_data(
                 x, y, allow_3d=True, ensure_ts_array=True, dtype=float
@@ -188,7 +213,13 @@ class TreeClassifierMixin(ClassifierMixin):
             else:
                 sample_weight = class_weight
 
-        self._fit(x, y, sample_weight, random_state)
+        self._fit(
+            x,
+            y,
+            sample_weight,
+            min(self.max_depth or sys.getrecursionlimit(), sys.getrecursionlimit()),
+            random_state,
+        )
         return self
 
     def predict(self, x, check_input=True):

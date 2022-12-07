@@ -3,10 +3,10 @@
 
 import math
 import numbers
+import warnings
 
-from sklearn.utils.validation import check_scalar
+from sklearn.utils._param_validation import Interval, StrOptions
 
-from ..utils.validation import check_option
 from ._cinterval import (
     Catch22Summarizer,
     IntervalFeatureEngineer,
@@ -29,7 +29,87 @@ _SUMMARIZER = {
 }
 
 
-class IntervalTransform(BaseFeatureEngineerTransform):
+class IntervalMixin:
+
+    _parameter_constraints: dict = {
+        "n_intervals": [
+            Interval(numbers.Integral, 1, None, closed="left"),
+            Interval(numbers.Real, 0, 1, closed="right"),
+            StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
+            callable,
+        ],
+        "intervals": [
+            StrOptions({"fixed", "sample", "random"}),
+        ],
+        "min_size": [
+            Interval(numbers.Real, 0, 1, closed="both"),
+            None,
+        ],
+        "max_size": [
+            Interval(numbers.Real, 0, 1, closed="both"),
+            None,
+        ],
+        "sample_size": [Interval(numbers.Real, 0, 1, closed="both")],
+        "summarizer": [StrOptions(_SUMMARIZER.keys()), list],
+    }
+
+    def _get_feature_engineer(self, n_samples):
+        if isinstance(self.summarizer, list):
+            if not all(callable(func) for func in self.summarizer):
+                raise ValueError(
+                    "summarizer must be list of callable or str, got %r"
+                    % self.summarizer
+                )
+            summarizer = PyFuncSummarizer(self.summarizer)
+        else:
+            summarizer = _SUMMARIZER[self.summarizer]()
+
+        if self.n_intervals == "sqrt":
+            n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
+        elif self.n_intervals == "log2" or self.n_intervals == "log":
+            if self.n_intervals == "log":
+                warnings.warn(
+                    "The value 'log' has been renamed to 'log2' and will "
+                    "be removed in 1.4",
+                    DeprecationWarning,
+                )
+
+            n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
+        elif isinstance(self.n_intervals, numbers.Integral):
+            n_intervals = self.n_intervals
+        else:
+            n_intervals = math.ceil(self.n_intervals * self.n_timesteps_in_)
+
+        if self.intervals == "fixed":
+            return IntervalFeatureEngineer(n_intervals, summarizer)
+        elif self.intervals == "sample":
+            return RandomFixedIntervalFeatureEngineer(
+                n_intervals, summarizer, math.floor(self.sample_size * n_intervals)
+            )
+        else:  # "random"
+            min_size = self.min_size if self.min_size is not None else 0
+            max_size = self.max_size if self.max_size is not None else 1
+
+            if min_size > max_size:
+                raise ValueError(
+                    f"The min_size parameter of {type(self).__qualname__} "
+                    "must be <= max_size."
+                )
+
+            min_size = int(self.min_size * self.n_timesteps_in_)
+            max_size = int(self.max_size * self.n_timesteps_in_)
+            if min_size < 2:
+                if self.n_timesteps_in_ < 2:
+                    min_size = 1
+                else:
+                    min_size = 2
+
+            return RandomIntervalFeatureEngineer(
+                n_intervals, summarizer, min_size, max_size
+            )
+
+
+class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
     """Embed a time series as a collection of features per interval.
 
     Examples
@@ -50,6 +130,11 @@ class IntervalTransform(BaseFeatureEngineerTransform):
 
     """
 
+    _parameter_constraints: dict = {
+        **IntervalMixin._parameter_constraints,
+        **BaseFeatureEngineerTransform._parameter_constraints,
+    }
+
     def __init__(
         self,
         n_intervals="sqrt",
@@ -68,7 +153,7 @@ class IntervalTransform(BaseFeatureEngineerTransform):
         n_intervals : str, int or float, optional
             The number of intervals to use for the transform.
 
-            - if "log", the number of intervals is ``log2(n_timestep)``.
+            - if "log2", the number of intervals is ``log2(n_timestep)``.
             - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
             - if int, the number of intervals is ``n_intervals``.
             - if float, the number of intervals is ``n_intervals * n_timestep``, with
@@ -118,101 +203,14 @@ class IntervalTransform(BaseFeatureEngineerTransform):
         self.min_size = min_size
         self.max_size = max_size
 
-    def _get_feature_engineer(self):
-        if isinstance(self.summarizer, list):
-            if not all(hasattr(func, "__call__") for func in self.summarizer):
-                raise ValueError(
-                    "summarizer must be list of callable or str, got %r"
-                    % self.summarizer
-                )
-            summarizer = PyFuncSummarizer(self.summarizer)
-        else:
-            summarizer = check_option(_SUMMARIZER, self.summarizer, "summarizer")()
-
-        if self.n_intervals == "sqrt":
-            n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
-        elif self.n_intervals == "log":
-            n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
-        elif isinstance(self.n_intervals, numbers.Integral):
-            n_intervals = check_scalar(
-                self.n_intervals,
-                "n_intervals",
-                numbers.Integral,
-                min_val=1,
-                max_val=self.n_timesteps_in_,
-            )
-        elif isinstance(self.n_intervals, numbers.Real):
-            n_intervals = math.ceil(
-                check_scalar(
-                    self.n_intervals,
-                    "n_intervals",
-                    numbers.Real,
-                    min_val=0,
-                    max_val=1,
-                    include_boundaries="right",
-                )
-                * self.n_timesteps_in_
-            )
-        else:
-            raise TypeError(
-                "n_intervals must be 'sqrt', 'log', float or int, got %r"
-                % type(self.n_intervals).__qualname__
-            )
-
-        if self.intervals == "fixed":
-            return IntervalFeatureEngineer(n_intervals, summarizer)
-        elif self.intervals == "sample":
-            sample_size = math.ceil(
-                check_scalar(
-                    self.sample_size,
-                    "sample_size",
-                    numbers.Real,
-                    min_val=0,
-                    max_val=1,
-                    include_boundaries="right",
-                )
-                * n_intervals
-            )
-            return RandomFixedIntervalFeatureEngineer(
-                n_intervals, summarizer, sample_size
-            )
-        elif self.intervals == "random":
-            check_scalar(
-                self.max_size,
-                "max_size",
-                numbers.Real,
-                min_val=self.min_size,
-                max_val=1,
-            )
-            check_scalar(
-                self.min_size,
-                "min_size",
-                numbers.Real,
-                min_val=0,
-                max_val=self.max_size,
-            )
-
-            min_size = math.ceil(self.min_size * self.n_timesteps_in_)
-            max_size = math.ceil(self.max_size * self.n_timesteps_in_)
-            # TODO(1.2): break backward
-            if min_size < 2:
-                if self.n_timesteps_in_ < 2:
-                    min_size = 1
-                else:
-                    min_size = 2
-
-            return RandomIntervalFeatureEngineer(
-                n_intervals, summarizer, min_size, max_size
-            )
-        else:
-            raise ValueError(
-                "intervals must be 'fixed', 'sample' or 'random', got %r"
-                % self.intervals
-            )
-
 
 class FeatureTransform(IntervalTransform):
     """Transform a time series as a number of features"""
+
+    _parameter_constraints: dict = {
+        "summarizer": IntervalMixin._parameter_constraints["summarizer"],
+        "n_jobs": [None, numbers.Integral],
+    }
 
     def __init__(
         self,

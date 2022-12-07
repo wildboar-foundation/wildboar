@@ -2,6 +2,7 @@
 # License: BSD 3 clause
 
 from abc import ABCMeta, abstractmethod
+from numbers import Integral
 
 import numpy as np
 from sklearn.base import TransformerMixin
@@ -31,6 +32,11 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
 
     """
 
+    _parameter_constraints: dict = {
+        "random_state": ["random_state"],
+        "n_jobs": [None, Integral],
+    }
+
     def __init__(self, *, random_state=None, n_jobs=None):
         """
         Parameters
@@ -58,9 +64,10 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         -------
         self : self
         """
+        self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
         self.embedding_ = feature_transform_fit(
-            self._get_feature_engineer(),
+            self._get_feature_engineer(x.shape[0]),
             _check_ts_array(x),
             check_random_state(self.random_state),
         )
@@ -103,9 +110,10 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         x_embedding : ndarray of shape [n_samples, n_outputs]
             The embedding.
         """
+        self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
         embedding, x_out = feature_transform_fit_transform(
-            self._get_feature_engineer(),
+            self._get_feature_engineer(x.shape[0]),
             _check_ts_array(x),
             check_random_state(self.random_state),
             self.n_jobs,
@@ -114,5 +122,5 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         return x_out
 
     @abstractmethod
-    def _get_feature_engineer(self):
+    def _get_feature_engineer(self, n_samples):
         pass

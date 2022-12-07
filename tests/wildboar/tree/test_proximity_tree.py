@@ -6,6 +6,10 @@ from numpy.testing import assert_equal
 
 from wildboar.datasets import load_gun_point
 from wildboar.tree import ProximityTreeClassifier
+from wildboar.utils._testing import (
+    assert_exhaustive_parameter_checks,
+    assert_parameter_checks,
+)
 from wildboar.utils.estimator_checks import check_estimator
 
 
@@ -14,10 +18,8 @@ def test_check_estimator():
         ProximityTreeClassifier(metric_factories={"euclidean": {}}),
         ignore=["check_sample_weights_invariance"],
     )
-
-
-def test_proximity_tree_metric_factories():
-    pass
+    assert_exhaustive_parameter_checks(ProximityTreeClassifier())
+    assert_parameter_checks(ProximityTreeClassifier())
 
 
 def test_proximity_tree():
