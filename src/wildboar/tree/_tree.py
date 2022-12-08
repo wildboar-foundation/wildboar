@@ -976,7 +976,7 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
         *,
         max_depth=None,
         min_samples_split=2,
-        min_sample_leaf=1,
+        min_samples_leaf=1,
         min_impurity_decrease=0.0,
         criterion="entropy",
         sampling="normal",
@@ -1067,7 +1067,7 @@ class RocketTreeClassifier(FeatureTreeClassifierMixin, BaseRocketTree):
         super().__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
-            min_sample_leaf=min_sample_leaf,
+            min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
         )
         self.n_kernels = n_kernels
