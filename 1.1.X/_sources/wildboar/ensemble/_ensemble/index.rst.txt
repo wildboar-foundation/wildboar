@@ -29,8 +29,8 @@ Classes
    wildboar.ensemble._ensemble.IsolationShapeletForest
    wildboar.ensemble._ensemble.PivotForestClassifier
    wildboar.ensemble._ensemble.ProximityForestClassifier
-   wildboar.ensemble._ensemble.RockestClassifier
-   wildboar.ensemble._ensemble.RockestRegressor
+   wildboar.ensemble._ensemble.RocketForestClassifier
+   wildboar.ensemble._ensemble.RocketForestRegressor
    wildboar.ensemble._ensemble.ShapeletForestClassifier
    wildboar.ensemble._ensemble.ShapeletForestEmbedding
    wildboar.ensemble._ensemble.ShapeletForestRegressor
@@ -436,14 +436,14 @@ Classes
        series. Data Mining and Knowledge Discovery
 
 
-.. py:class:: RockestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
+.. py:class:: RocketForestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestClassifier`
 
    An ensemble of rocket tree classifiers.
 
 
-.. py:class:: RockestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. py:class:: RocketForestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestRegressor`
 

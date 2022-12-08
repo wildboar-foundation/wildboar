@@ -297,7 +297,7 @@ Classes
 
 
 
-.. py:class:: IntervalForestClassifier(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='auto', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
+.. py:class:: IntervalForestClassifier(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='mean_var_std', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
    Bases: :py:obj:`BaseForestClassifier`
 
@@ -444,14 +444,14 @@ Classes
        series. Data Mining and Knowledge Discovery
 
 
-.. py:class:: RocketForestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
+.. py:class:: RocketForestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestClassifier`
 
    An ensemble of rocket tree classifiers.
 
 
-.. py:class:: RocketForestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='auto', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+.. py:class:: RocketForestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
    Bases: :py:obj:`BaseForestRegressor`
 
