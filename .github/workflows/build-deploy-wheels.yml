@@ -15,7 +15,6 @@ on:
 
 jobs:
   build_wheels:
-    name: Build and test wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -45,7 +44,6 @@ jobs:
           path: ./wheelhouse/*.whl
 
   build_sdist:
-    name: Build source distribution
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -74,7 +72,6 @@ jobs:
           path: dist/*.tar.gz
 
   build_docs:
-    name: Build and deploy documentation
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -117,7 +114,6 @@ jobs:
           publish_dir: ./html
 
   upload_pypi:
-    name: Upload artifacts to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
