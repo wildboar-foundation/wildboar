@@ -6,7 +6,6 @@ import numbers
 
 import numpy as np
 from scipy.stats import norm, uniform
-
 from sklearn.base import TransformerMixin, check_is_fitted
 from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_scalar
