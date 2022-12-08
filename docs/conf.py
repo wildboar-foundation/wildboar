@@ -214,7 +214,7 @@ def setup(app):
                     latest_tag = matching_tags[-1] if matching_tags else ver
                     latest_version_tags[ver] = latest_tag
                 elif ver == "master":
-                    latest_version_tags[ver] = config.version
+                    latest_version_tags[ver] = config.release
                 else:
                     logger.warning("[CONF] using branch version for tag (%s)", ver)
                     latest_version_tags[ver] = ver
