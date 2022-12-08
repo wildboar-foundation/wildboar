@@ -2,11 +2,80 @@
 What's new
 ==========
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Versions
+.. currentmodule:: wildboar
 
-   versions/v1.2
-   versions/v1.1
-   versions/v1.0
-   versions/older
+.. _whats-new:
+
+.. include:: defs.hrst
+
+Dependencies
+============
+
+Wildboar 1.2 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 1.2+.
+
+
+Version 1.2.0
+=============
+
+**In development**
+
+New and changed models
+----------------------
+
+
+Changelog
+---------
+
+.. grid:: 1
+
+  .. grid-item-card:: 
+    
+     :mod:`wildboar.ensemble`
+     ^^^
+     
+     - |API| Rename the constructor parameter ``base_estimator`` to ``estimator`` in 
+       :class:`ensemble.BaggingClassifier` and :class:`ensemble.BaggingRegressor`.
+       ``base_estimator`` is deprecated in 1.2 and will be removed in 1.4. Original
+       change in scikit-learn.
+
+     - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
+       This change affect :class:`tree.RocketForestClassifier` and :class:`tree.RocketForestRegressor`. 
+
+     - |Fix| Fix a bug where ``sampling`` was incorrectly set for :class:`ensemble.RocketForestClassifier`
+       and :class:`ensemble.RocketForestRegressor`.
+
+  .. grid-item-card:: 
+    
+     :mod:`wildboar.linear_model`
+     ^^^
+     
+     - |API| Remove the deprecated ``normalize`` parameter from :class:`linear_model.RocketClassifier` and
+       :class:`linear_model.RocketRegressor`.
+
+  .. grid-item-card:: 
+    
+     :mod:`wildboar.transform`
+     ^^^
+
+     - |Enhancement| Rename the parameter value ``log`` for the parameter ``n_intervals``
+       in :class:`transform.IntervalTransform` to ``log2``. The old value is deprecated
+       and will be removed in 1.4.
+
+     - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
+       This change affect :class:`transform.RocketTransform`.
+
+  .. grid-item-card:: 
+    
+     :mod:`wildboar.tree`
+     ^^^
+     
+     - |Fix| Correctly set ``min_samples_leaf`` in :class:`tree.RocketTreeClassifier` and :class:`RocketTreeRegressor`.
+
+     - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
+       This change affect :class:`tree.RocketTreeClassifier` and :class:`tree.RocketTreeRegressor`.
+
+Other improvements
+------------------
+
+- Remove all dependencies on deprecated Numpy APIs.
+- Migrate to the new scikit-learn parameter validation framework.
