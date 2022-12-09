@@ -297,12 +297,18 @@ def paired_subsequence_distance(
         of the i:th subsequence and the i:th sample
     """
     y = _validate_subsequence(y)
-    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
+
+    n_dims = x.shape[1] if x.ndim == 3 else 1
+    if not 0 >= dim < n_dims:
+        raise ValueError("The parameter dim must be 0 <= dim < n_dims")
+
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
                 "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
+
     DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
@@ -419,12 +425,19 @@ def subsequence_match(
     y = _validate_subsequence(y)
     if len(y) > 1:
         raise ValueError("A single subsequence expected, got %d" % len(y))
+
     y = y[0]
-    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
+
     if y.shape[0] > x.shape[-1]:
         raise ValueError(
             "Invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
         )
+
+    n_dims = x.shape[1] if x.ndim == 3 else 1
+    if not 0 >= dim < n_dims:
+        raise ValueError("The parameter dim must be 0 <= dim < n_dims")
+
     DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
 
@@ -577,6 +590,10 @@ def paired_subsequence_match(
     if len(y) != x.shape[0]:
         raise ValueError("x and y must have the same number of samples")
 
+    n_dims = x.shape[1] if x.ndim == 3 else 1
+    if not 0 >= dim < n_dims:
+        raise ValueError("The parameter dim must be 0 <= dim < n_dims")
+
     for s in y:
         if s.shape[0] > x.shape[-1]:
             raise ValueError(
@@ -644,7 +661,7 @@ def paired_distance(
     x,
     y,
     *,
-    dim=0,
+    dim="warn",
     metric="euclidean",
     metric_params=None,
     n_jobs=None,
@@ -659,7 +676,7 @@ def paired_distance(
     y : : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data
 
-    dim : int, optional
+    dim : int or {'mean', 'full'} optional
         The dim to compute distance
 
      metric : str or callable, optional
@@ -681,16 +698,21 @@ def paired_distance(
     distance : ndarray
         The distances. Return depends on input:
 
-        - if ndim > 1, return an ndarray of shape (n_samples, )
-        - if ndim == 1, return ndarray of shape (n_matches, ) or None
+        - if x.ndim == 1, return scalar
+        - if dim='full', return ndarray of shape (n_samples, n_dims)
+        - if x.ndim > 1, return an ndarray of shape (n_samples, )
     """
-    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
-    y = check_array(y, allow_3d=True, ensure_2d=False, dtype=np.double)
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
+    y = check_array(y, allow_3d=True, ensure_2d=False, dtype=float)
     y = np.broadcast_to(y, x.shape)
     if x.ndim != y.ndim:
         raise ValueError(
             "x (%dD-array) and y (%dD-array) are not compatible." % (x.ndim, y.ndim)
         )
+
+    if x.ndim == 3 and x.shape[1] != y.shape[1]:
+        raise ValueError("x and y must have the same number of dimensions.")
+
     if x.ndim > 1 and y.ndim > 1 and x.shape[0] != y.shape[0]:
         raise ValueError("x and y must have the same number of samples.")
 
@@ -706,60 +728,52 @@ def paired_distance(
             % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
         )
 
-    return _format_return(
-        _distance._paired_distance(
-            _check_ts_array(x),
-            _check_ts_array(y),
-            dim,
-            distance_measure,
-            n_jobs,
-        ),
-        y.ndim,
-        x.ndim,
-    )
+    n_dims = x.shape[1] if x.ndim == 3 else 1
 
-
-def mean_paired_distance(x, y, *, metric="euclidean", metric_params=None):
-    """Return the paired distance between x and y. For 3d-arrays, return the mean
-    paired distance between the dimensions.
-
-    Parameters
-    ----------
-
-
-    """
-    x = check_array(x, allow_3d=True, input_name="x")
-    y = check_array(y, allow_3d=True, input_name="y")
-
-    if x.ndim != y.ndim:
-        raise ValueError("both x and y must have the same rank")
-
-    if x.ndim == 2:
-        return paired_distance(x, y, metric=metric, metric_params=metric_params)
-    elif x.ndim == 3:
-        if x.shape[1] != y.shape[1]:
-            raise ValueError(
-                "x.shape[1]=%d != y.shape[1]=%d" % (x.shape[1], y.shape[1])
+    # TODO(1.3)
+    if dim == "warn":
+        if n_dims > 1:
+            warnings.warn(
+                "The default value for dim will change to 'mean' from 0 in 1.3. "
+                "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
+                DeprecationWarning,
             )
+        dim = 0
 
-        return np.mean(
-            [
-                paired_distance(
-                    x, y, metric=metric, metric_params=metric_params, dim=dim
-                )
-                for dim in range(x.shape[1])
-            ],
-            axis=0,
-        )
+    if n_dims == 1 and dim == "mean":
+        dim = 0
+
+    x_ = _check_ts_array(x)
+    y_ = _check_ts_array(y)
+    if dim in ["mean", "full"]:
+        distances = [
+            _distance._paired_distance(x_, y_, d, distance_measure, n_jobs)
+            for d in range(n_dims)
+        ]
+
+        if dim == "mean":
+            distances = np.mean(distances, axis=0)
+        else:
+            distances = np.stack(distances, axis=1)
+
+    elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
+        distances = _distance._paired_distance(x_, y_, dim, distance_measure, n_jobs)
     else:
-        raise ValueError("invalid rank, %d > 3" % x.ndim)
+        raise ValueError("The parameter dim must be 0 <= dim < n_dims")
+
+    return _format_return(distances, y.ndim, x.ndim)
+
+
+@np.deprecate(new_name="paired_distance(dim='mean')")
+def mean_paired_distance(x, y, *, metric="euclidean", metric_params=None):
+    return paired_distance(x, y, dim="mean", metric=metric, metric_params=metric_params)
 
 
 def pairwise_distance(
     x,
     y=None,
     *,
-    dim=0,
+    dim="warn",
     metric="euclidean",
     metric_params=None,
     n_jobs=None,
@@ -776,7 +790,7 @@ def pairwise_distance(
             (y_samples, n_dims, n_timestep), optional
         The input data
 
-    dim : int, optional
+    dim : int or {'mean', 'full'} optional
         The dim to compute distance
 
      metric : str or callable, optional
@@ -798,11 +812,13 @@ def pairwise_distance(
     dist : float or ndarray
         The distances. Return depends on input.
 
-        - if x.ndim > 1 and y is None, return array of shape (x_samples, x_samples)
-        - if x.ndim > 1 and y.ndim > 1, return array of shape (x_samples, y_samples)
-        - if x.ndim == 1 and y.ndim > 1, return array of shape (y_samples, )
-        - if y.ndim == 1 and x.ndim > 1, return array of shape (x_samples, )
-        - if x.ndim == 1 and y.ndim == 1, return scalar
+        - if x.ndim == 1 and y.ndim == 1, scalar
+        - if dim="full", array of shape (n_dims, x_samples, y_samples)
+        - if dim="full" and y is None, array of shape (n_dims, x_samples, x_samples)
+        - if x.ndim > 1 and y is None, array of shape (x_samples, x_samples)
+        - if x.ndim > 1 and y.ndim > 1, array of shape (x_samples, y_samples)
+        - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, )
+        - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, )
     """
     DistanceMeasure = check_option(_DISTANCE_MEASURE, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
@@ -812,16 +828,45 @@ def pairwise_distance(
         y = x
 
     if x is y:
-        x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
-        if not 0 >= dim < x.ndim:
-            raise ValueError("dim must be 0 <= %d < %d" % (dim, x.ndim))
-
+        x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
         if x.ndim == 1:
             return 0.0
 
-        return _distance._singleton_pairwise_distance(
-            _check_ts_array(x), dim, distance_measure, n_jobs
-        )
+        x_ = _check_ts_array(x)
+        n_dims = x.shape[1] if x.ndim == 3 else 1
+
+        # TODO(1.3)
+        if dim == "warn":
+            if n_dims > 1:
+                warnings.warn(
+                    "The default value for dim will change to 'mean' from 0 in 1.3. "
+                    "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
+                    DeprecationWarning,
+                )
+            dim = 0
+
+        if n_dims == 1 and dim == "mean":
+            dim = 0
+
+        if dim in ["mean", "full"]:
+            distances = [
+                _distance._singleton_pairwise_distance(x_, d, distance_measure, n_jobs)
+                for d in range(n_dims)
+            ]
+
+            if dim == "mean":
+                distances = np.mean(distances, axis=0)
+            else:
+                distances = np.stack(distances, axis=0)
+
+        elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
+            distances = _distance._singleton_pairwise_distance(
+                x_, dim, distance_measure, n_jobs
+            )
+        else:
+            raise ValueError("The parameter dim must be 0 <= dim < n_dims")
+
+        return distances
     else:
         x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
         y = check_array(y, allow_3d=True, ensure_2d=False, dtype=np.double)
@@ -830,29 +875,51 @@ def pairwise_distance(
                 "x (%dD-array) and y (%dD-array) are not compatible" % (x.ndim, y.ndim)
             )
 
-        if not 0 >= dim < x.ndim:
-            raise ValueError("dim must be 0 <= %d < %d" % (dim, x.ndim))
+        if x.ndim == 3 and x.shape[1] != y.shape[1]:
+            raise ValueError("x and y must have the same number of dimensions.")
 
-        if (
-            x.shape[x.ndim - 1] != y.shape[y.ndim - 1]
-            and not distance_measure.is_elastic
-        ):
+        if x.shape[-1] != y.shape[-1] and not distance_measure.is_elastic:
             raise ValueError(
                 "Illegal n_timestep (%r != %r) for non-elastic distance measure"
-                % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
+                % (x.shape[-1], y.shape[-1])
             )
 
-        return _format_return(
-            _distance._pairwise_distance(
-                _check_ts_array(x),
-                _check_ts_array(y),
-                dim,
-                distance_measure,
-                n_jobs,
-            ),
-            y.ndim,
-            x.ndim,
-        )
+        x_ = _check_ts_array(x)
+        y_ = _check_ts_array(y)
+        n_dims = x.shape[1] if x.ndim == 3 else 1
+
+        # TODO(1.3)
+        if dim == "warn":
+            if n_dims > 1:
+                warnings.warn(
+                    "The default value for dim will change to 'mean' from 0 in 1.3. "
+                    "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
+                    DeprecationWarning,
+                )
+            dim = 0
+
+        if n_dims == 1 and dim == "mean":
+            dim = 0
+
+        if dim in ["mean", "full"]:
+            distances = [
+                _distance._pairwise_distance(x_, y_, d, distance_measure, n_jobs)
+                for d in range(n_dims)
+            ]
+
+            if dim == "mean":
+                distances = np.mean(distances, axis=0)
+            else:
+                distances = np.stack(distances, axis=0)
+
+        elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
+            distances = _distance._pairwise_distance(
+                x_, y_, dim, distance_measure, n_jobs
+            )
+        else:
+            raise ValueError("The parameter dim must be 0 <= dim < n_dims")
+
+        return _format_return(distances, y.ndim, x.ndim)
 
 
 def matrix_profile(

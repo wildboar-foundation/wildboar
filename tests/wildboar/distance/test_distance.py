@@ -1,10 +1,11 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal
 
-from wildboar.datasets import load_gun_point
+from wildboar.datasets import load_gun_point, load_two_lead_ecg
 from wildboar.distance import (
     paired_distance,
     paired_subsequence_distance,
@@ -429,3 +430,66 @@ def test_subsequence_match_equivalent(left, right):
 
     for left_index, right_index in zip(left_indicies, right_indicies):
         assert_equal(left_index, right_index)
+
+
+def test_paired_distance_dim_mean():
+    X, y = load_two_lead_ecg()
+    x = X[:6].reshape(2, 3, -1)
+    y = X[6:12].reshape(2, 3, -1)
+    expected = np.array([3.8665873284447385, 6.069396564992267])
+    actual = paired_distance(x, y, dim="mean", metric="euclidean")
+    assert_almost_equal(actual, expected)
+
+
+def test_paired_distance_dim_full():
+    X, y = load_two_lead_ecg()
+    x = X[:6].reshape(2, 3, -1)
+    y = X[6:12].reshape(2, 3, -1)
+    expected = np.array(
+        [
+            [5.486831916137321, 2.5050700084886945, 3.607860060708199],
+            [6.359545576183372, 4.600410679545082, 7.248233439248347],
+        ]
+    )
+    actual = paired_distance(x, y, dim="full", metric="euclidean")
+    assert_almost_equal(actual, expected)
+
+
+def test_pairwise_distance_dim_full():
+    X, y = load_two_lead_ecg()
+    x = X[:6].reshape(2, 3, -1)
+    y = X[6:12].reshape(2, 3, -1)
+    expected = np.array(
+        [
+            [
+                [5.486831916137321, 6.6030195361586985],
+                [4.340837223002717, 6.359545576183372],
+            ],
+            [
+                [2.5050700084886945, 0.9092063468190077],
+                [5.276461266463071, 4.600410679545082],
+            ],
+            [
+                [3.607860060708199, 3.756451638398866],
+                [6.266771463173544, 7.248233439248347],
+            ],
+        ]
+    )
+
+    actual = pairwise_distance(x, y, dim="full", metric="euclidean")
+    assert_almost_equal(actual, expected)
+
+
+def test_pairwise_distance_dim_mean():
+    X, y = load_two_lead_ecg()
+    x = X[:6].reshape(2, 3, -1)
+    y = X[6:12].reshape(2, 3, -1)
+
+    expected = np.array(
+        [
+            [3.8665873284447385, 3.7562258404588573],
+            [5.294689984213111, 6.069396564992267],
+        ]
+    )
+    actual = pairwise_distance(x, y, dim="mean", metric="euclidean")
+    assert_almost_equal(actual, expected)
