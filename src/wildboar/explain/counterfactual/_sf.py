@@ -236,6 +236,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         return super()._validate_estimator(estimator, allow_3d)
 
     def fit(self, estimator, x=None, y=None):
+        self._validate_params()
         estimator = self._validate_estimator(estimator, allow_3d=True)
 
         self.cost_ = _cost_wrapper(self.cost)
