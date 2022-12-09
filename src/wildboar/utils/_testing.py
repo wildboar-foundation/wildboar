@@ -9,8 +9,9 @@ from sklearn.utils._param_validation import (
     generate_valid_param,
     make_constraint,
 )
+from sklearn.utils._testing import MinimalClassifier
 
-from ..base import BaseEstimator
+from ..base import BaseEstimator, is_explainer
 
 _DUMMY_X = np.zeros((10, 10))
 _DUMMY_X.setflags(write=False)
@@ -29,6 +30,11 @@ def assert_exhaustive_parameter_checks(estimator: BaseEstimator):
 
 def assert_parameter_checks(estimator: BaseEstimator):
     assert hasattr(estimator.__class__, "_parameter_constraints")
+    if is_explainer(estimator):
+        clf = MinimalClassifier()
+        clf.fit(_DUMMY_X, _DUMMY_Y)
+        clf.n_features_in_ = _DUMMY_X.shape[1]
+
     for param, constraints in estimator.__class__._parameter_constraints.items():
         for constraint in (make_constraint(constraint) for constraint in constraints):
             try:
@@ -41,8 +47,14 @@ def assert_parameter_checks(estimator: BaseEstimator):
             estimator_ = clone(estimator)
             estimator_.set_params(**{param: invalid_value})
             with pytest.raises(ValueError):
-                estimator_.fit(_DUMMY_X, _DUMMY_Y)
+                if is_explainer(estimator):
+                    estimator.fit(clf, _DUMMY_Y, _DUMMY_Y)
+                else:
+                    estimator_.fit(_DUMMY_X, _DUMMY_Y)
 
             estimator_ = clone(estimator)
             estimator_.set_params(**{param: valid_value})
-            estimator_.fit(_DUMMY_X, _DUMMY_Y)
+            if is_explainer(estimator):
+                estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
+            else:
+                estimator_.fit(_DUMMY_X, _DUMMY_Y)

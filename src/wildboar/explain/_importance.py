@@ -3,6 +3,7 @@
 
 import math
 import numbers
+import warnings
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 
@@ -10,14 +11,17 @@ import numpy as np
 from sklearn.metrics import check_scoring
 from sklearn.metrics._scorer import _check_multimetric_scoring, _MultimetricScorer
 from sklearn.model_selection._validation import _aggregate_score_dicts
+from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted, check_random_state, check_scalar
 
 from ..base import BaseEstimator, ExplainerMixin
 from ..distance import pairwise_subsequence_distance
 from ..transform import SAX, RandomShapeletTransform
+from ..transform._shapelet import ShapeletMixin
 from ..utils.validation import check_array, check_option
 
 try:
+    from matplotlib.axes import Axes
     from matplotlib.cm import ScalarMappable, get_cmap
     from matplotlib.pylab import subplots
 
@@ -31,6 +35,7 @@ except ModuleNotFoundError as e:
     subplots = matplotlib_missing
     MidpointNormalize = matplotlib_missing
     plot_time_domain = matplotlib_missing
+    Axes = matplotlib_missing
 
 Importance = namedtuple("Importance", ["mean", "std", "full"])
 
@@ -108,6 +113,14 @@ def _unpack_scores(orig_score, perm_score):
 
 
 class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
+
+    _parameter_constraints: dict = {
+        "scoring": [None, str, list, dict, callable],
+        "n_repeat": [Interval(numbers.Integral, 1, None, closed="left")],
+        "verbose": ["verbose"],
+        "random_state": ["random_state"],
+    }
+
     def __init__(self, *, scoring=None, n_repeat=1, verbose=0, random_state=None):
         self.scoring = scoring
         self.n_repeat = n_repeat
@@ -187,6 +200,15 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
     """
 
+    _parameter_constraints: dict = {
+        **PermuteImportance._parameter_constraints,
+        "n_intervals": [
+            StrOptions({"sqrt", "log2", "log"}, deprecated={"log"}),
+            Interval(numbers.Integral, 1, None, closed="left"),
+        ],
+        "window": [Interval(numbers.Integral, 1, None, closed="left"), None],
+    }
+
     def __init__(
         self,
         *,
@@ -194,7 +216,7 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         n_repeat=5,
         n_intervals="sqrt",
         window=None,
-        verbose=False,
+        verbose=0,
         random_state=None,
     ):
         """
@@ -211,7 +233,7 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
             - if "sqrt", the number of intervals is the square root of n_timestep.
 
-            - if "log", the number of intervals is the log2 of n_timestep.
+            - if "log2", the number of intervals is the log2 of n_timestep.
 
             - if int, exact number of intervals.
 
@@ -238,34 +260,34 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
     def _yield_components(self):
         if self.window is not None:
-            n_intervals = self.n_timesteps_in_ // check_scalar(
-                self.window,
-                "window",
-                numbers.Integral,
-                min_val=1,
-                max_val=self.n_timesteps_in_,
-            )
+            if self.window > self.n_timesteps_in_:
+                raise ValueError(
+                    f"The window parameter of {type(self).__name__} must be "
+                    "<= n_timesteps_in_"
+                )
+
+            n_intervals = self.n_timesteps_in_ // self.window
         elif self.n_intervals == "sqrt":
             n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
-        elif self.n_intervals == "log":
+        elif self.n_intervals in {"log", "log2"}:
+            if self.n_intervals == "log":
+                warnings.warn(
+                    "The value 'log' for parameter n_intervals of "
+                    f"{type(self).__name__} has been renamed to log2 in 1.2 and will "
+                    "be removed in 1.4"
+                )
+
             n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
         elif isinstance(self.n_intervals, numbers.Integral):
+            if self.n_intervals > self.n_timesteps_in_:
+                raise ValueError(
+                    f"The n_intervals parameter of {type(self).__name__} must be "
+                    "<= n_timesteps_in_"
+                )
             n_intervals = self.n_intervals
-        elif isinstance(self.n_intervals, numbers.Real):
-            check_scalar(
-                self.n_intervals,
-                "n_intervals",
-                numbers.Real,
-                min_val=0.0,
-                max_val=1.0,
-                include_boundaries="right",
-            )
-            n_intervals = math.ceil(self.n_timesteps_in_ * self.n_intervals)
         else:
-            raise ValueError(
-                "n_intervals should either be 'sqrt', 'log', float or int, got %r"
-                % self.n_intervals
-            )
+            n_intervals = math.ceil(self.n_timesteps_in_ * self.n_intervals)
+
         return _intervals(self.n_timesteps_in_, n_intervals)
 
     def _permute_component(self, X, component, random_state):
@@ -275,6 +297,7 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         return X_perm
 
     def fit(self, estimator, x, y, sample_weight=None):
+        self._validate_params()
         estimator = self._validate_estimator(estimator)
         x, y = self._validate_data(x, y, reset=False, allow_3d=False)
         random_state = check_random_state(self.random_state)
@@ -416,6 +439,12 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
 
     """
 
+    _parameter_constraints: dict = {
+        **IntervalImportance._parameter_constraints,
+        "binning": [StrOptions({"normal", "uniform"})],
+        "n_bins": [Interval(numbers.Integral, 1, None, closed="left")],
+    }
+
     def __init__(
         self,
         scoring=None,
@@ -424,9 +453,15 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         binning="normal",
         n_bins=4,
         n_repeat=1,
+        verbose=0,
         random_state=None,
     ):
-        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
+        super().__init__(
+            scoring=scoring,
+            n_repeat=n_repeat,
+            verbose=verbose,
+            random_state=random_state,
+        )
         self.n_intervals = n_intervals
         self.window = window
         self.binning = binning
@@ -471,6 +506,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         return X_perm
 
     def fit(self, estimator, X, y, sample_weight=None):
+        self._validate_params()
         estimator = self._validate_estimator(estimator)
         X, y = self._validate_data(X, y, reset=False, allow_3d=False)
         self.sax_ = SAX(
@@ -484,6 +520,11 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         random_state = check_random_state(self.random_state)
         self._fit(estimator, X, y, random_state, sample_weight=sample_weight)
         return self
+
+    def explain(self, X, y=None):
+        X = self._validate_data(X, reset=False)
+        X_sax = self.sax_.transform(X)
+        return self.importances_.mean[X_sax]
 
     def _validate_data_plot(self, x):
         if (
@@ -682,6 +723,11 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         The shapelets
     """
 
+    _parameter_constraints: dict = {
+        **PermuteImportance._parameter_constraints,
+        **ShapeletMixin._parameter_constraints,
+    }
+
     def __init__(
         self,
         scoring=None,
@@ -691,9 +737,15 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
+        verbose=0,
         random_state=None,
     ):
-        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
+        super().__init__(
+            scoring=scoring,
+            n_repeat=n_repeat,
+            verbose=verbose,
+            random_state=random_state,
+        )
         self.n_shapelets = n_shapelets
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size

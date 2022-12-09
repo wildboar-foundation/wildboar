@@ -1,9 +1,40 @@
 import numpy as np
+import pytest
 from numpy.testing import assert_almost_equal
 
+from wildboar.base import is_explainer
 from wildboar.datasets import load_two_lead_ecg
 from wildboar.explain import AmplitudeImportance, IntervalImportance, ShapeletImportance
 from wildboar.tree import ShapeletTreeClassifier
+from wildboar.utils._testing import (
+    assert_exhaustive_parameter_checks,
+    assert_parameter_checks,
+)
+
+
+@pytest.mark.parametrize(
+    "explainer",
+    [
+        IntervalImportance(),
+        AmplitudeImportance(),
+        ShapeletImportance(),
+    ],
+)
+def test_parameter_constrains(explainer):
+    assert_exhaustive_parameter_checks(explainer)
+    assert_parameter_checks(explainer)
+
+
+@pytest.mark.parametrize(
+    "explainer",
+    [
+        IntervalImportance(),
+        AmplitudeImportance(),
+        ShapeletImportance(),
+    ],
+)
+def test_is_explainer(explainer):
+    assert is_explainer(explainer)
 
 
 def test_interval_importance():
