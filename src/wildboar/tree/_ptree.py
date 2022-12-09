@@ -173,7 +173,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         "random_state": ["random_state"],
         "class_weight": [
             StrOptions({"balanced"}),
-            "array-like",
+            dict,
             None,
         ],
     }
