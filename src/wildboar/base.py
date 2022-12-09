@@ -297,7 +297,7 @@ def is_counterfactual(estimator):
     return (
         hasattr(estimator, "explain")
         and hasattr(type(estimator), "_estimator_type")
-        and type(estimator)._estimator_type == "counterfacutal"
+        and type(estimator)._estimator_type == "counterfactual"
     )
 
 
