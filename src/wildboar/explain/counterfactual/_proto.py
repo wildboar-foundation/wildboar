@@ -4,12 +4,14 @@
 import abc
 import math
 import numbers
+import warnings
 from copy import deepcopy
 from functools import partial
 
 import numpy as np
 from sklearn.neighbors import NearestNeighbors
-from sklearn.utils.validation import check_is_fitted, check_random_state, check_scalar
+from sklearn.utils._param_validation import Interval, StrOptions
+from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
@@ -20,253 +22,6 @@ from ...distance.dtw import (
     wdtw_alignment,
     wdtw_distance,
 )
-from ...utils.validation import check_option
-
-
-class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
-    """Model agnostic approach for constructing counterfactual explanations
-
-    Attributes
-    ----------
-
-    estimator_ : object
-        The estimator for which counterfactuals are computed
-
-    classes_ : ndarray
-        The classes
-
-    partitions_ : dict
-        Dictionary of classes and PrototypeSampler
-
-    target_ : TargetEvaluator
-        The target evaluator
-
-    References
-    ----------
-
-    Samsten, Isak (2020).
-        Model agnostic time series counterfactuals
-    """
-
-    def __init__(
-        self,
-        metric="euclidean",
-        *,
-        r=1.0,
-        g=0.05,
-        max_iter=100,
-        step_size=0.1,
-        n_prototypes="auto",
-        target="auto",
-        method="sample",
-        min_shapelet_size=0.0,
-        max_shapelet_size=1.0,
-        random_state=None,
-        verbose=False,
-    ):
-        """Crate a new model agnostic counterfactual explainer.
-
-        Parameters
-        ----------
-        metric : {'euclidean', 'dtw', 'wdtw'}, optional
-            The metric used to move the samples
-
-        r : float, optional
-            The warping window size, if metric='dtw' or metric='wdtw'
-
-        g : float, optional
-            Penalty control for weighted DTW, if metric='wdtw'
-
-        max_iter : int, optional
-            The maximum number of iterations
-
-        step_size : float, optional
-            The step size when moving samples toward class prototypes
-
-        n_prototypes : int, float or str, optional
-            The number of initial prototypes to sample from
-
-        target : float or str, optional
-            The target evaluation of counterfactuals:
-
-            - if 'auto' the counterfactual prediction must return the correct
-              label
-            - if float, the counterfactual prediction probability must
-              exceed target value
-
-        method : {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
-            Method for selecting prototypes
-
-            - if 'sample' a prototype is sampled among the initial prototypes
-            - if 'shapelet' a prototype shapelet is sampled among the initial
-              prototypes
-            - if 'nearest' a prototype is sampled from the closest n prototypes
-            - if 'nearest_shapelet' a prototype shapelet is sampled from the
-              closest n prototypes
-
-        min_shapelet_size : float, optional
-            Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
-
-        max_shapelet_size : float, optional
-            Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
-
-        random_state : RandomState or int, optional
-            Pseudo-random number for consistency between different runs
-        """
-        self.random_state = random_state
-        self.metric = metric
-        self.r = r
-        self.g = g
-        self.max_iter = max_iter
-        self.step_size = step_size
-        self.n_prototypes = n_prototypes
-        self.method = method
-        self.min_shapelet_size = min_shapelet_size
-        self.max_shapelet_size = max_shapelet_size
-        self.target = target
-        self.verbose = verbose
-
-    def fit(self, estimator, x, y):
-        if x is None or y is None:
-            raise ValueError("Both training samples and labels are required.")
-
-        estimator = self._validate_estimator(estimator)
-        x, y = self._validate_data(x, y, reset=False, dtype=float)
-
-        metric_params = {}
-        if self.metric in ["dtw", "wdtw"]:
-            metric_params["r"] = check_scalar(
-                self.r, "r", numbers.Real, min_val=0, max_val=1
-            )
-        if self.metric == ["wdtw"]:
-            metric_params["g"] = check_scalar(
-                self.g, "g", numbers.Real, min_val=0, include_boundaries="neither"
-            )
-
-        random_state = check_random_state(self.random_state)
-        metric_transform = check_option(_METRIC_TRANSFORM, self.metric, "metric")(
-            check_scalar(
-                self.step_size,
-                "step_size",
-                numbers.Real,
-                min_val=0,
-                max_val=1,
-                include_boundaries="right",
-            ),
-            **metric_params,
-        )
-        Sampler = check_option(_PROTOTYPE_SAMPLER, self.method, "method")
-
-        self.estimator_ = deepcopy(estimator)
-        self.classes_ = np.unique(y)
-        self.random_state_ = random_state.randint(np.iinfo(np.int32).max)
-        if self.target == "auto":
-            self.target_ = PredictEvaluator(self.estimator_)
-        else:
-            target = check_scalar(
-                self.target,
-                "target",
-                numbers.Real,
-                min_val=0,
-                max_val=1,
-                include_boundaries="right",
-            )
-            self.target_ = ProbabilityEvaluator(self.estimator_, target)
-
-        if self.method in ["shapelet", "nearest_shapelet"]:
-            min_shapelet_size = check_scalar(
-                self.min_shapelet_size,
-                "min_shapelet_size",
-                numbers.Real,
-                min_val=0,
-                max_val=self.max_shapelet_size,
-            )
-            max_shapelet_size = check_scalar(
-                self.max_shapelet_size,
-                "max_shapelet_size",
-                numbers.Real,
-                min_val=min_shapelet_size,
-                max_val=1.0,
-            )
-            method_params = {
-                "min_shapelet_size": min_shapelet_size,
-                "max_shapelet_size": max_shapelet_size,
-            }
-        else:
-            method_params = {}
-
-        self.partitions_ = {}
-        for c in self.classes_:
-            x_partition = x[y == c]
-            if self.n_prototypes == "auto":
-                n_prototypes = x_partition.shape[0]
-            elif isinstance(self.n_prototypes, numbers.Integral):
-                n_prototypes = max(1, min(self.n_prototypes, x_partition.shape[0]))
-            elif isinstance(self.n_prototypes, numbers.Real):
-                check_scalar(
-                    self.n_prototypes,
-                    "n_prototypes",
-                    numbers.Real,
-                    min_val=0,
-                    max_val=1,
-                    include_boundaries="right",
-                )
-                n_prototypes = math.ceil(self.n_prototypes * x_partition.shape[0])
-            else:
-                raise ValueError(
-                    "n_prototypes must be 'auto', int or float, got %r"
-                    % self.n_prototypes
-                )
-
-            prototype_indicies = np.arange(x_partition.shape[0])
-            random_state.shuffle(prototype_indicies)
-            prototype_indicies = prototype_indicies[:n_prototypes]
-            self.partitions_[c] = Sampler(
-                x_partition,
-                c,
-                prototype_indicies,
-                metric_transform,
-                **method_params,
-            )
-
-    def explain(self, x, y):
-        check_is_fitted(self)
-        random_state = check_random_state(self.random_state_)
-        x, y = self._validate_data(x, y, reset=False, dtype=float)
-        counterfactuals = np.empty(x.shape, dtype=x.dtype)
-        for i in range(x.shape[0]):
-            if self.verbose:
-                print(f"Computing counterfactual for the {i}th sample.")
-
-            counterfactuals[i] = self._transform_sample(
-                x[i], y[i], random_state.randint(np.iinfo(np.int32).max)
-            )
-
-        return counterfactuals
-
-    def _transform_sample(self, x, y, random_state):
-        random_state = check_random_state(random_state)
-        sampler = self.partitions_[y]
-        o = x.copy()
-        n_iter = 0
-        while not self.target_.is_counterfactual(o, y) and n_iter < self.max_iter:
-            if self.verbose and n_iter % (self.max_iter // 10) == 0:
-                print(f"Running {n_iter}/{self.max_iter}...")
-
-            o = sampler.sample_move(o, random_state)
-            n_iter += 1
-
-        if self.verbose:
-            print(f"Completed after {n_iter} iterations.")
-            if n_iter == self.max_iter:
-                print(
-                    "The counterfactual explain reached max_iter, increase step_size "
-                    "or max_iter for convergence."
-                )
-        return o
-
-    def _more_tags():
-        return {"requires_y": True}
 
 
 class TargetEvaluator(abc.ABC):
@@ -713,3 +468,237 @@ _PROTOTYPE_SAMPLER = {
     "shapelet": ShapeletPrototypeSampler,
     "nearest_shapelet": KNearestShapeletPrototypeSampler,
 }
+
+
+class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
+    """Model agnostic approach for constructing counterfactual explanations
+
+    Attributes
+    ----------
+
+    estimator_ : object
+        The estimator for which counterfactuals are computed
+
+    classes_ : ndarray
+        The classes
+
+    partitions_ : dict
+        Dictionary of classes and PrototypeSampler
+
+    target_ : TargetEvaluator
+        The target evaluator
+
+    References
+    ----------
+
+    Samsten, Isak (2020).
+        Model agnostic time series counterfactuals
+    """
+
+    _parameter_constraints: dict = {
+        "metric": [StrOptions(_METRIC_TRANSFORM.keys())],
+        "r": [None, Interval(numbers.Real, 0, 1.0, closed="both")],
+        "g": [None, Interval(numbers.Real, 0, None, closed="right")],
+        "max_iter": [Interval(numbers.Integral, 1, None, closed="left")],
+        "step_size": [Interval(numbers.Integral, 0, 1, closed="right")],
+        "n_prototypes": [
+            StrOptions({"auto"}),
+            Interval(numbers.Integral, 1, None, closed="left"),
+            Interval(numbers.Real, 0, 1, closed="right"),
+        ],
+        "target": [
+            StrOptions({"predict", "auto"}, deprecated={"auto"}),
+            Interval(numbers.Real, 0.5, 1, closed="right"),
+        ],
+        "method": [StrOptions(_PROTOTYPE_SAMPLER.keys())],
+        "min_shapelet_size": [Interval(numbers.Real, 0, 1, closed="left")],
+        "max_shapelet_size": [Interval(numbers.Real, 0, 1, closed="right")],
+        "random_state": ["random_state"],
+        "verbose": ["verbose"],
+    }
+
+    def __init__(
+        self,
+        metric="euclidean",
+        *,
+        r=1.0,
+        g=0.05,
+        max_iter=100,
+        step_size=0.1,
+        n_prototypes="auto",
+        target="auto",
+        method="sample",
+        min_shapelet_size=0.0,
+        max_shapelet_size=1.0,
+        random_state=None,
+        verbose=False,
+    ):
+        """Crate a new model agnostic counterfactual explainer.
+
+        Parameters
+        ----------
+        metric : {'euclidean', 'dtw', 'wdtw'}, optional
+            The metric used to move the samples
+
+        r : float, optional
+            The warping window size, if metric='dtw' or metric='wdtw'
+
+        g : float, optional
+            Penalty control for weighted DTW, if metric='wdtw'
+
+        max_iter : int, optional
+            The maximum number of iterations
+
+        step_size : float, optional
+            The step size when moving samples toward class prototypes
+
+        n_prototypes : int, float or str, optional
+            The number of initial prototypes to sample from
+
+        target : float or {'predict'}, optional
+            The target evaluation of counterfactuals:
+
+            - if 'predict' the counterfactual prediction must return the correct
+              label
+            - if float, the counterfactual prediction probability must
+              exceed target value
+
+        method : {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
+            Method for selecting prototypes
+
+            - if 'sample' a prototype is sampled among the initial prototypes
+            - if 'shapelet' a prototype shapelet is sampled among the initial
+              prototypes
+            - if 'nearest' a prototype is sampled from the closest n prototypes
+            - if 'nearest_shapelet' a prototype shapelet is sampled from the
+              closest n prototypes
+
+        min_shapelet_size : float, optional
+            Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
+
+        max_shapelet_size : float, optional
+            Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
+
+        random_state : RandomState or int, optional
+            Pseudo-random number for consistency between different runs
+        """
+        self.random_state = random_state
+        self.metric = metric
+        self.r = r
+        self.g = g
+        self.max_iter = max_iter
+        self.step_size = step_size
+        self.n_prototypes = n_prototypes
+        self.method = method
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
+        self.target = target
+        self.verbose = verbose
+
+    def fit(self, estimator, x, y):
+        if x is None or y is None:
+            raise ValueError("Both training samples and labels are required.")
+
+        estimator = self._validate_estimator(estimator)
+        x, y = self._validate_data(x, y, reset=False, dtype=float)
+
+        metric_params = {}
+        if self.metric in ["dtw", "wdtw"]:
+            metric_params["r"] = self.r
+        if self.metric == ["wdtw"]:
+            metric_params["g"] = self.g
+
+        random_state = check_random_state(self.random_state)
+        metric_transform = _METRIC_TRANSFORM[self.metric](
+            self.step_size,
+            **metric_params,
+        )
+        Sampler = _PROTOTYPE_SAMPLER[self.method]
+
+        self.estimator_ = deepcopy(estimator)
+        self.classes_ = np.unique(y)
+        self.random_state_ = random_state.randint(np.iinfo(np.int32).max)
+        if self.target in {"auto", "predict"}:
+            if self.target == "auto":
+                warnings.warn(
+                    f"The parameter value 'auto' for target of {type(self).__name__} "
+                    "has been renamed to 'predict' in 1.2 and will be removed in 1.4.",
+                    DeprecationWarning,
+                )
+            self.target_ = PredictEvaluator(self.estimator_)
+        else:
+            self.target_ = ProbabilityEvaluator(self.estimator_, self.target)
+
+        if self.method in ["shapelet", "nearest_shapelet"]:
+            if self.min_shapelet_size > self.max_shapelet_size:
+                raise ValueError(
+                    f"The parameter min_shapelet_size of {type(self).__name__} must be "
+                    "<= max_shapelet_size."
+                )
+
+            method_params = {
+                "min_shapelet_size": self.min_shapelet_size,
+                "max_shapelet_size": self.max_shapelet_size,
+            }
+        else:
+            method_params = {}
+
+        self.partitions_ = {}
+        for c in self.classes_:
+            x_partition = x[y == c]
+            if self.n_prototypes == "auto":
+                n_prototypes = x_partition.shape[0]
+            elif isinstance(self.n_prototypes, numbers.Integral):
+                n_prototypes = max(1, min(self.n_prototypes, x_partition.shape[0]))
+            else:
+                n_prototypes = math.ceil(self.n_prototypes * x_partition.shape[0])
+
+            prototype_indicies = np.arange(x_partition.shape[0])
+            random_state.shuffle(prototype_indicies)
+            prototype_indicies = prototype_indicies[:n_prototypes]
+            self.partitions_[c] = Sampler(
+                x_partition,
+                c,
+                prototype_indicies,
+                metric_transform,
+                **method_params,
+            )
+
+    def explain(self, x, y):
+        check_is_fitted(self)
+        random_state = check_random_state(self.random_state_)
+        x, y = self._validate_data(x, y, reset=False, dtype=float)
+        counterfactuals = np.empty(x.shape, dtype=x.dtype)
+        for i in range(x.shape[0]):
+            if self.verbose:
+                print(f"Computing counterfactual for the {i}th sample.")
+
+            counterfactuals[i] = self._transform_sample(
+                x[i], y[i], random_state.randint(np.iinfo(np.int32).max)
+            )
+
+        return counterfactuals
+
+    def _transform_sample(self, x, y, random_state):
+        random_state = check_random_state(random_state)
+        sampler = self.partitions_[y]
+        o = x.copy()
+        n_iter = 0
+        while not self.target_.is_counterfactual(o, y) and n_iter < self.max_iter:
+            if self.verbose and n_iter % (self.max_iter // 10) == 0:
+                print(f"Running {n_iter}/{self.max_iter}...")
+
+            o = sampler.sample_move(o, random_state)
+            n_iter += 1
+
+        if self.verbose:
+            print(f"Completed after {n_iter} iterations.")
+            if n_iter == self.max_iter:
+                print(
+                    "The counterfactual explain reached max_iter, increase step_size "
+                    "or max_iter for convergence."
+                )
+        return o
+
+    def _more_tags():
+        return {"requires_y": True}
