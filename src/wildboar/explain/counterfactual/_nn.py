@@ -33,7 +33,10 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
 
     def _validate_estimator(self, estimator, allow_3d=False):
         if not isinstance(estimator, KNeighborsClassifier):
-            raise ValueError("not a valid estimator")
+            raise ValueError(
+                "estimator must be KNeighborsClassifier, not %r"
+                % type(estimator).__qualname__
+            )
 
         if estimator.metric == "euclidean" or (
             estimator.metric == "minkowski" and estimator.p == 2
