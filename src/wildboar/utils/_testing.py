@@ -28,7 +28,7 @@ def assert_exhaustive_parameter_checks(estimator: BaseEstimator):
     )
 
 
-def assert_parameter_checks(estimator: BaseEstimator):
+def assert_parameter_checks(estimator: BaseEstimator, skip=None):
     assert hasattr(estimator.__class__, "_parameter_constraints")
     if is_explainer(estimator):
         clf = MinimalClassifier()
@@ -36,25 +36,37 @@ def assert_parameter_checks(estimator: BaseEstimator):
         clf.n_features_in_ = _DUMMY_X.shape[1]
 
     for param, constraints in estimator.__class__._parameter_constraints.items():
+        if skip is not None and param in skip:
+            continue
+
         for constraint in (make_constraint(constraint) for constraint in constraints):
             try:
                 invalid_value = generate_invalid_param_val(constraint)
             except NotImplementedError:
-                continue
+                invalid_value = None
+
+            if invalid_value is not None:
+                estimator_ = clone(estimator)
+                estimator_.set_params(**{param: invalid_value})
+                with pytest.raises(ValueError):
+                    if is_explainer(estimator):
+                        try:
+                            estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
+                        except ValueError as e:
+                            if "estimator must be " not in str(e):
+                                raise e
+                    else:
+                        estimator_.fit(_DUMMY_X, _DUMMY_Y)
 
             valid_value = generate_valid_param(constraint)
-
-            estimator_ = clone(estimator)
-            estimator_.set_params(**{param: invalid_value})
-            with pytest.raises(ValueError):
-                if is_explainer(estimator):
-                    estimator.fit(clf, _DUMMY_Y, _DUMMY_Y)
-                else:
-                    estimator_.fit(_DUMMY_X, _DUMMY_Y)
-
             estimator_ = clone(estimator)
             estimator_.set_params(**{param: valid_value})
             if is_explainer(estimator):
-                estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
+                try:
+                    estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
+                except ValueError as e:
+                    if "estimator must be " not in str(e):
+                        raise e
+
             else:
                 estimator_.fit(_DUMMY_X, _DUMMY_Y)

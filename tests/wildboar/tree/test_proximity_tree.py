@@ -19,7 +19,7 @@ def test_check_estimator():
         ignore=["check_sample_weights_invariance"],
     )
     assert_exhaustive_parameter_checks(ProximityTreeClassifier())
-    assert_parameter_checks(ProximityTreeClassifier())
+    assert_parameter_checks(ProximityTreeClassifier(), skip="metric_factories")
 
 
 def test_proximity_tree():

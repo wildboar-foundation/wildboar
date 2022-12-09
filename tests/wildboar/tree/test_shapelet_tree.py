@@ -30,7 +30,7 @@ from wildboar.utils.estimator_checks import check_estimator
 )
 def test_check_estimator(clf):
     assert_exhaustive_parameter_checks(clf)
-    assert_parameter_checks(clf)
+    assert_parameter_checks(clf, skip=["alpha"])
     check_estimator(clf)
 
 
