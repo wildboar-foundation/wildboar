@@ -6,17 +6,12 @@ import numbers
 from copy import deepcopy
 
 import numpy as np
-from sklearn.metrics.pairwise import (
-    paired_cosine_distances,
-    paired_euclidean_distances,
-    paired_manhattan_distances,
-)
 from sklearn.utils import check_random_state, resample
 from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
-from ...distance import pairwise_subsequence_distance
+from ...distance import paired_distance, pairwise_subsequence_distance
 from ...ensemble._ensemble import BaseShapeletForestClassifier
 
 
@@ -114,27 +109,25 @@ class PredictionPaths:
         return self._paths[item]
 
 
-def _cost_wrapper(cost):
+def _cost_wrapper(metric):
     def f(x, y, aggregation=np.mean):
-        if x.ndim == 1:
-            return cost(x.reshape(1, -1), y.reshape(1, -1))
-        if x.ndim == 2:
-            return cost(x, y)
-        elif x.ndim == 3:
+        if x.ndim == 1 and y.ndim == 1:
+            return paired_distance(x.reshape(1, -1), y.reshape(1, -1), metric=metric)
+        elif x.ndim == 2 and y.ndim == 2:
+            return paired_distance(x, y, metric=metric)
+        elif x.ndim == 3 and y.ndim == 3:
             return aggregation(
-                [cost(x[:, i, :], y[:, i, :]) for i in range(x.shape[1])], axis=0
+                [
+                    paired_distance(x, y, metric=metric, dim=i)
+                    for i in range(x.shape[1])
+                ],
+                axis=0,
             )
         else:
             raise ValueError("invalid dim")
 
     return f
 
-
-_COST = {
-    "euclidean": _cost_wrapper(paired_euclidean_distances),
-    "cosine": _cost_wrapper(paired_cosine_distances),
-    "manhattan": _cost_wrapper(paired_manhattan_distances),
-}
 
 _AGGREGATION = {
     "median": np.median,
@@ -172,7 +165,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
     """
 
     _parameter_constraints: dict = {
-        "cost": [StrOptions(_COST.keys()), callable],
+        "cost": [StrOptions({"euclidean", "cosine", "manhattan"}), callable],
         "aggregation": [StrOptions(_AGGREGATION.keys()), callable],
         "epsilon": [Interval(numbers.Real, 0, None, closed="right")],
         "batch_size": [Interval(numbers.Real, 0, 1, closed="right")],
@@ -245,11 +238,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
     def fit(self, estimator, x=None, y=None):
         estimator = self._validate_estimator(estimator, allow_3d=True)
 
-        if isinstance(self.cost, str):
-            self.cost_ = _COST[self.cost]
-        else:
-            self.cost_ = _cost_wrapper(self.cost)
-
+        self.cost_ = _cost_wrapper(self.cost)
         if isinstance(self.aggregation, str):
             self.aggregation_ = _AGGREGATION[self.aggregation]
         else:
