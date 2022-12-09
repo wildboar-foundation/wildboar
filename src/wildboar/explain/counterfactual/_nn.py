@@ -26,6 +26,8 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
         Knowledge and Information Systems, 62(5), 1671-1700.
     """
 
+    _parameter_constraints: dict = {"random_state": ["random_state"]}
+
     def __init__(self, random_state=None):
         self.random_state = random_state
 
@@ -44,6 +46,7 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
             )
 
     def fit(self, estimator, x=None, y=None):
+        self._validate_params()
         estimator = self._validate_estimator(estimator)
         x = estimator._fit_X
         y = estimator._y
