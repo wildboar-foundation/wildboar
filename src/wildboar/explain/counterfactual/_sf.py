@@ -12,12 +12,12 @@ from sklearn.metrics.pairwise import (
     paired_manhattan_distances,
 )
 from sklearn.utils import check_random_state, resample
-from sklearn.utils.validation import check_is_fitted, check_scalar
+from sklearn.utils._param_validation import Interval, StrOptions
+from sklearn.utils.validation import check_is_fitted
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 from ...distance import pairwise_subsequence_distance
 from ...ensemble._ensemble import BaseShapeletForestClassifier
-from ...utils.validation import check_option
 
 
 def _min_euclidean_distance(shapelet, x):
@@ -171,6 +171,16 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
     """
 
+    _parameter_constraints: dict = {
+        "cost": [StrOptions(_COST.keys()), callable],
+        "aggregation": [StrOptions(_AGGREGATION.keys()), callable],
+        "epsilon": [Interval(numbers.Real, 0, None, closed="right")],
+        "batch_size": [Interval(numbers.Real, 0, 1, closed="right")],
+        "max_paths": [Interval(numbers.Real, 0, 1, closed="right")],
+        "verbose": ["verbose"],
+        "random_state": ["random_state"],
+    }
+
     def __init__(
         self,
         *,
@@ -186,7 +196,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
         Parameters
         ----------
-        cost : {"euclidean", "cosine", "manhattan"}, optional
+        cost : {"euclidean", "cosine", "manhattan"} or callable, optional
             The cost function to determine the goodness of counterfactual
 
         aggregation : callable, optional
@@ -236,25 +246,14 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         estimator = self._validate_estimator(estimator, allow_3d=True)
 
         if isinstance(self.cost, str):
-            self.cost_ = check_option(_COST, self.cost, "cost")
-        elif callable(self.cost):
-            self.cost_ = _cost_wrapper(self.cost)
+            self.cost_ = _COST[self.cost]
         else:
-            raise TypeError(
-                "cost must be str or callable, not %r." % type(self.cost).__qualname__
-            )
+            self.cost_ = _cost_wrapper(self.cost)
 
         if isinstance(self.aggregation, str):
-            self.aggregation_ = check_option(
-                _AGGREGATION, self.aggregation, "aggregation"
-            )
-        elif callable(self.aggregation):
-            self.aggregation_ = self.aggregation
+            self.aggregation_ = _AGGREGATION[self.aggregation]
         else:
-            raise TypeError(
-                "aggregation must be str or callable, not %r"
-                % type(self.aggregation).__qualname__
-            )
+            self.aggregation_ = self.aggregation
 
         self.estimator_ = deepcopy(estimator)
         self.paths_ = PredictionPaths(estimator.classes_)
@@ -262,38 +261,15 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         for base_estimator in self.estimator_.estimators_:
             self.paths_._append(base_estimator.tree_)
 
-        max_paths = check_scalar(
-            self.max_paths,
-            "max_paths",
-            numbers.Real,
-            min_val=0,
-            max_val=1,
-            include_boundaries="right",
-        )
-        self.paths_.prune(max_paths, check_random_state(self.random_state))
+        self.epsilon_ = self.epsilon
+        self.batch_size_ = self.batch_size
+        self.paths_.prune(self.max_paths, check_random_state(self.random_state))
         return self
 
     def explain(self, x, y):
         check_is_fitted(self)
         x, y = self._validate_data(x, y, allow_3d=True, reset=False, dtype=float)
         counterfactuals = np.empty(x.shape)
-
-        batch_size = check_scalar(
-            self.batch_size,
-            "batch_size",
-            numbers.Real,
-            min_val=0,
-            max_val=1,
-            include_boundaries="right",
-        )
-
-        epsilon = check_scalar(
-            self.epsilon,
-            "epsilon",
-            numbers.Real,
-            min_val=0,
-            include_boundaries="neither",
-        )
 
         for i in range(x.shape[0]):
             if self.verbose:
@@ -305,7 +281,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
             if y[i] not in self.paths_:
                 raise ValueError("unknown label, got %r" % y)
 
-            t = self._candidates(x[i], y[i], epsilon, batch_size, self.paths_[y[i]])
+            t = self._candidates(x[i], y[i])
             if t is not None:
                 counterfactuals[i] = t
             else:
@@ -313,11 +289,12 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
         return counterfactuals
 
-    def _candidates(self, x, y, epsilon, batch_size, prediction_paths):
+    def _candidates(self, x, y):
+        prediction_paths = self.paths_[y]
         n_counterfactuals = len(prediction_paths)
         counterfactuals = np.empty((n_counterfactuals,) + x.shape)
         for i, path in enumerate(prediction_paths):
-            counterfactuals[i] = _path_transform(x.copy(), path, epsilon)
+            counterfactuals[i] = _path_transform(x.copy(), path, self.epsilon_)
 
         # Note that the cost is ordered in increasing order; hence, if a
         # conversion is successful there can exist no other successful
@@ -327,7 +304,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
             self.cost_(counterfactuals, x, aggregation=self.aggregation_)
         )
 
-        batch_size = math.ceil(n_counterfactuals * batch_size)
+        batch_size = math.ceil(n_counterfactuals * self.batch_size_)
         for i in range(0, n_counterfactuals, batch_size):
             batch_cost = cost_sort[i : min(n_counterfactuals, i + batch_size)]
             batch_counterfactuals = counterfactuals[batch_cost]

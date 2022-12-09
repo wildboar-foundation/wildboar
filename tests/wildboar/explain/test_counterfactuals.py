@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
 from sklearn.neighbors import KNeighborsClassifier
 
+from wildboar.base import is_counterfactual
 from wildboar.datasets import load_dataset
 from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.explain.counterfactual import (
@@ -16,11 +17,44 @@ from wildboar.explain.counterfactual import (
     ShapeletForestCounterfactual,
     counterfactuals,
 )
+from wildboar.utils._testing import (
+    assert_exhaustive_parameter_checks,
+    assert_parameter_checks,
+)
 from wildboar.utils.estimator_checks import check_estimator
 
 
-def test_estimator_check_shapelet_forest_counterfactual():
-    check_estimator(ShapeletForestCounterfactual(), skip_scikit=True)
+@pytest.mark.parametrize(
+    "estimator",
+    [ShapeletForestClassifier(), KNeighborsCounterfactual(), PrototypeCounterfactual()],
+)
+def test_estimator_check_shapelet_forest_counterfactual(estimator):
+    check_estimator(estimator, skip_scikit=True)
+
+
+@pytest.mark.parametrize(
+    "estimator",
+    [
+        KNeighborsCounterfactual(),
+        PrototypeCounterfactual(),
+        ShapeletForestCounterfactual(),
+    ],
+)
+def test_parameter_constraints(estimator):
+    assert_exhaustive_parameter_checks(estimator)
+    assert_parameter_checks(estimator)
+
+
+@pytest.mark.parametrize(
+    "estimator",
+    [
+        ShapeletForestCounterfactual(),
+        KNeighborsCounterfactual(),
+        PrototypeCounterfactual(),
+    ],
+)
+def test_is_counterfactual(estimator):
+    assert is_counterfactual(estimator)
 
 
 @pytest.mark.parametrize(
