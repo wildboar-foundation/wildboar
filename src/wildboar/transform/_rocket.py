@@ -97,11 +97,10 @@ class RocketTransform(BaseFeatureEngineerTransform):
             max_size = math.ceil(self.n_timesteps_in_ * max_size)
             min_size = math.ceil(self.n_timesteps_in_ * min_size)
             if min_size < 2:
-                # TODO(1.2): Break backward
-                if self.n_timesteps_in_ < 2:
-                    min_size = 1
-                else:
-                    min_size = 2
+                min_size = 2
+            if max_size < 3:
+                max_size = 3
+
             kernel_size = np.arange(min_size, max_size)
         elif _is_arraylike(self.kernel_size):
             kernel_size = self.kernel_size
