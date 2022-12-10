@@ -91,7 +91,6 @@ class SAX(TransformerMixin, BaseEstimator):
             Interval(numbers.Integral, 1, None, closed="left"),
             Interval(numbers.Real, 0, 1, closed="right"),
             StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
-            callable,
         ],
         "window": [None, Interval(numbers.Integral, 1, None, closed="left")],
         "n_bins": [Interval(numbers.Integral, 1, None, closed="left")],
@@ -206,7 +205,6 @@ class PAA(TransformerMixin, BaseEstimator):
             Interval(numbers.Integral, 1, None, closed="left"),
             Interval(numbers.Real, 0, 1, closed="right"),
             StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
-            callable,
         ],
         "window": [None, Interval(numbers.Integral, 1, None, closed="left")],
     }

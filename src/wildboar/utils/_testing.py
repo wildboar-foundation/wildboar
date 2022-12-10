@@ -5,6 +5,7 @@ import numpy as np
 import pytest
 from sklearn import clone
 from sklearn.utils._param_validation import (
+    InvalidParameterError,
     generate_invalid_param_val,
     generate_valid_param,
     make_constraint,
@@ -48,25 +49,37 @@ def assert_parameter_checks(estimator: BaseEstimator, skip=None):
             if invalid_value is not None:
                 estimator_ = clone(estimator)
                 estimator_.set_params(**{param: invalid_value})
-                with pytest.raises(ValueError):
+                with pytest.raises(InvalidParameterError):
                     if is_explainer(estimator):
                         try:
                             estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
-                        except ValueError as e:
-                            if "estimator must be " not in str(e):
+                        except Exception as e:
+                            if isinstance(e, InvalidParameterError):
                                 raise e
                     else:
-                        estimator_.fit(_DUMMY_X, _DUMMY_Y)
+                        try:
+                            estimator_.fit(_DUMMY_X, _DUMMY_Y)
+                        except Exception as e:
+                            if isinstance(e, InvalidParameterError):
+                                raise e
 
-            valid_value = generate_valid_param(constraint)
+            try:
+                valid_value = generate_valid_param(constraint)
+            except Exception:
+                continue
+
             estimator_ = clone(estimator)
             estimator_.set_params(**{param: valid_value})
             if is_explainer(estimator):
                 try:
                     estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
-                except ValueError as e:
-                    if "estimator must be " not in str(e):
+                except Exception as e:
+                    if isinstance(e, InvalidParameterError):
                         raise e
 
             else:
-                estimator_.fit(_DUMMY_X, _DUMMY_Y)
+                try:
+                    estimator_.fit(_DUMMY_X, _DUMMY_Y)
+                except Exception as e:
+                    if isinstance(e, InvalidParameterError):
+                        raise e

@@ -36,7 +36,6 @@ class IntervalMixin:
             Interval(numbers.Integral, 1, None, closed="left"),
             Interval(numbers.Real, 0, 1, closed="right"),
             StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
-            callable,
         ],
         "intervals": [
             StrOptions({"fixed", "sample", "random"}),

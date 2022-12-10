@@ -500,7 +500,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         "r": [None, Interval(numbers.Real, 0, 1.0, closed="both")],
         "g": [None, Interval(numbers.Real, 0, None, closed="right")],
         "max_iter": [Interval(numbers.Integral, 1, None, closed="left")],
-        "step_size": [Interval(numbers.Integral, 0, 1, closed="right")],
+        "step_size": [Interval(numbers.Real, 0, 1, closed="right")],
         "n_prototypes": [
             StrOptions({"auto"}),
             Interval(numbers.Integral, 1, None, closed="left"),
@@ -599,6 +599,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         if x is None or y is None:
             raise ValueError("Both training samples and labels are required.")
 
+        self._validate_params()
         estimator = self._validate_estimator(estimator)
         x, y = self._validate_data(x, y, reset=False, dtype=float)
 

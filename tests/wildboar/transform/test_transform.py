@@ -19,18 +19,18 @@ from wildboar.utils.estimator_checks import check_estimator
 
 
 @pytest.mark.parametrize(
-    "estimator",
+    "estimator, skip",
     [
-        IntervalTransform(),
-        RandomShapeletTransform(),
-        RocketTransform(),
-        MatrixProfileTransform(),
-        PivotTransform(),
-        SAX(),
-        PAA(),
+        (IntervalTransform(), []),
+        (RandomShapeletTransform(), []),
+        (RocketTransform(), ["max_size"]),
+        (MatrixProfileTransform(), []),
+        (PivotTransform(), ["metric_factories"]),
+        (SAX(), []),
+        (PAA(), []),
     ],
 )
-def test_estimator_checks(estimator):
+def test_estimator_checks(estimator, skip):
     check_estimator(estimator)
     assert_exhaustive_parameter_checks(estimator)
-    assert_parameter_checks(estimator)
+    assert_parameter_checks(estimator, skip=skip)

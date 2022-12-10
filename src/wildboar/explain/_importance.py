@@ -783,6 +783,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         return X_perm
 
     def fit(self, estimator, X, y, sample_weight=None):
+        self._validate_params()
         self._validate_estimator(estimator)
         X, y = self._validate_data(X, y, reset=False)
 

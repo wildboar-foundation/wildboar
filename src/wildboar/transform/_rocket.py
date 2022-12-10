@@ -62,22 +62,24 @@ class RocketMixin:
             max_size = int(self.n_timesteps_in_ * max_size)
             min_size = int(self.n_timesteps_in_ * min_size)
             if min_size < 2:
-                if self.n_timesteps_in_ < 2:
-                    min_size = 1
-                else:
-                    min_size = 2
+                min_size = 2
+            if max_size < 3:
+                max_size = 3
+
             kernel_size = np.arange(min_size, max_size)
         elif self.kernel_size is None:
-            kernel_size = [7, 11, 13]
+            kernel_size = np.array([7, 11, 13], dtype=int)
         else:
-            kernel_size = self.kernel_size
+            kernel_size = np.array(self.kernel_size, dtype=int)
+            if np.min(kernel_size) < 2:
+                raise ValueError("The minimum kernel size is 2.")
 
         WeightSampler = _SAMPLING_METHOD[self.sampling]
         sampling_params = {} if self.sampling_params is None else self.sampling_params
         return RocketFeatureEngineer(
             self.n_kernels,
             WeightSampler(**sampling_params),
-            np.array(kernel_size, dtype=int),
+            kernel_size,
             self.bias_prob,
             self.padding_prob,
             self.normalize_prob,
