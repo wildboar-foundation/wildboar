@@ -65,7 +65,7 @@ Classes
        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
 
    :param cost: The cost function to determine the goodness of counterfactual
-   :type cost: {"euclidean", "cosine", "manhattan"}, optional
+   :type cost: {"euclidean", "cosine", "manhattan"} or callable, optional
    :param aggregation: The aggregation function for the cost of multivariate counterfactuals.
    :type aggregation: callable, optional
    :param epsilon: Control the degree of change from the decision threshold

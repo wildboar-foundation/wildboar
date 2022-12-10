@@ -278,11 +278,11 @@ Classes
    :type n_prototypes: int, float or str, optional
    :param target: The target evaluation of counterfactuals:
 
-                  - if 'auto' the counterfactual prediction must return the correct
+                  - if 'predict' the counterfactual prediction must return the correct
                     label
                   - if float, the counterfactual prediction probability must
                     exceed target value
-   :type target: float or str, optional
+   :type target: float or {'predict'}, optional
    :param method: Method for selecting prototypes
 
                   - if 'sample' a prototype is sampled among the initial prototypes

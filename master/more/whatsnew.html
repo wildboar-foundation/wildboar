@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Developer’s guide" href="contributing.html" /><link rel="prev" title="More" href="../more.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>What’s new - Wildboar 1.1.1.dev219+g0d5c612c7 documentation</title>
+        <title>What’s new - Wildboar 1.1.1.dev232+ge9dccfe2b documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev219+g0d5c612c7 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev232+ge9dccfe2b documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +166,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>1.1.1.dev219+g0d5c612c7</small></span>
+        <small>1.1.1.dev232+ge9dccfe2b</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -300,7 +300,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><span class="reference internal">1.1.1.dev219+g0d5c612c7</span></li>
+                <li class="toctree-l2"><span class="reference internal">1.1.1.dev232+ge9dccfe2b</span></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../1.1.X/more/whatsnew.html">1.1.1</a></li>
             </ul>
@@ -361,6 +361,22 @@ future; or a feature will be removed in the future.</p></li>
 <h3>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">#</a></h3>
 <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
 <div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../wildboar/distance/index.html#module-wildboar.distance" title="wildboar.distance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Improve support for 3darrays in <a class="reference internal" href="../wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.pairwise_distance()</span></code></a>
+and <a class="reference internal" href="../wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.paired_distance()</span></code></a>. By setting <code class="docutils literal notranslate"><span class="pre">dim='mean'</span></code>, the mean distance
+over all dimensions are computed and by setting <code class="docutils literal notranslate"><span class="pre">dim='full'</span></code> the distance over
+all dimensions are returned. The default value for <code class="docutils literal notranslate"><span class="pre">dim</span></code> will change to “mean”
+in 1.3. For 3darrays, we issue a deprecation warning for the current default value.</p></li>
+</ul>
+</div>
+</div>
+</div>
 <div class="sd-col sd-d-flex-row docutils">
 <div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
 <div class="sd-card-header docutils">

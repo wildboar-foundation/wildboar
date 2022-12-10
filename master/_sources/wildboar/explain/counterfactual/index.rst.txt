@@ -105,11 +105,11 @@ Functions
    :type n_prototypes: int, float or str, optional
    :param target: The target evaluation of counterfactuals:
 
-                  - if 'auto' the counterfactual prediction must return the correct
+                  - if 'predict' the counterfactual prediction must return the correct
                     label
                   - if float, the counterfactual prediction probability must
                     exceed target value
-   :type target: float or str, optional
+   :type target: float or {'predict'}, optional
    :param method: Method for selecting prototypes
 
                   - if 'sample' a prototype is sampled among the initial prototypes
@@ -166,7 +166,7 @@ Functions
        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
 
    :param cost: The cost function to determine the goodness of counterfactual
-   :type cost: {"euclidean", "cosine", "manhattan"}, optional
+   :type cost: {"euclidean", "cosine", "manhattan"} or callable, optional
    :param aggregation: The aggregation function for the cost of multivariate counterfactuals.
    :type aggregation: callable, optional
    :param epsilon: Control the degree of change from the decision threshold

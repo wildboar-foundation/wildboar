@@ -23,6 +23,6 @@ Functions
 .. py:function:: assert_exhaustive_parameter_checks(estimator: wildboar.base.BaseEstimator)
 
 
-.. py:function:: assert_parameter_checks(estimator: wildboar.base.BaseEstimator)
+.. py:function:: assert_parameter_checks(estimator: wildboar.base.BaseEstimator, skip=None)
 
 

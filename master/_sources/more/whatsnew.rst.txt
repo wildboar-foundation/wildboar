@@ -30,6 +30,17 @@ Changelog
 
   .. grid-item-card:: 
     
+     :mod:`wildboar.distance`
+     ^^^
+
+     - |Enhancement| Improve support for 3darrays in :func:`distance.pairwise_distance`
+       and :func:`distance.paired_distance`. By setting ``dim='mean'``, the mean distance
+       over all dimensions are computed and by setting ``dim='full'`` the distance over
+       all dimensions are returned. The default value for ``dim`` will change to "mean"
+       in 1.3. For 3darrays, we issue a deprecation warning for the current default value.
+
+  .. grid-item-card:: 
+    
      :mod:`wildboar.ensemble`
      ^^^
      

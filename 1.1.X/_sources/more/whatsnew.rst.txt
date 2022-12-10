@@ -16,13 +16,21 @@ Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 
 Version 1.1.2
 =============
 
-  .. grid-item-card::   
-    
+
+  .. grid-item-card::
+
      :mod:`wildboar.ensemble`
-     ^^^ 
+     ^^^
      
      - |Fix| Fix a bug where ``sampling`` was incorrectly set for :class:`ensemble.RocketForestClassifier`
        and :class:`ensemble.RocketForestRegressor`.
+
+  .. grid-item-card::
+
+     :mod:`wildboar.transform`
+     ^^^
+
+     - |Fix| Correctly set the minimum kernel size to 2 in :class:`tree.RocketTransform`.
 
   .. grid-item-card::
 
@@ -30,6 +38,7 @@ Version 1.1.2
       ^^^
 
       - |Fix| Correctly set ``min_samples_leaf`` in :class:`tree.RocketTreeClassifier`.
+      - |Fix| Correctly set the minimum kernel size to 2 in :class:`tree.RocketTreeClassifier`.
 
 Version 1.1.1
 =============
