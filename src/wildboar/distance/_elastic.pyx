@@ -1949,7 +1949,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
@@ -2190,7 +2190,7 @@ cdef class LcssDistanceMeasure(DistanceMeasure):
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
@@ -2317,7 +2317,7 @@ cdef class ErpDistanceMeasure(DistanceMeasure):
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
@@ -2398,7 +2398,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
@@ -2514,7 +2514,7 @@ cdef class MsmDistanceMeasure(DistanceMeasure):
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
@@ -2593,7 +2593,7 @@ cdef class TweDistanceMeasure(DistanceMeasure):
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
         self.__free()
-        cdef Py_ssize_t n_timestep = max(X.shape[2], X.shape[2])
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
