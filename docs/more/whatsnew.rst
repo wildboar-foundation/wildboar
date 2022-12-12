@@ -84,6 +84,8 @@ Changelog
      :mod:`wildboar.tree`
      ^^^
      
+     - |Fix| Correctly use MSM distance measure in :class:`tree.ProximityTreeClassifier`.
+     
      - |Fix| Correctly set ``min_samples_leaf`` in :class:`tree.RocketTreeClassifier` and :class:`RocketTreeRegressor`.
 
      - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.

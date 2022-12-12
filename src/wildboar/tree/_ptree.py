@@ -75,7 +75,7 @@ def lcss_factory(min_r=0.0, max_r=0.25, min_threshold=0, max_threshold=1.0, n=10
 
 
 def msm_factory(min_c=0.01, max_c=100, n=10):
-    return [_DISTANCE_MEASURE["lcss"](c=c) for c in np.linspace(min_c, max_c, n)]
+    return [_DISTANCE_MEASURE["msm"](c=c) for c in np.linspace(min_c, max_c, n)]
 
 
 def twe_factory(
