@@ -1140,7 +1140,7 @@ cdef double edr_distance(
     const double *Y,
     Py_ssize_t y_length,
     Py_ssize_t r,
-    double threshold,
+    double epsilon,
     double *cost,
     double *cost_prev,
     double *weight_vector,
@@ -1178,7 +1178,7 @@ cdef double edr_distance(
             if weight_vector != NULL:
                 w = weight_vector[labs(i - j)]
 
-            cost[j] = min(y + (0 if v < threshold else 1), x + 1, z + 1)
+            cost[j] = min(y + (0 if v < epsilon else 1), x + 1, z + 1)
 
         if j_stop < y_length:
             cost[j_stop] = 0
@@ -1186,6 +1186,90 @@ cdef double edr_distance(
         cost, cost_prev = cost_prev, cost
 
     return cost_prev[y_length - 1] / max(x_length, y_length)
+
+
+cdef double edr_subsequence_distance(
+    const double *S,
+    Py_ssize_t s_length,
+    const double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double epsilon,
+    double *cost,
+    double *cost_prev,
+    double *weight_vector,
+    Py_ssize_t *index,
+) nogil:
+    cdef double dist = 0
+    cdef double min_dist = INFINITY
+
+    cdef Py_ssize_t i
+    for i in range(t_length - s_length + 1):
+        dist = edr_distance(
+            S,
+            s_length,
+            T + i,
+            s_length,
+            r, 
+            epsilon,
+            cost, 
+            cost_prev, 
+            weight_vector,
+        )
+
+        if dist < min_dist:
+            if index != NULL:
+                index[0] = i
+            min_dist = dist
+
+    return min_dist
+
+
+cdef Py_ssize_t edr_subsequence_matches(
+    const double *S,
+    Py_ssize_t s_length,
+    const double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double epsilon,
+    double *cost,
+    double *cost_prev,
+    double *weight_vector,
+    double threshold,
+    double **distances,
+    Py_ssize_t **matches
+) nogil:
+    cdef double dist = 0
+    cdef Py_ssize_t capacity = 1
+    cdef Py_ssize_t tmp_capacity
+    cdef Py_ssize_t i
+    cdef Py_ssize_t n_matches = 0
+
+    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
+    distances[0] = <double*> malloc(sizeof(double) * capacity)
+
+    for i in range(t_length - s_length + 1):
+        dist = edr_distance(
+            S,
+            s_length,
+            T + i,
+            s_length,
+            r, 
+            epsilon,
+            cost, 
+            cost_prev, 
+            weight_vector,
+        )
+
+        if dist <= threshold:
+            tmp_capacity = capacity
+            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
+            matches[0][n_matches] = i
+            distances[0][n_matches] = dist
+            n_matches += 1
+
+    return n_matches
 
 
 cdef inline double _msm_cost(float x, float y, float z, float c) nogil:
@@ -1871,11 +1955,13 @@ cdef class LcssSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         if self.cost == NULL or self.cost_prev == NULL:
             return -1
 
-
     cdef double _distance(
         self,
         const double *s,
         Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
@@ -1897,6 +1983,9 @@ cdef class LcssSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         self,
         double *s,
         Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
         double *x,
         Py_ssize_t x_len,
         double threshold,
@@ -1910,6 +1999,108 @@ cdef class LcssSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
             x_len,
             _compute_r(s_len, self.r),
             self.epsilon,
+            self.cost,
+            self.cost_prev,
+            NULL,
+            threshold,
+            distances,
+            indicies,
+        )
+
+
+cdef class EdrSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
+
+    cdef double *cost
+    cdef double *cost_prev
+    cdef double r
+    cdef double epsilon
+    
+    def __init__(self, double r=1.0, double epsilon=NAN):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        check_scalar(epsilon, "epsilon", float, min_val=0)
+        self.r = r
+        self.epsilon = epsilon
+
+    def __cinit__(self, *args, **kwargs):
+        self.cost = NULL
+        self.cost_prev = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.epsilon)
+
+    def __dealloc__(self):
+        self._free()
+
+    cdef void _free(self) nogil:
+        if self.cost != NULL:
+            free(self.cost)
+            self.cost = NULL
+
+        if self.cost_prev != NULL:
+            free(self.cost_prev)
+            self.cost_prev = NULL
+
+    cdef int reset(self, TSArray X) nogil:
+        self._free()
+        self.cost = <double*> malloc(sizeof(double) * X.shape[2])
+        self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
+        if self.cost == NULL or self.cost_prev == NULL:
+            return -1
+
+    cdef double _distance(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        Py_ssize_t *return_index=NULL,
+    ) nogil:
+        if isnan(self.epsilon):
+            epsilon = s_std / 4.0
+        else:
+            epsilon = self.epsilon
+
+        return edr_subsequence_distance(
+            s, 
+            s_len,
+            x,
+            x_len,
+            _compute_r(s_len, self.r),
+            epsilon,
+            self.cost,
+            self.cost_prev,
+            NULL,
+            return_index,
+        )
+
+    cdef Py_ssize_t _matches(
+        self,
+        double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        double *x,
+        Py_ssize_t x_len,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        if isnan(self.epsilon):
+            epsilon = s_std / 4.0
+        else:
+            epsilon = self.epsilon
+
+        return edr_subsequence_matches(
+            s,
+            s_len,
+            x,
+            x_len,
+            _compute_r(s_len, self.r),
+            epsilon,
             self.cost,
             self.cost_prev,
             NULL,
@@ -2360,21 +2551,34 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
 
     cdef Py_ssize_t warp_width
     cdef double r
-    cdef double threshold
+    cdef double epsilon
     
-    def __cinit__(self, double r=1.0, double threshold=-INFINITY, *args, **kwargs):
+    def __init__(self, double r=1.0, double epsilon=NAN, double threshold=NAN):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        if threshold != -INFINITY:
-            check_scalar(threshold, "threshold", float, min_val=0)
+        
+        # TODO(1.4): remove deprecated
+        if not isnan(threshold):
+            warnings.warn(
+                "The parameter threshold has been renamed to epsilon in 1.2 and will be "
+                "removed in 1.4.",
+                DeprecationWarning
+            )
+            epsilon = threshold
+
+        if not isnan(epsilon):
+            check_scalar(epsilon, "epsilon", float, min_val=0)
+
         self.r = r
-        self.threshold = threshold
+        self.epsilon = epsilon
+
+    def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
         self.std_x = NULL
         self.std_y = NULL
 
     def __reduce__(self):
-        return self.__class__, (self.r, self.threshold)
+        return self.__class__, (self.r, self.epsilon)
 
     def __dealloc__(self):
         self.__free()
@@ -2407,7 +2611,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
         
         cdef double mean, std
         cdef Py_ssize_t i
-        if self.threshold == -INFINITY:
+        if isnan(self.epsilon):
             for i in range(X.shape[0]):
                 fast_mean_std(&X[i, 0, 0], X.shape[2], &mean, &std)
                 self.std_x[i] = std
@@ -2424,10 +2628,10 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil:
-        if self.threshold == -INFINITY:
-            threshold = max(self.std_x[x_index], self.std_y[y_index]) / 4.0
+        if isnan(self.epsilon):
+            epsilon = max(self.std_x[x_index], self.std_y[y_index]) / 4.0
         else:
-            threshold = self.threshold
+            epsilon = self.epsilon
 
         return edr_distance(
             &X[x_index, dim, 0],
@@ -2435,7 +2639,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             &Y[y_index, dim, 0],
             Y.shape[2],
             self.warp_width,
-            threshold,
+            epsilon,
             self.cost,
             self.cost_prev,
             NULL,
@@ -2449,13 +2653,13 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
         const double *y,
         Py_ssize_t y_len,
     ) nogil:
-        cdef double mean, std_x, std_y, threshold
-        if self.threshold == -INFINITY:
+        cdef double mean, std_x, std_y, epsilon
+        if isnan(self.epsilon):
             fast_mean_std(x, x_len, &mean, &std_x)
             fast_mean_std(y, y_len, &mean, &std_y)
-            threshold = max(std_x, std_y) / 4.0
+            epsilon = max(std_x, std_y) / 4.0
         else:
-            threshold = self.threshold
+            epsilon = self.epsilon
 
         return edr_distance(
             x,
@@ -2463,7 +2667,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             y,
             y_len,
             self.warp_width,
-            threshold,
+            epsilon,
             self.cost,
             self.cost_prev,
             NULL,

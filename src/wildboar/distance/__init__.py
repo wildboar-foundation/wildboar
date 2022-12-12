@@ -31,6 +31,7 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
     "dtw": _elastic.DtwSubsequenceDistanceMeasure,
     "scaled_dtw": _elastic.ScaledDtwSubsequenceDistanceMeasure,
     "lcss": _elastic.LcssSubsequenceDistanceMeasure,
+    "edr": _elastic.EdrSubsequenceDistanceMeasure,
     "mass": _mass.ScaledMassSubsequenceDistanceMeasure,
     "manhattan": _metric.ManhattanSubsequenceDistanceMeasure,
     "minkowski": _metric.MinkowskiSubsequenceDistanceMeasure,

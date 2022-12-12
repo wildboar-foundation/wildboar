@@ -41,7 +41,11 @@ Changelog
 
      - |Feature| Add support for LCSS subsequence distance measure.
 
+     - |Feature| Add support for EDR subsequence distance measure.
+
      - |API| Rename LCSS ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
+
+     - |API| Rename EDR ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
 
   .. grid-item-card:: 
     
@@ -85,7 +89,7 @@ Changelog
      ^^^
      
      - |Fix| Correctly use MSM distance measure in :class:`tree.ProximityTreeClassifier`.
-     
+
      - |Fix| Correctly set ``min_samples_leaf`` in :class:`tree.RocketTreeClassifier` and :class:`RocketTreeRegressor`.
 
      - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.

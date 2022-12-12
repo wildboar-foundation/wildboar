@@ -199,3 +199,80 @@ def test_edr_elastic(X):
     actual = pairwise_distance(X[15:18, 10:-10], X[22:25], metric="edr")
     print(actual.tolist())
     assert_almost_equal(actual, desired)
+
+
+def test_edr_subsequence_distance(X):
+    desired = [
+        [0.16666666666666666, 0.2, 0.23333333333333334],
+        [0.3333333333333333, 0.2, 0.06666666666666667],
+        [0.5, 0.16666666666666666, 0.16666666666666666],
+        [0.06666666666666667, 0.36666666666666664, 0.43333333333333335],
+        [0.5, 0.16666666666666666, 0.26666666666666666],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="edr", metric_params={"r": 1.0}
+    )
+    print(actual.tolist())
+    assert_almost_equal(actual, desired)
+
+
+def test_edr_subsequence_match(X):
+    desired_inds = [
+        np.array([13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]),
+        None,
+        np.array([18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]),
+    ]
+
+    desired_dists = [
+        np.array(
+            [
+                0.23333333,
+                0.2,
+                0.16666667,
+                0.13333333,
+                0.1,
+                0.06666667,
+                0.1,
+                0.13333333,
+                0.16666667,
+                0.2,
+                0.23333333,
+            ]
+        ),
+        None,
+        np.array(
+            [
+                0.23333333,
+                0.2,
+                0.16666667,
+                0.13333333,
+                0.1,
+                0.06666667,
+                0.03333333,
+                0.0,
+                0.03333333,
+                0.06666667,
+                0.1,
+                0.13333333,
+                0.16666667,
+                0.2,
+                0.23333333,
+            ]
+        ),
+    ]
+    actual_inds, actual_dists = subsequence_match(
+        X[3, 20:50], X[52:55], metric="edr", threshold=0.25, return_distance=True
+    )
+
+    for actual_ind, desired_ind in zip(actual_inds, desired_inds):
+        if desired_ind is None:
+            assert actual_ind is None
+        else:
+            assert_almost_equal(actual_ind, desired_ind)
+
+    for actual_dist, desired_dist in zip(actual_dists, desired_dists):
+        if desired_dist is None:
+            assert actual_dist is None
+        else:
+            assert_almost_equal(actual_dist, desired_dist)
