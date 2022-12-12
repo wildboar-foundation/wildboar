@@ -71,6 +71,11 @@ using the ``metric_params`` argument.
      - ``{"r": float}``
      - Window ``r`` in ``[0, 1]``
 
+   * - Longest common subsequence [1]
+     - ``"lcss"``
+     - ``{r: float, epsilon: float}``
+     - Window ``r`` in ``[0, 1]``, default ``1``.  Match ``epsilon``, default ``1``.
+
 .. _list_of_metrics:
 
 .. list-table:: Distance metrics
@@ -120,8 +125,8 @@ using the ``metric_params`` argument.
 
    * - Longest common subsequence [1]
      - ``"lcss"``
-     - ``{r: float, threshold: float}``
-     - Window ``r`` in ``[0, 1]``.  Match ``threshold``, default ``1``. Elastic.
+     - ``{r: float, epsilon: float}``
+     - Window ``r`` in ``[0, 1]``, default ``1``.  Match ``epsilon``, default ``1``. Elastic.
 
    * - Edit distance with real penalty [2]
      - ``"erp"``

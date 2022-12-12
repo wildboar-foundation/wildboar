@@ -39,6 +39,10 @@ Changelog
        all dimensions are returned. The default value for ``dim`` will change to "mean"
        in 1.3. For 3darrays, we issue a deprecation warning for the current default value.
 
+     - |Feature| Add support for LCSS subsequence distance measure.
+
+     - |API| Rename LCSS ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
+
   .. grid-item-card:: 
     
      :mod:`wildboar.ensemble`
