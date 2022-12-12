@@ -623,16 +623,16 @@ cdef Py_ssize_t scaled_dtw_matches(
 
 cdef double inner_dtw_subsequence_distance(
     const double *S,
-    int s_length,
+    Py_ssize_t s_length,
     const double *T,
-    int r,
+    Py_ssize_t r,
     double *cost,
     double *cost_prev,
     double min_dist,
 ) nogil:
-    cdef int i = 0
-    cdef int j = 0
-    cdef int k = 0
+    cdef Py_ssize_t i = 0
+    cdef Py_ssize_t j = 0
+    cdef Py_ssize_t k = 0
 
     cdef double x
     cdef double y
@@ -1249,6 +1249,9 @@ cdef double twe_distance(
         cost, cost_prev = cost_prev, cost
 
     return cost_prev[y_length - 1]
+
+
+
 
 
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
