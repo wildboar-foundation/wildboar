@@ -113,7 +113,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         else:
             x, y = out
 
-        if self.n_dims_in_ > 1:
+        if x.ndim == 3:
             x = x.reshape(x.shape[0], -1)
 
         if no_val_y:
