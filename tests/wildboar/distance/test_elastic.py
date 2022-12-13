@@ -314,3 +314,67 @@ def test_twe_subsequence_match(X):
             assert actual_dist is None
         else:
             assert_almost_equal(actual_dist, desired_dist)
+
+
+def test_msm_subsequence_distance(X):
+    desired = [
+        [5.884132720530033, 6.212927086278796, 6.066322663798928],
+        [7.452256789430976, 5.099573530256748, 4.565707825124264],
+        [10.069798408076167, 4.704355984926224, 5.372886322438717],
+        [3.7369808349758387, 6.707286648452282, 8.716198019683361],
+        [9.660764277447015, 4.539345602039248, 7.1159256673417985],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="msm", metric_params={"r": 1.0}
+    )
+    print(actual.tolist())
+    assert_almost_equal(actual, desired)
+
+
+def test_msm_subsequence_match(X):
+    desired_inds = [
+        np.array([15, 16, 17, 18, 19, 20, 21]),
+        np.array([18]),
+        np.array([22, 23, 24, 25, 26, 27, 28]),
+    ]
+
+    desired_dists = [
+        np.array(
+            [
+                9.51183589,
+                7.39649074,
+                5.25149395,
+                3.18999668,
+                4.36803799,
+                6.29684289,
+                8.28040772,
+            ]
+        ),
+        np.array([9.40306032]),
+        np.array(
+            [
+                9.56636097,
+                7.28114184,
+                5.03819322,
+                3.00207221,
+                4.56476857,
+                6.47269578,
+                8.46184267,
+            ]
+        ),
+    ]
+    actual_inds, actual_dists = subsequence_match(
+        X[3, 20:50], X[52:55], metric="msm", threshold=10, return_distance=True
+    )
+    for actual_ind, desired_ind in zip(actual_inds, desired_inds):
+        if desired_ind is None:
+            assert actual_ind is None
+        else:
+            assert_almost_equal(actual_ind, desired_ind)
+
+    for actual_dist, desired_dist in zip(actual_dists, desired_dists):
+        if desired_dist is None:
+            assert actual_dist is None
+        else:
+            assert_almost_equal(actual_dist, desired_dist)
