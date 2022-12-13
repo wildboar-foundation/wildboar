@@ -4,6 +4,8 @@ from numpy.testing import assert_almost_equal
 
 from wildboar.datasets import load_two_lead_ecg
 from wildboar.distance import (
+    _DISTANCE_MEASURE,
+    _SUBSEQUENCE_DISTANCE_MEASURE,
     pairwise_distance,
     pairwise_subsequence_distance,
     subsequence_match,
@@ -14,6 +16,21 @@ from wildboar.distance import (
 def X():
     X, _ = load_two_lead_ecg()
     return X
+
+
+def test_pickle():
+    # TODO: ensure that the objects are equivalent
+    import pickle
+
+    for DistanceMeasure in _DISTANCE_MEASURE.values():
+        metric0 = DistanceMeasure()  # Default params
+        p = pickle.dumps(metric0)
+        pickle.loads(p)
+
+    for SubsequenceDistanceMeasure in _SUBSEQUENCE_DISTANCE_MEASURE.values():
+        metric0 = SubsequenceDistanceMeasure()  # Default params
+        p = pickle.dumps(metric0)
+        pickle.loads(p)
 
 
 @pytest.mark.parametrize(

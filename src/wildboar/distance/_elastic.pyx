@@ -2951,9 +2951,11 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
     cdef Py_ssize_t warp_width
     cdef double r
     
-    def __cinit__(self, double r=1.0, *args, **kwargs):
+    def __init__(self, double r=1.0, *args, **kwargs):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
+
+    def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
 
@@ -3017,8 +3019,10 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double *d_x
     cdef double *d_y
 
-    def __cinit__(self, double r=1.0):
-        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+    def __init__(self, double r=1.0):
+        super().__init__(r=r)
+
+    def __cinit__(self, *args, **kwargs):
         self.d_x = NULL
         self.d_y = NULL
 
@@ -3076,10 +3080,13 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double g
     cdef double *weights
 
-    def __cinit__(self, double r=1.0, double g=0.05):
-        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        self.weights = NULL
+    def __init__(self, double r=1.0, double g=0.05):
+        super().__init__(r=r)
+        check_scalar(g, "g", float, min_val=0.0)
         self.g = g
+
+    def __cinit__(self, *args, **kwargs):
+        self.weights = NULL
 
     def __reduce__(self):
         return self.__class__, (self.r, self.g)
@@ -3127,10 +3134,12 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
     cdef double *weights
     cdef double g
 
-    def __cinit__(self, double r=1.0, double g=0.05):
-        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        self.weights = NULL
+    def __init__(self, double r=1.0, double g=0.05):
+        super().__init__(r=r)
         self.g = g
+
+    def __cinit__(self, *args, **kwargs):
+        self.weights = NULL
         self.d_x = NULL
         self.d_y = NULL
     
@@ -3217,6 +3226,8 @@ cdef class LcssDistanceMeasure(DistanceMeasure):
         check_scalar(epsilon, "epsilon", float, min_val=0)
         self.r = r
         self.epsilon = epsilon
+
+    def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
 
@@ -3273,15 +3284,17 @@ cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
     cdef double g
     cdef double *weights
 
-    def __init__(self, double r=1.0, epsilon=1.0, double g=0.05, threshold=NAN):
-        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        check_scalar(epsilon, "epsilon", float, min_val=0.0)
-        self.weights = NULL
+    def __init__(self, double r=1.0, epsilon=1.0, double g=0.05, double threshold=NAN):
+        super().__init__(r=r, epsilon=epsilon, threshold=threshold)
+        check_scalar(g, "g", float, min_val=0.0)
         self.g = g
         self.epsilon = epsilon
 
+    def __cinit__(self, *args, **kwargs):
+        self.weights = NULL
+
     def __reduce__(self):
-        return self.__class__, (self.r, self.g)
+        return self.__class__, (self.r, self.epsilon, self.g)
 
     cdef void __free(self) nogil:
         LcssDistanceMeasure.__free(self)
@@ -3331,11 +3344,13 @@ cdef class ErpDistanceMeasure(DistanceMeasure):
     cdef double r
     cdef double g
     
-    def __cinit__(self, double r=1.0, double g=0.0, *args, **kwargs):
+    def __init__(self, double r=1.0, double g=0.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(g, "g", float, min_val=0)
         self.r = r
         self.g = g
+
+    def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
 
@@ -3501,7 +3516,6 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             NULL,
         )
 
-
     cdef double _distance(
         self,
         const double *x,
@@ -3544,11 +3558,13 @@ cdef class MsmDistanceMeasure(DistanceMeasure):
     cdef double r
     cdef double c
     
-    def __cinit__(self, double r=1.0, double c=1.0, *args, **kwargs):
+    def __init__(self, double r=1.0, double c=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(c, "c", float, min_val=0)
         self.r = r
         self.c = c
+
+    def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
         self.cost_y = NULL
@@ -3613,13 +3629,11 @@ cdef class TweDistanceMeasure(DistanceMeasure):
     cdef double penalty
     cdef double stiffness
     
-    def __cinit__(
+    def __init__(
         self, 
         double r=1.0, 
         double penalty=1.0, 
-        stiffness=0.001, 
-        *args, 
-        **kwargs
+        double stiffness=0.001, 
     ):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(
@@ -3633,6 +3647,8 @@ cdef class TweDistanceMeasure(DistanceMeasure):
         self.r = r
         self.penalty = penalty
         self.stiffness = stiffness
+
+    def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
 
