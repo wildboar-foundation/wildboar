@@ -15,8 +15,10 @@ Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 
 
 Version 1.1.2
 =============
+**Unreleased** 
 
-
+.. grid:: 1
+  
   .. grid-item-card::
 
      :mod:`wildboar.ensemble`
@@ -24,6 +26,9 @@ Version 1.1.2
      
      - |Fix| Fix a bug where ``sampling`` was incorrectly set for :class:`ensemble.RocketForestClassifier`
        and :class:`ensemble.RocketForestRegressor`.
+
+     - |Fix| Fix a bug where :class:`ensemble.ShapeletForestClassifier` does not support 
+       single dimension 3D input `#74 <https://github.com/isaksamsten/wildboar/issues/74>`_. 
 
   .. grid-item-card::
 

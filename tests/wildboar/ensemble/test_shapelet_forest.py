@@ -4,7 +4,7 @@
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal
 
-from wildboar.datasets import load_dataset
+from wildboar.datasets import load_dataset, load_gun_point
 from wildboar.ensemble import ShapeletForestClassifier, ShapeletForestRegressor
 from wildboar.utils.estimator_checks import check_estimator
 
@@ -329,4 +329,21 @@ def test_shapelet_forest_classifier():
         )
         assert_almost_equal(
             right_threshold, estimator.tree_.threshold[estimator.tree_.right > 0]
+        )
+
+
+def test_fit_3d_n_dims_1():
+    X, y = load_gun_point()
+    X_3d = X.reshape(X.shape[0], 1, -1)
+    clf0 = ShapeletForestClassifier(random_state=1)
+    clf1 = ShapeletForestClassifier(random_state=1)
+    clf0.fit(X_3d, y)
+    clf1.fit(X, y)
+    assert (clf0.predict(X_3d) == clf1.predict(X)).sum() == y.shape[0]
+    assert (clf0.predict(X) == clf1.predict(X_3d)).sum() == y.shape[0]
+
+    for b0, b1 in zip(clf0.estimators_, clf1.estimators_):
+        assert_equal(b0.tree_.left[b0.tree_.left > 0], b1.tree_.left[b1.tree_.left > 0])
+        assert_equal(
+            b0.tree_.right[b0.tree_.right > 0], b1.tree_.right[b1.tree_.right > 0]
         )
