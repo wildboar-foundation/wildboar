@@ -34,6 +34,7 @@ _SUBSEQUENCE_DISTANCE_MEASURE = {
     "edr": _elastic.EdrSubsequenceDistanceMeasure,
     "twe": _elastic.TweSubsequenceDistanceMeasure,
     "msm": _elastic.MsmSubsequenceDistanceMeasure,
+    "erp": _elastic.ErpSubsequenceDistanceMeasure,
     "mass": _mass.ScaledMassSubsequenceDistanceMeasure,
     "manhattan": _metric.ManhattanSubsequenceDistanceMeasure,
     "minkowski": _metric.MinkowskiSubsequenceDistanceMeasure,

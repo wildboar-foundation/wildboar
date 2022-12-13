@@ -47,6 +47,8 @@ Changelog
 
      - |Feature| Add support for MSM subsequence distance.
 
+     - |Feature| Add support for ERP subsequence distance.
+
      - |API| Rename LCSS ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
 
      - |API| Rename EDR ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.

@@ -328,7 +328,6 @@ def test_msm_subsequence_distance(X):
     actual = pairwise_subsequence_distance(
         X[:3, 20:50], X[50:55], metric="msm", metric_params={"r": 1.0}
     )
-    print(actual.tolist())
     assert_almost_equal(actual, desired)
 
 
@@ -367,6 +366,90 @@ def test_msm_subsequence_match(X):
     actual_inds, actual_dists = subsequence_match(
         X[3, 20:50], X[52:55], metric="msm", threshold=10, return_distance=True
     )
+    for actual_ind, desired_ind in zip(actual_inds, desired_inds):
+        if desired_ind is None:
+            assert actual_ind is None
+        else:
+            assert_almost_equal(actual_ind, desired_ind)
+
+    for actual_dist, desired_dist in zip(actual_dists, desired_dists):
+        if desired_dist is None:
+            assert actual_dist is None
+        else:
+            assert_almost_equal(actual_dist, desired_dist)
+
+
+def test_erp_subsequence_distance(X):
+    desired = [
+        [5.860492743551731, 5.51637732796371, 6.681755607947707],
+        [7.235501637682319, 4.641821198165417, 4.494721375405788],
+        [9.578443309292197, 4.325426779687405, 5.447692297399044],
+        [3.5930565763264894, 6.707286648452282, 8.571289233863354],
+        [9.660764277447015, 4.137808752711862, 7.071880591567606],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="erp", metric_params={"r": 1.0}
+    )
+    assert_almost_equal(actual, desired)
+
+
+def test_erp_subsequence_match(X):
+    desired_inds = [
+        np.array([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]),
+        np.array([18, 19]),
+        np.array([16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]),
+    ]
+
+    desired_dists = [
+        np.array(
+            [
+                9.18203199,
+                7.7950432,
+                6.75960507,
+                5.86078154,
+                5.3475072,
+                5.04154608,
+                4.83975397,
+                4.55013021,
+                3.87872966,
+                3.14008564,
+                2.99880227,
+                3.94245976,
+                5.0746254,
+                6.12780273,
+                7.33895668,
+                8.69492247,
+                9.91924116,
+            ]
+        ),
+        np.array([9.40306032, 9.81500911]),
+        np.array(
+            [
+                8.6444893,
+                7.40741205,
+                6.27264785,
+                5.55448708,
+                5.16029088,
+                4.8895849,
+                4.73896403,
+                4.25164569,
+                3.56806188,
+                3.00207221,
+                3.44339784,
+                4.47218099,
+                5.59572043,
+                6.69218668,
+                7.81572618,
+                9.00694879,
+            ]
+        ),
+    ]
+
+    actual_inds, actual_dists = subsequence_match(
+        X[3, 20:50], X[52:55], metric="erp", threshold=10, return_distance=True
+    )
+
     for actual_ind, desired_ind in zip(actual_inds, desired_inds):
         if desired_ind is None:
             assert actual_ind is None
