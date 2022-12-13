@@ -1421,6 +1421,92 @@ cdef double twe_distance(
     return cost_prev[y_length - 1]
 
 
+cdef double twe_subsequence_distance(
+    const double *S,
+    Py_ssize_t s_length,
+    const double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double penalty,
+    double stiffness,
+    double *cost,
+    double *cost_prev,
+    double *weight_vector,
+    Py_ssize_t *index,
+) nogil:
+    cdef double dist = 0
+    cdef double min_dist = INFINITY
+
+    cdef Py_ssize_t i
+    for i in range(t_length - s_length + 1):
+        dist = twe_distance(
+            S,
+            s_length,
+            T + i,
+            s_length,
+            r, 
+            penalty,
+            stiffness,
+            cost, 
+            cost_prev, 
+        )
+
+        if dist < min_dist:
+            if index != NULL:
+                index[0] = i
+            min_dist = dist
+
+    return min_dist
+
+
+cdef Py_ssize_t twe_subsequence_matches(
+    const double *S,
+    Py_ssize_t s_length,
+    const double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double penalty,
+    double stiffness,
+    double *cost,
+    double *cost_prev,
+    double *weight_vector,
+    double threshold,
+    double **distances,
+    Py_ssize_t **matches
+) nogil:
+    cdef double dist = 0
+    cdef Py_ssize_t capacity = 1
+    cdef Py_ssize_t tmp_capacity
+    cdef Py_ssize_t i
+    cdef Py_ssize_t n_matches = 0
+
+    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
+    distances[0] = <double*> malloc(sizeof(double) * capacity)
+
+    for i in range(t_length - s_length + 1):
+        dist = twe_distance(
+            S,
+            s_length,
+            T + i,
+            s_length,
+            r, 
+            penalty,
+            stiffness,
+            cost, 
+            cost_prev, 
+        )
+
+        if dist <= threshold:
+            tmp_capacity = capacity
+            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
+            matches[0][n_matches] = i
+            distances[0][n_matches] = dist
+            n_matches += 1
+
+    return n_matches
+
+
 cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
     if r == 1:
         return length - 1
@@ -2101,6 +2187,109 @@ cdef class EdrSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
             x_len,
             _compute_r(s_len, self.r),
             epsilon,
+            self.cost,
+            self.cost_prev,
+            NULL,
+            threshold,
+            distances,
+            indicies,
+        )
+
+
+cdef class TweSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+
+    cdef double *cost
+    cdef double *cost_prev
+    cdef double r
+    cdef double penalty
+    cdef double stiffness
+
+    def __init__(self, double r=1.0, double penalty=1.0, double stiffness=0.0001):
+        check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
+        check_scalar(
+            penalty, 
+            "penalty", 
+            float, 
+            min_val=0.0, 
+            include_boundaries="neither"
+        )
+        check_scalar(stiffness, "stiffness", float, min_val=0.0)
+        self.r = r
+        self.penalty = penalty
+        self.stiffness = stiffness
+
+    def __cinit__(self, *args, **kwargs):
+        self.cost = NULL
+        self.cost_prev = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.penalty, self.stiffness)
+
+    def __dealloc__(self):
+        self._free()
+
+    cdef void _free(self) nogil:
+        if self.cost != NULL:
+            free(self.cost)
+            self.cost = NULL
+
+        if self.cost_prev != NULL:
+            free(self.cost_prev)
+            self.cost_prev = NULL
+
+    cdef int reset(self, TSArray X) nogil:
+        self._free()
+        self.cost = <double*> malloc(sizeof(double) * X.shape[2])
+        self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
+        if self.cost == NULL or self.cost_prev == NULL:
+            return -1
+
+    cdef double _distance(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        Py_ssize_t *return_index=NULL,
+    ) nogil:
+        return twe_subsequence_distance(
+            s, 
+            s_len,
+            x,
+            x_len,
+            _compute_r(s_len, self.r),
+            self.penalty,
+            self.stiffness,
+            self.cost,
+            self.cost_prev,
+            NULL,
+            return_index,
+        )
+
+    cdef Py_ssize_t _matches(
+        self,
+        double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        double *x,
+        Py_ssize_t x_len,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) nogil:
+        return twe_subsequence_matches(
+            s,
+            s_len,
+            x,
+            x_len,
+            _compute_r(s_len, self.r),
+            self.penalty,
+            self.stiffness,
             self.cost,
             self.cost_prev,
             NULL,

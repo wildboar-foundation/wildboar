@@ -39,9 +39,11 @@ Changelog
        all dimensions are returned. The default value for ``dim`` will change to "mean"
        in 1.3. For 3darrays, we issue a deprecation warning for the current default value.
 
-     - |Feature| Add support for LCSS subsequence distance measure.
+     - |Feature| Add support for LCSS subsequence distance.
 
-     - |Feature| Add support for EDR subsequence distance measure.
+     - |Feature| Add support for EDR subsequence distance.
+
+     - |Feature| Add support for TWE subsequence distance.
 
      - |API| Rename LCSS ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
 

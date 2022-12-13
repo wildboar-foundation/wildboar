@@ -197,7 +197,6 @@ def test_edr_elastic(X):
     ]
 
     actual = pairwise_distance(X[15:18, 10:-10], X[22:25], metric="edr")
-    print(actual.tolist())
     assert_almost_equal(actual, desired)
 
 
@@ -213,7 +212,6 @@ def test_edr_subsequence_distance(X):
     actual = pairwise_subsequence_distance(
         X[:3, 20:50], X[50:55], metric="edr", metric_params={"r": 1.0}
     )
-    print(actual.tolist())
     assert_almost_equal(actual, desired)
 
 
@@ -263,6 +261,46 @@ def test_edr_subsequence_match(X):
     ]
     actual_inds, actual_dists = subsequence_match(
         X[3, 20:50], X[52:55], metric="edr", threshold=0.25, return_distance=True
+    )
+
+    for actual_ind, desired_ind in zip(actual_inds, desired_inds):
+        if desired_ind is None:
+            assert actual_ind is None
+        else:
+            assert_almost_equal(actual_ind, desired_ind)
+
+    for actual_dist, desired_dist in zip(actual_dists, desired_dists):
+        if desired_dist is None:
+            assert actual_dist is None
+        else:
+            assert_almost_equal(actual_dist, desired_dist)
+
+
+def test_twe_subsequence_distance(X):
+    desired = [
+        [11.649268791079521, 12.180933441966772, 10.074451576930286],
+        [13.404799362820386, 9.72582231733799, 7.091040290904044],
+        [19.939912437385317, 9.372541546821594, 8.709062487578393],
+        [7.400111306458712, 13.362499579787254, 16.208067022275923],
+        [19.014237593103942, 7.727498351947966, 12.209753487698737],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="twe", metric_params={"r": 1.0}
+    )
+    assert_almost_equal(actual, desired)
+
+
+def test_twe_subsequence_match(X):
+    desired_inds = [np.array([17, 18, 19, 20]), None, np.array([24, 25, 26, 27])]
+
+    desired_dists = [
+        np.array([8.13667472, 6.23308036, 7.37104807, 9.2250953]),
+        None,
+        np.array([7.83366694, 5.89159112, 7.10912424, 8.91684203]),
+    ]
+    actual_inds, actual_dists = subsequence_match(
+        X[3, 20:50], X[52:55], metric="twe", threshold=10, return_distance=True
     )
 
     for actual_ind, desired_ind in zip(actual_inds, desired_inds):
