@@ -26,9 +26,12 @@ __all__ = [
 
 _SUBSEQUENCE_DISTANCE_MEASURE = {
     "euclidean": _metric.EuclideanSubsequenceDistanceMeasure,
-    "normalized_euclidean": _metric.NormalizedEuclideanSubsequenceDistanceMeasure,  # noqa: E501
+    "normalized_euclidean": _metric.NormalizedEuclideanSubsequenceDistanceMeasure,
     "scaled_euclidean": _metric.ScaledEuclideanSubsequenceDistanceMeasure,
     "dtw": _elastic.DtwSubsequenceDistanceMeasure,
+    "wdtw": _elastic.WeightedDtwSubsequenceDistanceMeasure,
+    "ddtw": _elastic.DerivativeDtwSubsequenceDistanceMeasure,
+    "wddtw": _elastic.WeightedDerivativeDtwSubsequenceDistanceMeasure,
     "scaled_dtw": _elastic.ScaledDtwSubsequenceDistanceMeasure,
     "lcss": _elastic.LcssSubsequenceDistanceMeasure,
     "edr": _elastic.EdrSubsequenceDistanceMeasure,

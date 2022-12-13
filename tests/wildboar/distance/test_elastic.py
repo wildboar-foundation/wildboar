@@ -164,6 +164,17 @@ def test_twe_elastic(X):
     assert_almost_equal(actual, desired)
 
 
+def test_dtw_default(X):
+    desired = [
+        [3.5537758584340273, 2.4239916042161553, 4.014102144666234],
+        [1.1052711252130065, 0.6155502223457359, 1.3603006745123651],
+        [0.8904511837689495, 1.7621925843838169, 0.9011076709882901],
+    ]
+
+    actual = pairwise_distance(X[:3], X[3:6], metric="dtw")
+    assert_almost_equal(actual, desired)
+
+
 def test_dtw_elastic(X):
     desired = [
         [1.3184709191755355, 2.2190483689290956, 1.321736156689961],
@@ -172,6 +183,39 @@ def test_dtw_elastic(X):
     ]
 
     actual = pairwise_distance(X[15:18, 10:-10], X[22:25], metric="dtw")
+    assert_almost_equal(actual, desired)
+
+
+def test_wdtw_default(X):
+    desired = [
+        [1.2552015453334, 0.840657845575087, 1.397156676128907],
+        [0.38125602031080913, 0.21652193787948482, 0.4816084512219569],
+        [0.3074476369386968, 0.6205562983854465, 0.32328277683306095],
+    ]
+
+    actual = pairwise_distance(X[:3], X[3:6], metric="wdtw")
+    assert_almost_equal(actual, desired)
+
+
+def test_ddtw_default(X):
+    desired = [
+        [0.8813726884722624, 0.845112685537995, 0.900431284098585],
+        [0.5410051293098898, 0.2817966461521348, 0.5468055721838778],
+        [0.48507795268129195, 0.5978382928900522, 0.6375355302587586],
+    ]
+
+    actual = pairwise_distance(X[:3], X[3:6], metric="ddtw")
+    assert_almost_equal(actual, desired)
+
+
+def test_wddtw_default(X):
+    desired = [
+        [0.31308613461101015, 0.31035907083813735, 0.32896305445930935],
+        [0.1899586497011622, 0.10291886213457994, 0.20003786125651232],
+        [0.17004678165807582, 0.22040991627513995, 0.2315062579605518],
+    ]
+
+    actual = pairwise_distance(X[:3], X[3:6], metric="wddtw")
     assert_almost_equal(actual, desired)
 
 
@@ -461,3 +505,183 @@ def test_erp_subsequence_match(X):
             assert actual_dist is None
         else:
             assert_almost_equal(actual_dist, desired_dist)
+
+
+def test_dtw_subsequence_distance(X):
+    desired = [
+        [0.9892175168657907, 1.0063214093961415, 0.728809497908996],
+        [1.1535877966795345, 0.8751305858765588, 0.5918762820384382],
+        [1.6463501354826122, 0.8111886944554642, 0.7541254649350714],
+        [0.9060083944619378, 1.2025019188465507, 1.0572433054156687],
+        [1.6611303630194554, 0.7583611765873354, 0.8452636056135603],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="dtw", metric_params={"r": 1.0}
+    )
+
+    assert_almost_equal(actual, desired)
+
+
+def test_dtw_subsequence_match(X):
+    desired_inds = [
+        np.array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26]),
+        None,
+        np.array([23, 24, 25, 26, 27, 28, 29, 30, 31, 32]),
+    ]
+
+    desired_dists = [
+        np.array(
+            [
+                0.69910004,
+                0.55788568,
+                0.55933766,
+                0.54274111,
+                0.55801145,
+                0.54481298,
+                0.56354989,
+                0.64684609,
+                0.67375639,
+                0.96500658,
+            ]
+        ),
+        None,
+        np.array(
+            [
+                0.817363,
+                0.56456229,
+                0.51808363,
+                0.49816442,
+                0.49318993,
+                0.50482461,
+                0.50767,
+                0.51700958,
+                0.5434501,
+                0.66714102,
+            ]
+        ),
+    ]
+
+    actual_inds, actual_dists = subsequence_match(
+        X[3, 20:50], X[52:55], metric="dtw", threshold=1.0, return_distance=True
+    )
+
+    print(actual_inds)
+    print(actual_dists)
+
+    for actual_ind, desired_ind in zip(actual_inds, desired_inds):
+        if desired_ind is None:
+            assert actual_ind is None
+        else:
+            assert_almost_equal(actual_ind, desired_ind)
+
+    for actual_dist, desired_dist in zip(actual_dists, desired_dists):
+        if desired_dist is None:
+            assert actual_dist is None
+        else:
+            assert_almost_equal(actual_dist, desired_dist)
+
+
+def test_wdtw_subsequence_distance(X):
+    desired = [
+        [0.33976588576901373, 0.35696941021281137, 0.29529477646405033],
+        [0.40743928135924934, 0.2968451811061202, 0.20069638850403906],
+        [0.5718888312347068, 0.27778330485873565, 0.2602774731189233],
+        [0.3073448804124781, 0.4393089961212446, 0.43653337575076473],
+        [0.5747838846608478, 0.25904902500981475, 0.2936395717131312],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="wdtw", metric_params={"r": 1.0}
+    )
+    assert_almost_equal(actual, desired)
+
+
+def test_wdtw_subsequence_match(X):
+    desired_inds = [
+        np.array([17, 18, 19, 20, 21, 22, 23, 24, 25]),
+        None,
+        np.array([23, 24, 25, 26, 27, 28, 29, 30, 31, 32]),
+    ]
+
+    desired_dists = [
+        np.array(
+            [
+                0.2407963,
+                0.19020777,
+                0.19224316,
+                0.1907945,
+                0.19902954,
+                0.1989307,
+                0.20893769,
+                0.23934628,
+                0.25257523,
+            ]
+        ),
+        None,
+        np.array(
+            [
+                0.28205538,
+                0.19499937,
+                0.17651201,
+                0.16970836,
+                0.17094885,
+                0.17784312,
+                0.18213986,
+                0.18870032,
+                0.20072309,
+                0.24603989,
+            ]
+        ),
+    ]
+
+    actual_inds, actual_dists = subsequence_match(
+        X[3, 20:50], X[52:55], metric="wdtw", threshold=0.3, return_distance=True
+    )
+
+    print(actual_inds)
+    print(actual_dists)
+
+    for actual_ind, desired_ind in zip(actual_inds, desired_inds):
+        if desired_ind is None:
+            assert actual_ind is None
+        else:
+            assert_almost_equal(actual_ind, desired_ind)
+
+    for actual_dist, desired_dist in zip(actual_dists, desired_dists):
+        if desired_dist is None:
+            assert actual_dist is None
+        else:
+            assert_almost_equal(actual_dist, desired_dist)
+
+
+def test_ddtw_subsequence_distance(X):
+    desired = [
+        [0.601288821783055, 0.5221424348860837, 0.3430566541234427],
+        [0.5805189571399302, 0.4800321547177683, 0.24825602966276156],
+        [0.721921564327584, 0.37348317637184164, 0.5336120107986725],
+        [0.7454798658395534, 0.6940890375635499, 0.4371010970146026],
+        [0.7298777256758102, 0.4691353842406821, 0.40021046946845795],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="ddtw", metric_params={"r": 1.0}
+    )
+    print(actual.tolist())
+    assert_almost_equal(actual, desired)
+
+
+def test_wddtw_subsequence_distance(X):
+    desired = [
+        [0.2101076600612728, 0.18757147836726834, 0.11904901540274042],
+        [0.2019113352931962, 0.1691148360424211, 0.08709842622519594],
+        [0.25230204368944487, 0.12932437487520157, 0.18590896498560244],
+        [0.25993385996374907, 0.24188499844845562, 0.15344920657661343],
+        [0.2533634606527797, 0.16450048045815122, 0.1455145521526342],
+    ]
+
+    actual = pairwise_subsequence_distance(
+        X[:3, 20:50], X[50:55], metric="wddtw", metric_params={"r": 1.0}
+    )
+    print(actual.tolist())
+    assert_almost_equal(actual, desired)

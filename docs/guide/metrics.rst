@@ -66,6 +66,21 @@ using the ``metric_params`` argument.
      - ``{"r": float}``
      - Window ``r`` in ``[0, 1]``
 
+    * - Weighted DTW
+     - ``"wdtw"``
+     - ``{"r": float, "g": float}``
+     - Window ``r`` in ``[0, 1]``, default ``1.0``. Phase difference penalty ``g``, default ``0.05``.
+
+   * - Derivative DTW
+     - ``"ddtw"``
+     - ``{"r": float}``
+     - Window ``r`` in ``[0, 1]``, default ``1.0``.
+
+   * - Weighted Derivative DTW
+     - ``"wddtw"``
+     - ``{"r": float, "g": float}``
+     - Window ``r`` in ``[0, 1]``, default ``1.0``. Phase difference penalty ``g``, default ``0.05``.
+
    * - Scaled DTW
      - ``"scaled_dtw"``
      - ``{"r": float}``
@@ -74,7 +89,22 @@ using the ``metric_params`` argument.
    * - Longest common subsequence [1]
      - ``"lcss"``
      - ``{r: float, epsilon: float}``
-     - Window ``r`` in ``[0, 1]``, default ``1``.  Match ``epsilon``, default ``1``.
+     - Window ``r`` in ``[0, 1]``, default ``1.0``.  Match ``epsilon``, default ``1.0``.
+
+   * - Edit distance with real penalty [2]
+     - ``"erp"``
+     - ``{r: float, g: float}``
+     - Window ``r`` in ``[0, 1]``, default ``1.0``. Gap penalty ``g``, default ``0``.
+
+   * - Edit distance for real sequences [3]
+     - ``"edr"``
+     - ``{r: float, epsilon: float}``
+     - Window ``r`` in ``[0, 1]``, default ``1.0``. Match ``epsilon``, default ``1/4*max(std(x), std(y))``.
+
+   * - Move-split-merge [4]
+     - ``"msm"``
+     - ``{r: float, c: float}``
+     - Window ``r`` in ``[0, 1]``, default ``1.0``. Split/merge cost ``c``, default ``1``.
 
 .. _list_of_metrics:
 
@@ -135,8 +165,8 @@ using the ``metric_params`` argument.
 
    * - Edit distance for real sequences [3]
      - ``"edr"``
-     - ``{r: float, threshold: float}``
-     - Window ``r`` in ``[0, 1]``. Match ``threshold``, default ``1/4*max(std(x), std(y))``. Elastic.
+     - ``{r: float, epsilon: float}``
+     - Window ``r`` in ``[0, 1]``. Match ``epsilon``, default ``1/4*max(std(x), std(y))``. Elastic.
 
    * - Move-split-merge [4]
      - ``"msm"``
@@ -157,7 +187,7 @@ using the ``metric_params`` argument.
    * - Weighted DTW
      - ``"wdtw"``
      - ``{"r": float, "g": float}``
-     - Window ``r`` in ``[0, 1]``. Phase difference penalty ``g``. Elastic.
+     - Window ``r`` in ``[0, 1]``. Phase difference penalty ``g``, default ``0.05``. Elastic.
 
    * - Derivative DTW
      - ``"ddtw"``
@@ -167,7 +197,7 @@ using the ``metric_params`` argument.
    * - Weighted Derivative DTW
      - ``"wddtw"``
      - ``{"r": float, "g": float}``
-     - Window ``r`` in ``[0, 1]``. Phase difference penalty ``g``. Elastic.
+     - Window ``r`` in ``[0, 1]``. Phase difference penalty ``g``, default ``0.05``. Elastic.
 
 
 References

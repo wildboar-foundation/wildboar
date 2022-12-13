@@ -69,6 +69,7 @@ cdef double dtw_subsequence_distance(
     Py_ssize_t r,
     double *cost,
     double *cost_prev,
+    double *weight_vector,
     Py_ssize_t *index,
 ) nogil
 
