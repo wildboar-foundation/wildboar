@@ -39,6 +39,20 @@ Changelog
        all dimensions are returned. The default value for ``dim`` will change to "mean"
        in 1.3. For 3darrays, we issue a deprecation warning for the current default value.
 
+     - |Feature| Add support for LCSS subsequence distance.
+
+     - |Feature| Add support for EDR subsequence distance.
+
+     - |Feature| Add support for TWE subsequence distance.
+
+     - |Feature| Add support for MSM subsequence distance.
+
+     - |Feature| Add support for ERP subsequence distance.
+
+     - |API| Rename LCSS ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
+
+     - |API| Rename EDR ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
+
   .. grid-item-card:: 
     
      :mod:`wildboar.ensemble`
@@ -80,6 +94,8 @@ Changelog
      :mod:`wildboar.tree`
      ^^^
      
+     - |Fix| Correctly use MSM distance measure in :class:`tree.ProximityTreeClassifier`.
+
      - |Fix| Correctly set ``min_samples_leaf`` in :class:`tree.RocketTreeClassifier` and :class:`RocketTreeRegressor`.
 
      - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
