@@ -24,46 +24,46 @@ __all__ = [
     "matrix_profile",
 ]
 
-_SUBSEQUENCE_DISTANCE_MEASURE = {
-    "euclidean": _metric.EuclideanSubsequenceDistanceMeasure,
-    "normalized_euclidean": _metric.NormalizedEuclideanSubsequenceDistanceMeasure,
-    "scaled_euclidean": _metric.ScaledEuclideanSubsequenceDistanceMeasure,
-    "dtw": _elastic.DtwSubsequenceDistanceMeasure,
-    "wdtw": _elastic.WeightedDtwSubsequenceDistanceMeasure,
-    "ddtw": _elastic.DerivativeDtwSubsequenceDistanceMeasure,
-    "wddtw": _elastic.WeightedDerivativeDtwSubsequenceDistanceMeasure,
-    "scaled_dtw": _elastic.ScaledDtwSubsequenceDistanceMeasure,
-    "lcss": _elastic.LcssSubsequenceDistanceMeasure,
-    "edr": _elastic.EdrSubsequenceDistanceMeasure,
-    "twe": _elastic.TweSubsequenceDistanceMeasure,
-    "msm": _elastic.MsmSubsequenceDistanceMeasure,
-    "erp": _elastic.ErpSubsequenceDistanceMeasure,
-    "mass": _mass.ScaledMassSubsequenceDistanceMeasure,
-    "manhattan": _metric.ManhattanSubsequenceDistanceMeasure,
-    "minkowski": _metric.MinkowskiSubsequenceDistanceMeasure,
-    "chebyshev": _metric.ChebyshevSubsequenceDistanceMeasure,
-    "cosine": _metric.CosineSubsequenceDistanceMeasure,
-    "angular": _metric.AngularSubsequenceDistanceMeasure,
+_SUBSEQUENCE_METRICS = {
+    "euclidean": _metric.EuclideanSubsequenceMetric,
+    "normalized_euclidean": _metric.NormalizedEuclideanSubsequenceMetric,
+    "scaled_euclidean": _metric.ScaledEuclideanSubsequenceMetric,
+    "dtw": _elastic.DtwSubsequenceMetric,
+    "wdtw": _elastic.WeightedDtwSubsequenceMetric,
+    "ddtw": _elastic.DerivativeDtwSubsequenceMetric,
+    "wddtw": _elastic.WeightedDerivativeDtwSubsequenceMetric,
+    "scaled_dtw": _elastic.ScaledDtwSubsequenceMetric,
+    "lcss": _elastic.LcssSubsequenceMetric,
+    "edr": _elastic.EdrSubsequenceMetric,
+    "twe": _elastic.TweSubsequenceMetric,
+    "msm": _elastic.MsmSubsequenceMetric,
+    "erp": _elastic.ErpSubsequenceMetric,
+    "mass": _mass.ScaledMassSubsequenceMetric,
+    "manhattan": _metric.ManhattanSubsequenceMetric,
+    "minkowski": _metric.MinkowskiSubsequenceMetric,
+    "chebyshev": _metric.ChebyshevSubsequenceMetric,
+    "cosine": _metric.CosineSubsequenceMetric,
+    "angular": _metric.AngularSubsequenceMetric,
 }
 
-_DISTANCE_MEASURE = {
-    "euclidean": _metric.EuclideanDistanceMeasure,
-    "normalized_euclidean": _metric.NormalizedEuclideanDistanceMeasure,
-    "dtw": _elastic.DtwDistanceMeasure,
-    "ddtw": _elastic.DerivativeDtwDistanceMeasure,
-    "wdtw": _elastic.WeightedDtwDistanceMeasure,
-    "wddtw": _elastic.WeightedDerivativeDtwDistanceMeasure,
-    "lcss": _elastic.LcssDistanceMeasure,
-    "wlcss": _elastic.WeightedLcssDistanceMeasure,
-    "erp": _elastic.ErpDistanceMeasure,
-    "edr": _elastic.EdrDistanceMeasure,
-    "msm": _elastic.MsmDistanceMeasure,
-    "twe": _elastic.TweDistanceMeasure,
-    "manhattan": _metric.ManhattanDistanceMeasure,
-    "minkowski": _metric.MinkowskiDistanceMeasure,
-    "chebyshev": _metric.ChebyshevDistanceMeasure,
-    "cosine": _metric.CosineDistanceMeasure,
-    "angular": _metric.AngularDistanceMeasure,
+_METRICS = {
+    "euclidean": _metric.EuclideanMetric,
+    "normalized_euclidean": _metric.NormalizedEuclideanMetric,
+    "dtw": _elastic.DtwMetric,
+    "ddtw": _elastic.DerivativeDtwMetric,
+    "wdtw": _elastic.WeightedDtwMetric,
+    "wddtw": _elastic.WeightedDerivativeDtwMetric,
+    "lcss": _elastic.LcssMetric,
+    "wlcss": _elastic.WeightedLcssMetric,
+    "erp": _elastic.ErpMetric,
+    "edr": _elastic.EdrMetric,
+    "msm": _elastic.MsmMetric,
+    "twe": _elastic.TweMetric,
+    "manhattan": _metric.ManhattanMetric,
+    "minkowski": _metric.MinkowskiMetric,
+    "chebyshev": _metric.ChebyshevMetric,
+    "cosine": _metric.CosineMetric,
+    "angular": _metric.AngularMetric,
 }
 
 _THRESHOLD = {
@@ -191,7 +191,7 @@ def pairwise_subsequence_distance(
      metric : str or callable, optional
         The distance metric
 
-        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.
@@ -231,13 +231,13 @@ def pairwise_subsequence_distance(
                 "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
     metric_params = metric_params or {}
     min_dist, min_ind = _distance._pairwise_subsequence_distance(
         y,
         _check_ts_array(x),
         dim,
-        DistanceMeasure(**metric_params),
+        Metric(**metric_params),
         n_jobs,
     )
     if return_index:
@@ -279,7 +279,7 @@ def paired_subsequence_distance(
     metric : str or callable, optional
         The distance metric
 
-        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.
@@ -317,7 +317,7 @@ def paired_subsequence_distance(
                 "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
@@ -330,7 +330,7 @@ def paired_subsequence_distance(
 
     metric_params = metric_params if metric_params is not None else {}
     min_dist, min_ind = _distance._paired_subsequence_distance(
-        y, _check_ts_array(x), dim, DistanceMeasure(**metric_params)
+        y, _check_ts_array(x), dim, Metric(**metric_params)
     )
     if return_index:
         return (
@@ -388,7 +388,7 @@ def subsequence_match(
     metric : str or callable, optional
         The distance metric
 
-        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.
@@ -446,7 +446,7 @@ def subsequence_match(
     if not 0 >= dim < n_dims:
         raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
-    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -496,7 +496,7 @@ def subsequence_match(
         _check_ts_array(x),
         threshold,
         dim,
-        DistanceMeasure(**metric_params),
+        Metric(**metric_params),
         n_jobs,
     )
 
@@ -553,7 +553,7 @@ def paired_subsequence_match(
     metric : str or callable, optional
         The distance metric
 
-        See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.
@@ -608,7 +608,7 @@ def paired_subsequence_match(
                 "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    DistanceMeasure = check_option(_SUBSEQUENCE_DISTANCE_MEASURE, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -646,7 +646,7 @@ def paired_subsequence_match(
         _check_ts_array(x),
         threshold,
         dim,
-        DistanceMeasure(**metric_params),
+        Metric(**metric_params),
         n_jobs,
     )
 
@@ -690,7 +690,7 @@ def paired_distance(
      metric : str or callable, optional
         The distance metric
 
-        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.
@@ -727,9 +727,9 @@ def paired_distance(
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
-    DistanceMeasure = check_option(_DISTANCE_MEASURE, metric, "metric")
+    Metric = check_option(_METRICS, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
-    distance_measure = DistanceMeasure(**metric_params)
+    distance_measure = Metric(**metric_params)
     if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not distance_measure.is_elastic:
         raise ValueError(
             "Illegal n_timestep (%r != %r) for non-elastic distance measure"
@@ -804,7 +804,7 @@ def pairwise_distance(
      metric : str or callable, optional
         The distance metric
 
-        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.
@@ -828,9 +828,9 @@ def pairwise_distance(
         - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, )
         - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, )
     """
-    DistanceMeasure = check_option(_DISTANCE_MEASURE, metric, "metric")
+    Metric = check_option(_METRICS, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
-    distance_measure = DistanceMeasure(**metric_params)
+    distance_measure = Metric(**metric_params)
 
     if y is None:
         y = x

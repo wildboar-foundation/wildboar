@@ -28,7 +28,7 @@ cdef double EPSILON = 1e-13
 cdef class MetricList(List):
 
     cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) nogil:
-        return (<DistanceMeasure> self.get(metric)).reset(X, Y)
+        return (<Metric> self.get(metric)).reset(X, Y)
 
     cdef double distance(
         self, 
@@ -39,7 +39,7 @@ cdef class MetricList(List):
         Py_ssize_t y_index,
         Py_ssize_t dim,
     ) nogil:
-        return (<DistanceMeasure> self.get(metric)).distance(X, x_index, Y, y_index, dim)
+        return (<Metric> self.get(metric)).distance(X, x_index, Y, y_index, dim)
 
     cdef double _distance(
         self,
@@ -49,13 +49,13 @@ cdef class MetricList(List):
         const double *y,
         Py_ssize_t y_len
     ) nogil:
-        return (<DistanceMeasure> self.get(metric))._distance(x, x_len, y, y_len)
+        return (<Metric> self.get(metric))._distance(x, x_len, y, y_len)
 
 
 cdef class SubsequenceMetricList(List):
 
     cdef int reset(self, Py_ssize_t metric, TSArray X) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).reset(X)
+        return (<SubsequenceMetric> self.get(metric)).reset(X)
 
     cdef int init_transient(
         self,
@@ -67,7 +67,7 @@ cdef class SubsequenceMetricList(List):
         Py_ssize_t length,
         Py_ssize_t dim,
     ) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).init_transient(
+        return (<SubsequenceMetric> self.get(metric)).init_transient(
             X, v, index, start, length, dim
         )
 
@@ -78,13 +78,13 @@ cdef class SubsequenceMetricList(List):
         SubsequenceView* v,
         Subsequence* s,
     ) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).init_persistent(X, v, s)
+        return (<SubsequenceMetric> self.get(metric)).init_persistent(X, v, s)
 
     cdef int free_transient(self, Py_ssize_t metric, SubsequenceView *t) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).free_transient(t)
+        return (<SubsequenceMetric> self.get(metric)).free_transient(t)
 
     cdef int free_persistent(self, Py_ssize_t metric, Subsequence *t) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).free_persistent(t)
+        return (<SubsequenceMetric> self.get(metric)).free_persistent(t)
 
     cdef int from_array(
         self,
@@ -92,14 +92,14 @@ cdef class SubsequenceMetricList(List):
         Subsequence *s,
         object obj,
     ):
-        return (<SubsequenceDistanceMeasure> self.get(metric)).from_array(s, obj)
+        return (<SubsequenceMetric> self.get(metric)).from_array(s, obj)
 
     cdef object to_array(
         self, 
         Py_ssize_t metric, 
         Subsequence *s
     ):
-        return (<SubsequenceDistanceMeasure> self.get(metric)).to_array(s)
+        return (<SubsequenceMetric> self.get(metric)).to_array(s)
 
     cdef double transient_distance(
         self,
@@ -109,7 +109,7 @@ cdef class SubsequenceMetricList(List):
         Py_ssize_t index,
         Py_ssize_t *return_index,
     ) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).transient_distance(
+        return (<SubsequenceMetric> self.get(metric)).transient_distance(
             v, X, index, return_index
         )
 
@@ -122,7 +122,7 @@ cdef class SubsequenceMetricList(List):
         Py_ssize_t index,
         Py_ssize_t *return_index,
     ) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).persistent_distance(
+        return (<SubsequenceMetric> self.get(metric)).persistent_distance(
             s, X, index, return_index
         )
 
@@ -136,7 +136,7 @@ cdef class SubsequenceMetricList(List):
         double **distances,
         Py_ssize_t **indices,
     ) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).transient_matches(
+        return (<SubsequenceMetric> self.get(metric)).transient_matches(
             v, X, index, threshold, distances, indices
         )
 
@@ -150,7 +150,7 @@ cdef class SubsequenceMetricList(List):
         double **distances,
         Py_ssize_t **indices,
     ) nogil:
-        return (<SubsequenceDistanceMeasure> self.get(metric)).persistent_matches(
+        return (<SubsequenceMetric> self.get(metric)).persistent_matches(
             s, X, index, threshold, distances, indices
         )
 
@@ -174,7 +174,7 @@ cdef int _ts_view_update_statistics(SubsequenceView *v, const double* sample) no
     return 0
 
 
-cdef class SubsequenceDistanceMeasure:
+cdef class SubsequenceMetric:
 
     cdef int reset(self, TSArray X) nogil:
         pass
@@ -360,7 +360,7 @@ cdef class SubsequenceDistanceMeasure:
         return -1
 
 
-cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+cdef class ScaledSubsequenceMetric(SubsequenceMetric):
 
     cdef int init_transient(
         self,
@@ -371,7 +371,7 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         Py_ssize_t length,
         Py_ssize_t dim,
     ) nogil:
-        cdef int err = SubsequenceDistanceMeasure.init_transient(
+        cdef int err = SubsequenceMetric.init_transient(
             self, X, v, index, start, length, dim
         )
         if err < 0:
@@ -384,7 +384,7 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         Subsequence *v,
         object obj,
     ):
-        cdef int err = SubsequenceDistanceMeasure.from_array(self, v, obj)
+        cdef int err = SubsequenceMetric.from_array(self, v, obj)
         if err == -1:
             return -1
 
@@ -396,7 +396,7 @@ cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         return 0
 
 
-cdef class DistanceMeasure:
+cdef class Metric:
 
     cdef int reset(self, TSArray x, TSArray y) nogil:
         return 0
@@ -457,14 +457,14 @@ cdef class _PairwiseSubsequenceDistance:
     cdef double[:, :] distances,
     cdef Subsequence **shapelets
     cdef Py_ssize_t n_shapelets
-    cdef SubsequenceDistanceMeasure distance_measure
+    cdef SubsequenceMetric distance_measure
 
     def __cinit__(
         self, 
         double[:, :] distances,
         Py_ssize_t[:, :] min_indices,
         TSArray X, 
-        SubsequenceDistanceMeasure distance_measure
+        SubsequenceMetric distance_measure
     ):
         self.X = X
         self.distances = distances
@@ -499,7 +499,7 @@ cdef class _PairwiseSubsequenceDistance:
         cdef Py_ssize_t i, j, min_index
         cdef Subsequence *s
         cdef double distance
-        cdef SubsequenceDistanceMeasure distance_measure = deepcopy(self.distance_measure)
+        cdef SubsequenceMetric distance_measure = deepcopy(self.distance_measure)
         with nogil:
             distance_measure.reset(self.X)
             for i in range(offset, offset + batch_size):
@@ -516,7 +516,7 @@ def _pairwise_subsequence_distance(
     list shapelets, 
     TSArray x, 
     int dim, 
-    SubsequenceDistanceMeasure distance_measure,
+    SubsequenceMetric distance_measure,
     n_jobs,
 ):
     n_samples = x.shape[0]
@@ -538,7 +538,7 @@ def _paired_subsequence_distance(
     list shapelets,
     TSArray x,
     int dim,
-    SubsequenceDistanceMeasure distance_measure
+    SubsequenceMetric distance_measure
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
     cdef Py_ssize_t i, min_index
@@ -564,7 +564,7 @@ def _subsequence_match(
     TSArray x,
     double threshold,
     int dim,
-    SubsequenceDistanceMeasure distance_measure,
+    SubsequenceMetric distance_measure,
     n_jobs,
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
@@ -600,7 +600,7 @@ def _paired_subsequence_match(
     TSArray x,
     double threshold,
     int dim,
-    SubsequenceDistanceMeasure distance_measure,
+    SubsequenceMetric distance_measure,
     n_jobs,
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
@@ -636,7 +636,7 @@ def _pairwise_distance(
     TSArray y,
     TSArray x,
     Py_ssize_t dim,
-    DistanceMeasure distance_measure,
+    Metric distance_measure,
     n_jobs,
 ):
     cdef:
@@ -660,7 +660,7 @@ def _pairwise_distance(
 def _singleton_pairwise_distance(
     TSArray x, 
     Py_ssize_t dim, 
-    DistanceMeasure distance_measure, 
+    Metric distance_measure, 
     n_jobs
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
@@ -683,7 +683,7 @@ def _paired_distance(
     TSArray y,
     TSArray x,
     Py_ssize_t dim,
-    DistanceMeasure distance_measure,
+    Metric distance_measure,
     n_jobs,
 ):
     cdef Py_ssize_t n_samples = y.shape[0]

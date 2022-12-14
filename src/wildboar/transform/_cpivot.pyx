@@ -17,7 +17,7 @@ from ..utils cimport TSArray
 from ..utils._misc cimport to_ndarray_double
 from ..utils._rand cimport RAND_R_MAX, rand_int
 
-from ..distance import _DISTANCE_MEASURE
+from ..distance import _METRICS
 
 from ._feature cimport Feature, FeatureEngineer
 

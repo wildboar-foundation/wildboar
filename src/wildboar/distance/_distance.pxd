@@ -131,7 +131,7 @@ cdef struct Subsequence:
     double *data
     void *extra
 
-cdef class SubsequenceDistanceMeasure:
+cdef class SubsequenceMetric:
 
     cdef int reset(self, TSArray X) nogil
 
@@ -230,11 +230,11 @@ cdef class SubsequenceDistanceMeasure:
     ) nogil
 
 
-cdef class ScaledSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+cdef class ScaledSubsequenceMetric(SubsequenceMetric):
     pass
 
 
-cdef class DistanceMeasure:
+cdef class Metric:
 
     cdef int reset(self, TSArray X, TSArray Y) nogil
 

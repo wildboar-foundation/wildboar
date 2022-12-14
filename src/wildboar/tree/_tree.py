@@ -209,7 +209,7 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         metric : str, optional
             Distance metric used to identify the best shapelet.
 
-            See ``distance._SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of
+            See ``distance._SUBSEQUENCE_METRICS.keys()`` for a list of
             supported metrics.
 
         metric_params : dict, optional

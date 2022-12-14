@@ -22,17 +22,17 @@ from ..utils._stats cimport (
     inc_stats_variance,
 )
 from ._distance cimport (
-    DistanceMeasure,
-    ScaledSubsequenceDistanceMeasure,
+    Metric,
+    ScaledSubsequenceMetric,
     Subsequence,
-    SubsequenceDistanceMeasure,
+    SubsequenceMetric,
     SubsequenceView,
 )
 
 
 cdef double EPSILON = 1e-10
 
-cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
+cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
     cdef double *mean_x
     cdef double *std_x
     cdef double *dist_buffer

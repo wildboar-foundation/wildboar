@@ -53,6 +53,10 @@ Changelog
 
      - |API| Rename EDR ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
 
+     - |API| Rename :class:`_distance.DistanceMeasure` to ``Metric`` and 
+       :class:`_distance.SubsequenceDistanceMeasure` to ``SubsequenceMetric``. The change 
+       only affect code that ``cimport`` modules.
+
   .. grid-item-card:: 
     
      :mod:`wildboar.ensemble`

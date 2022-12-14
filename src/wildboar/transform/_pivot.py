@@ -57,7 +57,7 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
             The distance metrics. A dictionary where key is:
 
             - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
-            - if callable, a function returning a list of ``DistanceMeasure``-objects
+            - if callable, a function returning a list of ``Metric``-objects
 
             and where value is a dict of parameters to the factory.
         """

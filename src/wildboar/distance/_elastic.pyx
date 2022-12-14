@@ -18,10 +18,10 @@ from ..utils cimport TSArray
 from ..utils._misc cimport realloc_array
 from ..utils._stats cimport fast_mean_std
 from ._distance cimport (
-    DistanceMeasure,
-    ScaledSubsequenceDistanceMeasure,
+    Metric,
+    ScaledSubsequenceMetric,
     Subsequence,
-    SubsequenceDistanceMeasure,
+    SubsequenceMetric,
     SubsequenceView,
 )
 
@@ -1729,7 +1729,7 @@ cdef inline Py_ssize_t _compute_r(Py_ssize_t length, double r) nogil:
     return <Py_ssize_t> max(floor(length * r), 1)
 
 
-cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
+cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
     cdef double *X_buffer
     cdef double *lower
     cdef double *upper
@@ -2006,7 +2006,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         Py_ssize_t length,
         Py_ssize_t dim,
     ) nogil:
-        cdef int err = ScaledSubsequenceDistanceMeasure.init_transient(
+        cdef int err = ScaledSubsequenceMetric.init_transient(
             self, X, t, index, start, length, dim
         )
         if err < 0:
@@ -2030,7 +2030,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         return 0
 
     cdef int from_array(self, Subsequence *t, object obj):
-        cdef int err = ScaledSubsequenceDistanceMeasure.from_array(self, t, obj)
+        cdef int err = ScaledSubsequenceMetric.from_array(self, t, obj)
         if err == -1:
             return -1
         dim, arr = obj
@@ -2058,7 +2058,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         SubsequenceView* v,
         Subsequence* s,
     ) nogil:
-        cdef int err = ScaledSubsequenceDistanceMeasure.init_persistent(self, X, v, s)
+        cdef int err = ScaledSubsequenceMetric.init_persistent(self, X, v, s)
         if err == -1:
             return -1
 
@@ -2090,7 +2090,7 @@ cdef class ScaledDtwSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure)
         return 0
 
 
-cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+cdef class DtwSubsequenceMetric(SubsequenceMetric):
     cdef double *cost
     cdef double *cost_prev
     cdef double r
@@ -2178,7 +2178,7 @@ cdef class DtwSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         )
 
 
-cdef class WeightedDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure):
+cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
 
     cdef double g
     cdef double *weights
@@ -2193,7 +2193,7 @@ cdef class WeightedDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure):
         self.weights = NULL
 
     cdef int reset(self, TSArray X) nogil:
-        DtwSubsequenceDistanceMeasure.reset(self, X)
+        DtwSubsequenceMetric.reset(self, X)
         self.weights = <double*> malloc(sizeof(double) * X.shape[2])
         if self.weights == NULL:
             return -1
@@ -2208,7 +2208,7 @@ cdef class WeightedDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure):
         self._free()
 
     cdef void _free(self) nogil:
-        DtwSubsequenceDistanceMeasure._free(self)
+        DtwSubsequenceMetric._free(self)
         if self.weights != NULL:
             free(self.weights)
             self.weights = NULL
@@ -2267,7 +2267,7 @@ cdef class WeightedDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure):
         )
 
 
-cdef class DerivativeDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure):
+cdef class DerivativeDtwSubsequenceMetric(DtwSubsequenceMetric):
     cdef double *S_buffer
     cdef double *T_buffer
 
@@ -2275,7 +2275,7 @@ cdef class DerivativeDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure
         self.T_buffer = NULL
 
     cdef int reset(self, TSArray X) nogil:
-        DtwSubsequenceDistanceMeasure.reset(self, X)
+        DtwSubsequenceMetric.reset(self, X)
         self.T_buffer = <double*> malloc(sizeof(double) * X.shape[2])
         self.S_buffer = <double*> malloc(sizeof(double) * X.shape[2])
         if self.T_buffer == NULL or self.S_buffer == NULL:
@@ -2287,7 +2287,7 @@ cdef class DerivativeDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure
         self._free()
 
     cdef void _free(self) nogil:
-        DtwSubsequenceDistanceMeasure._free(self)
+        DtwSubsequenceMetric._free(self)
         if self.T_buffer != NULL:
             free(self.T_buffer)
             self.T_buffer = NULL
@@ -2346,7 +2346,7 @@ cdef class DerivativeDtwSubsequenceDistanceMeasure(DtwSubsequenceDistanceMeasure
             indicies,
         )
 
-cdef class WeightedDerivativeDtwSubsequenceDistanceMeasure(DerivativeDtwSubsequenceDistanceMeasure):
+cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric):
 
     cdef double g
     cdef double *weights
@@ -2361,7 +2361,7 @@ cdef class WeightedDerivativeDtwSubsequenceDistanceMeasure(DerivativeDtwSubseque
         self.weights = NULL
 
     cdef int reset(self, TSArray X) nogil:
-        DerivativeDtwSubsequenceDistanceMeasure.reset(self, X)
+        DerivativeDtwSubsequenceMetric.reset(self, X)
         self.weights = <double*> malloc(sizeof(double) * X.shape[2])
         if self.weights == NULL:
             return -1
@@ -2377,7 +2377,7 @@ cdef class WeightedDerivativeDtwSubsequenceDistanceMeasure(DerivativeDtwSubseque
         self._free()
 
     cdef void _free(self) nogil:
-        DerivativeDtwSubsequenceDistanceMeasure._free(self)
+        DerivativeDtwSubsequenceMetric._free(self)
         if self.weights != NULL:
             free(self.weights)
             self.weights = NULL
@@ -2440,7 +2440,7 @@ cdef class WeightedDerivativeDtwSubsequenceDistanceMeasure(DerivativeDtwSubseque
         )
 
 
-cdef class LcssSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+cdef class LcssSubsequenceMetric(SubsequenceMetric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -2532,7 +2532,7 @@ cdef class LcssSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         )
 
 
-cdef class EdrSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
+cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -2637,7 +2637,7 @@ cdef class EdrSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
         )
 
 
-cdef class TweSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+cdef class TweSubsequenceMetric(SubsequenceMetric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -2734,7 +2734,7 @@ cdef class TweSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         )
 
 
-cdef class MsmSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+cdef class MsmSubsequenceMetric(SubsequenceMetric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -2833,7 +2833,7 @@ cdef class MsmSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         )
 
 
-cdef class ErpSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+cdef class ErpSubsequenceMetric(SubsequenceMetric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -2941,7 +2941,7 @@ cdef class ErpSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
         )
 
 
-cdef class DtwDistanceMeasure(DistanceMeasure):
+cdef class DtwMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -3011,7 +3011,7 @@ cdef void average_slope(const double *q, Py_ssize_t len, double *d) nogil:
         j += 1
 
 
-cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
+cdef class DerivativeDtwMetric(DtwMetric):
 
     cdef double *d_x
     cdef double *d_y
@@ -3024,7 +3024,7 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
         self.d_y = NULL
 
     cdef void __free(self) nogil:
-        DtwDistanceMeasure.__free(self)
+        DtwMetric.__free(self)
         if self.d_x != NULL:
             free(self.d_x)
             self.d_x = NULL
@@ -3034,7 +3034,7 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
             self.d_y = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
-        DtwDistanceMeasure.reset(self, Y, X)
+        DtwMetric.reset(self, Y, X)
         if min(X.shape[2], Y.shape[2]) < 3:
             return 0
 
@@ -3072,7 +3072,7 @@ cdef class DerivativeDtwDistanceMeasure(DtwDistanceMeasure):
         return sqrt(dist)
 
 
-cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
+cdef class WeightedDtwMetric(DtwMetric):
 
     cdef double g
     cdef double *weights
@@ -3089,13 +3089,13 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
         return self.__class__, (self.r, self.g)
 
     cdef void __free(self) nogil:
-        DtwDistanceMeasure.__free(self)
+        DtwMetric.__free(self)
         if self.weights != NULL:
             free(self.weights)
             self.weights = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
-        DtwDistanceMeasure.reset(self, X, Y)
+        DtwMetric.reset(self, X, Y)
         cdef Py_ssize_t i
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
 
@@ -3124,7 +3124,7 @@ cdef class WeightedDtwDistanceMeasure(DtwDistanceMeasure):
         return sqrt(dist)
 
 
-cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
+cdef class WeightedDerivativeDtwMetric(DtwMetric):
 
     cdef double *d_x
     cdef double *d_y
@@ -3144,7 +3144,7 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
         return self.__class__, (self.r, self.g)
 
     cdef void __free(self) nogil:
-        DtwDistanceMeasure.__free(self)
+        DtwMetric.__free(self)
         if self.d_x != NULL:
             free(self.d_x)
             self.d_x = NULL
@@ -3158,7 +3158,7 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
             self.weights = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
-        DtwDistanceMeasure.reset(self, X, Y)
+        DtwMetric.reset(self, X, Y)
         if min(X.shape[2], Y.shape[2]) < 3:
             return 0
 
@@ -3201,7 +3201,7 @@ cdef class WeightedDerivativeDtwDistanceMeasure(DtwDistanceMeasure):
 
         return sqrt(dist)
 
-cdef class LcssDistanceMeasure(DistanceMeasure):
+cdef class LcssMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -3276,7 +3276,7 @@ cdef class LcssDistanceMeasure(DistanceMeasure):
         return True
 
 
-cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
+cdef class WeightedLcssMetric(LcssMetric):
 
     cdef double g
     cdef double *weights
@@ -3294,13 +3294,13 @@ cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
         return self.__class__, (self.r, self.epsilon, self.g)
 
     cdef void __free(self) nogil:
-        LcssDistanceMeasure.__free(self)
+        LcssMetric.__free(self)
         if self.weights != NULL:
             free(self.weights)
             self.weights = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) nogil:
-        LcssDistanceMeasure.reset(self, X, Y)
+        LcssMetric.reset(self, X, Y)
         cdef Py_ssize_t i
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
 
@@ -3330,7 +3330,7 @@ cdef class WeightedLcssDistanceMeasure(LcssDistanceMeasure):
         return dist
 
 
-cdef class ErpDistanceMeasure(DistanceMeasure):
+cdef class ErpMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -3410,7 +3410,7 @@ cdef class ErpDistanceMeasure(DistanceMeasure):
         return True
 
 
-cdef class EdrDistanceMeasure(DistanceMeasure):
+cdef class EdrMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -3545,7 +3545,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
         return True
 
 
-cdef class MsmDistanceMeasure(DistanceMeasure):
+cdef class MsmMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
@@ -3617,7 +3617,7 @@ cdef class MsmDistanceMeasure(DistanceMeasure):
         return True
 
 
-cdef class TweDistanceMeasure(DistanceMeasure):
+cdef class TweMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev

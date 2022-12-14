@@ -439,7 +439,7 @@ cdef class EntropyCriterion(Criterion):
                     branches[branch] -= v * log2(v)
 
 
-cdef class DistanceMeasureSampler:
+cdef class MetricSampler:
     cdef VoseRand vr
     cdef Py_ssize_t n_measures
 
@@ -460,7 +460,7 @@ cdef class DistanceMeasureSampler:
     ) nogil:
         pass
 
-cdef class UniformDistanceMeasureSampler(DistanceMeasureSampler):
+cdef class UniformMetricSampler(MetricSampler):
 
     cdef Py_ssize_t sample(
         self,
@@ -471,7 +471,7 @@ cdef class UniformDistanceMeasureSampler(DistanceMeasureSampler):
         return rand_int(0, self.n_measures, seed)
 
 
-cdef class WeightedDistanceMeasureSampler(DistanceMeasureSampler):
+cdef class WeightedMetricSampler(MetricSampler):
 
     cdef Py_ssize_t sample(
         self,
@@ -557,7 +557,7 @@ cdef class TreeBuilder:
     cdef MetricList distance_measures
     cdef readonly Tree tree
     cdef Criterion criterion
-    cdef DistanceMeasureSampler distance_measure_sampler
+    cdef MetricSampler distance_measure_sampler
     cdef PivotSampler pivot_sampler
     cdef uint32_t seed
 
@@ -566,7 +566,7 @@ cdef class TreeBuilder:
         TSArray X,
         const double[:] sample_weights,
         PivotSampler pivot_sampler,
-        DistanceMeasureSampler distance_measure_sampler,
+        MetricSampler distance_measure_sampler,
         Criterion criterion,
         Tree tree,
         object random_state,

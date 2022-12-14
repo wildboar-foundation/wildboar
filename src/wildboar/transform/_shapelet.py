@@ -8,7 +8,7 @@ import warnings
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ..distance import _SUBSEQUENCE_DISTANCE_MEASURE
+from ..distance import _SUBSEQUENCE_METRICS
 from ._cshapelet import RandomShapeletFeatureEngineer
 from .base import BaseFeatureEngineerTransform
 
@@ -22,7 +22,7 @@ class ShapeletMixin:
             callable,
         ],
         "metric": [
-            StrOptions(_SUBSEQUENCE_DISTANCE_MEASURE.keys()),
+            StrOptions(_SUBSEQUENCE_METRICS.keys()),
         ],
         "metric_params": [dict, None],
         "min_shapelet_size": [
@@ -82,7 +82,7 @@ class ShapeletMixin:
 
         metric_params = self.metric_params if self.metric_params is not None else {}
         return RandomShapeletFeatureEngineer(
-            _SUBSEQUENCE_DISTANCE_MEASURE[self.metric](**metric_params),
+            _SUBSEQUENCE_METRICS[self.metric](**metric_params),
             min_shapelet_size,
             max_shapelet_size,
             max(1, n_shapelets),
@@ -129,7 +129,7 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
         metric : str, optional
             Distance metric used to identify the best shapelet.
 
-            See ``distance._SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of
+            See ``distance._SUBSEQUENCE_METRICS.keys()`` for a list of
             supported metrics.
 
         metric_params : dict, optional

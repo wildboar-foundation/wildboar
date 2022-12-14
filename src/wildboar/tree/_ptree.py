@@ -6,16 +6,16 @@ import numbers
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ..distance import _DISTANCE_MEASURE
+from ..distance import _METRICS
 from ..tree._cptree import (
     EntropyCriterion,
     GiniCriterion,
     LabelPivotSampler,
     Tree,
     TreeBuilder,
-    UniformDistanceMeasureSampler,
+    UniformMetricSampler,
     UniformPivotSampler,
-    WeightedDistanceMeasureSampler,
+    WeightedMetricSampler,
 )
 from ..tree.base import BaseTree, BaseTreeClassifier
 from ..utils.validation import check_option
@@ -28,61 +28,61 @@ _PIVOT_SAMPLER = {
     "label": LabelPivotSampler,
     "uniform": UniformPivotSampler,
 }
-_DISTANCE_MEASURE_SAMPLER = {
-    "uniform": UniformDistanceMeasureSampler,
-    "weighted": WeightedDistanceMeasureSampler,
+_METRICS_SAMPLER = {
+    "uniform": UniformMetricSampler,
+    "weighted": WeightedMetricSampler,
 }
 
 
 def euclidean_factory():
-    return [_DISTANCE_MEASURE["euclidean"]()]
+    return [_METRICS["euclidean"]()]
 
 
 def dtw_factory():
-    return [_DISTANCE_MEASURE["dtw"](r=1.0)]
+    return [_METRICS["dtw"](r=1.0)]
 
 
 def ddtw_factory():
-    return [_DISTANCE_MEASURE["ddtw"](r=1.0)]
+    return [_METRICS["ddtw"](r=1.0)]
 
 
 def rdtw_factory(min_r=0, max_r=0.25, n=10):
-    return [_DISTANCE_MEASURE["dtw"](r=r) for r in np.linspace(min_r, max_r, n)]
+    return [_METRICS["dtw"](r=r) for r in np.linspace(min_r, max_r, n)]
 
 
 def rddtw_factory(min_r=0, max_r=0.25, n=10):
-    return [_DISTANCE_MEASURE["ddtw"](r=r) for r in np.linspace(min_r, max_r, n)]
+    return [_METRICS["ddtw"](r=r) for r in np.linspace(min_r, max_r, n)]
 
 
 def wdtw_factory(min_g=0.0, max_g=1.0, n=10):
-    return [_DISTANCE_MEASURE["wdtw"](g=g) for g in np.linspace(min_g, max_g, n)]
+    return [_METRICS["wdtw"](g=g) for g in np.linspace(min_g, max_g, n)]
 
 
 def wddtw_factory(min_g=0.0, max_g=1.0, n=10):
-    return [_DISTANCE_MEASURE["wddtw"](g=g) for g in np.linspace(min_g, max_g, n)]
+    return [_METRICS["wddtw"](g=g) for g in np.linspace(min_g, max_g, n)]
 
 
 def erp_factory(min_g=0.0, max_g=1.0, n=10):
-    return [_DISTANCE_MEASURE["erp"](g=g) for g in np.linspace(min_g, max_g, n)]
+    return [_METRICS["erp"](g=g) for g in np.linspace(min_g, max_g, n)]
 
 
 def lcss_factory(min_r=0.0, max_r=0.25, min_epsilon=0, max_epsilon=1.0, n=10):
     return [
-        _DISTANCE_MEASURE["lcss"](r=r, epsilon=epsilon)
+        _METRICS["lcss"](r=r, epsilon=epsilon)
         for epsilon in np.linspace(min_epsilon, max_epsilon, n)
         for r in np.linspace(min_r, max_r, n)
     ]
 
 
 def msm_factory(min_c=0.01, max_c=100, n=10):
-    return [_DISTANCE_MEASURE["msm"](c=c) for c in np.linspace(min_c, max_c, n)]
+    return [_METRICS["msm"](c=c) for c in np.linspace(min_c, max_c, n)]
 
 
 def twe_factory(
     min_penalty=0.00001, max_penalty=1.0, min_stiffness=10e-5, max_stiffness=0.1, n=10
 ):
     return [
-        _DISTANCE_MEASURE["twe"](penalty=penalty, stiffness=stiffness)
+        _METRICS["twe"](penalty=penalty, stiffness=stiffness)
         for penalty in np.linspace(min_penalty, max_penalty, n)
         for stiffness in np.linspace(min_stiffness, max_stiffness, n)
     ]
@@ -163,7 +163,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             StrOptions(_PIVOT_SAMPLER.keys()),
         ],
         "metric_sample": [
-            StrOptions(_DISTANCE_MEASURE_SAMPLER.keys()),
+            StrOptions(_METRICS_SAMPLER.keys()),
         ],
         "metric_factories": [
             StrOptions({"default"}),
@@ -214,7 +214,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             If dict, a dictionary where key is:
 
             - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
-            - if callable, a function returning a list of ``DistanceMeasure``-objects
+            - if callable, a function returning a list of ``Metric``-objects
 
             and where value is a dict of parameters to the factory.
 
@@ -298,12 +298,12 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         distance_measures, weights = make_metrics(metric_factories=metric_factories)
         Criterion = _CLF_CRITERION[self.criterion]
         PivotSampler = _PIVOT_SAMPLER[self.pivot_sample]
-        DistanceMeasureSampler = _DISTANCE_MEASURE_SAMPLER[self.metric_sample]
+        MetricSampler = _METRICS_SAMPLER[self.metric_sample]
         tree_builder = TreeBuilder(
             x,
             sample_weights,
             PivotSampler(),
-            DistanceMeasureSampler(len(distance_measures), weights=weights),
+            MetricSampler(len(distance_measures), weights=weights),
             Criterion(y, self.n_classes_),
             Tree(distance_measures, self.n_classes_),
             random_state,

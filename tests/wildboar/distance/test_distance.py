@@ -7,8 +7,8 @@ from numpy.testing import assert_almost_equal, assert_equal
 
 from wildboar.datasets import load_gun_point, load_two_lead_ecg
 from wildboar.distance import (
-    _DISTANCE_MEASURE,
-    _SUBSEQUENCE_DISTANCE_MEASURE,
+    _METRICS,
+    _SUBSEQUENCE_METRICS,
     paired_distance,
     paired_subsequence_distance,
     pairwise_distance,
@@ -752,22 +752,22 @@ def test_pickle():
     # TODO: ensure that the objects are equivalent
     import pickle
 
-    for DistanceMeasure in _DISTANCE_MEASURE.values():
-        metric0 = DistanceMeasure()  # Default params
+    for Metric in _METRICS.values():
+        metric0 = Metric()  # Default params
         p = pickle.dumps(metric0)
         pickle.loads(p)
 
-    for SubsequenceDistanceMeasure in _SUBSEQUENCE_DISTANCE_MEASURE.values():
-        metric0 = SubsequenceDistanceMeasure()  # Default params
+    for SubsequenceMetric in _SUBSEQUENCE_METRICS.values():
+        metric0 = SubsequenceMetric()  # Default params
         p = pickle.dumps(metric0)
         pickle.loads(p)
 
 
-@pytest.mark.parametrize("metric", list(_DISTANCE_MEASURE.keys()))
+@pytest.mark.parametrize("metric", list(_METRICS.keys()))
 def test_distance_measure_raises_bad_argument(metric):
     bogus_params = {"bogus_param_should_not_exists": 10}
     with pytest.raises(TypeError):
-        _DISTANCE_MEASURE[metric](**bogus_params)
+        _METRICS[metric](**bogus_params)
 
 
 @pytest.mark.parametrize(
@@ -777,10 +777,10 @@ def test_distance_measure_raises_bad_argument(metric):
 @pytest.mark.parametrize("metric_params", [{"r": -0.1}, {"r": 1.1}])
 def test_raises_bad_r_argument_value(metric, metric_params):
     with pytest.raises(ValueError):
-        _DISTANCE_MEASURE[metric](**metric_params)
+        _METRICS[metric](**metric_params)
 
     with pytest.raises(ValueError):
-        _SUBSEQUENCE_DISTANCE_MEASURE[metric](**metric_params)
+        _SUBSEQUENCE_METRICS[metric](**metric_params)
 
 
 @pytest.mark.parametrize(
@@ -799,20 +799,20 @@ def test_raises_bad_r_argument_value(metric, metric_params):
 )
 def test_raises_bad_argument_value(metric, metric_params):
     with pytest.raises(ValueError):
-        _DISTANCE_MEASURE[metric](**metric_params)
+        _METRICS[metric](**metric_params)
 
     with pytest.raises(ValueError):
-        _SUBSEQUENCE_DISTANCE_MEASURE[metric](**metric_params)
+        _SUBSEQUENCE_METRICS[metric](**metric_params)
 
 
-@pytest.mark.parametrize("metric", list(_SUBSEQUENCE_DISTANCE_MEASURE.keys()))
+@pytest.mark.parametrize("metric", list(_SUBSEQUENCE_METRICS.keys()))
 def test_subsequence_distance_measure_raises_bad_argument(metric):
     bogus_params = {"bogus_param_should_not_exists": 10}
     with pytest.raises(TypeError):
-        _SUBSEQUENCE_DISTANCE_MEASURE[metric](**bogus_params)
+        _SUBSEQUENCE_METRICS[metric](**bogus_params)
 
 
-@pytest.mark.parametrize("metric", list(_DISTANCE_MEASURE.keys()))
+@pytest.mark.parametrize("metric", list(_METRICS.keys()))
 def test_pairwise_distance_benchmark(benchmark, metric, X):
     X, y = load_two_lead_ecg()
     x = X[:100].reshape(-1).copy()
@@ -821,7 +821,7 @@ def test_pairwise_distance_benchmark(benchmark, metric, X):
     benchmark(pairwise_distance, x, y, metric=metric)
 
 
-@pytest.mark.parametrize("metric", list(_SUBSEQUENCE_DISTANCE_MEASURE.keys()))
+@pytest.mark.parametrize("metric", list(_SUBSEQUENCE_METRICS.keys()))
 def test_pairwise_subsequence_distance_benchmark(benchmark, metric, X):
     X, y = load_two_lead_ecg()
     x = X[:2].reshape(-1).copy()

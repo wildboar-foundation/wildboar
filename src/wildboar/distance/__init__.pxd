@@ -1,6 +1,6 @@
 from .distance._distance cimport (
-    DistanceMeasure,
+    Metric,
     MetricList,
-    SubsequenceDistanceMeasure,
+    SubsequenceMetric,
     SubsequenceMetricList,
 )

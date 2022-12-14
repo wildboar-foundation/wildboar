@@ -11,11 +11,7 @@ from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
-from ...distance import (
-    _DISTANCE_MEASURE,
-    paired_distance,
-    pairwise_subsequence_distance,
-)
+from ...distance import _METRICS, paired_distance, pairwise_subsequence_distance
 from ...ensemble._ensemble import BaseShapeletForestClassifier
 
 
@@ -169,7 +165,7 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
     """
 
     _parameter_constraints: dict = {
-        "cost": [StrOptions(_DISTANCE_MEASURE.keys()), callable],
+        "cost": [StrOptions(_METRICS.keys()), callable],
         "aggregation": [StrOptions(_AGGREGATION.keys()), callable],
         "epsilon": [Interval(numbers.Real, 0, None, closed="right")],
         "batch_size": [Interval(numbers.Real, 0, 1, closed="right")],

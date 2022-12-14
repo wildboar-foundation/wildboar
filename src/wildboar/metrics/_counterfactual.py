@@ -166,7 +166,7 @@ def relative_proximity_score(
     metric : str or callable, optional
         The distance metric
 
-        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.
@@ -249,7 +249,7 @@ def proximity_score(
     metric : str or callable, optional
         The distance metric
 
-        See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+        See ``_METRICS.keys()`` for a list of supported metrics.
 
     metric_params: dict, optional
         Parameters to the metric.

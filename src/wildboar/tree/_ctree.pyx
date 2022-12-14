@@ -15,9 +15,9 @@ from numpy cimport uint32_t
 
 from scipy.sparse import csr_matrix
 
-from ..distance._distance cimport DistanceMeasure
+from ..distance._distance cimport Metric
 
-from ..distance import _DISTANCE_MEASURE
+from ..distance import _METRICS
 
 from ..transform._feature cimport Feature, FeatureEngineer
 from ..utils cimport TSArray

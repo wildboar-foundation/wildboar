@@ -10,11 +10,7 @@
 from libc.stdlib cimport free, malloc
 from numpy cimport uint32_t
 
-from ..distance._distance cimport (
-    Subsequence,
-    SubsequenceDistanceMeasure,
-    SubsequenceView,
-)
+from ..distance._distance cimport Subsequence, SubsequenceMetric, SubsequenceView
 from ..utils cimport TSArray
 from ..utils._rand cimport RAND_R_MAX, rand_int
 from ._feature cimport Feature, FeatureEngineer
@@ -25,7 +21,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t min_shapelet_size
     cdef Py_ssize_t max_shapelet_size
 
-    cdef readonly SubsequenceDistanceMeasure distance_measure
+    cdef readonly SubsequenceMetric distance_measure
 
     def __init__(self, distance_measure, min_shapelet_size, max_shapelet_size):
         self.distance_measure = distance_measure
