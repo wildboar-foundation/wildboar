@@ -4,7 +4,111 @@
 # License: BSD 3 clause
 from numpy cimport float64_t, ndarray
 
-from ..utils cimport TSArray
+from ..utils cimport List, TSArray
+
+
+cdef class MetricList(List):
+
+    cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) nogil
+
+    cdef double distance(
+        self, 
+        Py_ssize_t metric, 
+        TSArray X,
+        Py_ssize_t x_index,
+        TSArray Y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+    ) nogil
+
+    cdef double _distance(
+        self,
+        Py_ssize_t metric,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len
+    ) nogil
+
+cdef class SubsequenceMetricList(List):
+
+    cdef int reset(self, Py_ssize_t metric, TSArray X) nogil
+
+    cdef int init_transient(
+        self,
+        Py_ssize_t metric,
+        TSArray X,
+        SubsequenceView *v,
+        Py_ssize_t index,
+        Py_ssize_t start,
+        Py_ssize_t length,
+        Py_ssize_t dim,
+    ) nogil
+
+    cdef int init_persistent(
+        self,
+        Py_ssize_t metric, 
+        TSArray X,
+        SubsequenceView* v,
+        Subsequence* s,
+    ) nogil
+
+    cdef int free_transient(self, Py_ssize_t metric, SubsequenceView *t) nogil
+
+    cdef int free_persistent(self, Py_ssize_t metric, Subsequence *t) nogil
+
+    cdef int from_array(
+        self,
+        Py_ssize_t metric, 
+        Subsequence *s,
+        object obj,
+    )
+
+    cdef object to_array(
+        self, 
+        Py_ssize_t metric, 
+        Subsequence *s
+    )
+
+    cdef double transient_distance(
+        self,
+        Py_ssize_t metric, 
+        SubsequenceView *v,
+        TSArray X,
+        Py_ssize_t index,
+        Py_ssize_t *return_index,
+    ) nogil
+
+    cdef double persistent_distance(
+        self,
+        Py_ssize_t metric, 
+        Subsequence *s,
+        TSArray X,
+        Py_ssize_t index,
+        Py_ssize_t *return_index,
+    ) nogil
+
+    cdef Py_ssize_t transient_matches(
+        self,
+        Py_ssize_t metric, 
+        SubsequenceView *v,
+        TSArray X,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indices,
+    ) nogil
+
+    cdef Py_ssize_t persistent_matches(
+        self,
+        Py_ssize_t metric, 
+        Subsequence *s,
+        TSArray X,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indices,
+    ) nogil
 
 
 cdef struct SubsequenceView:

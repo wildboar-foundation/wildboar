@@ -13,9 +13,9 @@ from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 from numpy cimport uint32_t
 
-from ..distance._distance cimport DistanceMeasure
+from ..distance._distance cimport MetricList
 from ..utils cimport TSArray
-from ..utils._misc cimport CList, argsort, safe_realloc
+from ..utils._misc cimport argsort, safe_realloc
 from ..utils._rand cimport (
     RAND_R_MAX,
     VoseRand,
@@ -105,7 +105,7 @@ cdef class Tree:
     cdef double *_values
     cdef Py_ssize_t _capacity
     cdef Py_ssize_t _n_labels
-    cdef CList distance_measures
+    cdef MetricList distance_measures
 
     def __cinit__(
         self,
@@ -124,7 +124,7 @@ cdef class Tree:
 
         self._pivots = <Pivot**> malloc(sizeof(Pivot*) * capacity)
         self._values = <double*> malloc(sizeof(double) * capacity * n_labels)
-        self.distance_measures = CList(distance_measures)
+        self.distance_measures = MetricList(distance_measures)
 
     def __reduce__(self):
        return _make_tree, (
@@ -251,18 +251,14 @@ cdef class Tree:
 
         with nogil:
             for i in range(self.distance_measures.size):
-                (<DistanceMeasure>self.distance_measures.get(i)).reset(X, X)
+                self.distance_measures.reset(i, X, X)
 
             for i in range(X.shape[0]):
                 node_index = 0
                 while self._branches[0][node_index] != -1:
                     pivot = self._pivots[node_index]
                     branch = find_min_branch(
-                        <DistanceMeasure> self.distance_measures.get(pivot.distance_measure),
-                        pivot.data,
-                        &X[i, 0, 0],
-                        pivot.length,
-                        pivot.n_branches,
+                        self.distance_measures, pivot, &X[i, 0, 0]
                     )
                     node_index = self._branches[branch][node_index]
                 out[i] = node_index
@@ -274,19 +270,19 @@ cdef class Tree:
 
 
 cdef Py_ssize_t find_min_branch(
-    DistanceMeasure distance_measure,
-    double **pivots,
+    MetricList metric_list,
+    Pivot *pivot,
     const double *sample,
-    Py_ssize_t n_timestep,
-    Py_ssize_t n_branches,
 ) nogil:
     cdef double dist
     cdef double min_dist = INFINITY
     cdef Py_ssize_t min_branch = -1
 
     cdef Py_ssize_t i
-    for i in range(n_branches):
-        dist = distance_measure._distance(sample, n_timestep, pivots[i], n_timestep)
+    for i in range(pivot.n_branches):
+        dist = metric_list._distance(
+            pivot.distance_measure, sample, pivot.length, pivot.data[i], pivot.length
+        )
         if dist < min_dist:
             min_dist = dist
             min_branch = i
@@ -558,7 +554,7 @@ cdef class TreeBuilder:
     cdef Py_ssize_t *branch_count
 
     cdef TSArray X
-    cdef CList distance_measures
+    cdef MetricList distance_measures
     cdef readonly Tree tree
     cdef Criterion criterion
     cdef DistanceMeasureSampler distance_measure_sampler
@@ -626,7 +622,7 @@ cdef class TreeBuilder:
         self.n_samples = j
 
         for i in range(self.distance_measures.size):
-            (<DistanceMeasure>self.distance_measures.get(i)).reset(self.X, self.X)
+            self.distance_measures.reset(i, self.X, self.X)
 
     def __dealloc__(self):
         free(self.samples)
@@ -887,9 +883,10 @@ cdef class TreeBuilder:
             j = self.samples[i]
             min_dist = INFINITY
             for pivot in range(n_branches):
-                dist = (
-                    <DistanceMeasure>self.distance_measures.get(distance_measure)
-                ).distance(self.X, pivots[pivot], self.X, j, 0)
+                dist = self.distance_measures.distance(
+                    distance_measure, self.X, pivots[pivot], self.X, j, 0
+                )
+
                 if dist < min_dist:
                     min_dist = dist
                     min_pivot = pivot

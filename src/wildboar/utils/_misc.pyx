@@ -17,9 +17,9 @@ from ..utils cimport TSArray
 cdef extern from "Python.h":
   cdef void* PyList_GET_ITEM(list, Py_ssize_t index) nogil
 
-cdef class CList:
+cdef class List:
     
-    def __cinit__(self, list py_list):
+    def __init__(self, list py_list):
         self.py_list = py_list
         self.size = len(py_list)
 

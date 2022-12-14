@@ -3,7 +3,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-cdef class CList:
+cdef class List:
     cdef list py_list
     cdef readonly Py_ssize_t size
 

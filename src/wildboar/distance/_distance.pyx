@@ -24,6 +24,137 @@ from ..utils.validation import check_array
 
 cdef double EPSILON = 1e-13
 
+
+cdef class MetricList(List):
+
+    cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) nogil:
+        return (<DistanceMeasure> self.get(metric)).reset(X, Y)
+
+    cdef double distance(
+        self, 
+        Py_ssize_t metric, 
+        TSArray X,
+        Py_ssize_t x_index,
+        TSArray Y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+    ) nogil:
+        return (<DistanceMeasure> self.get(metric)).distance(X, x_index, Y, y_index, dim)
+
+    cdef double _distance(
+        self,
+        Py_ssize_t metric,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len
+    ) nogil:
+        return (<DistanceMeasure> self.get(metric))._distance(x, x_len, y, y_len)
+
+
+cdef class SubsequenceMetricList(List):
+
+    cdef int reset(self, Py_ssize_t metric, TSArray X) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).reset(X)
+
+    cdef int init_transient(
+        self,
+        Py_ssize_t metric,
+        TSArray X,
+        SubsequenceView *v,
+        Py_ssize_t index,
+        Py_ssize_t start,
+        Py_ssize_t length,
+        Py_ssize_t dim,
+    ) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).init_transient(
+            X, v, index, start, length, dim
+        )
+
+    cdef int init_persistent(
+        self,
+        Py_ssize_t metric, 
+        TSArray X,
+        SubsequenceView* v,
+        Subsequence* s,
+    ) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).init_persistent(X, v, s)
+
+    cdef int free_transient(self, Py_ssize_t metric, SubsequenceView *t) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).free_transient(t)
+
+    cdef int free_persistent(self, Py_ssize_t metric, Subsequence *t) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).free_persistent(t)
+
+    cdef int from_array(
+        self,
+        Py_ssize_t metric, 
+        Subsequence *s,
+        object obj,
+    ):
+        return (<SubsequenceDistanceMeasure> self.get(metric)).from_array(s, obj)
+
+    cdef object to_array(
+        self, 
+        Py_ssize_t metric, 
+        Subsequence *s
+    ):
+        return (<SubsequenceDistanceMeasure> self.get(metric)).to_array(s)
+
+    cdef double transient_distance(
+        self,
+        Py_ssize_t metric, 
+        SubsequenceView *v,
+        TSArray X,
+        Py_ssize_t index,
+        Py_ssize_t *return_index,
+    ) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).transient_distance(
+            v, X, index, return_index
+        )
+
+
+    cdef double persistent_distance(
+        self,
+        Py_ssize_t metric, 
+        Subsequence *s,
+        TSArray X,
+        Py_ssize_t index,
+        Py_ssize_t *return_index,
+    ) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).persistent_distance(
+            s, X, index, return_index
+        )
+
+    cdef Py_ssize_t transient_matches(
+        self,
+        Py_ssize_t metric, 
+        SubsequenceView *v,
+        TSArray X,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indices,
+    ) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).transient_matches(
+            v, X, index, threshold, distances, indices
+        )
+
+    cdef Py_ssize_t persistent_matches(
+        self,
+        Py_ssize_t metric, 
+        Subsequence *s,
+        TSArray X,
+        Py_ssize_t index,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indices,
+    ) nogil:
+        return (<SubsequenceDistanceMeasure> self.get(metric)).persistent_matches(
+            s, X, index, threshold, distances, indices
+        )
+
+
 cdef int _ts_view_update_statistics(SubsequenceView *v, const double* sample) nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef double ex = 0

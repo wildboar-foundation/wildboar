@@ -21,7 +21,7 @@ from ..distance import _DISTANCE_MEASURE
 
 from ..transform._feature cimport Feature, FeatureEngineer
 from ..utils cimport TSArray
-from ..utils._misc cimport CList, argsort, safe_realloc
+from ..utils._misc cimport List, argsort, safe_realloc
 from ..utils._rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 

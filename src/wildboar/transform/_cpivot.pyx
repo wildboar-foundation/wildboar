@@ -12,9 +12,9 @@ from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 from numpy cimport uint32_t
 
-from ..distance._distance cimport DistanceMeasure
+from ..distance._distance cimport MetricList
 from ..utils cimport TSArray
-from ..utils._misc cimport CList, to_ndarray_double
+from ..utils._misc cimport to_ndarray_double
 from ..utils._rand cimport RAND_R_MAX, rand_int
 
 from ..distance import _DISTANCE_MEASURE
@@ -33,11 +33,11 @@ cdef struct PersitentPivot:
 
 cdef class PivotFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_pivots
-    cdef CList distance_measures
+    cdef MetricList distance_measures
 
     def __cinit__(self, Py_ssize_t n_pivots, list distance_measures):
         self.n_pivots = n_pivots
-        self.distance_measures = CList(distance_measures)
+        self.distance_measures = MetricList(distance_measures)
 
     def __reduce__(self):
         return self.__class__, (self.n_pivots, self.distance_measures.py_list)
@@ -45,7 +45,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     cdef int reset(self, TSArray X) nogil:
         cdef Py_ssize_t i
         for i in range(self.distance_measures.size):
-            (<DistanceMeasure>self.distance_measures.get(i)).reset(X, X)
+            self.distance_measures.reset(i, X, X)
         return 0
 
     cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
@@ -114,8 +114,8 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t sample
     ) nogil:
         cdef TransientPivot* pivot = <TransientPivot*>feature.feature
-        return (<DistanceMeasure>self.distance_measures.get(pivot.distance_measure)).distance(
-            X, sample, X, pivot.sample, feature.dim
+        return self.distance_measures.distance(
+            pivot.distance_measure, X, sample, X, pivot.sample, feature.dim
         )
 
     cdef double persistent_feature_value(
@@ -125,7 +125,8 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t sample
     ) nogil:
         cdef PersitentPivot* pivot = <PersitentPivot*> feature.feature
-        return (<DistanceMeasure>self.distance_measures.get(pivot.distance_measure))._distance(
+        return self.distance_measures._distance(
+            pivot.distance_measure,
             &X[sample, feature.dim, 0],
             X.shape[2],
             pivot.data,
