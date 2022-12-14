@@ -231,7 +231,7 @@ cdef class PyFuncSummarizer(Summarizer):
 
     cdef void reset(self, TSArray X) nogil:
         with gil:
-            self.x_buffer = np.empty(X.n_timestep, dtype=float)
+            self.x_buffer = np.empty(X.shape[2], dtype=float)
 
     cdef void summarize_all(
             self,
