@@ -2642,7 +2642,7 @@ cdef class TweSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     cdef double penalty
     cdef double stiffness
 
-    def __init__(self, double r=1.0, double penalty=1.0, double stiffness=0.0001):
+    def __init__(self, double r=1.0, double penalty=1.0, double stiffness=0.001):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(
             penalty, 
