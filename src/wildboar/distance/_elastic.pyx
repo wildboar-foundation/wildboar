@@ -2449,7 +2449,7 @@ cdef class LcssSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     
     def __init__(self, double r=1.0, double epsilon=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        check_scalar(epsilon, "epsilon", float, min_val=0)
+        check_scalar(epsilon, "epsilon", float, min_val=0, include_boundaries="neither")
         self.r = r
         self.epsilon = epsilon
 
@@ -2541,7 +2541,10 @@ cdef class EdrSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
     
     def __init__(self, double r=1.0, double epsilon=NAN):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        check_scalar(epsilon, "epsilon", float, min_val=0)
+        
+        if not isnan(epsilon):
+            check_scalar(epsilon, "epsilon", float, min_val=0, include_boundaries="neither")
+
         self.r = r
         self.epsilon = epsilon
 
@@ -2644,14 +2647,8 @@ cdef class TweSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
     def __init__(self, double r=1.0, double penalty=1.0, double stiffness=0.001):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        check_scalar(
-            penalty, 
-            "penalty", 
-            float, 
-            min_val=0.0, 
-            include_boundaries="neither"
-        )
-        check_scalar(stiffness, "stiffness", float, min_val=0.0)
+        check_scalar(penalty, "penalty", float, min_val=0.0)
+        check_scalar(stiffness, "stiffness", float, min_val=0.0, include_boundaries="neither")
         self.r = r
         self.penalty = penalty
         self.stiffness = stiffness
@@ -2951,7 +2948,7 @@ cdef class DtwDistanceMeasure(DistanceMeasure):
     cdef Py_ssize_t warp_width
     cdef double r
     
-    def __init__(self, double r=1.0, *args, **kwargs):
+    def __init__(self, double r=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
 
@@ -3223,7 +3220,7 @@ cdef class LcssDistanceMeasure(DistanceMeasure):
             epsilon = threshold
 
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        check_scalar(epsilon, "epsilon", float, min_val=0)
+        check_scalar(epsilon, "epsilon", float, min_val=0, include_boundaries="neither")
         self.r = r
         self.epsilon = epsilon
 
@@ -3437,7 +3434,7 @@ cdef class EdrDistanceMeasure(DistanceMeasure):
             epsilon = threshold
 
         if not isnan(epsilon):
-            check_scalar(epsilon, "epsilon", float, min_val=0)
+            check_scalar(epsilon, "epsilon", float, min_val=0, include_boundaries="neither")
 
         self.r = r
         self.epsilon = epsilon
@@ -3636,14 +3633,8 @@ cdef class TweDistanceMeasure(DistanceMeasure):
         double stiffness=0.001, 
     ):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        check_scalar(
-            penalty, 
-            "penalty", 
-            float, 
-            min_val=0.0, 
-            include_boundaries="neither"
-        )
-        check_scalar(stiffness, "stiffness", float, min_val=0.0)
+        check_scalar(penalty, "penalty", float, min_val=0.0)
+        check_scalar(stiffness, "stiffness", float, min_val=0.0, include_boundaries="neither")
         self.r = r
         self.penalty = penalty
         self.stiffness = stiffness

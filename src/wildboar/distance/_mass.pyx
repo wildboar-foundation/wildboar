@@ -39,6 +39,9 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
     cdef complex *x_buffer
     cdef complex *y_buffer
 
+    def __init__(self):
+        pass
+
     def __cinit__(self):
         self.mean_x = NULL
         self.std_x = NULL
@@ -174,7 +177,7 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         cdef Py_ssize_t i, j
         j = 0
         for i in range(X.shape[2] - s.length + 1):
-            if distances[0][i] < threshold:
+            if distances[0][i] <= threshold:
                 distances[0][j] = distances[0][i]
                 j += 1
         return j
@@ -213,7 +216,7 @@ cdef class ScaledMassSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure
         cdef Py_ssize_t i, j
         j = 0
         for i in range(X.shape[2] - s.length + 1):
-            if distances[0][i] < threshold:
+            if distances[0][i] <= threshold:
                 distances[0][j] = distances[0][i]
                 indicies[0][j] = i
                 j += 1

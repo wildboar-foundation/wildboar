@@ -24,6 +24,8 @@ from ._distance cimport (
 
 
 cdef class EuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -57,6 +59,8 @@ cdef class EuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 
 cdef class NormalizedEuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -91,6 +95,9 @@ cdef class NormalizedEuclideanSubsequenceDistanceMeasure(SubsequenceDistanceMeas
 
 cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMeasure):
     cdef double *X_buffer
+    
+    def __init__(self):
+        pass
 
     def __cinit__(self):
         self.X_buffer = NULL
@@ -195,6 +202,8 @@ cdef class ScaledEuclideanSubsequenceDistanceMeasure(ScaledSubsequenceDistanceMe
 
 
 cdef class ManhattanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -230,7 +239,7 @@ cdef class ManhattanSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 cdef class MinkowskiSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
     cdef Py_ssize_t p
 
-    def __cinit__(self, Py_ssize_t p=2):
+    def __init__(self, Py_ssize_t p=2):
         self.p = p
 
     def __reduce__(self):
@@ -268,6 +277,8 @@ cdef class MinkowskiSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 
 cdef class ChebyshevSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -301,6 +312,8 @@ cdef class ChebyshevSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 
 cdef class CosineSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -340,6 +353,8 @@ cdef class CosineSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 
 cdef class AngularSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -379,6 +394,8 @@ cdef class AngularSubsequenceDistanceMeasure(SubsequenceDistanceMeasure):
 
 
 cdef class EuclideanDistanceMeasure(DistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -391,6 +408,8 @@ cdef class EuclideanDistanceMeasure(DistanceMeasure):
 
 
 cdef class NormalizedEuclideanDistanceMeasure(DistanceMeasure):
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,
@@ -403,6 +422,9 @@ cdef class NormalizedEuclideanDistanceMeasure(DistanceMeasure):
 
 
 cdef class ManhattanDistanceMeasure(DistanceMeasure):
+    def __init__(self):
+        pass
+
     cdef double _distance(
         self,
         const double *x,
@@ -416,7 +438,7 @@ cdef class ManhattanDistanceMeasure(DistanceMeasure):
 cdef class MinkowskiDistanceMeasure(DistanceMeasure):
     cdef Py_ssize_t p
 
-    def __cinit__(self, Py_ssize_t p=2):
+    def __init__(self, Py_ssize_t p=2):
         self.p = p
 
     def __reduce__(self):
@@ -434,6 +456,9 @@ cdef class MinkowskiDistanceMeasure(DistanceMeasure):
 
 cdef class ChebyshevDistanceMeasure(DistanceMeasure):
 
+    def __init__(self):
+        pass
+
     cdef double _distance(
         self,
         const double *x,
@@ -446,6 +471,9 @@ cdef class ChebyshevDistanceMeasure(DistanceMeasure):
 
 cdef class CosineDistanceMeasure(DistanceMeasure):
 
+    def __init__(self):
+        pass
+
     cdef double _distance(
         self,
         const double *x,
@@ -457,6 +485,9 @@ cdef class CosineDistanceMeasure(DistanceMeasure):
 
 # https://en.wikipedia.org/wiki/Cosine_similarity#Angular_distance_and_similarity
 cdef class AngularDistanceMeasure(DistanceMeasure):
+
+    def __init__(self):
+        pass
 
     cdef double _distance(
         self,

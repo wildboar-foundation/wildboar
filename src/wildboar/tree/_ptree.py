@@ -66,10 +66,10 @@ def erp_factory(min_g=0.0, max_g=1.0, n=10):
     return [_DISTANCE_MEASURE["erp"](g=g) for g in np.linspace(min_g, max_g, n)]
 
 
-def lcss_factory(min_r=0.0, max_r=0.25, min_threshold=0, max_threshold=1.0, n=10):
+def lcss_factory(min_r=0.0, max_r=0.25, min_epsilon=0, max_epsilon=1.0, n=10):
     return [
-        _DISTANCE_MEASURE["lcss"](r=r, threshold=threshold)
-        for threshold in np.linspace(min_threshold, max_threshold, n)
+        _DISTANCE_MEASURE["lcss"](r=r, epsilon=epsilon)
+        for epsilon in np.linspace(min_epsilon, max_epsilon, n)
         for r in np.linspace(min_r, max_r, n)
     ]
 
@@ -79,7 +79,7 @@ def msm_factory(min_c=0.01, max_c=100, n=10):
 
 
 def twe_factory(
-    min_penalty=0.00001, max_penalty=1.0, min_stiffness=0.0, max_stiffness=0.1, n=10
+    min_penalty=0.00001, max_penalty=1.0, min_stiffness=10e-5, max_stiffness=0.1, n=10
 ):
     return [
         _DISTANCE_MEASURE["twe"](penalty=penalty, stiffness=stiffness)
@@ -276,8 +276,8 @@ class ProximityTreeClassifier(BaseTreeClassifier):
                 "lcss": {
                     "min_r": 0,
                     "max_r": 0.25,
-                    "min_threshold": std_x * 0.2,
-                    "max_threshold": std_x,
+                    "min_epsilon": std_x * 0.2,
+                    "max_epsilon": std_x,
                     "n": 20,
                 },
                 "erp": {"min_g": 0, "max_g": 1.0, "n": 50},
@@ -285,7 +285,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
                 "twe": {
                     "min_penalty": 0.00001,
                     "max_penalty": 1.0,
-                    "min_stiffness": 0.0,
+                    "min_stiffness": 0.000001,
                     "max_stiffness": 0.1,
                     "n": 20,
                 },
