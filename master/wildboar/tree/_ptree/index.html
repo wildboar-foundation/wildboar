@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.tree._ptree - Wildboar 1.1.1.dev245+g3caed225b documentation</title>
+        <title>wildboar.tree._ptree - Wildboar 1.1.1.dev247+gdaf503892 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev245+g3caed225b documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev247+gdaf503892 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +166,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>1.1.1.dev245+g3caed225b</small></span>
+        <small>1.1.1.dev247+gdaf503892</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -300,7 +300,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><span class="reference internal">1.1.1.dev245+g3caed225b</span></li>
+                <li class="toctree-l2"><span class="reference internal">1.1.1.dev247+gdaf503892</span></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.1.X/index.html">1.1.1</a></li>
             </ul>
@@ -369,7 +369,7 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree._ptree.euclidean_factory" title="wildboar.tree._ptree.euclidean_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">euclidean_factory</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._ptree.lcss_factory" title="wildboar.tree._ptree.lcss_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lcss_factory</span></code></a>([min_r, max_r, min_threshold, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.tree._ptree.lcss_factory" title="wildboar.tree._ptree.lcss_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lcss_factory</span></code></a>([min_r, max_r, min_epsilon, max_epsilon, n])</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.tree._ptree.make_metrics" title="wildboar.tree._ptree.make_metrics"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_metrics</span></code></a>([metric_factories])</p></td>
@@ -485,7 +485,7 @@ by <cite>np.random</cite>.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.tree._ptree.lcss_factory">
-<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">lcss_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L69-L74"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.lcss_factory" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">lcss_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L69-L74"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.lcss_factory" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -510,7 +510,7 @@ by <cite>np.random</cite>.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.tree._ptree.twe_factory">
-<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">twe_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_stiffness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stiffness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L81-L88"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.twe_factory" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.tree._ptree.</span></span><span class="sig-name descname"><span class="pre">twe_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">min_penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_stiffness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_stiffness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_ptree.py#L81-L88"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._ptree.twe_factory" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
