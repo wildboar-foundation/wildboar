@@ -764,7 +764,7 @@ def test_pickle():
 
 
 @pytest.mark.parametrize("metric", list(_METRICS.keys()))
-def test_distance_measure_raises_bad_argument(metric):
+def test_metric_raises_bad_argument(metric):
     bogus_params = {"bogus_param_should_not_exists": 10}
     with pytest.raises(TypeError):
         _METRICS[metric](**bogus_params)
@@ -806,7 +806,7 @@ def test_raises_bad_argument_value(metric, metric_params):
 
 
 @pytest.mark.parametrize("metric", list(_SUBSEQUENCE_METRICS.keys()))
-def test_subsequence_distance_measure_raises_bad_argument(metric):
+def test_subsequence_metric_raises_bad_argument(metric):
     bogus_params = {"bogus_param_should_not_exists": 10}
     with pytest.raises(TypeError):
         _SUBSEQUENCE_METRICS[metric](**bogus_params)

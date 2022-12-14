@@ -24,28 +24,28 @@ from ._feature cimport Feature, FeatureEngineer
 
 cdef struct TransientPivot:
     Py_ssize_t sample
-    Py_ssize_t distance_measure
+    Py_ssize_t metric
 
 cdef struct PersitentPivot:
     double *data
     Py_ssize_t length
-    Py_ssize_t distance_measure
+    Py_ssize_t metric
 
 cdef class PivotFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_pivots
-    cdef MetricList distance_measures
+    cdef MetricList metrics
 
-    def __cinit__(self, Py_ssize_t n_pivots, list distance_measures):
+    def __cinit__(self, Py_ssize_t n_pivots, list metrics):
         self.n_pivots = n_pivots
-        self.distance_measures = MetricList(distance_measures)
+        self.metrics = MetricList(metrics)
 
     def __reduce__(self):
-        return self.__class__, (self.n_pivots, self.distance_measures.py_list)
+        return self.__class__, (self.n_pivots, self.metrics.py_list)
 
     cdef int reset(self, TSArray X) nogil:
         cdef Py_ssize_t i
-        for i in range(self.distance_measures.size):
-            self.distance_measures.reset(i, X, X)
+        for i in range(self.metrics.size):
+            self.metrics.reset(i, X, X)
         return 0
 
     cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
@@ -65,7 +65,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     ) nogil:
         cdef TransientPivot *pivot = <TransientPivot*> malloc(sizeof(TransientPivot))
         pivot.sample = samples[rand_int(0, n_samples, seed)]
-        pivot.distance_measure = rand_int(0, self.distance_measures.size, seed)
+        pivot.metric = rand_int(0, self.metrics.size, seed)
         transient.dim = rand_int(0, X.shape[1], seed)
         transient.feature = pivot
         return 0
@@ -95,7 +95,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
         cdef PersitentPivot *persistent_pivot = <PersitentPivot*> malloc(sizeof(PersitentPivot))
         
         persistent_pivot.data = <double*> malloc(sizeof(double) * X.shape[2])
-        persistent_pivot.distance_measure = pivot.distance_measure
+        persistent_pivot.metric = pivot.metric
         persistent_pivot.length = X.shape[2]
         memcpy(
             persistent_pivot.data, 
@@ -114,8 +114,8 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t sample
     ) nogil:
         cdef TransientPivot* pivot = <TransientPivot*>feature.feature
-        return self.distance_measures.distance(
-            pivot.distance_measure, X, sample, X, pivot.sample, feature.dim
+        return self.metrics.distance(
+            pivot.metric, X, sample, X, pivot.sample, feature.dim
         )
 
     cdef double persistent_feature_value(
@@ -125,8 +125,8 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t sample
     ) nogil:
         cdef PersitentPivot* pivot = <PersitentPivot*> feature.feature
-        return self.distance_measures._distance(
-            pivot.distance_measure,
+        return self.metrics._distance(
+            pivot.metric,
             &X[sample, feature.dim, 0],
             X.shape[2],
             pivot.data,
@@ -159,10 +159,10 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
 
     cdef object persistent_feature_to_object(self, Feature *feature):
         cdef PersitentPivot *pivot = <PersitentPivot*> feature.feature
-        return feature.dim, (pivot.distance_measure, to_ndarray_double(pivot.data, pivot.length))
+        return feature.dim, (pivot.metric, to_ndarray_double(pivot.data, pivot.length))
 
     cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
-        dim, (distance_measure, arr) = object
+        dim, (metric, arr) = object
         cdef PersitentPivot *pivot = <PersitentPivot*> malloc(sizeof(PersitentPivot))
         cdef double *data = <double*> malloc(sizeof(double) * arr.size)
         cdef Py_ssize_t i
@@ -170,7 +170,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             data[i] = arr[i]
         pivot.data = data
         pivot.length = arr.size
-        pivot.distance_measure = distance_measure
+        pivot.metric = metric
 
         feature.dim = dim
         feature.feature = pivot

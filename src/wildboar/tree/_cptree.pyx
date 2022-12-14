@@ -29,7 +29,7 @@ from ..utils._rand cimport (
 
 cdef struct Pivot:
     double** data
-    Py_ssize_t distance_measure
+    Py_ssize_t metric
     Py_ssize_t length
     Py_ssize_t n_branches
 
@@ -37,7 +37,7 @@ cdef struct Pivot:
 cdef struct Split:
     Py_ssize_t* split_point # n_split
     Py_ssize_t *pivot # n_split + 1
-    Py_ssize_t distance_measure
+    Py_ssize_t metric
     Py_ssize_t n_split
     double impurity_improvement
     double *child_impurity # n_split + 1
@@ -57,14 +57,14 @@ cdef void free_split(Split *split) nogil:
         split.child_impurity = NULL
 
 cpdef Tree _make_tree(
-    list distance_measures,
+    list metrics,
     Py_ssize_t n_labels,
     Py_ssize_t max_depth,
     object branch,
     list pivots,
     object value,
 ):
-    cdef Tree tree = Tree(distance_measures, n_labels, capacity=len(pivots) + 1)
+    cdef Tree tree = Tree(metrics, n_labels, capacity=len(pivots) + 1)
     tree._max_depth = max_depth
     tree._node_count = len(pivots)
     cdef Py_ssize_t i, j, k
@@ -73,7 +73,7 @@ cpdef Tree _make_tree(
     for i in range(tree._node_count):
         if pivots[i] is not None:
             pivot = <Pivot*> malloc(sizeof(Pivot))
-            pivot.distance_measure = pivots[i][0]
+            pivot.metric = pivots[i][0]
             arr = pivots[i][1]
             pivot.n_branches = arr.shape[0]
             pivot.length = arr.shape[1]
@@ -105,11 +105,11 @@ cdef class Tree:
     cdef double *_values
     cdef Py_ssize_t _capacity
     cdef Py_ssize_t _n_labels
-    cdef MetricList distance_measures
+    cdef MetricList metrics
 
     def __cinit__(
         self,
-        list distance_measures,
+        list metrics,
         Py_ssize_t n_labels,
         Py_ssize_t capacity=10
     ):
@@ -124,11 +124,11 @@ cdef class Tree:
 
         self._pivots = <Pivot**> malloc(sizeof(Pivot*) * capacity)
         self._values = <double*> malloc(sizeof(double) * capacity * n_labels)
-        self.distance_measures = MetricList(distance_measures)
+        self.metrics = MetricList(metrics)
 
     def __reduce__(self):
        return _make_tree, (
-           self.distance_measures.py_list,
+           self.metrics.py_list,
            self._n_labels,
            self._max_depth,
            self.branch,
@@ -144,7 +144,7 @@ cdef class Tree:
         double n_weighted_samples,
         TSArray X,
         Py_ssize_t *pivots,
-        Py_ssize_t distance_measure,
+        Py_ssize_t metric,
         Py_ssize_t n_split,
     ) nogil:
         cdef Py_ssize_t node_id = self._node_count
@@ -155,7 +155,7 @@ cdef class Tree:
         cdef Pivot *pivot = <Pivot*> malloc(sizeof(Pivot))
         pivot.n_branches = n_split + 1
         pivot.length = X.shape[2]
-        pivot.distance_measure = distance_measure
+        pivot.metric = metric
         pivot.data = <double**> malloc(sizeof(double*) * pivot.n_branches)
         cdef Py_ssize_t i
         for i in range(pivot.n_branches):
@@ -224,7 +224,7 @@ cdef class Tree:
                 for j in range(pivot.n_branches):
                     for k in range(pivot.length):
                         arr[j, k] = self._pivots[i].data[j][k]
-                pivots.append((pivot.distance_measure, arr))
+                pivots.append((pivot.metric, arr))
             else:
                 pivots.append(None)
 
@@ -250,15 +250,15 @@ cdef class Tree:
         cdef Pivot *pivot
 
         with nogil:
-            for i in range(self.distance_measures.size):
-                self.distance_measures.reset(i, X, X)
+            for i in range(self.metrics.size):
+                self.metrics.reset(i, X, X)
 
             for i in range(X.shape[0]):
                 node_index = 0
                 while self._branches[0][node_index] != -1:
                     pivot = self._pivots[node_index]
                     branch = find_min_branch(
-                        self.distance_measures, pivot, &X[i, 0, 0]
+                        self.metrics, pivot, &X[i, 0, 0]
                     )
                     node_index = self._branches[branch][node_index]
                 out[i] = node_index
@@ -270,7 +270,7 @@ cdef class Tree:
 
 
 cdef Py_ssize_t find_min_branch(
-    MetricList metric_list,
+    MetricList metrics,
     Pivot *pivot,
     const double *sample,
 ) nogil:
@@ -280,8 +280,8 @@ cdef Py_ssize_t find_min_branch(
 
     cdef Py_ssize_t i
     for i in range(pivot.n_branches):
-        dist = metric_list._distance(
-            pivot.distance_measure, sample, pivot.length, pivot.data[i], pivot.length
+        dist = metrics._distance(
+            pivot.metric, sample, pivot.length, pivot.data[i], pivot.length
         )
         if dist < min_dist:
             min_dist = dist
@@ -554,10 +554,10 @@ cdef class TreeBuilder:
     cdef Py_ssize_t *branch_count
 
     cdef TSArray X
-    cdef MetricList distance_measures
+    cdef MetricList metrics
     cdef readonly Tree tree
     cdef Criterion criterion
-    cdef MetricSampler distance_measure_sampler
+    cdef MetricSampler metric_sampler
     cdef PivotSampler pivot_sampler
     cdef uint32_t seed
 
@@ -566,7 +566,7 @@ cdef class TreeBuilder:
         TSArray X,
         const double[:] sample_weights,
         PivotSampler pivot_sampler,
-        MetricSampler distance_measure_sampler,
+        MetricSampler metric_sampler,
         Criterion criterion,
         Tree tree,
         object random_state,
@@ -585,9 +585,9 @@ cdef class TreeBuilder:
         self.X = X
         self.criterion = criterion
         self.tree = tree
-        self.distance_measure_sampler = distance_measure_sampler
+        self.metric_sampler = metric_sampler
         self.pivot_sampler = pivot_sampler
-        self.distance_measures = tree.distance_measures
+        self.metrics = tree.metrics
         self.seed = random_state.randint(0, RAND_R_MAX)
 
         self.sample_weights = sample_weights
@@ -621,8 +621,8 @@ cdef class TreeBuilder:
 
         self.n_samples = j
 
-        for i in range(self.distance_measures.size):
-            self.distance_measures.reset(i, self.X, self.X)
+        for i in range(self.metrics.size):
+            self.metrics.reset(i, self.X, self.X)
 
     def __dealloc__(self):
         free(self.samples)
@@ -694,7 +694,7 @@ cdef class TreeBuilder:
                 self.criterion.weighted_n_total,
                 self.X,
                 split.pivot,
-                split.distance_measure,
+                split.metric,
                 split.n_split,
             )
             split_start = start
@@ -749,7 +749,7 @@ cdef class TreeBuilder:
 
         cdef Py_ssize_t label
         cdef Py_ssize_t pivot_index
-        cdef Py_ssize_t best_distance_measure = -1
+        cdef Py_ssize_t best_metric = -1
         cdef double impurity
         cdef double best_impurity
         cdef Split split
@@ -761,7 +761,7 @@ cdef class TreeBuilder:
             split.split_point = NULL
             split.pivot = NULL
             split.child_impurity = NULL
-            split.distance_measure = -1
+            split.metric = -1
             return split
         else:
             split.pivot = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.criterion.n_labels)
@@ -783,17 +783,17 @@ cdef class TreeBuilder:
                         )
                         pivot_index += 1
 
-                split.distance_measure = self.distance_measure_sampler.sample(
+                split.metric = self.metric_sampler.sample(
                     self.samples + start, n_samples, &self.seed,
                 )
                 self._partition_pivots(
-                    start, end, split.pivot, split.distance_measure, n_branches
+                    start, end, split.pivot, split.metric, n_branches
                 )
                 self.criterion.reset(self.samples_branch)
                 impurity = self.criterion.proxy_impurity(split.child_impurity, n_branches)
                 if impurity > best_impurity:
                     best_impurity = impurity
-                    best_distance_measure = split.distance_measure
+                    best_metric = split.metric
                     memcpy(
                         self.pivot_buffer,
                         split.pivot,
@@ -818,7 +818,7 @@ cdef class TreeBuilder:
 
             # Restore the pivots with the lowest impurity score
             memcpy(split.pivot, self.pivot_buffer, sizeof(Py_ssize_t) * self.criterion.n_labels)
-            split.distance_measure = best_distance_measure
+            split.metric = best_metric
 
             # Shift unused pivots to the end. The number of used pivots might be lower
             # than the number of possible branches. We compute the number of splits
@@ -871,7 +871,7 @@ cdef class TreeBuilder:
         Py_ssize_t start,
         Py_ssize_t end,
         Py_ssize_t *pivots,
-        Py_ssize_t distance_measure,
+        Py_ssize_t metric,
         Py_ssize_t n_branches
     ) nogil:
         cdef Py_ssize_t i, j
@@ -883,8 +883,8 @@ cdef class TreeBuilder:
             j = self.samples[i]
             min_dist = INFINITY
             for pivot in range(n_branches):
-                dist = self.distance_measures.distance(
-                    distance_measure, self.X, pivots[pivot], self.X, j, 0
+                dist = self.metrics.distance(
+                    metric, self.X, pivots[pivot], self.X, j, 0
                 )
 
                 if dist < min_dist:

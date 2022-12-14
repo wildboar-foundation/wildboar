@@ -104,24 +104,24 @@ _METRIC_FACTORIES = {
 
 
 def make_metrics(metric_factories=None):
-    distance_measures = []
+    metrics = []
     weights = []
     weight = 1.0 / len(metric_factories)
     for metric_factory, metric_factory_params in metric_factories.items():
         if callable(metric_factory):
-            metrics = metric_factory(**(metric_factory_params) or {})
+            current_metrics = metric_factory(**(metric_factory_params) or {})
         else:
-            metrics = check_option(
+            current_metrics = check_option(
                 _METRIC_FACTORIES,
                 metric_factory,
                 "metric_factories key",
             )(**(metric_factory_params or {}))
 
-        for distance_measure in metrics:
-            distance_measures.append(distance_measure)
-            weights.append(weight / len(metrics))
+        for metric in current_metrics:
+            metrics.append(metric)
+            weights.append(weight / len(current_metrics))
 
-    return distance_measures, np.array(weights, dtype=np.double)
+    return metrics, np.array(weights, dtype=float)
 
 
 class ProximityTreeClassifier(BaseTreeClassifier):
@@ -295,7 +295,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         else:
             metric_factories = self.metric_factories
 
-        distance_measures, weights = make_metrics(metric_factories=metric_factories)
+        metrics, weights = make_metrics(metric_factories=metric_factories)
         Criterion = _CLF_CRITERION[self.criterion]
         PivotSampler = _PIVOT_SAMPLER[self.pivot_sample]
         MetricSampler = _METRICS_SAMPLER[self.metric_sample]
@@ -303,9 +303,9 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             x,
             sample_weights,
             PivotSampler(),
-            MetricSampler(len(distance_measures), weights=weights),
+            MetricSampler(len(metrics), weights=weights),
             Criterion(y, self.n_classes_),
-            Tree(distance_measures, self.n_classes_),
+            Tree(metrics, self.n_classes_),
             random_state,
             n_features=self.n_pivot,
             max_depth=max_depth,

@@ -21,26 +21,26 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t min_shapelet_size
     cdef Py_ssize_t max_shapelet_size
 
-    cdef readonly SubsequenceMetric distance_measure
+    cdef readonly SubsequenceMetric metric
 
-    def __init__(self, distance_measure, min_shapelet_size, max_shapelet_size):
-        self.distance_measure = distance_measure
+    def __init__(self, metric, min_shapelet_size, max_shapelet_size):
+        self.metric = metric
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
     cdef int reset(self, TSArray X) nogil:
-        self.distance_measure.reset(X)
+        self.metric.reset(X)
         return 1
 
     cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
         if feature.feature != NULL:
-            self.distance_measure.free_transient(<SubsequenceView*> feature.feature)
+            self.metric.free_transient(<SubsequenceView*> feature.feature)
             free(feature.feature)
 
     cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
         cdef Subsequence *s
         if feature.feature != NULL:
-            self.distance_measure.free_persistent(<Subsequence*> feature.feature)
+            self.metric.free_persistent(<Subsequence*> feature.feature)
             free(feature.feature)
 
     cdef Py_ssize_t init_persistent_feature(
@@ -51,7 +51,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
     ) nogil:
         cdef SubsequenceView *v = <SubsequenceView*> transient.feature
         cdef Subsequence *s = <Subsequence*> malloc(sizeof(Subsequence))
-        self.distance_measure.init_persistent(X, v, s)
+        self.metric.init_persistent(X, v, s)
         persistent.dim = transient.dim
         persistent.feature = s
         return 1
@@ -62,7 +62,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         TSArray X,
         Py_ssize_t sample
     ) nogil:
-        return self.distance_measure.transient_distance(
+        return self.metric.transient_distance(
             <SubsequenceView*> feature.feature, X, sample
         )
 
@@ -72,7 +72,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         TSArray X,
         Py_ssize_t sample
     ) nogil:
-        return self.distance_measure.persistent_distance(
+        return self.metric.persistent_distance(
             <Subsequence*> feature.feature, X, sample
         )
 
@@ -85,7 +85,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
-        out[out_sample, feature_id] = self.distance_measure.transient_distance(
+        out[out_sample, feature_id] = self.metric.transient_distance(
             <SubsequenceView*> feature.feature, X, sample
         )
         return 0
@@ -99,18 +99,18 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) nogil:
-        out[out_sample, feature_id] = self.distance_measure.persistent_distance(
+        out[out_sample, feature_id] = self.metric.persistent_distance(
             <Subsequence*> feature.feature, X, sample
         )
         return 0
 
     cdef object persistent_feature_to_object(self, Feature *feature):
-        return feature.dim, self.distance_measure.to_array(<Subsequence*>feature.feature)
+        return feature.dim, self.metric.to_array(<Subsequence*>feature.feature)
 
     cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
         cdef Subsequence *s = <Subsequence*> malloc(sizeof(Subsequence))
         dim, obj = object
-        self.distance_measure.from_array(s, obj)
+        self.metric.from_array(s, obj)
         feature.dim = dim
         feature.feature = s
         return 0
@@ -120,9 +120,9 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
     cdef Py_ssize_t n_shapelets
 
     def __init__(
-        self, distance_measure, min_shapelet_size, max_shapelet_size, n_shapelets
+        self, metric, min_shapelet_size, max_shapelet_size, n_shapelets
     ):
-        super().__init__(distance_measure, min_shapelet_size, max_shapelet_size)
+        super().__init__(metric, min_shapelet_size, max_shapelet_size)
         self.n_shapelets = n_shapelets
 
     cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
@@ -157,7 +157,7 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
             shapelet_dim = 0
 
         transient.dim = shapelet_dim
-        self.distance_measure.init_transient(
+        self.metric.init_transient(
             X,
             v,
             shapelet_index,

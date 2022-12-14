@@ -729,8 +729,8 @@ def paired_distance(
 
     Metric = check_option(_METRICS, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
-    distance_measure = Metric(**metric_params)
-    if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not distance_measure.is_elastic:
+    metric = Metric(**metric_params)
+    if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not metric.is_elastic:
         raise ValueError(
             "Illegal n_timestep (%r != %r) for non-elastic distance measure"
             % (x.shape[x.ndim - 1], y.shape[y.ndim - 1])
@@ -755,8 +755,7 @@ def paired_distance(
     y_ = _check_ts_array(y)
     if dim in ["mean", "full"]:
         distances = [
-            _distance._paired_distance(x_, y_, d, distance_measure, n_jobs)
-            for d in range(n_dims)
+            _distance._paired_distance(x_, y_, d, metric, n_jobs) for d in range(n_dims)
         ]
 
         if dim == "mean":
@@ -765,7 +764,7 @@ def paired_distance(
             distances = np.stack(distances, axis=1)
 
     elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
-        distances = _distance._paired_distance(x_, y_, dim, distance_measure, n_jobs)
+        distances = _distance._paired_distance(x_, y_, dim, metric, n_jobs)
     else:
         raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
@@ -830,7 +829,7 @@ def pairwise_distance(
     """
     Metric = check_option(_METRICS, metric, "metric")
     metric_params = metric_params if metric_params is not None else {}
-    distance_measure = Metric(**metric_params)
+    metric = Metric(**metric_params)
 
     if y is None:
         y = x
@@ -858,7 +857,7 @@ def pairwise_distance(
 
         if dim in ["mean", "full"]:
             distances = [
-                _distance._singleton_pairwise_distance(x_, d, distance_measure, n_jobs)
+                _distance._singleton_pairwise_distance(x_, d, metric, n_jobs)
                 for d in range(n_dims)
             ]
 
@@ -868,9 +867,7 @@ def pairwise_distance(
                 distances = np.stack(distances, axis=0)
 
         elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
-            distances = _distance._singleton_pairwise_distance(
-                x_, dim, distance_measure, n_jobs
-            )
+            distances = _distance._singleton_pairwise_distance(x_, dim, metric, n_jobs)
         else:
             raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
@@ -886,7 +883,7 @@ def pairwise_distance(
         if x.ndim == 3 and x.shape[1] != y.shape[1]:
             raise ValueError("x and y must have the same number of dimensions.")
 
-        if x.shape[-1] != y.shape[-1] and not distance_measure.is_elastic:
+        if x.shape[-1] != y.shape[-1] and not metric.is_elastic:
             raise ValueError(
                 "Illegal n_timestep (%r != %r) for non-elastic distance measure"
                 % (x.shape[-1], y.shape[-1])
@@ -911,7 +908,7 @@ def pairwise_distance(
 
         if dim in ["mean", "full"]:
             distances = [
-                _distance._pairwise_distance(x_, y_, d, distance_measure, n_jobs)
+                _distance._pairwise_distance(x_, y_, d, metric, n_jobs)
                 for d in range(n_dims)
             ]
 
@@ -921,9 +918,7 @@ def pairwise_distance(
                 distances = np.stack(distances, axis=0)
 
         elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
-            distances = _distance._pairwise_distance(
-                x_, y_, dim, distance_measure, n_jobs
-            )
+            distances = _distance._pairwise_distance(x_, y_, dim, metric, n_jobs)
         else:
             raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
