@@ -5,7 +5,7 @@ from sklearn.base import clone
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.utils.validation import check_is_fitted
 
-from ...distance import mean_paired_distance
+from ...distance import paired_distance
 from ...ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
 from ...utils.validation import check_array
 from ._nn import KNeighborsCounterfactual
@@ -50,11 +50,13 @@ def _proximity(
         x_counterfactuals, allow_3d=True, input_name="x_counterfactuals"
     )
 
-    distance = mean_paired_distance(
-        x_true, x_counterfactuals, metric=metric, metric_params=metric_params
+    return paired_distance(
+        x_true,
+        x_counterfactuals,
+        metric=metric,
+        metric_params=metric_params,
+        dim="mean",
     )
-
-    return distance
 
 
 _COUNTERFACTUALS = {
