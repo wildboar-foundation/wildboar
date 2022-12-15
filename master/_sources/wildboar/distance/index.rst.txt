@@ -96,7 +96,7 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_METRICS.keys()`` for a list of supported metrics.
    :type dim: int or {'mean', 'full'} optional
    :param metric_params: Parameters to the metric.
 
@@ -129,7 +129,7 @@ Functions
    :type dim: int, optional
    :param metric: The distance metric
 
-                  See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric.
 
@@ -167,7 +167,7 @@ Functions
    :type dim: int, optional
    :param metric: The distance metric
 
-                  See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric.
 
@@ -214,7 +214,7 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_METRICS.keys()`` for a list of supported metrics.
    :type dim: int or {'mean', 'full'} optional
    :param metric_params: Parameters to the metric.
 
@@ -251,7 +251,7 @@ Functions
                metric : str or callable, optional
                   The distance metric
 
-                  See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
    :type dim: int, optional
    :param metric_params: Parameters to the metric.
 
@@ -307,7 +307,7 @@ Functions
    :type dim: int, optional
    :param metric: The distance metric
 
-                  See ``_SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric.
 

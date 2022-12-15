@@ -66,7 +66,7 @@ using the ``metric_params`` argument.
      - ``{"r": float}``
      - Window ``r`` in ``[0, 1]``
 
-    * - Weighted DTW
+   * - Weighted DTW
      - ``"wdtw"``
      - ``{"r": float, "g": float}``
      - Window ``r`` in ``[0, 1]``, default ``1.0``. Phase difference penalty ``g``, default ``0.05``.

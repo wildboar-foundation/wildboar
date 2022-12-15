@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.transform._pivot - Wildboar 1.1.1.dev247+gdaf503892 documentation</title>
+        <title>wildboar.transform._pivot - Wildboar 1.1.1.dev256+ga6035c4eb documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev247+gdaf503892 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev256+ga6035c4eb documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +166,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>1.1.1.dev247+gdaf503892</small></span>
+        <small>1.1.1.dev256+ga6035c4eb</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -300,7 +300,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><span class="reference internal">1.1.1.dev247+gdaf503892</span></li>
+                <li class="toctree-l2"><span class="reference internal">1.1.1.dev256+ga6035c4eb</span></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.1.X/index.html">1.1.1</a></li>
             </ul>
@@ -356,23 +356,35 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._pivot.PivotMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._pivot.</span></span><span class="sig-name descname"><span class="pre">PivotMixin</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L11-L37"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._pivot.PivotMixin" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._pivot.</span></span><span class="sig-name descname"><span class="pre">PivotMixin</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L12-L55"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._pivot.PivotMixin" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._pivot.PivotTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._pivot.</span></span><span class="sig-name descname"><span class="pre">PivotTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_factories</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L40-L66"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._pivot.PivotTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._pivot.</span></span><span class="sig-name descname"><span class="pre">PivotTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L58-L105"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._pivot.PivotTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.transform._pivot.PivotMixin" title="wildboar.transform._pivot.PivotMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PivotMixin</span></code></a>, <a class="reference internal" href="../base/index.html#wildboar.transform.base.BaseFeatureEngineerTransform" title="wildboar.transform.base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform.base.BaseFeatureEngineerTransform</span></code></a></p>
 <p>A transform using pivot time series and sampled distance metrics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>metric_factories</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>The distance metrics. A dictionary where key is:</p>
-<ul class="simple">
-<li><p>if str, a named distance factory (See <code class="docutils literal notranslate"><span class="pre">_DISTANCE_FACTORIES.keys()</span></code>)</p></li>
-<li><p>if callable, a function returning a list of <code class="docutils literal notranslate"><span class="pre">DistanceMeasure</span></code>-objects</p></li>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_pivot</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of pivot time series.</p></li>
+<li><p><strong>metrics</strong> (<em>{'auto'}</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – <ul>
+<li><p>If str, the distance metric used to identify the best shapelet.</p></li>
+<li><p>If list, multiple metrics specified as a list of tuples, where the first
+element of the tuple is a metric name and the second element a dictionary
+with a parameter grid specification. A parameter grid specification is a
+dict with two mandatory and one optional key-value pairs defining the
+lower and upper bound on the values and number of values in the grid. For
+example, to specifiy a grid over the argument ‘r’ with 10 values in the
+range 0 to 1, we would give the following specification: <code class="docutils literal notranslate"><span class="pre">dict(min_r=0,</span>
+<span class="pre">max_r=1,</span> <span class="pre">num_r=10)</span></code>.</p></li>
 </ul>
-<p>and where value is a dict of parameters to the factory.</p>
-</p>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../guide/metrics.html#list-of-subsequence-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</p></li>
+<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>np.RandomState</em><em>, </em><em>optional</em>) – The random state</p></li>
+<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of cores to use.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

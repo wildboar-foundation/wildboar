@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.linear_model._transform - Wildboar 1.1.1.dev247+gdaf503892 documentation</title>
+        <title>wildboar.linear_model._transform - Wildboar 1.1.1.dev256+ga6035c4eb documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -138,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev247+gdaf503892 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev256+ga6035c4eb documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +166,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>1.1.1.dev247+gdaf503892</small></span>
+        <small>1.1.1.dev256+ga6035c4eb</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -300,7 +300,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><span class="reference internal">1.1.1.dev247+gdaf503892</span></li>
+                <li class="toctree-l2"><span class="reference internal">1.1.1.dev256+ga6035c4eb</span></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.1.X/index.html">1.1.1</a></li>
             </ul>
@@ -345,14 +345,14 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="wildboar.linear_model._transform.BaseTransformEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformEstimator</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier" title="wildboar.linear_model._transform.BaseTransformClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformClassifier</span></code></a></p></td>
+<td><p>Mixin class for all classifiers in scikit-learn.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="wildboar.linear_model._transform.BaseTransformEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformEstimator</span></code></a></p></td>
 <td><p>Base class for all estimators in scikit-learn.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin" title="wildboar.linear_model._transform.TransformClassifierMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransformClassifierMixin</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin" title="wildboar.linear_model._transform.TransformRegressorMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransformRegressorMixin</span></code></a></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor" title="wildboar.linear_model._transform.BaseTransformRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformRegressor</span></code></a></p></td>
+<td><p>Mixin class for all regression estimators in scikit-learn.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model._transform.TransformRidgeCV" title="wildboar.linear_model._transform.TransformRidgeCV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransformRidgeCV</span></code></a></p></td>
 <td><p>Mixin class for all regression estimators in scikit-learn.</p></td>
@@ -364,8 +364,40 @@
 </table>
 </div>
 <dl class="py class">
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">BaseTransformClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L44-L67"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformClassifier" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code>, <a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="wildboar.linear_model._transform.BaseTransformEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformEstimator</span></code></a></p>
+<p>Mixin class for all classifiers in scikit-learn.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformClassifier.classes_">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classes_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformClassifier.classes_" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformClassifier.decision_function">
+<span class="sig-name descname"><span class="pre">decision_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L60-L63"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformClassifier.decision_function" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformClassifier.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L45-L48"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformClassifier.predict_log_proba">
+<span class="sig-name descname"><span class="pre">predict_log_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L55-L58"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict_log_proba" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformClassifier.predict_proba">
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L50-L53"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict_proba" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformEstimator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">BaseTransformEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L16-L39"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">BaseTransformEstimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L17-L41"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Base class for all estimators in scikit-learn.</p>
 <p class="rubric">Notes</p>
@@ -374,71 +406,43 @@ at the class level in their <code class="docutils literal notranslate"><span cla
 arguments (no <code class="docutils literal notranslate"><span class="pre">*args</span></code> or <code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformEstimator.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L21-L31"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformEstimator.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L22-L26"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformEstimator.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformClassifierMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">TransformClassifierMixin</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L42-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformClassifierMixin" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py property">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformClassifierMixin.classes_">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">classes_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformClassifierMixin.classes_" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformRegressor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">BaseTransformRegressor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L70-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformRegressor" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.RegressorMixin</span></code>, <a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="wildboar.linear_model._transform.BaseTransformEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformEstimator</span></code></a></p>
+<p>Mixin class for all regression estimators in scikit-learn.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformRegressor.decision_function">
+<span class="sig-name descname"><span class="pre">decision_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L76-L79"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformRegressor.decision_function" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformClassifierMixin.decision_function">
-<span class="sig-name descname"><span class="pre">decision_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L58-L61"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformClassifierMixin.decision_function" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformClassifierMixin.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L43-L46"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformClassifierMixin.predict_log_proba">
-<span class="sig-name descname"><span class="pre">predict_log_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L53-L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict_log_proba" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformClassifierMixin.predict_proba">
-<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L48-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict_proba" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformRegressorMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">TransformRegressorMixin</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L68-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRegressorMixin" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformRegressorMixin.decision_function">
-<span class="sig-name descname"><span class="pre">decision_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L74-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRegressorMixin.decision_function" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformRegressorMixin.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L69-L72"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRegressorMixin.predict" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="wildboar.linear_model._transform.BaseTransformRegressor.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L71-L74"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.BaseTransformRegressor.predict" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformRidgeCV">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">TransformRidgeCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">1.0,</span> <span class="pre">10.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcv_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L121-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRidgeCV" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.RegressorMixin</span></code>, <a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin" title="wildboar.linear_model._transform.TransformRegressorMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransformRegressorMixin</span></code></a>, <a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="wildboar.linear_model._transform.BaseTransformEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformEstimator</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">TransformRidgeCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">1.0,</span> <span class="pre">10.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcv_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L130-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRidgeCV" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor" title="wildboar.linear_model._transform.BaseTransformRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformRegressor</span></code></a></p>
 <p>Mixin class for all regression estimators in scikit-learn.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformRidgeClassifierCV">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">TransformRidgeClassifierCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">1.0,</span> <span class="pre">10.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L80-L118"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRidgeClassifierCV" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code>, <a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin" title="wildboar.linear_model._transform.TransformClassifierMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransformClassifierMixin</span></code></a>, <a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator" title="wildboar.linear_model._transform.BaseTransformEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformEstimator</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model._transform.</span></span><span class="sig-name descname"><span class="pre">TransformRidgeClassifierCV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">1.0,</span> <span class="pre">10.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L82-L127"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRidgeClassifierCV" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier" title="wildboar.linear_model._transform.BaseTransformClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTransformClassifier</span></code></a></p>
 <p>Mixin class for all classifiers in scikit-learn.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.linear_model._transform.TransformRidgeClassifierCV.predict_proba">
-<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L112-L118"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRidgeClassifierCV.predict_proba" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/linear_model/_transform.py#L121-L127"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model._transform.TransformRidgeClassifierCV.predict_proba" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -487,21 +491,21 @@ arguments (no <code class="docutils literal notranslate"><span class="pre">*args
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model._transform</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier"><code class="docutils literal notranslate"><span class="pre">BaseTransformClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.classes_"><code class="docutils literal notranslate"><span class="pre">BaseTransformClassifier.classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.decision_function"><code class="docutils literal notranslate"><span class="pre">BaseTransformClassifier.decision_function()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict"><code class="docutils literal notranslate"><span class="pre">BaseTransformClassifier.predict()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict_log_proba"><code class="docutils literal notranslate"><span class="pre">BaseTransformClassifier.predict_log_proba()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict_proba"><code class="docutils literal notranslate"><span class="pre">BaseTransformClassifier.predict_proba()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator"><code class="docutils literal notranslate"><span class="pre">BaseTransformEstimator</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator.fit"><code class="docutils literal notranslate"><span class="pre">BaseTransformEstimator.fit()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin"><code class="docutils literal notranslate"><span class="pre">TransformClassifierMixin</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.classes_"><code class="docutils literal notranslate"><span class="pre">TransformClassifierMixin.classes_</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.decision_function"><code class="docutils literal notranslate"><span class="pre">TransformClassifierMixin.decision_function()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict"><code class="docutils literal notranslate"><span class="pre">TransformClassifierMixin.predict()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict_log_proba"><code class="docutils literal notranslate"><span class="pre">TransformClassifierMixin.predict_log_proba()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict_proba"><code class="docutils literal notranslate"><span class="pre">TransformClassifierMixin.predict_proba()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin"><code class="docutils literal notranslate"><span class="pre">TransformRegressorMixin</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin.decision_function"><code class="docutils literal notranslate"><span class="pre">TransformRegressorMixin.decision_function()</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin.predict"><code class="docutils literal notranslate"><span class="pre">TransformRegressorMixin.predict()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor"><code class="docutils literal notranslate"><span class="pre">BaseTransformRegressor</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor.decision_function"><code class="docutils literal notranslate"><span class="pre">BaseTransformRegressor.decision_function()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor.predict"><code class="docutils literal notranslate"><span class="pre">BaseTransformRegressor.predict()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRidgeCV"><code class="docutils literal notranslate"><span class="pre">TransformRidgeCV</span></code></a></li>
@@ -509,21 +513,21 @@ arguments (no <code class="docutils literal notranslate"><span class="pre">*args
 <li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRidgeClassifierCV.predict_proba"><code class="docutils literal notranslate"><span class="pre">TransformRidgeClassifierCV.predict_proba()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier">BaseTransformClassifier</a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.classes_">classes_</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.decision_function">decision_function</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict">predict</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict_log_proba">predict_log_proba</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformClassifier.predict_proba">predict_proba</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator">BaseTransformEstimator</a><ul>
 <li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformEstimator.fit">fit</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin">TransformClassifierMixin</a><ul>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.classes_">classes_</a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.decision_function">decision_function</a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict">predict</a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict_log_proba">predict_log_proba</a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformClassifierMixin.predict_proba">predict_proba</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin">TransformRegressorMixin</a><ul>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin.decision_function">decision_function</a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRegressorMixin.predict">predict</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor">BaseTransformRegressor</a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor.decision_function">decision_function</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._transform.BaseTransformRegressor.predict">predict</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.linear_model._transform.TransformRidgeCV">TransformRidgeCV</a></li>

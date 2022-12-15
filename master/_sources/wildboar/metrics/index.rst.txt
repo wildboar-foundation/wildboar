@@ -98,7 +98,7 @@ Functions
    :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
    :param metric: The distance metric
 
-                  See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_METRICS.keys()`` for a list of supported metrics.
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric.
 
@@ -139,7 +139,7 @@ Functions
    :type y_counterfactual: array-like of shape (n_counterfactuals, )
    :param metric: The distance metric
 
-                  See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_METRICS.keys()`` for a list of supported metrics.
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric.
 

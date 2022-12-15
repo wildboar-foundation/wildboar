@@ -49,15 +49,28 @@ Changelog
 
      - |Feature| Add support for ERP subsequence distance.
 
+     - |Fix| Fix a bug in angular distance leading to ``NaN`` values.
+
+     - |Fix| Fix a bug in angular distance subsequence matching where an incorrect
+       threshold was set.
+
      - |API| Rename LCSS ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
 
      - |API| Rename EDR ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
+
+     - |API| Rename :class:`_distance.DistanceMeasure` to ``Metric`` and 
+       :class:`_distance.SubsequenceDistanceMeasure` to ``SubsequenceMetric``. The change 
+       only affect code that ``cimport`` modules.
 
   .. grid-item-card:: 
     
      :mod:`wildboar.ensemble`
      ^^^
      
+     - |Feature| Add support for multiple metrics in :class:`ensemble.ShapeletForestClassifier`,
+       :class:`ensemble.ShapeletForestRegressor`. All estimators with a ``metric`` parameter
+       and which implements the ``ShapeletMixin`` is affected by this change.
+
      - |API| Rename the constructor parameter ``base_estimator`` to ``estimator`` in 
        :class:`ensemble.BaggingClassifier` and :class:`ensemble.BaggingRegressor`.
        ``base_estimator`` is deprecated in 1.2 and will be removed in 1.4. Original
@@ -74,13 +87,16 @@ Changelog
      :mod:`wildboar.linear_model`
      ^^^
      
-     - |API| Remove the deprecated ``normalize`` parameter from :class:`linear_model.RocketClassifier` and
+     - |API| Undeprecate the ``normalize`` parameter from :class:`linear_model.RocketClassifier` and
        :class:`linear_model.RocketRegressor`.
 
   .. grid-item-card:: 
     
      :mod:`wildboar.transform`
      ^^^
+
+     - |Feature| Add support for multiple metrics in :class:`transform.RandomShapeletTransform`
+       by passing a list of metric specifications. See the documentation for details.
 
      - |Enhancement| Rename the parameter value ``log`` for the parameter ``n_intervals``
        in :class:`transform.IntervalTransform` to ``log2``. The old value is deprecated
@@ -94,12 +110,20 @@ Changelog
      :mod:`wildboar.tree`
      ^^^
      
+     - |Feature| Add support for multiple metrics in :class:`tree.ShapeletTreeClassifier`,
+       :class:`tree.ShapeletTreeRegressor`. All estimators with a ``metric`` parameter
+       and which implements the ``ShapeletMixin`` is affected by this change.
+
      - |Fix| Correctly use MSM distance measure in :class:`tree.ProximityTreeClassifier`.
 
      - |Fix| Correctly set ``min_samples_leaf`` in :class:`tree.RocketTreeClassifier` and :class:`RocketTreeRegressor`.
 
      - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
        This change affect :class:`tree.RocketTreeClassifier` and :class:`tree.RocketTreeRegressor`.
+
+     - |API| The ``metric_factories`` parameter of :class:`tree.ProximityTreeClassifier` has
+       been renamed to ``metrics``. We have deprecated ``metric_factories`` and it will be
+       removed in 1.4.
 
 Other improvements
 ------------------

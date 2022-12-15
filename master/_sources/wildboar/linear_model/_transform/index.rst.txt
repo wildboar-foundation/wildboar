@@ -14,12 +14,34 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.linear_model._transform.BaseTransformClassifier
    wildboar.linear_model._transform.BaseTransformEstimator
-   wildboar.linear_model._transform.TransformClassifierMixin
-   wildboar.linear_model._transform.TransformRegressorMixin
+   wildboar.linear_model._transform.BaseTransformRegressor
    wildboar.linear_model._transform.TransformRidgeCV
    wildboar.linear_model._transform.TransformRidgeClassifierCV
 
+
+
+
+.. py:class:: BaseTransformClassifier(*, random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`BaseTransformEstimator`
+
+   Mixin class for all classifiers in scikit-learn.
+
+   .. py:property:: classes_
+
+
+   .. py:method:: decision_function(x)
+
+
+   .. py:method:: predict(x)
+
+
+   .. py:method:: predict_log_proba(x)
+
+
+   .. py:method:: predict_proba(x)
 
 
 
@@ -39,25 +61,11 @@ Classes
 
 
 
-.. py:class:: TransformClassifierMixin
+.. py:class:: BaseTransformRegressor(*, random_state=None, n_jobs=None)
 
-   .. py:property:: classes_
+   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`BaseTransformEstimator`
 
-
-   .. py:method:: decision_function(x)
-
-
-   .. py:method:: predict(x)
-
-
-   .. py:method:: predict_log_proba(x)
-
-
-   .. py:method:: predict_proba(x)
-
-
-
-.. py:class:: TransformRegressorMixin
+   Mixin class for all regression estimators in scikit-learn.
 
    .. py:method:: decision_function(x)
 
@@ -66,16 +74,16 @@ Classes
 
 
 
-.. py:class:: TransformRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
+.. py:class:: TransformRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, gcv_mode=None, normalize=True, n_jobs=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`TransformRegressorMixin`, :py:obj:`BaseTransformEstimator`
+   Bases: :py:obj:`BaseTransformRegressor`
 
    Mixin class for all regression estimators in scikit-learn.
 
 
-.. py:class:: TransformRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
+.. py:class:: TransformRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize=True, n_jobs=None, random_state=None)
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`TransformClassifierMixin`, :py:obj:`BaseTransformEstimator`
+   Bases: :py:obj:`BaseTransformClassifier`
 
    Mixin class for all classifiers in scikit-learn.
 

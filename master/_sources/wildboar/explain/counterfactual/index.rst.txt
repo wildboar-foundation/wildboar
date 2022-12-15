@@ -25,7 +25,6 @@ Functions
 
    wildboar.explain.counterfactual.counterfactuals
    wildboar.explain.counterfactual.proximity
-   wildboar.explain.counterfactual.score
 
 
 
@@ -253,7 +252,7 @@ Functions
    :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
    :param metric: The distance metric
 
-                  See ``_DISTANCE_MEASURE.keys()`` for a list of supported metrics.
+                  See ``_METRICS.keys()`` for a list of supported metrics.
    :type metric: str or callable, optional
    :param metric_params: Parameters to the metric.
 
@@ -263,8 +262,5 @@ Functions
 
    :returns: **score** -- The scores
    :rtype: ndarray
-
-
-.. py:function:: score(x_true, x_counterfactuals, metric='euclidean', success=None)
 
 

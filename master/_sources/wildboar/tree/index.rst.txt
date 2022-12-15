@@ -322,7 +322,7 @@ Classes
    :type random_state: int or RandomState
 
 
-.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories='default', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics='auto', metric_factories=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
    Bases: :py:obj:`wildboar.tree.base.BaseTreeClassifier`
 
@@ -335,10 +335,10 @@ Classes
    >>> x, y = load_dataset("GunPoint")
    >>> f = ProximityTreeClassifier(
    ...     n_pivot=10,
-   ...     metric_factories={
-   ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
-   ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
-   ...     },
+   ...     metrics=[
+   ...         ("dtw", {"min_r": 0.1, "max_r": 0.25}),
+   ...         ("msm", {"min_c": 0.1, "max_c": 100, "num_c": 20})
+   ...     ],
    ...     criterion="gini"
    ... )
    >>> f.fit(x, y)
@@ -357,19 +357,21 @@ Classes
    :type pivot_sample: {"label", "uniform"}, optional
    :param metric_sample: The metric sampling method.
    :type metric_sample: {"uniform", "weighted"}, optional
-   :param metric_factories: The distance metrics.
+   :param metrics: The distance metrics. By default, we use the parameterization suggested by
+                   Lucas et.al (2019).
 
-                            If dict, a dictionary where key is:
+                   A custom metric specification can be given as a list of tuples, where
+                   the first element of the tuple is a metric name and the second element
+                   a dictionary with a parameter grid specification. A parameter grid
+                   specification is a dict with two mandatory and one optional key-value pairs
+                   defining the lower and upper bound on the values as well as the number of
+                   values in the grid. For example, to specifiy a grid over the argument 'r'
+                   with 10 values in the range 0 to 1, we would give the following
+                   specification: ``dict(min_r=0, max_r=1, num_r=10)``.
 
-                            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
-                            - if callable, a function returning a list of ``DistanceMeasure``-objects
-
-                            and where value is a dict of parameters to the factory.
-
-                            If list, a list of named factories or callables.
-
-                            If "default", use the parameterization of (Lucas et.al, 2019)
-   :type metric_factories: "default", list or dict, optional
+                   Read more about the metrics and their parameters in the
+                   :ref:`User guide <list_of_metrics>`.
+   :type metrics: "auto" or list, optional
    :param max_depth: The maximum tree depth.
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to consider a split.
@@ -679,15 +681,28 @@ Classes
                  - if ``None``, the number of sampled shapelets are the same independeth of
                    depth.
    :type alpha: float, optional
-   :param metric: Distance metric used to identify the best shapelet.
+   :param metric:
+                  - If str, the distance metric used to identify the best shapelet.
 
-                  See ``distance._SUBSEQUENCE_DISTANCE_MEASURE.keys()`` for a list of
-                  supported metrics.
-   :type metric: str, optional
-   :param metric_params: Parameters for the distance measure.
+                  - If list, multiple metrics specified as a list of tuples, where the first
+                    element of the tuple is a metric name and the second element a dictionary
+                    with a parameter grid specification. A parameter grid specification is a
+                    dict with two mandatory and one optional key-value pairs defining the
+                    lower and upper bound on the values and number of values in the grid. For
+                    example, to specifiy a grid over the argument 'r' with 10 values in the
+                    range 0 to 1, we would give the following specification: ``dict(min_r=0,
+                    max_r=1, num_r=10)``.
 
-                         Read more about the parameters in the
-                         :ref:`User guide <list_of_subsequence_metrics>`.
+                  Read more about the metrics and their parameters in the
+                  :ref:`User guide <list_of_subsequence_metrics>`.
+
+                  .. versionchanged:: 1.2
+                      Added support for multi-metric shapelet transform
+   :type metric: str or list, optional
+   :param metric_params: Parameters for the distance measure. Ignored unless metric is a string.
+
+                         Read more about the parameters in the :ref:`User guide
+                         <list_of_subsequence_metrics>`.
    :type metric_params: dict, optional
    :param random_state:
                         - If `int`, `random_state` is the seed used by the random number generator

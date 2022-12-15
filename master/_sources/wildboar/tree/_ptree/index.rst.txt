@@ -18,27 +18,8 @@ Classes
 
 
 
-Functions
-~~~~~~~~~
 
-.. autoapisummary::
-
-   wildboar.tree._ptree.ddtw_factory
-   wildboar.tree._ptree.dtw_factory
-   wildboar.tree._ptree.erp_factory
-   wildboar.tree._ptree.euclidean_factory
-   wildboar.tree._ptree.lcss_factory
-   wildboar.tree._ptree.make_metrics
-   wildboar.tree._ptree.msm_factory
-   wildboar.tree._ptree.rddtw_factory
-   wildboar.tree._ptree.rdtw_factory
-   wildboar.tree._ptree.twe_factory
-   wildboar.tree._ptree.wddtw_factory
-   wildboar.tree._ptree.wdtw_factory
-
-
-
-.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories='default', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+.. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metrics='auto', metric_factories=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
    Bases: :py:obj:`wildboar.tree.base.BaseTreeClassifier`
 
@@ -51,10 +32,10 @@ Functions
    >>> x, y = load_dataset("GunPoint")
    >>> f = ProximityTreeClassifier(
    ...     n_pivot=10,
-   ...     metric_factories={
-   ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
-   ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
-   ...     },
+   ...     metrics=[
+   ...         ("dtw", {"min_r": 0.1, "max_r": 0.25}),
+   ...         ("msm", {"min_c": 0.1, "max_c": 100, "num_c": 20})
+   ...     ],
    ...     criterion="gini"
    ... )
    >>> f.fit(x, y)
@@ -73,19 +54,21 @@ Functions
    :type pivot_sample: {"label", "uniform"}, optional
    :param metric_sample: The metric sampling method.
    :type metric_sample: {"uniform", "weighted"}, optional
-   :param metric_factories: The distance metrics.
+   :param metrics: The distance metrics. By default, we use the parameterization suggested by
+                   Lucas et.al (2019).
 
-                            If dict, a dictionary where key is:
+                   A custom metric specification can be given as a list of tuples, where
+                   the first element of the tuple is a metric name and the second element
+                   a dictionary with a parameter grid specification. A parameter grid
+                   specification is a dict with two mandatory and one optional key-value pairs
+                   defining the lower and upper bound on the values as well as the number of
+                   values in the grid. For example, to specifiy a grid over the argument 'r'
+                   with 10 values in the range 0 to 1, we would give the following
+                   specification: ``dict(min_r=0, max_r=1, num_r=10)``.
 
-                            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
-                            - if callable, a function returning a list of ``DistanceMeasure``-objects
-
-                            and where value is a dict of parameters to the factory.
-
-                            If list, a list of named factories or callables.
-
-                            If "default", use the parameterization of (Lucas et.al, 2019)
-   :type metric_factories: "default", list or dict, optional
+                   Read more about the metrics and their parameters in the
+                   :ref:`User guide <list_of_metrics>`.
+   :type metrics: "auto" or list, optional
    :param max_depth: The maximum tree depth.
    :type max_depth: int, optional
    :param min_samples_split: The minimum number of samples to consider a split.
@@ -107,41 +90,5 @@ Functions
                         - If `None`, the random number generator is the `RandomState` instance used
                           by `np.random`.
    :type random_state: int or RandomState
-
-
-.. py:function:: ddtw_factory()
-
-
-.. py:function:: dtw_factory()
-
-
-.. py:function:: erp_factory(min_g=0.0, max_g=1.0, n=10)
-
-
-.. py:function:: euclidean_factory()
-
-
-.. py:function:: lcss_factory(min_r=0.0, max_r=0.25, min_epsilon=0, max_epsilon=1.0, n=10)
-
-
-.. py:function:: make_metrics(metric_factories=None)
-
-
-.. py:function:: msm_factory(min_c=0.01, max_c=100, n=10)
-
-
-.. py:function:: rddtw_factory(min_r=0, max_r=0.25, n=10)
-
-
-.. py:function:: rdtw_factory(min_r=0, max_r=0.25, n=10)
-
-
-.. py:function:: twe_factory(min_penalty=1e-05, max_penalty=1.0, min_stiffness=0.0001, max_stiffness=0.1, n=10)
-
-
-.. py:function:: wddtw_factory(min_g=0.0, max_g=1.0, n=10)
-
-
-.. py:function:: wdtw_factory(min_g=0.0, max_g=1.0, n=10)
 
 
