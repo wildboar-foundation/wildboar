@@ -206,17 +206,29 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
             - if ``None``, the number of sampled shapelets are the same independeth of
               depth.
 
-        metric : str, optional
-            Distance metric used to identify the best shapelet.
+        metric : str or list, optional
+            - If str, the distance metric used to identify the best shapelet.
 
-            See ``distance._SUBSEQUENCE_METRICS.keys()`` for a list of
-            supported metrics.
+            - If list, multiple metrics specified as a list of tuples, where the first
+              element of the tuple is a metric name and the second element a dictionary
+              with a parameter grid specification. A parameter grid specification is a
+              dict with two mandatory and one optional key-value pairs defining the
+              lower and upper bound on the values and number of values in the grid. For
+              example, to specifiy a grid over the argument 'r' with 10 values in the
+              range 0 to 1, we would give the following specification: ``dict(min_r=0,
+              max_r=1, num_r=10)``.
+
+            Read more about the metrics and their parameters in the
+            :ref:`User guide <list_of_subsequence_metrics>`.
+
+            .. versionchanged:: 1.2
+                Added support for multi-metric shapelet transform
 
         metric_params : dict, optional
-            Parameters for the distance measure.
+            Parameters for the distance measure. Ignored unless metric is a string.
 
-            Read more about the parameters in the
-            :ref:`User guide <list_of_subsequence_metrics>`.
+            Read more about the parameters in the :ref:`User guide
+            <list_of_subsequence_metrics>`.
 
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator

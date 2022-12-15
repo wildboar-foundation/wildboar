@@ -7,6 +7,8 @@ from numpy cimport float64_t, ndarray
 from ..utils cimport List, TSArray
 
 
+cdef double EPSILON = 1e-13
+
 cdef class MetricList(List):
 
     cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) nogil

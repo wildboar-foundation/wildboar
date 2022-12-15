@@ -9,7 +9,11 @@ import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
 from ..distance import _SUBSEQUENCE_METRICS
-from ._cshapelet import RandomShapeletFeatureEngineer
+from ..distance._multi_metric import make_subsequence_metrics
+from ._cshapelet import (
+    RandomMultiMetricShapeletFeatureEngineer,
+    RandomShapeletFeatureEngineer,
+)
 from .base import BaseFeatureEngineerTransform
 
 
@@ -23,6 +27,7 @@ class ShapeletMixin:
         ],
         "metric": [
             StrOptions(_SUBSEQUENCE_METRICS.keys()),
+            list,
         ],
         "metric_params": [dict, None],
         "min_shapelet_size": [
@@ -80,13 +85,23 @@ class ShapeletMixin:
         else:
             n_shapelets = self.n_shapelets
 
-        metric_params = self.metric_params if self.metric_params is not None else {}
-        return RandomShapeletFeatureEngineer(
-            _SUBSEQUENCE_METRICS[self.metric](**metric_params),
-            min_shapelet_size,
-            max_shapelet_size,
-            max(1, n_shapelets),
-        )
+        if isinstance(self.metric, str):
+            metric_params = self.metric_params if self.metric_params is not None else {}
+            return RandomShapeletFeatureEngineer(
+                _SUBSEQUENCE_METRICS[self.metric](**metric_params),
+                min_shapelet_size,
+                max_shapelet_size,
+                max(1, n_shapelets),
+            )
+        else:
+            metrics, weights = make_subsequence_metrics(self.metric)
+            return RandomMultiMetricShapeletFeatureEngineer(
+                max(1, n_shapelets),
+                min_shapelet_size,
+                max_shapelet_size,
+                metrics,
+                weights,
+            )
 
 
 class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
@@ -97,11 +112,33 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
     embedding_ : Embedding
         The underlying embedding object.
 
+
+    Examples
+    --------
+
+    Transform each time series to the minimum DTW distance to each shapelet
+
+    >>> from wildboar.dataset import load_gunpoint()
+    >>> from wildboar.transform import RandomShapeletTransform
+    >>> t = RandomShapeletTransform(metric="dtw")
+    >>> t.fit_transform(X)
+
+    Transform each time series to the either the minimum DTW distance, with r randomly
+    set set between 0 and 1 or ERP distance with g between 0 and 1.
+
+    >>> t = RandomShapeletTransform(
+    ...     metric=[
+    ...         ("dtw", dict(min_r=0.0, max_r=1.0)),
+    ...         ("erp", dict(min_g=0.0, max_g=1.0)),
+    ...     ]
+    ... )
+    >>> t.fit_transform(X)
+
     References
     ----------
     Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
-        Ultra-fast shapelets for time series classification.
-        arXiv preprint arXiv:1503.05018 (2015).
+        Ultra-fast shapelets for time series classification. arXiv preprint
+        arXiv:1503.05018 (2015).
     """
 
     _parameter_constraints: dict = {
@@ -126,17 +163,26 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
         n_shapelets : int, optional
             The number of shapelets in the resulting transform
 
-        metric : str, optional
-            Distance metric used to identify the best shapelet.
+        metric : str or list, optional
+            - If str, the distance metric used to identify the best shapelet.
 
-            See ``distance._SUBSEQUENCE_METRICS.keys()`` for a list of
-            supported metrics.
+            - If list, multiple metrics specified as a list of tuples, where the first
+              element of the tuple is a metric name and the second element a dictionary
+              with a parameter grid specification. A parameter grid specification is a
+              dict with two mandatory and one optional key-value pairs defining the
+              lower and upper bound on the values and number of values in the grid. For
+              example, to specifiy a grid over the argument 'r' with 10 values in the
+              range 0 to 1, we would give the following specification: ``dict(min_r=0,
+              max_r=1, num_r=10)``.
+
+            Read more about the metrics and their parameters in the
+            :ref:`User guide <list_of_subsequence_metrics>`.
 
         metric_params : dict, optional
-            Parameters for the distance measure.
+            Parameters for the distance measure. Ignored unless metric is a string.
 
-            Read more about the parameters in the
-            :ref:`User guide <list_of_subsequence_metrics>`.
+            Read more about the parameters in the :ref:`User guide
+            <list_of_subsequence_metrics>`.
 
         min_shapelet_size : float, optional
             Minimum shapelet size.
@@ -145,8 +191,8 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
             Maximum shapelet size.
 
         n_jobs : int, optional
-            The number of jobs to run in parallel. None means 1 and
-            -1 means using all processors.
+            The number of jobs to run in parallel. None means 1 and -1 means using all
+            processors.
 
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator

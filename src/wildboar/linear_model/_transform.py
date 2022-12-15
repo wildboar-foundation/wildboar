@@ -7,6 +7,7 @@ import numpy as np
 from sklearn.base import ClassifierMixin, RegressorMixin
 from sklearn.linear_model import RidgeClassifierCV, RidgeCV
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.utils.extmath import softmax
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
@@ -20,15 +21,16 @@ class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
 
     def fit(self, x, y, sample_weight=None):
         x, y = self._validate_data(x, y, dtype=float, allow_3d=True)
-        random_state = check_random_state(self.random_state)
-        self.pipe_ = Pipeline(
-            [
-                ("transform", self._get_transform(random_state.randint(2**31))),
-                ("estimator", self._get_estimator(random_state.randint(2**31))),
-            ],
-        )
+        self.pipe_ = Pipeline(self._build_pipeline())
         self.pipe_.fit(x, y, estimator__sample_weight=sample_weight)
         return self
+
+    def _build_pipeline(self):
+        random_state = check_random_state(self.random_state)
+        return [
+            ("transform", self._get_transform(random_state.randint(2**31))),
+            ("estimator", self._get_estimator(random_state.randint(2**31))),
+        ]
 
     @abstractmethod
     def _get_transform(self, random_state):
@@ -39,7 +41,7 @@ class BaseTransformEstimator(BaseEstimator, metaclass=ABCMeta):
         pass
 
 
-class TransformClassifierMixin:
+class BaseTransformClassifier(ClassifierMixin, BaseTransformEstimator):
     def predict(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, dtype=float, allow_3d=True)
@@ -62,10 +64,10 @@ class TransformClassifierMixin:
 
     @property
     def classes_(self):
-        return self.pipe_[-1].classes_
+        return self.pipe_.classes_
 
 
-class TransformRegressorMixin:
+class BaseTransformRegressor(RegressorMixin, BaseTransformEstimator):
     def predict(self, x):
         check_is_fitted(self)
         x = self._validate_data(x, dtype=float, allow_3d=True)
@@ -77,9 +79,7 @@ class TransformRegressorMixin:
         return self.pipe_.decision_function(x)
 
 
-class TransformRidgeClassifierCV(
-    ClassifierMixin, TransformClassifierMixin, BaseTransformEstimator
-):
+class TransformRidgeClassifierCV(BaseTransformClassifier):
     def __init__(
         self,
         *,
@@ -88,6 +88,7 @@ class TransformRidgeClassifierCV(
         scoring=None,
         cv=None,
         class_weight=None,
+        normalize=True,
         n_jobs=None,
         random_state=None,
     ):
@@ -96,6 +97,7 @@ class TransformRidgeClassifierCV(
         self.fit_intercept = fit_intercept
         self.scoring = scoring
         self.cv = cv
+        self.normalize = normalize
         self.class_weight = class_weight
         self.random_state = random_state
 
@@ -109,6 +111,13 @@ class TransformRidgeClassifierCV(
             store_cv_values=False,
         )
 
+    def _build_pipeline(self):
+        pipeline = super()._build_pipeline()
+        if self.normalize:
+            pipeline.insert(1, ("normalize", StandardScaler()))
+
+        return pipeline
+
     def predict_proba(self, x):
         decision = self.decision_function(x)
         if decision.ndim == 1:
@@ -118,7 +127,7 @@ class TransformRidgeClassifierCV(
         return softmax(decision_2d, copy=False)
 
 
-class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEstimator):
+class TransformRidgeCV(BaseTransformRegressor):
     def __init__(
         self,
         *,
@@ -127,6 +136,7 @@ class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEst
         scoring=None,
         cv=None,
         gcv_mode=None,
+        normalize=True,
         n_jobs=None,
         random_state=None,
     ):
@@ -135,6 +145,7 @@ class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEst
         self.fit_intercept = fit_intercept
         self.scoring = scoring
         self.cv = cv
+        self.normalize = normalize
         self.gcv_mode = gcv_mode
 
     def _get_estimator(self, random_state):
@@ -147,3 +158,10 @@ class TransformRidgeCV(RegressorMixin, TransformRegressorMixin, BaseTransformEst
             store_cv_values=False,
             alpha_per_target=False,
         )
+
+    def _build_pipeline(self):
+        pipeline = super()._build_pipeline()
+        if self.normalize:
+            pipeline.insert(1, StandardScaler())
+
+        return pipeline

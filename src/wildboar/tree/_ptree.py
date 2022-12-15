@@ -2,11 +2,12 @@
 # License: BSD 3 clause
 
 import numbers
+import warnings
 
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ..distance import _METRICS
+from ..distance._multi_metric import make_metrics
 from ..tree._cptree import (
     EntropyCriterion,
     GiniCriterion,
@@ -18,7 +19,6 @@ from ..tree._cptree import (
     WeightedMetricSampler,
 )
 from ..tree.base import BaseTree, BaseTreeClassifier
-from ..utils.validation import check_option
 
 _CLF_CRITERION = {
     "gini": GiniCriterion,
@@ -34,96 +34,6 @@ _METRICS_SAMPLER = {
 }
 
 
-def euclidean_factory():
-    return [_METRICS["euclidean"]()]
-
-
-def dtw_factory():
-    return [_METRICS["dtw"](r=1.0)]
-
-
-def ddtw_factory():
-    return [_METRICS["ddtw"](r=1.0)]
-
-
-def rdtw_factory(min_r=0, max_r=0.25, n=10):
-    return [_METRICS["dtw"](r=r) for r in np.linspace(min_r, max_r, n)]
-
-
-def rddtw_factory(min_r=0, max_r=0.25, n=10):
-    return [_METRICS["ddtw"](r=r) for r in np.linspace(min_r, max_r, n)]
-
-
-def wdtw_factory(min_g=0.0, max_g=1.0, n=10):
-    return [_METRICS["wdtw"](g=g) for g in np.linspace(min_g, max_g, n)]
-
-
-def wddtw_factory(min_g=0.0, max_g=1.0, n=10):
-    return [_METRICS["wddtw"](g=g) for g in np.linspace(min_g, max_g, n)]
-
-
-def erp_factory(min_g=0.0, max_g=1.0, n=10):
-    return [_METRICS["erp"](g=g) for g in np.linspace(min_g, max_g, n)]
-
-
-def lcss_factory(min_r=0.0, max_r=0.25, min_epsilon=0, max_epsilon=1.0, n=10):
-    return [
-        _METRICS["lcss"](r=r, epsilon=epsilon)
-        for epsilon in np.linspace(min_epsilon, max_epsilon, n)
-        for r in np.linspace(min_r, max_r, n)
-    ]
-
-
-def msm_factory(min_c=0.01, max_c=100, n=10):
-    return [_METRICS["msm"](c=c) for c in np.linspace(min_c, max_c, n)]
-
-
-def twe_factory(
-    min_penalty=0.00001, max_penalty=1.0, min_stiffness=10e-5, max_stiffness=0.1, n=10
-):
-    return [
-        _METRICS["twe"](penalty=penalty, stiffness=stiffness)
-        for penalty in np.linspace(min_penalty, max_penalty, n)
-        for stiffness in np.linspace(min_stiffness, max_stiffness, n)
-    ]
-
-
-_METRIC_FACTORIES = {
-    "euclidean": euclidean_factory,
-    "dtw": dtw_factory,
-    "ddtw": ddtw_factory,
-    "rdtw": rdtw_factory,
-    "rddtw": rddtw_factory,
-    "wdtw": wdtw_factory,
-    "wddtw": wddtw_factory,
-    "erp": erp_factory,
-    "lcss": lcss_factory,
-    "msm": msm_factory,
-    "twe": twe_factory,
-}
-
-
-def make_metrics(metric_factories=None):
-    metrics = []
-    weights = []
-    weight = 1.0 / len(metric_factories)
-    for metric_factory, metric_factory_params in metric_factories.items():
-        if callable(metric_factory):
-            current_metrics = metric_factory(**(metric_factory_params) or {})
-        else:
-            current_metrics = check_option(
-                _METRIC_FACTORIES,
-                metric_factory,
-                "metric_factories key",
-            )(**(metric_factory_params or {}))
-
-        for metric in current_metrics:
-            metrics.append(metric)
-            weights.append(weight / len(current_metrics))
-
-    return metrics, np.array(weights, dtype=float)
-
-
 class ProximityTreeClassifier(BaseTreeClassifier):
     """A classifier that uses a k-branching tree based on pivot-time series.
 
@@ -134,10 +44,10 @@ class ProximityTreeClassifier(BaseTreeClassifier):
     >>> x, y = load_dataset("GunPoint")
     >>> f = ProximityTreeClassifier(
     ...     n_pivot=10,
-    ...     metric_factories={
-    ...         "rdtw": {"min_r": 0.1, "max_r": 0.25},
-    ...         "msm": {"min_c": 0.1, "max_c": 100, "n": 20}
-    ...     },
+    ...     metrics=[
+    ...         ("dtw", {"min_r": 0.1, "max_r": 0.25}),
+    ...         ("msm", {"min_c": 0.1, "max_c": 100, "num_c": 20})
+    ...     ],
     ...     criterion="gini"
     ... )
     >>> f.fit(x, y)
@@ -165,10 +75,14 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         "metric_sample": [
             StrOptions(_METRICS_SAMPLER.keys()),
         ],
-        "metric_factories": [
-            StrOptions({"default"}),
+        "metrics": [
+            StrOptions({"default", "auto"}, deprecated={"default"}),
             list,
-            dict,
+        ],
+        "metric_factories": [  # TODO(1.4)
+            StrOptions({"default", "auto"}, deprecated={"default"}),
+            list,
+            None,
         ],
         "random_state": ["random_state"],
         "class_weight": [
@@ -185,7 +99,8 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         criterion="entropy",
         pivot_sample="label",
         metric_sample="weighted",
-        metric_factories="default",
+        metrics="auto",
+        metric_factories=None,
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
@@ -208,19 +123,21 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         metric_sample : {"uniform", "weighted"}, optional
             The metric sampling method.
 
-        metric_factories : "default", list or dict, optional
-            The distance metrics.
+        metrics : "auto" or list, optional
+            The distance metrics. By default, we use the parameterization suggested by
+            Lucas et.al (2019).
 
-            If dict, a dictionary where key is:
+            A custom metric specification can be given as a list of tuples, where
+            the first element of the tuple is a metric name and the second element
+            a dictionary with a parameter grid specification. A parameter grid
+            specification is a dict with two mandatory and one optional key-value pairs
+            defining the lower and upper bound on the values as well as the number of
+            values in the grid. For example, to specifiy a grid over the argument 'r'
+            with 10 values in the range 0 to 1, we would give the following
+            specification: ``dict(min_r=0, max_r=1, num_r=10)``.
 
-            - if str, a named distance factory (See ``_DISTANCE_FACTORIES.keys()``)
-            - if callable, a function returning a list of ``Metric``-objects
-
-            and where value is a dict of parameters to the factory.
-
-            If list, a list of named factories or callables.
-
-            If "default", use the parameterization of (Lucas et.al, 2019)
+            Read more about the metrics and their parameters in the
+            :ref:`User guide <list_of_metrics>`.
 
         max_depth : int, optional
             The maximum tree depth.
@@ -258,44 +175,65 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         self.criterion = criterion
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
+        self.metrics = metrics
         self.metric_factories = metric_factories
         self.class_weight = class_weight
         self.random_state = random_state
 
     def _fit(self, x, y, sample_weights, max_depth, random_state):
-        if self.metric_factories == "default":
-            std_x = np.std(x)
-            metric_factories = {
-                "euclidean": None,
-                "dtw": None,
-                "ddtw": None,
-                "rdtw": {"min_r": 0, "max_r": 0.25, "n": 50},
-                "rddtw": {"min_r": 0, "max_r": 0.25, "n": 50},
-                "wdtw": {"min_g": std_x * 0.2, "max_g": std_x, "n": 50},
-                "wddtw": {"min_g": std_x * 0.2, "max_g": std_x, "n": 50},
-                "lcss": {
-                    "min_r": 0,
-                    "max_r": 0.25,
-                    "min_epsilon": std_x * 0.2,
-                    "max_epsilon": std_x,
-                    "n": 20,
-                },
-                "erp": {"min_g": 0, "max_g": 1.0, "n": 50},
-                "msm": {"min_c": 0.01, "max_c": 100, "n": 50},
-                "twe": {
-                    "min_penalty": 0.00001,
-                    "max_penalty": 1.0,
-                    "min_stiffness": 0.000001,
-                    "max_stiffness": 0.1,
-                    "n": 20,
-                },
-            }
-        elif isinstance(self.metric_factories, list):
-            metric_factories = {key: None for key in self.metric_factories}
-        else:
-            metric_factories = self.metric_factories
+        if self.metric_factories is not None:
+            warnings.warn(
+                "The parameter metric_factories has been renamed to metrics "
+                "in 1.2 and will be removed in 1.4",
+                DeprecationWarning,
+            )
+            if isinstance(self.metric_factories, dict):
+                metric_spec = list(self.metric_factories.items())
 
-        metrics, weights = make_metrics(metric_factories=metric_factories)
+            metric_spec = self.metric_factories
+
+        metric_spec = self.metrics
+        if metric_spec == "default":
+            warnings.warn(
+                "The default value for 'metrics' has changed to 'auto' in 1.2 and "
+                "'default' will be removed in 1.4.",
+                DeprecationWarning,
+            )
+        elif metric_spec == "auto":
+            std_x = np.std(x)
+            metric_spec = [
+                ("euclidean", None),
+                ("dtw", None),
+                ("ddtw", None),
+                ("dtw", {"min_r": 0, "max_r": 0.25, "default_n": 50}),
+                ("ddtw", {"min_r": 0, "max_r": 0.25, "default_n": 50}),
+                ("wdtw", {"min_g": std_x * 0.2, "max_g": std_x, "default_n": 50}),
+                ("wddtw", {"min_g": std_x * 0.2, "max_g": std_x, "default_n": 50}),
+                (
+                    "lcss",
+                    {
+                        "min_epsilon": std_x * 0.2,
+                        "max_epsilon": std_x,
+                        "min_r": 0,
+                        "max_r": 0.25,
+                        "default_n": 20,
+                    },
+                ),
+                ("erp", {"min_g": 0, "max_g": 1.0, "default_n": 50}),
+                ("msm", {"min_c": 0.01, "max_c": 100, "default_n": 50}),
+                (
+                    "twe",
+                    {
+                        "min_penalty": 0.00001,
+                        "max_penalty": 1.0,
+                        "min_stiffness": 0.000001,
+                        "max_stiffness": 0.1,
+                        "default_n": 20,
+                    },
+                ),
+            ]
+
+        metrics, weights = make_metrics(metric_spec)
         Criterion = _CLF_CRITERION[self.criterion]
         PivotSampler = _PIVOT_SAMPLER[self.pivot_sample]
         MetricSampler = _METRICS_SAMPLER[self.metric_sample]

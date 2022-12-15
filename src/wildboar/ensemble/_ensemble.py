@@ -1816,7 +1816,8 @@ class ProximityForestClassifier(BaseForestClassifier):
         n_pivot=1,
         pivot_sample="label",
         metric_sample="weighted",
-        metric_factories="default",
+        metrics="auto",
+        metric_factories=None,
         oob_score=False,
         max_depth=None,
         min_samples_split=2,
@@ -1834,6 +1835,7 @@ class ProximityForestClassifier(BaseForestClassifier):
             estimator_params=(
                 "n_pivot",
                 "metric_factories",
+                "metrics",
                 "pivot_sample",
                 "metric_sample",
                 "max_depth",
@@ -1856,7 +1858,8 @@ class ProximityForestClassifier(BaseForestClassifier):
             random_state=random_state,
         )
         self.n_pivot = n_pivot
-        self.metric_factories = metric_factories
+        self.metric_factories = metric_factories  # TODO(1.4)
+        self.metrics = metrics
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
 

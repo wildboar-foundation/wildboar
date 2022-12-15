@@ -22,9 +22,6 @@ from ..utils._parallel import run_in_parallel
 from ..utils.validation import check_array
 
 
-cdef double EPSILON = 1e-13
-
-
 cdef class MetricList(List):
 
     cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) nogil:
