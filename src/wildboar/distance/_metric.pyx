@@ -8,13 +8,14 @@
 
 cimport scipy.linalg.cython_blas as blas
 cimport scipy.linalg.cython_lapack as lapack
-from libc.math cimport INFINITY, M_PI, acos, fabs, pow, sqrt
+from libc.math cimport INFINITY, M_PI, acos, cos, fabs, pow, sqrt
 from libc.stdlib cimport free, malloc
 
 from ..utils cimport TSArray
 from ..utils._misc cimport realloc_array
 from ..utils._stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_variance
 from ._distance cimport (
+    EPSILON,
     Metric,
     ScaledSubsequenceMetric,
     Subsequence,
@@ -367,7 +368,16 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) nogil:
-        return acos(cosine_similarity(s, s_len, x, x_len, return_index)) / M_PI
+        cdef double cosine = cosine_similarity(s, s_len, x, x_len, return_index)
+
+        # Edge-case where, due to floating point issues, the cosine is larger 1
+        # or smaller than -1 we return the min and max value respectivley.
+        if cosine > 1:
+            return 0
+        elif cosine < -1:
+            return 1
+        else:
+            return acos(cosine) / M_PI
 
     cdef Py_ssize_t _matches(
         self,
@@ -384,11 +394,18 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
     ) nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t n_matches = cosine_similarity_matches(
-            s, s_len, x, x_len, acos(threshold) / M_PI, distances, indicies
+            s, s_len, x, x_len, cos(threshold * M_PI), distances, indicies
         )
+        cdef double cosine
         
         for i in range(n_matches):
-            distances[0][i] = acos(distances[0][i]) / M_PI
+            cosine = distances[0][i]
+            if cosine > 1:
+                distances[0][i] = 0
+            elif cosine < -1:
+                distances[0][i] = 1
+            else:
+                distances[0][i] = acos(cosine) / M_PI
         
         return n_matches
 
@@ -496,7 +513,13 @@ cdef class AngularMetric(Metric):
         const double *y,
         Py_ssize_t y_len
     ) nogil:
-        return acos(cosine_similarity(x, x_len, y, y_len, NULL)) / M_PI
+        cdef double cosine = cosine_similarity(x, x_len, y, y_len, NULL)
+        if cosine > 1:
+            return 0
+        elif cosine < -1:
+            return 1
+        else:
+            return acos(cosine) / M_PI
 
 
 cdef double scaled_euclidean_distance(
@@ -1059,7 +1082,12 @@ cdef double cosine_similarity(
             s_norm += pow(S[j], 2)
             t_norm += pow(T[i + j], 2)
 
-        sim = prod / (sqrt(s_norm) * sqrt(t_norm))
+        sim = (sqrt(s_norm) * sqrt(t_norm))
+        if sim <= EPSILON:
+            sim = 0
+        else:
+            sim = prod / sim
+        
         if sim > max_sim:
             max_sim = sim
             if index != NULL:
