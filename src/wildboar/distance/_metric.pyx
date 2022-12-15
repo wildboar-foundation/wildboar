@@ -238,9 +238,9 @@ cdef class ManhattanSubsequenceMetric(SubsequenceMetric):
 
 
 cdef class MinkowskiSubsequenceMetric(SubsequenceMetric):
-    cdef Py_ssize_t p
+    cdef double p
 
-    def __init__(self, Py_ssize_t p=2):
+    def __init__(self, double p=2):
         self.p = p
 
     def __reduce__(self):
@@ -453,9 +453,9 @@ cdef class ManhattanMetric(Metric):
 
 
 cdef class MinkowskiMetric(Metric):
-    cdef Py_ssize_t p
+    cdef double p
 
-    def __init__(self, Py_ssize_t p=2):
+    def __init__(self, double p=2):
         self.p = p
 
     def __reduce__(self):
@@ -947,7 +947,7 @@ cdef double minkowski_distance(
 
 
 cdef Py_ssize_t minkowski_distance_matches(
-    Py_ssize_t p,
+    double p,
     const double *S,
     Py_ssize_t s_length,
     const double *T,
