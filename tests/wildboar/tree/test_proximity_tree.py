@@ -15,11 +15,11 @@ from wildboar.utils.estimator_checks import check_estimator
 
 def test_check_estimator():
     check_estimator(
-        ProximityTreeClassifier(metrics=[("euclidean", None)]),
+        ProximityTreeClassifier(metric=[("euclidean", None)]),
         ignore=["check_sample_weights_invariance"],
     )
     assert_exhaustive_parameter_checks(ProximityTreeClassifier())
-    assert_parameter_checks(ProximityTreeClassifier(), skip="metrics")
+    assert_parameter_checks(ProximityTreeClassifier(), skip="metric")
 
 
 def test_proximity_tree():

@@ -7,6 +7,9 @@ import warnings
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
+from wildboar.utils.validation import check_option
+
+from ..distance import _METRICS
 from ..distance._multi_metric import make_metrics
 from ..tree._cptree import (
     EntropyCriterion,
@@ -24,14 +27,21 @@ _CLF_CRITERION = {
     "gini": GiniCriterion,
     "entropy": EntropyCriterion,
 }
+
 _PIVOT_SAMPLER = {
     "label": LabelPivotSampler,
     "uniform": UniformPivotSampler,
 }
+
 _METRICS_SAMPLER = {
     "uniform": UniformMetricSampler,
     "weighted": WeightedMetricSampler,
 }
+
+_METRIC_NAMES = set(_METRICS.keys())
+_METRIC_NAMES.add("auto")
+_METRIC_NAMES.add("default")  # TODO(1.3)
+_METRIC_NAMES = frozenset(_METRIC_NAMES)
 
 
 class ProximityTreeClassifier(BaseTreeClassifier):
@@ -75,10 +85,11 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         "metric_sample": [
             StrOptions(_METRICS_SAMPLER.keys()),
         ],
-        "metrics": [
-            StrOptions({"default", "auto"}, deprecated={"default"}),
+        "metric": [
+            StrOptions(_METRIC_NAMES, deprecated={"default"}),
             list,
         ],
+        "metric_params": [None, dict],
         "metric_factories": [  # TODO(1.4)
             StrOptions({"default", "auto"}, deprecated={"default"}),
             list,
@@ -99,7 +110,8 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         criterion="entropy",
         pivot_sample="label",
         metric_sample="weighted",
-        metrics="auto",
+        metric="auto",
+        metric_params=None,
         metric_factories=None,
         max_depth=None,
         min_samples_split=2,
@@ -123,21 +135,29 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         metric_sample : {"uniform", "weighted"}, optional
             The metric sampling method.
 
-        metrics : "auto" or list, optional
+        metric : str or list, optional
             The distance metrics. By default, we use the parameterization suggested by
             Lucas et.al (2019).
 
-            A custom metric specification can be given as a list of tuples, where
-            the first element of the tuple is a metric name and the second element
-            a dictionary with a parameter grid specification. A parameter grid
-            specification is a dict with two mandatory and one optional key-value pairs
-            defining the lower and upper bound on the values as well as the number of
-            values in the grid. For example, to specifiy a grid over the argument 'r'
-            with 10 values in the range 0 to 1, we would give the following
-            specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+            - If str, use a single metric or default metric specification.
+
+            - If list A custom metric specification can be given as a list of tuples,
+              where the first element of the tuple is a metric name and the second
+              element a dictionary with a parameter grid specification. A parameter grid
+              specification is a dict with two mandatory and one optional key-value
+              pairs defining the lower and upper bound on the values as well as the
+              number of values in the grid. For example, to specifiy a grid over the
+              argument 'r' with 10 values in the range 0 to 1, we would give the
+              following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
 
             Read more about the metrics and their parameters in the
             :ref:`User guide <list_of_metrics>`.
+
+        metric_params : dict, optional
+            Parameters for the distance measure. Ignored unless metric is a string.
+
+            Read more about the parameters in the :ref:`User guide
+            <list_of_metrics>`.
 
         max_depth : int, optional
             The maximum tree depth.
@@ -175,7 +195,8 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         self.criterion = criterion
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
-        self.metrics = metrics
+        self.metric = metric
+        self.metric_params = metric_params
         self.metric_factories = metric_factories
         self.class_weight = class_weight
         self.random_state = random_state
@@ -183,23 +204,24 @@ class ProximityTreeClassifier(BaseTreeClassifier):
     def _fit(self, x, y, sample_weights, max_depth, random_state):
         if self.metric_factories is not None:
             warnings.warn(
-                "The parameter metric_factories has been renamed to metrics "
+                "The parameter metric_factories has been renamed to metric "
                 "in 1.2 and will be removed in 1.4",
                 DeprecationWarning,
             )
             if isinstance(self.metric_factories, dict):
-                metric_spec = list(self.metric_factories.items())
+                metric = list(self.metric_factories.items())
 
-            metric_spec = self.metric_factories
+            metric = self.metric_factories
 
-        metric_spec = self.metrics
-        if metric_spec == "default":
-            warnings.warn(
-                "The default value for 'metrics' has changed to 'auto' in 1.2 and "
-                "'default' will be removed in 1.4.",
-                DeprecationWarning,
-            )
-        elif metric_spec == "auto":
+        metric = self.metric
+        if isinstance(metric, str) and metric in ["default", "auto"]:
+            if metric == "default":
+                warnings.warn(
+                    "The default value for 'metric' has changed to 'auto' in 1.2 and "
+                    "'default' will be removed in 1.4.",
+                    DeprecationWarning,
+                )
+
             std_x = np.std(x)
             metric_spec = [
                 ("euclidean", None),
@@ -232,8 +254,14 @@ class ProximityTreeClassifier(BaseTreeClassifier):
                     },
                 ),
             ]
+            metrics, weights = make_metrics(metric_spec)
+        elif isinstance(metric, str) and metric in _METRIC_NAMES:
+            Metric = check_option(_METRICS, metric, "metric")
+            metrics = [Metric(**(self.metric_params or {}))]
+            weights = np.ones(1)
+        else:
+            metrics, weights = make_metrics(metric)
 
-        metrics, weights = make_metrics(metric_spec)
         Criterion = _CLF_CRITERION[self.criterion]
         PivotSampler = _PIVOT_SAMPLER[self.pivot_sample]
         MetricSampler = _METRICS_SAMPLER[self.metric_sample]

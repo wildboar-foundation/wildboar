@@ -4,20 +4,28 @@ import numbers
 
 from sklearn.utils._param_validation import Interval, StrOptions
 
+from wildboar.utils.validation import check_option
+
+from ..distance import _METRICS
 from ..distance._multi_metric import make_metrics
 from ._cpivot import PivotFeatureEngineer
 from .base import BaseFeatureEngineerTransform
+
+_METRIC_NAMES = set(_METRICS.keys())
+_METRIC_NAMES.add("auto")
+_METRIC_NAMES = frozenset(_METRIC_NAMES)
 
 
 class PivotMixin:
 
     _parameter_constraints: dict = {
         "n_pivots": [Interval(numbers.Integral, 1, None, closed="left")],
-        "metrics": [StrOptions({"auto"}), list],
+        "metric": [StrOptions(_METRIC_NAMES), list],
+        "metric_params": [None, dict],
     }
 
     def _get_feature_engineer(self, n_samples):
-        if isinstance(self.metrics, str) and self.metrics == "auto":
+        if isinstance(self.metric, str) and self.metric == "auto":
             metric_specs = [
                 ("euclidean", None),
                 ("dtw", None),
@@ -47,11 +55,14 @@ class PivotMixin:
                     ),
                 ),
             ]
+            metrics, _ = make_metrics(metric_specs)
+        elif isinstance(self.metric, str):
+            Metric = check_option(_METRICS, self.metric, "metric")
+            metric_params = self.metric_params if self.metric_params is not None else {}
+            metrics = [Metric(**metric_params)]
         else:
-            metric_specs = self.metrics
+            metrics, _ = make_metrics(self.metric)
 
-        # TODO: weighted sampling?
-        metrics, _ = make_metrics(metric_specs)
         return PivotFeatureEngineer(self.n_pivots, metrics)
 
 
@@ -67,7 +78,8 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         self,
         n_pivots=100,
         *,
-        metrics="auto",
+        metric="auto",
+        metric_params=None,
         random_state=None,
         n_jobs=None,
     ):
@@ -79,8 +91,8 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         n_pivot : int, optional
             The number of pivot time series.
 
-        metrics : {'auto'} or list, optional
-            - If str, the distance metric used to identify the best shapelet.
+        metric : {'auto'} or list, optional
+            - If str, the metric to compute the distance.
 
             - If list, multiple metrics specified as a list of tuples, where the first
               element of the tuple is a metric name and the second element a dictionary
@@ -94,6 +106,12 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
             Read more about the metrics and their parameters in the
             :ref:`User guide <list_of_subsequence_metrics>`.
 
+        metric_params : dict, optional
+            Parameters for the distance measure. Ignored unless metric is a string.
+
+            Read more about the parameters in the :ref:`User guide
+            <list_of_metrics>`.
+
         random_state : int or np.RandomState, optional
             The random state
 
@@ -102,4 +120,5 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         """
         super().__init__(random_state=random_state, n_jobs=n_jobs)
         self.n_pivots = n_pivots
-        self.metrics = metrics
+        self.metric = metric
+        self.metric_params = metric_params
