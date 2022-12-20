@@ -27,27 +27,21 @@ cdef class List:
         return PyList_GET_ITEM(self.py_list, i)
 
 
-cdef void strided_copy(Py_ssize_t stride, double *f, double *t, Py_ssize_t length) nogil:
-    cdef Py_ssize_t i
-    for i in range(length):
-        t[i] = f[i * stride]
-
-
-cdef inline void argsort(double *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
+cdef inline void argsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
     if n == 0:
         return
     cdef Py_ssize_t maxd = 2 * <Py_ssize_t> log2(n)
     introsort(values, samples, n, maxd)
 
-cdef inline void swap(double *values, Py_ssize_t *samples,
+cdef inline void swap(double_or_int *values, Py_ssize_t *samples,
                       Py_ssize_t i, Py_ssize_t j) nogil:
     values[i], values[j] = values[j], values[i]
     samples[i], samples[j] = samples[j], samples[i]
 
-cdef inline double median3(double *values, Py_ssize_t n) nogil:
-    cdef double a = values[0]
-    cdef double b = values[n / 2]
-    cdef double c = values[n - 1]
+cdef inline double_or_int median3(double_or_int *values, Py_ssize_t n) nogil:
+    cdef double_or_int a = values[0]
+    cdef double_or_int b = values[n / 2]
+    cdef double_or_int c = values[n - 1]
     if a < b:
         if b < c:
             return b
@@ -63,9 +57,13 @@ cdef inline double median3(double *values, Py_ssize_t n) nogil:
     else:
         return b
 
-cdef void introsort(double *values, Py_ssize_t *samples,
-                    Py_ssize_t n, Py_ssize_t maxd) nogil:
-    cdef double pivot, value
+cdef void introsort(
+    double_or_int *values, 
+    Py_ssize_t *samples,
+    Py_ssize_t n, 
+    Py_ssize_t maxd
+) nogil:
+    cdef double_or_int pivot, value
     cdef Py_ssize_t i, l, r
 
     while n > 1:
@@ -95,7 +93,7 @@ cdef void introsort(double *values, Py_ssize_t *samples,
         samples += r
         n -= r
 
-cdef inline void sift_down(double *values, Py_ssize_t *samples,
+cdef inline void sift_down(double_or_int *values, Py_ssize_t *samples,
                            Py_ssize_t start, Py_ssize_t end) nogil:
     cdef Py_ssize_t child, maxind, root
     root = start
@@ -113,7 +111,7 @@ cdef inline void sift_down(double *values, Py_ssize_t *samples,
             swap(values, samples, root, maxind)
             root = maxind
 
-cdef void heapsort(double *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
+cdef void heapsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
     cdef Py_ssize_t start, end
 
     start = (n - 2) / 2
