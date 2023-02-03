@@ -30,3 +30,13 @@ cdef double rand_uniform(double low, double high, uint32_t *random_state) nogil
 cdef double rand_normal(double mean, double std, uint32_t *random_state) nogil
 
 cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) nogil
+
+cdef class RandomSampler:
+
+    cdef const double[::1] weights
+
+    cdef Py_ssize_t upper
+
+    cdef VoseRand vr
+
+    cdef Py_ssize_t rand_int(self, uint32_t *seed) nogil

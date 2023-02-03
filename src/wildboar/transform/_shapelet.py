@@ -152,7 +152,7 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
         *,
         metric="euclidean",
         metric_params=None,
-        min_shapelet_size=0,
+        min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         n_jobs=None,
         random_state=None,

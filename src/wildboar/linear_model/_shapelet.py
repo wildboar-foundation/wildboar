@@ -18,7 +18,7 @@ class RandomShapeletClassifier(TransformRidgeClassifierCV):
         max_shapelet_size=1.0,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
-        normalize="deprecated",
+        normalize=False,
         scoring=None,
         cv=None,
         class_weight=None,
