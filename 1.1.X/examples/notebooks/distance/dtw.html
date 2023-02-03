@@ -290,7 +290,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev256+ga6035c4eb</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev257+gc69fca192</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.1.1</span></li>
             </ul>
@@ -590,16 +590,16 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pylab as plt
-from matplotlib.collections import LineCollection
-from wildboar.datasets import load_dataset
-from wildboar.distance.dtw import (
-    dtw_alignment,
-    wdtw_alignment,
-    dtw_mapping,
-    dtw_distance,
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">LineCollection</span>
+<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">wildboar.distance.dtw</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">dtw_alignment</span><span class="p">,</span>
+    <span class="n">wdtw_alignment</span><span class="p">,</span>
+    <span class="n">dtw_mapping</span><span class="p">,</span>
+    <span class="n">dtw_distance</span><span class="p">,</span>
 
-)
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -608,9 +608,9 @@ from wildboar.distance.dtw import (
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>data, _ = load_dataset(&quot;Wafer&quot;)
-x = data[0]
-y = data[1]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Wafer&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 <br/></pre></div>
 </div>
 </div>
@@ -619,14 +619,14 @@ y = data[1]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>def plot_alignment(x, y, idx):
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(x)
-    ax.plot(y)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_alignment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
-    lines = [[(a, x[a]), (b, y[b])] for a, b in zip(*idx)]
-    collection = LineCollection(lines, color=&quot;gray&quot;, linewidth=0.5)
-    ax.add_collection(collection)
+    <span class="n">lines</span> <span class="o">=</span> <span class="p">[[(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">a</span><span class="p">]),</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">b</span><span class="p">])]</span> <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">idx</span><span class="p">)]</span>
+    <span class="n">collection</span> <span class="o">=</span> <span class="n">LineCollection</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_collection</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -637,7 +637,7 @@ y = data[1]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_alignment(x, y, dtw_mapping(alignment=dtw_alignment(x, y, r=0.05)).nonzero())
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_alignment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dtw_mapping</span><span class="p">(</span><span class="n">alignment</span><span class="o">=</span><span class="n">dtw_alignment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span><span class="o">.</span><span class="n">nonzero</span><span class="p">())</span>
 <br/></pre></div>
 </div>
 </div>
@@ -656,7 +656,7 @@ y = data[1]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plot_alignment(x, y, dtw_mapping(alignment=wdtw_alignment(x, y, g=0.05)).nonzero())
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_alignment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dtw_mapping</span><span class="p">(</span><span class="n">alignment</span><span class="o">=</span><span class="n">wdtw_alignment</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">g</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span><span class="o">.</span><span class="n">nonzero</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>

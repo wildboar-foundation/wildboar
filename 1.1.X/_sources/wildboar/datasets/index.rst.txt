@@ -159,7 +159,7 @@ Functions
       :rtype: the min version
 
    .. py:attribute:: supported_version
-      :annotation: = 1.1
+      :value: '1.1'
 
       
 

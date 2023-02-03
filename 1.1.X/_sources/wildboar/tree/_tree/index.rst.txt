@@ -686,12 +686,10 @@ Attributes
 
 
 .. py:data:: CLF_CRITERION
-   
 
    
 
 .. py:data:: REG_CRITERION
-   
 
    
 

@@ -324,7 +324,7 @@ Attributes
 
 
 .. py:data:: DEFAULT_TAG
-   :annotation: = default
+   :value: 'default'
 
    
 

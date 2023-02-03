@@ -224,12 +224,10 @@ Attributes
 
 
 .. py:data:: Importance
-   
 
    
 
 .. py:data:: matplotlib_missing
-   
 
    
 

@@ -40,12 +40,10 @@ Attributes
 
 
 .. py:data:: histogram_mode10
-   
 
    
 
 .. py:data:: histogram_mode5
-   
 
    
 

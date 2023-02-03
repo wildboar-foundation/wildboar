@@ -290,7 +290,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev256+ga6035c4eb</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev257+gc69fca192</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.1.1</span></li>
             </ul>
@@ -590,17 +590,17 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pyplot as plt
-import numpy as np
-from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.pipeline import make_pipeline
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.decomposition</span> <span class="kn">import</span> <span class="n">PCA</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
 
-from wildboar.datasets import load_dataset
-from wildboar.ensemble import ShapeletForestClassifier, ShapeletForestEmbedding
+<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span><span class="p">,</span> <span class="n">ShapeletForestEmbedding</span>
 
-random_state = 1234
+<span class="n">random_state</span> <span class="o">=</span> <span class="mi">1234</span>
 </pre></div>
 </div>
 </div>
@@ -609,10 +609,10 @@ random_state = 1234
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x, y = load_dataset(&quot;Car&quot;)
-x_train, x_test, y_train, y_test = train_test_split(
-    x, y, test_size=0.2, random_state=random_state
-)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;Car&quot;</span><span class="p">)</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -621,12 +621,12 @@ x_train, x_test, y_train, y_test = train_test_split(
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>f_embedding = make_pipeline(
-    ShapeletForestEmbedding(sparse_output=False, random_state=random_state),
-    PCA(n_components=2, random_state=random_state),
-)
-f_embedding.fit(x_train)
-x_embedding = f_embedding.transform(x_test)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_embedding</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+    <span class="n">ShapeletForestEmbedding</span><span class="p">(</span><span class="n">sparse_output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">),</span>
+    <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="n">f_embedding</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+<span class="n">x_embedding</span> <span class="o">=</span> <span class="n">f_embedding</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -635,61 +635,61 @@ x_embedding = f_embedding.transform(x_test)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>classifiers = [
-    (&quot;Shapelet forest&quot;, ShapeletForestClassifier(random_state=random_state)),
-    (&quot;Nearest neighbors&quot;, KNeighborsClassifier()),
-]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s2">&quot;Shapelet forest&quot;</span><span class="p">,</span> <span class="n">ShapeletForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;Nearest neighbors&quot;</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">()),</span>
+<span class="p">]</span>
 
-classes = np.unique(y)
-n_classes = len(classes)
+<span class="n">classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">n_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
 
-fig, ax = plt.subplots(
-    nrows=len(classifiers),
-    ncols=n_classes,
-    figsize=(3 * n_classes, 6),
-    sharex=True,
-    sharey=True,
-)
-for i, (name, clf) in enumerate(classifiers):
-    clf.fit(x_train, y_train)
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">classifiers</span><span class="p">),</span>
+    <span class="n">ncols</span><span class="o">=</span><span class="n">n_classes</span><span class="p">,</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">n_classes</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+    <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">classifiers</span><span class="p">):</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
-    y_pred = clf.predict(x_test)
-    probas = clf.predict_proba(x_test)
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+    <span class="n">probas</span> <span class="o">=</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
 
-    for k in range(n_classes):
-        if i == 0:
-            ax[i, k].set_title(&quot;Label: %r&quot; % classes[k])
-        if k == 0:
-            ax[i, k].set_ylabel(name)
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_classes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Label: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">classes</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-        ax[i, k].scatter(
-            x_embedding[:, 0],
-            x_embedding[:, 1],
-            c=&quot;black&quot;,
-            alpha=0.2,
-            marker=&quot;x&quot;,
-        )
-        mappable = ax[i, k].scatter(
-            x_embedding[y_pred == classes[k], 0],
-            x_embedding[y_pred == classes[k], 1],
-            c=probas[y_pred == classes[k], k],
-            marker=&quot;x&quot;,
-            cmap=&quot;viridis&quot;,
-        )
-        ax[i, k].scatter(
-            x_embedding[(y_test[y_test != y_pred] == classes[k]).nonzero()[0], 0],
-            x_embedding[(y_test[y_test != y_pred] == classes[k]).nonzero()[0], 1],
-            edgecolors=&quot;red&quot;,
-            linewidths=2,
-            alpha=0.3,
-            facecolors=&quot;None&quot;,
-            s=70,
-            marker=&quot;o&quot;,
-        )
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_embedding</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">x_embedding</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">c</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">mappable</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_embedding</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="n">classes</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">x_embedding</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="n">classes</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">c</span><span class="o">=</span><span class="n">probas</span><span class="p">[</span><span class="n">y_pred</span> <span class="o">==</span> <span class="n">classes</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">k</span><span class="p">],</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="n">x_embedding</span><span class="p">[(</span><span class="n">y_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">!=</span> <span class="n">y_pred</span><span class="p">]</span> <span class="o">==</span> <span class="n">classes</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">x_embedding</span><span class="p">[(</span><span class="n">y_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">!=</span> <span class="n">y_pred</span><span class="p">]</span> <span class="o">==</span> <span class="n">classes</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+            <span class="n">linewidths</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+            <span class="n">facecolors</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+            <span class="n">s</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
 
-plt.tight_layout()
-fig.colorbar(mappable, ax=ax, orientation=&quot;horizontal&quot;)
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

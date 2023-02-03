@@ -132,7 +132,6 @@ Attributes
 
 
 .. py:data:: matplotlib_missing
-   
 
    
 

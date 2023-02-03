@@ -290,7 +290,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev256+ga6035c4eb</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev257+gc69fca192</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.1.1</span></li>
             </ul>
@@ -590,22 +590,22 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import matplotlib.pylab as plt
-import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 
-from wildboar.datasets import load_dataset
-from wildboar.ensemble import ShapeletForestClassifier
-from wildboar.explain.counterfactual import (
-    counterfactuals,
-    ShapeletForestCounterfactual,
-    KNeighborsCounterfactual,
-    PrototypeCounterfactual,
-)
+<span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
+<span class="kn">from</span> <span class="nn">wildboar.explain.counterfactual</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">counterfactuals</span><span class="p">,</span>
+    <span class="n">ShapeletForestCounterfactual</span><span class="p">,</span>
+    <span class="n">KNeighborsCounterfactual</span><span class="p">,</span>
+    <span class="n">PrototypeCounterfactual</span><span class="p">,</span>
+<span class="p">)</span>
 
-random_state = 1234
+<span class="n">random_state</span> <span class="o">=</span> <span class="mi">1234</span>
 <br/></pre></div>
 </div>
 </div>
@@ -614,13 +614,13 @@ random_state = 1234
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x, y = load_dataset(&quot;TwoLeadECG&quot;)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;TwoLeadECG&quot;</span><span class="p">)</span>
 
-x_train, x_test, y_train, y_test = train_test_split(
-    x, y, test_size=0.2, random_state=random_state
-)
-label = np.unique(y_train)[0]
-x_test_sample = x_test[y_test != label][:2]
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span>
+<span class="p">)</span>
+<span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_train</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">x_test_sample</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">!=</span> <span class="n">label</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
 <br/></pre></div>
 </div>
 </div>
@@ -635,10 +635,10 @@ x_test_sample = x_test[y_test != label][:2]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>clf = ShapeletForestClassifier(
-    metric=&quot;euclidean&quot;, random_state=random_state, n_estimators=100
-)
-clf.fit(x_train, y_train)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">(</span>
+    <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span>
+<span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -654,8 +654,8 @@ clf.fit(x_train, y_train)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>explain = ShapeletForestCounterfactual(random_state=random_state)
-explain.fit(clf)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">explain</span> <span class="o">=</span> <span class="n">ShapeletForestCounterfactual</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+<span class="n">explain</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -671,7 +671,7 @@ explain.fit(clf)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>clf.predict(x_test_sample)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test_sample</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -689,9 +689,9 @@ array([2., 2.], dtype=float32)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x_counterfactual = explain.transform(
-    x_test_sample, np.broadcast_to(label, (x_test_sample.shape[0],))
-)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_counterfactual</span> <span class="o">=</span> <span class="n">explain</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+    <span class="n">x_test_sample</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">(</span><span class="n">x_test_sample</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -700,7 +700,7 @@ array([2., 2.], dtype=float32)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>clf.predict(x_counterfactual)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_counterfactual</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -718,9 +718,9 @@ array([1., 1.], dtype=float32)
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.plot(x_counterfactual[0])
-plt.plot(x_test_sample[0])
-plt.legend([&quot;Counterfactual&quot;, &quot;Original&quot;])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_counterfactual</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test_sample</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;Counterfactual&quot;</span><span class="p">,</span> <span class="s2">&quot;Original&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -745,14 +745,14 @@ plt.legend([&quot;Counterfactual&quot;, &quot;Original&quot;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x_counterfactual, valid, score = counterfactuals(
-    clf,
-    x_test_sample,
-    label,
-    scoring=&quot;euclidean&quot;,
-    valid_scoring=True,
-    random_state=random_state,
-)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_counterfactual</span><span class="p">,</span> <span class="n">valid</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">counterfactuals</span><span class="p">(</span>
+    <span class="n">clf</span><span class="p">,</span>
+    <span class="n">x_test_sample</span><span class="p">,</span>
+    <span class="n">label</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span>
+    <span class="n">valid_scoring</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -761,7 +761,7 @@ plt.legend([&quot;Counterfactual&quot;, &quot;Original&quot;])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>valid
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">valid</span>
 </pre></div>
 </div>
 </div>
@@ -779,7 +779,7 @@ array([ True,  True])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>score
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">score</span>
 </pre></div>
 </div>
 </div>
@@ -797,35 +797,35 @@ array([1.6957227 , 1.03749523])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>classifiers = [
-    (
-        &quot;Shapelet Forest Counterfactuals&quot;,
-        ShapeletForestClassifier(
-            metric=&quot;euclidean&quot;, random_state=random_state, n_estimators=100, n_jobs=-1
-        ),
-    ),
-    (&quot;KNearest Counterfactuals&quot;, KNeighborsClassifier(metric=&quot;euclidean&quot;)),
-    (&quot;Prototype Counterfactuals&quot;, RandomForestClassifier(random_state=random_state)),
-]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">classifiers</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span>
+        <span class="s2">&quot;Shapelet Forest Counterfactuals&quot;</span><span class="p">,</span>
+        <span class="n">ShapeletForestClassifier</span><span class="p">(</span>
+            <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="p">),</span>
+    <span class="p">),</span>
+    <span class="p">(</span><span class="s2">&quot;KNearest Counterfactuals&quot;</span><span class="p">,</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">metric</span><span class="o">=</span><span class="s2">&quot;euclidean&quot;</span><span class="p">)),</span>
+    <span class="p">(</span><span class="s2">&quot;Prototype Counterfactuals&quot;</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)),</span>
+<span class="p">]</span>
 
-fig, ax = plt.subplots(nrows=3, sharex=True)
-label = np.unique(y_train)[0]
-for i, (name, clf) in enumerate(classifiers):
-    clf.fit(x_train, y_train)
-    x_test_sample = x_test[y_test != label][:2]
-    if isinstance(clf, RandomForestClassifier):
-        kwargs = {&quot;train_x&quot;: x_train, &quot;train_y&quot;: y_train}
-    else:
-        kwargs = {}
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">y_train</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">clf</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">classifiers</span><span class="p">):</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">x_test_sample</span> <span class="o">=</span> <span class="n">x_test</span><span class="p">[</span><span class="n">y_test</span> <span class="o">!=</span> <span class="n">label</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">RandomForestClassifier</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;train_x&quot;</span><span class="p">:</span> <span class="n">x_train</span><span class="p">,</span> <span class="s2">&quot;train_y&quot;</span><span class="p">:</span> <span class="n">y_train</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
 
-    x_counterfactual, valid = counterfactuals(
-        clf, x_test_sample, label, random_state=random_state, method_args=kwargs
-    )
-    ax[i].set_title(name + (&quot;(invalid)&quot; if not valid[0] else &quot;&quot;))
-    ax[i].plot(x_counterfactual[0], c=&quot;red&quot;)
-    ax[i].plot(x_test[0], c=&quot;blue&quot;)
+    <span class="n">x_counterfactual</span><span class="p">,</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">counterfactuals</span><span class="p">(</span>
+        <span class="n">clf</span><span class="p">,</span> <span class="n">x_test_sample</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">method_args</span><span class="o">=</span><span class="n">kwargs</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;(invalid)&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">valid</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_counterfactual</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
 
-ax[-1].legend([&quot;x&#39;&quot;, &quot;x&quot;])
+<span class="n">ax</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s2">&quot;x&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">])</span>
 <br/></pre></div>
 </div>
 </div>

@@ -290,7 +290,7 @@
                         <use href="#svg-arrow-right"></use>
                     </svg></i></label>
             <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev256+ga6035c4eb</a></li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev257+gc69fca192</a></li>
                 <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
                 <li class="toctree-l2"><span class="reference internal">1.1.1</span></li>
             </ul>
@@ -589,12 +589,12 @@ div.rendered_html tbody tr:hover {
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>import numpy as np
-import matplotlib.pylab as plt
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
 
-from wildboar.distance import matrix_profile
-from wildboar.annotate import motifs
-from wildboar.utils.plot import plot_time_domain
+<span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">matrix_profile</span>
+<span class="kn">from</span> <span class="nn">wildboar.annotate</span> <span class="kn">import</span> <span class="n">motifs</span>
+<span class="kn">from</span> <span class="nn">wildboar.utils.plot</span> <span class="kn">import</span> <span class="n">plot_time_domain</span>
 </pre></div>
 </div>
 </div>
@@ -603,8 +603,8 @@ from wildboar.utils.plot import plot_time_domain
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>x = np.loadtxt(&quot;https://drive.google.com/uc?export=download&amp;id=1DYG3rwW_zpd-7lcgYeL0Y2nHtkr2Fi0O&quot;)
-x = x[20000:30000]
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s2">&quot;https://drive.google.com/uc?export=download&amp;id=1DYG3rwW_zpd-7lcgYeL0Y2nHtkr2Fi0O&quot;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">20000</span><span class="p">:</span><span class="mi">30000</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -613,7 +613,7 @@ x = x[20000:30000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>mp, mpi = matrix_profile(x, window=200, return_index=True)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mp</span><span class="p">,</span> <span class="n">mpi</span> <span class="o">=</span> <span class="n">matrix_profile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -622,9 +622,9 @@ x = x[20000:30000]
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(nrows=2, figsize=(12, 4), sharex=True)
-plot_time_domain(x, ax=ax[0])
-plot_time_domain(mp, ax=ax[1])
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plot_time_domain</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">plot_time_domain</span><span class="p">(</span><span class="n">mp</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -649,15 +649,15 @@ plot_time_domain(mp, ax=ax[1])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>motif_ind = motifs(
-    x,
-    mp=mp,
-    max_distance=0.5,
-    max_motif=5,
-    min_neighbours=2,
-    max_neighbours=5,
-    exclude=0.2,
-)
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">motif_ind</span> <span class="o">=</span> <span class="n">motifs</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">,</span>
+    <span class="n">mp</span><span class="o">=</span><span class="n">mp</span><span class="p">,</span>
+    <span class="n">max_distance</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">max_motif</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">min_neighbours</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">max_neighbours</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">exclude</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -666,14 +666,14 @@ plot_time_domain(mp, ax=ax[1])
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>fig, ax = plt.subplots(figsize=(12, 4), sharex=True)
-plot_time_domain(x, ax=ax)
-cmap = plt.get_cmap(&quot;Dark2&quot;, 5)
-for c, ind in enumerate(motif_ind):
-    first = ind[0]
-    for i in ind:
-        ax.plot(np.arange(i, i + 200), x[i : i + 200], color=cmap(c))
-    ax.annotate(f&quot;{c}&quot;, xy=(first, x[first]), xytext=(first, x[first] - 2000), arrowprops=dict(arrowstyle=&quot;-&gt;&quot;, connectionstyle=&quot;arc3&quot;))
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plot_time_domain</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Dark2&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">motif_ind</span><span class="p">):</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ind</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">200</span><span class="p">),</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">200</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">cmap</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">first</span><span class="p">]),</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">first</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2000</span><span class="p">),</span> <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s2">&quot;-&gt;&quot;</span><span class="p">,</span> <span class="n">connectionstyle</span><span class="o">=</span><span class="s2">&quot;arc3&quot;</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
