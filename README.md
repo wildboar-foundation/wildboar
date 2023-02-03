@@ -85,7 +85,7 @@ Contributions are welcome! The [developer's guide](https://docs.wildboar.dev/mas
 In short, pull requests should:
 
 - be well motivated
-- be fomatted using Black
+- be formatted using Black
 - add relevant tests
 - add relevant documentation
 

@@ -23,6 +23,7 @@ class RocketClassifier(TransformRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
+        normalize=True,
         n_jobs=None,
         random_state=None
     ):
@@ -33,6 +34,7 @@ class RocketClassifier(TransformRidgeClassifierCV):
             cv=cv,
             class_weight=class_weight,
             n_jobs=n_jobs,
+            normalize=normalize,
             random_state=random_state,
         )
         self.padding_prob = padding_prob

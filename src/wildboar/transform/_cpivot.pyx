@@ -15,7 +15,7 @@ from numpy cimport uint32_t
 from ..distance._distance cimport MetricList
 from ..utils cimport TSArray
 from ..utils._misc cimport to_ndarray_double
-from ..utils._rand cimport RAND_R_MAX, rand_int
+from ..utils._rand cimport RAND_R_MAX, RandomSampler, rand_int
 
 from ..distance import _METRICS
 
@@ -33,14 +33,17 @@ cdef struct PersitentPivot:
 
 cdef class PivotFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_pivots
+    cdef RandomSampler sampler
     cdef MetricList metrics
 
-    def __cinit__(self, Py_ssize_t n_pivots, list metrics):
+    def __cinit__(self, Py_ssize_t n_pivots, list metrics, RandomSampler sampler):
         self.n_pivots = n_pivots
         self.metrics = MetricList(metrics)
+        self.sampler = sampler
+        
 
     def __reduce__(self):
-        return self.__class__, (self.n_pivots, self.metrics.py_list)
+        return self.__class__, (self.n_pivots, self.metrics.py_list, self.sampler)
 
     cdef int reset(self, TSArray X) nogil:
         cdef Py_ssize_t i
@@ -65,7 +68,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     ) nogil:
         cdef TransientPivot *pivot = <TransientPivot*> malloc(sizeof(TransientPivot))
         pivot.sample = samples[rand_int(0, n_samples, seed)]
-        pivot.metric = rand_int(0, self.metrics.size, seed)
+        pivot.metric = self.sampler.rand_int(seed)
         transient.dim = rand_int(0, X.shape[1], seed)
         transient.feature = pivot
         return 0

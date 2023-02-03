@@ -5,12 +5,39 @@
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
+import numpy as np
 from libc.math cimport log, sqrt
 from libc.stdlib cimport free, malloc
 
 
 cdef inline uint32_t DEFAULT_SEED = 1
+
+cdef class RandomSampler:
+
+    def __cinit__(self, Py_ssize_t upper, const double[::1] weights=None):
+        self.weights = weights
+        self.upper = upper
+        if self.weights is not None:
+            if upper != len(weights):
+                raise ValueError("upper != len(weights)")
+
+            vose_rand_init(&self.vr, len(weights))
+            vose_rand_precompute(&self.vr, &weights[0])
+        
+
+    def __reduce__(self):
+        weights = np.asarray(self.weights) if self.weights is not None else None
+        return self.__class__, (self.upper, weights)
+
+    def __dealloc__(self):
+        if self.weights is not None:
+            vose_rand_free(&self.vr)
+
+    cdef Py_ssize_t rand_int(self, uint32_t *seed) nogil:
+        if self.weights is not None:
+            return vose_rand_int(&self.vr, seed)
+        else:
+            return rand_int(0, self.upper, seed)
 
 
 # https://jugit.fz-juelich.de/mlz/ransampl/-/blob/master/lib/ransampl.c
@@ -23,7 +50,7 @@ cdef void vose_rand_free(VoseRand *vr) nogil:
     free(vr.prob)
     free(vr.alias)
 
-cdef void vose_rand_precompute(VoseRand *vr, double *p) nogil:
+cdef void vose_rand_precompute(VoseRand *vr, const double *p) nogil:
     cdef Py_ssize_t n = vr.n
     cdef Py_ssize_t i, a, g
     cdef double *P = <double*> malloc(sizeof(double) * n)

@@ -2,13 +2,16 @@
 # License: BSD 3 clause
 import numbers
 
+import numpy as np
+from sklearn.base import TransformerMixin
+from sklearn.utils import check_random_state
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from wildboar.utils.validation import check_option
-
+from ..base import BaseEstimator
 from ..distance import _METRICS
 from ..distance._multi_metric import make_metrics
-from ._base import BaseFeatureEngineerTransform
+from ..utils._rand import RandomSampler
+from ..utils.validation import check_option
 from ._cpivot import PivotFeatureEngineer
 
 _METRIC_NAMES = set(_METRICS.keys())
@@ -21,6 +24,7 @@ class PivotMixin:
         "n_pivots": [Interval(numbers.Integral, 1, None, closed="left")],
         "metric": [StrOptions(_METRIC_NAMES), list],
         "metric_params": [None, dict],
+        "metric_sample": [StrOptions({"uniform", "weighted"}), None],
     }
 
     def _get_feature_engineer(self, n_samples):
@@ -54,15 +58,21 @@ class PivotMixin:
                     ),
                 ),
             ]
-            metrics, _ = make_metrics(metric_specs)
+            metrics, weights = make_metrics(metric_specs)
         elif isinstance(self.metric, str):
             Metric = check_option(_METRICS, self.metric, "metric")
             metric_params = self.metric_params if self.metric_params is not None else {}
             metrics = [Metric(**metric_params)]
+            weights = np.ones(1)
         else:
-            metrics, _ = make_metrics(self.metric)
+            metrics, weights = make_metrics(self.metric)
 
-        return PivotFeatureEngineer(self.n_pivots, metrics)
+        if self.metric_sample is None or self.metric_sample == "uniform":
+            weights = None
+
+        return PivotFeatureEngineer(
+            self.n_pivots, metrics, RandomSampler(len(metrics), weights)
+        )
 
 
 class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
@@ -79,6 +89,7 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         *,
         metric="auto",
         metric_params=None,
+        metric_sample=None,
         random_state=None,
         n_jobs=None,
     ):
@@ -86,7 +97,6 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
 
         Parameters
         ----------
-
         n_pivot : int, optional
             The number of pivot time series.
 
@@ -102,14 +112,19 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
               range 0 to 1, we would give the following specification: ``dict(min_r=0,
               max_r=1, num_r=10)``.
 
-            Read more about the metrics and their parameters in the
-            :ref:`User guide <list_of_subsequence_metrics>`.
+            Read more about the metrics and their parameters in the :ref:`User guide
+            <list_of_subsequence_metrics>`.
 
         metric_params : dict, optional
             Parameters for the distance measure. Ignored unless metric is a string.
 
-            Read more about the parameters in the :ref:`User guide
-            <list_of_metrics>`.
+            Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
+
+        metric_sample : {"uniform", "weighted"}, optional
+            If multiple metrics are specified this parameter controls how they are
+            sampled. "uniform" samples each metric configuration with equal probability
+            and "weighted" samples each metric with equal probability. By default,
+            metric configurations are sampled with equal probability.
 
         random_state : int or np.RandomState, optional
             The random state
@@ -121,3 +136,42 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         self.n_pivots = n_pivots
         self.metric = metric
         self.metric_params = metric_params
+        self.metric_sample = metric_sample
+
+
+class ProximityTransform(TransformerMixin, BaseEstimator):
+    def __init__(
+        self,
+        n_pivots=100,
+        metric="auto",
+        metric_params=None,
+        metric_sample="weighted",
+        random_state=None,
+        n_jobs=None,
+    ):
+        self.n_pivots = n_pivots
+        self.metric = metric
+        self.metric_params = metric_params
+        self.metric_sample = metric_sample
+        self.random_state = random_state
+        self.n_jobs = n_jobs
+
+    def fit(self, X, y):
+        X, y = self._validate_data(X, y, allow_3d=True, dtype=float)
+        random_state = check_random_state(self.random_state)
+        self.pivots_ = [
+            PivotTransform(
+                n_pivots=int(min(self.n_pivots, count)),
+                metric=self.metric,
+                metric_params=self.metric_params,
+                metric_sample=self.metric_sample,
+                random_state=random_state.randint(np.iinfo(np.int32).max),
+                n_jobs=self.n_jobs,
+            ).fit(X[y == label])
+            for label, count in zip(*np.unique(y, return_counts=True))
+        ]
+
+        return self
+
+    def transform(self, X, y=None):
+        return np.hstack([pivots.transform(X) for pivots in self.pivots_])

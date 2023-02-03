@@ -4,7 +4,7 @@
 
 from ._interval import FeatureTransform, IntervalTransform
 from ._matrix_profile import MatrixProfileTransform
-from ._pivot import PivotTransform
+from ._pivot import PivotTransform, ProximityTransform
 from ._rocket import RocketTransform
 from ._sax import (
     PAA,
@@ -21,6 +21,7 @@ __all__ = [
     "RocketTransform",
     "IntervalTransform",
     "PivotTransform",
+    "ProximityTransform",
     "FeatureTransform",
     "SAX",
     "PAA",
