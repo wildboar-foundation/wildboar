@@ -94,7 +94,6 @@ def _plot_single_importance(importance, ax, labels):
 
 
 def _intervals(n, n_intervals):
-
     for i in range(n_intervals):
         length = n // n_intervals
         start = i * length + min(i % n_intervals, n % n_intervals)
@@ -113,7 +112,6 @@ def _unpack_scores(orig_score, perm_score):
 
 
 class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
-
     _parameter_constraints: dict = {
         "scoring": [None, str, list, dict, callable],
         "n_repeat": [Interval(numbers.Integral, 1, None, closed="left")],

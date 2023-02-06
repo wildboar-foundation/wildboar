@@ -49,7 +49,6 @@ def _yield_explainer_checks(estimator):
 
 
 def _yield_all_checks(estimator):
-
     if is_classifier(estimator):
         for check in _yield_classifier_test(estimator):
             yield check

@@ -10,7 +10,6 @@ from .base import BaseFeatureEngineerTransform
 
 
 class PivotMixin:
-
     _parameter_constraints: dict = {
         "n_pivots": [Interval(numbers.Integral, 1, None, closed="left")],
         "metrics": [StrOptions({"auto"}), list],

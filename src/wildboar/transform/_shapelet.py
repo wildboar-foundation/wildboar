@@ -18,7 +18,6 @@ from .base import BaseFeatureEngineerTransform
 
 
 class ShapeletMixin:
-
     _parameter_constraints: dict = {
         "n_shapelets": [
             Interval(numbers.Integral, 1, None, closed="left"),

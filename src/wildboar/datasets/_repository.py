@@ -549,7 +549,6 @@ def _validate_collections(collections):
 
 
 class JSONRepository(Repository):
-
     supported_version = "1.1"
 
     def __init__(self, url):

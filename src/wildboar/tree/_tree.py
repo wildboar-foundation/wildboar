@@ -104,7 +104,6 @@ class BaseFeatureTreeClassifier(FeatureTreeMixin, BaseTreeClassifier):
 
 
 class DynamicTreeMixin:
-
     _parameter_constraints: dict = {"alpha": [float, None]}
 
     def _wrap_feature_engineer(self, feature_engineer):

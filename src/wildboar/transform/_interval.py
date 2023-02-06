@@ -30,7 +30,6 @@ _SUMMARIZER = {
 
 
 class IntervalMixin:
-
     _parameter_constraints: dict = {
         "n_intervals": [
             Interval(numbers.Integral, 1, None, closed="left"),
