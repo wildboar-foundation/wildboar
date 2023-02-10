@@ -102,6 +102,8 @@ Changelog
        in :class:`transform.IntervalTransform` to ``log2``. The old value is deprecated
        and will be removed in 1.4.
 
+     - |Feature| Improve the ``metric`` specification for :class:`transform.PivotTransform`.
+
      - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
        This change affect :class:`transform.RocketTransform`.
 
@@ -122,8 +124,8 @@ Changelog
        This change affect :class:`tree.RocketTreeClassifier` and :class:`tree.RocketTreeRegressor`.
 
      - |API| The ``metric_factories`` parameter of :class:`tree.ProximityTreeClassifier` has
-       been renamed to ``metrics``. We have deprecated ``metric_factories`` and it will be
-       removed in 1.4.
+       been renamed to ``metric``. We have deprecated ``metric_factories`` and it will be
+       removed in 1.4. We also introduce the ``metric_params`` argument for single metric uses.
 
 Other improvements
 ------------------

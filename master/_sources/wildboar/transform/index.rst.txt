@@ -211,7 +211,7 @@ Functions
 
 
 
-.. py:class:: PivotTransform(n_pivots=100, *, metrics='auto', random_state=None, n_jobs=None)
+.. py:class:: PivotTransform(n_pivots=100, *, metric='auto', metric_params=None, random_state=None, n_jobs=None)
 
    Bases: :py:obj:`PivotMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
@@ -219,21 +219,26 @@ Functions
 
    :param n_pivot: The number of pivot time series.
    :type n_pivot: int, optional
-   :param metrics:
-                   - If str, the distance metric used to identify the best shapelet.
+   :param metric:
+                  - If str, the metric to compute the distance.
 
-                   - If list, multiple metrics specified as a list of tuples, where the first
-                     element of the tuple is a metric name and the second element a dictionary
-                     with a parameter grid specification. A parameter grid specification is a
-                     dict with two mandatory and one optional key-value pairs defining the
-                     lower and upper bound on the values and number of values in the grid. For
-                     example, to specifiy a grid over the argument 'r' with 10 values in the
-                     range 0 to 1, we would give the following specification: ``dict(min_r=0,
-                     max_r=1, num_r=10)``.
+                  - If list, multiple metrics specified as a list of tuples, where the first
+                    element of the tuple is a metric name and the second element a dictionary
+                    with a parameter grid specification. A parameter grid specification is a
+                    dict with two mandatory and one optional key-value pairs defining the
+                    lower and upper bound on the values and number of values in the grid. For
+                    example, to specifiy a grid over the argument 'r' with 10 values in the
+                    range 0 to 1, we would give the following specification: ``dict(min_r=0,
+                    max_r=1, num_r=10)``.
 
-                   Read more about the metrics and their parameters in the
-                   :ref:`User guide <list_of_subsequence_metrics>`.
-   :type metrics: {'auto'} or list, optional
+                  Read more about the metrics and their parameters in the
+                  :ref:`User guide <list_of_subsequence_metrics>`.
+   :type metric: {'auto'} or list, optional
+   :param metric_params: Parameters for the distance measure. Ignored unless metric is a string.
+
+                         Read more about the parameters in the :ref:`User guide
+                         <list_of_metrics>`.
+   :type metric_params: dict, optional
    :param random_state: The random state
    :type random_state: int or np.RandomState, optional
    :param n_jobs: The number of cores to use.
