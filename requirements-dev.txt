@@ -4,8 +4,9 @@ requests
 networkx
 scikit-learn-extra
 pre-commit
-black==22.10.0
-isort
+flake8==6.0.0
+black==23.1.0
+isort==5.12.0
 cython>=0.29.24
 setuptools_scm[toml]>=6.2
 setuptools>=48.0
