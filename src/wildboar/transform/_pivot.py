@@ -17,7 +17,6 @@ _METRIC_NAMES = frozenset(_METRIC_NAMES)
 
 
 class PivotMixin:
-
     _parameter_constraints: dict = {
         "n_pivots": [Interval(numbers.Integral, 1, None, closed="left")],
         "metric": [StrOptions(_METRIC_NAMES), list],

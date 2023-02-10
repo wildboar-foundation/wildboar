@@ -23,7 +23,6 @@ _DEFAULT_TAGS = {
 
 
 class BaseEstimator(SklearnBaseEstimator):
-
     # Same additions as scikit-learn
     def __getstate__(self):
         try:

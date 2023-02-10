@@ -180,7 +180,6 @@ class ForestMixin:
 
 
 class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
-
     _parameter_constraints: dict = {**BaseBagging._parameter_constraints}
 
     def __init__(
@@ -628,7 +627,6 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
 
 
 class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
-
     _parameter_constraints: dict = {**BaseBagging._parameter_constraints}
 
     def __init__(
