@@ -1,0 +1,66 @@
+:py:mod:`wildboar.datasets.filter`
+==================================
+
+.. py:module:: wildboar.datasets.filter
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets.filter.make_dict_filter
+   wildboar.datasets.filter.make_filter
+   wildboar.datasets.filter.make_list_filter
+   wildboar.datasets.filter.make_str_filter
+
+
+
+.. py:function:: make_dict_filter(filter)
+
+   Make a new filter
+
+   :param filter: The dict of [subject] -> [op][verb]
+   :type filter: dict
+
+   :returns: The filter function
+   :rtype: function
+
+
+.. py:function:: make_filter(filter)
+
+   Create a new filter
+
+   :param filter: The filter
+   :type filter: str, list or dict
+
+   :returns: The filter function
+   :rtype: function
+
+
+.. py:function:: make_list_filter(filter)
+
+   Make a new filter based on a list of filter strings
+
+   :param filter: A list of filter strings
+   :type filter: list
+
+   :returns: The filter function
+   :rtype: function
+
+
+.. py:function:: make_str_filter(filter)
+
+   Make a new filter
+
+   :param filter: The filter string [subject][op][verb]
+   :type filter: str
+
+   :returns: The filter function
+   :rtype: function
+
+

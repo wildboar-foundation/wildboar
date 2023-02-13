@@ -1,0 +1,71 @@
+:py:mod:`wildboar`
+==================
+
+.. py:module:: wildboar
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   annotate/index.rst
+   datasets/index.rst
+   distance/index.rst
+   ensemble/index.rst
+   explain/index.rst
+   linear_model/index.rst
+   metrics/index.rst
+   model_selection/index.rst
+   transform/index.rst
+   tree/index.rst
+   utils/index.rst
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
+   version/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.iseos
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.eos
+
+
+.. py:function:: iseos(x)
+
+   Boolean indicator if a value is the end-of-sequence value.
+
+   :param x: The array
+   :type x: array-like
+
+   :returns: boolean indicator array
+   :rtype: ndarray
+
+
+.. py:data:: eos
+
+   The end-of-sequence identifier. Indicates the end of a time series.
+

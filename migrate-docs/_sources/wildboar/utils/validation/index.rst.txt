@@ -1,0 +1,112 @@
+:py:mod:`wildboar.utils.validation`
+===================================
+
+.. py:module:: wildboar.utils.validation
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.validation.check_X_y
+   wildboar.utils.validation.check_array
+   wildboar.utils.validation.check_option
+   wildboar.utils.validation.check_type
+
+
+
+.. py:function:: check_X_y(x, y, *, dtype=float, order='C', copy=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite=True, multi_output=False, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, allow_eos=False, y_numeric=False, y_contiguous=True, estimator=None)
+
+
+.. py:function:: check_array(array, *, dtype='numeric', order='C', copy=False, ravel_1d=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite=True, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, estimator=None, input_name='', allow_eos=False)
+
+   Delegate array validation to scikit-learn
+   :func:`sklearn.utils.validation.check_array` with wildboar defaults and conventions.
+
+   - we optionally allow end-of-sequence identifiers
+   - by default we convert arrays to c-order
+   - we optionally specifically allow for 3d-arrays
+   - we never allow for sparse arrays
+
+   By default, the input is checked to be a non-empty 2D array in c-order containing
+   only finite values, with at least 1 sample, 1 timestep and 1 dimension. If the dtype
+   of the array is object, attempt converting to float, raising on failure.
+
+   :param array: Input object to check / convert.
+   :type array: object
+   :param dtype: Data type of result. If None, the dtype of the input is preserved.
+                 If "numeric", dtype is preserved unless array.dtype is object.
+                 If dtype is a list of types, conversion on the first type is only
+                 performed if the dtype of the input is not in the list.
+   :type dtype: 'numeric', type, list of type or None, optional
+   :param order: Whether an array will be forced to be fortran or c-style.
+                 When order is None, then if copy=False, nothing is ensured
+                 about the memory layout of the output array; otherwise (copy=True)
+                 the memory layout of the returned array is kept as close as possible
+                 to the original array.
+   :type order: {'F', 'C', 'T'} or None, optional
+   :param copy: Whether a forced copy will be triggered. If copy=False, a copy might
+                be triggered by a conversion.
+   :type copy: bool, optional
+   :param ravel_1d: Whether to ravel 1d arrays or column vectors, it the array is neither an
+                    error is raised.
+   :type ravel_1d: bool, optional
+   :param ensure_2d: Whether to raise a value error if array is not 2D.
+   :type ensure_2d: bool, optional
+   :param allow_3d: Wheter to allow array.ndim == 3
+   :type allow_3d: bool, optional
+   :param allow_nd: Whether to allow array.ndim > 2.
+   :type allow_nd: bool, optional
+   :param force_all_finite: Whether to raise an error on np.inf, np.nan, pd.NA in array. The
+                            possibilities are:
+
+                            - True: Force all values of array to be finite.
+                            - False: accepts np.inf, np.nan, pd.NA in array.
+                            - 'allow-nan': accepts only np.nan and pd.NA values in array. Values
+                              cannot be infinite.
+
+                            If allow_eos=True, -np.inf is allowed despite force_all_finite=True.
+   :type force_all_finite: bool or 'allow-nan', default=True
+   :param ensure_min_samples: Make sure that the array has a minimum number of samples in its first
+                              axis (rows for a 2D array). Setting to 0 disables this check.
+   :type ensure_min_samples: int, optional
+   :param ensure_min_timesteps: Make sure that the 2D array has some minimum number of timesteps
+                                (columns). The default value of 1 rejects empty datasets.
+                                This check is only enforced when the input data has effectively 2
+                                dimensions or is originally 1D and ``ensure_2d`` is True. Setting to 0
+                                disables this check.
+   :type ensure_min_timesteps: int, optional
+   :param ensure_min_dims: Make sure that the array has a minimum number of dimensions. Setting to 0
+                           disables this check.
+   :type ensure_min_dims: int, optional
+   :param estimator: If passed, include the name of the estimator in warning messages.
+   :type estimator: str or estimator instance, default=None
+   :param input_name: The data name used to construct the error message.
+   :type input_name: str, default=""
+
+   :returns: **array_converted** -- The converted and validated array.
+   :rtype: object
+
+
+.. py:function:: check_option(dict, key, name)
+
+
+.. py:function:: check_type(x, name, target_type, required=True)
+
+   Check that the type of x is of a target type.
+
+   :param x: The object to check.
+   :type x: object
+   :param name: The name of the parameter.
+   :type name: str
+   :param target_type: The required type(s) of x.
+   :type target_type: type or tuple
+   :param required: If required=False, None is an allowed.
+   :type required: bool, optional
+
+

@@ -1,0 +1,65 @@
+:py:mod:`wildboar.utils.estimator_checks`
+=========================================
+
+.. py:module:: wildboar.utils.estimator_checks
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.estimator_checks.check_consistent_estimator_params
+   wildboar.utils.estimator_checks.check_estimator
+   wildboar.utils.estimator_checks.check_force_n_dims
+   wildboar.utils.estimator_checks.check_force_n_dims_raises
+   wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order
+
+
+
+.. py:function:: check_consistent_estimator_params(name, estimator)
+
+
+.. py:function:: check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False)
+
+   Check if estimator adheres to scikit-learn (and wildboar) conventions.
+
+   This method delegates to `check_estimator` in scikit-learn but monkey-patches
+   the estimator with tags to skip some tests related to performance.
+
+   We also add a new parameter to allow for silently ignoring some scikit-learn
+   tests.
+
+   Finally, we also add a suite of specific wildboar-tests tailored towards
+   time series classifiers, regressors and transformers.
+
+   :param estimator: Estimator instance to check.
+   :type estimator: estimator object
+   :param generate_only: When `False`, checks are evaluated when `check_estimator` is called.
+                         When `True`, `check_estimator` returns a generator that yields
+                         (estimator, check) tuples. The check is run by calling
+                         `check(estimator)`.
+   :type generate_only: bool, default=False
+   :param ignore: Ignore the checks in the list.
+   :type ignore: list, optional
+   :param skip_scikit: Skip all scikit-learn tests.
+   :type skip_scikit: bool, optional
+
+   :returns: **checks_generator** -- Generator that yields (estimator, check) tuples. Returned when
+             `generate_only=True`.
+   :rtype: generator
+
+
+.. py:function:: check_force_n_dims(name, estimator)
+
+
+.. py:function:: check_force_n_dims_raises(name, estimator)
+
+
+.. py:function:: check_sample_weights_invariance_samples_order(name, estimator_orig, kind='ones')
+
+

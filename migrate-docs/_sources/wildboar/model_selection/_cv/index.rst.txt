@@ -1,0 +1,84 @@
+:orphan:
+
+:py:mod:`wildboar.model_selection._cv`
+======================================
+
+.. py:module:: wildboar.model_selection._cv
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.model_selection._cv.RepeatedOutlierSplit
+
+
+
+
+.. py:class:: RepeatedOutlierSplit(n_splits=None, *, test_size=0.2, n_outlier=0.05, shuffle=True, random_state=None)
+
+   Repeated random outlier cross-validator
+
+   Yields indicies that split the dataset into training and test sets.
+
+   .. note::
+
+      Contrary to other cross-validation strategies, the random outlier
+      cross-validator does not ensure that all folds will be different.
+      Instead, the inlier samples are shuffled and new outlier samples
+      are inserted in the training and test sets repeatedly.
+
+   :param n_splits: The maximum number of splits.
+
+                    - if None, the number of splits is determined by the number of
+                      outliers as, `total_n_outliers/(n_inliers * n_outliers)`
+
+                    - if int, the number of splits is an upper-bound
+   :type n_splits: int, optional
+   :param test_size: The size of the test set.
+   :type test_size: float, optional
+   :param n_outlier: The fraction of outliers in the training and test sets.
+   :type n_outlier: float, optional
+   :param shuffle: Shuffle the training indicies in each iteration.
+   :type shuffle: bool, optional
+   :param random_state: The psudo-random number generator
+   :type random_state: int or RandomState, optional
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: get_n_splits(X, y, groups=None)
+
+      Returns the number of splitting iterations in the cross-validator
+      :param X: The samples
+      :type X: object
+      :param y: The labels
+      :type y: object
+      :param groups: Always ignored, exists for compatibility.
+      :type groups: object
+
+      :returns: **n_splits** -- Returns the number of splitting iterations in the cross-validator.
+      :rtype: int
+
+
+   .. py:method:: split(x, y, groups=None)
+
+      Return training and test indicies
+
+      :param x: Always ignored, exists for compatibility.
+      :type x: object
+      :param y: The labels
+      :type y: object
+      :param groups: Always ignored, exists for compatibility.
+      :type groups: object, optional
+
+      :Yields: **train_idx, test_idx** (*ndarray*) -- The training and test indicies
+
+
+

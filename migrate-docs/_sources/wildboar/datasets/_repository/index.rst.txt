@@ -1,0 +1,293 @@
+:orphan:
+
+:py:mod:`wildboar.datasets._repository`
+=======================================
+
+.. py:module:: wildboar.datasets._repository
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets._repository.Bundle
+   wildboar.datasets._repository.JSONRepository
+   wildboar.datasets._repository.NpBundle
+   wildboar.datasets._repository.Repository
+   wildboar.datasets._repository.RepositoryCollection
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets._repository.DEFAULT_TAG
+
+
+.. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
+
+   Base class for handling dataset bundles
+
+   .. attribute:: name
+
+      Human-readable name of the bundle
+
+      :type: str
+
+   .. attribute:: description
+
+      Description of the bundle
+
+      :type: str
+
+   .. attribute:: label_index
+
+      Index of the class label(s)
+
+      :type: int or array-like
+
+   :param key: A unique key of the bundle
+   :type key: str
+   :param version: The version of the bundle
+   :type version: str
+   :param name: Human-readable name of the bundle
+   :type name: str
+   :param description: Description of the bundle
+   :type description: str
+   :param arrays: The arrays of the dataset
+   :type arrays: list
+
+   .. py:method:: get_collection(collection)
+
+
+   .. py:method:: get_filename(version=None, tag=None, ext=None)
+
+
+   .. py:method:: list(archive, collection=None)
+
+      List all datasets in this bundle
+
+      :param archive: The bundle file
+      :type archive: ZipFile
+      :param collection: The collection name
+      :type collection: str, optional
+
+      :returns: **dataset_names** -- A sorted list of datasets in the bundle
+      :rtype: list
+
+
+   .. py:method:: load(name, archive)
+
+      Load a dataset from the bundle
+
+      :param name: Name of the dataset
+      :type name: str
+      :param archive: The zip-file bundle
+      :type archive: ZipFile
+
+      :returns: * **x** (*ndarray*) -- Data samples
+                * **y** (*ndarray*) -- Data labels
+                * **n_training_samples** (*int*) -- Number of samples that are for training. The value is <= x.shape[0]
+                * **extras** (*dict, optional*) -- Extra numpy arrays
+
+
+
+.. py:class:: JSONRepository(url)
+
+   Bases: :py:obj:`Repository`
+
+   A repository is a collection of bundles
+
+   .. py:property:: download_url
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+   .. py:property:: identifier
+
+
+   .. py:property:: name
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: wildboar_requires
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+   .. py:attribute:: supported_version
+      :value: '1.1'
+
+      
+
+   .. py:method:: get_bundles()
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+
+.. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
+
+   Bases: :py:obj:`Bundle`
+
+   bundle of numpy binary files
+
+   :param key: A unique key of the bundle
+   :type key: str
+   :param version: The version of the bundle
+   :type version: str
+   :param name: Human-readable name of the bundle
+   :type name: str
+   :param description: Description of the bundle
+   :type description: str
+   :param arrays: The arrays of the dataset
+   :type arrays: list
+
+
+.. py:class:: Repository
+
+   A repository is a collection of bundles
+
+   .. py:property:: active
+
+
+   .. py:property:: download_url
+      :abstractmethod:
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+   .. py:property:: identifier
+      :abstractmethod:
+
+
+   .. py:property:: name
+      :abstractmethod:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+      :abstractmethod:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: wildboar_requires
+      :abstractmethod:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+   .. py:method:: __eq__(o)
+
+      Return self==value.
+
+
+   .. py:method:: __hash__() -> int
+
+      Return hash(self).
+
+
+   .. py:method:: clear_cache(cache_dir, keep_last_version=True)
+
+
+   .. py:method:: get_bundle(key)
+
+      Get a bundle with the specified key
+
+      :param key: Key of the bundle
+      :type key: str
+
+      :returns: **bundle** -- A bundle or None
+      :rtype: Bundle, optional
+
+
+   .. py:method:: get_bundles()
+      :abstractmethod:
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+   .. py:method:: list_datasets(bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+
+
+   .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+
+
+   .. py:method:: refresh(timeout=None)
+
+      Refresh the repository
+
+
+
+.. py:class:: RepositoryCollection
+
+   .. py:method:: __contains__(item)
+
+
+   .. py:method:: __delitem__(key)
+
+
+   .. py:method:: __getitem__(key)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: install(repository, refresh=True, timeout=None, cache_dir=None)
+
+
+   .. py:method:: load_repository(repository, cache_dir=None)
+
+
+   .. py:method:: refresh(repository=None, timeout=None, cache_dir=None)
+
+
+   .. py:method:: save_repository(repository, cache_dir=None)
+
+
+
+.. py:data:: DEFAULT_TAG
+   :value: 'default'
+
+   
+

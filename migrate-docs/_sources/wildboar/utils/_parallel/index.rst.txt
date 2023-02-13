@@ -1,0 +1,35 @@
+:orphan:
+
+:py:mod:`wildboar.utils._parallel`
+==================================
+
+.. py:module:: wildboar.utils._parallel
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils._parallel.partition_n_jobs
+   wildboar.utils._parallel.run_in_parallel
+
+
+
+.. py:function:: partition_n_jobs(n_jobs, n)
+
+
+.. py:function:: run_in_parallel(work, n_jobs=-1, **parallel_args)
+
+   Execute work in parallel
+
+   :param work: A work batch
+   :type work: Batch
+   :param n_jobs: Number of parallel jobs, by default -1
+   :type n_jobs: int, optional
+
+

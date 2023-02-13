@@ -1,0 +1,44 @@
+:orphan:
+
+:py:mod:`wildboar.distance._multi_metric`
+=========================================
+
+.. py:module:: wildboar.distance._multi_metric
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.distance._multi_metric.make_metric
+   wildboar.distance._multi_metric.make_metrics
+   wildboar.distance._multi_metric.make_parameter_grid
+   wildboar.distance._multi_metric.make_subsequence_metric
+   wildboar.distance._multi_metric.make_subsequence_metrics
+   wildboar.distance._multi_metric.parse_metric_spec
+
+
+
+.. py:function:: make_metric(metric, *, default_n=10, **kwargs)
+
+
+.. py:function:: make_metrics(metric_specs)
+
+
+.. py:function:: make_parameter_grid(metric_spec, default_n=10)
+
+
+.. py:function:: make_subsequence_metric(metric, *, default_n=10, **kwargs)
+
+
+.. py:function:: make_subsequence_metrics(metric_specs)
+
+
+.. py:function:: parse_metric_spec(kwargs)
+
+

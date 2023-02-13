@@ -1,0 +1,82 @@
+:py:mod:`wildboar.transform.base`
+=================================
+
+.. py:module:: wildboar.transform.base
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.transform.base.BaseFeatureEngineerTransform
+
+
+
+
+.. py:class:: BaseFeatureEngineerTransform(*, random_state=None, n_jobs=None)
+
+   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
+   Base feature engineer transform
+
+   .. attribute:: embedding_
+
+      The underlying embedding.
+
+      :type: Embedding
+
+   :param n_jobs: The number of jobs to run in parallel. None means 1 and
+                  -1 means using all processors.
+   :type n_jobs: int, optional
+
+   .. py:method:: fit(x, y=None)
+
+      Fit the transform.
+
+      :param x:
+      :type x: array-like of shape [n_samples, n_timestep] or
+      :param [n_samples: The time series dataset.
+      :param n_dimensions: The time series dataset.
+      :param n_timestep]: The time series dataset.
+      :param y: For compatibility.
+      :type y: None, optional
+
+      :returns: **self**
+      :rtype: self
+
+
+   .. py:method:: fit_transform(x, y=None)
+
+      Fit the embedding and return the transform of x.
+
+      :param x:
+      :type x: array-like of shape [n_samples, n_timestep] or
+      :param [n_samples: The time series dataset.
+      :param n_dimensions: The time series dataset.
+      :param n_timestep]: The time series dataset.
+      :param y: For compatibility.
+      :type y: None, optional
+
+      :returns: **x_embedding** -- The embedding.
+      :rtype: ndarray of shape [n_samples, n_outputs]
+
+
+   .. py:method:: transform(x)
+
+      Transform the dataset.
+
+      :param x:
+      :type x: array-like of shape [n_samples, n_timestep] or
+      :param [n_samples: The time series dataset.
+      :param n_dimensions: The time series dataset.
+      :param n_timestep]: The time series dataset.
+
+      :returns: **x_transform** -- The transformation.
+      :rtype: ndarray of shape [n_samples, n_outputs]
+
+
+

@@ -1,0 +1,329 @@
+:py:mod:`wildboar.distance.dtw`
+===============================
+
+.. py:module:: wildboar.distance.dtw
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.distance.dtw.ddtw_distance
+   wildboar.distance.dtw.dtw_alignment
+   wildboar.distance.dtw.dtw_average
+   wildboar.distance.dtw.dtw_distance
+   wildboar.distance.dtw.dtw_envelop
+   wildboar.distance.dtw.dtw_lb_keogh
+   wildboar.distance.dtw.dtw_mapping
+   wildboar.distance.dtw.dtw_pairwise_distance
+   wildboar.distance.dtw.jeong_weight
+   wildboar.distance.dtw.wddtw_distance
+   wildboar.distance.dtw.wdtw_alignment
+   wildboar.distance.dtw.wdtw_distance
+
+
+
+.. py:function:: ddtw_distance(x, y, *, r=1.0)
+
+   Compute the derivative dynamic time warping distance
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep, )
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep, )
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+
+   :returns: **distance** -- The dynamic time warping distance
+   :rtype: float
+
+   .. seealso::
+
+      :obj:`dtw_distance`
+          compute the dtw distance
+
+
+.. py:function:: dtw_alignment(x, y, *, r=1.0, weight=None, out=None)
+
+   Compute the Dynamic time warping alignment matrix
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,)
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep,)
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+   :param out: Store the warping path in this array.
+   :type out: array-like of shape (x_timestep, y_timestep), optional
+   :param weight: A weighting vector to penalize warping.
+   :type weight: array-like of shape (max(x_timestep, y_timestep), ), optional
+
+   :returns: **alignment** -- The dynamic time warping alignment matrix
+   :rtype: ndarray of shape (x_timestep, y_timestep)
+
+   .. rubric:: Notes
+
+   If only the distance between two series is required use `dtw_distance` instead
+
+   .. seealso::
+
+      :obj:`dtw_distance`
+          compute the dtw distance
+
+   .. rubric:: References
+
+   Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+       Weighted dynamic time warping for time series classification.
+       Pattern Recognition 44, 2231-2240
+
+
+.. py:function:: dtw_average(X, *, r=1.0, g=None, sample_weight=None, init='random', method='mm', max_stable=5, learning_rate=0.1, decay=0.9, tol=1e-05, max_epoch=50, return_cost=False, verbose=False, random_state=None)
+
+   Compute the DTW barycenter average (DBA).
+
+   :param X: The samples.
+   :type X: array-like of shape (n_samples, n_timestep)
+   :param r: The warping window as a fraction of n_timestep.
+   :type r: float, optional
+   :param g: If set, use the weighted DTW alignment with :math:`g` as penalty control.
+
+             .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}}
+   :type g: float, optional
+   :param sample_weight: The sample weight.
+   :type sample_weight: array-like of shape (n_samples, ), optional
+   :param init: The initial sample used for the average.
+   :type init: 'random' or array-like of shape (m_timestep, ), optional
+   :param method: The method for computing the DBA.
+
+                  - if 'mm', use the majorize-minimize mean algorithm [1], which is equivalent to
+                    the DBA method in [2].
+
+                  - if 'ssg', use the stochastic subgradient mean algorithm [1].
+   :type method: {'mm', 'ssg'}, optional
+   :param max_stable: The maximum number of epoch where the average with lowest cost is unchanged
+                      if method='ssg'.
+   :type max_stable: int, optional
+   :param learning_rate: The learning rate, if method='ssg'.
+   :type learning_rate: float, optional
+   :param decay: The learning rate decay, if method='ssg'.
+   :type decay: float, optional
+   :param tol: The minmum change in cost between two epochs, if method='mm'.
+   :type tol: float, optional
+   :param max_epoch: The maximum number of epochs.
+   :type max_epoch: int, optional
+   :param verbose: If set, show runtime information.
+   :type verbose: bool, optional
+   :param random_state: Pseudo-random number generator.
+   :type random_state: int or RandomState, optional
+
+   :returns: * **mean** (*array-like of shape (m_timestep, ) or (n_timestep, )*) -- The mean time series.
+             * **cost** (*float, optional*) -- Return the cost of the average
+
+
+.. py:function:: dtw_distance(x, y, *, r=1.0)
+
+   Compute the dynamic time warping distance
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep, )
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep, )
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+
+   :returns: **distance** -- The dynamic time warping distance
+   :rtype: float
+
+   .. seealso::
+
+      :obj:`dtw_alignment`
+          compute the dtw alignment matrix
+
+
+.. py:function:: dtw_envelop(x, *, r=1.0)
+
+   Compute the envelop for LB_keogh
+
+   :param x: The time series
+   :type x: array-like of shape (x_timestep,)
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+
+   :returns: * **lower** (*ndarray of shape (x_timestep,)*) -- The min value of the envelop
+             * **upper** (*ndarray of shape (x_timestep,)*) -- The max value of the envelop
+
+   .. rubric:: References
+
+   Keogh, E. (2002).
+       Exact indexing of dynamic time warping.
+       In 28th International Conference on Very Large Data Bases.
+
+
+.. py:function:: dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0)
+
+   The LB_keogh lower bound
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,)
+   :param y: The second time series (same size as x)
+   :type y: array-like of shape (x_timestep,), optional
+   :param lower: The min value of the envelop
+   :type lower: ndarray of shape (x_timestep,), optional
+   :param upper: The max value of the envelop
+   :type upper: ndarray of shape (x_timestep,), optional
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+
+   :returns: * **min_dist** (*float*) -- The cumulative minimum distance.
+             * **lb_keogh** (*ndarray of shape (x_timestep,),*) -- The lower bound at each time step
+
+   .. rubric:: Notes
+
+   - if y=None, both lower and upper must be given
+   - if y is given, lower and upper are ignored
+   - if lower and upper is given and y=None, r is ignored
+
+   .. rubric:: References
+
+   Keogh, E. (2002).
+       Exact indexing of dynamic time warping.
+       In 28th International Conference on Very Large Data Bases.
+
+
+.. py:function:: dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False)
+
+   Compute the optimal warping path between two series or from a given
+   alignment matrix
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,), optional
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep,), optional
+   :param alignment: Precomputed alignment
+   :type alignment: ndarray of shape (x_timestep, y_timestep), optional
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+   :param return_index: Return the indices of the warping path
+   :type return_index: bool, optional
+
+   :returns: * **indicator** (*ndarray of shape (x_timestep, y_timestep)*) -- Boolean array with the dtw path
+             * **(x_indices, y_indices)** (*tuple, optional*) -- The indices of the first and second dimension of
+               the optimal alignment path.
+
+   .. rubric:: Notes
+
+   - either x and y or alignment must be provided
+   - if alignment is given x and y are ignored
+   - if alignment is given r is ignored
+
+
+.. py:function:: dtw_pairwise_distance(x, r=1.0)
+
+   Compute the distance between all pairs of rows
+
+   :param x: An array of samples
+   :type x: array-like of shape (n_samples, n_timestep)
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float or int, optional
+
+   :returns: **distances** -- The distance between pairs of rows
+   :rtype: ndarray of shape (n_samples, n_samples)
+
+
+.. py:function:: jeong_weight(n, g=0.05)
+
+   Weighting described by Jeong et. al. (2011) using g as the penalty control.
+
+   .. math:: w(x)=\frac{1}{1+e^{-g(x-m/2)}}
+
+   :param n: The number of weights.
+   :type n: int
+   :param g: Penalty control.
+   :type g: float, optional
+
+   :returns: **weight** -- The weights
+   :rtype: ndarray of shape (n, )
+
+   .. rubric:: References
+
+   Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+       Weighted dynamic time warping for time series classification.
+       Pattern Recognition 44, 2231-2240
+
+
+.. py:function:: wddtw_distance(x, y, *, r=1.0, g=0.05)
+
+   Compute the weighted derivative dynamic time warping distance
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep, )
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep, )
+   :param r: The warping window in [0, 1] as a fraction of ``max(x_timestep, y_timestep)``
+   :type r: float, optional
+   :param g: Penalization for points deviating the diagonal.
+   :type g: float, optional
+
+   :returns: **distance** -- The dynamic time warping distance
+   :rtype: float
+
+   .. seealso::
+
+      :obj:`dtw_distance`
+          compute the dtw distance
+
+
+.. py:function:: wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None)
+
+   Weighted dynamic time warping alignment
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep,)
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep,)
+   :param r: The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+   :type r: float, optional
+   :param g: Weighting described by Jeong et. al. (2011) using :math:`g` as penalty control.
+
+             .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}},
+   :type g: float, optional
+   :param out: Store the warping path in this array.
+   :type out: array-like of shape (x_timestep, y_timestep), optional
+
+   :returns: **alignment** -- The dynamic time warping alignment matrix
+   :rtype: ndarray of shape (x_timestep, y_timestep)
+
+   .. rubric:: References
+
+   Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+       Weighted dynamic time warping for time series classification.
+       Pattern Recognition 44, 2231-2240
+
+
+.. py:function:: wdtw_distance(x, y, *, r=1.0, g=0.05)
+
+   Compute the weighted dynamic time warping distance
+
+   :param x: The first time series
+   :type x: array-like of shape (x_timestep, )
+   :param y: The second time series
+   :type y: array-like of shape (y_timestep, )
+   :param r: The warping window in [0, 1] as a fraction of ``max(x_timestep, y_timestep)``
+   :type r: float, optional
+   :param g: Penalization for points deviating the diagonal.
+   :type g: float, optional
+
+   :returns: **distance** -- The dynamic time warping distance
+   :rtype: float
+
+   .. seealso::
+
+      :obj:`dtw_distance`
+          compute the dtw distance
+
+

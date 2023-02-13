@@ -1,0 +1,6 @@
+:py:mod:`wildboar.version`
+==========================
+
+.. py:module:: wildboar.version
+
+

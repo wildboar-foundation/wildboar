@@ -1,0 +1,266 @@
+:py:mod:`wildboar.explain.counterfactual`
+=========================================
+
+.. py:module:: wildboar.explain.counterfactual
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain.counterfactual.KNeighborsCounterfactual
+   wildboar.explain.counterfactual.PrototypeCounterfactual
+   wildboar.explain.counterfactual.ShapeletForestCounterfactual
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.explain.counterfactual.counterfactuals
+   wildboar.explain.counterfactual.proximity
+
+
+
+.. py:class:: KNeighborsCounterfactual(random_state=None)
+
+   Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
+   Fit a counterfactual explainer to a k-nearest neighbors classifier
+
+   .. attribute:: explainer_
+
+      The explainer for each label
+
+      :type: dict
+
+   .. rubric:: References
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
+
+   .. py:method:: explain(x, y)
+
+
+   .. py:method:: fit(estimator, x=None, y=None)
+
+
+
+.. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, verbose=False)
+
+   Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
+   Model agnostic approach for constructing counterfactual explanations
+
+   .. attribute:: estimator_
+
+      The estimator for which counterfactuals are computed
+
+      :type: object
+
+   .. attribute:: classes_
+
+      The classes
+
+      :type: ndarray
+
+   .. attribute:: partitions_
+
+      Dictionary of classes and PrototypeSampler
+
+      :type: dict
+
+   .. attribute:: target_
+
+      The target evaluator
+
+      :type: TargetEvaluator
+
+   .. rubric:: References
+
+   Samsten, Isak (2020).
+       Model agnostic time series counterfactuals
+
+   Crate a new model agnostic counterfactual explainer.
+
+   :param metric: The metric used to move the samples
+   :type metric: {'euclidean', 'dtw', 'wdtw'}, optional
+   :param r: The warping window size, if metric='dtw' or metric='wdtw'
+   :type r: float, optional
+   :param g: Penalty control for weighted DTW, if metric='wdtw'
+   :type g: float, optional
+   :param max_iter: The maximum number of iterations
+   :type max_iter: int, optional
+   :param step_size: The step size when moving samples toward class prototypes
+   :type step_size: float, optional
+   :param n_prototypes: The number of initial prototypes to sample from
+   :type n_prototypes: int, float or str, optional
+   :param target: The target evaluation of counterfactuals:
+
+                  - if 'predict' the counterfactual prediction must return the correct
+                    label
+                  - if float, the counterfactual prediction probability must
+                    exceed target value
+   :type target: float or {'predict'}, optional
+   :param method: Method for selecting prototypes
+
+                  - if 'sample' a prototype is sampled among the initial prototypes
+                  - if 'shapelet' a prototype shapelet is sampled among the initial
+                    prototypes
+                  - if 'nearest' a prototype is sampled from the closest n prototypes
+                  - if 'nearest_shapelet' a prototype shapelet is sampled from the
+                    closest n prototypes
+   :type method: {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
+   :param min_shapelet_size: Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type min_shapelet_size: float, optional
+   :param max_shapelet_size: Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
+   :type max_shapelet_size: float, optional
+   :param random_state: Pseudo-random number for consistency between different runs
+   :type random_state: RandomState or int, optional
+
+   .. py:method:: explain(x, y)
+
+
+   .. py:method:: fit(estimator, x, y)
+
+
+
+.. py:class:: ShapeletForestCounterfactual(*, cost='euclidean', aggregation='mean', epsilon=1.0, batch_size=0.1, max_paths=1.0, verbose=False, random_state=None)
+
+   Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
+   Counterfactual explanations for shapelet forest classifiers
+
+   .. attribute:: paths_
+
+      A dictionary of prediction paths per label
+
+      :type: dict
+
+   .. rubric:: Notes
+
+   This implementation only supports the reversible algorithm
+   described by Karlsson (2020)
+
+   .. warning::
+
+      Only shapelet forests fit with the Euclidean distance is supported i.e.,
+      ``metric="euclidean"``
+
+   .. rubric:: References
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2018).
+       Explainable time series tweaking via irreversible and reversible temporal
+       transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
+
+   :param cost: The cost function to determine the goodness of counterfactual
+   :type cost: {"euclidean", "cosine", "manhattan"} or callable, optional
+   :param aggregation: The aggregation function for the cost of multivariate counterfactuals.
+   :type aggregation: callable, optional
+   :param epsilon: Control the degree of change from the decision threshold
+   :type epsilon: float, optional
+   :param batch_size: Batch size when evaluating the cost and predictions of
+                      counterfactual candidates. The default setting is to evaluate
+                      all counterfactual samples.
+
+                      .. versionchanged :: 1.1
+                          The default value changed to 0.1
+   :type batch_size: float, optional
+   :param max_paths: Sample a fraction of the positive prediction paths.
+
+                     .. versionadded :: 1.1
+                         Add support for subsampling prediction paths.
+   :type max_paths: float, optional
+   :param verbose: Print information to stdout during execution.
+   :type verbose: boolean, optional
+   :param random_state: Pseudo-random number for consistency between different runs
+   :type random_state: RandomState or int, optional
+
+   .. py:method:: explain(x, y)
+
+
+   .. py:method:: fit(estimator, x=None, y=None)
+
+
+
+.. py:function:: counterfactuals(estimator, x, y, *, train_x=None, train_y=None, method='best', scoring='deprecated', valid_scoring='deprecated', proximity=None, random_state=None, method_args=None)
+
+   Compute a single counterfactual example for each sample
+
+   :param estimator: The estimator used to compute the counterfactual example
+   :type estimator: object
+   :param x: The data samples to fit counterfactuals to
+   :type x: array-like of shape (n_samples, n_timestep)
+   :param y: The desired label of the counterfactual
+   :type y: array-like broadcast to shape (n_samples,)
+   :param method: The method to generate counterfactual explanations
+
+                  - if 'best', infer the most appropriate counterfactual explanation method
+                    based on the estimator
+
+                    .. versionchanged :: 1.1.0
+
+                  - if str, select counterfactual explainer from named collection. See
+                    ``_COUNTERFACTUALS.keys()`` for a list of valid values.
+
+                  - if, BaseCounterfactual use the supplied counterfactual
+   :type method: str or BaseCounterfactual, optional
+   :param scoring: The scoring function to determine the similarity between the counterfactual
+                   sample and the original sample
+
+                   .. deprecated:: 1.1
+                       ``scoring`` was renamed to ``proximity`` in 1.1 and will be removed in 1.2.
+   :type scoring: str, callable, list or dict, optional
+   :param proximity: The scoring function to determine the similarity between the counterfactual
+                     sample and the original sample
+   :type proximity: str, callable, list or dict, optional
+   :param valid_scoring: Only compute score for successful counterfactuals.
+
+                         .. deprecated:: 1.1
+                             ``valid_scoring`` will be removed in 1.2.
+   :type valid_scoring: bool, optional
+   :param random_state: The pseudo random number generator to ensure stable result
+   :type random_state: RandomState or int, optional
+   :param method_args: Optional arguments to the counterfactual explainer.
+
+                       .. versionadded :: 1.1.0
+   :type method_args: dict, optional
+
+   :returns: * **x_counterfactuals** (*ndarray of shape (n_samples, n_timestep)*) -- The counterfactual example.
+             * **valid** (*ndarray of shape (n_samples,)*) -- Indicator matrix for valid counterfactuals
+             * **score** (*ndarray of shape (n_samples,) or dict, optional*) -- Return score of the counterfactual transform, if ``scoring`` is not None
+
+
+.. py:function:: proximity(x_true, x_counterfactuals, metric='normalized_euclidean', metric_params=None)
+
+   Compute the proximity of the counterfactuals.
+
+   :param x_true: The true samples
+   :type x_true: array-like of shape (n_samples, n_timestep)
+   :param x_counterfactuals: The counterfactual samples
+   :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
+   :param metric: The distance metric
+
+                  See ``_METRICS.keys()`` for a list of supported metrics.
+   :type metric: str or callable, optional
+   :param metric_params: Parameters to the metric.
+
+                         Read more about the parameters in the
+                         :ref:`User guide <list_of_metrics>`.
+   :type metric_params: dict, optional
+
+   :returns: **score** -- The scores
+   :rtype: ndarray
+
+
