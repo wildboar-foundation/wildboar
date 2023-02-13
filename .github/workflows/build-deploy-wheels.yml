@@ -2,7 +2,7 @@ name: Build, test and upload to PyPI
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - 1.0.X
       - 1.1.X
@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Fetch all history for all tags and branches
         run: |
           git fetch --prune --unshallow
@@ -56,7 +56,7 @@ jobs:
       - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Install requirements
         run: |
@@ -74,9 +74,16 @@ jobs:
   build_docs:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: github.event_name == 'push' && ${{ !startsWith(github.ref, 'refs/tags/v') }}
+    strategy:
+      fail-fast: true
+      matrix:
+        branch: [master, 1.1.X, 1.0.X]
+
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.branch }}
 
       - name: Fetch all branches
         run: |
@@ -86,10 +93,13 @@ jobs:
       - name: List tags
         run: git tag
 
+      - name: List current branch
+        run: git branch --show-current
+
       - uses: actions/setup-python@v4
         name: Install Python
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Install requirements
         run: |
@@ -97,21 +107,20 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r docs/requirements.txt
 
-      - name: Install latest version
+      - name: Install current version
         run: pip install .
 
       - name: Build docmentation
         run: |
           mkdir html
-          touch html/.nojekyll
-          python -I -m sphinx_multiversion docs html -D "autoapi_root=\${sourcedir}" -D "autoapi_dirs=\${sourcedir}/../src"
-          cp docs/assets/index.html html/index.html
+          python -I -m sphinx docs html
 
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./html
+          destination_dir: ${{ matrix.branch }}
 
   upload_pypi:
     needs: [build_wheels, build_sdist]
