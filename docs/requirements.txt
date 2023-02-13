@@ -7,3 +7,4 @@ nbsphinx>=0.8.9
 pandoc>=2.2
 ipython>=8.5.0
 sphinx-copybutton>=0.5.0
+setuptools_scm>=6.2
