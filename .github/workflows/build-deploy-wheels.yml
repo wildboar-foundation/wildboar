@@ -110,7 +110,7 @@ jobs:
       - name: Build docmentation
         run: |
           mkdir html
-          python -I -m sphinx_build docs html
+          python -I -m sphinx docs html
 
       - name: Deploy documentation
         uses: peaceiris/actions-gh-pages@v3
