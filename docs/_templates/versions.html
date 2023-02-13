@@ -1,24 +1,35 @@
 {%- if current_version %}
 <div class="sidebar-tree">
-    <ul>
-        {%- if versions.branches %}
-        <li class="toctree-l1 has-children"><a class="reference internal" href="#">Versions</a>
-            <input class="toctree-checkbox" id="version-checkbox-1" name="version-checkbox-1" type="checkbox"><label
-                for="version-checkbox-1"><i class="icon"><svg>
-                        <use href="#svg-arrow-right"></use>
-                    </svg></i></label>
-            <ul>
-                {%- for item in versions %}
-                {%- if not current_version.name == item.name %}
-                <li class="toctree-l2"><a class="reference internal" href="{{ item.url }}">{{ item.version }}</a></li>
-                {%- else %}
-                <li class="toctree-l2"><span class="reference internal">{{ item.version }}</span></li>
-                {%- endif %}
-                {%- endfor %}
-            </ul>
+  <ul>
+    {%- if versions %}
+    <li class="toctree-l1 has-children">
+      <a class="reference internal" href="#">Versions</a>
+      <input
+        class="toctree-checkbox"
+        id="version-checkbox-1"
+        name="version-checkbox-1"
+        type="checkbox"
+      /><label for="version-checkbox-1"
+        ><i class="icon"
+          ><svg>
+            <use href="#svg-arrow-right"></use></svg></i
+      ></label>
+      <ul>
+        {%- for item in versions %} {%- if not current_version == item %}
+        <li class="toctree-l2">
+          <a class="reference internal" href="{{ item.url }}"
+            >{{ item.name }}</a
+          >
         </li>
-        {%- endif %}
-    </ul>
+        {%- else %}
+        <li class="toctree-l2">
+          <span class="reference internal">{{ item.name }}</span>
+        </li>
+        {%- endif %} {%- endfor %}
+      </ul>
+    </li>
+    {%- endif %}
+  </ul>
 </div>
 
 {%- endif %}
