@@ -42,7 +42,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.linkcode",
     "autoapi.extension",
-    "sphinx_multiversion",
     "sphinx_design",
     "nbsphinx",
     "sphinx_copybutton",
