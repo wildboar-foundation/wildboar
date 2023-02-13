@@ -1,6 +1,21 @@
 name: Build, test and upload to PyPI
 
+<<<<<<< HEAD
 on: [push, pull_request]
+=======
+on:
+  push:
+    branches:
+      - master
+      - 1.0.X
+      - 1.1.X
+
+    tags:
+      - v*
+
+  pull_request:
+    types: [opened, reopened]
+>>>>>>> e662582fb (Drop sphinx_multiversion dependency)
 
 jobs:
   build_wheels:
@@ -17,8 +32,13 @@ jobs:
       CIBW_TEST_COMMAND: python -m pytest --pyargs wildboar
 
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v2
       
+=======
+      - uses: actions/checkout@v3
+
+>>>>>>> e662582fb (Drop sphinx_multiversion dependency)
       - name: Fetch all history for all tags and branches
         run: |
           git fetch --prune --unshallow
@@ -55,7 +75,11 @@ jobs:
       - uses: actions/setup-python@v2
         name: Install Python
         with:
+<<<<<<< HEAD
           python-version: '3.8'
+=======
+          python-version: "3.9"
+>>>>>>> e662582fb (Drop sphinx_multiversion dependency)
 
       - name: Install requirements
         run: |
@@ -70,6 +94,60 @@ jobs:
         with:
           path: dist/*.tar.gz
 
+<<<<<<< HEAD
+=======
+  build_docs:
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && ${{ !startsWith(github.ref, 'refs/tags/v') }}
+    strategy:
+      fail-fast: true
+      matrix:
+        branch: [master, 1.1.X, 1.0.X]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ matrix.branch }}
+
+      - name: Fetch all branches
+        run: |
+          git fetch --prune --unshallow
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+
+      - name: List tags
+        run: git tag
+
+      - name: List current branch
+        run: git branch --show-current
+
+      - uses: actions/setup-python@v4
+        name: Install Python
+        with:
+          python-version: "3.9"
+
+      - name: Install requirements
+        run: |
+          sudo apt-get install graphviz pandoc
+          python -m pip install --upgrade pip
+          python -m pip install -r docs/requirements.txt
+
+      - name: Install current version
+        run: pip install .
+
+      - name: Build docmentation
+        run: |
+          mkdir html
+          python -I -m sphinx docs html
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./html
+          destination_dir: ${{ matrix.branch }}
+
+>>>>>>> e662582fb (Drop sphinx_multiversion dependency)
   upload_pypi:
     name: Upload artifacts to PyPI
     needs: [build_wheels, build_sdist]

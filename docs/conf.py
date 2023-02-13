@@ -8,13 +8,24 @@
 
 from logging import log
 import os
+import sys
+import subprocess
+import re
 
-SEM_VER_REGEX = "^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+from pkg_resources import parse_version
+from setuptools_scm import get_version
+from sphinx.util.logging import getLogger
 
-from pkg_resources import get_distribution, parse_version
+sys.path.insert(0, os.path.abspath("sphinxext"))
 
-release = get_distribution("wildboar").version
-version = ".".join(release.split(".")[:3])
+from version import SimpleVersion, find_version_by_name
+
+logger = getLogger(__name__)
+
+release = get_version("..")
+VERSION = parse_version(release)
+version = f"{VERSION.major}.{VERSION.minor}.{VERSION.micro}"
+
 # -- Project information -----------------------------------------------------
 
 project = "Wildboar"
@@ -30,7 +41,6 @@ author = "Isak Samsten"
 extensions = [
     "sphinx.ext.napoleon",
     "autoapi.extension",
-    "sphinx_multiversion",
     "sphinx_panels",
 ]
 
@@ -42,7 +52,7 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-autoapi_dirs = "autoapi"
+autoapi_dirs = ["../src/"]
 autoapi_root = "."
 autoapi_template_dir = "_templates/autoapi/"
 autoapi_ignore = ["*tests*", "_*.py"]
@@ -58,11 +68,7 @@ autoapi_options = [
     "special-members",
     "imported-members",
 ]
-# -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
 html_theme = "furo"
 html_theme_options = {}
 html_sidebars = {
@@ -75,98 +81,87 @@ html_sidebars = {
         "sidebar/scroll-end.html",
     ],
 }
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
+
 html_static_path = ["_static"]
-smv_branch_whitelist = r"^master|\d+\.\d+\.X$"
-smv_remote_whitelist = r"^origin$"
-smv_released_pattern = r"^refs/(heads|remotes)/\d+\.\d+\.X$"
-smv_tag_whitelist = None
 
 
-def setup(app):
-    import re
-    import pathlib
-    from sphinx.util.logging import getLogger
+# Find the source file given a module
+def find_source(info):
+    import importlib
+    import inspect
 
-    logger = getLogger(__name__)
+    obj = importlib.import_module(info["module"])
+    for part in info["fullname"].split("."):
+        obj = getattr(obj, part)
 
-    def is_tag_for(gitref, major, minor):
-        match = re.match(SEM_VER_REGEX, gitref.name)
-        return (
-            gitref.source == "tags"
-            and match
-            and match.group(1) == major
-            and match.group(2) == minor
-        )
+    fn = os.path.normpath(inspect.getsourcefile(obj))
+    fn_split = fn.split(os.sep)
+    fn_index = fn_split.index("wildboar")
+    fn = os.path.join(*fn_split[fn_index:])
+    source, lineno = inspect.getsourcelines(obj)
+    return fn, lineno, lineno + len(source) - 1
 
-    def read_latest_version(app, config):
-        if not hasattr(config, "smv_metadata") or len(config.smv_metadata) == 0:
-            return
 
-        logger.info("[CONF] installed version %s", config.release)
+def linkcode_resolve(domain, info):
+    if domain != "py" or not info["module"]:
+        return None
+    try:
+        filename = "%s#L%d-L%d" % find_source(info)
+    except:
+        filename = info["module"].replace(".", "/") + ".py"
 
-        from sphinx_multiversion import git
+    return "https://github.com/isaksamsten/wildboar/blob/%s/src/%s" % (
+        f"{VERSION.major}.{VERSION.minor}.X" if not VERSION.is_devrelease else "master",
+        filename,
+    )
 
-        gitroot = pathlib.Path(
-            git.get_toplevel_path(cwd=os.path.abspath(app.confdir))
-        ).resolve()
-        gitrefs = list(git.get_all_refs(gitroot))
-        latest_version_tags = {}
-        for ver, metadata in config.smv_metadata.items():
-            current_version = re.match("(\d)\.(\d)(?:.X)?", ver)
-            if current_version:
-                major = current_version.group(1)
-                minor = current_version.group(2)
-                matching_tags = [
-                    re.sub("^v", "", gitref.name)
-                    for gitref in gitrefs
-                    if is_tag_for(gitref, major, minor)
-                ]
-                matching_tags.sort(key=parse_version)
-                latest_tag = matching_tags[-1] if matching_tags else ver
-                latest_version_tags[ver] = latest_tag
-            elif ver == "master":
-                latest_version_tags[ver] = config.version
-            else:
-                logger.warning("[CONF] using branch version for tag (%s)", ver)
-                latest_version_tags[ver] = ver
 
-            logger.info(
-                "[CONF] latest version tag for '%s' is '%s'",
-                ver,
-                latest_version_tags[ver],
-            )
-            metadata["version"] = latest_version_tags[ver]
+def is_tag_version(tag):
+    # Excluding major version of 0
+    SEMVER = (
+        r"^v?([1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
+        r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+    )
+    return re.match(SEMVER, tag)
 
-        if config.smv_current_version != "master":
-            config.version = config.smv_metadata[config.smv_current_version]["version"]
-            config.release = config.version
 
-        config.smv_latest_version_tags = latest_version_tags
-        config.smv_current_version_tag = latest_version_tags[config.smv_current_version]
+def get_versions_from_git():
+    with subprocess.Popen(["git tag"], stdout=subprocess.PIPE, shell=True) as cmd:
+        tags, _ = cmd.communicate()
+        tags = [tag.strip() for tag in tags.decode().splitlines()]
+        return [SimpleVersion(tag) for tag in tags if is_tag_version(tag)]
 
-        version_sorted = sorted(
-            config.smv_metadata.keys(),
-            key=lambda x: parse_version(re.sub(".X$", "", x)),
-        )
-        config.smv_latest_stable = version_sorted[-1] if version_sorted else "master"
 
-        logger.info("[DOCS] latest stable version is %s", config.smv_latest_stable)
+def get_latest_version_major_minor():
+    versions = {}
 
-    def set_latest_version(app, pagename, templatename, context, doctree):
-        if not hasattr(app.config, "smv_metadata") or len(app.config.smv_metadata) == 0:
-            return
+    for version in get_versions_from_git():
+        major_minor = f"{version.version.major}.{version.version.minor}"
+        if major_minor not in versions:
+            versions[major_minor] = version
+        else:
+            old_version = versions[major_minor]
+            if version > old_version:
+                versions[major_minor] = version
 
-        from sphinx_multiversion.sphinx import VersionInfo
+    return [value for _, value in sorted(versions.items(), reverse=True)]
 
-        versioninfo = VersionInfo(
-            app, context, app.config.smv_metadata, app.config.smv_current_version
-        )
-        context["current_version_tag"] = app.config.smv_current_version_tag
-        context["latest_version_tags"] = app.config.smv_latest_version_tags
-        context["latest_stable_version"] = versioninfo[app.config.smv_latest_stable]
 
-    app.connect("config-inited", read_latest_version)
-    app.connect("html-page-context", set_latest_version)
+versions = get_latest_version_major_minor()
+latest_stable_version = versions[0]
+develop_version = SimpleVersion("master", dev_version=VERSION)
+
+# Render the development version last
+versions.insert(0, develop_version)
+
+html_context = {
+    "versions": versions,
+    "stable_version": latest_stable_version,
+    "develop_version": develop_version,
+    "current_version": (
+        find_version_by_name(version, versions)
+        if not VERSION.is_devrelease
+        else develop_version
+    ),
+}
+logger.info(f"Current version: {html_context['current_version']}")
