@@ -85,7 +85,6 @@ jobs:
         run: |
           git fetch --prune --unshallow
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          git fetch --depth=1 origin +refs/heads/*:refs/heads/*
 
       - name: List tags
         run: git tag
@@ -119,7 +118,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: new_doc_test
           publish_dir: ./html
-          destination_dir: ${{ env.GITHUB_REF_NAME }}
+          destination_dir: ${{ github.ref_name }}
 
   upload_pypi:
     needs: [build_wheels, build_sdist]

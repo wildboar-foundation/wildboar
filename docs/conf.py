@@ -9,6 +9,7 @@
 import os
 import sys
 import subprocess
+import re
 
 from pkg_resources import parse_version
 from setuptools_scm import get_version
@@ -126,16 +127,16 @@ def linkcode_resolve(domain, info):
 
 
 def is_branch_version(branch):
-    import re
-
-    logger.info(branch)
     return re.match(r"\d+.\d+.X", branch)
 
 
-with subprocess.Popen(["git branch"], stdout=subprocess.PIPE, shell=True) as cmd:
+with subprocess.Popen(
+    ["git branch --remote"], stdout=subprocess.PIPE, shell=True
+) as cmd:
     branches, _ = cmd.communicate()
     branches = [
-        branch.replace("*", "").strip() for branch in branches.decode().splitlines()
+        branch.replace("origin/", "").replace("*", "").strip()
+        for branch in branches.decode().splitlines()
     ]
     versions = [
         SimpleVersion(branch) for branch in branches if is_branch_version(branch)
