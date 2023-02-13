@@ -119,7 +119,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: new_doc_test
           publish_dir: ./html
-          destination_dir: ${{ GITHUB_REF_NAME }}
+          destination_dir: ${{ env.GITHUB_REF_NAME }}
 
   upload_pypi:
     needs: [build_wheels, build_sdist]
