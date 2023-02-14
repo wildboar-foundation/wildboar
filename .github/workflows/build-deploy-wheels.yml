@@ -81,7 +81,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        branch: [master]
+        branch: [migrate-docs]
 
     steps:
       - uses: actions/checkout@v3
