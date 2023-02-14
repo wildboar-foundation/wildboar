@@ -14,12 +14,12 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.datasets._repository.ArffBundle
-   wildboar.datasets._repository.Bundle
-   wildboar.datasets._repository.JSONRepository
-   wildboar.datasets._repository.NpyBundle
    wildboar.datasets._repository.Repository
+   wildboar.datasets._repository.JSONRepository
    wildboar.datasets._repository.RepositoryCollection
+   wildboar.datasets._repository.Bundle
+   wildboar.datasets._repository.ArffBundle
+   wildboar.datasets._repository.NpyBundle
 
 
 
@@ -32,24 +32,143 @@ Attributes
    wildboar.datasets._repository.DEFAULT_TAG
 
 
-.. py:class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
+.. py:data:: DEFAULT_TAG
+   :value: 'default'
 
-   Bases: :py:obj:`Bundle`
+   
 
-   bundle of .arff-files
+.. py:class:: Repository
 
-   Construct a bundle
+   A repository is a collection of bundles
 
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param class_index: Index of the class label(s)
-   :type class_index: int or array-like
+   .. py:property:: name
+      :abstractmethod:
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+      :abstractmethod:
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: download_url
+      :abstractmethod:
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+   .. py:property:: wildboar_requires
+      :abstractmethod:
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+   .. py:method:: get_bundles()
+      :abstractmethod:
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+   .. py:method:: get_bundle(key)
+
+      Get a bundle with the specified key
+
+      :param key: Key of the bundle
+      :type key: str
+
+      :returns: **bundle** -- A bundle or None
+      :rtype: Bundle, optional
+
+
+   .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
+
+
+   .. py:method:: list_datasets(bundle, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
+
+
+   .. py:method:: clear_cache(cache_dir, keep_last_version=True)
+
+
+   .. py:method:: refresh()
+
+      Refresh the repository
+
+
+
+.. py:class:: JSONRepository(url)
+
+   Bases: :py:obj:`Repository`
+
+   A repository is a collection of bundles
+
+   .. py:property:: wildboar_requires
+
+      The minimum required wildboar version
+
+      :returns: **str**
+      :rtype: the min version
+
+   .. py:property:: name
+
+      Name of the repository
+
+      :returns: **str**
+      :rtype: the name of the repository
+
+   .. py:property:: version
+
+      The repository version
+
+      :returns: **str**
+      :rtype: the version of the repository
+
+   .. py:property:: download_url
+
+      The url template for downloading bundles
+
+      :returns: **str**
+      :rtype: the download url
+
+   .. py:method:: get_bundles()
+
+      Get all bundles
+
+      :returns: **dict**
+      :rtype: a dictionary of key and bundle
+
+
+   .. py:method:: refresh()
+
+      Refresh the repository
+
+
+
+.. py:class:: RepositoryCollection
+
+   .. py:method:: __getitem__(item)
+
+
+   .. py:method:: __contains__(item)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: append(item)
+
 
 
 .. py:class:: Bundle(*, key, version, name, description=None, class_index=-1)
@@ -73,70 +192,6 @@ Attributes
       Index of the class label(s)
 
       :type: int or array-like
-
-   .. attribute:: Construct a bundle
-
-
-
-   .. attribute::
-
-
-
-      :type: param key: A unique key of the bundle
-
-   .. attribute::
-
-
-
-      :type: type key: str
-
-   .. attribute::
-
-
-
-      :type: param version: The version of the bundle
-
-   .. attribute::
-
-
-
-      :type: type version: str
-
-   .. attribute::
-
-
-
-      :type: param name: Human-readable name of the bundle
-
-   .. attribute::
-
-
-
-      :type: type name: str
-
-   .. attribute::
-
-
-
-      :type: param description: Description of the bundle
-
-   .. attribute::
-
-
-
-      :type: type description: str
-
-   .. attribute::
-
-
-
-      :type: param class_index: Index of the class label(s)
-
-   .. attribute::
-
-
-
-      :type: type class_index: int or array-like
 
    .. py:method:: get_filename(version=None, tag=None, ext=None)
 
@@ -169,52 +224,11 @@ Attributes
 
 
 
-.. py:class:: JSONRepository(url)
+.. py:class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
 
-   Bases: :py:obj:`Repository`
+   Bases: :py:obj:`Bundle`
 
-   A repository is a collection of bundles
-
-   .. py:property:: download_url
-
-      The url template for downloading bundles
-
-      :returns: **str**
-      :rtype: the download url
-
-   .. py:property:: name
-
-      Name of the repository
-
-      :returns: **str**
-      :rtype: the name of the repository
-
-   .. py:property:: version
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-   .. py:property:: wildboar_requires
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
-
-   .. py:method:: get_bundles()
-
-      Get all bundles
-
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
-
-
-   .. py:method:: refresh()
-
-      Refresh the repository
-
+   bundle of .arff-files
 
 
 .. py:class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
@@ -223,108 +237,4 @@ Attributes
 
    bundle of numpy binary files
 
-   Construct a bundle
-
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param class_index: Index of the class label(s)
-   :type class_index: int or array-like
-
-
-.. py:class:: Repository
-
-   A repository is a collection of bundles
-
-   .. py:property:: download_url
-      :abstractmethod:
-
-      The url template for downloading bundles
-
-      :returns: **str**
-      :rtype: the download url
-
-   .. py:property:: name
-      :abstractmethod:
-
-      Name of the repository
-
-      :returns: **str**
-      :rtype: the name of the repository
-
-   .. py:property:: version
-      :abstractmethod:
-
-      The repository version
-
-      :returns: **str**
-      :rtype: the version of the repository
-
-   .. py:property:: wildboar_requires
-      :abstractmethod:
-
-      The minimum required wildboar version
-
-      :returns: **str**
-      :rtype: the min version
-
-   .. py:method:: clear_cache(cache_dir, keep_last_version=True)
-
-
-   .. py:method:: get_bundle(key)
-
-      Get a bundle with the specified key
-
-      :param key: Key of the bundle
-      :type key: str
-
-      :returns: **bundle** -- A bundle or None
-      :rtype: Bundle, optional
-
-
-   .. py:method:: get_bundles()
-      :abstractmethod:
-
-      Get all bundles
-
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
-
-
-   .. py:method:: list_datasets(bundle, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
-
-
-   .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, dtype=None, force=False)
-
-
-   .. py:method:: refresh()
-
-      Refresh the repository
-
-
-
-.. py:class:: RepositoryCollection
-
-   .. py:method:: __contains__(item)
-
-
-   .. py:method:: __getitem__(item)
-
-
-   .. py:method:: __iter__()
-
-
-   .. py:method:: append(item)
-
-
-
-.. py:data:: DEFAULT_TAG
-   :value: 'default'
-
-   
 

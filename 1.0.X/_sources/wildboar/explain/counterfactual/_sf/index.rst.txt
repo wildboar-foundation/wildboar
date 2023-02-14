@@ -29,6 +29,15 @@ Attributes
    wildboar.explain.counterfactual._sf.euclidean_distance
 
 
+.. py:data:: MIN_MATCHING_DISTANCE
+   :value: 0.0001
+
+   
+
+.. py:data:: euclidean_distance
+
+   
+
 .. py:class:: PredictionPaths(classes)
 
    .. py:method:: __contains__(item)
@@ -66,17 +75,6 @@ Attributes
        Explainable time series tweaking via irreversible and reversible temporal
        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
 
-   :param epsilon: Control the degree of change from the decision threshold
-   :type epsilon: float, optional
-   :param batch_size: Batch size when evaluating the cost and predictions of counterfactual candidates.
-                      The default setting is to evaluate all counterfactual samples.
-   :type batch_size: float, optional
-   :param random_state: Pseudo-random number for consistency between different runs
-   :type random_state: RandomState or int, optional
-
-   .. py:method:: candidates(x, y)
-
-
    .. py:method:: fit(estimator)
 
       Fit the counterfactual to a given estimator
@@ -101,13 +99,7 @@ Attributes
                 * **success** (*ndarray of shape (n_samples,)*) -- Boolean vector indicating successful transformations.
 
 
+   .. py:method:: candidates(x, y)
 
-.. py:data:: MIN_MATCHING_DISTANCE
-   :value: 0.0001
 
-   
-
-.. py:data:: euclidean_distance
-
-   
 

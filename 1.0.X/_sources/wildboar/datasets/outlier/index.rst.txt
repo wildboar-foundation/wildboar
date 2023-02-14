@@ -12,13 +12,93 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.datasets.outlier.DensityLabeler
-   wildboar.datasets.outlier.EmmottLabeler
+   wildboar.datasets.outlier.OutlierLabeler
    wildboar.datasets.outlier.KMeansLabeler
+   wildboar.datasets.outlier.DensityLabeler
    wildboar.datasets.outlier.MajorityLabeler
    wildboar.datasets.outlier.MinorityLabeler
-   wildboar.datasets.outlier.OutlierLabeler
+   wildboar.datasets.outlier.EmmottLabeler
 
+
+
+
+.. py:class:: OutlierLabeler
+
+   Base-class for outlier labelers
+
+   .. py:method:: fit(x, y=None)
+      :abstractmethod:
+
+      Fit the outlier labeler to the give samples
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ) optional
+
+
+   .. py:method:: transform(x, y=None)
+      :abstractmethod:
+
+      Transform the labels of (a subset) of samples in x to inlier and outliers
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ), optional
+
+      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
+                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
+
+
+   .. py:method:: fit_transform(x, y=None)
+
+
+
+.. py:class:: KMeansLabeler(*, n_clusters=None, n_outliers=None, random_state=None)
+
+   Bases: :py:obj:`OutlierLabeler`
+
+   KMeans labeler that assign an outlier label to the most deviating cluster
+
+   .. attribute:: k_means_
+
+      The estimator for assigning points to the outlier class
+
+      :type: object
+
+   .. attribute:: outlier_cluster_
+
+      The cluster index that is considered as outlier
+
+      :type: int
+
+   .. warning:: The implementation does not yet work as expected.
+
+   .. py:method:: fit(x, y=None)
+
+      Fit the outlier labeler to the give samples
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ) optional
+
+
+   .. py:method:: fit_transform(x, y=None)
+
+
+   .. py:method:: transform(x, y=None)
+
+      Transform the labels of (a subset) of samples in x to inlier and outliers
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ), optional
+
+      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
+                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
 
 
 
@@ -41,6 +121,78 @@ Classes
 
 
    .. py:method:: fit_transform(x, y=None)
+
+
+   .. py:method:: transform(x, y=None)
+
+      Transform the labels of (a subset) of samples in x to inlier and outliers
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ), optional
+
+      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
+                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
+
+
+
+.. py:class:: MajorityLabeler(n_outliers=None, random_state=None)
+
+   Bases: :py:obj:`OutlierLabeler`
+
+   Labels the majority class as inliers
+
+   .. attribute:: outlier_labels_
+
+      The outlier labels
+
+      :type: ndarray
+
+   .. py:method:: fit(x, y=None)
+
+      Fit the outlier labeler to the give samples
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ) optional
+
+
+   .. py:method:: transform(x, y=None)
+
+      Transform the labels of (a subset) of samples in x to inlier and outliers
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ), optional
+
+      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
+                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
+
+
+
+.. py:class:: MinorityLabeler(n_outliers=None, random_state=None)
+
+   Bases: :py:obj:`OutlierLabeler`
+
+   Labels the minority class as the outlier
+
+   .. attribute:: outlier_label_
+
+      The label of the outlier class
+
+      :type: object
+
+   .. py:method:: fit(x, y=None)
+
+      Fit the outlier labeler to the give samples
+
+      :param x: The time series samples
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The optional original labels
+      :type y: array-like of shape (n_samples, ) optional
 
 
    .. py:method:: transform(x, y=None)
@@ -115,36 +267,6 @@ Classes
        Systematic construction of anomaly detection benchmarks from real data.
        In Proceedings of the ACM SIGKDD workshop on outlier detection and description (pp. 16-21).
 
-   Construct a new emmott labeler for synthetic outlier datasets
-
-   :param n_outliers: Number of desired (but not guaranteed) outliers in the resulting transformation.
-   :type n_outliers: int, float, optional
-   :param confusion_estimator: Estimator of class confusion for datasets where n_classes > 2. Default to a random forest classifier.
-   :type confusion_estimator: object, optional
-   :param difficulty_estimator: Estimator for sample difficulty. The difficulty estimator must support ``predict_proba``. Defaults
-                                to a kernel logistic regression model with a RBF-kernel.
-   :type difficulty_estimator: object, optional
-   :param difficulty: The difficulty of the outlier points quantized according to scale. The value should be in the range
-                      `[1, len(scale)]` with lower difficulty denoting simpler outliers. If an array is given, multiple
-                      difficulties can be included, e.g., `[1, 4]` would mix easy and difficult outliers.
-
-                      - if 'any' outliers are sampled from all scores
-                      - if 'simplest' the simplest n_outliers are selected
-                      - if 'hardest' the hardest n_outliers are selected
-   :type difficulty: {'any', 'simplest', 'hardest'}, int or array-like, optional
-   :param scale: The scale of quantized difficulty scores. Defaults to [0, 0.16, 0.3, 0.5]. Scores (which are probabilities
-                 in the range [0, 1]) are fit into the ranges using ``np.digitize(difficulty, scale)``.
-   :type scale: array-like, optional
-   :param variation: Selection procedure for sampling outlier samples
-
-                     - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples are selected according to
-                       their euclidean distance
-                     - if 'dispersed' ``n_outlier`` points are selected according to a facility location algorithm such that
-                       they are distributed among the outliers.
-   :type variation: {'tight', 'dispersed'}, optional
-   :param random_state: A pseudo-random number generator to control the randomness of the algorithm.
-   :type random_state: RandomState or int, optinal
-
    .. py:method:: fit(x, y=None)
 
       Fit the outlier labeler to the give samples
@@ -159,197 +281,6 @@ Classes
 
 
    .. py:method:: transform(x, y=None)
-
-      Transform the labels of (a subset) of samples in x to inlier and outliers
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ), optional
-
-      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
-                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
-
-
-
-.. py:class:: KMeansLabeler(*, n_clusters=None, n_outliers=None, random_state=None)
-
-   Bases: :py:obj:`OutlierLabeler`
-
-   KMeans labeler that assign an outlier label to the most deviating cluster
-
-   .. attribute:: k_means_
-
-      The estimator for assigning points to the outlier class
-
-      :type: object
-
-   .. attribute:: outlier_cluster_
-
-      The cluster index that is considered as outlier
-
-      :type: int
-
-   .. warning::
-
-      The implementation does not yet work as expected.
-
-      Construct a new labeler
-
-      :param n_clusters: Number of clusters to fit
-      :type n_clusters: int, optional
-      :param n_outliers: The number of outliers in the resulting dataset. This is not guaranteed.
-      :type n_outliers: int or float, optional
-      :param random_state: The pseudo random state to ensure consistent results.
-      :type random_state: RandomState or int, optional
-
-   .. py:method:: fit(x, y=None)
-
-      Fit the outlier labeler to the give samples
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ) optional
-
-
-   .. py:method:: fit_transform(x, y=None)
-
-
-   .. py:method:: transform(x, y=None)
-
-      Transform the labels of (a subset) of samples in x to inlier and outliers
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ), optional
-
-      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
-                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
-
-
-
-.. py:class:: MajorityLabeler(n_outliers=None, random_state=None)
-
-   Bases: :py:obj:`OutlierLabeler`
-
-   Labels the majority class as inliers
-
-   .. attribute:: outlier_labels_
-
-      The outlier labels
-
-      :type: ndarray
-
-   .. attribute:: Create a new majority labeler
-
-
-
-   .. attribute::
-
-
-
-      :type: param n_outliers: The fraction of outliers, by default None
-
-   .. attribute::
-
-
-
-      :type: type n_outliers: float, optional
-
-   .. attribute::
-
-
-
-      :type: param random_state: The psudo-random number generator, by default None
-
-   .. attribute::
-
-
-
-      :type: type random_state: int or RandomState, optional
-
-   .. py:method:: fit(x, y=None)
-
-      Fit the outlier labeler to the give samples
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ) optional
-
-
-   .. py:method:: transform(x, y=None)
-
-      Transform the labels of (a subset) of samples in x to inlier and outliers
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ), optional
-
-      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
-                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
-
-
-
-.. py:class:: MinorityLabeler(n_outliers=None, random_state=None)
-
-   Bases: :py:obj:`OutlierLabeler`
-
-   Labels the minority class as the outlier
-
-   .. attribute:: outlier_label_
-
-      The label of the outlier class
-
-      :type: object
-
-   .. py:method:: fit(x, y=None)
-
-      Fit the outlier labeler to the give samples
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ) optional
-
-
-   .. py:method:: transform(x, y=None)
-
-      Transform the labels of (a subset) of samples in x to inlier and outliers
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ), optional
-
-      :returns: * **x_new** (*array-like of shape (n_samples_new, n_timestep)*) -- The outlier and inlier samples
-                * **y_new** (*array-like of shape (n_samples_new, )*) -- The labels
-
-
-
-.. py:class:: OutlierLabeler
-
-   Base-class for outlier labelers
-
-   .. py:method:: fit(x, y=None)
-      :abstractmethod:
-
-      Fit the outlier labeler to the give samples
-
-      :param x: The time series samples
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The optional original labels
-      :type y: array-like of shape (n_samples, ) optional
-
-
-   .. py:method:: fit_transform(x, y=None)
-
-
-   .. py:method:: transform(x, y=None)
-      :abstractmethod:
 
       Transform the labels of (a subset) of samples in x to inlier and outliers
 

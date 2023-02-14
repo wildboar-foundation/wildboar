@@ -15,10 +15,10 @@ Functions
 
    wildboar.distance.dtw.dtw_alignment
    wildboar.distance.dtw.dtw_distance
+   wildboar.distance.dtw.dtw_pairwise_distance
    wildboar.distance.dtw.dtw_envelop
    wildboar.distance.dtw.dtw_lb_keogh
    wildboar.distance.dtw.dtw_mapping
-   wildboar.distance.dtw.dtw_pairwise_distance
 
 
 
@@ -74,6 +74,22 @@ Functions
 
       :obj:`dtw_alignment`
           compute the dtw alignment matrix
+
+
+.. py:function:: dtw_pairwise_distance(x, r=1.0)
+
+   Compute the distance between all pairs of rows
+
+   :param x: An array of samples
+   :type x: array-like of shape (n_samples, n_timestep)
+   :param r: The size of the warping window
+
+             - if float in [0, 1] a fraction of x_timestep
+             - if int the exact warping window (max(1, r))
+   :type r: float or int, optional
+
+   :returns: **distances** -- The distance between pairs of rows
+   :rtype: ndarray of shape (n_samples, n_samples)
 
 
 .. py:function:: dtw_envelop(x, r=1.0)
@@ -158,21 +174,5 @@ Functions
    - either x and y or alignment must be provided
    - if alignment is given x and y are ignored
    - if alignment is given r is ignored
-
-
-.. py:function:: dtw_pairwise_distance(x, r=1.0)
-
-   Compute the distance between all pairs of rows
-
-   :param x: An array of samples
-   :type x: array-like of shape (n_samples, n_timestep)
-   :param r: The size of the warping window
-
-             - if float in [0, 1] a fraction of x_timestep
-             - if int the exact warping window (max(1, r))
-   :type r: float or int, optional
-
-   :returns: **distances** -- The distance between pairs of rows
-   :rtype: ndarray of shape (n_samples, n_samples)
 
 
