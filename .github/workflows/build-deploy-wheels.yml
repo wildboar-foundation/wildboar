@@ -1,8 +1,5 @@
 name: Build, test and upload to PyPI
 
-<<<<<<< HEAD
-on: [push, pull_request]
-=======
 on:
   push:
     branches:
@@ -15,7 +12,6 @@ on:
 
   pull_request:
     types: [opened, reopened]
->>>>>>> e662582fb (Drop sphinx_multiversion dependency)
 
 jobs:
   build_wheels:
@@ -32,13 +28,7 @@ jobs:
       CIBW_TEST_COMMAND: python -m pytest --pyargs wildboar
 
     steps:
-<<<<<<< HEAD
-      - uses: actions/checkout@v2
-      
-=======
       - uses: actions/checkout@v3
-
->>>>>>> e662582fb (Drop sphinx_multiversion dependency)
       - name: Fetch all history for all tags and branches
         run: |
           git fetch --prune --unshallow
@@ -47,7 +37,7 @@ jobs:
       - uses: actions/setup-python@v2
         name: Install Python
         with:
-          python-version: '3.8'
+          python-version: "3.8"
 
       - name: Install cibuildwheel
         run: |
@@ -75,11 +65,7 @@ jobs:
       - uses: actions/setup-python@v2
         name: Install Python
         with:
-<<<<<<< HEAD
-          python-version: '3.8'
-=======
-          python-version: "3.9"
->>>>>>> e662582fb (Drop sphinx_multiversion dependency)
+          python-version: "3.8"
 
       - name: Install requirements
         run: |
@@ -94,8 +80,6 @@ jobs:
         with:
           path: dist/*.tar.gz
 
-<<<<<<< HEAD
-=======
   build_docs:
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
@@ -147,7 +131,6 @@ jobs:
           publish_dir: ./html
           destination_dir: ${{ matrix.branch }}
 
->>>>>>> e662582fb (Drop sphinx_multiversion dependency)
   upload_pypi:
     name: Upload artifacts to PyPI
     needs: [build_wheels, build_sdist]
