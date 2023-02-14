@@ -81,7 +81,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        branch: [1.1.X, 1.0.X, master]
+        branch: [master]
 
     steps:
       - uses: actions/checkout@v3
