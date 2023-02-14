@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.transform" href="../../transform/index.html" /><link rel="prev" title="wildboar.model_selection" href="../index.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.model_selection.outlier - Wildboar 1.1.1 documentation</title>
+        <title>wildboar.model_selection.outlier - Wildboar 1.1.2.dev6+gf6422ffae documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -40,6 +40,16 @@
 </style></head>
   <body>
     
+
+<div class="announcement">
+    <aside class="announcement-content">
+        
+        You're reading the documentation for a development version.
+        For the latest released version, please have a look at <a
+            href="/1.1.X/index.html">1.1.1</a>.
+        
+    </aside>
+</div>
 
 
     <script>
@@ -128,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.2.dev6+gf6422ffae documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -148,7 +158,7 @@
   <aside class="sidebar-drawer">
     <div class="sidebar-container">
       
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../../index.html">
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="/master/index.html">
     
     <div class="sidebar-logo-container">
         <img class="sidebar-logo only-light" src="../../../_static/logo.png" alt="Light Logo" />
@@ -156,7 +166,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>1.1.1</small></span>
+        <small>1.1.2.dev6</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -283,19 +293,36 @@
 
 </div>
 <div class="sidebar-tree">
-    <ul>
-        <li class="toctree-l1 has-children"><a class="reference internal" href="#">Versions</a>
-            <input class="toctree-checkbox" id="version-checkbox-1" name="version-checkbox-1" type="checkbox"><label
-                for="version-checkbox-1"><i class="icon"><svg>
-                        <use href="#svg-arrow-right"></use>
-                    </svg></i></label>
-            <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../master/index.html">1.1.1.dev260+gb9b00e1a2</a></li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../../1.0.X/index.html">1.0.12</a></li>
-                <li class="toctree-l2"><span class="reference internal">1.1.1</span></li>
-            </ul>
+  <ul>
+    <li class="toctree-l1 has-children">
+      <a class="reference internal" href="#">Versions</a>
+      <input
+        class="toctree-checkbox"
+        id="version-checkbox-1"
+        name="version-checkbox-1"
+        type="checkbox"
+      /><label for="version-checkbox-1"
+        ><i class="icon"
+          ><svg>
+            <use href="#svg-arrow-right"></use></svg></i
+      ></label>
+      <ul>
+        <li class="toctree-l2">
+          <span class="reference internal">1.1.2.dev6</span>
         </li>
-    </ul>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/1.1.X/index.html"
+            >1.1.1</a
+          >
+        </li>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/1.0.X/index.html"
+            >1.0.12</a
+          >
+        </li>
+      </ul>
+    </li>
+  </ul>
 </div></div>
       </div>
       
@@ -358,7 +385,7 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.RepeatedOutlierSplit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></span><span class="sig-name descname"><span class="pre">RepeatedOutlierSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outlier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/model_selection/_cv.py#L14-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></span><span class="sig-name descname"><span class="pre">RepeatedOutlierSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outlier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L14-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit" title="Permalink to this definition">#</a></dt>
 <dd><p>Repeated random outlier cross-validator</p>
 <p>Yields indicies that split the dataset into training and test sets.</p>
 <div class="admonition note">
@@ -387,13 +414,13 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/model_selection/_cv.py#L152-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L152-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">#</a></dt>
 <dd><p>Return repr(self).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits">
-<span class="sig-name descname"><span class="pre">get_n_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/model_selection/_cv.py#L66-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_n_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L66-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns the number of splitting iterations in the cross-validator
 :param X: The samples
 :type X: object
@@ -413,7 +440,7 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.RepeatedOutlierSplit.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/model_selection/_cv.py#L93-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.split" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L93-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.RepeatedOutlierSplit.split" title="Permalink to this definition">#</a></dt>
 <dd><p>Return training and test indicies</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -433,7 +460,7 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.threshold_score">
-<span class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></span><span class="sig-name descname"><span class="pre">threshold_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_f</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/model_selection/outlier.py#L103-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.threshold_score" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></span><span class="sig-name descname"><span class="pre">threshold_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_true</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">score_f</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/outlier.py#L103-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.threshold_score" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute the performance of using the i:th score</p>
 <p>The scores are typically computed using an outlier detection algorithm</p>
 <dl class="field-list simple">
@@ -478,7 +505,7 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.model_selection.outlier.train_test_split">
-<span class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></span><span class="sig-name descname"><span class="pre">train_test_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalies_train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/model_selection/outlier.py#L20-L100"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.train_test_split" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.model_selection.outlier.</span></span><span class="sig-name descname"><span class="pre">train_test_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normal_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anomalies_train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/outlier.py#L20-L100"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection.outlier.train_test_split" title="Permalink to this definition">#</a></dt>
 <dd><p>Training and testing split from classification dataset</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
