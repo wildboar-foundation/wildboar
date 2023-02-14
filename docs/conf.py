@@ -10,8 +10,7 @@ from logging import log
 import os
 import sys
 
-from pkg_resources import parse_version
-from setuptools_scm import get_version
+from pkg_resources import parse_version, get_distribution
 from sphinx.util.logging import getLogger
 
 sys.path.insert(0, os.path.abspath("sphinxext"))
@@ -20,7 +19,8 @@ from version import load_version_html_context
 
 logger = getLogger(__name__)
 
-full_release = parse_version(get_version(".."))
+full_release = parse_version(get_distribution("wildboar").version)
+logger.info(f"The full release {full_release}")
 release = full_release.public
 version = f"{full_release.major}.{full_release.minor}.{full_release.micro}"
 
