@@ -119,4 +119,4 @@ def linkcode_resolve(domain, info):
 html_context = {}  # default context
 
 html_context.update(load_version_html_context(full_release))
-logger.info(f"Current version: {html_context['current_version']}")
+logger.info(f"Current version: {html_context}")

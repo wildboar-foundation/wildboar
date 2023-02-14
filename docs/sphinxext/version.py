@@ -5,13 +5,15 @@ from pkg_resources import parse_version
 
 
 class Version:
-    def __init__(self, tag, dev_version=None):
+    def __init__(self, tag):
         self.is_released = tag != "master"
-        self.version = parse_version(tag) if self.is_released else dev_version
+        self.version = (
+            parse_version(tag) if self.is_released else parse_version("1000000000.0.0")
+        )
         self.name = (
             f"{self.version.major}.{self.version.minor}.{self.version.micro}"
             if self.is_released
-            else dev_version.public
+            else "main (dev)"
         )
         self.url_base = (
             f"{self.version.major}.{self.version.minor}.X"
@@ -21,7 +23,7 @@ class Version:
         self.url = f"/{self.url_base}/index.html"
 
     def __repr__(self) -> str:
-        return f"Version({self.version}, {self.url})"
+        return f"Version({self.name}, {self.url})"
 
     def __lt__(self, other):
         return self.version < other.version
@@ -77,9 +79,9 @@ def get_latest_version_major_minor():
 def load_version_html_context(release):
     versions = get_latest_version_major_minor()
     latest_stable_version = versions[0]
-    develop_version = Version("master", dev_version=release)
+    develop_version = Version("master")
 
-    # Render the development version last
+    # Render the development version first
     versions.insert(0, develop_version)
     return {
         "versions": versions,
