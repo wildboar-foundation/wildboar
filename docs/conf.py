@@ -8,8 +8,6 @@
 
 import os
 import sys
-import subprocess
-import re
 
 from pkg_resources import parse_version
 from setuptools_scm import get_version
@@ -17,13 +15,13 @@ from sphinx.util.logging import getLogger
 
 sys.path.insert(0, os.path.abspath("sphinxext"))
 
-from version import SimpleVersion, find_version_by_name
+from version import load_version_html_context
 
 logger = getLogger(__name__)
 
-release = get_version("..")
-VERSION = parse_version(release)
-version = f"{VERSION.major}.{VERSION.minor}.{VERSION.micro}"
+full_release = parse_version(get_version(".."))
+release = full_release.public
+version = f"{full_release.major}.{full_release.minor}.{full_release.micro}"
 
 # -- Project information -----------------------------------------------------
 
@@ -120,57 +118,14 @@ def linkcode_resolve(domain, info):
         filename = info["module"].replace(".", "/") + ".py"
 
     return "https://github.com/isaksamsten/wildboar/blob/%s/src/%s" % (
-        f"{VERSION.major}.{VERSION.minor}.X" if not VERSION.is_devrelease else "master",
+        f"{full_release.major}.{full_release.minor}.X"
+        if not full_release.is_devrelease
+        else "master",
         filename,
     )
 
 
-def is_tag_version(tag):
-    # Excluding major version of 0
-    SEMVER = (
-        r"^v?([1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
-        r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
-    )
-    return re.match(SEMVER, tag)
+html_context = {}  # default context
 
-
-def get_versions_from_git():
-    with subprocess.Popen(["git tag"], stdout=subprocess.PIPE, shell=True) as cmd:
-        tags, _ = cmd.communicate()
-        tags = [tag.strip() for tag in tags.decode().splitlines()]
-        return [SimpleVersion(tag) for tag in tags if is_tag_version(tag)]
-
-
-def get_latest_version_major_minor():
-    versions = {}
-
-    for version in get_versions_from_git():
-        major_minor = f"{version.version.major}.{version.version.minor}"
-        if major_minor not in versions:
-            versions[major_minor] = version
-        else:
-            old_version = versions[major_minor]
-            if version > old_version:
-                versions[major_minor] = version
-
-    return [value for _, value in sorted(versions.items(), reverse=True)]
-
-
-versions = get_latest_version_major_minor()
-latest_stable_version = versions[0]
-develop_version = SimpleVersion("master", dev_version=VERSION)
-
-# Render the development version last
-versions.insert(0, develop_version)
-
-html_context = {
-    "versions": versions,
-    "stable_version": latest_stable_version,
-    "develop_version": develop_version,
-    "current_version": (
-        find_version_by_name(version, versions)
-        if not VERSION.is_devrelease
-        else develop_version
-    ),
-}
+html_context.update(load_version_html_context(full_release))
 logger.info(f"Current version: {html_context['current_version']}")
