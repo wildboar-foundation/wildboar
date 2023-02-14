@@ -6,11 +6,11 @@
         {% if current_version.is_released %}
         You're reading an old version of this documentation.
         If you want up-to-date information, please have a look at <a
-            href="{{ stable_version.url }}">{{stable_version.version}}</a>.
+            href="{{ stable_version.url }}">{{stable_version.name}}</a>.
         {% else %}
         You're reading the documentation for a development version.
         For the latest released version, please have a look at <a
-            href="{{ stable_version.url }}">{{stable_version.version}}</a>.
+            href="{{ stable_version.url }}">{{stable_version.name}}</a>.
         {% endif %}
     </aside>
 </div>

@@ -15,16 +15,15 @@
             <use href="#svg-arrow-right"></use></svg></i
       ></label>
       <ul>
-        {%- for item in versions %} {%- if not current_version == item.version
-        %}
+        {%- for item in versions %} {%- if not current_version == item %}
         <li class="toctree-l2">
           <a class="reference internal" href="{{ item.url }}"
-            >{{ item.version }}</a
+            >{{ item.name }}</a
           >
         </li>
         {%- else %}
         <li class="toctree-l2">
-          <span class="reference internal">{{ item.version }}</span>
+          <span class="reference internal">{{ item.name }}</span>
         </li>
         {%- endif %} {%- endfor %}
       </ul>

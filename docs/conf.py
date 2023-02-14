@@ -23,7 +23,7 @@ logger = getLogger(__name__)
 
 release = get_version("..")
 VERSION = parse_version(release)
-version = f"{VERSION.major}.{VERSION.minor}"
+version = f"{VERSION.major}.{VERSION.minor}.{VERSION.micro}"
 
 # -- Project information -----------------------------------------------------
 
@@ -125,34 +125,49 @@ def linkcode_resolve(domain, info):
     )
 
 
-def is_branch_version(branch):
-    return re.match(r"\d+.\d+.X", branch)
+def is_tag_version(tag):
+    # Excluding major version of 0
+    SEMVER = (
+        r"^v?([1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
+        r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+    )
+    return re.match(SEMVER, tag)
 
 
-with subprocess.Popen(
-    ["git branch --remote"], stdout=subprocess.PIPE, shell=True
-) as cmd:
-    branches, _ = cmd.communicate()
-    branches = [
-        branch.replace("origin/", "").replace("*", "").strip()
-        for branch in branches.decode().splitlines()
-    ]
-    versions = [
-        SimpleVersion(branch) for branch in branches if is_branch_version(branch)
-    ]
+def get_versions_from_git():
+    with subprocess.Popen(["git tag"], stdout=subprocess.PIPE, shell=True) as cmd:
+        tags, _ = cmd.communicate()
+        tags = [tag.strip() for tag in tags.decode().splitlines()]
+        logger.info(tags)
+        return [SimpleVersion(tag) for tag in tags if is_tag_version(tag)]
 
 
-versions = sorted(versions, reverse=True)
+def get_latest_version_major_minor():
+    versions = {}
 
-stable_version = versions[0]
-develop_version = SimpleVersion("master", public=VERSION.public)
+    for version in get_versions_from_git():
+        major_minor = f"{version.version.major}.{version.version.minor}"
+        if major_minor not in versions:
+            versions[major_minor] = version
+        else:
+            old_version = versions[major_minor]
+            if version > old_version:
+                versions[major_minor] = version
+
+    return [value for _, value in sorted(versions.items(), reverse=True)]
+
+
+versions = get_latest_version_major_minor()
+latest_stable_version = versions[0]
+develop_version = SimpleVersion("master", dev_version=VERSION)
 
 # Render the development version last
-versions.append(develop_version)
+versions.insert(0, develop_version)
+
 logger.info(versions)
 html_context = {
     "versions": versions,
-    "stable_version": stable_version,
+    "stable_version": latest_stable_version,
     "develop_version": develop_version,
     "current_version": (
         find_version_by_name(version, versions)
@@ -160,3 +175,4 @@ html_context = {
         else develop_version
     ),
 }
+logger.info(html_context)
