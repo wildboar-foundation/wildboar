@@ -117,7 +117,7 @@ jobs:
           python -m pip install -r docs/requirements.txt
 
       - name: Install current version
-        run: pip install .
+        run: pip install --force-reinstall .
 
       - name: Build docmentation
         run: |
