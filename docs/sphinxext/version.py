@@ -31,7 +31,7 @@ class Version:
 
 def find_version_by_major_minor(major, minor, versions):
     for version in versions:
-        if version.version.major == major and version.version.minor:
+        if version.version.major == major and version.version.minor == minor:
             return version
 
     raise ValueError(f"{major}.{minor} is not a defined version")
