@@ -77,6 +77,7 @@ jobs:
     if: github.event_name == 'push' && ${{ !startsWith(github.ref, 'refs/tags/v') }}
     strategy:
       fail-fast: true
+      max-parallel: 1
       matrix:
         branch: [master, 1.1.X, 1.0.X]
 
