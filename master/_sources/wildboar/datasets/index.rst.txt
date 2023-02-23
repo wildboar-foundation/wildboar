@@ -535,12 +535,24 @@ Functions
 
                   The `comparison spec` is a string of two parts, comparison operator
                   (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
+
+                  .. note::
+
+                      If the parameter ``merge_train_test`` is set to ``False``, the
+                      filter is applied on the *training* part of the data.
    :type filter: str, dict, list or callable, optional
-   :param kwargs: Optional arguments to ``load_dataset``
+   :param kwargs: Optional arguments to :func:`~wildboar.datasets.load_dataset`.
    :type kwargs: dict
 
-   :Yields: * **x** (*array-like*) -- Data samples
-            * **y** (*array-like*) -- Data labels
+   :Yields: * **name** (*str*) -- The dataset name
+            * **dataset** (*list*) -- Depends on the ``kwargs``.
+
+              - If ``merge_train_test=True`` (default), dataset is a tuple of
+                ``(x, y)``.
+              - If ``merge_train_test=False``, dataset is a tuple of
+                ``(x_train, x_test, y_train, y_test)``.
+              - If ``return_extras=True``, the last element of the tuple contains
+                optional extra (or ``None``).
 
    .. rubric:: Examples
 
