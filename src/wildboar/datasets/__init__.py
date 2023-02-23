@@ -194,16 +194,28 @@ def load_datasets(
         The `comparison spec` is a string of two parts, comparison operator
         (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
 
+        .. note::
+
+            If the parameter ``merge_train_test`` is set to ``False``, the
+            filter is applied on the *training* part of the data.
     kwargs : dict
-        Optional arguments to ``load_dataset``
+        Optional arguments to :func:`~wildboar.datasets.load_dataset`.
 
     Yields
     ------
-    x : array-like
-        Data samples
 
-    y : array-like
-        Data labels
+    name : str
+        The dataset name
+
+    dataset : list
+        Depends on the ``kwargs``.
+
+        - If ``merge_train_test=True`` (default), dataset is a tuple of
+          ``(x, y)``.
+        - If ``merge_train_test=False``, dataset is a tuple of
+          ``(x_train, x_test, y_train, y_test)``.
+        - If ``return_extras=True``, the last element of the tuple contains
+          optional extra (or ``None``).
 
     Examples
     --------
@@ -232,15 +244,23 @@ def load_datasets(
         progress=progress,
         force=force,
     ):
-        x, y = load_dataset(dataset, repository=repository, **kwargs)
+        if kwargs.get("merge_train_test", True):
+            data = load_dataset(dataset, repository=repository, **kwargs)
+            x = data[0]
+            y = data[1]
+        else:
+            data = load_dataset(dataset, repository=repository, **kwargs)
+            x = data[0]  # x_train
+            y = data[2]  # y_train
+
         if filter is None:
-            yield dataset, (x, y)
+            yield dataset, data
         elif hasattr(filter, "__call__"):
             if filter(dataset, x, y):
-                yield dataset, (x, y)
+                yield dataset, data
         else:
             if make_filter(filter)(dataset, x, y):
-                yield dataset, (x, y)
+                yield dataset, data
 
 
 def load_dataset(
