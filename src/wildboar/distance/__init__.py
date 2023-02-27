@@ -712,7 +712,7 @@ def paired_distance(
     """
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
     y = check_array(y, allow_3d=True, ensure_2d=False, dtype=float)
-    y = np.broadcast_to(y, x.shape)
+    x, y = np.broadcast_arrays(x, y)
     if x.ndim != y.ndim:
         raise ValueError(
             "x (%dD-array) and y (%dD-array) are not compatible." % (x.ndim, y.ndim)
