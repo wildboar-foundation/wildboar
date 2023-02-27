@@ -47,7 +47,7 @@ def plot_time_domain(
     cmap="Dark2",
     show_legend=8,
 ):
-    """Plot the samples in the time domain
+    """Plot the samples in the time domain.
 
     Parameters
     ----------
@@ -152,7 +152,7 @@ def plot_frequency_domain(
     frequency=False,
     cmap="Dark2",
 ):
-    """Plot the samples in the freqency domain
+    """Plot the samples in the freqency domain.
 
     Parameters
     ----------

@@ -35,7 +35,7 @@ def _compute_warp_size(x_size, r, *, y_size=0):
 
 
 def dtw_distance(x, y, *, r=1.0):
-    """Compute the dynamic time warping distance
+    """Compute the dynamic time warping distance.
 
     Parameters
     ----------
@@ -63,7 +63,7 @@ def dtw_distance(x, y, *, r=1.0):
 
 
 def ddtw_distance(x, y, *, r=1.0):
-    """Compute the derivative dynamic time warping distance
+    """Compute the derivative dynamic time warping distance.
 
     Parameters
     ----------
@@ -91,7 +91,7 @@ def ddtw_distance(x, y, *, r=1.0):
 
 
 def wdtw_distance(x, y, *, r=1.0, g=0.05):
-    """Compute the weighted dynamic time warping distance
+    """Compute the weighted dynamic time warping distance.
 
     Parameters
     ----------
@@ -122,7 +122,7 @@ def wdtw_distance(x, y, *, r=1.0, g=0.05):
 
 
 def wddtw_distance(x, y, *, r=1.0, g=0.05):
-    """Compute the weighted derivative dynamic time warping distance
+    """Compute the weighted derivative dynamic time warping distance.
 
     Parameters
     ----------
@@ -157,7 +157,7 @@ def wddtw_distance(x, y, *, r=1.0, g=0.05):
     "Use 'pairwise_distance(x, metric=\"dtw\")' instead."
 )
 def dtw_pairwise_distance(x, r=1.0):
-    """Compute the distance between all pairs of rows
+    """Compute the distance between all pairs of rows.
 
     Parameters
     ----------
@@ -176,7 +176,7 @@ def dtw_pairwise_distance(x, r=1.0):
 
 
 def dtw_envelop(x, *, r=1.0):
-    """Compute the envelop for LB_keogh
+    """Compute the envelop for LB_keogh.
 
     Parameters
     ----------
@@ -206,7 +206,7 @@ def dtw_envelop(x, *, r=1.0):
 
 
 def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
-    """The LB_keogh lower bound
+    """The LB_keogh lower bound.
 
     Parameters
     ----------
@@ -270,7 +270,7 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
 
 
 def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
-    """Compute the Dynamic time warping alignment matrix
+    """Compute the Dynamic time warping alignment matrix.
 
     Parameters
     ----------
@@ -325,7 +325,7 @@ def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
 
 
 def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
-    """Weighted dynamic time warping alignment
+    """Weighted dynamic time warping alignment.
 
     Parameters
     ----------
@@ -362,7 +362,8 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
 
 
 def jeong_weight(n, g=0.05):
-    """Weighting described by Jeong et. al. (2011) using g as the penalty control.
+    """Weighting described by Jeong et. al. (2011) using g as the penalty
+    control.
 
     .. math:: w(x)=\\frac{1}{1+e^{-g(x-m/2)}}
 
@@ -391,7 +392,7 @@ def jeong_weight(n, g=0.05):
 
 def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
     """Compute the optimal warping path between two series or from a given
-    alignment matrix
+    alignment matrix.
 
     Parameters
     ----------

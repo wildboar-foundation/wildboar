@@ -104,7 +104,8 @@ class BaseEstimator(SklearnBaseEstimator):
             )
 
     def _validate_force_n_dims(self, X):
-        """Validate that X is valid in relation to the optional _force_n_dims attribute.
+        """Validate that X is valid in relation to the optional _force_n_dims
+        attribute.
 
         Parameters
         ----------
@@ -185,7 +186,7 @@ class BaseEstimator(SklearnBaseEstimator):
 
 
 class ExplainerMixin:
-    """Mixin class for all explainers in wildboar"""
+    """Mixin class for all explainers in wildboar."""
 
     _estimator_type = "explainer"
 
@@ -281,7 +282,7 @@ class CounterfactualMixin:
 
 
 def is_counterfactual(estimator):
-    """Check if estimator is a counterfactual explainer
+    """Check if estimator is a counterfactual explainer.
 
     Parameters
     ----------
@@ -301,7 +302,7 @@ def is_counterfactual(estimator):
 
 
 def is_explainer(estimator):
-    """Check if estimator is an explainer
+    """Check if estimator is an explainer.
 
     Parameters
     ----------
@@ -311,5 +312,6 @@ def is_explainer(estimator):
     Returns
     -------
     bool
-        True if the estimator probably is an explainer"""
+        True if the estimator probably is an explainer
+    """
     return hasattr(estimator, "explain")

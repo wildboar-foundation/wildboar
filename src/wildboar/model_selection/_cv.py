@@ -12,7 +12,7 @@ from sklearn.utils.validation import check_array
 
 
 class RepeatedOutlierSplit(metaclass=ABCMeta):
-    """Repeated random outlier cross-validator
+    """Repeated random outlier cross-validator.
 
     Yields indicies that split the dataset into training and test sets.
 
@@ -22,7 +22,6 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
     cross-validator does not ensure that all folds will be different.
     Instead, the inlier samples are shuffled and new outlier samples
     are inserted in the training and test sets repeatedly.
-
     """
 
     def __init__(
@@ -91,7 +90,7 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         return n_splits
 
     def split(self, x, y, groups=None):
-        """Return training and test indicies
+        """Return training and test indicies.
 
         Parameters
         ----------

@@ -347,7 +347,6 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
     >>> f = ShapeletForestClassifier(n_estimators=100, metric='scaled_euclidean')
     >>> f.fit(x, y)
     >>> y_hat = f.predict(x)
-
     """
 
     _parameter_constraints: dict = {
@@ -496,7 +495,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
 
 
 class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
-    """An ensemble of extremely random shapelet trees for time series regression.
+    """An ensemble of extremely random shapelet trees for time series
+    regression.
 
     Examples
     --------
@@ -507,7 +507,6 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
     >>> f = ExtraShapeletTreesClassifier(n_estimators=100, metric='scaled_euclidean')
     >>> f.fit(x, y)
     >>> y_hat = f.predict(x)
-
     """
 
     _parameter_constraints: dict = {
@@ -909,7 +908,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
 
 
 class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
-    """An ensemble of extremely random shapelet trees for time series regression.
+    """An ensemble of extremely random shapelet trees for time series
+    regression.
 
     Examples
     --------
@@ -920,7 +920,6 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
     >>> f = ExtraShapeletTreesRegressor(n_estimators=100, metric='scaled_euclidean')
     >>> f.fit(x, y)
     >>> y_hat = f.predict(x)
-
     """
 
     _parameter_constraints: dict = {
@@ -1016,7 +1015,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
 
 
 class ShapeletForestEmbedding(BaseShapeletForestRegressor):
-    """An ensemble of random shapelet trees
+    """An ensemble of random shapelet trees.
 
     An unsupervised transformation of a time series dataset
     to a high-dimensional sparse representation. A time series i
@@ -1025,7 +1024,6 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
 
     The dimensionality of the resulting representation is
     ``<= n_estimators * 2^max_depth``
-
     """
 
     _parameter_constraints: dict = {
@@ -1193,7 +1191,6 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
     >>> f.fit(x_train)
     >>> y_pred = f.predict(x_test)
     >>> balanced_accuracy_score(y_test, y_pred)
-
     """
 
     _parameter_constraints: dict = {
@@ -1225,7 +1222,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         metric_params=None,
         random_state=None,
     ):
-        """Construct a shapelet isolation forest
+        """Construct a shapelet isolation forest.
 
         Parameters
         ----------
@@ -1792,7 +1789,7 @@ class PivotForestClassifier(BaseForestClassifier):
 
 
 class ProximityForestClassifier(BaseForestClassifier):
-    """A forest of proximity trees
+    """A forest of proximity trees.
 
     References
     ----------

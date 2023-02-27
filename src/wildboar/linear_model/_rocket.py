@@ -6,7 +6,7 @@ from ._transform import TransformRidgeClassifierCV, TransformRidgeCV
 
 
 class RocketClassifier(TransformRidgeClassifierCV):
-    """Implements the ROCKET classifier"""
+    """Implements the ROCKET classifier."""
 
     def __init__(
         self,
@@ -58,7 +58,7 @@ class RocketClassifier(TransformRidgeClassifierCV):
 
 
 class RocketRegressor(TransformRidgeCV):
-    """Implements the ROCKET regressor"""
+    """Implements the ROCKET regressor."""
 
     def __init__(
         self,

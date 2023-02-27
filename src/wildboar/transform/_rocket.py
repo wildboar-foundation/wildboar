@@ -87,7 +87,7 @@ class RocketMixin:
 
 
 class RocketTransform(RocketMixin, BaseFeatureEngineerTransform):
-    """Transform a time series using random convolution features
+    """Transform a time series using random convolution features.
 
     Attributes
     ----------

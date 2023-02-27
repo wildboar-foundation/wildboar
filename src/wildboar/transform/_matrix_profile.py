@@ -11,7 +11,8 @@ from ..distance import matrix_profile
 
 
 class MatrixProfileTransform(TransformerMixin, BaseEstimator):
-    """Transform each time series in a dataset to its MatrixProfile similarity self-join
+    """Transform each time series in a dataset to its MatrixProfile similarity
+    self-join.
 
     Examples
     --------
@@ -20,7 +21,6 @@ class MatrixProfileTransform(TransformerMixin, BaseEstimator):
     >>> x, y = load_two_lead_ecg()
     >>> t = MatrixProfileTransform()
     >>> t.fit_transform(x)
-
     """
 
     _parameter_constraints: dict = {
@@ -60,7 +60,7 @@ class MatrixProfileTransform(TransformerMixin, BaseEstimator):
         self.exclude = exclude
 
     def fit(self, x, y=None):
-        """Fit the matrix profile. Sets the expected input dimensions
+        """Fit the matrix profile. Sets the expected input dimensions.
 
         Parameters
         ----------

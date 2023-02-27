@@ -47,7 +47,7 @@ def __new_composite_filter(filters):
 
 
 def make_filter(filter):
-    """Create a new filter
+    """Create a new filter.
 
     Parameters
     ----------
@@ -72,7 +72,7 @@ def make_filter(filter):
 
 
 def make_list_filter(filter):
-    """Make a new filter based on a list of filter strings
+    """Make a new filter based on a list of filter strings.
 
     Parameters
     ----------
@@ -92,7 +92,7 @@ def make_list_filter(filter):
 
 
 def make_dict_filter(filter):
-    """Make a new filter
+    """Make a new filter.
 
     Parameters
     ----------
@@ -116,7 +116,7 @@ def make_dict_filter(filter):
 
 
 def make_str_filter(filter):
-    """Make a new filter
+    """Make a new filter.
 
     Parameters
     ----------

@@ -22,14 +22,13 @@ __all__ = [
 
 
 class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
-    """Base feature engineer transform
+    """Base feature engineer transform.
 
     Attributes
     ----------
 
     embedding_ : Embedding
         The underlying embedding.
-
     """
 
     _parameter_constraints: dict = {

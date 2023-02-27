@@ -65,7 +65,7 @@ _COUNTERFACTUALS = {
 
 
 def _best_counterfactional(estimator):
-    """Infer the counterfactual explainer to use based on the estimator
+    """Infer the counterfactual explainer to use based on the estimator.
 
     Parameters
     ----------
@@ -105,7 +105,7 @@ def counterfactuals(
     random_state=None,
     method_args=None,
 ):
-    """Compute a single counterfactual example for each sample
+    """Compute a single counterfactual example for each sample.
 
     Parameters
     ----------

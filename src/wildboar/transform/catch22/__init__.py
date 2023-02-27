@@ -14,7 +14,7 @@ __all__ = ["histogram_mode", "histogram_mode5", "histogram_mode10"]
 
 @array_or_scalar
 def histogram_mode(x, n_bins=5):
-    """Compute the histogram mode
+    """Compute the histogram mode.
 
     Parameters
     ----------

@@ -125,7 +125,6 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
 
     Each interval (150 // 12 timepoints) are transformed to two features. The mean
     and the standard deviation.
-
     """
 
     _parameter_constraints: dict = {
@@ -203,7 +202,7 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
 
 
 class FeatureTransform(IntervalTransform):
-    """Transform a time series as a number of features"""
+    """Transform a time series as a number of features."""
 
     _parameter_constraints: dict = {
         "summarizer": IntervalMixin._parameter_constraints["summarizer"],

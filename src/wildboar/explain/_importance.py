@@ -184,7 +184,7 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
 
 
 class IntervalImportance(ExplainerMixin, PermuteImportance):
-    """Compute a model agnostic importance score for non-overlapping intervals
+    """Compute a model agnostic importance score for non-overlapping intervals.
 
     Attributes
     ----------
@@ -195,7 +195,6 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
     components_ : ndarray of shape (n_intervals, 2)
         The interval start and end positions.
-
     """
 
     _parameter_constraints: dict = {
@@ -558,9 +557,10 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         show_bins=False,
         show_grid=True,
     ):
-        """Plot the importances. If x is given, the importances are plotted over the
-        samples optionally labeling each sample using the supplied labels. If x is
-        not give, the importances are plotted as one or more boxplots.
+        """Plot the importances. If x is given, the importances are plotted
+        over the samples optionally labeling each sample using the supplied
+        labels. If x is not give, the importances are plotted as one or more
+        boxplots.
 
         Parameters
         ----------
@@ -713,7 +713,8 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
 
 
 class ShapeletImportance(ExplainerMixin, PermuteImportance):
-    """Compute the importance of shapelets by permuting instances with lowest distance.
+    """Compute the importance of shapelets by permuting instances with lowest
+    distance.
 
     Attributes
     ----------

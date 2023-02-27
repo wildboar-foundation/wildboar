@@ -49,7 +49,7 @@ def _replace_placeholders(url, **kwargs):
 
 
 def _check_integrity(bundle_file, hash_file, throws=True):
-    """Check the integrity of the downloaded or cached file
+    """Check the integrity of the downloaded or cached file.
 
     Parameters
     ----------
@@ -83,7 +83,7 @@ def _check_integrity(bundle_file, hash_file, throws=True):
 
 
 def _sha1_is_sane(hash_file):
-    """Check the sanity of a hash file
+    """Check the sanity of a hash file.
 
     Parameters
     ----------
@@ -107,7 +107,7 @@ def _load_archive(
     progress=True,
     force=False,
 ):
-    """Load or download a bundle
+    """Load or download a bundle.
 
     Parameters
     ----------
@@ -169,7 +169,7 @@ def _load_archive(
 
 
 def _download_hash_file(cached_hash, hash_url, filename):
-    """Download the
+    """Download the.
 
     Parameters
     ----------
@@ -243,7 +243,7 @@ def _print_progress(
 
 
 def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
-    """Download the bundle
+    """Download the bundle.
 
     Parameters
     ----------
@@ -298,7 +298,7 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
 
 
 class Repository(metaclass=ABCMeta):
-    """A repository is a collection of bundles"""
+    """A repository is a collection of bundles."""
 
     def __init__(self):
         self._active = False
@@ -319,7 +319,7 @@ class Repository(metaclass=ABCMeta):
     @property
     @abstractmethod
     def name(self):
-        """Name of the repository
+        """Name of the repository.
 
         Returns
         -------
@@ -330,7 +330,7 @@ class Repository(metaclass=ABCMeta):
     @property
     @abstractmethod
     def version(self):
-        """The repository version
+        """The repository version.
 
         Returns
         -------
@@ -341,7 +341,7 @@ class Repository(metaclass=ABCMeta):
     @property
     @abstractmethod
     def download_url(self):
-        """The url template for downloading bundles
+        """The url template for downloading bundles.
 
         Returns
         -------
@@ -352,7 +352,7 @@ class Repository(metaclass=ABCMeta):
     @property
     @abstractmethod
     def wildboar_requires(self):
-        """The minimum required wildboar version
+        """The minimum required wildboar version.
 
         Returns
         -------
@@ -362,7 +362,7 @@ class Repository(metaclass=ABCMeta):
 
     @abstractmethod
     def get_bundles(self):
-        """Get all bundles
+        """Get all bundles.
 
         Returns
         -------
@@ -375,7 +375,7 @@ class Repository(metaclass=ABCMeta):
         return self._active
 
     def get_bundle(self, key):
-        """Get a bundle with the specified key
+        """Get a bundle with the specified key.
 
         Parameters
         ----------
@@ -476,7 +476,7 @@ class Repository(metaclass=ABCMeta):
                 os.remove(full_path)
 
     def refresh(self, timeout=None):
-        """Refresh the repository"""
+        """Refresh the repository."""
         try:
             self._refresh(timeout)
             self._active = True
@@ -748,7 +748,7 @@ class RepositoryCollection:
 
 
 class Bundle(metaclass=ABCMeta):
-    """Base class for handling dataset bundles
+    """Base class for handling dataset bundles.
 
     Attributes
     ----------
@@ -761,7 +761,6 @@ class Bundle(metaclass=ABCMeta):
 
     label_index : int or array-like
         Index of the class label(s)
-
     """
 
     def __init__(
@@ -819,7 +818,7 @@ class Bundle(metaclass=ABCMeta):
             return c
 
     def list(self, archive, collection=None):
-        """List all datasets in this bundle
+        """List all datasets in this bundle.
 
         Parameters
         ----------
@@ -854,7 +853,7 @@ class Bundle(metaclass=ABCMeta):
         name,
         archive,
     ):
-        """Load a dataset from the bundle
+        """Load a dataset from the bundle.
 
         Parameters
         ----------
@@ -960,7 +959,7 @@ class Bundle(metaclass=ABCMeta):
 
     @abstractmethod
     def _is_dataset(self, file_name, ext):
-        """Overridden by subclasses
+        """Overridden by subclasses.
 
         Check if a path and extension is to be considered a dataset. The check should be
         simple and only consider the filename and or extension of the file.
@@ -983,7 +982,7 @@ class Bundle(metaclass=ABCMeta):
 
     @abstractmethod
     def _load_array(self, archive, file):
-        """Overridden by subclasses
+        """Overridden by subclasses.
 
         Load the file inside the archive and convert to a numpy array
 
@@ -1004,7 +1003,7 @@ class Bundle(metaclass=ABCMeta):
 
 
 class NpBundle(Bundle):
-    """bundle of numpy binary files"""
+    """bundle of numpy binary files."""
 
     def _is_dataset(self, file_name, ext):
         return ext in [".npy", ".npz"]

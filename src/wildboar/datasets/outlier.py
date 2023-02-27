@@ -32,12 +32,12 @@ __all__ = [
 
 
 class KernelLogisticRegression(LogisticRegression):
-    """A simple kernel logistic implementation using a Nystroem kernel approximation
+    """A simple kernel logistic implementation using a Nystroem kernel
+    approximation.
 
     See Also
     --------
     wildboar.datasets.outlier.EmmottLabeler : Synthetic outlier dataset construction
-
     """
 
     def __init__(
@@ -123,7 +123,8 @@ def kmeans_outliers(
     n_clusters=5,
     random_state=None,
 ):
-    """Label the samples of the cluster farthers from the other clusters as outliers.
+    """Label the samples of the cluster farthers from the other clusters as
+    outliers.
 
     Parameters
     ----------
@@ -156,7 +157,6 @@ def kmeans_outliers(
 
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
         The inliers (labeled as 1) and outlier (labled as -1)
-
     """
     x = check_array(x)
     random_state = check_random_state(random_state)
@@ -199,8 +199,8 @@ def density_outliers(
     max_eps=np.inf,
     random_state=None,
 ):
-    """Labels samples as outliers if a density cluster algorithm fail to assign them to
-    a cluster
+    """Labels samples as outliers if a density cluster algorithm fail to assign
+    them to a cluster.
 
     Parameters
     ----------
@@ -236,7 +236,6 @@ def density_outliers(
 
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
         The inliers (labeled as 1) and outlier (labled as -1)
-
     """
     if method == "dbscan":
         estimator = DBSCAN(eps=eps, min_samples=min_sample, metric=metric)
@@ -262,7 +261,7 @@ def density_outliers(
 
 
 def majority_outliers(x, y, *, n_outliers=0.05, random_state=None):
-    """Labels the majority class as inliers
+    """Labels the majority class as inliers.
 
     Parameters
     ----------
@@ -366,8 +365,8 @@ def emmott_outliers(
     variation="tight",
     random_state=None,
 ):
-    """Create a synthetic outlier detection dataset from a labeled classification
-    dataset using the method described by Emmott et.al. (2013).
+    """Create a synthetic outlier detection dataset from a labeled
+    classification dataset using the method described by Emmott et.al. (2013).
 
     The Emmott labeler can reliably label both binary and multiclass datasets. For
     binary datasets a random label is selected as the outlier class. For multiclass
@@ -472,7 +471,6 @@ def emmott_outliers(
         Systematic construction of anomaly detection benchmarks from real data.
         In Proceedings of the ACM SIGKDD workshop on outlier detection and description
         (pp. 16-21).
-
     """
     x, y = check_X_y(x, y, dtype=float)
     random_state = check_random_state(random_state)

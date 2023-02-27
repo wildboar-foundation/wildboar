@@ -84,7 +84,7 @@ _BINNING = {"normal": NormalBinning, "uniform": UniformBinning}
 
 
 class SAX(TransformerMixin, BaseEstimator):
-    """Symbolic aggregate approximation"""
+    """Symbolic aggregate approximation."""
 
     _parameter_constraints: dict = {
         "n_intervals": [
@@ -198,7 +198,7 @@ class SAX(TransformerMixin, BaseEstimator):
 
 
 class PAA(TransformerMixin, BaseEstimator):
-    """Peicewise aggregate approximation"""
+    """Peicewise aggregate approximation."""
 
     _parameter_constraints: dict = {
         "n_intervals": [
@@ -264,7 +264,7 @@ def symbolic_aggregate_approximation(
     n_bins=4,
     binning="normal",
 ):
-    """Symbolic aggregate approximation
+    """Symbolic aggregate approximation.
 
     Parameters
     ----------
@@ -296,7 +296,6 @@ def symbolic_aggregate_approximation(
     -------
     sax : ndarray of shape (n_samples, n_intervals)
         The symbolic aggregate approximation
-
     """
     return SAX(
         n_intervals=n_intervals, window=window, n_bins=n_bins, binning=binning
@@ -304,7 +303,7 @@ def symbolic_aggregate_approximation(
 
 
 def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
-    """Peicewise aggregate approximation
+    """Peicewise aggregate approximation.
 
     Parameters
     ----------
@@ -328,6 +327,5 @@ def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
     -------
     paa : ndarray of shape (n_samples, n_intervals)
         The symbolic aggregate approximation
-
     """
     return PAA(n_intervals=n_intervals, window=window).fit_transform(x)

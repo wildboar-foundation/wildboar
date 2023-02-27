@@ -124,7 +124,6 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
 
     tree_ : Tree
         The internal tree representation
-
     """
 
     _parameter_constraints: dict = {
@@ -262,7 +261,6 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
 
     tree_ : Tree
         The internal tree representation
-
     """
 
     _parameter_constraints: dict = {**ShapeletTreeRegressor._parameter_constraints}
@@ -395,7 +393,6 @@ class ShapeletTreeClassifier(
     --------
     ShapeletTreeRegressor : A shapelet tree regressor.
     ExtraShapeletTreeClassifier : An extra random shapelet tree classifier.
-
     """
 
     _parameter_constraints: dict = {
@@ -521,7 +518,6 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
     ----------
     tree_ : Tree
         The tree representation
-
     """
 
     _parameter_constraints: dict = {**ShapeletTreeClassifier._parameter_constraints}
@@ -636,7 +632,6 @@ class RocketTreeRegressor(RocketMixin, BaseFeatureTreeRegressor):
 
     tree_ : Tree
         The internal tree representation.
-
     """
 
     _parameter_constraints: dict = {
@@ -757,7 +752,6 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
 
     tree_ : Tree
         The internal tree representation.
-
     """
 
     _parameter_constraints: dict = {
@@ -893,7 +887,6 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
 
     tree_ : Tree
         The internal tree structure.
-
     """
 
     _parameter_constraints: dict = {
@@ -1014,7 +1007,6 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
 
     tree_ : Tree
         The internal tree structure.
-
     """
 
     _parameter_constraints: dict = {
@@ -1124,13 +1116,11 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
 class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
     """A tree classifier that uses pivot time series.
 
-
     Attributes
     ----------
 
     tree_ : Tree
         The internal tree representation
-
     """
 
     _parameter_constraints: dict = {

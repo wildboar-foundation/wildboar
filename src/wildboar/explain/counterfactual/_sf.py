@@ -136,7 +136,7 @@ _AGGREGATION = {
 
 
 class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
-    """Counterfactual explanations for shapelet forest classifiers
+    """Counterfactual explanations for shapelet forest classifiers.
 
     Attributes
     ----------

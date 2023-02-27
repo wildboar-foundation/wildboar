@@ -23,7 +23,8 @@ def named_preprocess(name):
 
 
 def standardize(x):
-    """Scale x along the time dimension to have zero mean and unit standard deviation
+    """Scale x along the time dimension to have zero mean and unit standard
+    deviation.
 
     Parameters
     ----------
@@ -42,7 +43,8 @@ def standardize(x):
 
 
 def minmax_scale(x, min=0, max=1):
-    """Scale x along the time dimension so that each value is between min and max
+    """Scale x along the time dimension so that each value is between min and
+    max.
 
     Parameters
     ----------

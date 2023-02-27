@@ -114,7 +114,6 @@ def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=Fal
     checks_generator : generator
         Generator that yields (estimator, check) tuples. Returned when
         `generate_only=True`.
-
     """
 
     if ignore is None:

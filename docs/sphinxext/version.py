@@ -1,5 +1,5 @@
-import subprocess
 import re
+import subprocess
 
 from pkg_resources import parse_version
 
@@ -40,8 +40,9 @@ def find_version_by_major_minor(major, minor, versions):
 def is_tag_version(tag):
     # Excluding major version of 0
     SEMVER = (
-        r"^v?([1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
-        r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+        r"^v?([1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|"
+        r"\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-]"
+        r"[0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
     )
     return re.match(SEMVER, tag)
 

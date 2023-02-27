@@ -1,6 +1,6 @@
 import pytest
 
-from wildboar.datasets import load_dataset, load_datasets
+from wildboar.datasets import load_datasets
 
 
 @pytest.mark.parametrize("merge_train_test, length", [(True, 2), (False, 4)])

@@ -82,7 +82,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
 
 class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a shapelet tree regressor from the training set
+        """Fit a shapelet tree regressor from the training set.
 
         Parameters
         ----------
@@ -245,8 +245,8 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
 
     def predict_proba(self, x, check_input=True):
         """Predict class probabilities of the input samples X.  The predicted
-        class probability is the fraction of samples of the same class
-        in a leaf.
+        class probability is the fraction of samples of the same class in a
+        leaf.
 
         Parameters
         ----------

@@ -68,7 +68,6 @@ class ProximityTreeClassifier(BaseTreeClassifier):
     Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
         Proximity forest: an effective and scalable distance-based classifier for time
         series. Data Mining and Knowledge Discovery
-
     """
 
     _parameter_constraints: dict = {

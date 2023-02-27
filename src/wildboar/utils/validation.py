@@ -414,8 +414,8 @@ def check_array(
 
 
 def _check_ts_array(array):
-    """Force the array to (1) be 3D (n_samples, n_dims, n_timesteps) and
-    (2) have the final dimension contiguous in memory, and (3) have dtype=float.
+    """Force the array to (1) be 3D (n_samples, n_dims, n_timesteps) and (2)
+    have the final dimension contiguous in memory, and (3) have dtype=float.
 
     Parameters
     ----------
@@ -426,7 +426,6 @@ def _check_ts_array(array):
     -------
     tsarray : TSArray
         A time series array
-
     """
     if array.ndim == 1:
         array = array.reshape(1, 1, array.shape[0])

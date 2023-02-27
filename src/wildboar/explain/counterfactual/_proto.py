@@ -25,10 +25,10 @@ from ...distance.dtw import (
 
 
 class TargetEvaluator(abc.ABC):
-    """Evaluate if a sample is a counterfactual"""
+    """Evaluate if a sample is a counterfactual."""
 
     def __init__(self, estimator):
-        """Construct a new evaluator
+        """Construct a new evaluator.
 
         Parameters
         ----------
@@ -38,7 +38,7 @@ class TargetEvaluator(abc.ABC):
         self.estimator = estimator
 
     def is_counterfactual(self, x, y):
-        """Return true if x is a counterfactual of label y
+        """Return true if x is a counterfactual of label y.
 
         Parameters
         ----------
@@ -60,17 +60,18 @@ class TargetEvaluator(abc.ABC):
 
 
 class PredictEvaluator(TargetEvaluator):
-    """Evaluate if a counterfactual is predicted as y"""
+    """Evaluate if a counterfactual is predicted as y."""
 
     def _is_counterfactual(self, x, y):
         return self.estimator.predict(x)[0] == y
 
 
 class ProbabilityEvaluator(TargetEvaluator):
-    """Evaluate if the probability of a counterfactual is at least a given constant"""
+    """Evaluate if the probability of a counterfactual is at least a given
+    constant."""
 
     def __init__(self, estimator, probability=0.5):
-        """Construct a new evaluator
+        """Construct a new evaluator.
 
         Parameters
         ----------
@@ -95,7 +96,7 @@ class ProbabilityEvaluator(TargetEvaluator):
 
 class PrototypeSampler(abc.ABC):
     def __init__(self, x, y, prototype_indices, metric_transform):
-        """Sample and refine counterfactuals
+        """Sample and refine counterfactuals.
 
         Parameters
         ----------
@@ -120,7 +121,7 @@ class PrototypeSampler(abc.ABC):
         self.prototype_indices = prototype_indices
 
     def _get_random_index(self, random_state):
-        """Return a random index in the initial prototype sample
+        """Return a random index in the initial prototype sample.
 
         Returns
         -------
@@ -132,7 +133,7 @@ class PrototypeSampler(abc.ABC):
 
     @abc.abstractmethod
     def sample(self, o, random_state):
-        """Sample an example
+        """Sample an example.
 
         Parameters
         ----------
@@ -147,7 +148,7 @@ class PrototypeSampler(abc.ABC):
         pass
 
     def move(self, o, p):
-        """Move the current counterfactual toward the prototype
+        """Move the current counterfactual toward the prototype.
 
         Parameters
         ----------
@@ -165,7 +166,8 @@ class PrototypeSampler(abc.ABC):
         return self.metric_transform.move(o, p)
 
     def sample_move(self, o, random_state):
-        """Sampla a prototype and move the counterfactual towards the prototype
+        """Sampla a prototype and move the counterfactual towards the
+        prototype.
 
         Parameters
         ----------
@@ -182,14 +184,16 @@ class PrototypeSampler(abc.ABC):
 
 
 class UniformPrototypeSampler(PrototypeSampler):
-    """Sample a prototype uniformly at random from the initial prototype sample"""
+    """Sample a prototype uniformly at random from the initial prototype
+    sample."""
 
     def sample(self, _o, random_state):
         return self.x[self._get_random_index(random_state)]
 
 
 class KNearestPrototypeSampler(PrototypeSampler):
-    """Sample a prototype among the samples closest to the current counterfactual"""
+    """Sample a prototype among the samples closest to the current
+    counterfactual."""
 
     def __init__(self, x, y, prototype_indicies, metric_transform):
         super().__init__(x, y, prototype_indicies, metric_transform)
@@ -216,7 +220,7 @@ class KNearestPrototypeSampler(PrototypeSampler):
         self.nearest_neighbors.fit(x)
 
     def nearest_index(self, o, random_state):
-        """Return the index of the closest sample
+        """Return the index of the closest sample.
 
         Parameters
         ----------
@@ -237,7 +241,7 @@ class KNearestPrototypeSampler(PrototypeSampler):
 
 
 class ShapeletPrototypeSampler(PrototypeSampler):
-    """Sample shapelet prototypes"""
+    """Sample shapelet prototypes."""
 
     def __init__(
         self,
@@ -248,7 +252,7 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         min_shapelet_size=0,
         max_shapelet_size=1,
     ):
-        """Sample shapelet
+        """Sample shapelet.
 
         Parameters
         ----------
@@ -275,7 +279,7 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         self.max_shapelet_size = max_shapelet_size
 
     def sample_shapelet(self, p, random_state):
-        """Sample a shapelet from x
+        """Sample a shapelet from x.
 
         Parameters
         ----------
@@ -302,8 +306,8 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         )
 
     def move(self, o, p):
-        """Move the best matching shapelet of the  counterfactual sample towards
-        the shapelet prototype
+        """Move the best matching shapelet of the  counterfactual sample
+        towards the shapelet prototype.
 
         Parameters
         ----------
@@ -348,8 +352,7 @@ class ShapeletPrototypeSampler(PrototypeSampler):
 class KNearestShapeletPrototypeSampler(PrototypeSampler):
     """Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler
     such that prototype samples are sampled among the nearest neighbors of the
-    counterfactual
-    """
+    counterfactual."""
 
     def __init__(
         self,
@@ -382,10 +385,10 @@ class KNearestShapeletPrototypeSampler(PrototypeSampler):
 
 
 class MetricTransform(abc.ABC):
-    """Move a time series towards a prototype"""
+    """Move a time series towards a prototype."""
 
     def __init__(self, gamma):
-        """Construct a new transformer
+        """Construct a new transformer.
 
         Parameters
         ----------
@@ -398,7 +401,7 @@ class MetricTransform(abc.ABC):
 
     @abc.abstractmethod
     def move(self, o, p):
-        """Move the sample o towards p
+        """Move the sample o towards p.
 
         Parameters
         ----------
@@ -416,14 +419,15 @@ class MetricTransform(abc.ABC):
 
 
 class EuclideanTransform(MetricTransform):
-    """Transform a sample by moving it closer in euclidean space"""
+    """Transform a sample by moving it closer in euclidean space."""
 
     def move(self, o, p):
         return ((1 - self.gamma) * o) + self.gamma * p
 
 
 class DynamicTimeWarpTransform(MetricTransform):
-    """Transform a sample by moving it closer using the dtw alignment matrix"""
+    """Transform a sample by moving it closer using the dtw alignment
+    matrix."""
 
     def __init__(self, gamma, r=1.0):
         super().__init__(gamma)
@@ -471,7 +475,7 @@ _PROTOTYPE_SAMPLER = {
 
 
 class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
-    """Model agnostic approach for constructing counterfactual explanations
+    """Model agnostic approach for constructing counterfactual explanations.
 
     Attributes
     ----------

@@ -49,7 +49,7 @@ class DependencyMissing:
 
 
 def os_cache_path(dir):
-    """Get the path to a operating system specific cache directory
+    """Get the path to a operating system specific cache directory.
 
     Parameters
     ----------

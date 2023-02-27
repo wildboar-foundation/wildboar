@@ -141,9 +141,9 @@ def relative_proximity_score(
     metric_params=None,
     average=True,
 ):
-    """Relative proximity score captures the mean proximity of counterfactual and
-    test sample pairs over mean proximity of the closest native counterfactual. The
-    lower the score, the better.
+    """Relative proximity score captures the mean proximity of counterfactual
+    and test sample pairs over mean proximity of the closest native
+    counterfactual. The lower the score, the better.
 
     Parameters
     ----------
@@ -234,7 +234,8 @@ def proximity_score(
     metric="normalized_euclidean",
     metric_params=None,
 ):
-    """Compute the proximity score of the counterfactuals using the provided metric.
+    """Compute the proximity score of the counterfactuals using the provided
+    metric.
 
     The closer the counterfactual is to the original, the lower the score.
 
@@ -290,8 +291,8 @@ def compactness_score(
     average=True,
 ):
     """Return the compactness of the counterfactuals as measured by the
-    fraction of changed timesteps. The fewer timesteps have changed between the original
-    and the counterfactual, the lower the score.
+    fraction of changed timesteps. The fewer timesteps have changed between the
+    original and the counterfactual, the lower the score.
 
     Parameters
     ----------

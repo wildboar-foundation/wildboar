@@ -20,7 +20,7 @@ __all__ = [
 def train_test_split(
     x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None
 ):
-    """Training and testing split from classification dataset
+    """Training and testing split from classification dataset.
 
     Parameters
     ----------
@@ -101,7 +101,7 @@ def train_test_split(
 
 
 def threshold_score(y_true, score, score_f):
-    """Compute the performance of using the i:th score
+    """Compute the performance of using the i:th score.
 
     The scores are typically computed using an outlier detection algorithm
 

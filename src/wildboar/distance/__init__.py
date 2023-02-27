@@ -172,7 +172,8 @@ def pairwise_subsequence_distance(
     return_index=False,
     n_jobs=None,
 ):
-    """Compute the minimum subsequence distance between subsequences and time series
+    """Compute the minimum subsequence distance between subsequences and time
+    series.
 
     Parameters
     ----------
@@ -259,8 +260,8 @@ def paired_subsequence_distance(
     return_index=False,
     n_jobs=None,
 ):
-    """Compute the minimum subsequence distance between the i:th subsequence and time
-    series
+    """Compute the minimum subsequence distance between the i:th subsequence
+    and time series.
 
     Parameters
     ----------
@@ -354,8 +355,8 @@ def subsequence_match(
     return_distance=False,
     n_jobs=None,
 ):
-    """Find the positions where the distance is less than the threshold between the
-    subsequence and all time series.
+    """Find the positions where the distance is less than the threshold between
+    the subsequence and all time series.
 
     - If a `threshold` is given, the default behaviour is to return all matching
       indices in the order of occurrence
@@ -530,8 +531,8 @@ def paired_subsequence_match(
     return_distance=False,
     n_jobs=None,
 ):
-    """Compute the minimum subsequence distance between the i:th subsequence and time
-    series
+    """Compute the minimum subsequence distance between the i:th subsequence
+    and time series.
 
     Parameters
     ----------
@@ -674,7 +675,7 @@ def paired_distance(
     metric_params=None,
     n_jobs=None,
 ):
-    """Compute the distance between the i:th time series
+    """Compute the distance between the i:th time series.
 
     Parameters
     ----------
@@ -785,7 +786,7 @@ def pairwise_distance(
     metric_params=None,
     n_jobs=None,
 ):
-    """Compute the distance between subsequences and time series
+    """Compute the distance between subsequences and time series.
 
     Parameters
     ----------

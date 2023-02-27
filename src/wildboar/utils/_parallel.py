@@ -25,7 +25,7 @@ def partition_n_jobs(n_jobs, n):
 
 
 def run_in_parallel(work, n_jobs=-1, **parallel_args):
-    """Execute work in parallel
+    """Execute work in parallel.
 
     Parameters
     ----------

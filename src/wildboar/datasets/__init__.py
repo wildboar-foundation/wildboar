@@ -80,8 +80,8 @@ def _split_repo_bundle(repo_bundle_name):
 
 
 def set_cache_dir(cache_dir=None):
-    """Change the global cache directory. If called without arguments, the cache
-    directory is reset to the default directory.
+    """Change the global cache directory. If called without arguments, the
+    cache directory is reset to the default directory.
 
     cache_dir : str, optional
         The cache directory root
@@ -95,7 +95,7 @@ def _default_cache_dir():
 
 
 def load_synthetic_control(merge_train_test=True):
-    """Load the Synthetic_Control dataset
+    """Load the Synthetic_Control dataset.
 
     See Also
     --------
@@ -109,7 +109,7 @@ def load_synthetic_control(merge_train_test=True):
 
 
 def load_two_lead_ecg(merge_train_test=True):
-    """Load the TwoLeadECG dataset
+    """Load the TwoLeadECG dataset.
 
     See Also
     --------
@@ -123,7 +123,7 @@ def load_two_lead_ecg(merge_train_test=True):
 
 
 def load_gun_point(merge_train_test=True):
-    """Load the GunPoint dataset
+    """Load the GunPoint dataset.
 
     See Also
     --------
@@ -147,7 +147,7 @@ def load_datasets(
     filter=None,
     **kwargs,
 ):
-    """Load all datasets as a generator
+    """Load all datasets as a generator.
 
     Parameters
     ----------
@@ -279,7 +279,7 @@ def load_dataset(
     refresh=False,
     timeout=None,
 ):
-    """Load a dataset from a repository
+    """Load a dataset from a repository.
 
     Parameters
     ----------
@@ -476,7 +476,7 @@ def list_datasets(
     refresh=False,
     timeout=None,
 ):
-    """List the datasets in the repository
+    """List the datasets in the repository.
 
     Parameters
     ----------
@@ -538,7 +538,7 @@ def list_datasets(
 
 
 def clear_cache(repository=None, *, cache_dir=None, keep_last_version=True):
-    """Clear the cache by deleting cached datasets
+    """Clear the cache by deleting cached datasets.
 
     Parameters
     ----------
@@ -564,7 +564,7 @@ def clear_cache(repository=None, *, cache_dir=None, keep_last_version=True):
 
 
 def get_repository(repository):
-    """Get repository by name
+    """Get repository by name.
 
     Parameters
     ----------
@@ -580,7 +580,7 @@ def get_repository(repository):
 
 
 def install_repository(repository, *, refresh=True, timeout=None, cache_dir=None):
-    """Install repository
+    """Install repository.
 
     Parameters
     ----------
@@ -612,7 +612,7 @@ def install_repository(repository, *, refresh=True, timeout=None, cache_dir=None
 
 
 def refresh_repositories(repository=None, *, timeout=None, cache_dir=None):
-    """Refresh the installed repositories
+    """Refresh the installed repositories.
 
     repository : str, optional
         The repository. None means all repositories.
@@ -632,7 +632,7 @@ def refresh_repositories(repository=None, *, timeout=None, cache_dir=None):
 
 
 def get_bundles(repository, *, refresh=False, timeout=None):
-    """Get all bundles in the repository
+    """Get all bundles in the repository.
 
     Parameters
     ----------
@@ -687,7 +687,7 @@ def list_bundles(repository, *, refresh=False, timeout=None):
 
 
 def list_collections(repository):
-    """List the collections of the repository
+    """List the collections of the repository.
 
     Parameters
     ----------
@@ -712,7 +712,7 @@ def list_collections(repository):
 
 
 def list_repositories(*, refresh=False, timeout=None, cache_dir=None):
-    """List the key of all installed repositories
+    """List the key of all installed repositories.
 
     refresh : bool, optional
         Refresh all repositories

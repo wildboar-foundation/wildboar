@@ -10,7 +10,7 @@ from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
 
 
 class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
-    """Fit a counterfactual explainer to a k-nearest neighbors classifier
+    """Fit a counterfactual explainer to a k-nearest neighbors classifier.
 
     Attributes
     ----------

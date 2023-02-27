@@ -23,8 +23,8 @@ def _array_or_scalar(x, squeeze=True):
 
 
 def array_or_scalar(optional_f=None, squeeze=True):
-    """Decorate a function returning an ndarray to return a single scalar if the array
-    has a single item.
+    """Decorate a function returning an ndarray to return a single scalar if
+    the array has a single item.
 
     Parameters
     ----------
@@ -62,9 +62,8 @@ def _singleton(x):
 
 
 def singleton(f):
-    """Recursivley try to unwrap list return arguments such that a single element can
-    be returned
-    """
+    """Recursivley try to unwrap list return arguments such that a single
+    element can be returned."""
 
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -78,7 +77,7 @@ def singleton(f):
 
 
 def unstable(optional_f=None, stability="beta", description=None):
-    """Decorate a function as unsatable
+    """Decorate a function as unsatable.
 
     Parameters
     ----------
@@ -91,7 +90,6 @@ def unstable(optional_f=None, stability="beta", description=None):
 
     description : str, optional
         The description of the feature
-
     """
     import warnings
 

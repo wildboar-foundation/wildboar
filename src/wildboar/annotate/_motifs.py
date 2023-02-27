@@ -24,7 +24,7 @@ def motifs(
     max_motif=1,
     return_distance=False,
 ):
-    """Find motifs
+    """Find motifs.
 
     Parameters
     ----------

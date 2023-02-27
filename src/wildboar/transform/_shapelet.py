@@ -104,7 +104,8 @@ class ShapeletMixin:
 
 
 class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
-    """Transform a time series to the distances to a selection of random shapelets.
+    """Transform a time series to the distances to a selection of random
+    shapelets.
 
     Attributes
     ----------
