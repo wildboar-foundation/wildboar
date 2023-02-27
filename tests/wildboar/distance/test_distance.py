@@ -1419,7 +1419,7 @@ def test_paired_distance_dim_full():
         ]
     )
     actual = paired_distance(x, y, dim="full", metric="euclidean")
-    assert_almost_equal(actual, expected)
+    assert_almost_equal(actual, expected.T)
 
 
 def test_pairwise_distance_dim_full():

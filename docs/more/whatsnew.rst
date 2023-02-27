@@ -54,6 +54,9 @@ Changelog
      - |Fix| Fix a bug in angular distance subsequence matching where an incorrect
        threshold was set.
 
+     - |Fix| Fix the return value of :func:`distance.paired_distance` to
+       `(n_dims, n_samples)` when `dim="full"`.
+
      - |API| Rename LCSS ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
 
      - |API| Rename EDR ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.

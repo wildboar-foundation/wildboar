@@ -707,7 +707,7 @@ def paired_distance(
         The distances. Return depends on input:
 
         - if x.ndim == 1, return scalar
-        - if dim='full', return ndarray of shape (n_samples, n_dims)
+        - if dim='full', return ndarray of shape (n_dims, n_samples)
         - if x.ndim > 1, return an ndarray of shape (n_samples, )
     """
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
@@ -761,7 +761,7 @@ def paired_distance(
         if dim == "mean":
             distances = np.mean(distances, axis=0)
         else:
-            distances = np.stack(distances, axis=1)
+            distances = np.stack(distances, axis=0)
 
     elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
         distances = _distance._paired_distance(x_, y_, dim, metric, n_jobs)
