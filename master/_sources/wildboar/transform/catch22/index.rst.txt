@@ -28,7 +28,7 @@ Attributes
 
 .. py:function:: histogram_mode(x, n_bins=5)
 
-   Compute the histogram mode
+   Compute the histogram mode.
 
    :param x: The input array
    :type x: ndarray of shape (n_samples, n_timestep) or (n_timestep, )

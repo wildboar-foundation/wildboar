@@ -20,8 +20,8 @@ Functions
 
 .. py:function:: array_or_scalar(optional_f=None, squeeze=True)
 
-   Decorate a function returning an ndarray to return a single scalar if the array
-   has a single item.
+   Decorate a function returning an ndarray to return a single scalar if
+   the array has a single item.
 
    :param optional_f: Used if the decorator is used without arguments
    :type optional_f: callable, optional
@@ -31,7 +31,7 @@ Functions
 
 .. py:function:: singleton(f)
 
-   Recursivley try to unwrap list return arguments such that a single element can
-   be returned
+   Recursivley try to unwrap list return arguments such that a single
+   element can be returned.
 
 

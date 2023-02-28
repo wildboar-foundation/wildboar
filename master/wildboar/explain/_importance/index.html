@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.explain._importance - Wildboar 1.1.1.dev269 documentation</title>
+        <title>wildboar.explain._importance - Wildboar 1.1.1.dev76 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -40,16 +40,6 @@
 </style></head>
   <body>
     
-
-<div class="announcement">
-    <aside class="announcement-content">
-        
-        You're reading the documentation for a development version.
-        For the latest released version, please have a look at <a
-            href="/1.1.X/index.html">1.1.1</a>.
-        
-    </aside>
-</div>
 
 
     <script>
@@ -138,7 +128,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev269 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev76 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +156,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>main (dev)</small></span>
+        <small>main</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -175,118 +165,51 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installing wildboar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">wildboar tutorial</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guide.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/basics.html">Time series</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/repositories.html">Repositories</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/preprocess.html">Preprocessing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/filter.html">Filtering</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/outlier.html">Outlier generation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://wildboar.dev/main">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
+</ul>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/linear_models.html">Linear models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/tree_models.html">Decision trees</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/ensemble_models.html">Ensemble models</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/pattern_discovery.html">Pattern discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/outlier_detection.html">Outlier detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/metrics.html">Distance metrics</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/explain.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/counterfactuals.html">Counterfactual explanations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/importance.html">Interval permutation importance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../transform/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../transform/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/motif.html">Motif discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/segment.html">Segmentation</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/transform.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/interval.html">Interval</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/rocket.html">Rocket</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/sax.html">Symbolic aggregate approximation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/shapelet.html">Shapelets</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/explainability/counterfactuals.html">Comparing counterfactals</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/classifier_comparision.html">Comparing classifiers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/miss_classification_analysis.html">Miss-classification analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/shapelet_forest_vs_shapelet_extra_trees.html">Shapelet forests and extremly randomized shapelet trees</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/matrix_profile.html">Matrix profile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/outlier_detection.html">Outlier detection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../more.html">More</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../more/contributing.html">Developer’s guide</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../transform/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../transform/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -308,17 +231,7 @@
       ></label>
       <ul>
         <li class="toctree-l2">
-          <span class="reference internal">main (dev)</span>
-        </li>
-        <li class="toctree-l2">
-          <a class="reference internal" href="/1.1.X/index.html"
-            >1.1.1</a
-          >
-        </li>
-        <li class="toctree-l2">
-          <a class="reference internal" href="/1.0.X/index.html"
-            >1.0.12</a
-          >
+          <span class="reference internal">main</span>
         </li>
       </ul>
     </li>
@@ -366,13 +279,13 @@
 <td><p>Compute the importance of equi-probable horizontal time series intervals by</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain._importance.IntervalImportance" title="wildboar.explain._importance.IntervalImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalImportance</span></code></a></p></td>
-<td><p>Compute a model agnostic importance score for non-overlapping intervals</p></td>
+<td><p>Compute a model agnostic importance score for non-overlapping intervals.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p></td>
 <td><p>Base class for all estimators in scikit-learn.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain._importance.ShapeletImportance" title="wildboar.explain._importance.ShapeletImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletImportance</span></code></a></p></td>
-<td><p>Compute the importance of shapelets by permuting instances with lowest distance.</p></td>
+<td><p>Compute the importance of shapelets by permuting instances with lowest</p></td>
 </tr>
 </tbody>
 </table>
@@ -406,7 +319,7 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain._importance.AmplitudeImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">AmplitudeImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L417-L712"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">AmplitudeImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L416-L712"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p>
 <p>Compute the importance of equi-probable horizontal time series intervals by
 permuting the values between each horizontal interval. The implementation uses
@@ -426,20 +339,21 @@ the samples along that bin.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.AmplitudeImportance.explain">
-<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L522-L525"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.explain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L521-L524"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.explain" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.AmplitudeImportance.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L506-L520"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L505-L519"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.AmplitudeImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L548-L712"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.plot" title="Permalink to this definition">#</a></dt>
-<dd><p>Plot the importances. If x is given, the importances are plotted over the
-samples optionally labeling each sample using the supplied labels. If x is
-not give, the importances are plotted as one or more boxplots.</p>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L547-L712"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.AmplitudeImportance.plot" title="Permalink to this definition">#</a></dt>
+<dd><p>Plot the importances. If x is given, the importances are plotted
+over the samples optionally labeling each sample using the supplied
+labels. If x is not give, the importances are plotted as one or more
+boxplots.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -475,9 +389,9 @@ Only returned if ax is not None and x is not None.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L186-L414"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">IntervalImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L186-L413"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p>
-<p>Compute a model agnostic importance score for non-overlapping intervals</p>
+<p>Compute a model agnostic importance score for non-overlapping intervals.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.importances_">
 <span class="sig-name descname"><span class="pre">importances_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.importances_" title="Permalink to this definition">#</a></dt>
@@ -501,45 +415,19 @@ function.</p>
 </dl>
 </dd></dl>
 
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>scoring</strong> (<em>str</em><em>, </em><em>list</em><em>, </em><em>dict</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – The scoring function. By default the estimators score function is used.</p></li>
-<li><p><strong>n_repeat</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of repeated permutations</p></li>
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals.</p>
-<ul>
-<li><p>if “sqrt”, the number of intervals is the square root of n_timestep.</p></li>
-<li><p>if “log2”, the number of intervals is the log2 of n_timestep.</p></li>
-<li><p>if int, exact number of intervals.</p></li>
-</ul>
-</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size. If specicied, n_intervals is ignored and the number of
-intervals is computed such that each interval is (at least) of size window.</p></li>
-<li><p><strong>domain</strong> (<em>{&quot;time&quot;</em><em>, </em><em>&quot;frequency&quot;}</em><em>, </em><em>optional</em>) – Compute the importance in the time or frequency domain.</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em><em>, </em><em>optional</em>) – Show extra progress information.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
-<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
-<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
-<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used
-by <cite>np.random</cite>.</p></li>
-</ul>
-</p></li>
-</ul>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.explain">
-<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L305-L311"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.explain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L304-L310"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.explain" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L297-L303"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L296-L302"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.IntervalImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L313-L414"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_grid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L312-L413"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.IntervalImportance.plot" title="Permalink to this definition">#</a></dt>
 <dd><p>Plot the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -566,9 +454,10 @@ arguments (no <code class="docutils literal notranslate"><span class="pre">*args
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">ShapeletImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L715-L932"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain._importance.</span></span><span class="sig-name descname"><span class="pre">ShapeletImportance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L715-L933"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code>, <a class="reference internal" href="#wildboar.explain._importance.PermuteImportance" title="wildboar.explain._importance.PermuteImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PermuteImportance</span></code></a></p>
-<p>Compute the importance of shapelets by permuting instances with lowest distance.</p>
+<p>Compute the importance of shapelets by permuting instances with lowest
+distance.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.components">
 <span class="sig-name descname"><span class="pre">components</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.components" title="Permalink to this definition">#</a></dt>
@@ -582,17 +471,17 @@ arguments (no <code class="docutils literal notranslate"><span class="pre">*args
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.explain">
-<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L800-L838"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.explain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L801-L839"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.explain" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L783-L798"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L784-L799"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.fit" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain._importance.ShapeletImportance.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L840-L928"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/_importance.py#L841-L929"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain._importance.ShapeletImportance.plot" title="Permalink to this definition">#</a></dt>
 <dd><p>Plot the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -657,7 +546,7 @@ len(importances) Axes objects.</p>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2020, Isak Samsten
+                Copyright &#169; 2023, Isak Samsten
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

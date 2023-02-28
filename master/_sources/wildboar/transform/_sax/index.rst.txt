@@ -54,7 +54,7 @@ Functions
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Peicewise aggregate approximation
+   Peicewise aggregate approximation.
 
    .. py:property:: intervals
 
@@ -73,7 +73,7 @@ Functions
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Symbolic aggregate approximation
+   Symbolic aggregate approximation.
 
    :param x: The input data.
    :type x: array-like of shape (n_samples, n_timestep)
@@ -128,7 +128,7 @@ Functions
 
 .. py:function:: piecewice_aggregate_approximation(x, *, n_intervals='sqrt', window=None)
 
-   Peicewise aggregate approximation
+   Peicewise aggregate approximation.
 
    :param x: The input data.
    :type x: array-like of shape (n_samples, n_timestep)
@@ -150,7 +150,7 @@ Functions
 
 .. py:function:: symbolic_aggregate_approximation(x, *, n_intervals='sqrt', window=None, n_bins=4, binning='normal')
 
-   Symbolic aggregate approximation
+   Symbolic aggregate approximation.
 
    :param x: The input data.
    :type x: array-like of shape (n_samples, n_timestep)

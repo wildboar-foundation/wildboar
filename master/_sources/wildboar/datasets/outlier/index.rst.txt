@@ -33,20 +33,20 @@ Functions
 
    Bases: :py:obj:`sklearn.linear_model.LogisticRegression`
 
-   A simple kernel logistic implementation using a Nystroem kernel approximation
+   A simple kernel logistic implementation using a Nystroem kernel
+   approximation.
 
    .. seealso::
 
-      :obj:`wildboar.datasets.outlier.EmmottLabeler`
-          Synthetic outlier dataset construction
+      wildboar.datasets.outlier.EmmottLabeler : Synthetic outlier dataset construction
 
-   :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
-                  for kernels. The default kernel is 'rbf'.
-   :type kernel: str, optional
-   :param kernel_params: Parameters to the kernel function.
-   :type kernel_params: dict, optional
-   :param n_components: Number of features to construct
-   :type n_components: int, optional
+      :param kernel: The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
+                     for kernels. The default kernel is 'rbf'.
+      :type kernel: str, optional
+      :param kernel_params: Parameters to the kernel function.
+      :type kernel_params: dict, optional
+      :param n_components: Number of features to construct
+      :type n_components: int, optional
 
    .. py:method:: decision_function(x)
 
@@ -91,8 +91,8 @@ Functions
 
 .. py:function:: density_outliers(x, y=None, *, n_outliers=0.05, method='dbscan', eps=2.0, min_sample=5, metric='euclidean', max_eps=np.inf, random_state=None)
 
-   Labels samples as outliers if a density cluster algorithm fail to assign them to
-   a cluster
+   Labels samples as outliers if a density cluster algorithm fail to assign
+   them to a cluster.
 
    :param x: The input samples
    :type x: ndarray of shape (n_samples, n_timestep)
@@ -118,8 +118,8 @@ Functions
 
 .. py:function:: emmott_outliers(x, y, *, n_outliers=None, confusion_estimator=None, difficulty_estimator=None, transform='interval', difficulty='simplest', scale=None, variation='tight', random_state=None)
 
-   Create a synthetic outlier detection dataset from a labeled classification
-   dataset using the method described by Emmott et.al. (2013).
+   Create a synthetic outlier detection dataset from a labeled
+   classification dataset using the method described by Emmott et.al. (2013).
 
    The Emmott labeler can reliably label both binary and multiclass datasets. For
    binary datasets a random label is selected as the outlier class. For multiclass
@@ -213,7 +213,8 @@ Functions
 
 .. py:function:: kmeans_outliers(x, y=None, *, n_outliers=0.05, n_clusters=5, random_state=None)
 
-   Label the samples of the cluster farthers from the other clusters as outliers.
+   Label the samples of the cluster farthers from the other clusters as
+   outliers.
 
    :param x: The input samples
    :type x: ndarray of shape (n_samples, n_timestep)
@@ -240,7 +241,7 @@ Functions
 
 .. py:function:: majority_outliers(x, y, *, n_outliers=0.05, random_state=None)
 
-   Labels the majority class as inliers
+   Labels the majority class as inliers.
 
    :param x: The input samples
    :type x: ndarray of shape (n_samples, n_timestep)

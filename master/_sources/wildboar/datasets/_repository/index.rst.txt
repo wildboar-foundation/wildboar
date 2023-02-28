@@ -33,7 +33,7 @@ Attributes
 
 .. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
-   Base class for handling dataset bundles
+   Base class for handling dataset bundles.
 
    .. attribute:: name
 
@@ -53,16 +53,65 @@ Attributes
 
       :type: int or array-like
 
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param arrays: The arrays of the dataset
-   :type arrays: list
+   .. attribute::
+
+
+
+      :type: param key: A unique key of the bundle
+
+   .. attribute::
+
+
+
+      :type: type key: str
+
+   .. attribute::
+
+
+
+      :type: param version: The version of the bundle
+
+   .. attribute::
+
+
+
+      :type: type version: str
+
+   .. attribute::
+
+
+
+      :type: param name: Human-readable name of the bundle
+
+   .. attribute::
+
+
+
+      :type: type name: str
+
+   .. attribute::
+
+
+
+      :type: param description: Description of the bundle
+
+   .. attribute::
+
+
+
+      :type: type description: str
+
+   .. attribute::
+
+
+
+      :type: param arrays: The arrays of the dataset
+
+   .. attribute::
+
+
+
+      :type: type arrays: list
 
    .. py:method:: get_collection(collection)
 
@@ -72,7 +121,7 @@ Attributes
 
    .. py:method:: list(archive, collection=None)
 
-      List all datasets in this bundle
+      List all datasets in this bundle.
 
       :param archive: The bundle file
       :type archive: ZipFile
@@ -85,7 +134,7 @@ Attributes
 
    .. py:method:: load(name, archive)
 
-      Load a dataset from the bundle
+      Load a dataset from the bundle.
 
       :param name: Name of the dataset
       :type name: str
@@ -103,11 +152,11 @@ Attributes
 
    Bases: :py:obj:`Repository`
 
-   A repository is a collection of bundles
+   A repository is a collection of bundles.
 
    .. py:property:: download_url
 
-      The url template for downloading bundles
+      The url template for downloading bundles.
 
       :returns: **str**
       :rtype: the download url
@@ -117,21 +166,21 @@ Attributes
 
    .. py:property:: name
 
-      Name of the repository
+      Name of the repository.
 
       :returns: **str**
       :rtype: the name of the repository
 
    .. py:property:: version
 
-      The repository version
+      The repository version.
 
       :returns: **str**
       :rtype: the version of the repository
 
    .. py:property:: wildboar_requires
 
-      The minimum required wildboar version
+      The minimum required wildboar version.
 
       :returns: **str**
       :rtype: the min version
@@ -143,7 +192,7 @@ Attributes
 
    .. py:method:: get_bundles()
 
-      Get all bundles
+      Get all bundles.
 
       :returns: **dict**
       :rtype: a dictionary of key and bundle
@@ -154,7 +203,7 @@ Attributes
 
    Bases: :py:obj:`Bundle`
 
-   bundle of numpy binary files
+   bundle of numpy binary files.
 
    :param key: A unique key of the bundle
    :type key: str
@@ -170,7 +219,7 @@ Attributes
 
 .. py:class:: Repository
 
-   A repository is a collection of bundles
+   A repository is a collection of bundles.
 
    .. py:property:: active
 
@@ -178,7 +227,7 @@ Attributes
    .. py:property:: download_url
       :abstractmethod:
 
-      The url template for downloading bundles
+      The url template for downloading bundles.
 
       :returns: **str**
       :rtype: the download url
@@ -190,7 +239,7 @@ Attributes
    .. py:property:: name
       :abstractmethod:
 
-      Name of the repository
+      Name of the repository.
 
       :returns: **str**
       :rtype: the name of the repository
@@ -198,7 +247,7 @@ Attributes
    .. py:property:: version
       :abstractmethod:
 
-      The repository version
+      The repository version.
 
       :returns: **str**
       :rtype: the version of the repository
@@ -206,7 +255,7 @@ Attributes
    .. py:property:: wildboar_requires
       :abstractmethod:
 
-      The minimum required wildboar version
+      The minimum required wildboar version.
 
       :returns: **str**
       :rtype: the min version
@@ -226,7 +275,7 @@ Attributes
 
    .. py:method:: get_bundle(key)
 
-      Get a bundle with the specified key
+      Get a bundle with the specified key.
 
       :param key: Key of the bundle
       :type key: str
@@ -238,7 +287,7 @@ Attributes
    .. py:method:: get_bundles()
       :abstractmethod:
 
-      Get all bundles
+      Get all bundles.
 
       :returns: **dict**
       :rtype: a dictionary of key and bundle
@@ -252,7 +301,7 @@ Attributes
 
    .. py:method:: refresh(timeout=None)
 
-      Refresh the repository
+      Refresh the repository.
 
 
 

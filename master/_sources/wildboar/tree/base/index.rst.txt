@@ -75,8 +75,8 @@ Classes
    .. py:method:: predict_proba(x, check_input=True)
 
       Predict class probabilities of the input samples X.  The predicted
-      class probability is the fraction of samples of the same class
-      in a leaf.
+      class probability is the fraction of samples of the same class in a
+      leaf.
 
       :param x: The input time series
       :type x: array-like of shape (n_samples, n_timesteps)
@@ -98,7 +98,7 @@ Classes
 
    .. py:method:: fit(x, y, sample_weight=None, check_input=True)
 
-      Fit a shapelet tree regressor from the training set
+      Fit a shapelet tree regressor from the training set.
 
       :param X: The training time series.
       :type X: array-like of shape (n_samples, n_timesteps)

@@ -21,7 +21,7 @@ Functions
 
 .. py:function:: counterfactuals(estimator, x, y, *, train_x=None, train_y=None, method='best', scoring='deprecated', valid_scoring='deprecated', proximity=None, random_state=None, method_args=None)
 
-   Compute a single counterfactual example for each sample
+   Compute a single counterfactual example for each sample.
 
    :param estimator: The estimator used to compute the counterfactual example
    :type estimator: object

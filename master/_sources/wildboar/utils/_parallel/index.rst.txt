@@ -25,7 +25,7 @@ Functions
 
 .. py:function:: run_in_parallel(work, n_jobs=-1, **parallel_args)
 
-   Execute work in parallel
+   Execute work in parallel.
 
    :param work: A work batch
    :type work: Batch

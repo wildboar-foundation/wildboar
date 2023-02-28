@@ -21,7 +21,7 @@ Functions
 
 .. py:function:: motifs(x, mp=None, *, window='auto', exclude=0.2, max_distance='best', max_neighbours=10, min_neighbours=1, max_motif=1, return_distance=False)
 
-   Find motifs
+   Find motifs.
 
    :param x: The time series
    :type x: array-like of shape (n_samples, n_timestep)

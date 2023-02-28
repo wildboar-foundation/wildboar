@@ -27,7 +27,7 @@ Classes
 
    Bases: :py:obj:`RocketMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
-   Transform a time series using random convolution features
+   Transform a time series using random convolution features.
 
    .. attribute:: embedding_
 

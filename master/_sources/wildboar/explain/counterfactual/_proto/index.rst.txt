@@ -35,9 +35,10 @@ Classes
 
    Bases: :py:obj:`MetricTransform`
 
-   Transform a sample by moving it closer using the dtw alignment matrix
+   Transform a sample by moving it closer using the dtw alignment
+   matrix.
 
-   Construct a new transformer
+   Construct a new transformer.
 
    :param gamma: The strength of the move, where values close to 0 means that the
                  sample is moved less and values closer to 1 mean that the sample
@@ -46,7 +47,7 @@ Classes
 
    .. py:method:: move(o, p)
 
-      Move the sample o towards p
+      Move the sample o towards p.
 
       :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
@@ -62,9 +63,9 @@ Classes
 
    Bases: :py:obj:`MetricTransform`
 
-   Transform a sample by moving it closer in euclidean space
+   Transform a sample by moving it closer in euclidean space.
 
-   Construct a new transformer
+   Construct a new transformer.
 
    :param gamma: The strength of the move, where values close to 0 means that the
                  sample is moved less and values closer to 1 mean that the sample
@@ -73,7 +74,7 @@ Classes
 
    .. py:method:: move(o, p)
 
-      Move the sample o towards p
+      Move the sample o towards p.
 
       :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
@@ -89,9 +90,10 @@ Classes
 
    Bases: :py:obj:`PrototypeSampler`
 
-   Sample a prototype among the samples closest to the current counterfactual
+   Sample a prototype among the samples closest to the current
+   counterfactual.
 
-   Sample and refine counterfactuals
+   Sample and refine counterfactuals.
 
    :param x: The data samples labeled as y
    :type x: ndarray of shape (n_samples, n_timestep)
@@ -106,7 +108,7 @@ Classes
 
    .. py:method:: nearest_index(o, random_state)
 
-      Return the index of the closest sample
+      Return the index of the closest sample.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -117,7 +119,7 @@ Classes
 
    .. py:method:: sample(o, random_state)
 
-      Sample an example
+      Sample an example.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -133,9 +135,9 @@ Classes
 
    Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler
    such that prototype samples are sampled among the nearest neighbors of the
-   counterfactual
+   counterfactual.
 
-   Sample and refine counterfactuals
+   Sample and refine counterfactuals.
 
    :param x: The data samples labeled as y
    :type x: ndarray of shape (n_samples, n_timestep)
@@ -150,7 +152,7 @@ Classes
 
    .. py:method:: move(o, p)
 
-      Move the current counterfactual toward the prototype
+      Move the current counterfactual toward the prototype.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -163,7 +165,7 @@ Classes
 
    .. py:method:: sample(o, random_state)
 
-      Sample an example
+      Sample an example.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -177,9 +179,9 @@ Classes
 
    Bases: :py:obj:`abc.ABC`
 
-   Move a time series towards a prototype
+   Move a time series towards a prototype.
 
-   Construct a new transformer
+   Construct a new transformer.
 
    :param gamma: The strength of the move, where values close to 0 means that the
                  sample is moved less and values closer to 1 mean that the sample
@@ -189,7 +191,7 @@ Classes
    .. py:method:: move(o, p)
       :abstractmethod:
 
-      Move the sample o towards p
+      Move the sample o towards p.
 
       :param o: An array, the time series to move
       :type o: ndarray of shape (n_timestep,)
@@ -205,9 +207,9 @@ Classes
 
    Bases: :py:obj:`TargetEvaluator`
 
-   Evaluate if a counterfactual is predicted as y
+   Evaluate if a counterfactual is predicted as y.
 
-   Construct a new evaluator
+   Construct a new evaluator.
 
    :param estimator: The estimator
    :type estimator: object
@@ -217,9 +219,10 @@ Classes
 
    Bases: :py:obj:`TargetEvaluator`
 
-   Evaluate if the probability of a counterfactual is at least a given constant
+   Evaluate if the probability of a counterfactual is at least a given
+   constant.
 
-   Construct a new evaluator
+   Construct a new evaluator.
 
    :param estimator: The estimator
    :type estimator: object
@@ -231,7 +234,7 @@ Classes
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Model agnostic approach for constructing counterfactual explanations
+   Model agnostic approach for constructing counterfactual explanations.
 
    .. attribute:: estimator_
 
@@ -313,7 +316,7 @@ Classes
    Helper class that provides a standard way to create an ABC using
    inheritance.
 
-   Sample and refine counterfactuals
+   Sample and refine counterfactuals.
 
    :param x: The data samples labeled as y
    :type x: ndarray of shape (n_samples, n_timestep)
@@ -328,7 +331,7 @@ Classes
 
    .. py:method:: move(o, p)
 
-      Move the current counterfactual toward the prototype
+      Move the current counterfactual toward the prototype.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -342,7 +345,7 @@ Classes
    .. py:method:: sample(o, random_state)
       :abstractmethod:
 
-      Sample an example
+      Sample an example.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -353,7 +356,8 @@ Classes
 
    .. py:method:: sample_move(o, random_state)
 
-      Sampla a prototype and move the counterfactual towards the prototype
+      Sampla a prototype and move the counterfactual towards the
+      prototype.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -367,9 +371,9 @@ Classes
 
    Bases: :py:obj:`PrototypeSampler`
 
-   Sample shapelet prototypes
+   Sample shapelet prototypes.
 
-   Sample shapelet
+   Sample shapelet.
 
    :param x: The data samples
    :type x: ndarray of shape (n_samples, n_timestep)
@@ -386,8 +390,8 @@ Classes
 
    .. py:method:: move(o, p)
 
-      Move the best matching shapelet of the  counterfactual sample towards
-      the shapelet prototype
+      Move the best matching shapelet of the  counterfactual sample
+      towards the shapelet prototype.
 
       :param o: The counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -400,7 +404,7 @@ Classes
 
    .. py:method:: sample(_o, random_state)
 
-      Sample an example
+      Sample an example.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -411,7 +415,7 @@ Classes
 
    .. py:method:: sample_shapelet(p, random_state)
 
-      Sample a shapelet from x
+      Sample a shapelet from x.
 
       :param p: The prototype sample
       :type p: ndarray of shape (n_timestep,)
@@ -425,16 +429,16 @@ Classes
 
    Bases: :py:obj:`abc.ABC`
 
-   Evaluate if a sample is a counterfactual
+   Evaluate if a sample is a counterfactual.
 
-   Construct a new evaluator
+   Construct a new evaluator.
 
    :param estimator: The estimator
    :type estimator: object
 
    .. py:method:: is_counterfactual(x, y)
 
-      Return true if x is a counterfactual of label y
+      Return true if x is a counterfactual of label y.
 
       :param x: The counterfactual sample
       :type x: ndarray of shape (n_timestep,)
@@ -450,9 +454,10 @@ Classes
 
    Bases: :py:obj:`PrototypeSampler`
 
-   Sample a prototype uniformly at random from the initial prototype sample
+   Sample a prototype uniformly at random from the initial prototype
+   sample.
 
-   Sample and refine counterfactuals
+   Sample and refine counterfactuals.
 
    :param x: The data samples labeled as y
    :type x: ndarray of shape (n_samples, n_timestep)
@@ -467,7 +472,7 @@ Classes
 
    .. py:method:: sample(_o, random_state)
 
-      Sample an example
+      Sample an example.
 
       :param o: The current counterfactual sample
       :type o: ndarray of shape (n_timestep,)
@@ -481,9 +486,10 @@ Classes
 
    Bases: :py:obj:`DynamicTimeWarpTransform`
 
-   Transform a sample by moving it closer using the dtw alignment matrix
+   Transform a sample by moving it closer using the dtw alignment
+   matrix.
 
-   Construct a new transformer
+   Construct a new transformer.
 
    :param gamma: The strength of the move, where values close to 0 means that the
                  sample is moved less and values closer to 1 mean that the sample

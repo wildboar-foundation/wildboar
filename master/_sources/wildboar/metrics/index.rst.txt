@@ -24,8 +24,8 @@ Functions
 .. py:function:: compactness_score(x_true, x_counterfactuals, *, window=None, n_bins=None, atol=1e-08, average=True)
 
    Return the compactness of the counterfactuals as measured by the
-   fraction of changed timesteps. The fewer timesteps have changed between the original
-   and the counterfactual, the lower the score.
+   fraction of changed timesteps. The fewer timesteps have changed between the
+   original and the counterfactual, the lower the score.
 
    :param x_true: The true samples
    :type x_true: array-like of shape (n_samples, n_timesteps)     or (n_samples, n_dims, n_timeteps)
@@ -88,7 +88,8 @@ Functions
 
 .. py:function:: proximity_score(x_true, x_counterfactuals, metric='normalized_euclidean', metric_params=None)
 
-   Compute the proximity score of the counterfactuals using the provided metric.
+   Compute the proximity score of the counterfactuals using the provided
+   metric.
 
    The closer the counterfactual is to the original, the lower the score.
 
@@ -122,9 +123,9 @@ Functions
 
 .. py:function:: relative_proximity_score(X_native, X_test, X_counterfactual, *, y_native=None, y_counterfactual=None, metric='euclidean', metric_params=None, average=True)
 
-   Relative proximity score captures the mean proximity of counterfactual and
-   test sample pairs over mean proximity of the closest native counterfactual. The
-   lower the score, the better.
+   Relative proximity score captures the mean proximity of counterfactual
+   and test sample pairs over mean proximity of the closest native
+   counterfactual. The lower the score, the better.
 
    :param X_native: The native counterfactual candidates. If y_counterfactual is None, the full
                     array is considered as possible native counterfactuals.

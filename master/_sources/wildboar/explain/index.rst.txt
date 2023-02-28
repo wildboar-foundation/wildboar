@@ -69,9 +69,10 @@ Functions
 
    .. py:method:: plot(x=None, y=None, *, ax=None, n_samples=100, scoring=None, preprocess=True, k=None, show_bins=False, show_grid=True)
 
-      Plot the importances. If x is given, the importances are plotted over the
-      samples optionally labeling each sample using the supplied labels. If x is
-      not give, the importances are plotted as one or more boxplots.
+      Plot the importances. If x is given, the importances are plotted
+      over the samples optionally labeling each sample using the supplied
+      labels. If x is not give, the importances are plotted as one or more
+      boxplots.
 
       :param x: The samples
       :type x: array-like of shape (n_samples, n_timesteps), optional
@@ -104,7 +105,7 @@ Functions
 
    Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
-   Compute a model agnostic importance score for non-overlapping intervals
+   Compute a model agnostic importance score for non-overlapping intervals.
 
    .. attribute:: importances_
 
@@ -119,31 +120,100 @@ Functions
 
       :type: ndarray of shape (n_intervals, 2)
 
-   :param scoring: The scoring function. By default the estimators score function is used.
-   :type scoring: str, list, dict or callable, optional
-   :param n_repeat: The number of repeated permutations
-   :type n_repeat: int, optional
-   :param n_intervals: The number of intervals.
+   .. attribute::
 
-                       - if "sqrt", the number of intervals is the square root of n_timestep.
 
-                       - if "log2", the number of intervals is the log2 of n_timestep.
 
-                       - if int, exact number of intervals.
-   :type n_intervals: str, optional
-   :param window: The window size. If specicied, n_intervals is ignored and the number of
-                  intervals is computed such that each interval is (at least) of size window.
-   :type window: int, optional
-   :param domain: Compute the importance in the time or frequency domain.
-   :type domain: {"time", "frequency"}, optional
-   :param verbose: Show extra progress information.
-   :type verbose: bool, optional
-   :param random_state:
-                        - If `int`, `random_state` is the seed used by the random number generator
-                        - If `RandomState` instance, `random_state` is the random number generator
-                        - If `None`, the random number generator is the `RandomState` instance used
-                          by `np.random`.
-   :type random_state: int or RandomState
+      :type: param scoring: The scoring function. By default the estimators score function is used.
+
+   .. attribute::
+
+
+
+      :type: type scoring: str, list, dict or callable, optional
+
+   .. attribute::
+
+
+
+      :type: param n_repeat: The number of repeated permutations
+
+   .. attribute::
+
+
+
+      :type: type n_repeat: int, optional
+
+   .. attribute::
+
+
+
+      - if "sqrt", the number of intervals is the square root of n_timestep.
+
+      - if "log2", the number of intervals is the log2 of n_timestep.
+
+      - if int, exact number of intervals.
+
+      :type: param n_intervals: The number of intervals.
+
+   .. attribute::
+
+
+
+      :type: type n_intervals: str, optional
+
+   .. attribute::
+
+      intervals is computed such that each interval is (at least) of size window.
+
+      :type: param window: The window size. If specicied, n_intervals is ignored and the number of
+
+   .. attribute::
+
+
+
+      :type: type window: int, optional
+
+   .. attribute::
+
+
+
+      :type: param domain: Compute the importance in the time or frequency domain.
+
+   .. attribute::
+
+
+
+      :type: type domain: {"time", "frequency"}, optional
+
+   .. attribute::
+
+
+
+      :type: param verbose: Show extra progress information.
+
+   .. attribute::
+
+
+
+      :type: type verbose: bool, optional
+
+   .. attribute::
+
+
+
+      - If `int`, `random_state` is the seed used by the random number generator
+      - If `RandomState` instance, `random_state` is the random number generator
+      - If `None`, the random number generator is the `RandomState` instance used
+        by `np.random`.
+
+      :type: param random_state:
+
+   .. attribute::
+
+
+
+      :type: type random_state: int or RandomState
 
    .. py:method:: explain(x, y=None)
 
@@ -164,7 +234,8 @@ Functions
 
    Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
-   Compute the importance of shapelets by permuting instances with lowest distance.
+   Compute the importance of shapelets by permuting instances with lowest
+   distance.
 
    .. attribute:: components
 

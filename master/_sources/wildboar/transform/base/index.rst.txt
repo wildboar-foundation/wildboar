@@ -21,7 +21,7 @@ Classes
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Base feature engineer transform
+   Base feature engineer transform.
 
    .. attribute:: embedding_
 
@@ -29,9 +29,17 @@ Classes
 
       :type: Embedding
 
-   :param n_jobs: The number of jobs to run in parallel. None means 1 and
-                  -1 means using all processors.
-   :type n_jobs: int, optional
+   .. attribute::
+
+      -1 means using all processors.
+
+      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
+
+   .. attribute::
+
+
+
+      :type: type n_jobs: int, optional
 
    .. py:method:: fit(x, y=None)
 

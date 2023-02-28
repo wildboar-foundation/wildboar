@@ -22,7 +22,7 @@ Functions
 
 .. py:function:: make_dict_filter(filter)
 
-   Make a new filter
+   Make a new filter.
 
    :param filter: The dict of [subject] -> [op][verb]
    :type filter: dict
@@ -33,7 +33,7 @@ Functions
 
 .. py:function:: make_filter(filter)
 
-   Create a new filter
+   Create a new filter.
 
    :param filter: The filter
    :type filter: str, list or dict
@@ -44,7 +44,7 @@ Functions
 
 .. py:function:: make_list_filter(filter)
 
-   Make a new filter based on a list of filter strings
+   Make a new filter based on a list of filter strings.
 
    :param filter: A list of filter strings
    :type filter: list
@@ -55,7 +55,7 @@ Functions
 
 .. py:function:: make_str_filter(filter)
 
-   Make a new filter
+   Make a new filter.
 
    :param filter: The filter string [subject][op][verb]
    :type filter: str

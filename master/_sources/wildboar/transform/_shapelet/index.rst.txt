@@ -24,7 +24,8 @@ Classes
 
    Bases: :py:obj:`ShapeletMixin`, :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
-   Transform a time series to the distances to a selection of random shapelets.
+   Transform a time series to the distances to a selection of random
+   shapelets.
 
    .. attribute:: embedding_
 

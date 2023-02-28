@@ -32,7 +32,7 @@ Functions
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Fit a counterfactual explainer to a k-nearest neighbors classifier
+   Fit a counterfactual explainer to a k-nearest neighbors classifier.
 
    .. attribute:: explainer_
 
@@ -57,7 +57,7 @@ Functions
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Model agnostic approach for constructing counterfactual explanations
+   Model agnostic approach for constructing counterfactual explanations.
 
    .. attribute:: estimator_
 
@@ -136,7 +136,7 @@ Functions
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Counterfactual explanations for shapelet forest classifiers
+   Counterfactual explanations for shapelet forest classifiers.
 
    .. attribute:: paths_
 
@@ -196,7 +196,7 @@ Functions
 
 .. py:function:: counterfactuals(estimator, x, y, *, train_x=None, train_y=None, method='best', scoring='deprecated', valid_scoring='deprecated', proximity=None, random_state=None, method_args=None)
 
-   Compute a single counterfactual example for each sample
+   Compute a single counterfactual example for each sample.
 
    :param estimator: The estimator used to compute the counterfactual example
    :type estimator: object

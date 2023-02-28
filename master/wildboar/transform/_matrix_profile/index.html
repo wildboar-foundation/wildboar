@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.transform._matrix_profile - Wildboar 1.1.1.dev269 documentation</title>
+        <title>wildboar.transform._matrix_profile - Wildboar 1.1.1.dev76 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -40,16 +40,6 @@
 </style></head>
   <body>
     
-
-<div class="announcement">
-    <aside class="announcement-content">
-        
-        You're reading the documentation for a development version.
-        For the latest released version, please have a look at <a
-            href="/1.1.X/index.html">1.1.1</a>.
-        
-    </aside>
-</div>
 
 
     <script>
@@ -138,7 +128,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev269 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev76 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +156,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>main (dev)</small></span>
+        <small>main</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -175,118 +165,51 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installing wildboar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">wildboar tutorial</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guide.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/basics.html">Time series</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/repositories.html">Repositories</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/preprocess.html">Preprocessing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/filter.html">Filtering</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/outlier.html">Outlier generation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://wildboar.dev/main">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
+</ul>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/linear_models.html">Linear models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/tree_models.html">Decision trees</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/ensemble_models.html">Ensemble models</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/pattern_discovery.html">Pattern discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/outlier_detection.html">Outlier detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/metrics.html">Distance metrics</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/explain.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/counterfactuals.html">Counterfactual explanations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/importance.html">Interval permutation importance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/motif.html">Motif discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/segment.html">Segmentation</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/transform.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/interval.html">Interval</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/rocket.html">Rocket</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/sax.html">Symbolic aggregate approximation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/shapelet.html">Shapelets</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/explainability/counterfactuals.html">Comparing counterfactals</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/classifier_comparision.html">Comparing classifiers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/miss_classification_analysis.html">Miss-classification analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/shapelet_forest_vs_shapelet_extra_trees.html">Shapelet forests and extremly randomized shapelet trees</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/matrix_profile.html">Matrix profile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/outlier_detection.html">Outlier detection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../more.html">More</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../more/contributing.html">Developer’s guide</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../model_selection/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -308,17 +231,7 @@
       ></label>
       <ul>
         <li class="toctree-l2">
-          <span class="reference internal">main (dev)</span>
-        </li>
-        <li class="toctree-l2">
-          <a class="reference internal" href="/1.1.X/index.html"
-            >1.1.1</a
-          >
-        </li>
-        <li class="toctree-l2">
-          <a class="reference internal" href="/1.0.X/index.html"
-            >1.0.12</a
-          >
+          <span class="reference internal">main</span>
         </li>
       </ul>
     </li>
@@ -363,7 +276,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform._matrix_profile.MatrixProfileTransform" title="wildboar.transform._matrix_profile.MatrixProfileTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MatrixProfileTransform</span></code></a></p></td>
-<td><p>Transform each time series in a dataset to its MatrixProfile similarity self-join</p></td>
+<td><p>Transform each time series in a dataset to its MatrixProfile similarity</p></td>
 </tr>
 </tbody>
 </table>
@@ -372,7 +285,8 @@
 <dt class="sig sig-object py" id="wildboar.transform._matrix_profile.MatrixProfileTransform">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._matrix_profile.</span></span><span class="sig-name descname"><span class="pre">MatrixProfileTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L13-L124"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._matrix_profile.MatrixProfileTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
-<p>Transform each time series in a dataset to its MatrixProfile similarity self-join</p>
+<p>Transform each time series in a dataset to its MatrixProfile similarity
+self-join.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">MatrixProfileTransform</span>
@@ -404,7 +318,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._matrix_profile.MatrixProfileTransform.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L62-L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._matrix_profile.MatrixProfileTransform.fit" title="Permalink to this definition">#</a></dt>
-<dd><p>Fit the matrix profile. Sets the expected input dimensions</p>
+<dd><p>Fit the matrix profile. Sets the expected input dimensions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -455,7 +369,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2020, Isak Samsten
+                Copyright &#169; 2023, Isak Samsten
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             

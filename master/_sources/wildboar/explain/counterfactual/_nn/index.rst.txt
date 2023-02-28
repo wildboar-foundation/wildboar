@@ -23,7 +23,7 @@ Classes
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Fit a counterfactual explainer to a k-nearest neighbors classifier
+   Fit a counterfactual explainer to a k-nearest neighbors classifier.
 
    .. attribute:: explainer_
 

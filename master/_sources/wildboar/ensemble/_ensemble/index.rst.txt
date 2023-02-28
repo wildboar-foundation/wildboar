@@ -188,7 +188,8 @@ Classes
 
    Bases: :py:obj:`BaseShapeletForestClassifier`
 
-   An ensemble of extremely random shapelet trees for time series regression.
+   An ensemble of extremely random shapelet trees for time series
+   regression.
 
    .. rubric:: Examples
 
@@ -247,7 +248,8 @@ Classes
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
-   An ensemble of extremely random shapelet trees for time series regression.
+   An ensemble of extremely random shapelet trees for time series
+   regression.
 
    .. rubric:: Examples
 
@@ -357,7 +359,7 @@ Classes
    >>> y_pred = f.predict(x_test)
    >>> balanced_accuracy_score(y_test, y_pred)
 
-   Construct a shapelet isolation forest
+   Construct a shapelet isolation forest.
 
    :param n_estimators: The number of estimators
    :type n_estimators: int, optional
@@ -435,7 +437,7 @@ Classes
 
    Bases: :py:obj:`BaseForestClassifier`
 
-   A forest of proximity trees
+   A forest of proximity trees.
 
    .. rubric:: References
 
@@ -543,7 +545,7 @@ Classes
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
-   An ensemble of random shapelet trees
+   An ensemble of random shapelet trees.
 
    An unsupervised transformation of a time series dataset
    to a high-dimensional sparse representation. A time series i
@@ -552,7 +554,6 @@ Classes
 
    The dimensionality of the resulting representation is
    ``<= n_estimators * 2^max_depth``
-
 
    :param n_estimators: The number of estimators
    :type n_estimators: int, optional

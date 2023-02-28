@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.model_selection._cv - Wildboar 1.1.1.dev269 documentation</title>
+        <title>wildboar.model_selection._cv - Wildboar 1.1.1.dev76 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -40,16 +40,6 @@
 </style></head>
   <body>
     
-
-<div class="announcement">
-    <aside class="announcement-content">
-        
-        You're reading the documentation for a development version.
-        For the latest released version, please have a look at <a
-            href="/1.1.X/index.html">1.1.1</a>.
-        
-    </aside>
-</div>
 
 
     <script>
@@ -138,7 +128,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev269 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev76 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +156,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>main (dev)</small></span>
+        <small>main</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -175,118 +165,51 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installing wildboar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorial.html">wildboar tutorial</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../guide.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/basics.html">Time series</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/repositories.html">Repositories</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/preprocess.html">Preprocessing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/filter.html">Filtering</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/datasets/outlier.html">Outlier generation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://wildboar.dev/main">User guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
+</ul>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/linear_models.html">Linear models</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/tree_models.html">Decision trees</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/supervised/ensemble_models.html">Ensemble models</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/pattern_discovery.html">Pattern discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/unsupervised/outlier_detection.html">Outlier detection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../guide/metrics.html">Distance metrics</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../guide/explain.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/counterfactuals.html">Counterfactual explanations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../guide/explain/importance.html">Interval permutation importance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../transform/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../transform/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/annotate.html">Annotate</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/motif.html">Motif discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/annotate/segment.html">Segmentation</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/distance.html">Distance</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance.html">Pairwise and paired distance</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/distance-benchmark.html">Distance benchmarks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/distance/dtw.html">Dynamic time warping</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/transform.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/interval.html">Interval</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/rocket.html">Rocket</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/sax.html">Symbolic aggregate approximation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/transform/shapelet.html">Shapelets</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/explainability.html">Explainability</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/explainability/counterfactuals.html">Comparing counterfactals</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/supervised.html">Supervised</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/classifier_comparision.html">Comparing classifiers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/miss_classification_analysis.html">Miss-classification analysis</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/supervised/shapelet_forest_vs_shapelet_extra_trees.html">Shapelet forests and extremly randomized shapelet trees</a></li>
-</ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../examples/unsupervised.html">Unsupervised</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/matrix_profile.html">Matrix profile</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../examples/notebooks/unsupervised/outlier_detection.html">Outlier detection</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../more.html">More</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../more/contributing.html">Developer’s guide</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/filter/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.filter</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection.outlier</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../transform/catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../transform/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../tree/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree.base</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/decorators/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.decorators</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/estimator_checks/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.estimator_checks</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/plot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.plot</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/validation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.validation</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../version/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.version</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -308,17 +231,7 @@
       ></label>
       <ul>
         <li class="toctree-l2">
-          <span class="reference internal">main (dev)</span>
-        </li>
-        <li class="toctree-l2">
-          <a class="reference internal" href="/1.1.X/index.html"
-            >1.1.1</a
-          >
-        </li>
-        <li class="toctree-l2">
-          <a class="reference internal" href="/1.0.X/index.html"
-            >1.0.12</a
-          >
+          <span class="reference internal">main</span>
         </li>
       </ul>
     </li>
@@ -363,15 +276,15 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.model_selection._cv.RepeatedOutlierSplit" title="wildboar.model_selection._cv.RepeatedOutlierSplit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RepeatedOutlierSplit</span></code></a></p></td>
-<td><p>Repeated random outlier cross-validator</p></td>
+<td><p>Repeated random outlier cross-validator.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.model_selection._cv.RepeatedOutlierSplit">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.model_selection._cv.</span></span><span class="sig-name descname"><span class="pre">RepeatedOutlierSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outlier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L14-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit" title="Permalink to this definition">#</a></dt>
-<dd><p>Repeated random outlier cross-validator</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.model_selection._cv.</span></span><span class="sig-name descname"><span class="pre">RepeatedOutlierSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outlier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L14-L152"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit" title="Permalink to this definition">#</a></dt>
+<dd><p>Repeated random outlier cross-validator.</p>
 <p>Yields indicies that split the dataset into training and test sets.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -379,33 +292,53 @@
 cross-validator does not ensure that all folds will be different.
 Instead, the inlier samples are shuffled and new outlier samples
 are inserted in the training and test sets repeatedly.</p>
-</div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_splits</strong> (<em>int</em><em>, </em><em>optional</em>) – <p>The maximum number of splits.</p>
-<ul>
+<dt class="field-odd">param n_splits<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The maximum number of splits.</p>
+<ul class="simple">
 <li><p>if None, the number of splits is determined by the number of
 outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 <li><p>if int, the number of splits is an upper-bound</p></li>
 </ul>
-</p></li>
-<li><p><strong>test_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The size of the test set.</p></li>
-<li><p><strong>n_outlier</strong> (<em>float</em><em>, </em><em>optional</em>) – The fraction of outliers in the training and test sets.</p></li>
-<li><p><strong>shuffle</strong> (<em>bool</em><em>, </em><em>optional</em>) – Shuffle the training indicies in each iteration.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em><em>, </em><em>optional</em>) – The psudo-random number generator</p></li>
-</ul>
+</dd>
+<dt class="field-even">type n_splits<span class="colon">:</span></dt>
+<dd class="field-even"><p>int, optional</p>
+</dd>
+<dt class="field-odd">param test_size<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The size of the test set.</p>
+</dd>
+<dt class="field-even">type test_size<span class="colon">:</span></dt>
+<dd class="field-even"><p>float, optional</p>
+</dd>
+<dt class="field-odd">param n_outlier<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The fraction of outliers in the training and test sets.</p>
+</dd>
+<dt class="field-even">type n_outlier<span class="colon">:</span></dt>
+<dd class="field-even"><p>float, optional</p>
+</dd>
+<dt class="field-odd">param shuffle<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Shuffle the training indicies in each iteration.</p>
+</dd>
+<dt class="field-even">type shuffle<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool, optional</p>
+</dd>
+<dt class="field-odd">param random_state<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The psudo-random number generator</p>
+</dd>
+<dt class="field-even">type random_state<span class="colon">:</span></dt>
+<dd class="field-even"><p>int or RandomState, optional</p>
 </dd>
 </dl>
+</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection._cv.RepeatedOutlierSplit.__repr__">
-<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L152-L153"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L151-L152"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.__repr__" title="Permalink to this definition">#</a></dt>
 <dd><p>Return repr(self).</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection._cv.RepeatedOutlierSplit.get_n_splits">
-<span class="sig-name descname"><span class="pre">get_n_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L66-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_n_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L65-L90"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.get_n_splits" title="Permalink to this definition">#</a></dt>
 <dd><p>Returns the number of splitting iterations in the cross-validator
 :param X: The samples
 :type X: object
@@ -425,8 +358,8 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.model_selection._cv.RepeatedOutlierSplit.split">
-<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L93-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.split" title="Permalink to this definition">#</a></dt>
-<dd><p>Return training and test indicies</p>
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/model_selection/_cv.py#L92-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.model_selection._cv.RepeatedOutlierSplit.split" title="Permalink to this definition">#</a></dt>
+<dd><p>Return training and test indicies.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -458,7 +391,7 @@ outliers as, <cite>total_n_outliers/(n_inliers * n_outliers)</cite></p></li>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2020, Isak Samsten
+                Copyright &#169; 2023, Isak Samsten
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
