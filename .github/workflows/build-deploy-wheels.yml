@@ -78,18 +78,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           ref: ${{ matrix.branch }}
 
-      - name: Fetch all branches
-        run: |
-          git fetch --prune --unshallow
-          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-
-      - name: List tags
-        run: git tag
-
-      - name: List current branch
-        run: git branch --show-current
+      - name: List branches
+        run: git branch --list
 
       - uses: actions/setup-python@v4
         name: Install Python
