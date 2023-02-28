@@ -1,4 +1,4 @@
-{%- if current_version %}
+{%- if versions %}
 <div class="sidebar-tree">
   <ul>
     {%- if versions %}
@@ -15,7 +15,7 @@
             <use href="#svg-arrow-right"></use></svg></i
       ></label>
       <ul>
-        {%- for item in versions %} {%- if not current_version == item %}
+        {%- for item in versions.versions %} {%- if not item.is_current %}
         <li class="toctree-l2">
           <a class="reference internal" href="{{ item.url }}"
             >{{ item.name }}</a

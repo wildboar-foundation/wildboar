@@ -4,3 +4,4 @@ matplotlib>=3.1.3
 requests>=2.25
 sphinx-panels>=0.5.2
 setuptools_scm>=6.2
+sphinx_simpleversion @ git+https://github.com/isaksamsten/sphinx_simpleversion.git@main
