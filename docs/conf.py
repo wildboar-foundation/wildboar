@@ -8,26 +8,21 @@
 
 import os
 import sys
-
 from pkg_resources import parse_version, get_distribution
-from sphinx.util.logging import getLogger
 
-sys.path.insert(0, os.path.abspath("sphinxext"))
+# sys.path.insert(0, os.path.abspath("_extensions"))
 
-from version import load_version_html_context
+from sphinx_simpleversion import get_current_branch
 
-logger = getLogger(__name__)
-
-full_release = parse_version(get_distribution("wildboar").version)
-logger.info(f"The full release {full_release}")
-release = full_release.public
-version = f"{full_release.major}.{full_release.minor}.{full_release.micro}"
+current_release = parse_version(get_distribution("wildboar").version)
+release = current_release.public
+version = f"{current_release.major}.{current_release.minor}.{current_release.micro}"
 
 # -- Project information -----------------------------------------------------
 
 project = "Wildboar"
 description = "Time series learning with Python"
-copyright = "2020, Isak Samsten"
+copyright = "2023, Isak Samsten"
 author = "Isak Samsten"
 
 # -- General configuration ---------------------------------------------------
@@ -36,6 +31,7 @@ author = "Isak Samsten"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx_simpleversion",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.linkcode",
@@ -52,6 +48,8 @@ templates_path = ["_templates"]
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+versions_develop_branch = "master"
 
 autoapi_dirs = ["../src/"]
 autoapi_root = "."
@@ -89,7 +87,7 @@ html_sidebars = {
 
 html_static_path = ["_static"]
 
-nbsphinx_prompt_width = "0px"
+current_branch_name = get_current_branch()
 
 
 # Find the source file given a module
@@ -118,14 +116,6 @@ def linkcode_resolve(domain, info):
         filename = info["module"].replace(".", "/") + ".py"
 
     return "https://github.com/isaksamsten/wildboar/blob/%s/src/%s" % (
-        f"{full_release.major}.{full_release.minor}.X"
-        if not full_release.is_devrelease
-        else "master",
+        current_branch_name,
         filename,
     )
-
-
-html_context = {}  # default context
-
-html_context.update(load_version_html_context(full_release))
-logger.info(f"Current version: {html_context}")
