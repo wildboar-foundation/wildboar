@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.utils.estimator_checks" href="../estimator_checks/index.html" /><link rel="prev" title="wildboar.utils" href="../index.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>wildboar.utils.decorators - Wildboar 1.1.2.dev10 documentation</title>
+        <title>wildboar.utils.decorators - Wildboar 1.1.2.dev11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -128,7 +128,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.2.dev10 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.2.dev11 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -156,7 +156,7 @@
     </div>
     
     <span class="sidebar-brand-text">Wildboar
-        <small>1.1.1</small></span>
+        <small>1.1</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -299,16 +299,11 @@
       <ul>
         <li class="toctree-l2">
           <a class="reference internal" href="/master/index.html"
-            >main (dev)</a
+            >main</a
           >
         </li>
         <li class="toctree-l2">
-          <span class="reference internal">1.1.1</span>
-        </li>
-        <li class="toctree-l2">
-          <a class="reference internal" href="/1.0.X/index.html"
-            >1.0.12</a
-          >
+          <span class="reference internal">1.1</span>
         </li>
       </ul>
     </li>
@@ -363,7 +358,7 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.decorators.array_or_scalar">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">array_or_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optional_f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squeeze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L25-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.array_or_scalar" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">array_or_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optional_f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squeeze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/utils/decorators.py#L25-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.array_or_scalar" title="Permalink to this definition">#</a></dt>
 <dd><p>Decorate a function returning an ndarray to return a single scalar if the array
 has a single item.</p>
 <dl class="field-list simple">
@@ -378,7 +373,7 @@ has a single item.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.decorators.singleton">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L64-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.singleton" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/1.1.X/src/wildboar/utils/decorators.py#L64-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.singleton" title="Permalink to this definition">#</a></dt>
 <dd><p>Recursivley try to unwrap list return arguments such that a single element can
 be returned</p>
 </dd></dl>
@@ -416,7 +411,7 @@ be returned</p>
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2020, Isak Samsten
+                Copyright &#169; 2023, Isak Samsten
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
