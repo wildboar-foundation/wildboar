@@ -105,6 +105,7 @@ def load_synthetic_control(merge_train_test=True):
         "SyntheticControl",
         repository="wildboar/ucr-tiny",
         merge_train_test=merge_train_test,
+        progress=False,
     )
 
 
@@ -119,6 +120,7 @@ def load_two_lead_ecg(merge_train_test=True):
         "TwoLeadECG",
         repository="wildboar/ucr-tiny",
         merge_train_test=merge_train_test,
+        progress=False,
     )
 
 
@@ -133,6 +135,7 @@ def load_gun_point(merge_train_test=True):
         "GunPoint",
         repository="wildboar/ucr-tiny",
         merge_train_test=merge_train_test,
+        progress=False,
     )
 
 
