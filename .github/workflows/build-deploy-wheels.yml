@@ -79,12 +79,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      - name: Checkout branch
-        run: git checkout ${{ matrix.branch }}
-
-      - name: List branches
-        run: git branch --list
+          ref: ${{ matrix.branch }}
 
       - uses: actions/setup-python@v4
         name: Install Python
@@ -93,7 +88,6 @@ jobs:
 
       - name: Install requirements
         run: |
-          sudo apt-get install graphviz pandoc
           python -m pip install --upgrade pip
           python -m pip install -r docs/requirements.txt
 
