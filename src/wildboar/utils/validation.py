@@ -8,7 +8,7 @@ from sklearn.utils.validation import _check_estimator_name, _check_y
 from sklearn.utils.validation import check_array as sklearn_check_array
 from sklearn.utils.validation import check_consistent_length
 
-import wildboar as wb
+from .variable_len import is_end_of_series, is_variable_length
 
 __all__ = [
     "check_type",
@@ -236,16 +236,19 @@ def check_array(
     ensure_ts_array=False,
     allow_3d=False,
     allow_nd=False,
+    allow_eos=False,
     force_all_finite=True,
     ensure_min_samples=1,
     ensure_min_timesteps=1,
     ensure_min_dims=1,
     estimator=None,
     input_name="",
-    allow_eos=False,
 ):
-    """Delegate array validation to scikit-learn
-    :func:`sklearn.utils.validation.check_array` with wildboar defaults and conventions.
+    """Input validation on time-series.
+
+    Delegate array validation to scikit-learn
+    :func:`sklearn.utils.validation.check_array` with wildboar defaults and
+    conventions.
 
     - we optionally allow end-of-sequence identifiers
     - by default we convert arrays to c-order
@@ -286,10 +289,14 @@ def check_array(
         Whether to raise a value error if array is not 2D.
 
     allow_3d : bool, optional
-        Wheter to allow array.ndim == 3
+        Whether to allow array.ndim == 3
 
     allow_nd : bool, optional
         Whether to allow array.ndim > 2.
+
+    allow_eos : bool, optional
+        Whether to raise an error on `wildboar.utils.variable_len.eos` in the
+        array.
 
     force_all_finite : bool or 'allow-nan', default=True
         Whether to raise an error on np.inf, np.nan, pd.NA in array. The
@@ -299,8 +306,6 @@ def check_array(
         - False: accepts np.inf, np.nan, pd.NA in array.
         - 'allow-nan': accepts only np.nan and pd.NA values in array. Values
           cannot be infinite.
-
-        If allow_eos=True, -np.inf is allowed despite force_all_finite=True.
 
     ensure_min_samples : int, optional
         Make sure that the array has a minimum number of samples in its first
@@ -399,22 +404,30 @@ def check_array(
 
     if np.issubdtype(array.dtype, np.double):
         padded_input_name = input_name + " " if input_name else ""
-        if force_all_finite and not allow_eos and wb.iseos(array).any():
+        if not allow_eos and is_variable_length(array):
             raise ValueError(
                 f"Input {padded_input_name}expected time series of equal length."
             )
 
-        if force_all_finite is True and np.isnan(array).any():
-            raise ValueError(f"Input {padded_input_name}contains NaN.")
+        if force_all_finite is True:
+            if allow_eos:
+                anynan = np.logical_and(np.isnan(array), ~is_end_of_series(array)).any()
+            else:
+                anynan = np.isnan(array).any()
 
-        if force_all_finite and np.isposinf(array).any():
+            if anynan:
+                raise ValueError(f"Input {padded_input_name}contains NaN.")
+
+        if force_all_finite and np.isinf(array).any():
             raise ValueError(f"Input {padded_input_name}contains infinity.")
 
     return _check_ts_array(array) if ensure_ts_array else array
 
 
 def _check_ts_array(array):
-    """Force the array to (1) be 3D (n_samples, n_dims, n_timesteps) and (2)
+    """Ensure a time-series array.
+
+    Force the array to (1) be 3D (n_samples, n_dims, n_timesteps) and (2)
     have the final dimension contiguous in memory, and (3) have dtype=float.
 
     Parameters

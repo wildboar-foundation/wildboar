@@ -5,6 +5,7 @@ import numpy as np
 import pytest
 
 from wildboar.utils.validation import check_array
+from wildboar.utils.variable_len import eos
 
 
 def test_check_array_multivariate():
@@ -73,7 +74,7 @@ def test_check_array_force_all_finite():
             [1, 2, 3, np.inf, np.nan, -np.inf],
             ensure_2d=False,
             force_all_finite=True,
-            allow_eos=True,
+            allow_eos=False,
         )
 
     with pytest.raises(ValueError, match=".*infinity.*"):
@@ -88,4 +89,12 @@ def test_check_array_force_all_finite():
         [1, 2, 3, np.inf, np.nan, -np.inf], ensure_2d=False, force_all_finite=False
     )
 
-    check_array([1, 2, 3, -np.inf], ensure_2d=False, allow_eos=True)
+
+def test_check_array_allow_eos():
+    with pytest.raises(ValueError, match=".*equal length.*"):
+        check_array([[1, 2, 3, 4, eos]], allow_eos=False)
+
+    check_array([[1, np.nan, 3, eos, 10]], force_all_finite="allow-nan", allow_eos=True)
+
+    with pytest.raises(ValueError, match=".*NaN.*"):
+        check_array([[1, eos, eos, np.nan, 1]], allow_eos=True)

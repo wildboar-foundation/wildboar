@@ -5,9 +5,9 @@ from functools import partial
 
 import numpy as np
 
-from .. import iseos
 from ..transform._sax import piecewice_aggregate_approximation
 from ..utils.validation import check_array, check_option
+from ..utils.variable_len import is_end_of_series
 
 __all__ = [
     "standardize",
@@ -107,7 +107,7 @@ def truncate(x, n_shortest=None):
     """
     x = check_array(x, allow_3d=True, allow_eos=True, force_all_finite="allow-nan")
     if n_shortest is None:
-        eos = np.nonzero(iseos(x))[-1]
+        eos = np.nonzero(is_end_of_series(x))[-1]
         if eos.size > 0:
             return x[..., : np.min(eos)]
         else:
