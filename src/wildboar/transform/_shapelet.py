@@ -10,11 +10,11 @@ from sklearn.utils._param_validation import Interval, StrOptions
 
 from ..distance import _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
+from ._base import BaseFeatureEngineerTransform
 from ._cshapelet import (
     RandomMultiMetricShapeletFeatureEngineer,
     RandomShapeletFeatureEngineer,
 )
-from .base import BaseFeatureEngineerTransform
 
 
 class ShapeletMixin:

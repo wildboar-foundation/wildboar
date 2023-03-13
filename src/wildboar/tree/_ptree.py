@@ -21,7 +21,7 @@ from ..tree._cptree import (
     UniformPivotSampler,
     WeightedMetricSampler,
 )
-from ..tree.base import BaseTree, BaseTreeClassifier
+from ._base import BaseTree, BaseTreeClassifier
 
 _CLF_CRITERION = {
     "gini": GiniCriterion,

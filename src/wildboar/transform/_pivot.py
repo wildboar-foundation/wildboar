@@ -8,8 +8,8 @@ from wildboar.utils.validation import check_option
 
 from ..distance import _METRICS
 from ..distance._multi_metric import make_metrics
+from ._base import BaseFeatureEngineerTransform
 from ._cpivot import PivotFeatureEngineer
-from .base import BaseFeatureEngineerTransform
 
 _METRIC_NAMES = set(_METRICS.keys())
 _METRIC_NAMES.add("auto")

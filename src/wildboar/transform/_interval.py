@@ -7,6 +7,7 @@ import warnings
 
 from sklearn.utils._param_validation import Interval, StrOptions
 
+from ._base import BaseFeatureEngineerTransform
 from ._cinterval import (
     Catch22Summarizer,
     IntervalFeatureEngineer,
@@ -18,7 +19,6 @@ from ._cinterval import (
     SlopeSummarizer,
     VarianceSummarizer,
 )
-from .base import BaseFeatureEngineerTransform
 
 _SUMMARIZER = {
     "mean_var_slope": MeanVarianceSlopeSummarizer,

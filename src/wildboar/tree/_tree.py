@@ -20,7 +20,7 @@ from ..tree._ctree import (
     TreeFeatureEngineer,
 )
 from ..utils.validation import check_option
-from .base import BaseTree, BaseTreeClassifier, BaseTreeRegressor
+from ._base import BaseTree, BaseTreeClassifier, BaseTreeRegressor
 
 CLF_CRITERION = {"gini": GiniCriterion, "entropy": EntropyCriterion}
 REG_CRITERION = {"squared_error": MSECriterion}

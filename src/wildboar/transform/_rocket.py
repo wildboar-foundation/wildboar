@@ -6,13 +6,13 @@ import numbers
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
+from ._base import BaseFeatureEngineerTransform
 from ._crocket import (
     NormalWeightSampler,
     RocketFeatureEngineer,
     ShapeletWeightSampler,
     UniformWeightSampler,
 )
-from .base import BaseFeatureEngineerTransform
 
 _SAMPLING_METHOD = {
     "normal": NormalWeightSampler,
