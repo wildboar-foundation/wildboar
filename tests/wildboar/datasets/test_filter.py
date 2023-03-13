@@ -3,7 +3,7 @@
 
 import numpy as np
 
-from wildboar.datasets.filter import make_str_filter
+from wildboar.datasets._filter import make_str_filter
 
 
 class TestStrFilter:
