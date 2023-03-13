@@ -1,3 +1,5 @@
+"""Explanation methods for classifiers and regressors."""
+
 # Authors: Isak Samsten
 # License: BSD 3 clause
 

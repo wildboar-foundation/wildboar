@@ -1,3 +1,8 @@
+"""Dataset loading utilities.
+
+See the :doc:`dataset section in the User Guide
+<wildboar:guide/datasets>` for more details and examples.
+"""
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
@@ -8,6 +13,7 @@ import numpy as np
 from wildboar.utils.validation import check_option
 
 from ..utils import os_cache_path
+from ._filter import make_filter
 from ._repository import (
     Bundle,
     JSONRepository,
@@ -15,7 +21,6 @@ from ._repository import (
     Repository,
     RepositoryCollection,
 )
-from .filter import make_filter
 from .preprocess import _PREPROCESS
 
 __all__ = [

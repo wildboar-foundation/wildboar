@@ -1,5 +1,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
+"""Utilities for preprocessing time series."""
 
 from functools import partial
 

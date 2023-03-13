@@ -10,13 +10,6 @@ from sklearn.utils.validation import check_consistent_length
 
 from .variable_len import is_end_of_series, is_variable_length
 
-__all__ = [
-    "check_type",
-    "check_option",
-    "check_array",
-    "check_X_y",
-]
-
 
 def check_type(x, name, target_type, required=True):
     """Check that the type of x is of a target type.
@@ -332,7 +325,6 @@ def check_array(
     -------
     array_converted : object
         The converted and validated array.
-
     """
     check_params = dict(
         accept_sparse=False,

@@ -1,11 +1,28 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+"""Wildboar - a library for temporal machine learning.
+
+Wildboar includes numerous temporal machine learning algorithms and seamlessly
+integrates them with `scikit-learn <https://scikit-learn.org>`_.
+"""
+
 import warnings
 
 import numpy as np
 from sklearn.utils.deprecation import deprecated
 
+from . import (
+    annotate,
+    datasets,
+    distance,
+    ensemble,
+    explain,
+    metrics,
+    model_selection,
+    transform,
+    tree,
+)
 from .utils.variable_len import EOS, EoS, eos, is_end_of_series
 from .version import version as __version__
 
@@ -15,6 +32,15 @@ __all__ = [
     "EoS",
     "EOS",
     "iseos",  # TODO(1.4): Remove
+    "annotate",
+    "datasets",
+    "distance",
+    "ensemble",
+    "explain",
+    "metrics",
+    "model_selection",
+    "transform",
+    "tree",
 ]
 
 

@@ -1,15 +1,19 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
+
+"""Utility functions."""
+
 import os
 import platform
 import warnings
 
 import numpy as np
 
+from .validation import check_array, check_X_y
+
 __all__ = [
-    "os_cache_dir",
-    "_soft_dependency_error",
-    "DependencyMissing",
+    "check_array",
+    "check_X_y",
 ]
 
 

@@ -1,3 +1,5 @@
+"""Evaluation metrics."""
+
 from ._counterfactual import (
     compactness_score,
     plausability_score,

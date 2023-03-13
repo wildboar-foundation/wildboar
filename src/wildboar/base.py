@@ -1,5 +1,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
+"""Base classes for all estimators."""
 
 import warnings
 
@@ -11,7 +12,13 @@ from sklearn.utils.validation import _check_y, check_is_fitted
 from . import __version__
 from .utils.validation import _num_timesteps, check_array, check_X_y
 
-__all__ = ["BaseEstimator"]
+__all__ = [
+    "BaseEstimator",
+    "CounterfactualMixin",
+    "ExplainerMixin",
+    "is_counterfactual",
+    "is_explainer",
+]
 
 _DEFAULT_TAGS = {
     # The estimator can be fit with variable length time series

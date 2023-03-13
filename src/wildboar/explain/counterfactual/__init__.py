@@ -1,3 +1,8 @@
+"""Counterfactual explanations.
+
+The :mod:`wildboar.explain.counterfactual` module includes numerous
+methods for generating counterfactual explanations.
+"""
 # Authors: Isak Samsten
 # License: BSD 3 clause
 

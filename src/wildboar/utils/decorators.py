@@ -6,11 +6,6 @@ from functools import wraps
 import numpy as np
 from sklearn.utils.validation import _is_arraylike_not_scalar
 
-__all__ = [
-    "array_or_scalar",
-    "singleton",
-]
-
 
 def _array_or_scalar(x, squeeze=True):
     if not isinstance(x, np.ndarray):

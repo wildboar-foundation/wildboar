@@ -1,3 +1,5 @@
+"""Ensemble methods for classification, regression and outlier detection."""
+
 # Authors: Isak Samsten
 # License: BSD 3 clause
 

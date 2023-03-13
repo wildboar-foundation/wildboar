@@ -1,3 +1,13 @@
+"""Fast distance computations.
+
+The :py:mod:`wildboar.distance` module includes functions for computing
+paired and pairwise distances between time series and between time series and
+subsequences.
+
+See the :doc:`User Guide <wildboar:guide/metrics/distance>` for more details and
+examples.
+"""
+
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
@@ -22,6 +32,7 @@ __all__ = [
     "pairwise_distance",
     "paired_distance",
     "matrix_profile",
+    "mean_paired_distance",  # Deprecated
 ]
 
 _SUBSEQUENCE_METRICS = {

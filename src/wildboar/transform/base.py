@@ -16,17 +16,12 @@ from ._cfeature_transform import (
     feature_transform_transform,
 )
 
-__all__ = [
-    "BaseFeatureEngineerTransform",
-]
-
 
 class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
     """Base feature engineer transform.
 
     Attributes
     ----------
-
     embedding_ : Embedding
         The underlying embedding.
     """

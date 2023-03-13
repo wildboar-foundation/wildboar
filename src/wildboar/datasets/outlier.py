@@ -1,6 +1,13 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+"""Utilities for generating synthetic outlier datasets.
+
+See the :doc:`User Guide
+<wildboar:guide/unsupervised/outlier/generation` for more details and
+example uses.
+"""
+
 import math
 import numbers
 import warnings
@@ -22,7 +29,6 @@ from ..utils import _soft_dependency_error
 from ..utils.validation import check_array, check_option, check_X_y
 
 __all__ = [
-    "KernelLogisticRegression",
     "kmeans_outliers",
     "density_outliers",
     "minority_outliers",

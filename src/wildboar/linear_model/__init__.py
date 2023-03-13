@@ -1,3 +1,5 @@
+"""Linear methods for both classification and regression."""
+
 # Authors: Isak Samsten
 # License: BSD 3 clause
 

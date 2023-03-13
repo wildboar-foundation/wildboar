@@ -1,5 +1,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
+"""Transform raw time series to tabular representations."""
 
 from ._interval import FeatureTransform, IntervalTransform
 from ._matrix_profile import MatrixProfileTransform

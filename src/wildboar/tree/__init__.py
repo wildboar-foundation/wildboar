@@ -1,6 +1,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+"""Tree-based estimators for classification and regression."""
 
 from ._ptree import ProximityTreeClassifier
 from ._tree import (

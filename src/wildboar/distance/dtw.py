@@ -1,6 +1,12 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+"""DTW alignment and distance computations.
+
+The :mod:`wildboar.distance.dtw` module implements several functions for
+computing DTW alignments and distances.
+"""
+
 import math
 import numbers
 from functools import partial
