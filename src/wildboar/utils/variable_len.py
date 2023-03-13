@@ -10,7 +10,7 @@ def _long_bit_to_double(bits):
     return np.array(bits, dtype="Q").view(dtype="d")
 
 
-eos = _long_bit_to_double(0x7FF0000000000009).item()
+eos = EoS = EOS = _long_bit_to_double(0x7FF0000000000009).item()
 _END_OF_SERIES_MASK = np.array(0x000000000000000F, dtype=np.uint64)
 
 
