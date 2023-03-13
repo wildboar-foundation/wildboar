@@ -6,7 +6,7 @@ import numbers
 from functools import partial
 
 import numpy as np
-from sklearn.utils import check_random_state, check_scalar, deprecated
+from sklearn.utils import check_random_state, check_scalar
 from sklearn.utils.validation import _check_sample_weight, _is_arraylike
 
 from ..utils.validation import check_array
@@ -22,7 +22,6 @@ __all__ = [
     "wddtw_distance",
     "dtw_mapping",
     "dtw_envelop",
-    "dtw_pairwise_distance",
     "dtw_lb_keogh",
     "jeong_weight",
     "dtw_average",
@@ -150,29 +149,6 @@ def wddtw_distance(x, y, *, r=1.0, g=0.05):
     x = check_array(x, ravel_1d=True, ensure_2d=False)
     y = check_array(y, ravel_1d=True, ensure_2d=False)
     return pairwise_distance(x, y, metric="wddtw", metric_params={"r": r, "g": g})
-
-
-@deprecated(
-    "Function 'dtw_pairwise_distance' was deprectad in 1.1 and will be removed in 1.2."
-    "Use 'pairwise_distance(x, metric=\"dtw\")' instead."
-)
-def dtw_pairwise_distance(x, r=1.0):
-    """Compute the distance between all pairs of rows.
-
-    Parameters
-    ----------
-    x : array-like of shape (n_samples, n_timestep)
-        An array of samples
-
-    r : float or int, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
-
-    Returns
-    -------
-    distances : ndarray of shape (n_samples, n_samples)
-        The distance between pairs of rows
-    """
-    return pairwise_distance(x, metric="dtw", metric_params={"r": r})
 
 
 def dtw_envelop(x, *, r=1.0):
