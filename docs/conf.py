@@ -7,11 +7,8 @@
 # -- Path setup --------------------------------------------------------------
 
 import os
-import sys
-from pkg_resources import parse_version, get_distribution
 
-# sys.path.insert(0, os.path.abspath("_extensions"))
-
+from pkg_resources import get_distribution, parse_version
 from sphinx_simpleversion import get_current_branch
 
 current_release = parse_version(get_distribution("wildboar").version)
@@ -32,14 +29,33 @@ author = "Isak Samsten"
 # ones.
 extensions = [
     "sphinx_simpleversion",
+    "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
     "sphinx.ext.linkcode",
     "autoapi.extension",
     "sphinx_design",
-    "nbsphinx",
+    "myst_parser",
     "sphinx_copybutton",
 ]
+
+intersphinx_mapping = {
+    "wildboar": ("https://wildboar.dev/main", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
+}
+
+# Markdown setting
+myst_heading_anchors = 3
+myst_enable_extensions = [
+    "dollarmath",
+    "substitution",
+    "deflist",
+]
+
+pygments_style = "github-light-colorblind"
+pygments_dark_style = "github-dark-colorblind"
+syntax_highlight = "short"
+add_function_parentheses = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -52,11 +68,11 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 versions_develop_branch = "master"
 
 autoapi_dirs = ["../src/"]
-autoapi_root = "."
+autoapi_root = "api"
 autoapi_template_dir = "_templates/autoapi/"
 autoapi_ignore = ["*tests*", "_*.py"]
 autoapi_keep_files = True
-autoapi_add_toctree_entry = False
+autoapi_add_toctree_entry = True
 autoapi_python_class_content = "both"
 autoapi_member_order = "groupwise"
 
@@ -65,7 +81,7 @@ autoapi_options = [
     "undoc-members",
     "show-inheritance",
     "show-module-summary",
-    "special-members",
+    # "special-members",
     "imported-members",
 ]
 
@@ -86,7 +102,9 @@ html_sidebars = {
 }
 
 html_static_path = ["_static"]
-
+html_css_files = [
+    "css/custom.css",
+]
 current_branch_name = get_current_branch()
 
 
