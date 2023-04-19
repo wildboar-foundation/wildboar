@@ -12,17 +12,6 @@ import warnings
 import numpy as np
 from sklearn.utils.deprecation import deprecated
 
-from . import (
-    annotate,
-    datasets,
-    distance,
-    ensemble,
-    explain,
-    metrics,
-    model_selection,
-    transform,
-    tree,
-)
 from .utils.variable_len import EOS, EoS, eos, is_end_of_series
 from .version import version as __version__
 
@@ -32,15 +21,6 @@ __all__ = [
     "EoS",
     "EOS",
     "iseos",  # TODO(1.4): Remove
-    "annotate",
-    "datasets",
-    "distance",
-    "ensemble",
-    "explain",
-    "metrics",
-    "model_selection",
-    "transform",
-    "tree",
 ]
 
 
