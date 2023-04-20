@@ -11,7 +11,9 @@ from ..distance import matrix_profile
 
 
 class MatrixProfileTransform(TransformerMixin, BaseEstimator):
-    """Transform each time series in a dataset to its MatrixProfile similarity
+    """Matrix profile transform.
+
+    Transform each time series in a dataset to its MatrixProfile similarity
     self-join.
 
     Examples
@@ -37,30 +39,31 @@ class MatrixProfileTransform(TransformerMixin, BaseEstimator):
     }
 
     def __init__(self, window=0.1, exclude=None, n_jobs=None):
-        """
+        """Construct a new matrix profile transform.
+
         Parameters
         ----------
         window : int or float, optional
-        The subsequence size, by default 0.1
+            The subsequence size, by default 0.1.
 
-        - if float, a fraction of n_timestep
-        - if int, the exact subsequence size
-
+            - if float, a fraction of n_timestep.
+            - if int, the exact subsequence size.
         exclude : int or float, optional
-            The size of the exclusion zone. The default exclusion zone is 0.2
+            The size of the exclusion zone. The default exclusion zone is 0.2.
 
-            - if float, expressed as a fraction of the windows size
-            - if int, exact size (0 < exclude)
-
+            - if float, expressed as a fraction of the windows size.
+            - if int, exact size (0 < exclude).
         n_jobs : int, optional
-            The number of jobs to use when computing the
+            The number of jobs to use when computing the profile.
         """
         self.window = window
         self.n_jobs = n_jobs
         self.exclude = exclude
 
     def fit(self, x, y=None):
-        """Fit the matrix profile. Sets the expected input dimensions.
+        """Fit the matrix profile.
+
+        Sets the expected input dimensions.
 
         Parameters
         ----------

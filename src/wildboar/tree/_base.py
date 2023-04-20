@@ -82,28 +82,24 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
 
 class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a shapelet tree regressor from the training set.
+        """Fit the estimator.
 
         Parameters
         ----------
         X : array-like of shape (n_samples, n_timesteps)
             The training time series.
-
         y : array-like of shape (n_samples,)
             Target values as floating point values
-
         sample_weight : array-like of shape (n_samples,)
             If `None`, then samples are equally weighted. Splits that would create child
             nodes with net zero or negative weight are ignored while searching for a
             split in each node. Splits are also ignored if they would result in any
             single class carrying a negative weight in either child node.
-
         check_input : bool, optional
             Allow to bypass several input checks
 
         Returns
         -------
-
         self: object
         """
         self._validate_params()
@@ -128,20 +124,18 @@ class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):
         return self
 
     def predict(self, x, check_input=True):
-        """Predict the regression of the input samples x.
+        """Predict the value of x.
 
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timesteps)
             The input time series
-
         check_input : bool, optional
             Allow to bypass several input checking. Don't use this parameter unless you
             know what you do.
 
         Returns
         -------
-
         y : ndarray of shape (n_samples,)
             The predicted classes.
         """
@@ -166,22 +160,18 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
         ----------
         x : array-like of shape (n_samples, n_timesteps)
             The training time series.
-
         y : array-like of shape (n_samples,)
             The target values
-
         sample_weight : array-like of shape (n_samples,)
             If `None`, then samples are equally weighted. Splits that would create child
             nodes with net zero or negative weight are ignored while searching for a
             split in each node. Splits are also ignored if they would result in any
             single class carrying a negative weight in either child node.
-
         check_input : bool, optional
             Allow to bypass several input checks.
 
         Returns
         -------
-
         self: object
         """
         self._validate_params()
@@ -229,14 +219,12 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
         ----------
         x : array-like of shape (n_samples, n_timesteps)
             The input time series
-
         check_input : bool, optional
             Allow to bypass several input checking. Don't use this parameter unless you
             know what you do.
 
         Returns
         -------
-
         y : ndarray of shape (n_samples,)
             The predicted classes.
         """
@@ -244,15 +232,15 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
         return self.classes_.take(np.argmax(proba, axis=1), axis=0)
 
     def predict_proba(self, x, check_input=True):
-        """Predict class probabilities of the input samples X.  The predicted
-        class probability is the fraction of samples of the same class in a
-        leaf.
+        """Predict class probabilities of the input samples X.
+
+        The predicted class probability is the fraction of samples of the same
+        class in a leaf.
 
         Parameters
         ----------
         x :  array-like of shape (n_samples, n_timesteps)
             The input time series
-
         check_input : bool, optional
             Allow to bypass several input checking. Don't use this parameter unless you
             know what you do.

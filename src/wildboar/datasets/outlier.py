@@ -38,8 +38,7 @@ __all__ = [
 
 
 class KernelLogisticRegression(LogisticRegression):
-    """A simple kernel logistic implementation using a Nystroem kernel
-    approximation.
+    """Kernel logistic implementation using a Nystroem kernel approximation.
 
     See Also
     --------
@@ -68,7 +67,8 @@ class KernelLogisticRegression(LogisticRegression):
         n_jobs=None,
         l1_ratio=None,
     ):
-        """
+        """Construct a new estimator.
+
         Parameters
         ----------
         kernel : str, optional
@@ -103,6 +103,22 @@ class KernelLogisticRegression(LogisticRegression):
         self.n_components = n_components
 
     def fit(self, x, y, sample_weight=None):
+        """Fit the estimator.
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep)
+            The input time series.
+        y : array-like of shape (n_samples, )
+            The labels.
+        sample_weight : array-like of shape (n_samples, )
+            The sample weights.
+
+        Returns
+        -------
+        self
+            The same object.
+        """
         random_state = check_random_state(self.random_state)
         kernel = self.kernel or "rbf"
         n_components = min(x.shape[0], self.n_components)
@@ -117,6 +133,18 @@ class KernelLogisticRegression(LogisticRegression):
         return self
 
     def decision_function(self, x):
+        """Predict confidence scores for the estimator.
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep)
+            The input time series.
+
+        Returns
+        -------
+        ndarray of shape (n_samples, )
+            The confidence scores.
+        """
         check_is_fitted(self)
         return super().decision_function(self.nystroem_.transform(x))
 
@@ -129,7 +157,9 @@ def kmeans_outliers(
     n_clusters=5,
     random_state=None,
 ):
-    """Label the samples of the cluster farthers from the other clusters as
+    """K-means outlier generation.
+
+    Label the samples of the cluster farthers from the other clusters as
     outliers.
 
     Parameters
@@ -205,7 +235,9 @@ def density_outliers(
     max_eps=np.inf,
     random_state=None,
 ):
-    """Labels samples as outliers if a density cluster algorithm fail to assign
+    """Densitiy based outlier generation.
+
+    Labels samples as outliers if a density cluster algorithm fail to assign
     them to a cluster.
 
     Parameters
@@ -371,8 +403,10 @@ def emmott_outliers(
     variation="tight",
     random_state=None,
 ):
-    """Create a synthetic outlier detection dataset from a labeled
-    classification dataset using the method described by Emmott et.al. (2013).
+    """Difficulty based outlier generation.
+
+    Create a synthetic outlier detection dataset from a labeled classification
+    dataset using the method described by Emmott et.al. (2013).
 
     The Emmott labeler can reliably label both binary and multiclass datasets. For
     binary datasets a random label is selected as the outlier class. For multiclass

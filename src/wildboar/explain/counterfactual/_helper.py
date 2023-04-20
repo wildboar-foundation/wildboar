@@ -25,15 +25,12 @@ def _proximity(
     ----------
     x_true : array-like of shape (n_samples, n_timestep)
         The true samples
-
     x_counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
-
     metric : str or callable, optional
         The distance metric
 
         See ``_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
@@ -111,13 +108,10 @@ def counterfactuals(
     ----------
     estimator : object
         The estimator used to compute the counterfactual example
-
     x : array-like of shape (n_samples, n_timestep)
         The data samples to fit counterfactuals to
-
     y : array-like broadcast to shape (n_samples,)
         The desired label of the counterfactual
-
     method : str or BaseCounterfactual, optional
         The method to generate counterfactual explanations
 
@@ -125,10 +119,8 @@ def counterfactuals(
           based on the estimator
 
           .. versionchanged :: 1.1.0
-
         - if str, select counterfactual explainer from named collection. See
           ``_COUNTERFACTUALS.keys()`` for a list of valid values.
-
         - if, BaseCounterfactual use the supplied counterfactual
 
     scoring : str, callable, list or dict, optional
@@ -137,20 +129,16 @@ def counterfactuals(
 
         .. deprecated:: 1.1
             ``scoring`` was renamed to ``proximity`` in 1.1 and will be removed in 1.2.
-
     proximity : str, callable, list or dict, optional
         The scoring function to determine the similarity between the counterfactual
         sample and the original sample
-
     valid_scoring : bool, optional
         Only compute score for successful counterfactuals.
 
         .. deprecated:: 1.1
             ``valid_scoring`` will be removed in 1.2.
-
     random_state : RandomState or int, optional
         The pseudo random number generator to ensure stable result
-
     method_args : dict, optional
         Optional arguments to the counterfactual explainer.
 
@@ -160,10 +148,8 @@ def counterfactuals(
     -------
     x_counterfactuals : ndarray of shape (n_samples, n_timestep)
         The counterfactual example.
-
     valid : ndarray of shape (n_samples,)
         Indicator matrix for valid counterfactuals
-
     score : ndarray of shape (n_samples,) or dict, optional
         Return score of the counterfactual transform, if ``scoring`` is not None
     """

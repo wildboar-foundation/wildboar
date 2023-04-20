@@ -34,28 +34,22 @@ def plausability_score(
     method="accuracy",
     average=True,
 ):
-    """Compute the plausibility of the generated counterfactuals.
+    """Compute plausibility score.
 
     Parameters
     ----------
     X_plausible : array-like of shape (n_samples, n_timesteps)
         The plausible time series, typically the training or testing samples.
-
     X_counterfactuals : array-like of shape (m_samples, n_timesteps)
         The generated counterfactuals.
-
     y_plausible : array-like of shape (n_samples, ), optional
         The labels of the plausible samples.
-
     y_counterfactual : array-like of shape (m_samples, ), optional
         The desired label of the counterfactuals.
-
     estimator : Estimator, optional
         The outlier estimator.
-
     method : {'score', 'accuracy'}, optional
         The score function.
-
     average : bool, optional
         If True, return the average score for all labels in y_counterfactual;
         otherwise, return the score for the individual labels (ordered as np.unique)
@@ -67,9 +61,7 @@ def plausability_score(
 
         - if method='scores', the mean score is returned, with larger score incicating
           better performance.
-
         - if method='accuracy', the fraction of plausible counterfactuals are returned.
-
         - if y_counterfactual is None and average=False, the scores or accuracy for each
           counterfactual label is returned.
 
@@ -141,7 +133,9 @@ def relative_proximity_score(
     metric_params=None,
     average=True,
 ):
-    """Relative proximity score captures the mean proximity of counterfactual
+    """Compute relative proximity score.
+
+    The relative proximity score captures the mean proximity of counterfactual
     and test sample pairs over mean proximity of the closest native
     counterfactual. The lower the score, the better.
 
@@ -150,30 +144,23 @@ def relative_proximity_score(
     X_native : array-like of shape (n_natives, n_timesteps)
         The native counterfactual candidates. If y_counterfactual is None, the full
         array is considered as possible native counterfactuals.
-
     X_test : array-like of shape (n_counterfactuals, n_timesteps)
         The test samples.
-
     X_counterfactuals : array-like of shape (n_counterfactuals, n_timesteps)
         The counterfactual samples.
-
     y_native : array-like of shape (n_natives, ), optional
         The label of the native counterfactual candidates.
-
     y_counterfactual : array-like of shape (n_counterfactuals, )
         The desired counterfactual label.
-
     metric : str or callable, optional
         The distance metric
 
         See ``_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
         :ref:`User guide <list_of_metrics>`.
-
     average : bool, optional
         Average the relative proximity of all labels in y_counterfactual.
 
@@ -234,8 +221,7 @@ def proximity_score(
     metric="normalized_euclidean",
     metric_params=None,
 ):
-    """Compute the proximity score of the counterfactuals using the provided
-    metric.
+    """Compute proximity score.
 
     The closer the counterfactual is to the original, the lower the score.
 
@@ -243,15 +229,12 @@ def proximity_score(
     ----------
     x_true : array-like of shape (n_samples, n_timestep)
         The true samples
-
     x_counterfactuals : array-like of shape (n_samples, n_timestep)
         The counterfactual samples
-
     metric : str or callable, optional
         The distance metric
 
         See ``_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
@@ -268,7 +251,6 @@ def proximity_score(
     Delaney, E., Greene, D., & Keane, M. T. (2020).
         Instance-based Counterfactual Explanations for Time Series Classification.
         arXiv, 2009.13211v2.
-
     Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
         Locally and globally explainable time series tweaking.
         Knowledge and Information Systems, 62(5), 1671-1700.
@@ -290,26 +272,24 @@ def compactness_score(
     atol=1.0e-8,
     average=True,
 ):
-    """Return the compactness of the counterfactuals as measured by the
-    fraction of changed timesteps. The fewer timesteps have changed between the
-    original and the counterfactual, the lower the score.
+    """Compute compactness score.
+
+    The compactness of counterfactuals as measured by the fraction of changed
+    timesteps. The fewer timesteps have changed between the original and the
+    counterfactual, the lower the score.
 
     Parameters
     ----------
     x_true : array-like of shape (n_samples, n_timesteps) \
     or (n_samples, n_dims, n_timeteps)
         The true samples
-
     x_counterfactuals : array-like of shape (n_samples, n_timesteps) \
     or (n_samples, n_dims, n_timeteps)
         The counterfactual samples
-
     atol : float,
         The absolute tolerance.
-
     window : int, optional
         If set, evaluate the difference between windows of specified size.
-
     n_bins : int, optional
         If set, evaluate the set overlap of SAX transformed series.
 
@@ -362,7 +342,9 @@ def compactness_score(
 
 
 def validity_score(y_pred, y_counterfactual, sample_weight=None):
-    """Compute the number counterfactuals that have the desired label.
+    """Compute validity score.
+
+    The number counterfactuals that have the desired label.
 
     Parameters
     ----------
@@ -383,7 +365,6 @@ def validity_score(y_pred, y_counterfactual, sample_weight=None):
     Delaney, E., Greene, D., & Keane, M. T. (2020).
         Instance-based Counterfactual Explanations for Time Series Classification.
         arXiv, 2009.13211v2.
-
     Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
         Locally and globally explainable time series tweaking.
         Knowledge and Information Systems, 62(5), 1671-1700.

@@ -30,8 +30,20 @@ _DEFAULT_TAGS = {
 
 
 class BaseEstimator(SklearnBaseEstimator):
+    """Base estimator for all Wildboar estimators."""
+
     # Same additions as scikit-learn
     def __getstate__(self):
+        """Get the state of the estimator.
+
+        Add a new element to the dict we return `_wildboar_version` which
+        is we use to warn when setting the state.
+
+        Returns
+        -------
+        dict
+            The state
+        """
         try:
             state = super().__getstate__()
         except AttributeError:
@@ -44,6 +56,15 @@ class BaseEstimator(SklearnBaseEstimator):
 
     # Same check as scikit-learn
     def __setstate__(self, state):
+        """Set the state of the estimator.
+
+        Gives a warning if a user tries to unpickle a object serialized
+        from a older version of Wildboar.
+
+        Parameters
+        ----------
+        state : The state
+        """
         if type(self).__module__.startswith("wildboar."):
             pickle_version = state.pop("_wildboar_version", "pre-1.1")
             if pickle_version != __version__:
@@ -111,7 +132,9 @@ class BaseEstimator(SklearnBaseEstimator):
             )
 
     def _validate_force_n_dims(self, X):
-        """Validate that X is valid in relation to the optional _force_n_dims
+        """Validate that X is valid.
+
+        The validation takes into consideration the optional _force_n_dims
         attribute.
 
         Parameters
@@ -198,8 +221,9 @@ class ExplainerMixin:
     _estimator_type = "explainer"
 
     def _validate_estimator(self, estimator, allow_3d=False):
-        """Check the estimator and set the `n_timesteps_in_` and `n_dims_in_`
-        parameter from the estimator.
+        """Check the estimator.
+
+        Set the `n_timesteps_in_` and `n_dims_in_` parameter from the estimator.
 
         Parameters
         ----------
@@ -216,9 +240,9 @@ class ExplainerMixin:
             self.n_timesteps_in_ = estimator.n_features_in_
         else:
             raise ValueError(
-                "Unable to find the number of timesteps from %s. Please ensure that "
+                "Unable to find the number of timesteps from {}. Please ensure that "
                 "the estimator is correctly fit and sets the n_timesteps_in_ or "
-                "n_features_in_ properties." % type(estimator).__qualname__
+                "n_features_in_ properties.".format(type(estimator).__qualname__)
             )
 
         self.n_features_in_ = self.n_timesteps_in_
@@ -230,13 +254,32 @@ class ExplainerMixin:
         if self.n_dims_in_ > 1 and not allow_3d:
             raise ValueError(
                 "The explainer does not permit 3darrays as input but the estimator is "
-                "fitted with a 3darray of shape (?, %d, %d)."
-                % (self.n_dims_in_, self.n_timesteps_in_)
+                "fitted with a 3darray of shape (?, {}, {}).".format(
+                    self.n_dims_in_, self.n_timesteps_in_
+                )
             )
 
         return estimator
 
     def fit_explain(self, estimator, x=None, y=None, **kwargs):
+        """Fit and return the explanation.
+
+        Parameters
+        ----------
+        estimator : Estimator
+            The estimator to explain.
+        x : time-series, optional
+            The input time series.
+        y : array-like of shape (n_samples, ), optional
+            The labels.
+        **kwargs
+            Optional extra arguments.
+
+        Returns
+        -------
+        ndarray
+            The explanation.
+        """
         return self.fit(estimator, x, y, **kwargs).explain(x, y)
 
     def plot(self, x=None, y=None, ax=None):
@@ -264,7 +307,7 @@ class CounterfactualMixin:
         "transform(x, y) has been deprecated in 1.1 and will be removed in 1.2. "
         "Use explain(x, y) instead."
     )
-    def transform(self, x, y):
+    def transform(self, x, y):  # noqa: D102
         return self.explain(x, y)
 
     def score(self, x, y):

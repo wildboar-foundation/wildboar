@@ -4,7 +4,6 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_array_equal, assert_equal
-
 from wildboar.datasets import load_gun_point
 from wildboar.tree import (
     ExtraShapeletTreeClassifier,

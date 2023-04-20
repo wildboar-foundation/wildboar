@@ -1,7 +1,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 import numpy as np
-
 from wildboar.datasets import load_two_lead_ecg
 from wildboar.transform import PAA, SAX
 

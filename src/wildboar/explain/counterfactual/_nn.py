@@ -14,13 +14,11 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
 
     Attributes
     ----------
-
     explainer_ : dict
         The explainer for each label
 
     References
     ----------
-
     Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
         Locally and globally explainable time series tweaking.
         Knowledge and Information Systems, 62(5), 1671-1700.

@@ -185,19 +185,16 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         verbose=False,
         random_state=None,
     ):
-        """
+        """Construct a new shapelet forest counterfactual.
 
         Parameters
         ----------
         cost : {"euclidean", "cosine", "manhattan"} or callable, optional
             The cost function to determine the goodness of counterfactual
-
         aggregation : callable, optional
             The aggregation function for the cost of multivariate counterfactuals.
-
         epsilon : float, optional
             Control the degree of change from the decision threshold
-
         batch_size : float, optional
             Batch size when evaluating the cost and predictions of
             counterfactual candidates. The default setting is to evaluate
@@ -205,16 +202,13 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
 
             .. versionchanged :: 1.1
                 The default value changed to 0.1
-
         max_paths : float, optional
             Sample a fraction of the positive prediction paths.
 
             .. versionadded :: 1.1
                 Add support for subsampling prediction paths.
-
         verbose : boolean, optional
             Print information to stdout during execution.
-
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
         """

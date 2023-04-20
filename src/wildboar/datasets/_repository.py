@@ -29,7 +29,7 @@ DEFAULT_TAG = "default"
 
 
 def _replace_placeholders(url, **kwargs):
-    """Replace placeholder values of the format {key} with kwargs[key]
+    """Replace placeholder values of the format {key} with kwargs[key].
 
     Parameters
     ----------
@@ -752,7 +752,6 @@ class Bundle(metaclass=ABCMeta):
 
     Attributes
     ----------
-
     name : str
         Human-readable name of the bundle
 
@@ -774,7 +773,8 @@ class Bundle(metaclass=ABCMeta):
         description=None,
         collections=None,
     ):
-        """
+        """Construct a new Bundle.
+
         Parameters
         ----------
         key : str

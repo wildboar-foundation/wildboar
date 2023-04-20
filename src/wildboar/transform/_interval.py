@@ -112,7 +112,6 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
 
     Examples
     --------
-
     >>> from wildboar.datasets import load_dataset
     >>> x, y = load_dataset("GunPoint")
     >>> t = IntervalTransform(n_intervals=10, summarizer="mean")
@@ -144,7 +143,8 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
         n_jobs=None,
         random_state=None,
     ):
-        """
+        """Construct a new interval transform.
+
         Parameters
         ----------
         n_intervals : str, int or float, optional
@@ -155,7 +155,6 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
             - if int, the number of intervals is ``n_intervals``.
             - if float, the number of intervals is ``n_intervals * n_timestep``, with
               ``0 < n_intervals < 1``.
-
         intervals : str, optional
             The method for selecting intervals
 
@@ -163,16 +162,12 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
             - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
             - if "random", `n_intervals` possibly overlapping intervals of randomly
               sampled in ``[min_size * n_timestep, max_size * n_timestep]``
-
         sample_size : float, optional
             The sample size of fixed intervals if ``intervals="sample"``
-
         min_size : float, optional
             The minimum interval size if ``intervals="random"``
-
         max_size : float, optional
             The maximum interval size if ``intervals="random"``
-
         summarizer : str or list, optional
             The method to summarize each interval.
 
@@ -182,10 +177,8 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
 
             The default summarizer summarizes each interval as its mean, standard
             deviation and slope.
-
         n_jobs : int, optional
             The number of cores to use on multi-core.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -215,23 +208,23 @@ class FeatureTransform(IntervalTransform):
         summarizer="catch22",
         n_jobs=None,
     ):
-        """
+        """Construct a new feature transform.
+
         Parameters
         ----------
         summarizer : str or list, optional
             The method to summarize each interval.
 
             - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
-
             - if list, the summarizer is a list of functions f(x) -> float, where
               x is a numpy array.
 
             The default summarizer summarizes each time series using catch22-features
-
         n_jobs : int, optional
             The number of cores to use on multi-core.
 
         References
+        ----------
         ==========
         Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz, \
         Ben D. Fulcher, and Nick S. Jones.

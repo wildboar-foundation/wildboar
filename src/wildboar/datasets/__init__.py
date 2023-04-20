@@ -47,7 +47,7 @@ __all__ = [
 
 
 def _split_repo_bundle(repo_bundle_name):
-    """Split a repository bundle string of the format {repo}/{bundle}
+    """Split a repository bundle string of the format {repo}/{bundle}.
 
     Parameters
     ----------
@@ -85,8 +85,10 @@ def _split_repo_bundle(repo_bundle_name):
 
 
 def set_cache_dir(cache_dir=None):
-    """Change the global cache directory. If called without arguments, the
-    cache directory is reset to the default directory.
+    """Change the global cache directory.
+
+    If called without arguments, the cache directory is reset to the default
+    directory.
 
     cache_dir : str, optional
         The cache directory root
@@ -211,7 +213,6 @@ def load_datasets(
 
     Yields
     ------
-
     name : str
         The dataset name
 
@@ -227,7 +228,6 @@ def load_datasets(
 
     Examples
     --------
-
     >>> from wildboar.datasets import load_datasets
     >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr'):
     >>>     print(dataset, x.shape, y.shape)
@@ -368,7 +368,6 @@ def load_dataset(
 
     Examples
     --------
-
     Load a dataset from the default repository
 
     >>> x, y = load_dataset("SyntheticControl")

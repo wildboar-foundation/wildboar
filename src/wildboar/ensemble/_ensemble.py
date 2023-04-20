@@ -34,6 +34,8 @@ from ..tree._tree import RocketTreeClassifier, RocketTreeRegressor
 
 
 class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
+    """Base estimator for Wildboar ensemble estimators."""
+
     _parameter_constraints: dict = {
         "estimator": [HasMethods(["fit", "predict"]), None],
         "n_estimators": [Interval(Integral, 1, None, closed="left")],
@@ -340,7 +342,6 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
 
     Examples
     --------
-
     >>> from wildboar.ensemble import ShapeletForestClassifier
     >>> from wildboar.datasets import load_synthetic_control
     >>> x, y = load_synthetic_control()
@@ -495,12 +496,10 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
 
 
 class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
-    """An ensemble of extremely random shapelet trees for time series
-    regression.
+    """An ensemble of extremely random shapelet trees.
 
     Examples
     --------
-
     >>> from wildboar.ensemble import ExtraShapeletTreesClassifier
     >>> from wildboar.datasets import load_synthetic_control
     >>> x, y = load_synthetic_control()
@@ -773,7 +772,6 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
 
     Examples
     --------
-
     >>> from wildboar.ensemble import ShapeletForestRegressor
     >>> from wildboar.datasets import load_synthetic_control
     >>> x, y = load_synthetic_control()
@@ -908,18 +906,16 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
 
 
 class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
-    """An ensemble of extremely random shapelet trees for time series
-    regression.
+    """An ensemble of extremely random shapelet trees.
 
     Examples
     --------
-
     >>> from wildboar.ensemble import ExtraShapeletTreesRegressor
     >>> from wildboar.datasets import load_synthetic_control
     >>> x, y = load_synthetic_control()
     >>> f = ExtraShapeletTreesRegressor(n_estimators=100, metric='scaled_euclidean')
     >>> f.fit(x, y)
-    >>> y_hat = f.predict(x)
+    >>> y_hat = f.predict(x).
     """
 
     _parameter_constraints: dict = {
@@ -945,7 +941,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         n_jobs=None,
         random_state=None,
     ):
-        """Construct a extra shapelet trees regressor.
+        """Construct an extra shapelet trees regressor.
 
         Parameters
         ----------
@@ -1017,13 +1013,13 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
 class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     """An ensemble of random shapelet trees.
 
-    An unsupervised transformation of a time series dataset
-    to a high-dimensional sparse representation. A time series i
-    indexed by the leaf that it falls into. This leads to a binary
-    coding of a time series with as many ones as trees in the forest.
+    An unsupervised transformation of a time series dataset to a
+    high-dimensional sparse representation. A time series i indexed by the leaf
+    that it falls into. This leads to a binary coding of a time series with as
+    many ones as trees in the forest.
 
-    The dimensionality of the resulting representation is
-    ``<= n_estimators * 2^max_depth``
+    The dimensionality of the resulting representation is ``<= n_estimators *
+    2^max_depth``
     """
 
     _parameter_constraints: dict = {
@@ -1052,42 +1048,32 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         sparse_output=True,
         random_state=None,
     ):
-        """
+        """Construct a new shapelet forest embedding.
+
         Parameters
         ----------
-
         n_estimators : int, optional
-            The number of estimators
-
+            The number of estimators.
         bootstrap : bool, optional
             Use bootstrap sampling to fit the base estimators
-
         n_jobs : int, optional
             The number of processor cores used for fitting the ensemble
-
         min_shapelet_size : float, optional
             The minimum shapelet size to sample
-
         max_shapelet_size : float, optional
             The maximum shapelet size to sample
-
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
-
         warm_start : bool, optional
             When set to True, reuse the solution of the previous call to fit
             and add more estimators to the ensemble, otherwise, just fit
             a whole new ensemble.
-
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Set the metric used to compute the distance between shapelet and time series
-
         metric_params : dict, optional
             Parameters passed to the metric construction
-
         sparse_output : bool, optional
             Return a sparse CSR-matrix.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -1150,7 +1136,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
 
 
 class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
-    """A isolation shapelet forest.
+    """An isolation shapelet forest.
 
     .. versionadded:: 0.3.5
 
@@ -1161,7 +1147,6 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
     Examples
     --------
-
     >>> from wildboar.ensemble import IsolationShapeletForest
     >>> from wildboar.datasets import load_two_lead_ecg
     >>> from wildboar.model_selection.outlier import train_test_split
@@ -1228,30 +1213,22 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         ----------
         n_estimators : int, optional
             The number of estimators
-
         bootstrap : bool, optional
             Use bootstrap sampling to fit the base estimators
-
         n_jobs : int, optional
             The number of processor cores used for fitting the ensemble
-
         min_shapelet_size : float, optional
             The minimum shapelet size to sample
-
         max_shapelet_size : float, optional
             The maximum shapelet size to sample
-
         min_samples_split : int, optional
             The minimum samples required to split the decision trees
-
         max_samples : "auto", float or int, optional
             The number of samples to draw to train each base estimator
-
         contamination : 'auto' or float, optional
             The strategy for computing the offset (see `offset_`)
 
             - if 'auto', `offset_=-0.5`
-
             - if float ``offset_`` is computed as the c:th percentile of scores.
 
             If `bootstrap=True`, out-of-bag samples are used for computing the scores.
@@ -1259,13 +1236,10 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         warm_start : bool, optional
             When set to True, reuse the solution of the previous call to fit and add
             more estimators to the ensemble, otherwise, just fit a whole new ensemble.
-
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Set the metric used to compute the distance between shapelet and time series
-
         metric_params : dict, optional
             Parameters passed to the metric construction
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator

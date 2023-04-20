@@ -47,11 +47,9 @@ def plot_importances(importances, ax=None, labels=None):
     ---------
     importances : Importance or dict
         The importances
-
     ax : Axes, optional
         The axes to plot. If importances is dict, ax must contain at least
         len(importances) Axes objects.
-
     labels : array-like, optional
         The labels for the importances.
 
@@ -184,11 +182,10 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
 
 
 class IntervalImportance(ExplainerMixin, PermuteImportance):
-    """Compute a model agnostic importance score for non-overlapping intervals.
+    """Interval importance for time series.
 
     Attributes
     ----------
-
     importances_ : dict or Importance
         The importance scores for each interval. If dict, one value per scoring
         function.
@@ -216,34 +213,27 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         verbose=0,
         random_state=None,
     ):
-        """
+        """Construct new interval importance estimator.
+
         Parameters
         ----------
         scoring : str, list, dict or callable, optional
             The scoring function. By default the estimators score function is used.
-
         n_repeat : int, optional
             The number of repeated permutations
-
         n_intervals : str, optional
             The number of intervals.
 
             - if "sqrt", the number of intervals is the square root of n_timestep.
-
             - if "log2", the number of intervals is the log2 of n_timestep.
-
             - if int, exact number of intervals.
-
         window : int, optional
             The window size. If specicied, n_intervals is ignored and the number of
             intervals is computed such that each interval is (at least) of size window.
-
         domain : {"time", "frequency"}, optional
             Compute the importance in the time or frequency domain.
-
         verbose : bool, optional
             Show extra progress information.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -414,26 +404,22 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
 
 class AmplitudeImportance(ExplainerMixin, PermuteImportance):
-    """Compute the importance of equi-probable horizontal time series intervals by
-    permuting the values between each horizontal interval. The implementation uses
+    """Compute the importance of equi-probable amplitude intervals.
+
+    The implementation uses
     :class:`transform.SAX` to discretize the time series and then for each bin permute
     the samples along that bin.
 
     Paramters
     ---------
-
     sax_ : SAX
         The SAX transformation.
-
     baseline_score_ : float or dict
         The baseline score.
-
     importances_ : float or dict
         The importances of each vertical bin.
-
     components_ : list
         List of binning identifiers.
-
     """
 
     _parameter_constraints: dict = {
@@ -557,38 +543,32 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         show_bins=False,
         show_grid=True,
     ):
-        """Plot the importances. If x is given, the importances are plotted
-        over the samples optionally labeling each sample using the supplied
-        labels. If x is not give, the importances are plotted as one or more
-        boxplots.
+        """Plot the importances.
+
+        If x is given, the importances are plotted over the samples optionally
+        labeling each sample using the supplied labels. If x is not give, the
+        importances are plotted as one or more boxplots.
 
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timesteps), optional
             The samples
-
         y : array-like of shape (n_samples, ), optional
             The labels
-
         ax : Axes, optional
             Axes to plot. If ax is set, x is None and scoring is None, the number of
             axes must be the same as the number of scorers.
-
         scoring : str, optional
             The scoring to plot if multiple scorers were used when fitting.
-
         preprocess : bool, optional
             Preprocess the time series to align with the bins, ignored if x is not None.
-
         k : int or float, optional
             The number of top bins to plot, ignored if x is not None.
 
             - if int, the specified number of bins are shown
             - if float, a fraction of the number of bins are shown
-
         show_bins : bool, optional
             Annotate the plot with the index of the bin, ignored if x is not None.
-
         show_grid : bool, optional
             Annotate the plot with the bin thresholds, ignored if x is not None.
 
@@ -596,7 +576,6 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         -------
         ax : Axis
             The axis
-
         mappable : ScalarMappable, optional
             Return the mappable used to plot the colorbar.
             Only returned if ax is not None and x is not None.
@@ -713,8 +692,10 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
 
 
 class ShapeletImportance(ExplainerMixin, PermuteImportance):
-    """Compute the importance of shapelets by permuting instances with lowest
-    distance.
+    """Compute the importance of shapelets.
+
+    The importance is given by permuting time series sections with
+    the minimum distance to shapelets.
 
     Attributes
     ----------

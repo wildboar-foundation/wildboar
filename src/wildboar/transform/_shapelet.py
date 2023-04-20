@@ -104,7 +104,9 @@ class ShapeletMixin:
 
 
 class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
-    """Transform a time series to the distances to a selection of random
+    """Random shapelet tranform.
+
+    Transform a time series to the distances to a selection of random
     shapelets.
 
     Attributes
@@ -112,10 +114,8 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
     embedding_ : Embedding
         The underlying embedding object.
 
-
     Examples
     --------
-
     Transform each time series to the minimum DTW distance to each shapelet
 
     >>> from wildboar.dataset import load_gunpoint()
@@ -157,15 +157,14 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
         n_jobs=None,
         random_state=None,
     ):
-        """
+        """Construct a new random shapelet transform.
+
         Parameters
         ----------
         n_shapelets : int, optional
-            The number of shapelets in the resulting transform
-
+            The number of shapelets in the resulting transform.
         metric : str or list, optional
             - If str, the distance metric used to identify the best shapelet.
-
             - If list, multiple metrics specified as a list of tuples, where the first
               element of the tuple is a metric name and the second element a dictionary
               with a parameter grid specification. A parameter grid specification is a
@@ -177,23 +176,18 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
 
             Read more about the metrics and their parameters in the
             :ref:`User guide <list_of_subsequence_metrics>`.
-
         metric_params : dict, optional
             Parameters for the distance measure. Ignored unless metric is a string.
 
             Read more about the parameters in the :ref:`User guide
             <list_of_subsequence_metrics>`.
-
         min_shapelet_size : float, optional
             Minimum shapelet size.
-
         max_shapelet_size : float, optional
             Maximum shapelet size.
-
         n_jobs : int, optional
             The number of jobs to run in parallel. None means 1 and -1 means using all
             processors.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator

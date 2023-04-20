@@ -100,10 +100,8 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         ----------
         n_pivot : int, optional
             The number of pivot time series.
-
         metric : {'auto'} or list, optional
             - If str, the metric to compute the distance.
-
             - If list, multiple metrics specified as a list of tuples, where the first
               element of the tuple is a metric name and the second element a dictionary
               with a parameter grid specification. A parameter grid specification is a
@@ -115,21 +113,17 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
 
             Read more about the metrics and their parameters in the :ref:`User guide
             <list_of_subsequence_metrics>`.
-
         metric_params : dict, optional
             Parameters for the distance measure. Ignored unless metric is a string.
 
             Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
-
         metric_sample : {"uniform", "weighted"}, optional
             If multiple metrics are specified this parameter controls how they are
             sampled. "uniform" samples each metric configuration with equal probability
             and "weighted" samples each metric with equal probability. By default,
             metric configurations are sampled with equal probability.
-
         random_state : int or np.RandomState, optional
             The random state
-
         n_jobs : int, optional
             The number of cores to use.
         """

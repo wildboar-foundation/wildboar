@@ -44,7 +44,6 @@ class TargetEvaluator(abc.ABC):
         ----------
         x : ndarray of shape (n_timestep,)
             The counterfactual sample
-
         y : object
             The counterfactual label
 
@@ -67,8 +66,7 @@ class PredictEvaluator(TargetEvaluator):
 
 
 class ProbabilityEvaluator(TargetEvaluator):
-    """Evaluate if the probability of a counterfactual is at least a given
-    constant."""
+    """Evaluate the probability threshold."""
 
     def __init__(self, estimator, probability=0.5):
         """Construct a new evaluator.
@@ -77,7 +75,6 @@ class ProbabilityEvaluator(TargetEvaluator):
         ----------
         estimator : object
             The estimator
-
         probability : float
             The minimum probability of the predicted label
         """
@@ -102,16 +99,12 @@ class PrototypeSampler(abc.ABC):
         ----------
         x : ndarray of shape (n_samples, n_timestep)
             The data samples labeled as y
-
         y : object
             The label of the samples in x
-
         n_prototypes : int
             The number of prototypes in the initial sample
-
         metric_transform : MetricTransform
             The metric transformer.
-
         random_state : RandomState
             The random number generator.
         """
@@ -154,7 +147,6 @@ class PrototypeSampler(abc.ABC):
         ----------
         o : ndarray of shape (n_timestep,)
             The current counterfactual sample
-
         p : ndarray of shape (n_timestep,)
             The prototype of the counterfactual label
 
@@ -166,8 +158,7 @@ class PrototypeSampler(abc.ABC):
         return self.metric_transform.move(o, p)
 
     def sample_move(self, o, random_state):
-        """Sampla a prototype and move the counterfactual towards the
-        prototype.
+        """Sampla a prototype and move the counterfactual towards the prototype.
 
         Parameters
         ----------
@@ -184,16 +175,14 @@ class PrototypeSampler(abc.ABC):
 
 
 class UniformPrototypeSampler(PrototypeSampler):
-    """Sample a prototype uniformly at random from the initial prototype
-    sample."""
+    """Sample a prototype uniformly at random from the initial prototype sample."""
 
     def sample(self, _o, random_state):
         return self.x[self._get_random_index(random_state)]
 
 
 class KNearestPrototypeSampler(PrototypeSampler):
-    """Sample a prototype among the samples closest to the current
-    counterfactual."""
+    """Sample a prototype among the samples closest to the current counterfactual."""
 
     def __init__(self, x, y, prototype_indicies, metric_transform):
         super().__init__(x, y, prototype_indicies, metric_transform)
@@ -258,19 +247,14 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         ----------
         x : ndarray of shape (n_samples, n_timestep)
             The data samples
-
         y : object
             The label of the samples in x
-
         metric_transform : MetricTransform
             The metric transformer.
-
         random_state : RandomState
             The random number generator.
-
         min_shapelet_size : float
             The minimum shapelet size
-
         max_shapelet_size : float
             The maximum shapelet size
         """
@@ -306,14 +290,12 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         )
 
     def move(self, o, p):
-        """Move the best matching shapelet of the  counterfactual sample
-        towards the shapelet prototype.
+        """Move the best matching shapelet towards the shapelet prototype.
 
         Parameters
         ----------
         o : ndarray of shape (n_timestep,)
             The counterfactual sample
-
         p : ndarray
             The prototype shapelet
 
@@ -350,9 +332,11 @@ class ShapeletPrototypeSampler(PrototypeSampler):
 
 
 class KNearestShapeletPrototypeSampler(PrototypeSampler):
-    """Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler
-    such that prototype samples are sampled among the nearest neighbors of the
-    counterfactual."""
+    """Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler.
+
+    The prototype samples are sampled among the nearest neighbors of the
+    counterfactual.
+    """
 
     def __init__(
         self,
@@ -407,7 +391,6 @@ class MetricTransform(abc.ABC):
         ----------
         o : ndarray of shape (n_timestep,)
             An array, the time series to move
-
         p : ndarray of shape (n_timestep,)
             An array, the time series to move towards
 
@@ -426,8 +409,7 @@ class EuclideanTransform(MetricTransform):
 
 
 class DynamicTimeWarpTransform(MetricTransform):
-    """Transform a sample by moving it closer using the dtw alignment
-    matrix."""
+    """Transform a sample by moving it closer using the dtw alignment matrix."""
 
     def __init__(self, gamma, r=1.0):
         super().__init__(gamma)
@@ -479,22 +461,17 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
 
     Attributes
     ----------
-
     estimator_ : object
         The estimator for which counterfactuals are computed
-
     classes_ : ndarray
         The classes
-
     partitions_ : dict
         Dictionary of classes and PrototypeSampler
-
     target_ : TargetEvaluator
         The target evaluator
 
     References
     ----------
-
     Samsten, Isak (2020).
         Model agnostic time series counterfactuals
     """
@@ -543,22 +520,16 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         ----------
         metric : {'euclidean', 'dtw', 'wdtw'}, optional
             The metric used to move the samples
-
         r : float, optional
             The warping window size, if metric='dtw' or metric='wdtw'
-
         g : float, optional
             Penalty control for weighted DTW, if metric='wdtw'
-
         max_iter : int, optional
             The maximum number of iterations
-
         step_size : float, optional
             The step size when moving samples toward class prototypes
-
         n_prototypes : int, float or str, optional
             The number of initial prototypes to sample from
-
         target : float or {'predict'}, optional
             The target evaluation of counterfactuals:
 
@@ -566,7 +537,6 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
               label
             - if float, the counterfactual prediction probability must
               exceed target value
-
         method : {'sample', 'shapelet', 'nearest', 'nearest_shapelet'}, optional
             Method for selecting prototypes
 
@@ -576,13 +546,10 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
             - if 'nearest' a prototype is sampled from the closest n prototypes
             - if 'nearest_shapelet' a prototype shapelet is sampled from the
               closest n prototypes
-
         min_shapelet_size : float, optional
             Minimum shapelet size, if method='shapelet' or 'nearest_shapelet'
-
         max_shapelet_size : float, optional
             Maximum shapelet size, if method='shapelet' or 'nearest_shapelet'
-
         random_state : RandomState or int, optional
             Pseudo-random number for consistency between different runs
         """

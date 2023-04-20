@@ -107,12 +107,12 @@ class SAX(TransformerMixin, BaseEstimator):
         binning="normal",
         estimate=True,
     ):
-        """
+        """Construct a new SAX transform.
+
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timestep)
             The input data.
-
         n_intervals : str, optional
             The number of intervals to use for the transform.
 
@@ -121,19 +121,15 @@ class SAX(TransformerMixin, BaseEstimator):
             - if int, the number of intervals is ``n_intervals``.
             - if float, the number of intervals is ``n_intervals * n_timestep``, with
                 ``0 < n_intervals < 1``.
-
         window : int, optional
             The window size. If ``window`` is set, the value of ``n_intervals`` has no
             effect.
-
         n_bins : int, optional
             The number of bins.
-
         binning : str, optional
             The bin construction. By default the bins are defined according to the
             normal distribution. Possible values are ``"normal"`` for normally
             distributed bins or ``"uniform"`` for uniformly distributed bins.
-
         estimate : bool, optional
             Estimate the distribution parameters for the binning from data.
 
@@ -141,10 +137,8 @@ class SAX(TransformerMixin, BaseEstimator):
 
             - preprocessed using :func:`datasets.preprocess.normalize` when
               ``binning="normal"``.
-
             - preprocessed using :func:`datasets.preprocess.minmax_scale`. when
               ``binning="uniform"``
-
         """
         self.n_intervals = n_intervals
         self.window = window
@@ -270,7 +264,6 @@ def symbolic_aggregate_approximation(
     ----------
     x : array-like of shape (n_samples, n_timestep)
         The input data.
-
     n_intervals : str, optional
         The number of intervals to use for the transform.
 
@@ -279,14 +272,11 @@ def symbolic_aggregate_approximation(
         - if int, the number of intervals is ``n_intervals``.
         - if float, the number of intervals is ``n_intervals * n_timestep``, with
             ``0 < n_intervals < 1``.
-
     window : int, optional
         The window size. If ``window`` is set, the value of ``n_intervals`` has no
         effect.
-
     n_bins : int, optional
         The number of bins.
-
     binning : str, optional
         The bin construction. By default the bins are defined according to the
         normal distribution. Possible values are ``"normal"`` for normally
@@ -309,7 +299,6 @@ def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
     ----------
     x : array-like of shape (n_samples, n_timestep)
         The input data.
-
     n_intervals : str, optional
         The number of intervals to use for the transform.
 
@@ -318,7 +307,6 @@ def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
         - if int, the number of intervals is ``n_intervals``.
         - if float, the number of intervals is ``n_intervals * n_timestep``, with
             ``0 < n_intervals < 1``.
-
     window : int, optional
         The window size. If ``window`` is set, the value of ``n_intervals`` has no
         effect.

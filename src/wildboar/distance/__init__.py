@@ -183,8 +183,7 @@ def pairwise_subsequence_distance(
     return_index=False,
     n_jobs=None,
 ):
-    """Compute the minimum subsequence distance between subsequences and time
-    series.
+    """Minimum subsequence distance between subsequences and time series.
 
     Parameters
     ----------
@@ -192,25 +191,20 @@ def pairwise_subsequence_distance(
         Input time series.
 
         - if list, a list of array-like of shape (n_timestep, )
-
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
         The input data
-
     dim : int, optional
         The dim to search for subsequence
-
-     metric : str or callable, optional
+    metric : str or callable, optional
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
-
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
@@ -225,7 +219,6 @@ def pairwise_subsequence_distance(
         - if len(y) == 1, return an array of shape (n_samples, ).
         - if x.ndim == 1, return an array of shape (n_subsequences, ).
         - if x.ndim == 1 and len(y) == 1, return scalar.
-
     indices : int, ndarray, optional
          The start index of the minumum distance. Return dependes on input:
 
@@ -271,8 +264,7 @@ def paired_subsequence_distance(
     return_index=False,
     n_jobs=None,
 ):
-    """Compute the minimum subsequence distance between the i:th subsequence
-    and time series.
+    """Minimum subsequence distance between the i:th subsequence and time series.
 
     Parameters
     ----------
@@ -280,29 +272,23 @@ def paired_subsequence_distance(
         Input time series.
 
         - if list, a list of array-like of shape (m_timestep, )
-
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
         The input data
-
     dim : int, optional
         The dim to search for shapelets
-
     metric : str or callable, optional
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
-
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
-
     n_jobs : int, optional
         The number of parallel jobs to run. Ignored
 
@@ -311,7 +297,6 @@ def paired_subsequence_distance(
     dist : float, ndarray
         An array of shape (n_samples, ) with the minumum distance between the i:th
         subsequence and the i:th sample
-
     indices : int, ndarray, optional
         An array of shape (n_samples, ) with the index of the best matching position
         of the i:th subsequence and the i:th sample
@@ -366,7 +351,9 @@ def subsequence_match(
     return_distance=False,
     n_jobs=None,
 ):
-    """Find the positions where the distance is less than the threshold between
+    """Find matching subsequnces.
+
+    Find the positions where the distance is less than the threshold between
     the subsequence and all time series.
 
     - If a `threshold` is given, the default behaviour is to return all matching
@@ -380,11 +367,9 @@ def subsequence_match(
     ----------
     y : array-like of shape (yn_timestep, )
         The subsequence
-
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
         The input data
-
     threshold : str, float or callable, optional
         The distance threshold used to consider a subsequence matching. If no threshold
         is selected, `max_matches` defaults to 10.
@@ -393,24 +378,19 @@ def subsequence_match(
         - if callable, return all matches closer than the treshold computed by the
           threshold function, given all distances to the subsequence
         - if str, return all matches according to the named threshold.
-
     dim : int, optional
         The dim to search for shapelets
-
     metric : str or callable, optional
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
-
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
-
     exclude : float or int, optional
         Exclude trivial matches in the vicinity of the match.
 
@@ -419,10 +399,8 @@ def subsequence_match(
 
         A match is considered trivial if a match with lower distance is within `exclude`
         timesteps of another match with higher distance.
-
     return_distance : bool, optional
         - if True, return the distance of the match
-
     n_jobs : int, optional
         The number of parallel jobs to run. Ignored
 
@@ -435,7 +413,6 @@ def subsequence_match(
         - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
 
         For each sample, the ndarray contains the .
-
     distance : ndarray, optional
         The distances of matching subsequences. Return depends on input:
 
@@ -542,7 +519,17 @@ def paired_subsequence_match(
     return_distance=False,
     n_jobs=None,
 ):
-    """Compute the minimum subsequence distance between the i:th subsequence
+    """Find matching subsequnces.
+
+    Find the positions where the distance is less than the threshold between
+    the i:th subsequences and time series.
+
+    - If a `threshold` is given, the default behaviour is to return all matching
+      indices in the order of occurrence
+    - If no `threshold` is given, the default behaviour is to return the top 10
+      matching indicies ordered by distance
+    - If both `threshold` and `max_matches` are given, the top matches are returned
+      ordered by distance.
     and time series.
 
     Parameters
@@ -551,28 +538,22 @@ def paired_subsequence_match(
         Input time series.
 
         - if list, a list of array-like of shape (n_timestep, ) with length n_samples
-
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data
-
     threshold : float
         The distance threshold used to consider a subsequence matching. If no threshold
         is selected, `max_matches` defaults to 10.
-
     dim : int, optional
         The dim to search for shapelets
-
     metric : str or callable, optional
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
-
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
 
@@ -582,10 +563,8 @@ def paired_subsequence_match(
           matching indicies ordered by distance
         - If both `threshold` and `max_matches` are given the top matches are returned
           ordered by distance.
-
     return_distance : bool, optional
         - if True, return the distance of the match
-
     n_jobs : int, optional
         The number of parallel jobs to run. Ignored
 
@@ -598,7 +577,6 @@ def paired_subsequence_match(
         - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
 
         For each sample, the ndarray contains the .
-
     distance : ndarray, optional
         The distances of matching subsequences. Return depends on input:
 
@@ -692,24 +670,19 @@ def paired_distance(
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data. y will be broadcast to the shape of x if possible.
-
-    y : : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+    y : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data
-
     dim : int or {'mean', 'full'} optional
         The dim to compute distance
-
      metric : str or callable, optional
         The distance metric
 
         See ``_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
         :ref:`User guide <list_of_metrics>`.
-
     n_jobs : int, optional
         The number of parallel jobs.
 
@@ -804,25 +777,20 @@ def pairwise_distance(
     x : ndarray of shape (n_timestep, ), (x_samples, n_timestep) or \
             (x_samples, n_dims, n_timestep)
         The input data
-
     y : ndarray of shape (n_timestep, ), (y_samples, n_timestep) or \
             (y_samples, n_dims, n_timestep), optional
         The input data
-
     dim : int or {'mean', 'full'} optional
         The dim to compute distance
-
      metric : str or callable, optional
         The distance metric
 
         See ``_METRICS.keys()`` for a list of supported metrics.
-
     metric_params: dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
         :ref:`User guide <list_of_metrics>`.
-
     n_jobs : int, optional
         The number of parallel jobs.
 
@@ -961,30 +929,24 @@ def matrix_profile(
     x : array-like of shape (n_timestep, ), (n_samples, xn_timestep) or \
         (n_samples, n_dim, xn_timestep)
         The first time series
-
     y : array-like of shape (n_timestep, ), (n_samples, yn_timestep) or \
         (n_samples, n_dim, yn_timestep), optional
         The optional second time series. y is broadcast to the shape of x if possible.
-
     window : int or float, optional
         The subsequence size, by default 5
 
         - if float, a fraction of `y.shape[-1]`
         - if int, the exact subsequence size
-
     dim : int, optional
         The dim to compute the matrix profile for, by default 0
-
     exclude : int or float, optional
         The size of the exclusion zone. The default exclusion zone is  0.2 for
         similarity self-join and 0.0 for similarity join.
 
         - if float, expressed as a fraction of the windows size
         - if int, exact size (0 >= exclude < window)
-
     n_jobs : int, optional
         The number of jobs to use when computing the
-
     return_index : bool, optional
         Return the matrix profile index
 
@@ -992,7 +954,6 @@ def matrix_profile(
     -------
     mp : ndarray of shape (profile_size, ) or (n_samples, profile_size)
         The matrix profile
-
     mpi : ndarray of shape (profile_size, ) or (n_samples, profile_size), optional
         The matrix profile index
 

@@ -121,7 +121,6 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
 
     Attributes
     ----------
-
     tree_ : Tree
         The internal tree representation
     """
@@ -149,42 +148,35 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         criterion="squared_error",
         random_state=None,
     ):
-        """
+        """Construct a new shapelet tree regressor estimator.
+
         Parameters
         ----------
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
-            samples
-
+            samples.
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf
-
         criterion : {"squared_error"}, optional
             The criterion used to evaluate the utility of a split
 
             .. deprecated:: 1.0
                 Criterion "mse" was deprecated in v1.1 and will be removed in
                 version 1.2. Use `criterion="squared_error"` which is equivalent.
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value
-
         n_shapelets : int, optional
             The number of shapelets to sample at each node.
-
         min_shapelet_size : float, optional
             The minimum length of a sampled shapelet expressed as a fraction, computed
             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
-
         max_shapelet_size : float, optional
             The maximum length of a sampled shapelet, expressed as a fraction, computed
             as `ceil(X.shape[-1] * max_shapelet_size)`.
-
         alpha : float, optional
             Dynamically decrease the number of sampled shapelets at each node according
             to the current depth.
@@ -203,10 +195,8 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
 
             - if ``None``, the number of sampled shapelets are the same independeth of
               depth.
-
         metric : str or list, optional
             - If str, the distance metric used to identify the best shapelet.
-
             - If list, multiple metrics specified as a list of tuples, where the first
               element of the tuple is a metric name and the second element a dictionary
               with a parameter grid specification. A parameter grid specification is a
@@ -221,13 +211,11 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
 
             .. versionchanged:: 1.2
                 Added support for multi-metric shapelet transform
-
         metric_params : dict, optional
             Parameters for the distance measure. Ignored unless metric is a string.
 
             Read more about the parameters in the :ref:`User guide
             <list_of_subsequence_metrics>`.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -258,7 +246,6 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
 
     Attributes
     ----------
-
     tree_ : Tree
         The internal tree representation
     """
@@ -281,51 +268,41 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         criterion="squared_error",
         random_state=None,
     ):
-        """
+        """Construct a new extra ranodm shapelet tree regressor estimator.
+
         Parameters
         ----------
         n_shapelets : int, optional
             The number of shapelets to sample at each node.
-
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf
-
         criterion : {"mse"}, optional
             The criterion used to evaluate the utility of a split
 
             .. deprecated:: 1.0
                 Criterion "mse" was deprecated in v1.1 and will be removed in
                 version 1.2. Use `criterion="squared_error"` which is equivalent.
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value
-
         n_shapelets : int, optional
             The number of shapelets to sample at each node.
-
         min_shapelet_size : float, optional
             The minimum length of a sampled shapelet expressed as a fraction, computed
             as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
-
         max_shapelet_size : float, optional
             The maximum length of a sampled shapelet, expressed as a fraction, computed
             as `ceil(X.shape[-1] * max_shapelet_size)`.
-
         metric : {'euclidean', 'scaled_euclidean', 'scaled_dtw'}, optional
             Distance metric used to identify the best shapelet.
-
         metric_params : dict, optional
             Parameters for the distance measure
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
@@ -379,13 +356,10 @@ class ShapeletTreeClassifier(
 
     Attributes
     ----------
-
     tree_ : Tree
         The tree data structure used internally
-
     classes_ : ndarray of shape (n_classes,)
         The class labels
-
     n_classes_ : int
         The number of class labels
 
@@ -419,7 +393,7 @@ class ShapeletTreeClassifier(
         class_weight=None,
         random_state=None,
     ):
-        """
+        """Construct a new shapelet tree classifier.
 
         Parameters
         ----------
@@ -427,31 +401,23 @@ class ShapeletTreeClassifier(
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf
-
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value
-
         n_shapelets : int, optional
             The number of shapelets to sample at each node.
-
         min_shapelet_size : float, optional
             The minimum length of a sampled shapelet expressed as a fraction, computed
             as ``min(ceil(X.shape[-1] * min_shapelet_size), 2)``.
-
         max_shapelet_size : float, optional
             The maximum length of a sampled shapelet, expressed as a fraction, computed
             as ``ceil(X.shape[-1] * max_shapelet_size)``.
-
         alpha : float, optional
             Dynamically decrease the number of sampled shapelets at each node according
             to the current depth.
@@ -462,21 +428,17 @@ class ShapeletTreeClassifier(
               ``n_shapelets`` towards 1 with increased depth.
 
               .. math:`n_shapelets * (1 - w)`
-
             - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
               towards ``n_shapelets`` with increased depth.
 
               .. math:`n_shapelets * w`
-
             - if ``None``, the number of sampled shapelets are the same independeth of
               depth.
 
         metric : {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
             Distance metric used to identify the best shapelet.
-
         metric_params : dict, optional
             Parameters for the distance measure
-
         class_weight : dict or "balanced", optional
             Weights associated with the labels
 
@@ -484,7 +446,6 @@ class ShapeletTreeClassifier(
             - if "balanced" each class weight inversely proportional to the class
               frequency
             - if None, each class has equal weight
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
@@ -539,44 +500,35 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         class_weight=None,
         random_state=None,
     ):
-        """
+        """Construct a new extra shapelet tree classifier.
+
         Parameters
         ----------
         n_shapelets : int, optional
             The number of shapelets to sample at each node.
-
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf
-
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value
-
         min_shapelet_size : float, optional
             The minimum length of a sampled shapelet expressed as a fraction, computed
             as ``min(ceil(X.shape[-1] * min_shapelet_size), 2)``.
-
         max_shapelet_size : float, optional
             The maximum length of a sampled shapelet, expressed as a fraction, computed
             as ``ceil(X.shape[-1] * max_shapelet_size)``.
-
         metric : {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
             Distance metric used to identify the best shapelet.
-
         metric_params : dict, optional
             Parameters for the distance measure
-
         class_weight : dict or "balanced", optional
             Weights associated with the labels
 
@@ -584,7 +536,6 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             - if "balanced" each class weight inversely proportional to the class
               frequency
             - if None, each class has equal weight
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator;
             - If `RandomState` instance, `random_state` is the random number generator;
@@ -629,7 +580,6 @@ class RocketTreeRegressor(RocketMixin, BaseFeatureTreeRegressor):
 
     Attributes
     ----------
-
     tree_ : Tree
         The internal tree representation.
     """
@@ -657,70 +607,54 @@ class RocketTreeRegressor(RocketMixin, BaseFeatureTreeRegressor):
         padding_prob=0.5,
         random_state=None,
     ):
-        """
+        """Construct a new rocket tree regressor.
+
         Parameters
         ----------
         n_kernels : int, optional
             The number of kernels to sample at each node.
-
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples.
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node.
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf.
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value.
-
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split.
-
         sampling : {"normal", "uniform", "shapelet"}, optional
             The sampling of convolutional filters.
 
             - if "normal", sample filter according to a normal distribution with
               ``mean`` and ``scale``.
-
             - if "uniform", sample filter according to a uniform distribution with
               ``lower`` and ``upper``.
-
             - if "shapelet", sample filters as subsequences in the training data.
-
         sampling_params : dict, optional
             The parameters for the sampling.
 
             - if "normal", ``{"mean": float, "scale": float}``, defaults to
                ``{"mean": 0, "scale": 1}``.
-
             - if "uniform", ``{"lower": float, "upper": float}``, defaults to
                ``{"lower": -1, "upper": 1}``.
-
         kernel_size : array-like, optional
             The kernel size, by default ``[7, 11, 13]``.
-
         min_size : float, optional
             The minimum timestep fraction to generate kernel sizes. If set,
             ``kernel_size`` cannot be set.
-
         max_size : float, optional
             The maximum timestep fractio to generate kernel sizes, If set,
             ``kernel_size`` cannot be set.
-
         bias_prob : float, optional
             The probability of using a bias term.
-
         normalize_prob : float, optional
             The probability of performing normalization.
-
         padding_prob : float, optional
             The probability of padding with zeros.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -749,7 +683,6 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
 
     Attributes
     ----------
-
     tree_ : Tree
         The internal tree representation.
     """
@@ -780,71 +713,54 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
         class_weight=None,
         random_state=None,
     ):
-        """
+        """Construct a new rocket tree classifier.
+
         Parameters
         ----------
-
         n_kernels : int, optional
             The number of kernels to sample at each node.
-
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples.
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node.
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf.
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value.
-
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split.
-
         sampling : {"normal", "uniform", "shapelet"}, optional
             The sampling of convolutional filters.
 
             - if "normal", sample filter according to a normal distribution with
               ``mean`` and ``scale``.
-
             - if "uniform", sample filter according to a uniform distribution with
               ``lower`` and ``upper``.
-
             - if "shapelet", sample filters as subsequences in the training data.
-
         sampling_params : dict, optional
             The parameters for the sampling.
 
             - if "normal", ``{"mean": float, "scale": float}``, defaults to
                ``{"mean": 0, "scale": 1}``.
-
             - if "uniform", ``{"lower": float, "upper": float}``, defaults to
                ``{"lower": -1, "upper": 1}``.
-
         kernel_size : array-like, optional
             The kernel size, by default ``[7, 11, 13]``.
-
         min_size : float, optional
             The minimum timestep fraction to generate kernel sizes. If set,
             ``kernel_size`` cannot be set.
-
         max_size : float, optional
             The maximum timestep fractio to generate kernel sizes, If set,
             ``kernel_size`` cannot be set.
-
         bias_prob : float, optional
             The probability of using a bias term.
-
         normalize_prob : float, optional
             The probability of performing normalization.
-
         padding_prob : float, optional
             The probability of padding with zeros.
-
         class_weight : dict or "balanced", optional
             Weights associated with the labels
 
@@ -852,7 +768,6 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
             - if "balanced" each class weight inversely proportional to the class
               frequency
             - if None, each class has equal weight
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -884,7 +799,6 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
 
     Attributes
     ----------
-
     tree_ : Tree
         The internal tree structure.
     """
@@ -912,10 +826,10 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
         class_weight=None,
         random_state=None,
     ):
-        """
+        """Construct a new interval tree classifier.
+
         Parameters
         ----------
-
         n_intervals : {"log", "sqrt"}, int or float, optional
             The number of intervals to partition the time series into.
 
@@ -924,42 +838,32 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
             - if int, the number of intervals is ``n_intervals``.
             - if float, the number of intervals is ``n_intervals * n_timestep``, with
               ``0 < n_intervals < 1``.
-
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples.
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node.
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf.
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value.
-
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split.
-
         intervals : {"fixed", "sample", "random"}, optional
 
             - if "fixed", `n_intervals` non-overlapping intervals.
             - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
             - if "random", `n_intervals` possibly overlapping intervals of randomly
               sampled in ``[min_size * n_timestep, max_size * n_timestep]``
-
         sample_size : float, optional
             The fraction of intervals to sample at each node. Ignored unless
             ``intervals="sample"``.
-
         min_size : float, optional
             The minmum interval size. Ignored unless ``intervals="random"``.
-
         max_size : float, optional
             The maximum interval size. Ignored unless ``intervals="random"``.
-
         summarizer : list or str, optional
             The summarization of each interval.
 
@@ -967,15 +871,12 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
             - if str, a predified summarized. See
               :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
               summarizers.
-
         class_weight : dict or "balanced", optional
             Weights associated with the labels
-
             - if dict, weights on the form {label: weight}
             - if "balanced" each class weight inversely proportional to the class
               frequency
             - if None, each class has equal weight
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -1004,7 +905,6 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
 
     Attributes
     ----------
-
     tree_ : Tree
         The internal tree structure.
     """
@@ -1031,10 +931,10 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
         summarizer="mean_var_slope",
         random_state=None,
     ):
-        """
+        """Construct a new interval tree regressor.
+
         Parameters
         ----------
-
         n_intervals : {"log", "sqrt"}, int or float, optional
             The number of intervals to partition the time series into.
 
@@ -1043,46 +943,35 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
             - if int, the number of intervals is ``n_intervals``.
             - if float, the number of intervals is ``n_intervals * n_timestep``, with
               ``0 < n_intervals < 1``.
-
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples.
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node.
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf.
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value.
-
         criterion : {"squared_error"}, optional
             The criterion used to evaluate the utility of a split.
 
             .. deprecated:: 1.0
                 Criterion "mse" was deprecated in v1.1 and will be removed in
                 version 1.2. Use `criterion="squared_error"` which is equivalent.
-
         intervals : {"fixed", "sample", "random"}, optional
-
             - if "fixed", `n_intervals` non-overlapping intervals.
             - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
             - if "random", `n_intervals` possibly overlapping intervals of randomly
               sampled in ``[min_size * n_timestep, max_size * n_timestep]``
-
         sample_size : float, optional
             The fraction of intervals to sample at each node. Ignored unless
             ``intervals="sample"``.
-
         min_size : float, optional
             The minmum interval size. Ignored unless ``intervals="random"``.
-
         max_size : float, optional
             The maximum interval size. Ignored unless ``intervals="random"``.
-
         summarizer : list or str, optional
             The summarization of each interval.
 
@@ -1090,7 +979,6 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
             - if str, a predified summarized. See
               :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
               summarizers.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
@@ -1118,7 +1006,6 @@ class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
 
     Attributes
     ----------
-
     tree_ : Tree
         The internal tree representation
     """
@@ -1142,33 +1029,27 @@ class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
         class_weight=None,
         random_state=None,
     ):
-        """
+        """Construct a new pivot tree classifier.
+
         Parameters
         ----------
         n_pivot : str or int, optional
             The number of pivot time series to sample at each node.
-
         metrics : str, optional
             The metrics to sample from. Currently, we only support "all".
-
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
             samples.
-
         min_samples_split : int, optional
             The minimum number of samples to split an internal node.
-
         min_samples_leaf : int, optional
             The minimum number of samples in a leaf.
-
         min_impurity_decrease : float, optional
             A split will be introduced only if the impurity decrease is larger than or
             equal to this value.
-
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split.
-
         class_weight : dict or "balanced", optional
             Weights associated with the labels.
 
@@ -1176,7 +1057,6 @@ class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
             - if "balanced" each class weight inversely proportional to the class
               frequency.
             - if None, each class has equal weight.
-
         random_state : int or RandomState
             - If `int`, `random_state` is the seed used by the random number generator
             - If `RandomState` instance, `random_state` is the random number generator
