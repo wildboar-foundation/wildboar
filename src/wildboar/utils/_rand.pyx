@@ -18,7 +18,7 @@ cdef class RandomSampler:
         self.weights = weights
         self.upper = upper
         if self.weights is not None:
-            if upper != len(weights):
+            if upper != weights.shape[0]:
                 raise ValueError("upper != len(weights)")
 
             vose_rand_init(&self.vr, len(weights))
