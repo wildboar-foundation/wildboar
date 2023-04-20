@@ -1,0 +1,52 @@
+:orphan:
+
+:py:mod:`wildboar.model_selection._outlier`
+===========================================
+
+.. py:module:: wildboar.model_selection._outlier
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.model_selection._outlier.outlier_train_test_split
+
+
+
+.. py:function:: outlier_train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None)
+
+   Outlier training and testing split from classification dataset.
+
+   :param x: Input data samples
+   :type x: array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep)
+   :param y: Input class label
+   :type y: array-like of shape (n_samples,)
+   :param normal_class: Class label that should be considered as the normal class
+   :type normal_class: int
+   :param test_size: Size of the test set
+   :type test_size: float
+   :param anomalies_train_size: Contamination of anomalies in the training dataset
+   :type anomalies_train_size: float
+   :param random_state: Psudo random state used for stable results.
+   :type random_state: int or RandomState
+
+   :returns: * **x_train** (*array-like*) -- Training samples
+             * **x_test** (*array-like*) -- Test samples
+             * **y_train** (*array-like*) -- Training labels (either 1 or -1, where 1 denotes normal and -1 anomalous)
+             * **y_test** (*array-like*) -- Test labels (either 1 or -1, where 1 denotes normal and -1 anomalous)
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_two_lead_ecg
+   >>> x, y = load_two_lead_ecg()
+   >>> x_train, x_test, y_train, y_test = train_test_split(
+   ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+   ... )
+
+

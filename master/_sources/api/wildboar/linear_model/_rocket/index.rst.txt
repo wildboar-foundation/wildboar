@@ -1,0 +1,36 @@
+:orphan:
+
+:py:mod:`wildboar.linear_model._rocket`
+=======================================
+
+.. py:module:: wildboar.linear_model._rocket
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.linear_model._rocket.RocketClassifier
+   wildboar.linear_model._rocket.RocketRegressor
+
+
+
+
+.. py:class:: RocketClassifier(n_kernels=10000, *, kernel_size=None, sampling='normal', sampling_params=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize=True, n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeClassifierCV`
+
+   Implements the ROCKET classifier.
+
+
+.. py:class:: RocketRegressor(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
+
+   Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeCV`
+
+   Implements the ROCKET regressor.
+
+

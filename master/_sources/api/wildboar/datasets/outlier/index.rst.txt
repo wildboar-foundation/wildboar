@@ -1,0 +1,233 @@
+:py:mod:`wildboar.datasets.outlier`
+===================================
+
+.. py:module:: wildboar.datasets.outlier
+
+.. autoapi-nested-parse::
+
+   Utilities for generating synthetic outlier datasets.
+
+   See the :doc:`User Guide
+   <wildboar:guide/unsupervised/outlier/generation` for more details and
+   example uses.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.datasets.outlier.density_outliers
+   wildboar.datasets.outlier.emmott_outliers
+   wildboar.datasets.outlier.kmeans_outliers
+   wildboar.datasets.outlier.majority_outliers
+   wildboar.datasets.outlier.minority_outliers
+
+
+
+.. py:function:: density_outliers(x, y=None, *, n_outliers=0.05, method='dbscan', eps=2.0, min_sample=5, metric='euclidean', max_eps=np.inf, random_state=None)
+
+   Densitiy based outlier generation.
+
+   Labels samples as outliers if a density cluster algorithm fail to assign
+   them to a cluster.
+
+   :param x: The input samples
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: Ignored.
+   :type y: ndarray of shape (n_samples, ), optional
+   :param n_outliers: The number of outlier samples expressed as a fraction of the inlier samples.
+                      By default, all samples of the minority class is considered as outliers.
+   :type n_outliers: float, optional
+   :param method: The density based clustering method.
+   :type method: {"dbscan", "optics"}, optional
+   :param eps: The eps parameter, when ``method="dbscan"``.
+   :type eps: float, optional
+   :param min_sample: The ``min_sample`` parameter to the cluter method
+   :type min_sample: int, optional
+   :param metric: The ``metric`` parameter to the cluster method
+   :type metric: str, optional
+   :param max_eps: The ``max_eps`` parameter, when ``method="optics"``.
+   :type max_eps: float, optional
+
+   :returns: * **x_outlier** (*ndarray of shape (n_inliers + n_outliers, n_timestep)*) -- The samples
+             * **y_outlier** (*ndarray of shape (n_inliers + n_outliers, )*) -- The inliers (labeled as 1) and outlier (labled as -1)
+
+
+.. py:function:: emmott_outliers(x, y, *, n_outliers=None, confusion_estimator=None, difficulty_estimator=None, transform='interval', difficulty='simplest', scale=None, variation='tight', random_state=None)
+
+   Difficulty based outlier generation.
+
+   Create a synthetic outlier detection dataset from a labeled classification
+   dataset using the method described by Emmott et.al. (2013).
+
+   The Emmott labeler can reliably label both binary and multiclass datasets. For
+   binary datasets a random label is selected as the outlier class. For multiclass
+   datasets a set of classes with maximal confusion (as measured by
+   ``confusion_estimator`` is selected as outlier label. For each outlier sample the
+   ``difficulty_estimator`` assigns a difficulty score which is digitized into ranges
+   and selected according to the ``difficulty`` parameters. Finally a sample of
+   approximately ``n_outlier`` is selected either maximally dispersed or tight.
+
+   :param x: The input samples
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The input labels.
+   :type y: ndarray of shape (n_samples, )
+   :param n_outliers: The number of outlier samples expressed as a fraction of the inlier samples.
+
+                      - if float, the number of outliers are guaranteed but an error is raised
+                        if the the requested difficulty has to few samples or the labels selected
+                        for the outlier label has to few samples.
+   :type n_outliers: float, optional
+   :param confusion_estimator: Estimator of class confusion for datasets where ``n_classes > 2``. Default to a
+                               random forest classifier.
+   :type confusion_estimator: object, optional
+   :param difficulty_estimator: Estimator for sample difficulty. The difficulty estimator must support
+                                ``predict_proba``. Defaults to a kernel logistic regression model with
+                                a RBF-kernel.
+   :type difficulty_estimator: object, optional
+   :param transform: Transform x before the confusion and difficulty estimator.
+
+                     - if None, no transformation is applied.
+                     - if 'interval', use the :class:`transform.IntervalTransform` with default
+                       parameters.
+                     - otherwise, use the supplied transform
+   :type transform: 'interval' or Transform, optional
+   :param difficulty: The difficulty of the outlier points quantized according to scale. The value
+                      should be in the range ``[1, len(scale)]`` with lower difficulty denoting
+                      simpler outliers. If an array is given, multiple difficulties can be
+                      included, e.g., ``[1, 4]`` would mix easy and difficult outliers.
+
+                      - if 'any' outliers are sampled from all scores
+                      - if 'simplest' the simplest n_outliers are selected
+                      - if 'hardest' the hardest n_outliers are selected
+   :type difficulty: {'any', 'simplest', 'hardest'}, int or array-like, optional
+   :param scale: The scale of quantized difficulty scores. Defaults to ``[0, 0.16, 0.3, 0.5]``.
+                 Scores (which are probabilities in the range [0, 1]) are fit into the ranges
+                 using ``np.digitize(difficulty, scale)``.
+
+                 - if int, use `scale` percentiles based in the difficulty scores.
+   :type scale: int or array-like, optional
+   :param variation: Selection procedure for sampling outlier samples. If ``difficulty="simplest"``
+                     or ``difficulty="hardest"``, this parameter has no effect.
+
+                     - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples
+                       are selected according to their euclidean distance.
+                     - if 'dispersed' ``n_outlier`` points are selected according to a facility
+                       location algorithm such that they are distributed among the outliers.
+   :type variation: {'tight', 'dispersed'}, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                            by `np.random`.
+   :type random_state: int or RandomState
+
+   :returns: * **x_outlier** (*ndarray of shape (n_inliers + n_outliers, n_timestep)*) -- The samples
+             * **y_outlier** (*ndarray of shape (n_inliers + n_outliers, )*) -- The inliers (labeled as 1) and outlier (labled as -1)
+
+   .. rubric:: Notes
+
+   - For multiclass datasets the Emmott labeler require the package `networkx`
+   - For dispersed outlier selection the Emmott labeler require the package
+     `scikit-learn-extra`
+
+   The difficulty parameters 'simplest' and 'hardest' are not described by
+   Emmott et.al. (2013)
+
+   .. warning::
+
+      n_outliers
+          The number of outliers returned is dependent on the difficulty setting and the
+          available number of samples of the minority class. If the minority class does
+          not contain sufficient number of samples of the desired difficulty, fewer than
+          n_outliers may be returned.
+
+   .. rubric:: References
+
+   Emmott, A. F., Das, S., Dietterich, T., Fern, A., & Wong, W. K. (2013).
+       Systematic construction of anomaly detection benchmarks from real data.
+       In Proceedings of the ACM SIGKDD workshop on outlier detection and description
+       (pp. 16-21).
+
+
+.. py:function:: kmeans_outliers(x, y=None, *, n_outliers=0.05, n_clusters=5, random_state=None)
+
+   K-means outlier generation.
+
+   Label the samples of the cluster farthers from the other clusters as
+   outliers.
+
+   :param x: The input samples
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: Ignored.
+   :type y: ndarray of shape (n_samples, ), optional
+   :param n_outliers: The number of outlier samples expressed as a fraction of the inlier samples.
+
+                      - if float, the number of outliers are guaranteed but an error is raised
+                        if no cluster can satisfy the constraints. Lowering the ``n_cluster``
+                        parameter to allow for more samples per cluster.
+   :type n_outliers: float, optional
+   :param n_clusters: The number of clusters.
+   :type n_clusters: int, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                            by `np.random`.
+   :type random_state: int or RandomState
+
+   :returns: * **x_outlier** (*ndarray of shape (n_inliers + n_outliers, n_timestep)*) -- The samples
+             * **y_outlier** (*ndarray of shape (n_inliers + n_outliers, )*) -- The inliers (labeled as 1) and outlier (labled as -1)
+
+
+.. py:function:: majority_outliers(x, y, *, n_outliers=0.05, random_state=None)
+
+   Labels the majority class as inliers.
+
+   :param x: The input samples
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The input labels.
+   :type y: ndarray of shape (n_samples, )
+   :param n_outliers: The number of outlier samples expressed as a fraction of the inlier samples.
+   :type n_outliers: float, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                            by `np.random`.
+   :type random_state: int or RandomState
+
+   :returns: * **x_outlier** (*ndarray of shape (n_inliers + n_outliers, n_timestep)*) -- The samples
+             * **y_outlier** (*ndarray of shape (n_inliers + n_outliers, )*) -- The inliers (labeled as 1) and outlier (labled as -1)
+
+
+.. py:function:: minority_outliers(x, y, *, n_outliers=0.05, random_state=None)
+
+   Labels (a fraction of) the minority class as the outlier.
+
+   :param x: The input samples
+   :type x: ndarray of shape (n_samples, n_timestep)
+   :param y: The input labels.
+   :type y: ndarray of shape (n_samples, )
+   :param n_outliers: The number of outlier samples expressed as a fraction of the inlier samples.
+
+                      - if float, the number of outliers are guaranteed but an error is raised
+                        if the minority class has to few samples.
+   :type n_outliers: float, optional
+   :param random_state:
+                        - If `int`, `random_state` is the seed used by the random number generator
+                        - If `RandomState` instance, `random_state` is the random number generator
+                        - If `None`, the random number generator is the `RandomState` instance used
+                            by `np.random`.
+   :type random_state: int or RandomState
+
+   :returns: * **x_outlier** (*ndarray of shape (n_inliers + n_outliers, n_timestep)*) -- The samples
+             * **y_outlier** (*ndarray of shape (n_inliers + n_outliers, )*) -- The inliers (labeled as 1) and outlier (labled as -1)
+
+

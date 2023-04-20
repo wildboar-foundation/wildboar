@@ -1,0 +1,78 @@
+:py:mod:`wildboar.utils.variable_len`
+=====================================
+
+.. py:module:: wildboar.utils.variable_len
+
+.. autoapi-nested-parse::
+
+   Utilities for variable length series.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.variable_len.get_variable_length
+   wildboar.utils.variable_len.is_end_of_series
+   wildboar.utils.variable_len.is_variable_length
+
+
+
+.. py:function:: get_variable_length(x)
+
+   Return the length of each time-series.
+
+   :param x: The input
+   :type x: time-series
+
+   :returns: **length** -- The lenght of the time series
+   :rtype: float or ndarray
+
+   .. rubric:: Examples
+
+   >>> from wildboar.utils.variable_len import get_variable_length
+   >>> x = np.array(
+   ...     [
+   ...         [[1, 2, 3, eos], [1, 2, eos, eos], [1, 2, 3, 4]],
+   ...         [[1, 2, 3, eos], [1, 2, eos, eos], [1, eos, 3, 4]],
+   ...     ]
+   ... )
+   >>> get_variable_length(x)
+   [[3 2 4]
+    [3 2 4]]
+
+   >>> get_variable_length([1, 2, eos, eos])
+   2
+
+   >>> get_variable_length([[1, 2, eos, eos]])
+   [2]
+
+
+.. py:function:: is_end_of_series(x)
+
+   Test element-wise for EoS and return result as a boolean array.
+
+   :param x: Input array.
+   :type x: ndarray
+
+   :returns: boolean indicator array
+   :rtype: ndarray or bool
+
+
+.. py:function:: is_variable_length(x)
+
+   Test if time-series is variable length.
+
+   :param x: The input.
+   :type x: time-series
+
+   :returns: True if time series contains EoS
+   :rtype: bool
+
+

@@ -1,0 +1,50 @@
+:py:mod:`wildboar.utils.decorators`
+===================================
+
+.. py:module:: wildboar.utils.decorators
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.utils.decorators.array_or_scalar
+   wildboar.utils.decorators.singleton
+   wildboar.utils.decorators.unstable
+
+
+
+.. py:function:: array_or_scalar(optional_f=None, squeeze=True)
+
+   Decorate a function returning an ndarray to return a single scalar if
+   the array has a single item.
+
+   :param optional_f: Used if the decorator is used without arguments
+   :type optional_f: callable, optional
+   :param squeeze: Remove axis of length one from the returned arrays
+   :type squeeze: bool, optional
+
+
+.. py:function:: singleton(f)
+
+   Recursivley try to unwrap list return arguments such that a single
+   element can be returned.
+
+
+.. py:function:: unstable(optional_f=None, stability='beta', description=None)
+
+   Decorate a function as unsatable.
+
+   :param optional_f: The decorated function
+   :type optional_f: callable, optional
+   :param stability: The stability of the feature
+   :type stability: str, optional
+   :param description: The description of the feature
+   :type description: str, optional
+
+

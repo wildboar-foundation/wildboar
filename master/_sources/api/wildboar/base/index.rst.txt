@@ -1,0 +1,114 @@
+:py:mod:`wildboar.base`
+=======================
+
+.. py:module:: wildboar.base
+
+.. autoapi-nested-parse::
+
+   Base classes for all estimators.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.base.BaseEstimator
+   wildboar.base.CounterfactualMixin
+   wildboar.base.ExplainerMixin
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   wildboar.base.is_counterfactual
+   wildboar.base.is_explainer
+
+
+
+.. py:class:: BaseEstimator
+
+   Bases: :py:obj:`sklearn.base.BaseEstimator`
+
+   Base estimator for all Wildboar estimators.
+
+
+.. py:class:: CounterfactualMixin
+
+   Mixin class for counterfactual explainer.
+
+   .. py:method:: score(x, y)
+
+      Score the counterfactual explainer in terms of closeness of fit.
+
+      :param x: The samples.
+      :type x: array-like of shape (n_samples, n_timestep)
+      :param y: The desired counterfactal label.
+      :type y: array-like of shape (n_samples, )
+
+      :returns: **score** -- The closensess of fit.
+      :rtype: float
+
+
+   .. py:method:: transform(x, y)
+
+
+
+.. py:class:: ExplainerMixin
+
+   Mixin class for all explainers in wildboar.
+
+   .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
+
+      Fit and return the explanation.
+
+      :param estimator: The estimator to explain.
+      :type estimator: Estimator
+      :param x: The input time series.
+      :type x: time-series, optional
+      :param y: The labels.
+      :type y: array-like of shape (n_samples, ), optional
+      :param \*\*kwargs: Optional extra arguments.
+
+      :returns: The explanation.
+      :rtype: ndarray
+
+
+   .. py:method:: plot(x=None, y=None, ax=None)
+
+      Plot the explanation.
+
+      :returns: **ax** -- The axes object
+      :rtype: Axes
+
+
+
+.. py:function:: is_counterfactual(estimator)
+
+   Check if estimator is a counterfactual explainer.
+
+   :param estimator: The estimator
+   :type estimator: object
+
+   :returns: True if the estimator probably is a counterfactual explainer
+   :rtype: bool
+
+
+.. py:function:: is_explainer(estimator)
+
+   Check if estimator is an explainer.
+
+   :param estimator: The estimator
+   :type estimator: object
+
+   :returns: True if the estimator probably is an explainer
+   :rtype: bool
+
+
