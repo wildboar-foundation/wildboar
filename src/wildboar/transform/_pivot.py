@@ -12,6 +12,7 @@ from ..distance import _METRICS
 from ..distance._multi_metric import make_metrics
 from ..utils._rand import RandomSampler
 from ..utils.validation import check_option
+from ._base import BaseFeatureEngineerTransform
 from ._cpivot import PivotFeatureEngineer
 
 _METRIC_NAMES = set(_METRICS.keys())
@@ -93,7 +94,7 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         random_state=None,
         n_jobs=None,
     ):
-        """
+        """Construct a new pivot transform.
 
         Parameters
         ----------
