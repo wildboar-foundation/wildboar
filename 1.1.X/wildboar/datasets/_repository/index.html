@@ -5,13 +5,13 @@
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 6.2.0 and Furo 2023.03.27 -->
         <title>wildboar.datasets._repository - Wildboar 1.1.2.dev11 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -877,57 +877,6 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.datasets._repository.DEFAULT_TAG"><code class="docutils literal notranslate"><span class="pre">DEFAULT_TAG</span></code></a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle">Bundle</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle.name">name</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle.description">description</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle.label_index">label_index</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle.get_collection">get_collection</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle.get_filename">get_filename</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle.list">list</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Bundle.load">load</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository">JSONRepository</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository.download_url">download_url</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository.identifier">identifier</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository.name">name</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository.version">version</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository.wildboar_requires">wildboar_requires</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository.supported_version">supported_version</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.JSONRepository.get_bundles">get_bundles</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.NpBundle">NpBundle</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository">Repository</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.active">active</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.download_url">download_url</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.identifier">identifier</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.name">name</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.version">version</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.wildboar_requires">wildboar_requires</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.__eq__">__eq__</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.__hash__">__hash__</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.clear_cache">clear_cache</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.get_bundle">get_bundle</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.get_bundles">get_bundles</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.list_datasets">list_datasets</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.load_dataset">load_dataset</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.Repository.refresh">refresh</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection">RepositoryCollection</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.__contains__">__contains__</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.__delitem__">__delitem__</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.__getitem__">__getitem__</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.__iter__">__iter__</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.__len__">__len__</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.install">install</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.load_repository">load_repository</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.refresh">refresh</a></li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.RepositoryCollection.save_repository">save_repository</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.datasets._repository.DEFAULT_TAG">DEFAULT_TAG</a></li>
 </ul>
 </li>
 </ul>
@@ -945,9 +894,6 @@
   </div>
 </div>
 <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>

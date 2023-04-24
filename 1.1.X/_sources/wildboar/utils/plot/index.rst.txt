@@ -69,7 +69,7 @@ Attributes
       :param value: Data to normalize.
       :param clip: If ``None``, defaults to ``self.clip`` (which defaults to
                    ``False``).
-      :type clip: bool
+      :type clip: bool, optional
 
       .. rubric:: Notes
 
