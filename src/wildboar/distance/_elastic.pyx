@@ -1619,7 +1619,7 @@ cdef double twe_distance(
                 up_left
                 + fabs(X[i] - Y[j]) 
                 + fabs(x - y)
-                + stiffness * 2 * fabs(i - j)
+                + stiffness * 2 * labs(i - j)
             )
 
             cost[j] = min(del_x, del_y, match)
