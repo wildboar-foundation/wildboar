@@ -4,7 +4,8 @@
 # License: BSD 3 clause
 from numpy cimport float64_t, ndarray
 
-from ..utils cimport List, TSArray
+from ..utils cimport TSArray
+from ..utils._misc cimport List
 
 
 cdef double EPSILON = 1e-13

@@ -17,6 +17,7 @@ from ..utils cimport _stats
 from copy import deepcopy
 
 from ..utils cimport TSArray
+from ..utils._misc cimport List
 
 from ..utils._parallel import run_in_parallel
 from ..utils.validation import check_array
