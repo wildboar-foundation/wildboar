@@ -25,6 +25,7 @@ Classes
 
 .. py:class:: BaseTransformClassifier(*, random_state=None, n_jobs=None)
 
+
    Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`BaseTransformEstimator`
 
    Mixin class for all classifiers in scikit-learn.
@@ -47,6 +48,7 @@ Classes
 
 .. py:class:: BaseTransformEstimator(*, random_state=None, n_jobs=None)
 
+
    Bases: :py:obj:`wildboar.base.BaseEstimator`
 
    Base estimator for all Wildboar estimators.
@@ -56,6 +58,7 @@ Classes
 
 
 .. py:class:: BaseTransformRegressor(*, random_state=None, n_jobs=None)
+
 
    Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`BaseTransformEstimator`
 
@@ -70,12 +73,14 @@ Classes
 
 .. py:class:: TransformRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, gcv_mode=None, normalize=True, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`BaseTransformRegressor`
 
    Mixin class for all regression estimators in scikit-learn.
 
 
 .. py:class:: TransformRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize=True, n_jobs=None, random_state=None)
+
 
    Bases: :py:obj:`BaseTransformClassifier`
 

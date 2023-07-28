@@ -35,12 +35,14 @@ Functions
 
 .. py:class:: BaseEstimator
 
+
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
    Base estimator for all Wildboar estimators.
 
 
 .. py:class:: CounterfactualMixin
+
 
    Mixin class for counterfactual explainer.
 
@@ -62,6 +64,7 @@ Functions
 
 
 .. py:class:: ExplainerMixin
+
 
    Mixin class for all explainers in wildboar.
 

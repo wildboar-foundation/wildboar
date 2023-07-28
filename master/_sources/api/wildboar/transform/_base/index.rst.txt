@@ -21,6 +21,7 @@ Classes
 
 .. py:class:: BaseFeatureEngineerTransform(*, random_state=None, n_jobs=None)
 
+
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
    Base feature engineer transform.

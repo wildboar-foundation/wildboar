@@ -62,6 +62,7 @@ Functions
 
 .. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
+
    Base class for handling dataset bundles.
 
    .. attribute:: name
@@ -183,6 +184,7 @@ Functions
 
 .. py:class:: JSONRepository(url)
 
+
    Bases: :py:obj:`Repository`
 
    A repository is a collection of bundles.
@@ -234,6 +236,7 @@ Functions
 
 .. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
+
    Bases: :py:obj:`Bundle`
 
    bundle of numpy binary files.
@@ -253,6 +256,7 @@ Functions
 
 
 .. py:class:: Repository
+
 
    A repository is a collection of bundles.
 

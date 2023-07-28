@@ -22,11 +22,13 @@ Classes
 
 .. py:class:: PredictionPaths(classes)
 
+
    .. py:method:: prune(max_paths, random_state)
 
 
 
 .. py:class:: ShapeletForestCounterfactual(*, cost='euclidean', aggregation='mean', epsilon=1.0, batch_size=0.1, max_paths=1.0, verbose=False, random_state=None)
+
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
