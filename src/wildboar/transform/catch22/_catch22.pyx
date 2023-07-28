@@ -86,7 +86,7 @@ cdef double f1ecac(const double *ac, Py_ssize_t n) nogil:
     return n
 
 
-cdef double first_min(const double *ac, Py_ssize_t n) nogil:
+cdef double first_min(double *ac, Py_ssize_t n) nogil:
     if n <= 2:
         return 0.0
     
