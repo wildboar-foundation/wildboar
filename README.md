@@ -46,7 +46,7 @@ See the [documentation](https://docs.wildboar.dev/master/examples.html) for exam
 
     pip install wildboar
 
-Universal binaries are compiled for GNU/Linux and Python 3.8, 3.9, 3.10
+Universal binaries are compiled for  Python 3.8, 3.9, 3.10 and 3.11 running on GNU/Linux, Windows and macOS.
 
 ### Compilation
 
