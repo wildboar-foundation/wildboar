@@ -21,6 +21,7 @@ Classes
 
 .. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Transform a time series using random convolution features

@@ -36,6 +36,7 @@ Attributes
 
 .. py:class:: MidpointNormalize(vmin=None, vmax=None, midpoint=None, clip=False)
 
+
    Bases: :py:obj:`matplotlib.colors.Normalize`
 
    Normalise the colorbar.

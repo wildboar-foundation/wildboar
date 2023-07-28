@@ -37,6 +37,7 @@ Classes
 
 .. py:class:: ExtraShapeletTreeClassifier(*, n_shapelets=1, max_depth=None, min_samples_leaf=1, min_impurity_decrease=0.0, min_samples_split=2, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
+
    Bases: :py:obj:`ShapeletTreeClassifier`
 
    An extra shapelet tree classifier.
@@ -92,6 +93,7 @@ Classes
 
 .. py:class:: ExtraShapeletTreeRegressor(*, n_shapelets=1, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
+
    Bases: :py:obj:`ShapeletTreeRegressor`
 
    An extra shapelet tree regressor.
@@ -145,6 +147,7 @@ Classes
 
 
 .. py:class:: IntervalTreeClassifier(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', class_weight=None, random_state=None)
+
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseIntervalTree`
 
@@ -214,6 +217,7 @@ Classes
 
 .. py:class:: IntervalTreeRegressor(n_intervals='sqrt', *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', random_state=None)
 
+
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseIntervalTree`
 
    An interval based tree regressor.
@@ -279,6 +283,7 @@ Classes
 
 .. py:class:: PivotTreeClassifier(n_pivot='sqrt', *, metrics='all', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', class_weight=None, random_state=None)
 
+
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BasePivotTree`
 
    A tree classifier that uses pivot time series.
@@ -323,6 +328,7 @@ Classes
 
 
 .. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric_factories='default', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
+
 
    Bases: :py:obj:`wildboar.tree.base.TreeClassifierMixin`, :py:obj:`wildboar.tree.base.BaseTree`
 
@@ -394,6 +400,7 @@ Classes
 
 
 .. py:class:: RocketTreeClassifier(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='entropy', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, class_weight=None, random_state=None)
+
 
    Bases: :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseRocketTree`
 
@@ -468,6 +475,7 @@ Classes
 
 .. py:class:: RocketTreeRegressor(n_kernels=10, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, random_state=None)
 
+
    Bases: :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseRocketTree`
 
    A tree regressor that uses random convolutions as features.
@@ -533,6 +541,7 @@ Classes
 
 
 .. py:class:: ShapeletTreeClassifier(*, n_shapelets='warn', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
+
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeClassifierMixin`, :py:obj:`BaseShapeletTree`
 
@@ -623,6 +632,7 @@ Classes
 
 
 .. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
+
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`FeatureTreeRegressorMixin`, :py:obj:`BaseShapeletTree`
 

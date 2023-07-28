@@ -21,6 +21,7 @@ Classes
 
 .. py:class:: BaseTree(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0)
 
+
    Bases: :py:obj:`wildboar.base.BaseEstimator`
 
    Base class for tree based estimators.
@@ -33,6 +34,7 @@ Classes
 
 
 .. py:class:: TreeClassifierMixin
+
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`
 
@@ -91,6 +93,7 @@ Classes
 
 
 .. py:class:: TreeRegressorMixin
+
 
    Bases: :py:obj:`sklearn.base.RegressorMixin`
 

@@ -34,6 +34,7 @@ Functions
 
 .. py:class:: Binning(n_bins)
 
+
    .. py:method:: get_thresholds(x=None, estimate=False)
 
 
@@ -44,6 +45,7 @@ Functions
 
 .. py:class:: NormalBinning(n_bins)
 
+
    Bases: :py:obj:`Binning`
 
    .. py:method:: scale(x)
@@ -51,6 +53,7 @@ Functions
 
 
 .. py:class:: PAA(n_intervals='sqrt', window=None)
+
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
@@ -70,6 +73,7 @@ Functions
 
 
 .. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate=True)
+
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
@@ -119,6 +123,7 @@ Functions
 
 
 .. py:class:: UniformBinning(n_bins)
+
 
    Bases: :py:obj:`Binning`
 

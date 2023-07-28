@@ -39,6 +39,7 @@ Functions
 
 .. py:class:: DependencyMissing(e=None, *, package=None, context=None)
 
+
    .. py:method:: __call__(*args, **kwds)
 
 

@@ -19,6 +19,7 @@ Classes
 
 .. py:class:: BaseEstimator
 
+
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
    Base class for all estimators in scikit-learn.

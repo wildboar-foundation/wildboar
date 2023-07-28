@@ -41,6 +41,7 @@ Attributes
 
 .. py:class:: AmplitudeImportance(scoring=None, n_intervals='sqrt', window=None, binning='normal', n_bins=4, n_repeat=1, random_state=None)
 
+
    Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
    Compute the importance of equi-probable horizontal time series intervals by
@@ -102,6 +103,7 @@ Attributes
 
 .. py:class:: IntervalImportance(*, scoring=None, n_repeat=5, n_intervals='sqrt', window=None, verbose=False, random_state=None)
 
+
    Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 
    Compute a model agnostic importance score for non-overlapping intervals
@@ -162,6 +164,7 @@ Attributes
 
 .. py:class:: PermuteImportance(*, scoring=None, n_repeat=1, verbose=0, random_state=None)
 
+
    Bases: :py:obj:`wildboar.base.BaseEstimator`
 
    Base class for all estimators in scikit-learn.
@@ -174,6 +177,7 @@ Attributes
 
 
 .. py:class:: ShapeletImportance(scoring=None, n_repeat=1, n_shapelets=10, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, random_state=None)
+
 
    Bases: :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`PermuteImportance`
 

@@ -53,6 +53,7 @@ Functions
 
 .. py:class:: FeatureTransform(*, summarizer='catch22', n_jobs=None)
 
+
    Bases: :py:obj:`IntervalTransform`
 
    Transform a time series as a number of features
@@ -77,6 +78,7 @@ Functions
 
 
 .. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', n_jobs=None, random_state=None)
+
 
    Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
@@ -139,6 +141,7 @@ Functions
 
 .. py:class:: MatrixProfileTransform(window=0.1, exclude=None, n_jobs=None)
 
+
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
    Transform each time series in a dataset to its MatrixProfile similarity self-join
@@ -194,6 +197,7 @@ Functions
 
 .. py:class:: PAA(n_intervals='sqrt', window=None)
 
+
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
    Peicewise aggregate approximation
@@ -213,6 +217,7 @@ Functions
 
 .. py:class:: PivotTransform(n_pivots=1, *, metric_factories=None, random_state=None, n_jobs=None)
 
+
    Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    A transform using pivot time series and sampled distance metrics.
@@ -227,6 +232,7 @@ Functions
 
 
 .. py:class:: RandomShapeletTransform(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
+
 
    Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
@@ -269,6 +275,7 @@ Functions
 
 .. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`wildboar.transform.base.BaseFeatureEngineerTransform`
 
    Transform a time series using random convolution features
@@ -296,6 +303,7 @@ Functions
 
 
 .. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate=True)
+
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 

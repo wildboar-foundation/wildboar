@@ -22,12 +22,14 @@ Classes
 
 .. py:class:: RandomShapeletClassifier(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize='deprecated', scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeClassifierCV`
 
    A classifier that uses random shapelets.
 
 
 .. py:class:: RandomShapeletRegressor(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
+
 
    Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeCV`
 
@@ -36,12 +38,14 @@ Classes
 
 .. py:class:: RocketClassifier(n_kernels=10000, *, kernel_size=None, sampling='normal', sampling_params=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize='deprecated', scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeClassifierCV`
 
    Implements the ROCKET classifier
 
 
 .. py:class:: RocketRegressor(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize='deprecated', scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
+
 
    Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeCV`
 
