@@ -8,7 +8,7 @@ import numpy as np
 from libc.math cimport INFINITY, floor, sqrt
 from libc.stdlib cimport free, malloc
 from libc.string cimport memset
-from sklearn.utils._cython_blas cimport _nrm2
+from scipy.linalg.cython_blas cimport dnrm2
 
 from ._fft cimport _pocketfft
 
@@ -230,8 +230,9 @@ cdef int welch(
     cdef double df = 1.0 / next_power_of_2(windowWidth) / dt
     cdef double m = mean(x, size)
     cdef int k = <int>floor(<double>size/(<double>windowWidth/2.0))-1;
-   
-    cdef double w_norm = _nrm2(windowWidth, window, 1)
+    
+    cdef int incx = 1
+    cdef double w_norm = dnrm2(&windowWidth, window, &incx)
     cdef double KMU = k * w_norm * w_norm
 
     cdef double *P = <double*> malloc(sizeof(double) * NFFT)
