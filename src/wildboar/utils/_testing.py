@@ -77,13 +77,13 @@ def assert_parameter_checks(estimator: BaseEstimator, skip=None):
                 with pytest.raises(InvalidParameterError):
                     if is_explainer(estimator):
                         try:
-                            estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
+                            estimator_._validate_params()
                         except Exception as e:
                             if isinstance(e, InvalidParameterError):
                                 raise e
                     else:
                         try:
-                            estimator_.fit(_DUMMY_X, _DUMMY_Y)
+                            estimator_._validate_params()
                         except Exception as e:
                             if isinstance(e, InvalidParameterError):
                                 raise e
@@ -97,14 +97,14 @@ def assert_parameter_checks(estimator: BaseEstimator, skip=None):
             estimator_.set_params(**{param: valid_value})
             if is_explainer(estimator):
                 try:
-                    estimator_.fit(clf, _DUMMY_X, _DUMMY_Y)
+                    estimator_._validate_params()
                 except Exception as e:
                     if isinstance(e, InvalidParameterError):
                         raise e
 
             else:
                 try:
-                    estimator_.fit(_DUMMY_X, _DUMMY_Y)
+                    estimator_._validate_params()
                 except Exception as e:
                     if isinstance(e, InvalidParameterError):
                         raise e
