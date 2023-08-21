@@ -2,6 +2,7 @@
 # License: BSD 3 clause
 
 import numpy as np
+import sklearn
 import pytest
 from numpy.testing import assert_almost_equal
 from sklearn.ensemble import RandomForestClassifier
@@ -22,6 +23,8 @@ from wildboar.utils._testing import (
     assert_parameter_checks,
 )
 from wildboar.utils.estimator_checks import check_estimator
+
+SKLEARN_VERSION = sklearn.__version__.split(".")
 
 
 @pytest.mark.parametrize(
@@ -64,9 +67,13 @@ def test_is_counterfactual(estimator):
             ShapeletForestClassifier(n_shapelets=10, n_estimators=10, random_state=123),
             np.array([1.0216381495890032, 5.925046545971925]),
         ),
+        # Some change in scikit-learn > 1.3 changes the
+        # output here.
         pytest.param(
             KNeighborsClassifier(n_neighbors=5, metric="euclidean"),
-            np.array([2.307078907707276, 9.355327387515722]),
+            np.array([2.307078907707276, 9.355327387515722])
+            if sklearn.__version__ < "1.3.0"
+            else np.array([2.307078907707276, 11.05428542]),
         ),
         pytest.param(
             KNeighborsClassifier(n_neighbors=1, metric="euclidean"),
