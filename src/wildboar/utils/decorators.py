@@ -18,16 +18,17 @@ def _array_or_scalar(x, squeeze=True):
 
 
 def array_or_scalar(optional_f=None, squeeze=True):
-    """Decorate a function returning an ndarray to return a single scalar if
-    the array has a single item.
+    """
+    Decorate a function returning.
+
+    An ndarray to return a single scalar if the array has a single item.
 
     Parameters
     ----------
     optional_f : callable, optional
-        Used if the decorator is used without arguments
-
+        Used if the decorator is used without arguments.
     squeeze : bool, optional
-        Remove axis of length one from the returned arrays
+        Remove axis of length one from the returned arrays.
     """
 
     def decorator(f):
@@ -57,8 +58,21 @@ def _singleton(x):
 
 
 def singleton(f):
-    """Recursivley try to unwrap list return arguments such that a single
-    element can be returned."""
+    """
+    Recursivley try to unwrap list return arguments.
+
+    Such that a single element can be returned.
+
+    Parameters
+    ----------
+    f : function
+        The function to wrap.
+
+    Returns
+    -------
+    function
+        The wrapper.
+    """
 
     @wraps(f)
     def wrap(*args, **kwargs):
@@ -72,19 +86,17 @@ def singleton(f):
 
 
 def unstable(optional_f=None, stability="beta", description=None):
-    """Decorate a function as unsatable.
+    """
+    Decorate a function as unsatable.
 
     Parameters
     ----------
-
     optional_f : callable, optional
-        The decorated function
-
+        The decorated function.
     stability : str, optional
-        The stability of the feature
-
+        The stability of the feature.
     description : str, optional
-        The description of the feature
+        The description of the feature.
     """
     import warnings
 

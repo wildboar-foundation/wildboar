@@ -49,5 +49,6 @@ def iseos(x):
             "be removed in 1.4. Use wildboar.utils.variable_len.is_end_of_series",
             DeprecationWarning,
         )
-        return isneginf
+        return np.logical_or(isneginf, is_end_of_series(x))
+
     return is_end_of_series(x)

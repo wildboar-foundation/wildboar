@@ -307,7 +307,7 @@ class CounterfactualMixin:
         "transform(x, y) has been deprecated in 1.1 and will be removed in 1.2. "
         "Use explain(x, y) instead."
     )
-    def transform(self, x, y):  # noqa: D102
+    def transform(self, x, y):
         return self.explain(x, y)
 
     def score(self, x, y):

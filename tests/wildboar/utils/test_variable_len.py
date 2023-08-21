@@ -1,5 +1,6 @@
 import numpy as np
-
+import pytest
+import wildboar
 from wildboar.utils.variable_len import (
     eos,
     get_variable_length,
@@ -9,20 +10,32 @@ from wildboar.utils.variable_len import (
 
 
 def test_is_variable_len():
-    x1 = [1, 2, 3, eos]
+    x1 = np.array([1, 2, 3, eos])
     assert is_variable_length(x1)
 
 
-def test_is_end_of_series():
-    x = [
-        [eos, eos, np.nan, np.inf],
-        [1, eos, -np.inf, eos],
-    ]
-    expected = [
-        [True, True, False, False],
-        [False, True, False, True],
-    ]
+@pytest.mark.parametrize(
+    "x",
+    [
+        np.array(
+            [
+                [eos, eos, np.nan, np.inf],
+                [1, eos, -np.inf, eos],
+            ],
+            dtype=np.float64,
+        ),
+    ],
+)
+def test_is_end_of_series(x):
+    expected = np.array(
+        [
+            [True, True, False, False],
+            [False, True, False, True],
+        ]
+    )
     np.testing.assert_equal(is_end_of_series(x), expected)
+    expected[1, 2] = True
+    np.testing.assert_equal(wildboar.iseos(x), expected)
 
 
 def test_is_end_of_series_2d():

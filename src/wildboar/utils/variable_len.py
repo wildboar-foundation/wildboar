@@ -46,6 +46,9 @@ def is_variable_length(x):
     bool
         True if time series contains EoS
     """
+    if not np.issubdtype(x.dtype, np.float64):
+        raise ValueError(f"Array must have dtype=float64, got {x.dtype}")
+
     return is_end_of_series(x).any()
 
 

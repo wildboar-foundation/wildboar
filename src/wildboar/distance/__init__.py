@@ -94,11 +94,10 @@ def _validate_subsequence(y):
                     y.ndim, y
                 )
             )
+    elif any(_is_arraylike(e) for e in y):
+        y = [np.array(e, dtype=np.double) for e in y]
     else:
-        if any(_is_arraylike(e) for e in y):
-            y = [np.array(e, dtype=np.double) for e in y]
-        else:
-            y = [np.array(y, dtype=np.double)]
+        y = [np.array(y, dtype=np.double)]
 
     return y
 
@@ -236,7 +235,7 @@ def pairwise_subsequence_distance(
                 "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params or {}
     min_dist, min_ind = _distance._pairwise_subsequence_distance(
         y,
@@ -314,7 +313,7 @@ def paired_subsequence_distance(
                 "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
@@ -338,7 +337,7 @@ def paired_subsequence_distance(
         return _format_return(min_dist, len(y), x.ndim)
 
 
-def subsequence_match(
+def subsequence_match(  # noqa: PLR0912
     y,
     x,
     threshold=None,
@@ -435,7 +434,7 @@ def subsequence_match(
     if not 0 >= dim < n_dims:
         raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -507,7 +506,7 @@ def subsequence_match(
         return _format_return(_safe_jagged_array(indicies), 1, x.ndim)
 
 
-def paired_subsequence_match(
+def paired_subsequence_match(  # noqa: PLR0912
     y,
     x,
     threshold=None,
@@ -598,7 +597,7 @@ def paired_subsequence_match(
                 "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")
+    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -655,7 +654,7 @@ def paired_subsequence_match(
         return _format_return(_safe_jagged_array(indicies), len(y), x.ndim)
 
 
-def paired_distance(
+def paired_distance(  # noqa: PLR0912
     x,
     y,
     *,
@@ -712,7 +711,7 @@ def paired_distance(
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
-    Metric = check_option(_METRICS, metric, "metric")
+    Metric = check_option(_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params if metric_params is not None else {}
     metric = Metric(**metric_params)
     if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not metric.is_elastic:
@@ -761,7 +760,7 @@ def mean_paired_distance(x, y, *, metric="euclidean", metric_params=None):
     return paired_distance(x, y, dim="mean", metric=metric, metric_params=metric_params)
 
 
-def pairwise_distance(
+def pairwise_distance(  # noqa: PLR
     x,
     y=None,
     *,
@@ -807,7 +806,7 @@ def pairwise_distance(
         - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, )
         - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, )
     """
-    Metric = check_option(_METRICS, metric, "metric")
+    Metric = check_option(_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params if metric_params is not None else {}
     metric = Metric(**metric_params)
 
@@ -905,7 +904,7 @@ def pairwise_distance(
         return _format_return(distances, y.ndim, x.ndim)
 
 
-def matrix_profile(
+def matrix_profile(  # noqa: PLR0912
     x,
     y=None,
     *,
@@ -961,7 +960,7 @@ def matrix_profile(
     -----
     The `profile_size` depends on the input.
 
-    - If `y` is `None´, `profile_size` is  ``x.shape[-1] - window + 1``
+    - If `y` is `None`, `profile_size` is  ``x.shape[-1] - window + 1``
     - If `y` is not `None`, `profile_size` is ``y.shape[-1] - window + 1``
 
     References

@@ -22,6 +22,8 @@ _SAMPLING_METHOD = {
 
 
 class RocketMixin:
+    """Mixin for ROCKET based estimators."""
+
     _parameter_constraints: dict = {
         "n_kernels": [
             Interval(numbers.Integral, 1, None, closed="left"),
@@ -87,7 +89,56 @@ class RocketMixin:
 
 
 class RocketTransform(RocketMixin, BaseFeatureEngineerTransform):
-    """Transform a time series using random convolution features.
+    """
+    Transform a time series using random convolution features.
+
+    Parameters
+    ----------
+    n_kernels : int, optional
+        The number of kernels to sample at each node.
+    sampling : {"normal", "uniform", "shapelet"}, optional
+        The sampling of convolutional filters.
+
+        - if "normal", sample filter according to a normal distribution with
+          ``mean`` and ``scale``.
+        - if "uniform", sample filter according to a uniform distribution with
+          ``lower`` and ``upper``.
+        - if "shapelet", sample filters as subsequences in the training data.
+    sampling_params : dict, optional
+        Parameters for the sampling strategy.
+
+        - if "normal", ``{"mean": float, "scale": float}``, defaults to
+          ``{"mean": 0, "scale": 1}``.
+        - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+          ``{"lower": -1, "upper": 1}``.
+    kernel_size : array-like, optional
+        The kernel size, by default ``[7, 11, 13]``.
+    min_size : float, optional
+        The minimum timestep size used for generating kernel sizes, If set,
+        ``kernel_size`` is ignored.
+    max_size : float, optional
+        The maximum timestep size used for generating kernel sizes, If set,
+        ``kernel_size`` is ignored.
+    bias_prob : float, optional
+        The probability of using the bias term.
+    normalize_prob : float, optional
+        The probability of performing normalization.
+    padding_prob : float, optional
+        The probability of padding with zeros.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. A value of ``None`` means using
+        a single core and a value of ``-1`` means using all cores. Positive
+        integers mean the exact number of cores.
+    random_state : int or RandomState, optional
+        Controls the random resampling of the original dataset.
+
+        - If ``int``, ``random_state`` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+          the random number generator.
+        - If ``None``, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
 
     Attributes
     ----------
@@ -122,48 +173,6 @@ class RocketTransform(RocketMixin, BaseFeatureEngineerTransform):
         n_jobs=None,
         random_state=None,
     ):
-        """Construct a new rocket transform.
-
-        Parameters
-        ----------
-        n_kernels : int, optional
-            The number of kernels to sample at each node.
-
-        sampling : {"normal", "uniform", "shapelet"}, optional
-            The sampling of convolutional filters.
-
-            - if "normal", sample filter according to a normal distribution with
-              ``mean`` and ``scale``.
-            - if "uniform", sample filter according to a uniform distribution with
-              ``lower`` and ``upper``.
-            - if "shapelet", sample filters as subsequences in the training data.
-        sampling_params : dict, optional
-            The parameters for the sampling.
-
-            - if "normal", ``{"mean": float, "scale": float}``, defaults to
-               ``{"mean": 0, "scale": 1}``.
-            - if "uniform", ``{"lower": float, "upper": float}``, defaults to
-               ``{"lower": -1, "upper": 1}``.
-        kernel_size : array-like, optional
-            The kernel size, by default ``[7, 11, 13]``.
-        min_size : float, optional
-            The minimum timestep fraction to generate kernel sizes. If set,
-            ``kernel_size`` cannot be set.
-        max_size : float, optional
-            The maximum timestep fractio to generate kernel sizes, If set,
-            ``kernel_size`` cannot be set.
-        bias_prob : float, optional
-            The probability of using a bias term.
-        normalize_prob : float, optional
-            The probability of performing normalization.
-        padding_prob : float, optional
-            The probability of padding with zeros.
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator
-            - If `RandomState` instance, `random_state` is the random number generator
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
         super().__init__(n_jobs=n_jobs, random_state=random_state)
         self.sampling = sampling
         self.sampling_params = sampling_params

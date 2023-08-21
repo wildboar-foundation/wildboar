@@ -12,7 +12,7 @@ from ..utils.validation import check_array, check_option, check_type
 
 
 @singleton
-def motifs(
+def motifs(  # noqa: PLR0912, PLR0915
     x,
     mp=None,
     *,
@@ -30,10 +30,8 @@ def motifs(
     ----------
     x : array-like of shape (n_samples, n_timestep)
         The time series
-
     mp : ndarray or shape (n_samples, profile_size), optional
         The matrix profile. The matrix profile is computed if None.
-
     window : "auto", int or float, optional
         The window size of the matrix profile.
 
@@ -41,22 +39,16 @@ def motifs(
           window of the matrix profile if mp is not None.
         - if float, a fraction of n_timestep
         - if int, the exact window size
-
     exclude : float, optional
         The size of the exclusion zone.
-
     max_distance : str, optional
         The maximum distance between motifs.
-
-    max_matches : int, optional
+    max_neighbours : int, optional
         The maximum number of neighbours
-
     min_neighbours : int, optional
         The minimum number of neighbours
-
     max_motif : int, optional
         The maximum number of motifs to return.
-
     return_distance : bool, optional
         Return the distance from main to neighbours
 
@@ -64,14 +56,12 @@ def motifs(
     -------
     motif_indicies : list
         List of arrays of motif neighbour indicies
-
     motif_distance : list, optional
         List of arrays of distance from motif to neighbours
 
-    See also
+    See Also
     --------
     wildboar.distance.subsequence_match : find subsequence matches
-
     wildboar.distance.matrix_profile : compute the matrix profile
 
     References

@@ -12,50 +12,43 @@ from sklearn.utils._random import sample_without_replacement
 def outlier_train_test_split(
     x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None
 ):
-    """Outlier training and testing split from classification dataset.
+    """
+    Outlier training and testing split from classification dataset.
 
     Parameters
     ----------
     x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep)
-        Input data samples
-
+        Input data samples.
     y : array-like of shape (n_samples,)
-        Input class label
-
+        Input class label.
     normal_class : int
-        Class label that should be considered as the normal class
-
-    test_size : float
-        Size of the test set
-
-    anomalies_train_size : float
-        Contamination of anomalies in the training dataset
-
-    random_state : int or RandomState
+        Class label that should be considered as the normal class.
+    test_size : float, optional
+        Size of the test set.
+    anomalies_train_size : float, optional
+        Contamination of anomalies in the training dataset.
+    random_state : int or RandomState, optional
         Psudo random state used for stable results.
 
     Returns
     -------
     x_train : array-like
-        Training samples
-
+        Training samples.
     x_test : array-like
-        Test samples
-
+        Test samples.
     y_train : array-like
-        Training labels (either 1 or -1, where 1 denotes normal and -1 anomalous)
-
+        Training labels (either 1 or -1, where 1 denotes normal and -1 anomalous).
     y_test : array-like
-        Test labels (either 1 or -1, where 1 denotes normal and -1 anomalous)
+        Test labels (either 1 or -1, where 1 denotes normal and -1 anomalous).
 
     Examples
     --------
-
     >>> from wildboar.datasets import load_two_lead_ecg
     >>> x, y = load_two_lead_ecg()
     >>> x_train, x_test, y_train, y_test = train_test_split(
     ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
     ... )
+
     """
     random_state = check_random_state(random_state)
     normal = y == normal_class

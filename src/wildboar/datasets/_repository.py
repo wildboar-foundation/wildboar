@@ -14,8 +14,8 @@ from abc import ABCMeta, abstractmethod
 import numpy as np
 from pkg_resources import parse_version
 
+from .. import EOS
 from .. import __version__ as wildboar_version
-from .. import eos as EOS
 
 try:
     import requests
@@ -35,7 +35,6 @@ def _replace_placeholders(url, **kwargs):
     ----------
     url : str
         The input string
-
     **kwargs : dict
         The key and values to replace
 
@@ -55,10 +54,8 @@ def _check_integrity(bundle_file, hash_file, throws=True):
     ----------
     bundle_file : str, bytes or PathLike
         Path to the bundle file
-
     hash_file : str, bytes or PathLike
         Path to the hash file
-
     throws : bool
         Throw an exception on hash missmatch
 
@@ -113,19 +110,14 @@ def _load_archive(
     ----------
     bundle_name : str
         The name of the cached file
-
     download_url : str
         The download url to the bundle and hash file
-
     cache_dir : str
         The cache directory
-
     create_cache_dir : bool
         Create the cache directory if missing
-
     progress : bool
         Show progress information
-
     force : bool
         Remove any cached files and force re-download
 
@@ -175,10 +167,8 @@ def _download_hash_file(cached_hash, hash_url, filename):
     ----------
     cached_hash : str, bytes or PathLike
         The path to the cached hash
-
     hash_url : str
         The download url
-
     filename : str
         The filename of the bundle
     """
@@ -249,13 +239,10 @@ def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
     ----------
     cached_bundle : str, bytes or PathLike
         The path to the cached bundle
-
     bundle_url : str
         The download url
-
     filename : str
         The filename of the bundle
-
     progress : bool
         Show progress bar
     """
@@ -754,10 +741,8 @@ class Bundle(metaclass=ABCMeta):
     ----------
     name : str
         Human-readable name of the bundle
-
     description : str
         Description of the bundle
-
     label_index : int or array-like
         Index of the class label(s)
     """
@@ -779,16 +764,12 @@ class Bundle(metaclass=ABCMeta):
         ----------
         key : str
             A unique key of the bundle
-
         version : str
             The version of the bundle
-
         name : str
             Human-readable name of the bundle
-
         description : str
             Description of the bundle
-
         arrays : list
             The arrays of the dataset
         """
@@ -824,7 +805,6 @@ class Bundle(metaclass=ABCMeta):
         ----------
         archive : ZipFile
             The bundle file
-
         collection : str, optional
             The collection name
 
@@ -848,7 +828,7 @@ class Bundle(metaclass=ABCMeta):
 
         return sorted(set(names))
 
-    def load(
+    def load(  # noqa: PLR0912
         self,
         name,
         archive,
@@ -859,7 +839,6 @@ class Bundle(metaclass=ABCMeta):
         ----------
         name : str
             Name of the dataset
-
         archive : ZipFile
             The zip-file bundle
 
@@ -867,13 +846,10 @@ class Bundle(metaclass=ABCMeta):
         -------
         x : ndarray
             Data samples
-
         y : ndarray
             Data labels
-
         n_training_samples : int
             Number of samples that are for training. The value is <= x.shape[0]
-
         extras : dict, optional
             Extra numpy arrays
         """
@@ -959,11 +935,14 @@ class Bundle(metaclass=ABCMeta):
 
     @abstractmethod
     def _is_dataset(self, file_name, ext):
-        """Overridden by subclasses.
+        """Check if a path and extension is to be considered a dataset.
 
-        Check if a path and extension is to be considered a dataset. The check should be
-        simple and only consider the filename and or extension of the file.
-        Validation of the file should be deferred to `_load_array`
+        .. note::
+            Overridden by subclasses.
+
+        The check should be simple and only consider the filename and or
+        extension of the file. Validation of the file should be deferred to
+        `_load_array`
 
         Parameters
         ----------
@@ -982,15 +961,15 @@ class Bundle(metaclass=ABCMeta):
 
     @abstractmethod
     def _load_array(self, archive, file):
-        """Overridden by subclasses.
+        """Load the file inside the archive and convert to a numpy array.
 
-        Load the file inside the archive and convert to a numpy array
+        .. note::
+            Overridden by subclasses.
 
         Parameters
         ----------
         archive : ZipFile
             The zip-archive in which the file reside
-
         file : str
             Path to the file inside the zip-archive
 

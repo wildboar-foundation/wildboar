@@ -1,6 +1,10 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+"""
+Symbolic aggregate approximation and piecewice aggregate approximation.
+"""
+
 import abc
 import numbers
 
@@ -21,15 +25,47 @@ def _percentiles(n_bins):
 
 
 class Binning(metaclass=abc.ABCMeta):
+    """
+    Abstract base class for binning strategies.
+
+    Parameters
+    ----------
+    n_bins : int
+        The number of bins.
+    """
+
     def __init__(self, n_bins) -> None:
         self.n_bins = n_bins
         self._percentiles = _percentiles(n_bins)
 
     @abc.abstractmethod
     def scale(self, x):
+        """
+        Scale the input such that it is suitable for binning.
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timesteps)
+            The samples.
+        """
         pass
 
     def get_thresholds(self, x=None, estimate=False):
+        """
+        Get thresholds for binning.
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep), optional
+            The samples.
+        estimate : bool, optional
+            Calculate the thresholds from the samples.
+
+        Returns
+        -------
+        ndarray of shape (n_bins - 1, )
+            The thresholds.
+        """
         if estimate and x is None:
             raise ValueError("if estimate=True, x cannot be None.")
 
@@ -41,6 +77,8 @@ class Binning(metaclass=abc.ABCMeta):
 
 
 class NormalBinning(Binning):
+    """Bin using a normal distribution."""
+
     def scale(self, x):
         # Avoid circular import
         from ..datasets.preprocess import standardize
@@ -61,6 +99,8 @@ class NormalBinning(Binning):
 
 
 class UniformBinning(Binning):
+    """Bin using a uniform distribution."""
+
     def scale(self, x):
         # Avoid circular import
         from ..datasets.preprocess import minmax_scale
@@ -84,7 +124,38 @@ _BINNING = {"normal": NormalBinning, "uniform": UniformBinning}
 
 
 class SAX(TransformerMixin, BaseEstimator):
-    """Symbolic aggregate approximation."""
+    """
+    Symbolic aggregate approximation.
+
+    Parameters
+    ----------
+    n_intervals : str, optional
+        The number of intervals to use for the transform.
+
+        - if "log", the number of intervals is `log2(n_timestep)`.
+        - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
+        - if int, the number of intervals is `n_intervals`.
+        - if float, the number of intervals is `n_intervals * n_timestep`, with
+            `0 < n_intervals < 1`.
+    window : int, optional
+        The window size. If `window` is set, the value of `n_intervals` has no
+        effect.
+    n_bins : int, optional
+        The number of bins.
+    binning : str, optional
+        The bin construction. By default the bins are defined according to the
+        normal distribution. Possible values are "normal" for normally
+        distributed bins or "uniform" for uniformly distributed bins.
+    estimate : bool, optional
+        Estimate the distribution parameters for the binning from data.
+
+        If `estimate=False`, it is assumed that each time series are:
+
+        - preprocessed using :func:`datasets.preprocess.normalize` when
+            `binning="normal"`.
+        - preprocessed using :func:`datasets.preprocess.minmax_scale`. when
+            `binning="uniform"`
+    """
 
     _parameter_constraints: dict = {
         "n_intervals": [
@@ -107,39 +178,6 @@ class SAX(TransformerMixin, BaseEstimator):
         binning="normal",
         estimate=True,
     ):
-        """Construct a new SAX transform.
-
-        Parameters
-        ----------
-        x : array-like of shape (n_samples, n_timestep)
-            The input data.
-        n_intervals : str, optional
-            The number of intervals to use for the transform.
-
-            - if "log", the number of intervals is ``log2(n_timestep)``.
-            - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-            - if int, the number of intervals is ``n_intervals``.
-            - if float, the number of intervals is ``n_intervals * n_timestep``, with
-                ``0 < n_intervals < 1``.
-        window : int, optional
-            The window size. If ``window`` is set, the value of ``n_intervals`` has no
-            effect.
-        n_bins : int, optional
-            The number of bins.
-        binning : str, optional
-            The bin construction. By default the bins are defined according to the
-            normal distribution. Possible values are ``"normal"`` for normally
-            distributed bins or ``"uniform"`` for uniformly distributed bins.
-        estimate : bool, optional
-            Estimate the distribution parameters for the binning from data.
-
-            If ``estimate=False``, it is assumed that each time series are:
-
-            - preprocessed using :func:`datasets.preprocess.normalize` when
-              ``binning="normal"``.
-            - preprocessed using :func:`datasets.preprocess.minmax_scale`. when
-              ``binning="uniform"``
-        """
         self.n_intervals = n_intervals
         self.window = window
         self.n_bins = n_bins
@@ -192,7 +230,16 @@ class SAX(TransformerMixin, BaseEstimator):
 
 
 class PAA(TransformerMixin, BaseEstimator):
-    """Peicewise aggregate approximation."""
+    """
+    Peicewise aggregate approximation.
+
+    Parameters
+    ----------
+    n_intervals : {"sqrt", "log2"}, int or float, optional
+        The number of intervals.
+    window : int, optional
+        The size of an interval. If `window`, is given then `n_intervals` is ignored.
+    """
 
     _parameter_constraints: dict = {
         "n_intervals": [
@@ -258,7 +305,8 @@ def symbolic_aggregate_approximation(
     n_bins=4,
     binning="normal",
 ):
-    """Symbolic aggregate approximation.
+    """
+    Symbolic aggregate approximation.
 
     Parameters
     ----------
@@ -284,8 +332,9 @@ def symbolic_aggregate_approximation(
 
     Returns
     -------
-    sax : ndarray of shape (n_samples, n_intervals)
-        The symbolic aggregate approximation
+    ndarray of shape (n_samples, n_intervals)
+        The symbolic aggregate approximation.
+
     """
     return SAX(
         n_intervals=n_intervals, window=window, n_bins=n_bins, binning=binning
@@ -293,7 +342,8 @@ def symbolic_aggregate_approximation(
 
 
 def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
-    """Peicewise aggregate approximation.
+    """
+    Peicewise aggregate approximation.
 
     Parameters
     ----------
@@ -313,7 +363,8 @@ def piecewice_aggregate_approximation(x, *, n_intervals="sqrt", window=None):
 
     Returns
     -------
-    paa : ndarray of shape (n_samples, n_intervals)
-        The symbolic aggregate approximation
+    ndarray of shape (n_samples, n_intervals)
+        The symbolic aggregate approximation.
+
     """
     return PAA(n_intervals=n_intervals, window=window).fit_transform(x)

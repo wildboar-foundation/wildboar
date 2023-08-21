@@ -12,12 +12,29 @@ from sklearn.utils.validation import check_array
 
 
 class RepeatedOutlierSplit(metaclass=ABCMeta):
-    """Repeated random outlier cross-validator.
+    """
+    Repeated random outlier cross-validator.
 
     Yields indicies that split the dataset into training and test sets.
 
-    Note
-    ----
+    Parameters
+    ----------
+    n_splits : int, optional
+        The maximum number of splits.
+        - if None, the number of splits is determined by the number of
+            outliers as, `total_n_outliers/(n_inliers * n_outliers)`
+        - if int, the number of splits is an upper-bound
+    test_size : float, optional
+        The size of the test set.
+    n_outlier : float, optional
+        The fraction of outliers in the training and test sets.
+    shuffle : bool, optional
+        Shuffle the training indicies in each iteration.
+    random_state : int or RandomState, optional
+        The psudo-random number generator
+
+    Notes
+    -----
     Contrary to other cross-validation strategies, the random outlier
     cross-validator does not ensure that all folds will be different.
     Instead, the inlier samples are shuffled and new outlier samples
@@ -33,29 +50,6 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         shuffle=True,
         random_state=None,
     ):
-        """
-        Parameters
-        ----------
-        n_splits : int, optional
-            The maximum number of splits.
-
-            - if None, the number of splits is determined by the number of
-              outliers as, `total_n_outliers/(n_inliers * n_outliers)`
-
-            - if int, the number of splits is an upper-bound
-
-        test_size : float, optional
-            The size of the test set.
-
-        n_outlier : float, optional
-            The fraction of outliers in the training and test sets.
-
-        shuffle : bool, optional
-            Shuffle the training indicies in each iteration.
-
-        random_state : int or RandomState, optional
-            The psudo-random number generator
-        """
         self.n_outliers = n_outlier
         self.test_size = test_size
         self.n_splits = n_splits
@@ -63,7 +57,9 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         self.random_state = random_state
 
     def get_n_splits(self, X, y, groups=None):
-        """Returns the number of splitting iterations in the cross-validator
+        """
+        Return the number of splitting iterations in the cross-validator.
+
         Parameters
         ----------
         X : object
@@ -72,10 +68,12 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
             The labels
         groups : object
             Always ignored, exists for compatibility.
+
         Returns
         -------
-        n_splits : int
+        int
             Returns the number of splitting iterations in the cross-validator.
+
         """
         outlier_index = (y == -1).nonzero()[0]
         inlier_index = (y == 1).nonzero()[0]
@@ -90,7 +88,8 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         return n_splits
 
     def split(self, x, y, groups=None):
-        """Return training and test indicies.
+        """
+        Return training and test indicies.
 
         Parameters
         ----------
@@ -102,9 +101,10 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
             Always ignored, exists for compatibility.
 
         Yields
-        -------
+        ------
         train_idx, test_idx : ndarray
             The training and test indicies
+
         """
         y = check_array(y, ensure_2d=False)
         random_state = check_random_state(self.random_state)

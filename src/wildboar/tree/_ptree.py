@@ -44,11 +44,82 @@ _METRIC_NAMES.add("default")  # TODO(1.3)
 _METRIC_NAMES = frozenset(_METRIC_NAMES)
 
 
+# noqa: D409
 class ProximityTreeClassifier(BaseTreeClassifier):
-    """A classifier that uses a k-branching tree based on pivot-time series.
+    """
+    A classifier that uses a k-branching tree based on pivot-time series.
+
+    Parameters
+    ----------
+    n_pivot : int, optional
+        The number of pivots to sample at each node.
+    criterion : {"entropy", "gini"}, optional
+        The impurity criterion.
+    pivot_sample : {"label", "uniform"}, optional
+        The pivot sampling method.
+    metric_sample : {"uniform", "weighted"}, optional
+        The metric sampling method.
+    metric : {"auto", "default"}, str or list, optional
+        The distance metrics. By default, we use the parameterization suggested by
+        Lucas et.al (2019).
+
+        - If "auto", use the default metric specification, suggested by
+          (Lucas et. al, 2020).
+        - If str, use a single metric or default metric specification.
+        - If list, custom metric specification can be given as a list of
+          tuples, where the first element of the tuple is a metric name and the
+          second element a dictionary with a parameter grid specification. A
+          parameter grid specification is a `dict` with two mandatory and one
+          optional key-value pairs defining the lower and upper bound on the
+          values as well as the number of values in the grid. For example, to
+          specifiy a grid over the argument 'r' with 10 values in the range 0
+          to 1, we would give the following specification: 
+          `dict(min_r=0, max_r=1, num_r=10)`.
+
+        Read more about the metrics and their parameters in the
+        :ref:`User guide <list_of_metrics>`.
+    metric_params : dict, optional
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the :ref:`User guide
+        <list_of_metrics>`.
+    metric_factories : dict, optional
+        A metric specification.
+
+        .. deprecated:: 1.2
+            Use the combination of metric and metric params.
+    max_depth : int, optional
+        The maximum tree depth.
+    min_samples_split : int, optional
+        The minimum number of samples to consider a split.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        The minimum impurity decrease to build a sub-tree.
+    class_weight : dict or "balanced", optional
+        Weights associated with the labels.
+
+        - if dict, weights on the form {label: weight}.
+        - if "balanced" each class weight inversely proportional to the class
+            frequency.
+        - if None, each class has equal weight.
+    random_state : int or RandomState
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
+
+    References
+    ----------
+    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi, \
+    Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
+        Proximity forest: an effective and scalable distance-based classifier for time
+        series. Data Mining and Knowledge Discovery
 
     Examples
     --------
+    Fit a single proximity tree, with dynamic time warping and move-split-merge metrics.
+
     >>> from wildboar.datasets import load_dataset
     >>> from wildboar.tree import ProximityTreeClassifier
     >>> x, y = load_dataset("GunPoint")
@@ -62,12 +133,6 @@ class ProximityTreeClassifier(BaseTreeClassifier):
     ... )
     >>> f.fit(x, y)
 
-    References
-    ----------
-    Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi, \
-    Bart Goethals, François Petitjean, and Geoffrey I. Webb. (2019)
-        Proximity forest: an effective and scalable distance-based classifier for time
-        series. Data Mining and Knowledge Discovery
     """
 
     _parameter_constraints: dict = {
@@ -119,60 +184,6 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         class_weight=None,
         random_state=None,
     ):
-        """Construct a new proximity tree estimator.
-
-        Parameters
-        ----------
-        n_pivot : int, optional
-            The number of pivots to sample at each node.
-        criterion : {"entropy", "gini"}, optional
-            The impurity criterion.
-        pivot_sample : {"label", "uniform"}, optional
-            The pivot sampling method.
-        metric_sample : {"uniform", "weighted"}, optional
-            The metric sampling method.
-        metric : str or list, optional
-            The distance metrics. By default, we use the parameterization suggested by
-            Lucas et.al (2019).
-
-            - If str, use a single metric or default metric specification.
-            - If list A custom metric specification can be given as a list of tuples,
-              where the first element of the tuple is a metric name and the second
-              element a dictionary with a parameter grid specification. A parameter grid
-              specification is a dict with two mandatory and one optional key-value
-              pairs defining the lower and upper bound on the values as well as the
-              number of values in the grid. For example, to specifiy a grid over the
-              argument 'r' with 10 values in the range 0 to 1, we would give the
-              following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
-
-            Read more about the metrics and their parameters in the
-            :ref:`User guide <list_of_metrics>`.
-        metric_params : dict, optional
-            Parameters for the distance measure. Ignored unless metric is a string.
-
-            Read more about the parameters in the :ref:`User guide
-            <list_of_metrics>`.
-        max_depth : int, optional
-            The maximum tree depth.
-        min_samples_split : int, optional
-            The minimum number of samples to consider a split.
-        min_samples_leaf : int, optional
-            The minimum number of samples in a leaf.
-        min_impurity_decrease : float, optional
-            The minimum impurity decrease to build a sub-tree.
-        class_weight : dict or "balanced", optional
-            Weights associated with the labels.
-
-            - if dict, weights on the form {label: weight}.
-            - if "balanced" each class weight inversely proportional to the class
-              frequency.
-            - if None, each class has equal weight.
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator
-            - If `RandomState` instance, `random_state` is the random number generator
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
         super().__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,

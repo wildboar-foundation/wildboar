@@ -44,8 +44,8 @@ def segment(
         The self-join exclusion for the matrix profile. Ignored if `mpi` is given.
 
     boundry : float, optional
-        The region around an identified segmentation that is ignored when searching
-        for subsequent segmentations
+        Ignore the region around each identified segmentation. Expressed as a
+        fraction of `window`.
 
     return_arc_curve : bool, optional
         Return the arc curve.
@@ -54,11 +54,10 @@ def segment(
     -------
     segments : ndarray of shape (n_samples, n_segments), (n_segments) or int
         The start index of a segment
-
     arc_curves : ndarray of shape (n_samples, profile_size) or (profile_size, )
         The arc curves
 
-    See also
+    See Also
     --------
     wildboar.distance.matrix_profile : compute the matrix profile
 

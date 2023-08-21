@@ -43,10 +43,10 @@ Importance = namedtuple("Importance", ["mean", "std", "full"])
 def plot_importances(importances, ax=None, labels=None):
     """Plot the importances as a boxplot.
 
-    Paramters
-    ---------
+    Parameters
+    ----------
     importances : Importance or dict
-        The importances
+        The importances.
     ax : Axes, optional
         The axes to plot. If importances is dict, ax must contain at least
         len(importances) Axes objects.
@@ -134,7 +134,7 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
     def _permute_component(self, X, component, random_state):
         pass
 
-    def _fit(self, estimator, X, y, random_state, sample_weight=None):
+    def _fit(self, estimator, X, y, random_state, sample_weight=None):  # noqa: PLR0912
         if callable(self.scoring):
             scoring = self.scoring
         elif self.scoring is None or isinstance(self.scoring, str):
@@ -192,6 +192,7 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
     components_ : ndarray of shape (n_intervals, 2)
         The interval start and end positions.
+
     """
 
     _parameter_constraints: dict = {
@@ -299,7 +300,7 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
             importances[start:end] = self.importances_.mean[i]
         return np.broadcast_to(importances, (x.shape[0], self.n_timesteps_in_))
 
-    def plot(
+    def plot(  # noqa: PLR0912
         self,
         x=None,
         y=None,
@@ -404,22 +405,12 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
 
 class AmplitudeImportance(ExplainerMixin, PermuteImportance):
-    """Compute the importance of equi-probable amplitude intervals.
+    """
+    Compute the importance of equi-probable amplitude intervals.
 
     The implementation uses
     :class:`transform.SAX` to discretize the time series and then for each bin permute
     the samples along that bin.
-
-    Paramters
-    ---------
-    sax_ : SAX
-        The SAX transformation.
-    baseline_score_ : float or dict
-        The baseline score.
-    importances_ : float or dict
-        The importances of each vertical bin.
-    components_ : list
-        List of binning identifiers.
     """
 
     _parameter_constraints: dict = {
@@ -530,7 +521,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
                 "plot is not standardized. Set preprocess=True to scale the data."
             )
 
-    def plot(
+    def plot(  # noqa: PLR0915, PLR0912
         self,
         x=None,
         y=None,
@@ -701,6 +692,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
     ----------
     components : ndarray
         The shapelets
+
     """
 
     _parameter_constraints: dict = {
@@ -819,7 +811,9 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
 
             return explanation
 
-    def plot(self, X=None, y=None, k=None, scoring=None, kernel_scale=0.25, ax=None):
+    def plot(  # noqa: PLR0912
+        self, X=None, y=None, k=None, scoring=None, kernel_scale=0.25, ax=None
+    ):
         if X is None:
             plot_importances(
                 self.importances_, ax=ax, labels=range(len(self.components_))

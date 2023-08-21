@@ -21,6 +21,8 @@ _METRIC_NAMES = frozenset(_METRIC_NAMES)
 
 
 class PivotMixin:
+    """Mixin for Pivot based estimators."""
+
     _parameter_constraints: dict = {
         "n_pivots": [Interval(numbers.Integral, 1, None, closed="left")],
         "metric": [StrOptions(_METRIC_NAMES), list],
@@ -77,7 +79,40 @@ class PivotMixin:
 
 
 class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
-    """A transform using pivot time series and sampled distance metrics."""
+    """
+    A transform using pivot time series and sampled distance metrics.
+
+    Parameters
+    ----------
+    n_pivots : int, optional
+        The number of pivot time series.
+    metric : {'auto'} or list, optional
+        - If str, the metric to compute the distance.
+        - If list, multiple metrics specified as a list of tuples, where the first
+            element of the tuple is a metric name and the second element a dictionary
+            with a parameter grid specification. A parameter grid specification is a
+            dict with two mandatory and one optional key-value pairs defining the
+            lower and upper bound on the values and number of values in the grid. For
+            example, to specifiy a grid over the argument 'r' with 10 values in the
+            range 0 to 1, we would give the following specification: `dict(min_r=0,
+            max_r=1, num_r=10)`.
+
+        Read more about the metrics and their parameters in the :ref:`User guide
+        <list_of_subsequence_metrics>`.
+    metric_params : dict, optional
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
+    metric_sample : {"uniform", "weighted"}, optional
+        If multiple metrics are specified this parameter controls how they are
+        sampled. "uniform" samples each metric configuration with equal probability
+        and "weighted" samples each metric with equal probability. By default,
+        metric configurations are sampled with equal probability.
+    random_state : int or np.RandomState, optional
+        The random state.
+    n_jobs : int, optional
+        The number of cores to use.
+    """
 
     _parameter_constraints: dict = {
         **PivotMixin._parameter_constraints,
@@ -94,39 +129,6 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
         random_state=None,
         n_jobs=None,
     ):
-        """Construct a new pivot transform.
-
-        Parameters
-        ----------
-        n_pivot : int, optional
-            The number of pivot time series.
-        metric : {'auto'} or list, optional
-            - If str, the metric to compute the distance.
-            - If list, multiple metrics specified as a list of tuples, where the first
-              element of the tuple is a metric name and the second element a dictionary
-              with a parameter grid specification. A parameter grid specification is a
-              dict with two mandatory and one optional key-value pairs defining the
-              lower and upper bound on the values and number of values in the grid. For
-              example, to specifiy a grid over the argument 'r' with 10 values in the
-              range 0 to 1, we would give the following specification: ``dict(min_r=0,
-              max_r=1, num_r=10)``.
-
-            Read more about the metrics and their parameters in the :ref:`User guide
-            <list_of_subsequence_metrics>`.
-        metric_params : dict, optional
-            Parameters for the distance measure. Ignored unless metric is a string.
-
-            Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
-        metric_sample : {"uniform", "weighted"}, optional
-            If multiple metrics are specified this parameter controls how they are
-            sampled. "uniform" samples each metric configuration with equal probability
-            and "weighted" samples each metric with equal probability. By default,
-            metric configurations are sampled with equal probability.
-        random_state : int or np.RandomState, optional
-            The random state
-        n_jobs : int, optional
-            The number of cores to use.
-        """
         super().__init__(random_state=random_state, n_jobs=n_jobs)
         self.n_pivots = n_pivots
         self.metric = metric
@@ -135,6 +137,41 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
 
 
 class ProximityTransform(TransformerMixin, BaseEstimator):
+    """
+    Transform time series based on class conditional pivots.
+
+    Parameters
+    ----------
+    n_pivots : int, optional
+        The number of pivot time series per class.
+    metric : {'auto'} or list, optional
+        - If str, the metric to compute the distance.
+        - If list, multiple metrics specified as a list of tuples, where the first
+            element of the tuple is a metric name and the second element a dictionary
+            with a parameter grid specification. A parameter grid specification is a
+            dict with two mandatory and one optional key-value pairs defining the
+            lower and upper bound on the values and number of values in the grid. For
+            example, to specifiy a grid over the argument 'r' with 10 values in the
+            range 0 to 1, we would give the following specification: `dict(min_r=0,
+            max_r=1, num_r=10)`.
+
+        Read more about the metrics and their parameters in the :ref:`User guide
+        <list_of_subsequence_metrics>`.
+    metric_params : dict, optional
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
+    metric_sample : {"uniform", "weighted"}, optional
+        If multiple metrics are specified this parameter controls how they are
+        sampled. "uniform" samples each metric configuration with equal probability
+        and "weighted" samples each metric with equal probability. By default,
+        metric configurations are sampled with equal probability.
+    random_state : int or np.RandomState, optional
+        The random state.
+    n_jobs : int, optional
+        The number of cores to use.
+    """
+
     def __init__(
         self,
         n_pivots=100,

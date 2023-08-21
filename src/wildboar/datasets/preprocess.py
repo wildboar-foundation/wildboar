@@ -65,10 +65,8 @@ def minmax_scale(x, min=0, max=1):
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The dataset
-
     min : float, optional
         The minimum value
-
     max : float, optional
         The maximum value
 
@@ -111,7 +109,6 @@ def truncate(x, n_shortest=None):
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The dataset
-
     n_shortest : int, optional
         The maximum size
 

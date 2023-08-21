@@ -18,6 +18,8 @@ from ._cshapelet import (
 
 
 class ShapeletMixin:
+    """Mixin for shapelet based estiomators."""
+
     _parameter_constraints: dict = {
         "n_shapelets": [
             Interval(numbers.Integral, 1, None, closed="left"),
@@ -104,15 +106,57 @@ class ShapeletMixin:
 
 
 class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
-    """Random shapelet tranform.
+    """
+    Random shapelet tranform.
 
     Transform a time series to the distances to a selection of random
     shapelets.
+
+    Parameters
+    ----------
+    n_shapelets : int, optional
+        The number of shapelets in the resulting transform.
+    metric : str or list, optional
+        - If str, the distance metric used to identify the best shapelet.
+        - If list, multiple metrics specified as a list of tuples, where the first
+            element of the tuple is a metric name and the second element a dictionary
+            with a parameter grid specification. A parameter grid specification is a
+            dict with two mandatory and one optional key-value pairs defining the
+            lower and upper bound on the values and number of values in the grid. For
+            example, to specifiy a grid over the argument 'r' with 10 values in the
+            range 0 to 1, we would give the following specification: ``dict(min_r=0,
+            max_r=1, num_r=10)``.
+
+        Read more about the metrics and their parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
+    metric_params : dict, optional
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the :ref:`User guide
+        <list_of_subsequence_metrics>`.
+    min_shapelet_size : float, optional
+        Minimum shapelet size.
+    max_shapelet_size : float, optional
+        Maximum shapelet size.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. None means 1 and -1 means using all
+        processors.
+    random_state : int or RandomState
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
 
     Attributes
     ----------
     embedding_ : Embedding
         The underlying embedding object.
+
+    References
+    ----------
+    Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
+        Ultra-fast shapelets for time series classification. arXiv preprint
+        arXiv:1503.05018 (2015).
 
     Examples
     --------
@@ -134,11 +178,6 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
     ... )
     >>> t.fit_transform(X)
 
-    References
-    ----------
-    Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.
-        Ultra-fast shapelets for time series classification. arXiv preprint
-        arXiv:1503.05018 (2015).
     """
 
     _parameter_constraints: dict = {
@@ -157,43 +196,6 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
         n_jobs=None,
         random_state=None,
     ):
-        """Construct a new random shapelet transform.
-
-        Parameters
-        ----------
-        n_shapelets : int, optional
-            The number of shapelets in the resulting transform.
-        metric : str or list, optional
-            - If str, the distance metric used to identify the best shapelet.
-            - If list, multiple metrics specified as a list of tuples, where the first
-              element of the tuple is a metric name and the second element a dictionary
-              with a parameter grid specification. A parameter grid specification is a
-              dict with two mandatory and one optional key-value pairs defining the
-              lower and upper bound on the values and number of values in the grid. For
-              example, to specifiy a grid over the argument 'r' with 10 values in the
-              range 0 to 1, we would give the following specification: ``dict(min_r=0,
-              max_r=1, num_r=10)``.
-
-            Read more about the metrics and their parameters in the
-            :ref:`User guide <list_of_subsequence_metrics>`.
-        metric_params : dict, optional
-            Parameters for the distance measure. Ignored unless metric is a string.
-
-            Read more about the parameters in the :ref:`User guide
-            <list_of_subsequence_metrics>`.
-        min_shapelet_size : float, optional
-            Minimum shapelet size.
-        max_shapelet_size : float, optional
-            Maximum shapelet size.
-        n_jobs : int, optional
-            The number of jobs to run in parallel. None means 1 and -1 means using all
-            processors.
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator
-            - If `RandomState` instance, `random_state` is the random number generator
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
         super().__init__(n_jobs=n_jobs, random_state=random_state)
         self.n_shapelets = n_shapelets
         self.metric = metric

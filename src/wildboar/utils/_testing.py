@@ -22,6 +22,19 @@ _DUMMY_Y.setflags(write=False)
 
 
 def assert_exhaustive_parameter_checks(estimator: BaseEstimator):
+    """
+    Assert that all parameter are checked.
+
+    Parameters
+    ----------
+    estimator : BaseEstimator
+       The estimator to check.
+
+    Attributes
+    ----------
+    test : bool
+        Ok.
+    """
     assert hasattr(estimator.__class__, "_parameter_constraints")
     assert (
         estimator.get_params(deep=False).keys()
@@ -30,6 +43,18 @@ def assert_exhaustive_parameter_checks(estimator: BaseEstimator):
 
 
 def assert_parameter_checks(estimator: BaseEstimator, skip=None):
+    """
+    Assert that all parameter checks are correct.
+
+    Extended.
+
+    Parameters
+    ----------
+    estimator : BaseEstimator
+        The estimator.
+    skip : list, optional
+        The parameter constraints to skip.
+    """
     assert hasattr(estimator.__class__, "_parameter_constraints")
     if is_explainer(estimator):
         clf = MinimalClassifier()

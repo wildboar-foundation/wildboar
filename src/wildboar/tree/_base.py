@@ -16,6 +16,7 @@ from ..base import BaseEstimator
 from ..utils.validation import _check_ts_array, _num_timesteps
 
 
+# noqa: PR01
 class BaseTree(BaseEstimator, metaclass=ABCMeta):
     """Base class for tree based estimators."""
 
@@ -82,25 +83,28 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
 
 class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit the estimator.
+        """
+        Fit the estimator.
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_timesteps)
+        x : array-like of shape (n_samples, n_timesteps)
             The training time series.
         y : array-like of shape (n_samples,)
-            Target values as floating point values
+            Target values as floating point values.
         sample_weight : array-like of shape (n_samples,)
             If `None`, then samples are equally weighted. Splits that would create child
             nodes with net zero or negative weight are ignored while searching for a
             split in each node. Splits are also ignored if they would result in any
             single class carrying a negative weight in either child node.
         check_input : bool, optional
-            Allow to bypass several input checks
+            Allow to bypass several input checks.
 
         Returns
         -------
-        self: object
+        self
+            This object.
+
         """
         self._validate_params()
         if check_input:
@@ -124,20 +128,22 @@ class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):
         return self
 
     def predict(self, x, check_input=True):
-        """Predict the value of x.
+        """
+        Predict the value of x.
 
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timesteps)
-            The input time series
+            The input time series.
         check_input : bool, optional
             Allow to bypass several input checking. Don't use this parameter unless you
             know what you do.
 
         Returns
         -------
-        y : ndarray of shape (n_samples,)
+        ndarray of shape (n_samples,)
             The predicted classes.
+
         """
         check_is_fitted(self, ["tree_"])
         if check_input:
@@ -154,14 +160,15 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
     """Mixin for classification trees."""
 
     def fit(self, x, y, sample_weight=None, check_input=True):
-        """Fit a classification tree.
+        """
+        Fit a classification tree.
 
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timesteps)
             The training time series.
         y : array-like of shape (n_samples,)
-            The target values
+            The target values.
         sample_weight : array-like of shape (n_samples,)
             If `None`, then samples are equally weighted. Splits that would create child
             nodes with net zero or negative weight are ignored while searching for a
@@ -172,7 +179,9 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
 
         Returns
         -------
-        self: object
+        self
+            This instance.
+
         """
         self._validate_params()
         if check_input:
@@ -213,26 +222,29 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
         return self
 
     def predict(self, x, check_input=True):
-        """Predict the regression of the input samples x.
+        """
+        Predict the regression of the input samples x.
 
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timesteps)
-            The input time series
+            The input time series.
         check_input : bool, optional
             Allow to bypass several input checking. Don't use this parameter unless you
             know what you do.
 
         Returns
         -------
-        y : ndarray of shape (n_samples,)
+        ndarray of shape (n_samples,)
             The predicted classes.
+
         """
         proba = self.predict_proba(x, check_input=check_input)
         return self.classes_.take(np.argmax(proba, axis=1), axis=0)
 
     def predict_proba(self, x, check_input=True):
-        """Predict class probabilities of the input samples X.
+        """
+        Predict class probabilities of the input samples X.
 
         The predicted class probability is the fraction of samples of the same
         class in a leaf.
@@ -240,16 +252,17 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
         Parameters
         ----------
         x :  array-like of shape (n_samples, n_timesteps)
-            The input time series
+            The input time series.
         check_input : bool, optional
             Allow to bypass several input checking. Don't use this parameter unless you
             know what you do.
 
         Returns
         -------
-        proba : ndarray of shape (n_samples, n_classes)
+        ndarray of shape (n_samples, n_classes)
             The class probabilities of the input samples. The order of the classes
-            corresponds to that in the attribute `classes_`
+            corresponds to that in the attribute `classes_`.
+
         """
         check_is_fitted(self, ["tree_"])
         if check_input:

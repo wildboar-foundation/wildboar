@@ -54,7 +54,7 @@ class KernelLogisticRegression(LogisticRegression):
         penalty="l2",
         dual=False,
         tol=1e-4,
-        C=1.0,
+        C=1.0,  # noqa: N803
         fit_intercept=True,
         intercept_scaling=1,
         class_weight=None,
@@ -74,10 +74,8 @@ class KernelLogisticRegression(LogisticRegression):
         kernel : str, optional
             The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
             for kernels. The default kernel is 'rbf'.
-
         kernel_params : dict, optional
             Parameters to the kernel function.
-
         n_components : int, optional
             Number of features to construct
         """
@@ -166,20 +164,16 @@ def kmeans_outliers(
     ----------
     x : ndarray of shape (n_samples, n_timestep)
         The input samples
-
     y : ndarray of shape (n_samples, ), optional
         Ignored.
-
     n_outliers : float, optional
         The number of outlier samples expressed as a fraction of the inlier samples.
 
         - if float, the number of outliers are guaranteed but an error is raised
           if no cluster can satisfy the constraints. Lowering the ``n_cluster``
           parameter to allow for more samples per cluster.
-
     n_clusters : int, optional
         The number of clusters.
-
     random_state : int or RandomState
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
@@ -190,7 +184,6 @@ def kmeans_outliers(
     -------
     x_outlier : ndarray of shape (n_inliers + n_outliers, n_timestep)
         The samples
-
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
         The inliers (labeled as 1) and outlier (labled as -1)
     """
@@ -390,7 +383,7 @@ def minority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     )
 
 
-def emmott_outliers(
+def emmott_outliers(  # noqa: PLR
     x,
     y,
     *,
@@ -411,35 +404,30 @@ def emmott_outliers(
     The Emmott labeler can reliably label both binary and multiclass datasets. For
     binary datasets a random label is selected as the outlier class. For multiclass
     datasets a set of classes with maximal confusion (as measured by
-    ``confusion_estimator`` is selected as outlier label. For each outlier sample the
-    ``difficulty_estimator`` assigns a difficulty score which is digitized into ranges
-    and selected according to the ``difficulty`` parameters. Finally a sample of
-    approximately ``n_outlier`` is selected either maximally dispersed or tight.
+    `confusion_estimator` is selected as outlier label. For each outlier sample the
+    `difficulty_estimator` assigns a difficulty score which is digitized into ranges
+    and selected according to the `difficulty` parameters. Finally a sample of
+    approximately `n_outlier` is selected either maximally dispersed or tight.
 
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep)
         The input samples
-
     y : ndarray of shape (n_samples, )
         The input labels.
-
     n_outliers : float, optional
         The number of outlier samples expressed as a fraction of the inlier samples.
 
         - if float, the number of outliers are guaranteed but an error is raised
           if the the requested difficulty has to few samples or the labels selected
           for the outlier label has to few samples.
-
     confusion_estimator : object, optional
         Estimator of class confusion for datasets where ``n_classes > 2``. Default to a
         random forest classifier.
-
     difficulty_estimator : object, optional
         Estimator for sample difficulty. The difficulty estimator must support
         ``predict_proba``. Defaults to a kernel logistic regression model with
         a RBF-kernel.
-
     transform : 'interval' or Transform, optional
         Transform x before the confusion and difficulty estimator.
 
@@ -447,7 +435,6 @@ def emmott_outliers(
         - if 'interval', use the :class:`transform.IntervalTransform` with default
           parameters.
         - otherwise, use the supplied transform
-
     difficulty : {'any', 'simplest', 'hardest'}, int or array-like, optional
         The difficulty of the outlier points quantized according to scale. The value
         should be in the range ``[1, len(scale)]`` with lower difficulty denoting
@@ -457,14 +444,12 @@ def emmott_outliers(
         - if 'any' outliers are sampled from all scores
         - if 'simplest' the simplest n_outliers are selected
         - if 'hardest' the hardest n_outliers are selected
-
     scale : int or array-like, optional
         The scale of quantized difficulty scores. Defaults to ``[0, 0.16, 0.3, 0.5]``.
         Scores (which are probabilities in the range [0, 1]) are fit into the ranges
         using ``np.digitize(difficulty, scale)``.
 
         - if int, use `scale` percentiles based in the difficulty scores.
-
     variation : {'tight', 'dispersed'}, optional
         Selection procedure for sampling outlier samples. If ``difficulty="simplest"``
         or ``difficulty="hardest"``, this parameter has no effect.
@@ -473,7 +458,6 @@ def emmott_outliers(
           are selected according to their euclidean distance.
         - if 'dispersed' ``n_outlier`` points are selected according to a facility
           location algorithm such that they are distributed among the outliers.
-
     random_state : int or RandomState
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
@@ -484,7 +468,6 @@ def emmott_outliers(
     -------
     x_outlier : ndarray of shape (n_inliers + n_outliers, n_timestep)
         The samples
-
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
         The inliers (labeled as 1) and outlier (labled as -1)
 

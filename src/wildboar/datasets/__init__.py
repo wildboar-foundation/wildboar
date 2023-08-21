@@ -1,7 +1,7 @@
 """Dataset loading utilities.
 
-See the :doc:`dataset section in the User Guide
-<wildboar:guide/datasets>` for more details and examples.
+See the dataset section in the :doc:`User Guide <wildboar:guide/datasets>` for
+more details and examples.
 """
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -58,13 +58,10 @@ def _split_repo_bundle(repo_bundle_name):
     -------
     repository : str
         Key of the repository
-
     bundle : str
         Name of the bundle
-
     version : str
         An optional version
-
     tag : str
         An optional tag
     """
@@ -93,7 +90,7 @@ def set_cache_dir(cache_dir=None):
     cache_dir : str, optional
         The cache directory root
     """
-    global _CACHE_DIR
+    global _CACHE_DIR  # noqa: PLW0603
     _CACHE_DIR = cache_dir
 
 
@@ -163,22 +160,16 @@ def load_datasets(
     ----------
     repository : str
         The repository string
-
     collection : str, optional
         A collection of named datasets.
-
     progress : bool, optional
         If progress indicator is shown while downloading the repository.
-
     cache_dir : str, optional
         The cache directory for downloaded dataset repositories.
-
     create_cache_dir : bool, optional
         Create the cache directory if it does not exist.
-
     force : bool, optional
         Force re-download of cached repository
-
     filter: str, dict, list or callable, optional
         Filter the datasets
 
@@ -192,22 +183,12 @@ def load_datasets(
 
         - if str, filter based on attribute comparison
 
-        The format of attribute comparisons are ``[attribute][comparison spec]``.
+        Read more in the `User guide <wildboar:datasets_filter>`_
 
-        Valid attributes are
-        - ``dataset``
-        - ``n_samples``
-        - ``n_timestep``
-        - ``n_dims``
-        - ``n_labels``
+        .. warning::
 
-        The `comparison spec` is a string of two parts, comparison operator
-        (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
-
-        .. note::
-
-            If the parameter ``merge_train_test`` is set to ``False``, the
-            filter is applied on the *training* part of the data.
+            If the parameter ``merge_train_test`` is ``False``, the filter is
+            applied on the *training* part of the data.
     kwargs : dict
         Optional arguments to :func:`~wildboar.datasets.load_dataset`.
 
@@ -228,21 +209,32 @@ def load_datasets(
 
     Examples
     --------
-    >>> from wildboar.datasets import load_datasets
-    >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr'):
-    >>>     print(dataset, x.shape, y.shape)
+    Load all datasets in a repository:
+
+    >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr-tiny'):
+    ...     print(dataset, x.shape, y.shape)
+    ...
+    Beef (60, 470) (60,)
+    Coffee (56, 286) (56,)
+    GunPoint (200, 150) (200,)
+    SyntheticControl (600, 60) (600,)
+    TwoLeadECG (1162, 82) (1162,)
 
     Print the names of datasets with more than 200 samples
 
     >>> for dataset, (x, y) in load_datasets(
-    ...    repository='wildboar/ucr', filter={"n_samples": ">200"}
+    ...    repository='wildboar/ucr-tiny', filter={"n_samples": ">200"}
     ... ):
-    >>>     print(dataset)
+    ...     print(dataset)
+    SyntheticControl
+    TwoLeadECG
 
     >>> for dataset, (x, y) in load_datasets(
-    ...    repository='wildboar/ucr', filter="n_samples>200"
+    ...    repository='wildboar/ucr-tiny', filter="n_samples>200"
     ... ):
-    >>>     print(dataset)
+    ...     print(dataset)
+    SyntheticControl
+    TwoLeadECG
     """
     for dataset in list_datasets(
         repository=repository,
@@ -258,20 +250,20 @@ def load_datasets(
             y = data[1]
         else:
             data = load_dataset(dataset, repository=repository, **kwargs)
+
+            # We extract the training part to apply the filter.
             x = data[0]  # x_train
             y = data[2]  # y_train
 
         if filter is None:
             yield dataset, data
-        elif hasattr(filter, "__call__"):
-            if filter(dataset, x, y):
-                yield dataset, data
-        else:
-            if make_filter(filter)(dataset, x, y):
-                yield dataset, data
+        elif hasattr(filter, "__call__") and filter(dataset, x, y):
+            yield dataset, data
+        elif make_filter(filter)(dataset, x, y):
+            yield dataset, data
 
 
-def load_dataset(
+def load_dataset(  # noqa: PLR0912
     name,
     *,
     repository="wildboar/ucr",
@@ -293,16 +285,14 @@ def load_dataset(
     ----------
     name : str
         The name of the dataset to load.
-
     repository : str, optional
-        The data repository formatted as {repository}/{bundle}[:{version}][:{tag}]
-
+        The data repository formatted as
+        ``{repository}/{bundle}[:{version}][:{tag}]``. Read more in the `User
+        guide <datasets_repositories>`_.
     dtype : dtype, optional
         The data type of x (train and test)
-
     contiguous : bool, optional
         Ensure that the returned dataset is memory contiguous.
-
     preprocess : str, list or callable, optional
         Preprocess the dataset
 
@@ -310,34 +300,26 @@ def load_dataset(
           for valid keys)
         - if callable, function taking a np.ndarray and returns the preprocessed dataset
         - if list, a list of callable or str
-
     merge_train_test : bool, optional
         Merge the existing training and testing partitions.
-
     progress: bool, optional
         Show a progress bar while downloading a bundle.
-
     cache_dir: str, optional
         The directory where downloaded files are cached
-
     create_cache_dir: bool, optional
         Create cache directory if missing (default=True)
-
     return_extras : bool, optional
         Return optional extras
 
         .. versionadded :: 1.1
-
     force : bool, optional
         Force re-download of already cached bundle
 
         .. versionadded :: 1.0.4
-
     refresh : bool, optional
         Refresh the repository
 
         .. versionadded :: 1.1
-
     timeout : float, optional
         Timeout for json request
 
@@ -347,30 +329,26 @@ def load_dataset(
     -------
     x : ndarray
         The data samples, optional
-
     y : ndarray, optional
         The labels
-
     x_train : ndarray, optional
-        The training samples if ``merge_train_test=False``
-
+        The training samples if `merge_train_test=False`
     x_test : ndarray, optional
-        The testing samples if ``merge_train_test=False``
-
+        The testing samples if `merge_train_test=False`
     y_train : ndarray, optional
-        The training labels if ``merge_train_test=False``
-
+        The training labels if `merge_train_test=False`
     y_test : ndarray, optional
-        The testing labels if ``merge_train_test=False``
-
+        The testing labels if `merge_train_test=False`
     extras : dict, optional
-        The optional extras if ``return_extras=True``
+        The optional extras if `return_extras=True`
 
     Examples
     --------
     Load a dataset from the default repository
 
     >>> x, y = load_dataset("SyntheticControl")
+    >>> x.shape
+    (600, 60)
 
     or if original training and testing splits are to be preserved
 
@@ -381,7 +359,9 @@ def load_dataset(
     or for a specific version of the dataset
 
     >>> x_train, x_test, y_train, y_test = load_dataset(
-    ...     "Wafer", repository='wildboar/ucr-tiny:1.0'
+    ...     "SyntheticControl",
+    ...     repository='wildboar/ucr-tiny:1.0.1',
+    ...     merge_train_test=False,
     ... )
     """
     (
@@ -463,7 +443,7 @@ def load_dataset(
 
     if contiguous:
         return [
-            np.ascontiguousarray(x)  # TODO: migrate to check_array
+            np.ascontiguousarray(x)
             if isinstance(x, np.ndarray)
             else {k: np.ascontiguousarray(v) for k, v in extras.items()}
             for x in ret_val
@@ -490,28 +470,21 @@ def list_datasets(
     repository : str or Bundle, optional
         The data repository
 
-        - if str load a named bundle, format {repository}/{bundle}
-
+        - if str load a named bundle, format `{repository}/{bundle}`
     collection : str, optional
         A collection of named datasets.
-
     progress: bool, optional
         Show a progress bar while downloading a bundle.
-
     cache_dir: str, optional
         The directory where downloaded files are cached (default='wildboar_cache')
-
     create_cache_dir: bool, optional
         Create cache directory if missing (default=True)
-
     force : bool, optional
         Force re-download of cached bundle
-
     refresh : bool, optional
         Refresh the repository
 
         .. versionadded :: 1.1
-
     timeout : float, optional
         Timeout for json request
 
@@ -553,10 +526,8 @@ def clear_cache(repository=None, *, cache_dir=None, keep_last_version=True):
         The name of the repository to clear cache.
 
         - if None, clear cache of all repositories
-
     cache_dir : str, optional
         The cache directory
-
     keep_last_version : bool, optional
         If true, keep the latest version of each repository.
     """
@@ -593,17 +564,14 @@ def install_repository(repository, *, refresh=True, timeout=None, cache_dir=None
     ----------
     repository : str or Repository
         A repository
-
     refresh : bool, optional
         Refresh the repository
 
         ..versionadded :: 1.1
-
     timeout : float, optional
         Timeout for json request
 
         ..versionadded :: 1.1
-
     cache_dir : str, optional
         Cache directory
 
@@ -623,12 +591,10 @@ def refresh_repositories(repository=None, *, timeout=None, cache_dir=None):
 
     repository : str, optional
         The repository. None means all repositories.
-
     timeout : float, optional
         Timeout for request
 
         ..versionadded :: 1.1
-
     cache_dir : str, optional
         Cache directory
 
@@ -645,12 +611,10 @@ def get_bundles(repository, *, refresh=False, timeout=None):
     ----------
     repository : str
         Name of the repository
-
     refresh : bool, optional
         Refresh the repository
 
         ..versionadded :: 1.1
-
     timeout : float, optional
         Timeout for json request
 
@@ -674,12 +638,10 @@ def list_bundles(repository, *, refresh=False, timeout=None):
     ----------
     repository : str
         The name of the repository
-
     refresh : bool, optional
         Refresh the repository
 
         ..versionadded :: 1.1
-
     timeout : float, optional
         Timeout for json request
 
@@ -725,12 +687,10 @@ def list_repositories(*, refresh=False, timeout=None, cache_dir=None):
         Refresh all repositories
 
         ..versionadded :: 1.1
-
     timeout : float, optional
         Timeout for json request
 
         ..versionadded :: 1.1
-
     cache_dir : str, optional
         Cache directory
 
@@ -759,6 +719,7 @@ def _get_dataset_version():
         return "%d.%d" % (v.major, v.minor)
 
 
+# TODO: Update the url to datasets.wildboar.dev
 install_repository(
     "https://isaksamsten.github.io/wildboar-datasets/%s/repo.json"
     % _get_dataset_version(),

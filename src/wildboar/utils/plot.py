@@ -86,7 +86,6 @@ def plot_time_domain(
 
     Returns
     -------
-
     ax : Axes
         The axes object that has been plotted.
     """

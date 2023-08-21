@@ -297,9 +297,11 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
     r : float, optional
         The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
     g : float, optional
-        Weighting described by Jeong et. al. (2011) using :math:`g` as penalty control.
+        Weighting described by Jeong et. al. (2011) using ``g`` as penalty control.
 
-        .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}},
+        ::
+            w(x)= 1.0 / 1.0 + exp(-g(x-m/2)),
+
     out : array-like of shape (x_timestep, y_timestep), optional
         Store the warping path in this array.
 
@@ -321,9 +323,10 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
 def jeong_weight(n, g=0.05):
     r"""Weighting described by Jeong et. al. (2011).
 
-    Uses `g` as the penalty control.
+    Uses ``g`` as the penalty control.
 
-    .. math:: w(x)=\frac{1}{1+e^{-g(x-m/2)}}
+    ::
+        w(x)= 1.0 / 1.0 + exp(-g(x-m/2)),
 
     Parameters
     ----------
@@ -435,29 +438,30 @@ def dtw_average(
     r : float, optional
         The warping window as a fraction of n_timestep.
     g : float, optional
-        If set, use the weighted DTW alignment with :math:`g` as penalty control.
+        If set, use the weighted DTW alignment with ``g`` as penalty control.
 
-        .. math:: w(x)=\frac{w_{max}}{1+e^{-g(x-m/2)}}
+        ::
+            w(x)= 1.0 / 1.0 + exp(-g(x-m/2)),
     sample_weight : array-like of shape (n_samples, ), optional
         The sample weight.
-    init : 'random' or array-like of shape (m_timestep, ), optional
+    init : "random" or array-like of shape (m_timestep, ), optional
         The initial sample used for the average.
-    method : {'mm', 'ssg'}, optional
+    method : {"mm", "ssg"}, optional
         The method for computing the DBA.
 
-        - if 'mm', use the majorize-minimize mean algorithm [1], which is equivalent to
+        - if "mm", use the majorize-minimize mean algorithm [1], which is equivalent to
           the DBA method in [2].
 
-        - if 'ssg', use the stochastic subgradient mean algorithm [1].
+        - if "ssg", use the stochastic subgradient mean algorithm [1].
     max_stable : int, optional
         The maximum number of epoch where the average with lowest cost is unchanged
-        if method='ssg'.
+        if ``method='ssg'``.
     learning_rate : float, optional
-        The learning rate, if method='ssg'.
+        The learning rate, if ``method="ssg"``.
     decay : float, optional
-        The learning rate decay, if method='ssg'.
+        The learning rate decay, if ``method="ssg"``.
     tol : float, optional
-        The minmum change in cost between two epochs, if method='mm'.
+        The minmum change in cost between two epochs, if ``method="mm"``.
     max_epoch : int, optional
         The maximum number of epochs.
     verbose : bool, optional

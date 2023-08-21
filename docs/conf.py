@@ -31,31 +31,13 @@ extensions = [
     "sphinx_simpleversion",
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
-    "sphinx.ext.napoleon",
+    "numpydoc",
     "sphinx.ext.linkcode",
     "autoapi.extension",
     "sphinx_design",
-    "myst_parser",
     "sphinx_copybutton",
 ]
 
-intersphinx_mapping = {
-    "wildboar": ("https://wildboar.dev/main", None),
-    "sklearn": ("https://scikit-learn.org/stable/", None),
-}
-
-# Markdown setting
-myst_heading_anchors = 3
-myst_enable_extensions = [
-    "dollarmath",
-    "substitution",
-    "deflist",
-]
-
-pygments_style = "github-light-colorblind"
-pygments_dark_style = "github-dark-colorblind"
-syntax_highlight = "short"
-add_function_parentheses = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -65,6 +47,23 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
+intersphinx_mapping = {
+    "wildboar": ("https://wildboar.dev/main", None),
+    "sklearn": ("https://scikit-learn.org/stable/", None),
+}
+
+pygments_style = "github-light-colorblind"
+pygments_dark_style = "github-dark-colorblind"
+syntax_highlight = "short"
+add_function_parentheses = False
+
+# TODO: Enable once we have fewer warnings
+# numpydoc_validation_checks = {
+#     "all",
+#     "SA01",
+#     "EX01",
+# }
+
 versions_develop_branch = "master"
 
 autoapi_dirs = ["../src/"]
@@ -73,7 +72,7 @@ autoapi_template_dir = "_templates/autoapi/"
 autoapi_ignore = ["*tests*", "_*.py"]
 autoapi_keep_files = True
 autoapi_add_toctree_entry = True
-autoapi_python_class_content = "both"
+autoapi_python_class_content = "class"
 autoapi_member_order = "groupwise"
 
 autoapi_options = [
@@ -106,6 +105,12 @@ html_css_files = [
     "css/custom.css",
 ]
 current_branch_name = get_current_branch()
+
+rst_prolog = """
+.. role:: python(code)
+   :language: python
+   :class: highlight
+"""
 
 
 # Find the source file given a module

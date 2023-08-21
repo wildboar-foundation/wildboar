@@ -1,6 +1,5 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
 from abc import ABCMeta, abstractmethod
 from numbers import Integral
 
@@ -18,12 +17,31 @@ from ._cfeature_transform import (
 
 
 class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
-    """Base feature engineer transform.
+    """
+    Base feature engineer transform.
+
+    Parameters
+    ----------
+    random_state : int or RandomState
+        Controls the random resampling of the original dataset.
+
+        - If ``int``, ``random_state`` is the seed used by the
+          random number generator.
+        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+          the random number generator.
+        - If ``None``, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. A value of ``None`` means
+        using a single core and a value of ``-1`` means using all cores.
+        Positive integers mean the exact number of cores.
 
     Attributes
     ----------
     embedding_ : Embedding
         The underlying embedding.
+
     """
 
     _parameter_constraints: dict = {
@@ -32,31 +50,26 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
     }
 
     def __init__(self, *, random_state=None, n_jobs=None):
-        """
-        Parameters
-        ----------
-        n_jobs : int, optional
-            The number of jobs to run in parallel. None means 1 and
-            -1 means using all processors.
-        """
         self.n_jobs = n_jobs
         self.random_state = random_state
 
     def fit(self, x, y=None):
-        """Fit the transform.
+        """
+        Fit the transform.
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or
-        [n_samples, n_dimensions, n_timestep]
+        x : array-like of shape (n_samples, n_timestep) or\
+                (n_samples, n_dimensions, n_timestep)
             The time series dataset.
-
         y : None, optional
             For compatibility.
 
         Returns
         -------
-        self : self
+        BaseFeatureEngineerTransform
+            This object.
+
         """
         self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
@@ -68,18 +81,20 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         return self
 
     def transform(self, x):
-        """Transform the dataset.
+        """
+        Transform the dataset.
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or
-        [n_samples, n_dimensions, n_timestep]
+        x : array-like of shape (n_samples, n_timestep) or\
+                (n_samples, n_dimensions, n_timestep)
             The time series dataset.
 
         Returns
         -------
-        x_transform : ndarray of shape [n_samples, n_outputs]
+        ndarray of shape (n_samples, n_outputs)
             The transformation.
+
         """
         check_is_fitted(self, attributes="embedding_")
         x = self._validate_data(x, reset=False, allow_3d=True, dtype=np.double)
@@ -88,20 +103,20 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         )
 
     def fit_transform(self, x, y=None):
-        """Fit the embedding and return the transform of x.
+        """
+        Fit the embedding and return the transform of x.
 
         Parameters
         ----------
-        x : array-like of shape [n_samples, n_timestep] or
-        [n_samples, n_dimensions, n_timestep]
+        x : array-like of shape (n_samples, n_timestep) or\
+                (n_samples, n_dimensions, n_timestep)
             The time series dataset.
-
         y : None, optional
             For compatibility.
 
         Returns
         -------
-        x_embedding : ndarray of shape [n_samples, n_outputs]
+        ndarray of shape (n_samples, n_outputs)
             The embedding.
         """
         self._validate_params()
