@@ -16,6 +16,8 @@ __all__ = ["BaseEstimator"]
 _DEFAULT_TAGS = {
     # The estimator can be fit with variable length time series
     "allow_eos": False,
+    # By default no estimator supports nan.
+    "allow_nan": False,
     # The explainer requires an estimator to fit
     "requires_estimator": False,
     # X_types = ["3darray"]
@@ -23,7 +25,6 @@ _DEFAULT_TAGS = {
 
 
 class BaseEstimator(SklearnBaseEstimator):
-
     # Same additions as scikit-learn
     def __getstate__(self):
         try:
