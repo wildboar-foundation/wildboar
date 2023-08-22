@@ -1,5 +1,7 @@
+
+*****************************************
 :py:mod:`wildboar.utils.estimator_checks`
-=========================================
+*****************************************
 
 .. py:module:: wildboar.utils.estimator_checks
 
@@ -9,7 +11,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -26,6 +28,7 @@ Functions
 
 .. py:function:: check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False)
 
+   
    Check if estimator adheres to scikit-learn (and wildboar) conventions.
 
    This method delegates to `check_estimator` in scikit-learn but monkey-patches
@@ -37,22 +40,43 @@ Functions
    Finally, we also add a suite of specific wildboar-tests tailored towards
    time series classifiers, regressors and transformers.
 
-   :param estimator: Estimator instance to check.
-   :type estimator: estimator object
-   :param generate_only: When `False`, checks are evaluated when `check_estimator` is called.
-                         When `True`, `check_estimator` returns a generator that yields
-                         (estimator, check) tuples. The check is run by calling
-                         `check(estimator)`.
-   :type generate_only: bool, default=False
-   :param ignore: Ignore the checks in the list.
-   :type ignore: list, optional
-   :param skip_scikit: Skip all scikit-learn tests.
-   :type skip_scikit: bool, optional
+   :Parameters:
 
-   :returns: **checks_generator** -- Generator that yields (estimator, check) tuples. Returned when
-             `generate_only=True`.
-   :rtype: generator
+       **estimator** : estimator object
+           Estimator instance to check.
 
+       **generate_only** : bool, default=False
+           When `False`, checks are evaluated when `check_estimator` is called.
+           When `True`, `check_estimator` returns a generator that yields
+           (estimator, check) tuples. The check is run by calling
+           `check(estimator)`.
+
+       **ignore** : list, optional
+           Ignore the checks in the list.
+
+       **skip_scikit** : bool, optional
+           Skip all scikit-learn tests.
+
+   :Returns:
+
+       **checks_generator** : generator
+           Generator that yields (estimator, check) tuples. Returned when
+           `generate_only=True`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: check_force_n_dims(name, estimator)
 

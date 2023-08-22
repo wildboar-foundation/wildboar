@@ -1,7 +1,9 @@
 :orphan:
 
+
+*********************************************
 :py:mod:`wildboar.explain.counterfactual._sf`
-=============================================
+*********************************************
 
 .. py:module:: wildboar.explain.counterfactual._sf
 
@@ -10,7 +12,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -32,23 +34,27 @@ Classes
 
    Bases: :py:obj:`wildboar.base.CounterfactualMixin`, :py:obj:`wildboar.base.ExplainerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
+   
    Counterfactual explanations for shapelet forest classifiers.
 
-   .. attribute:: paths_
 
-      A dictionary of prediction paths per label
 
-      :type: dict
+
+
+
+
+
+
+   .. warning::
+
+       Only shapelet forests fit with the Euclidean distance is supported i.e.,
+       ``metric="euclidean"``
+
 
    .. rubric:: Notes
 
    This implementation only supports the reversible algorithm
    described by Karlsson (2020)
-
-   .. warning::
-
-      Only shapelet forests fit with the Euclidean distance is supported i.e.,
-      ``metric="euclidean"``
 
    .. rubric:: References
 
@@ -60,31 +66,19 @@ Classes
        Explainable time series tweaking via irreversible and reversible temporal
        transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
 
-   Construct a new shapelet forest counterfactual.
+   .. only:: latex
 
-   :param cost: The cost function to determine the goodness of counterfactual
-   :type cost: {"euclidean", "cosine", "manhattan"} or callable, optional
-   :param aggregation: The aggregation function for the cost of multivariate counterfactuals.
-   :type aggregation: callable, optional
-   :param epsilon: Control the degree of change from the decision threshold
-   :type epsilon: float, optional
-   :param batch_size: Batch size when evaluating the cost and predictions of
-                      counterfactual candidates. The default setting is to evaluate
-                      all counterfactual samples.
+      
 
-                      .. versionchanged :: 1.1
-                          The default value changed to 0.1
-   :type batch_size: float, optional
-   :param max_paths: Sample a fraction of the positive prediction paths.
 
-                     .. versionadded :: 1.1
-                         Add support for subsampling prediction paths.
-   :type max_paths: float, optional
-   :param verbose: Print information to stdout during execution.
-   :type verbose: boolean, optional
-   :param random_state: Pseudo-random number for consistency between different runs
-   :type random_state: RandomState or int, optional
+   :Attributes:
 
+       **paths_** : dict
+           A dictionary of prediction paths per label
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: explain(x, y)
 
 

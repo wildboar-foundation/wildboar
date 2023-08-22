@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.datasets" href="../datasets/index.html" /><link rel="prev" title="wildboar" href="../index.html" />
 
-    <!-- Generated with Sphinx 7.1.1 and Furo 2023.07.26 -->
-        <title>wildboar.annotate - Wildboar 1.1.1.dev100 documentation</title>
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19 -->
+        <title>wildboar.annotate - Wildboar 1.1.1.dev106 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev100 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev106 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -278,14 +278,15 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-wildboar.annotate">
-<span id="wildboar-annotate"></span><h1><a class="reference internal" href="#module-wildboar.annotate" title="wildboar.annotate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a><a class="headerlink" href="#module-wildboar.annotate" title="Permalink to this heading">#</a></h1>
-<p>Annotation of time series.</p>
+          <section id="wildboar-annotate">
+<h1><a class="reference internal" href="#module-wildboar.annotate" title="wildboar.annotate"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a><a class="headerlink" href="#wildboar-annotate" title="Link to this heading">#</a></h1>
+<p id="module-wildboar.annotate">Annotation of time series.</p>
 <p>See the <span class="xref std std-doc">annotation section in the User Guide</span> for more details and examples.</p>
 <section id="package-contents">
-<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading">#</a></h2>
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading">#</a></h2>
+</section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -300,35 +301,44 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.annotate.motifs">
-<span class="sig-prename descclassname"><span class="pre">wildboar.annotate.</span></span><span class="sig-name descname"><span class="pre">motifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_motif</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L14-L193"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.annotate.motifs" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.annotate.</span></span><span class="sig-name descname"><span class="pre">motifs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_neighbours</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_motif</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L14-L183"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.annotate.motifs" title="Link to this definition">#</a></dt>
 <dd><p>Find motifs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series</p></li>
-<li><p><strong>mp</strong> (<em>ndarray</em><em> or </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>profile_size</em><em>)</em><em>, </em><em>optional</em>) – The matrix profile. The matrix profile is computed if None.</p></li>
-<li><p><strong>window</strong> (<em>&quot;auto&quot;</em><em>, </em><em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The window size of the matrix profile.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep)</span></dt><dd><p>The time series</p>
+</dd>
+<dt><strong>mp</strong><span class="classifier">ndarray or shape (n_samples, profile_size), optional</span></dt><dd><p>The matrix profile. The matrix profile is computed if None.</p>
+</dd>
+<dt><strong>window</strong><span class="classifier">“auto”, int or float, optional</span></dt><dd><p>The window size of the matrix profile.</p>
+<ul class="simple">
 <li><p>if “auto” the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
 window of the matrix profile if mp is not None.</p></li>
 <li><p>if float, a fraction of n_timestep</p></li>
 <li><p>if int, the exact window size</p></li>
 </ul>
-</p></li>
-<li><p><strong>exclude</strong> (<em>float</em><em>, </em><em>optional</em>) – The size of the exclusion zone.</p></li>
-<li><p><strong>max_distance</strong> (<em>str</em><em>, </em><em>optional</em>) – The maximum distance between motifs.</p></li>
-<li><p><strong>max_matches</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of neighbours</p></li>
-<li><p><strong>min_neighbours</strong> (<em>int</em><em>, </em><em>optional</em>) – The minimum number of neighbours</p></li>
-<li><p><strong>max_motif</strong> (<em>int</em><em>, </em><em>optional</em>) – The maximum number of motifs to return.</p></li>
-<li><p><strong>return_distance</strong> (<em>bool</em><em>, </em><em>optional</em>) – Return the distance from main to neighbours</p></li>
-</ul>
+</dd>
+<dt><strong>exclude</strong><span class="classifier">float, optional</span></dt><dd><p>The size of the exclusion zone.</p>
+</dd>
+<dt><strong>max_distance</strong><span class="classifier">str, optional</span></dt><dd><p>The maximum distance between motifs.</p>
+</dd>
+<dt><strong>max_neighbours</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of neighbours</p>
+</dd>
+<dt><strong>min_neighbours</strong><span class="classifier">int, optional</span></dt><dd><p>The minimum number of neighbours</p>
+</dd>
+<dt><strong>max_motif</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of motifs to return.</p>
+</dd>
+<dt><strong>return_distance</strong><span class="classifier">bool, optional</span></dt><dd><p>Return the distance from main to neighbours</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>motif_indicies</strong> (<em>list</em>) – List of arrays of motif neighbour indicies</p></li>
-<li><p><strong>motif_distance</strong> (<em>list, optional</em>) – List of arrays of distance from motif to neighbours</p></li>
-</ul>
-</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>motif_indicies</strong><span class="classifier">list</span></dt><dd><p>List of arrays of motif neighbour indicies</p>
+</dd>
+<dt><strong>motif_distance</strong><span class="classifier">list, optional</span></dt><dd><p>List of arrays of distance from motif to neighbours</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -351,32 +361,39 @@ conference on data mining (ICDM)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.annotate.segment">
-<span class="sig-prename descclassname"><span class="pre">wildboar.annotate.</span></span><span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_segments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_arc_curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L13-L122"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.annotate.segment" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.annotate.</span></span><span class="sig-name descname"><span class="pre">segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_segments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundry</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_arc_curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/utils/decorators.py#L13-L121"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.annotate.segment" title="Link to this definition">#</a></dt>
 <dd><p>Find change regimes in a time series.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>) or </em><em>(</em><em>n_timestep</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The time series. If x is given, the matrix profile of x is computed.</p></li>
-<li><p><strong>mpi</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>profile_size</em><em>) or </em><em>(</em><em>profile_size</em><em>)</em><em>, </em><em>optional</em>) – The matrix profile index. Must be given unless x is given.</p></li>
-<li><p><strong>n_segments</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of segmentations to identify</p></li>
-<li><p><strong>window</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The window size. The window parameter is ignored if mpi is not None.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep) or (n_timestep, ), optional</span></dt><dd><p>The time series. If x is given, the matrix profile of x is computed.</p>
+</dd>
+<dt><strong>mpi</strong><span class="classifier">array-like of shape (n_samples, profile_size) or (profile_size), optional</span></dt><dd><p>The matrix profile index. Must be given unless x is given.</p>
+</dd>
+<dt><strong>n_segments</strong><span class="classifier">int, optional</span></dt><dd><p>The number of segmentations to identify</p>
+</dd>
+<dt><strong>window</strong><span class="classifier">int or float, optional</span></dt><dd><p>The window size. The window parameter is ignored if mpi is not None.</p>
+<ul class="simple">
 <li><p>if float, a fraction of n_timestep</p></li>
 <li><p>if int, the exact window size</p></li>
 </ul>
-</p></li>
-<li><p><strong>exclude</strong> (<em>float</em><em>, </em><em>optional</em>) – The self-join exclusion for the matrix profile. Ignored if <cite>mpi</cite> is given.</p></li>
-<li><p><strong>boundry</strong> (<em>float</em><em>, </em><em>optional</em>) – The region around an identified segmentation that is ignored when searching
-for subsequent segmentations</p></li>
-<li><p><strong>return_arc_curve</strong> (<em>bool</em><em>, </em><em>optional</em>) – Return the arc curve.</p></li>
-</ul>
+</dd>
+<dt><strong>exclude</strong><span class="classifier">float, optional</span></dt><dd><p>The self-join exclusion for the matrix profile. Ignored if <cite>mpi</cite> is given.</p>
+</dd>
+<dt><strong>boundry</strong><span class="classifier">float, optional</span></dt><dd><p>Ignore the region around each identified segmentation. Expressed as a
+fraction of <cite>window</cite>.</p>
+</dd>
+<dt><strong>return_arc_curve</strong><span class="classifier">bool, optional</span></dt><dd><p>Return the arc curve.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>segments</strong> (<em>ndarray of shape (n_samples, n_segments), (n_segments) or int</em>) – The start index of a segment</p></li>
-<li><p><strong>arc_curves</strong> (<em>ndarray of shape (n_samples, profile_size) or (profile_size, )</em>) – The arc curves</p></li>
-</ul>
-</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>segments</strong><span class="classifier">ndarray of shape (n_samples, n_segments), (n_segments) or int</span></dt><dd><p>The start index of a segment</p>
+</dd>
+<dt><strong>arc_curves</strong><span class="classifier">ndarray of shape (n_samples, profile_size) or (profile_size, )</span></dt><dd><p>The arc curves</p>
+</dd>
+</dl>
 </dd>
 </dl>
 <div class="admonition seealso">
@@ -394,7 +411,6 @@ performance levels. In proceedings of International Conference on Data Mining</p
 </dl>
 </dd></dl>
 
-</section>
 </section>
 </section>
 
@@ -454,12 +470,10 @@ performance levels. In proceedings of International Conference on Data Mining</p
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a><ul>
-<li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
+<li><a class="reference internal" href="#package-contents">Package Contents</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.annotate.motifs"><code class="docutils literal notranslate"><span class="pre">motifs</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.annotate.segment"><code class="docutils literal notranslate"><span class="pre">segment</span></code></a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -474,9 +488,9 @@ performance levels. In proceedings of International Conference on Data Mining</p
     </aside>
   </div>
 </div>
-<script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=3653749c"></script>
+<script src="../../../_static/documentation_options.js?v=53783bbf"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>

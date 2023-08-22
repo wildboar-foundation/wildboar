@@ -1,7 +1,9 @@
 :orphan:
 
+
+***************************************
 :py:mod:`wildboar.linear_model._rocket`
-=======================================
+***************************************
 
 .. py:module:: wildboar.linear_model._rocket
 
@@ -10,7 +12,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -25,14 +27,50 @@ Classes
 
    Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeClassifierCV`
 
+   
    Implements the ROCKET classifier.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:class:: RocketRegressor(n_kernels=10000, *, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, gcv_mode=None, n_jobs=None, random_state=None)
 
 
    Bases: :py:obj:`wildboar.linear_model._transform.TransformRidgeCV`
 
+   
    Implements the ROCKET regressor.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

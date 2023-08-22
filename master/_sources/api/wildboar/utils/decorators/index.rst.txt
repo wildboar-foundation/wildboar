@@ -1,5 +1,7 @@
+
+***********************************
 :py:mod:`wildboar.utils.decorators`
-===================================
+***********************************
 
 .. py:module:: wildboar.utils.decorators
 
@@ -9,7 +11,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -21,30 +23,97 @@ Functions
 
 .. py:function:: array_or_scalar(optional_f=None, squeeze=True)
 
-   Decorate a function returning an ndarray to return a single scalar if
-   the array has a single item.
+   
+   Decorate a function returning.
 
-   :param optional_f: Used if the decorator is used without arguments
-   :type optional_f: callable, optional
-   :param squeeze: Remove axis of length one from the returned arrays
-   :type squeeze: bool, optional
+   An ndarray to return a single scalar if the array has a single item.
 
+   :Parameters:
+
+       **optional_f** : callable, optional
+           Used if the decorator is used without arguments.
+
+       **squeeze** : bool, optional
+           Remove axis of length one from the returned arrays.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: singleton(f)
 
-   Recursivley try to unwrap list return arguments such that a single
-   element can be returned.
+   
+   Recursivley try to unwrap list return arguments.
 
+   Such that a single element can be returned.
+
+   :Parameters:
+
+       **f** : function
+           The function to wrap.
+
+   :Returns:
+
+       function
+           The wrapper.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: unstable(optional_f=None, stability='beta', description=None)
 
+   
    Decorate a function as unsatable.
 
-   :param optional_f: The decorated function
-   :type optional_f: callable, optional
-   :param stability: The stability of the feature
-   :type stability: str, optional
-   :param description: The description of the feature
-   :type description: str, optional
 
+   :Parameters:
+
+       **optional_f** : callable, optional
+           The decorated function.
+
+       **stability** : str, optional
+           The stability of the feature.
+
+       **description** : str, optional
+           The description of the feature.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

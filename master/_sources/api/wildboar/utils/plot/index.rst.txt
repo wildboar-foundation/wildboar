@@ -1,5 +1,7 @@
+
+*****************************
 :py:mod:`wildboar.utils.plot`
-=============================
+*****************************
 
 .. py:module:: wildboar.utils.plot
 
@@ -8,7 +10,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -17,7 +19,7 @@ Classes
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -27,7 +29,7 @@ Functions
 
 
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
@@ -39,61 +41,132 @@ Attributes
 
    Bases: :py:obj:`matplotlib.colors.Normalize`
 
+   
    Normalise the colorbar.
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: plot_frequency_domain(x, y=None, *, ax=None, n_samples=100, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
 
+   
    Plot the samples in the freqency domain.
 
-   :param x: The samples
-   :type x: array-like of shape (n_sample, n_timestep)
-   :param y: The labels, by default None
-   :type y: array-like of shape (n_samples, ), optional
-   :param ax: The matplotlib Axes-object, by default None
-   :type ax: Axes, optional
-   :param jitter: Add jitter to the amplitude lines, by default False
-   :type jitter: bool, optional
-   :param sample_spacing: The frequency domain sample spacing, by default 1
-   :type sample_spacing: int, optional
-   :param frequency: Show the frequency bins, by default False
-   :type frequency: bool, optional
-   :param cmap: The colormap, by default "Dark2"
-   :type cmap: str, optional
 
+   :Parameters:
+
+       **x** : array-like of shape (n_sample, n_timestep)
+           The samples
+
+       **y** : array-like of shape (n_samples, ), optional
+           The labels, by default None
+
+       **ax** : Axes, optional
+           The matplotlib Axes-object, by default None
+
+       **jitter** : bool, optional
+           Add jitter to the amplitude lines, by default False
+
+       **sample_spacing** : int, optional
+           The frequency domain sample spacing, by default 1
+
+       **frequency** : bool, optional
+           Show the frequency bins, by default False
+
+       **cmap** : str, optional
+           The colormap, by default "Dark2"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: plot_time_domain(x, y=None, *, n_samples=100, ax=None, alpha=0.5, linewidth=0.5, zorder=-1, cmap='Dark2', show_legend=8)
 
+   
    Plot the samples in the time domain.
 
-   :param x: The samples
-   :type x: array-like of shape (n_sample, n_timestep)
-   :param y: The labels
-   :type y: array-like of shape (n_samples, ), optional
-   :param n_samples: The maximum number of samples to plot. If n_samples is larger than the number
-                     of samples in x or None, all samples are plotted.
-   :type n_samples: int, optional
-   :param ax: The matplotlib Axes-object
-   :type ax: Axes, optional
-   :param alpha: The opacity of the samples.
-   :type alpha: float, optional
-   :param linewidth: The width of the sample lines.
-   :type linewidth: float, optional
-   :param zorder: The order where the samples are plotted. By default we plot the samples
-                  at -1.
-   :type zorder: int, optional
-   :param cmap: The colormap used to colorize samples according to its label.
-   :type cmap: str, optional
-   :param show_legend: Whether the legend of labels are show.
 
-                       - if bool, show the legend if y is not None
-                       - if int, show the legend if the number of labels are lower than the
-                         show_legend parameter value
-   :type show_legend: bool or int, optional
+   :Parameters:
 
-   :returns: **ax** -- The axes object that has been plotted.
-   :rtype: Axes
+       **x** : array-like of shape (n_sample, n_timestep)
+           The samples
 
+       **y** : array-like of shape (n_samples, ), optional
+           The labels
+
+       **n_samples** : int, optional
+           The maximum number of samples to plot. If n_samples is larger than the number
+           of samples in x or None, all samples are plotted.
+
+       **ax** : Axes, optional
+           The matplotlib Axes-object
+
+       **alpha** : float, optional
+           The opacity of the samples.
+
+       **linewidth** : float, optional
+           The width of the sample lines.
+
+       **zorder** : int, optional
+           The order where the samples are plotted. By default we plot the samples
+           at -1.
+
+       **cmap** : str, optional
+           The colormap used to colorize samples according to its label.
+
+       **show_legend** : bool or int, optional
+           Whether the legend of labels are show.
+           
+           - if bool, show the legend if y is not None
+           - if int, show the legend if the number of labels are lower than the
+             show_legend parameter value
+
+   :Returns:
+
+       **ax** : Axes
+           The axes object that has been plotted.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:data:: matplotlib_missing
 

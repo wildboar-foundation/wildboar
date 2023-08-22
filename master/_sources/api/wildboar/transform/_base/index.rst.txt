@@ -1,7 +1,9 @@
 :orphan:
 
+
+**********************************
 :py:mod:`wildboar.transform._base`
-==================================
+**********************************
 
 .. py:module:: wildboar.transform._base
 
@@ -10,7 +12,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -24,70 +26,144 @@ Classes
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
+   
    Base feature engineer transform.
 
-   .. attribute:: embedding_
 
-      The underlying embedding.
+   :Parameters:
 
-      :type: Embedding
+       **random_state** : int or RandomState
+           Controls the random resampling of the original dataset.
+           
+           - If ``int``, ``random_state`` is the seed used by the
+             random number generator.
+           - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+             the random number generator.
+           - If ``None``, the random number generator is the
+             :class:`numpy.random.RandomState` instance used by
+             :func:`numpy.random`.
 
-   .. attribute::
-
-      -1 means using all processors.
-
-      :type: param n_jobs: The number of jobs to run in parallel. None means 1 and
-
-   .. attribute::
+       **n_jobs** : int, optional
+           The number of jobs to run in parallel. A value of ``None`` means
+           using a single core and a value of ``-1`` means using all cores.
+           Positive integers mean the exact number of cores.
 
 
 
-      :type: type n_jobs: int, optional
 
+
+
+
+
+
+
+
+
+   :Attributes:
+
+       **embedding_** : Embedding
+           The underlying embedding.
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: fit(x, y=None)
 
+      
       Fit the transform.
 
-      :param x:
-      :type x: array-like of shape [n_samples, n_timestep] or
-      :param [n_samples: The time series dataset.
-      :param n_dimensions: The time series dataset.
-      :param n_timestep]: The time series dataset.
-      :param y: For compatibility.
-      :type y: None, optional
 
-      :returns: **self**
-      :rtype: self
+      :Parameters:
 
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          BaseFeatureEngineerTransform
+              This object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: fit_transform(x, y=None)
 
+      
       Fit the embedding and return the transform of x.
 
-      :param x:
-      :type x: array-like of shape [n_samples, n_timestep] or
-      :param [n_samples: The time series dataset.
-      :param n_dimensions: The time series dataset.
-      :param n_timestep]: The time series dataset.
-      :param y: For compatibility.
-      :type y: None, optional
 
-      :returns: **x_embedding** -- The embedding.
-      :rtype: ndarray of shape [n_samples, n_outputs]
+      :Parameters:
 
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The embedding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: transform(x)
 
+      
       Transform the dataset.
 
-      :param x:
-      :type x: array-like of shape [n_samples, n_timestep] or
-      :param [n_samples: The time series dataset.
-      :param n_dimensions: The time series dataset.
-      :param n_timestep]: The time series dataset.
 
-      :returns: **x_transform** -- The transformation.
-      :rtype: ndarray of shape [n_samples, n_outputs]
+      :Parameters:
 
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 

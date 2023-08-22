@@ -1,7 +1,9 @@
 :orphan:
 
+
+**********************************
 :py:mod:`wildboar.utils._parallel`
-==================================
+**********************************
 
 .. py:module:: wildboar.utils._parallel
 
@@ -11,7 +13,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -25,11 +27,31 @@ Functions
 
 .. py:function:: run_in_parallel(work, n_jobs=-1, **parallel_args)
 
+   
    Execute work in parallel.
 
-   :param work: A work batch
-   :type work: Batch
-   :param n_jobs: Number of parallel jobs, by default -1
-   :type n_jobs: int, optional
 
+   :Parameters:
+
+       **work** : Batch
+           A work batch
+
+       **n_jobs** : int, optional
+           Number of parallel jobs, by default -1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

@@ -1,7 +1,9 @@
 :orphan:
 
+
+***********************************
 :py:mod:`wildboar.datasets._filter`
-===================================
+***********************************
 
 .. py:module:: wildboar.datasets._filter
 
@@ -11,7 +13,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -24,45 +26,125 @@ Functions
 
 .. py:function:: make_dict_filter(filter)
 
+   
    Make a new filter.
 
-   :param filter: The dict of [subject] -> [op][verb]
-   :type filter: dict
 
-   :returns: The filter function
-   :rtype: function
+   :Parameters:
 
+       **filter** : dict
+           The dict of [subject] -> [op][verb]
+
+   :Returns:
+
+       function
+           The filter function
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: make_filter(filter)
 
+   
    Create a new filter.
 
-   :param filter: The filter
-   :type filter: str, list or dict
 
-   :returns: The filter function
-   :rtype: function
+   :Parameters:
 
+       **filter** : str, list or dict
+           The filter
+
+   :Returns:
+
+       function
+           The filter function
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: make_list_filter(filter)
 
+   
    Make a new filter based on a list of filter strings.
 
-   :param filter: A list of filter strings
-   :type filter: list
 
-   :returns: The filter function
-   :rtype: function
+   :Parameters:
 
+       **filter** : list
+           A list of filter strings
+
+   :Returns:
+
+       function
+           The filter function
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: make_str_filter(filter)
 
+   
    Make a new filter.
 
-   :param filter: The filter string [subject][op][verb]
-   :type filter: str
 
-   :returns: The filter function
-   :rtype: function
+   :Parameters:
 
+       **filter** : str
+           The filter string [subject][op][verb]
+
+   :Returns:
+
+       function
+           The filter function
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

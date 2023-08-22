@@ -1,7 +1,9 @@
 :orphan:
 
+
+***************************************
 :py:mod:`wildboar.datasets._repository`
-=======================================
+***************************************
 
 .. py:module:: wildboar.datasets._repository
 
@@ -10,7 +12,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -24,7 +26,7 @@ Classes
 
 
 Attributes
-~~~~~~~~~~
+----------
 
 .. autoapisummary::
 
@@ -34,90 +36,36 @@ Attributes
 .. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
 
+   
    Base class for handling dataset bundles.
 
-   .. attribute:: name
-
-      Human-readable name of the bundle
-
-      :type: str
-
-   .. attribute:: description
-
-      Description of the bundle
-
-      :type: str
-
-   .. attribute:: label_index
-
-      Index of the class label(s)
-
-      :type: int or array-like
-
-   .. attribute:: Construct a new Bundle.
 
 
 
-   .. attribute::
 
 
 
-      :type: param key: A unique key of the bundle
-
-   .. attribute::
 
 
 
-      :type: type key: str
-
-   .. attribute::
 
 
 
-      :type: param version: The version of the bundle
 
-   .. attribute::
+   :Attributes:
 
+       **name** : str
+           Human-readable name of the bundle
 
+       **description** : str
+           Description of the bundle
 
-      :type: type version: str
-
-   .. attribute::
-
-
-
-      :type: param name: Human-readable name of the bundle
-
-   .. attribute::
+       **label_index** : int or array-like
+           Index of the class label(s)
 
 
-
-      :type: type name: str
-
-   .. attribute::
-
-
-
-      :type: param description: Description of the bundle
-
-   .. attribute::
-
-
-
-      :type: type description: str
-
-   .. attribute::
-
-
-
-      :type: param arrays: The arrays of the dataset
-
-   .. attribute::
-
-
-
-      :type: type arrays: list
-
+   ..
+       !! processed by numpydoc !!
    .. py:method:: get_collection(collection)
 
 
@@ -126,31 +74,80 @@ Attributes
 
    .. py:method:: list(archive, collection=None)
 
+      
       List all datasets in this bundle.
 
-      :param archive: The bundle file
-      :type archive: ZipFile
-      :param collection: The collection name
-      :type collection: str, optional
 
-      :returns: **dataset_names** -- A sorted list of datasets in the bundle
-      :rtype: list
+      :Parameters:
 
+          **archive** : ZipFile
+              The bundle file
+
+          **collection** : str, optional
+              The collection name
+
+      :Returns:
+
+          **dataset_names** : list
+              A sorted list of datasets in the bundle
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: load(name, archive)
 
+      
       Load a dataset from the bundle.
 
-      :param name: Name of the dataset
-      :type name: str
-      :param archive: The zip-file bundle
-      :type archive: ZipFile
 
-      :returns: * **x** (*ndarray*) -- Data samples
-                * **y** (*ndarray*) -- Data labels
-                * **n_training_samples** (*int*) -- Number of samples that are for training. The value is <= x.shape[0]
-                * **extras** (*dict, optional*) -- Extra numpy arrays
+      :Parameters:
 
+          **name** : str
+              Name of the dataset
+
+          **archive** : ZipFile
+              The zip-file bundle
+
+      :Returns:
+
+          **x** : ndarray
+              Data samples
+
+          **y** : ndarray
+              Data labels
+
+          **n_training_samples** : int
+              Number of samples that are for training. The value is <= x.shape[0]
+
+          **extras** : dict, optional
+              Extra numpy arrays
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: JSONRepository(url)
@@ -158,38 +155,136 @@ Attributes
 
    Bases: :py:obj:`Repository`
 
+   
    A repository is a collection of bundles.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:property:: download_url
 
+      
       The url template for downloading bundles.
 
-      :returns: **str**
-      :rtype: the download url
+
+
+      :Returns:
+
+          **str** : the download url
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: identifier
 
 
    .. py:property:: name
 
+      
       Name of the repository.
 
-      :returns: **str**
-      :rtype: the name of the repository
+
+
+      :Returns:
+
+          **str** : the name of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: version
 
+      
       The repository version.
 
-      :returns: **str**
-      :rtype: the version of the repository
+
+
+      :Returns:
+
+          **str** : the version of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: wildboar_requires
 
+      
       The minimum required wildboar version.
 
-      :returns: **str**
-      :rtype: the min version
+
+
+      :Returns:
+
+          **str** : the min version
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:attribute:: supported_version
       :value: '1.1'
@@ -198,11 +293,30 @@ Attributes
 
    .. py:method:: get_bundles()
 
+      
       Get all bundles.
 
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
 
+
+      :Returns:
+
+          **dict** : a dictionary of key and bundle
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
@@ -210,37 +324,80 @@ Attributes
 
    Bases: :py:obj:`Bundle`
 
+   
    bundle of numpy binary files.
 
-   Construct a new Bundle.
 
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param arrays: The arrays of the dataset
-   :type arrays: list
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:class:: Repository
 
 
+   
    A repository is a collection of bundles.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:property:: active
 
 
    .. py:property:: download_url
       :abstractmethod:
 
+      
       The url template for downloading bundles.
 
-      :returns: **str**
-      :rtype: the download url
+
+
+      :Returns:
+
+          **str** : the download url
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: identifier
       :abstractmethod:
@@ -249,49 +406,148 @@ Attributes
    .. py:property:: name
       :abstractmethod:
 
+      
       Name of the repository.
 
-      :returns: **str**
-      :rtype: the name of the repository
+
+
+      :Returns:
+
+          **str** : the name of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: version
       :abstractmethod:
 
+      
       The repository version.
 
-      :returns: **str**
-      :rtype: the version of the repository
+
+
+      :Returns:
+
+          **str** : the version of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: wildboar_requires
       :abstractmethod:
 
+      
       The minimum required wildboar version.
 
-      :returns: **str**
-      :rtype: the min version
+
+
+      :Returns:
+
+          **str** : the min version
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: clear_cache(cache_dir, keep_last_version=True)
 
 
    .. py:method:: get_bundle(key)
 
+      
       Get a bundle with the specified key.
 
-      :param key: Key of the bundle
-      :type key: str
 
-      :returns: **bundle** -- A bundle or None
-      :rtype: Bundle, optional
+      :Parameters:
 
+          **key** : str
+              Key of the bundle
+
+      :Returns:
+
+          **bundle** : Bundle, optional
+              A bundle or None
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: get_bundles()
       :abstractmethod:
 
+      
       Get all bundles.
 
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
 
+
+      :Returns:
+
+          **dict** : a dictionary of key and bundle
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: list_datasets(bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
@@ -301,8 +557,26 @@ Attributes
 
    .. py:method:: refresh(timeout=None)
 
+      
       Refresh the repository.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: RepositoryCollection

@@ -1,19 +1,39 @@
+
+***************************
 :py:mod:`wildboar.datasets`
-===========================
+***************************
 
 .. py:module:: wildboar.datasets
 
 .. autoapi-nested-parse::
 
+   
    Dataset loading utilities.
 
-   See the :doc:`dataset section in the User Guide
-   <wildboar:guide/datasets>` for more details and examples.
+   See the dataset section in the :doc:`User Guide <wildboar:guide/datasets>` for
+   more details and examples.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 
 Submodules
-----------
+==========
+
 .. toctree::
    :titlesonly:
    :maxdepth: 1
@@ -26,7 +46,7 @@ Package Contents
 ----------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -38,7 +58,7 @@ Classes
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -63,90 +83,36 @@ Functions
 .. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
 
+   
    Base class for handling dataset bundles.
 
-   .. attribute:: name
-
-      Human-readable name of the bundle
-
-      :type: str
-
-   .. attribute:: description
-
-      Description of the bundle
-
-      :type: str
-
-   .. attribute:: label_index
-
-      Index of the class label(s)
-
-      :type: int or array-like
-
-   .. attribute:: Construct a new Bundle.
 
 
 
-   .. attribute::
 
 
 
-      :type: param key: A unique key of the bundle
-
-   .. attribute::
 
 
 
-      :type: type key: str
-
-   .. attribute::
 
 
 
-      :type: param version: The version of the bundle
 
-   .. attribute::
+   :Attributes:
 
+       **name** : str
+           Human-readable name of the bundle
 
+       **description** : str
+           Description of the bundle
 
-      :type: type version: str
-
-   .. attribute::
-
-
-
-      :type: param name: Human-readable name of the bundle
-
-   .. attribute::
+       **label_index** : int or array-like
+           Index of the class label(s)
 
 
-
-      :type: type name: str
-
-   .. attribute::
-
-
-
-      :type: param description: Description of the bundle
-
-   .. attribute::
-
-
-
-      :type: type description: str
-
-   .. attribute::
-
-
-
-      :type: param arrays: The arrays of the dataset
-
-   .. attribute::
-
-
-
-      :type: type arrays: list
-
+   ..
+       !! processed by numpydoc !!
    .. py:method:: get_collection(collection)
 
 
@@ -155,31 +121,80 @@ Functions
 
    .. py:method:: list(archive, collection=None)
 
+      
       List all datasets in this bundle.
 
-      :param archive: The bundle file
-      :type archive: ZipFile
-      :param collection: The collection name
-      :type collection: str, optional
 
-      :returns: **dataset_names** -- A sorted list of datasets in the bundle
-      :rtype: list
+      :Parameters:
 
+          **archive** : ZipFile
+              The bundle file
+
+          **collection** : str, optional
+              The collection name
+
+      :Returns:
+
+          **dataset_names** : list
+              A sorted list of datasets in the bundle
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: load(name, archive)
 
+      
       Load a dataset from the bundle.
 
-      :param name: Name of the dataset
-      :type name: str
-      :param archive: The zip-file bundle
-      :type archive: ZipFile
 
-      :returns: * **x** (*ndarray*) -- Data samples
-                * **y** (*ndarray*) -- Data labels
-                * **n_training_samples** (*int*) -- Number of samples that are for training. The value is <= x.shape[0]
-                * **extras** (*dict, optional*) -- Extra numpy arrays
+      :Parameters:
 
+          **name** : str
+              Name of the dataset
+
+          **archive** : ZipFile
+              The zip-file bundle
+
+      :Returns:
+
+          **x** : ndarray
+              Data samples
+
+          **y** : ndarray
+              Data labels
+
+          **n_training_samples** : int
+              Number of samples that are for training. The value is <= x.shape[0]
+
+          **extras** : dict, optional
+              Extra numpy arrays
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: JSONRepository(url)
@@ -187,38 +202,136 @@ Functions
 
    Bases: :py:obj:`Repository`
 
+   
    A repository is a collection of bundles.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:property:: download_url
 
+      
       The url template for downloading bundles.
 
-      :returns: **str**
-      :rtype: the download url
+
+
+      :Returns:
+
+          **str** : the download url
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: identifier
 
 
    .. py:property:: name
 
+      
       Name of the repository.
 
-      :returns: **str**
-      :rtype: the name of the repository
+
+
+      :Returns:
+
+          **str** : the name of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: version
 
+      
       The repository version.
 
-      :returns: **str**
-      :rtype: the version of the repository
+
+
+      :Returns:
+
+          **str** : the version of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: wildboar_requires
 
+      
       The minimum required wildboar version.
 
-      :returns: **str**
-      :rtype: the min version
+
+
+      :Returns:
+
+          **str** : the min version
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:attribute:: supported_version
       :value: '1.1'
@@ -227,11 +340,30 @@ Functions
 
    .. py:method:: get_bundles()
 
+      
       Get all bundles.
 
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
 
+
+      :Returns:
+
+          **dict** : a dictionary of key and bundle
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
@@ -239,37 +371,80 @@ Functions
 
    Bases: :py:obj:`Bundle`
 
+   
    bundle of numpy binary files.
 
-   Construct a new Bundle.
 
-   :param key: A unique key of the bundle
-   :type key: str
-   :param version: The version of the bundle
-   :type version: str
-   :param name: Human-readable name of the bundle
-   :type name: str
-   :param description: Description of the bundle
-   :type description: str
-   :param arrays: The arrays of the dataset
-   :type arrays: list
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:class:: Repository
 
 
+   
    A repository is a collection of bundles.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:property:: active
 
 
    .. py:property:: download_url
       :abstractmethod:
 
+      
       The url template for downloading bundles.
 
-      :returns: **str**
-      :rtype: the download url
+
+
+      :Returns:
+
+          **str** : the download url
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: identifier
       :abstractmethod:
@@ -278,49 +453,148 @@ Functions
    .. py:property:: name
       :abstractmethod:
 
+      
       Name of the repository.
 
-      :returns: **str**
-      :rtype: the name of the repository
+
+
+      :Returns:
+
+          **str** : the name of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: version
       :abstractmethod:
 
+      
       The repository version.
 
-      :returns: **str**
-      :rtype: the version of the repository
+
+
+      :Returns:
+
+          **str** : the version of the repository
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:property:: wildboar_requires
       :abstractmethod:
 
+      
       The minimum required wildboar version.
 
-      :returns: **str**
-      :rtype: the min version
+
+
+      :Returns:
+
+          **str** : the min version
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: clear_cache(cache_dir, keep_last_version=True)
 
 
    .. py:method:: get_bundle(key)
 
+      
       Get a bundle with the specified key.
 
-      :param key: Key of the bundle
-      :type key: str
 
-      :returns: **bundle** -- A bundle or None
-      :rtype: Bundle, optional
+      :Parameters:
 
+          **key** : str
+              Key of the bundle
+
+      :Returns:
+
+          **bundle** : Bundle, optional
+              A bundle or None
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: get_bundles()
       :abstractmethod:
 
+      
       Get all bundles.
 
-      :returns: **dict**
-      :rtype: a dictionary of key and bundle
 
+
+      :Returns:
+
+          **dict** : a dictionary of key and bundle
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: list_datasets(bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
 
@@ -330,214 +604,445 @@ Functions
 
    .. py:method:: refresh(timeout=None)
 
+      
       Refresh the repository.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
 .. py:function:: clear_cache(repository=None, *, cache_dir=None, keep_last_version=True)
 
+   
    Clear the cache by deleting cached datasets.
 
-   :param repository: The name of the repository to clear cache.
 
-                      - if None, clear cache of all repositories
-   :type repository: str, optional
-   :param cache_dir: The cache directory
-   :type cache_dir: str, optional
-   :param keep_last_version: If true, keep the latest version of each repository.
-   :type keep_last_version: bool, optional
+   :Parameters:
 
+       **repository** : str, optional
+           The name of the repository to clear cache.
+           
+           - if None, clear cache of all repositories
+
+       **cache_dir** : str, optional
+           The cache directory
+
+       **keep_last_version** : bool, optional
+           If true, keep the latest version of each repository.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: get_bundles(repository, *, refresh=False, timeout=None)
 
+   
    Get all bundles in the repository.
 
-   :param repository: Name of the repository
-   :type repository: str
-   :param refresh: Refresh the repository
 
-                   ..versionadded :: 1.1
-   :type refresh: bool, optional
-   :param timeout: Timeout for json request
+   :Parameters:
 
-                   ..versionadded :: 1.1
-   :type timeout: float, optional
+       **repository** : str
+           Name of the repository
 
-   :returns: **dict**
-   :rtype: A dict of key Bundle pairs
+       **refresh** : bool, optional
+           Refresh the repository
+           
+           ..versionadded :: 1.1
 
+       **timeout** : float, optional
+           Timeout for json request
+           
+           ..versionadded :: 1.1
+
+   :Returns:
+
+       **dict** : A dict of key Bundle pairs
+           ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: get_repository(repository)
 
+   
    Get repository by name.
 
-   :param repository: Repository name
-   :type repository: str
 
-   :returns: **repository** -- A repository
-   :rtype: Repository
+   :Parameters:
 
+       **repository** : str
+           Repository name
+
+   :Returns:
+
+       **repository** : Repository
+           A repository
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: install_repository(repository, *, refresh=True, timeout=None, cache_dir=None)
 
+   
    Install repository.
 
-   :param repository: A repository
-   :type repository: str or Repository
-   :param refresh: Refresh the repository
 
-                   ..versionadded :: 1.1
-   :type refresh: bool, optional
-   :param timeout: Timeout for json request
+   :Parameters:
 
-                   ..versionadded :: 1.1
-   :type timeout: float, optional
-   :param cache_dir: Cache directory
+       **repository** : str or Repository
+           A repository
 
-                     ..versionadded :: 1.1
-   :type cache_dir: str, optional
+       **refresh** : bool, optional
+           Refresh the repository
+           
+           ..versionadded :: 1.1
 
+       **timeout** : float, optional
+           Timeout for json request
+           
+           ..versionadded :: 1.1
+
+       **cache_dir** : str, optional
+           Cache directory
+           
+           ..versionadded :: 1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: list_bundles(repository, *, refresh=False, timeout=None)
 
+   
    Get a list of all bundle names in the specified repository.
 
-   :param repository: The name of the repository
-   :type repository: str
-   :param refresh: Refresh the repository
 
-                   ..versionadded :: 1.1
-   :type refresh: bool, optional
-   :param timeout: Timeout for json request
+   :Parameters:
 
-                   ..versionadded :: 1.1
-   :type timeout: float, optional
+       **repository** : str
+           The name of the repository
 
-   :returns: **bundle** -- The name of the bundle
-   :rtype: str
+       **refresh** : bool, optional
+           Refresh the repository
+           
+           ..versionadded :: 1.1
 
+       **timeout** : float, optional
+           Timeout for json request
+           
+           ..versionadded :: 1.1
+
+   :Returns:
+
+       **bundle** : str
+           The name of the bundle
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: list_collections(repository)
 
+   
    List the collections of the repository.
 
-   :param repository: The data repository
 
-                      - if str load a named bundle, format {repository}/{bundle}
-   :type repository: str or Bundle, optional
+   :Parameters:
 
-   :returns: **list**
-   :rtype: a list of collections
+       **repository** : str or Bundle, optional
+           The data repository
+           
+           - if str load a named bundle, format {repository}/{bundle}
 
+   :Returns:
+
+       **list** : a list of collections
+           ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: list_datasets(repository='wildboar/ucr', *, collection=None, cache_dir=None, create_cache_dir=True, progress=True, force=False, refresh=False, timeout=None)
 
+   
    List the datasets in the repository.
 
-   :param repository: The data repository
 
-                      - if str load a named bundle, format {repository}/{bundle}
-   :type repository: str or Bundle, optional
-   :param collection: A collection of named datasets.
-   :type collection: str, optional
-   :param progress: Show a progress bar while downloading a bundle.
-   :type progress: bool, optional
-   :param cache_dir: The directory where downloaded files are cached (default='wildboar_cache')
-   :type cache_dir: str, optional
-   :param create_cache_dir: Create cache directory if missing (default=True)
-   :type create_cache_dir: bool, optional
-   :param force: Force re-download of cached bundle
-   :type force: bool, optional
-   :param refresh: Refresh the repository
+   :Parameters:
 
-                   .. versionadded :: 1.1
-   :type refresh: bool, optional
-   :param timeout: Timeout for json request
+       **repository** : str or Bundle, optional
+           The data repository
+           
+           - if str load a named bundle, format `{repository}/{bundle}`
 
-                   .. versionadded :: 1.1
-   :type timeout: float, optional
+       **collection** : str, optional
+           A collection of named datasets.
 
-   :returns: **dataset** -- A set of dataset names
-   :rtype: set
+       **progress: bool, optional**
+           Show a progress bar while downloading a bundle.
 
+       **cache_dir: str, optional**
+           The directory where downloaded files are cached (default='wildboar_cache')
+
+       **create_cache_dir: bool, optional**
+           Create cache directory if missing (default=True)
+
+       **force** : bool, optional
+           Force re-download of cached bundle
+
+       **refresh** : bool, optional
+           Refresh the repository
+           
+           .. versionadded :: 1.1
+
+       **timeout** : float, optional
+           Timeout for json request
+           
+           .. versionadded :: 1.1
+
+   :Returns:
+
+       **dataset** : set
+           A set of dataset names
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: list_repositories(*, refresh=False, timeout=None, cache_dir=None)
 
+   
    List the key of all installed repositories.
 
    refresh : bool, optional
        Refresh all repositories
 
        ..versionadded :: 1.1
-
    timeout : float, optional
        Timeout for json request
 
        ..versionadded :: 1.1
-
    cache_dir : str, optional
        Cache directory
 
        ..versionadded :: 1.1
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: load_dataset(name, *, repository='wildboar/ucr', dtype=float, preprocess=None, contiguous=True, merge_train_test=True, cache_dir=None, create_cache_dir=True, progress=True, return_extras=False, force=False, refresh=False, timeout=None)
 
+   
    Load a dataset from a repository.
 
-   :param name: The name of the dataset to load.
-   :type name: str
-   :param repository: The data repository formatted as {repository}/{bundle}[:{version}][:{tag}]
-   :type repository: str, optional
-   :param dtype: The data type of x (train and test)
-   :type dtype: dtype, optional
-   :param contiguous: Ensure that the returned dataset is memory contiguous.
-   :type contiguous: bool, optional
-   :param preprocess: Preprocess the dataset
 
-                      - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
-                        for valid keys)
-                      - if callable, function taking a np.ndarray and returns the preprocessed dataset
-                      - if list, a list of callable or str
-   :type preprocess: str, list or callable, optional
-   :param merge_train_test: Merge the existing training and testing partitions.
-   :type merge_train_test: bool, optional
-   :param progress: Show a progress bar while downloading a bundle.
-   :type progress: bool, optional
-   :param cache_dir: The directory where downloaded files are cached
-   :type cache_dir: str, optional
-   :param create_cache_dir: Create cache directory if missing (default=True)
-   :type create_cache_dir: bool, optional
-   :param return_extras: Return optional extras
+   :Parameters:
 
-                         .. versionadded :: 1.1
-   :type return_extras: bool, optional
-   :param force: Force re-download of already cached bundle
+       **name** : str
+           The name of the dataset to load.
 
-                 .. versionadded :: 1.0.4
-   :type force: bool, optional
-   :param refresh: Refresh the repository
+       **repository** : str, optional
+           The data repository formatted as
+           ``{repository}/{bundle}[:{version}][:{tag}]``. Read more in the `User
+           guide <datasets_repositories>`_.
 
-                   .. versionadded :: 1.1
-   :type refresh: bool, optional
-   :param timeout: Timeout for json request
+       **dtype** : dtype, optional
+           The data type of x (train and test)
 
-                   .. versionadded :: 1.1
-   :type timeout: float, optional
+       **contiguous** : bool, optional
+           Ensure that the returned dataset is memory contiguous.
 
-   :returns: * **x** (*ndarray*) -- The data samples, optional
-             * **y** (*ndarray, optional*) -- The labels
-             * **x_train** (*ndarray, optional*) -- The training samples if ``merge_train_test=False``
-             * **x_test** (*ndarray, optional*) -- The testing samples if ``merge_train_test=False``
-             * **y_train** (*ndarray, optional*) -- The training labels if ``merge_train_test=False``
-             * **y_test** (*ndarray, optional*) -- The testing labels if ``merge_train_test=False``
-             * **extras** (*dict, optional*) -- The optional extras if ``return_extras=True``
+       **preprocess** : str, list or callable, optional
+           Preprocess the dataset
+           
+           - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
+             for valid keys)
+           - if callable, function taking a np.ndarray and returns the preprocessed dataset
+           - if list, a list of callable or str
+
+       **merge_train_test** : bool, optional
+           Merge the existing training and testing partitions.
+
+       **progress: bool, optional**
+           Show a progress bar while downloading a bundle.
+
+       **cache_dir: str, optional**
+           The directory where downloaded files are cached
+
+       **create_cache_dir: bool, optional**
+           Create cache directory if missing (default=True)
+
+       **return_extras** : bool, optional
+           Return optional extras
+           
+           .. versionadded :: 1.1
+
+       **force** : bool, optional
+           Force re-download of already cached bundle
+           
+           .. versionadded :: 1.0.4
+
+       **refresh** : bool, optional
+           Refresh the repository
+           
+           .. versionadded :: 1.1
+
+       **timeout** : float, optional
+           Timeout for json request
+           
+           .. versionadded :: 1.1
+
+   :Returns:
+
+       **x** : ndarray
+           The data samples, optional
+
+       **y** : ndarray, optional
+           The labels
+
+       **x_train** : ndarray, optional
+           The training samples if `merge_train_test=False`
+
+       **x_test** : ndarray, optional
+           The testing samples if `merge_train_test=False`
+
+       **y_train** : ndarray, optional
+           The training labels if `merge_train_test=False`
+
+       **y_test** : ndarray, optional
+           The testing labels if `merge_train_test=False`
+
+       **extras** : dict, optional
+           The optional extras if `return_extras=True`
+
+
+
+
+
+
+
+
+
 
    .. rubric:: Examples
 
    Load a dataset from the default repository
 
    >>> x, y = load_dataset("SyntheticControl")
+   >>> x.shape
+   (600, 60)
 
    or if original training and testing splits are to be preserved
 
@@ -548,137 +1053,246 @@ Functions
    or for a specific version of the dataset
 
    >>> x_train, x_test, y_train, y_test = load_dataset(
-   ...     "Wafer", repository='wildboar/ucr-tiny:1.0'
+   ...     "SyntheticControl",
+   ...     repository='wildboar/ucr-tiny:1.0.1',
+   ...     merge_train_test=False,
    ... )
 
 
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: load_datasets(repository='wildboar/ucr', *, collection=None, cache_dir=None, create_cache_dir=True, progress=True, force=False, filter=None, **kwargs)
 
+   
    Load all datasets as a generator.
 
-   :param repository: The repository string
-   :type repository: str
-   :param collection: A collection of named datasets.
-   :type collection: str, optional
-   :param progress: If progress indicator is shown while downloading the repository.
-   :type progress: bool, optional
-   :param cache_dir: The cache directory for downloaded dataset repositories.
-   :type cache_dir: str, optional
-   :param create_cache_dir: Create the cache directory if it does not exist.
-   :type create_cache_dir: bool, optional
-   :param force: Force re-download of cached repository
-   :type force: bool, optional
-   :param filter: Filter the datasets
 
-                  - if callable, only yield those datasets for which the callable returns True.
-                    ``f(dataset, x, y) -> bool``
+   :Parameters:
 
-                  - if dict, filter based on the keys and values, where keys are attributes and
-                    values comparison specs
+       **repository** : str
+           The repository string
 
-                  - if list, filter based on conjunction of attribute comparisons
+       **collection** : str, optional
+           A collection of named datasets.
 
-                  - if str, filter based on attribute comparison
+       **progress** : bool, optional
+           If progress indicator is shown while downloading the repository.
 
-                  The format of attribute comparisons are ``[attribute][comparison spec]``.
+       **cache_dir** : str, optional
+           The cache directory for downloaded dataset repositories.
 
-                  Valid attributes are
-                  - ``dataset``
-                  - ``n_samples``
-                  - ``n_timestep``
-                  - ``n_dims``
-                  - ``n_labels``
+       **create_cache_dir** : bool, optional
+           Create the cache directory if it does not exist.
 
-                  The `comparison spec` is a string of two parts, comparison operator
-                  (<, <=, >, >= or =) and a number, e.g., "<100", "<= 200", or ">300"
+       **force** : bool, optional
+           Force re-download of cached repository
 
-                  .. note::
+       **filter: str, dict, list or callable, optional**
+           Filter the datasets
+           
+           - if callable, only yield those datasets for which the callable returns True.
+             ``f(dataset, x, y) -> bool``
+           
+           - if dict, filter based on the keys and values, where keys are attributes and
+             values comparison specs
+           
+           - if list, filter based on conjunction of attribute comparisons
+           
+           - if str, filter based on attribute comparison
+           
+           Read more in the `User guide <wildboar:datasets_filter>`_
+           
+           .. warning::
+           
+               If the parameter ``merge_train_test`` is ``False``, the filter is
+               applied on the *training* part of the data.
 
-                      If the parameter ``merge_train_test`` is set to ``False``, the
-                      filter is applied on the *training* part of the data.
-   :type filter: str, dict, list or callable, optional
-   :param kwargs: Optional arguments to :func:`~wildboar.datasets.load_dataset`.
-   :type kwargs: dict
+       **kwargs** : dict
+           Optional arguments to :func:`~wildboar.datasets.load_dataset`.
 
-   :Yields: * **name** (*str*) -- The dataset name
-            * **dataset** (*list*) -- Depends on the ``kwargs``.
 
-              - If ``merge_train_test=True`` (default), dataset is a tuple of
-                ``(x, y)``.
-              - If ``merge_train_test=False``, dataset is a tuple of
-                ``(x_train, x_test, y_train, y_test)``.
-              - If ``return_extras=True``, the last element of the tuple contains
-                optional extra (or ``None``).
+   :Yields:
+
+       **name** : str
+           The dataset name
+
+       **dataset** : list
+           Depends on the ``kwargs``.
+           
+           - If ``merge_train_test=True`` (default), dataset is a tuple of
+             ``(x, y)``.
+           - If ``merge_train_test=False``, dataset is a tuple of
+             ``(x_train, x_test, y_train, y_test)``.
+           - If ``return_extras=True``, the last element of the tuple contains
+             optional extra (or ``None``).
+
+
+
+
+
+
+
+
 
    .. rubric:: Examples
 
-   >>> from wildboar.datasets import load_datasets
-   >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr'):
-   >>>     print(dataset, x.shape, y.shape)
+   Load all datasets in a repository:
+
+   >>> for dataset, (x, y) in load_datasets(repository='wildboar/ucr-tiny'):
+   ...     print(dataset, x.shape, y.shape)
+   ...
+   Beef (60, 470) (60,)
+   Coffee (56, 286) (56,)
+   GunPoint (200, 150) (200,)
+   SyntheticControl (600, 60) (600,)
+   TwoLeadECG (1162, 82) (1162,)
 
    Print the names of datasets with more than 200 samples
 
    >>> for dataset, (x, y) in load_datasets(
-   ...    repository='wildboar/ucr', filter={"n_samples": ">200"}
+   ...    repository='wildboar/ucr-tiny', filter={"n_samples": ">200"}
    ... ):
-   >>>     print(dataset)
+   ...     print(dataset)
+   SyntheticControl
+   TwoLeadECG
 
    >>> for dataset, (x, y) in load_datasets(
-   ...    repository='wildboar/ucr', filter="n_samples>200"
+   ...    repository='wildboar/ucr-tiny', filter="n_samples>200"
    ... ):
-   >>>     print(dataset)
+   ...     print(dataset)
+   SyntheticControl
+   TwoLeadECG
 
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: load_gun_point(merge_train_test=True)
 
+   
    Load the GunPoint dataset.
+
+
+
+
+
+
+
+
+
 
    .. seealso::
 
-      :obj:`load_dataset`
-          load a named dataset
+       
+       :obj:`load_dataset`
+           load a named dataset
+       
+       
 
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: load_synthetic_control(merge_train_test=True)
 
+   
    Load the Synthetic_Control dataset.
+
+
+
+
+
+
+
+
+
 
    .. seealso::
 
-      :obj:`load_dataset`
-          load a named dataset
+       
+       :obj:`load_dataset`
+           load a named dataset
+       
+       
 
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: load_two_lead_ecg(merge_train_test=True)
 
+   
    Load the TwoLeadECG dataset.
+
+
+
+
+
+
+
+
+
 
    .. seealso::
 
-      :obj:`load_dataset`
-          load a named dataset
+       
+       :obj:`load_dataset`
+           load a named dataset
+       
+       
 
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: refresh_repositories(repository=None, *, timeout=None, cache_dir=None)
 
+   
    Refresh the installed repositories.
 
    repository : str, optional
        The repository. None means all repositories.
-
    timeout : float, optional
        Timeout for request
 
        ..versionadded :: 1.1
-
    cache_dir : str, optional
        Cache directory
 
        ..versionadded :: 1.1
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: set_cache_dir(cache_dir=None)
 
+   
    Change the global cache directory.
 
    If called without arguments, the cache directory is reset to the default
@@ -687,4 +1301,20 @@ Functions
    cache_dir : str, optional
        The cache directory root
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

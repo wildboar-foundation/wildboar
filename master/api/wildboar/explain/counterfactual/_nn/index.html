@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../../../genindex.html" /><link rel="search" title="Search" href="../../../../../search.html" />
 
-    <!-- Generated with Sphinx 7.1.1 and Furo 2023.07.26 -->
-        <title>wildboar.explain.counterfactual._nn - Wildboar 1.1.1.dev100 documentation</title>
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19 -->
+        <title>wildboar.explain.counterfactual._nn - Wildboar 1.1.1.dev106 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css?v=eafc0fe6" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../../index.html"><div class="brand">Wildboar 1.1.1.dev100 documentation</div></a>
+      <a href="../../../../../index.html"><div class="brand">Wildboar 1.1.1.dev106 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -278,12 +278,13 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-wildboar.explain.counterfactual._nn">
-<span id="wildboar-explain-counterfactual-nn"></span><h1><a class="reference internal" href="#module-wildboar.explain.counterfactual._nn" title="wildboar.explain.counterfactual._nn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual._nn</span></code></a><a class="headerlink" href="#module-wildboar.explain.counterfactual._nn" title="Permalink to this heading">#</a></h1>
+          <section id="wildboar-explain-counterfactual-nn">
+<h1><a class="reference internal" href="#module-wildboar.explain.counterfactual._nn" title="wildboar.explain.counterfactual._nn"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual._nn</span></code></a><a class="headerlink" href="#wildboar-explain-counterfactual-nn" title="Link to this heading">#</a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<span id="module-wildboar.explain.counterfactual._nn"></span><h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+</section>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -295,39 +296,35 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._nn.KNeighborsCounterfactual">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._nn.</span></span><span class="sig-name descname"><span class="pre">KNeighborsCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L12-L104"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._nn.</span></span><span class="sig-name descname"><span class="pre">KNeighborsCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L12-L104"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../../base/index.html#wildboar.base.CounterfactualMixin" title="wildboar.base.CounterfactualMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.CounterfactualMixin</span></code></a>, <a class="reference internal" href="../../../base/index.html#wildboar.base.ExplainerMixin" title="wildboar.base.ExplainerMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.ExplainerMixin</span></code></a>, <a class="reference internal" href="../../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Fit a counterfactual explainer to a k-nearest neighbors classifier.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.explainer_">
-<span class="sig-name descname"><span class="pre">explainer_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.explainer_" title="Permalink to this definition">#</a></dt>
-<dd><p>The explainer for each label</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p class="rubric">References</p>
 <dl class="simple">
 <dt>Karlsson, I., Rebane, J., Papapetrou, P., &amp; Gionis, A. (2020).</dt><dd><p>Locally and globally explainable time series tweaking.
 Knowledge and Information Systems, 62(5), 1671-1700.</p>
 </dd>
 </dl>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>explainer_</strong><span class="classifier">dict</span></dt><dd><p>The explainer for each label</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.explain">
-<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L88-L101"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.explain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L88-L101"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.explain" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L49-L86"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L49-L86"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.fit" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-</section>
 </section>
 </section>
 
@@ -369,14 +366,11 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual._nn</span></code></a><ul>
-<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a></li>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.explainer_"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual.explainer_</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.explain"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual.explain</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual.fit"><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactual.fit</span></code></a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -393,9 +387,9 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
     </aside>
   </div>
 </div>
-<script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js?v=3653749c"></script>
+<script src="../../../../../_static/documentation_options.js?v=53783bbf"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../../_static/copybutton.js?v=f281be69"></script>

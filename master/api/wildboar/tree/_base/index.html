@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
-    <!-- Generated with Sphinx 7.1.1 and Furo 2023.07.26 -->
-        <title>wildboar.tree._base - Wildboar 1.1.1.dev100 documentation</title>
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19 -->
+        <title>wildboar.tree._base - Wildboar 1.1.1.dev106 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev100 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev106 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -278,12 +278,13 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-wildboar.tree._base">
-<span id="wildboar-tree-base"></span><h1><a class="reference internal" href="#module-wildboar.tree._base" title="wildboar.tree._base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree._base</span></code></a><a class="headerlink" href="#module-wildboar.tree._base" title="Permalink to this heading">#</a></h1>
+          <section id="wildboar-tree-base">
+<h1><a class="reference internal" href="#module-wildboar.tree._base" title="wildboar.tree._base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree._base</span></code></a><a class="headerlink" href="#wildboar-tree-base" title="Link to this heading">#</a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<span id="module-wildboar.tree._base"></span><h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+</section>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -301,92 +302,100 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTree">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._base.</span></span><span class="sig-name descname"><span class="pre">BaseTree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L19-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTree" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._base.</span></span><span class="sig-name descname"><span class="pre">BaseTree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L20-L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTree" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Base class for tree based estimators.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTree.apply">
-<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L68-L77"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTree.apply" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L69-L78"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTree.apply" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTree.decision_path">
-<span class="sig-name descname"><span class="pre">decision_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L57-L66"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTree.decision_path" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">decision_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L58-L67"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTree.decision_path" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTreeClassifier">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._base.</span></span><span class="sig-name descname"><span class="pre">BaseTreeClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L153-L262"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._base.</span></span><span class="sig-name descname"><span class="pre">BaseTreeClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L159-L275"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.ClassifierMixin.html#sklearn.base.ClassifierMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.ClassifierMixin</span></code></a>, <a class="reference internal" href="#wildboar.tree._base.BaseTree" title="wildboar.tree._base.BaseTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTree</span></code></a></p>
 <p>Mixin for classification trees.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTreeClassifier.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L156-L213"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L162-L222"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit a classification tree.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)</em>) – The training time series.</p></li>
-<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – If <cite>None</cite>, then samples are equally weighted. Splits that would create child
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The training time series.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>The target values.</p>
+</dd>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>If <cite>None</cite>, then samples are equally weighted. Splits that would create child
 nodes with net zero or negative weight are ignored while searching for a
 split in each node. Splits are also ignored if they would result in any
-single class carrying a negative weight in either child node.</p></li>
-<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checks.</p></li>
-</ul>
+single class carrying a negative weight in either child node.</p>
+</dd>
+<dt><strong>check_input</strong><span class="classifier">bool, optional</span></dt><dd><p>Allow to bypass several input checks.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><dl class="simple">
+<dt>self</dt><dd><p>This instance.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>object</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTreeClassifier.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L215-L232"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier.predict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L224-L243"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier.predict" title="Link to this definition">#</a></dt>
 <dd><p>Predict the regression of the input samples x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)</em>) – The input time series</p></li>
-<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you
-know what you do.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The input time series.</p>
+</dd>
+<dt><strong>check_input</strong><span class="classifier">bool, optional</span></dt><dd><p>Allow to bypass several input checking. Don’t use this parameter unless you
+know what you do.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples,)</dt><dd><p>The predicted classes.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTreeClassifier.predict_proba">
-<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L234-L262"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier.predict_proba" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L245-L275"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeClassifier.predict_proba" title="Link to this definition">#</a></dt>
 <dd><p>Predict class probabilities of the input samples X.</p>
 <p>The predicted class probability is the fraction of samples of the same
 class in a leaf.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)</em>) – The input time series</p></li>
-<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you
-know what you do.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The input time series.</p>
+</dd>
+<dt><strong>check_input</strong><span class="classifier">bool, optional</span></dt><dd><p>Allow to bypass several input checking. Don’t use this parameter unless you
+know what you do.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>proba</strong> – The class probabilities of the input samples. The order of the classes
-corresponds to that in the attribute <cite>classes_</cite></p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_classes)</dt><dd><p>The class probabilities of the input samples. The order of the classes
+corresponds to that in the attribute <cite>classes_</cite>.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples, n_classes)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -395,58 +404,63 @@ corresponds to that in the attribute <cite>classes_</cite></p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTreeRegressor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._base.</span></span><span class="sig-name descname"><span class="pre">BaseTreeRegressor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L83-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeRegressor" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.tree._base.</span></span><span class="sig-name descname"><span class="pre">BaseTreeRegressor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_impurity_decrease</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L84-L156"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeRegressor" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.RegressorMixin.html#sklearn.base.RegressorMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.RegressorMixin</span></code></a>, <a class="reference internal" href="#wildboar.tree._base.BaseTree" title="wildboar.tree._base.BaseTree"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseTree</span></code></a></p>
 <p>Mixin class for all regression estimators in scikit-learn.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTreeRegressor.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L84-L124"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeRegressor.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L85-L128"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeRegressor.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)</em>) – The training time series.</p></li>
-<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target values as floating point values</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – If <cite>None</cite>, then samples are equally weighted. Splits that would create child
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The training time series.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Target values as floating point values.</p>
+</dd>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>If <cite>None</cite>, then samples are equally weighted. Splits that would create child
 nodes with net zero or negative weight are ignored while searching for a
 split in each node. Splits are also ignored if they would result in any
-single class carrying a negative weight in either child node.</p></li>
-<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checks</p></li>
-</ul>
+single class carrying a negative weight in either child node.</p>
+</dd>
+<dt><strong>check_input</strong><span class="classifier">bool, optional</span></dt><dd><p>Allow to bypass several input checks.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><dl class="simple">
+<dt>self</dt><dd><p>This object.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>object</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.tree._base.BaseTreeRegressor.predict">
-<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L126-L150"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeRegressor.predict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/tree/_base.py#L130-L156"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.tree._base.BaseTreeRegressor.predict" title="Link to this definition">#</a></dt>
 <dd><p>Predict the value of x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)</em>) – The input time series</p></li>
-<li><p><strong>check_input</strong> (<em>bool</em><em>, </em><em>optional</em>) – Allow to bypass several input checking. Don’t use this parameter unless you
-know what you do.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The input time series.</p>
+</dd>
+<dt><strong>check_input</strong><span class="classifier">bool, optional</span></dt><dd><p>Allow to bypass several input checking. Don’t use this parameter unless you
+know what you do.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples,)</dt><dd><p>The predicted classes.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</section>
 </section>
 </section>
 
@@ -488,7 +502,7 @@ know what you do.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree._base</span></code></a><ul>
-<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a></li>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
 <li><a class="reference internal" href="#wildboar.tree._base.BaseTree"><code class="docutils literal notranslate"><span class="pre">BaseTree</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.tree._base.BaseTree.apply"><code class="docutils literal notranslate"><span class="pre">BaseTree.apply</span></code></a></li>
@@ -511,8 +525,6 @@ know what you do.</p></li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 
           </div>
         </div>
@@ -522,9 +534,9 @@ know what you do.</p></li>
     </aside>
   </div>
 </div>
-<script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=3653749c"></script>
+<script src="../../../../_static/documentation_options.js?v=53783bbf"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>

@@ -1,5 +1,7 @@
+
+*************************************
 :py:mod:`wildboar.utils.variable_len`
-=====================================
+*************************************
 
 .. py:module:: wildboar.utils.variable_len
 
@@ -7,6 +9,8 @@
 
    Utilities for variable length series.
 
+   ..
+       !! processed by numpydoc !!
 
 
 Module Contents
@@ -14,7 +18,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -26,13 +30,28 @@ Functions
 
 .. py:function:: get_variable_length(x)
 
+   
    Return the length of each time-series.
 
-   :param x: The input
-   :type x: time-series
 
-   :returns: **length** -- The lenght of the time series
-   :rtype: float or ndarray
+   :Parameters:
+
+       **x** : time-series
+           The input
+
+   :Returns:
+
+       **length** : float or ndarray
+           The lenght of the time series
+
+
+
+
+
+
+
+
+
 
    .. rubric:: Examples
 
@@ -54,25 +73,69 @@ Functions
    [2]
 
 
+
+   ..
+       !! processed by numpydoc !!
+
 .. py:function:: is_end_of_series(x)
 
+   
    Test element-wise for EoS and return result as a boolean array.
 
-   :param x: Input array.
-   :type x: ndarray
 
-   :returns: boolean indicator array
-   :rtype: ndarray or bool
+   :Parameters:
 
+       **x** : ndarray
+           Input array.
+
+   :Returns:
+
+       ndarray or bool
+           boolean indicator array
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: is_variable_length(x)
 
+   
    Test if time-series is variable length.
 
-   :param x: The input.
-   :type x: time-series
 
-   :returns: True if time series contains EoS
-   :rtype: bool
+   :Parameters:
 
+       **x** : time-series
+           The input.
+
+   :Returns:
+
+       bool
+           True if time series contains EoS
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

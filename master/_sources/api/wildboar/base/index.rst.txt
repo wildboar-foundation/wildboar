@@ -1,5 +1,7 @@
+
+***********************
 :py:mod:`wildboar.base`
-=======================
+***********************
 
 .. py:module:: wildboar.base
 
@@ -7,13 +9,15 @@
 
    Base classes for all estimators.
 
+   ..
+       !! processed by numpydoc !!
 
 
 Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -24,7 +28,7 @@ Classes
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -38,26 +42,83 @@ Functions
 
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
+   
    Base estimator for all Wildboar estimators.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:class:: CounterfactualMixin
 
 
+   
    Mixin class for counterfactual explainer.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: score(x, y)
 
+      
       Score the counterfactual explainer in terms of closeness of fit.
 
-      :param x: The samples.
-      :type x: array-like of shape (n_samples, n_timestep)
-      :param y: The desired counterfactal label.
-      :type y: array-like of shape (n_samples, )
 
-      :returns: **score** -- The closensess of fit.
-      :rtype: float
+      :Parameters:
 
+          **x** : array-like of shape (n_samples, n_timestep)
+              The samples.
+
+          **y** : array-like of shape (n_samples, )
+              The desired counterfactal label.
+
+      :Returns:
+
+          **score** : float
+              The closensess of fit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: transform(x, y)
 
@@ -66,52 +127,153 @@ Functions
 .. py:class:: ExplainerMixin
 
 
+   
    Mixin class for all explainers in wildboar.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
 
+      
       Fit and return the explanation.
 
-      :param estimator: The estimator to explain.
-      :type estimator: Estimator
-      :param x: The input time series.
-      :type x: time-series, optional
-      :param y: The labels.
-      :type y: array-like of shape (n_samples, ), optional
-      :param \*\*kwargs: Optional extra arguments.
 
-      :returns: The explanation.
-      :rtype: ndarray
+      :Parameters:
 
+          **estimator** : Estimator
+              The estimator to explain.
+
+          **x** : time-series, optional
+              The input time series.
+
+          **y** : array-like of shape (n_samples, ), optional
+              The labels.
+
+          **\*\*kwargs**
+              Optional extra arguments.
+
+      :Returns:
+
+          ndarray
+              The explanation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: plot(x=None, y=None, ax=None)
 
+      
       Plot the explanation.
 
-      :returns: **ax** -- The axes object
-      :rtype: Axes
 
+
+      :Returns:
+
+          **ax** : Axes
+              The axes object
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:function:: is_counterfactual(estimator)
 
+   
    Check if estimator is a counterfactual explainer.
 
-   :param estimator: The estimator
-   :type estimator: object
 
-   :returns: True if the estimator probably is a counterfactual explainer
-   :rtype: bool
+   :Parameters:
 
+       **estimator** : object
+           The estimator
+
+   :Returns:
+
+       bool
+           True if the estimator probably is a counterfactual explainer
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: is_explainer(estimator)
 
+   
    Check if estimator is an explainer.
 
-   :param estimator: The estimator
-   :type estimator: object
 
-   :returns: True if the estimator probably is an explainer
-   :rtype: bool
+   :Parameters:
 
+       **estimator** : object
+           The estimator
+
+   :Returns:
+
+       bool
+           True if the estimator probably is an explainer
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

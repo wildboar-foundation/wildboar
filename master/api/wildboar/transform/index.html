@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.transform.catch22" href="catch22/index.html" /><link rel="prev" title="wildboar.model_selection" href="../model_selection/index.html" />
 
-    <!-- Generated with Sphinx 7.1.1 and Furo 2023.07.26 -->
-        <title>wildboar.transform - Wildboar 1.1.1.dev100 documentation</title>
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19 -->
+        <title>wildboar.transform - Wildboar 1.1.1.dev106 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev100 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev106 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -278,21 +278,21 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-wildboar.transform">
-<span id="wildboar-transform"></span><h1><a class="reference internal" href="#module-wildboar.transform" title="wildboar.transform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><a class="headerlink" href="#module-wildboar.transform" title="Permalink to this heading">#</a></h1>
-<p>Transform raw time series to tabular representations.</p>
+          <section id="wildboar-transform">
+<h1><a class="reference internal" href="#module-wildboar.transform" title="wildboar.transform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><a class="headerlink" href="#wildboar-transform" title="Link to this heading">#</a></h1>
+<p id="module-wildboar.transform">Transform raw time series to tabular representations.</p>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="catch22/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform.catch22</span></code></a></li>
 </ul>
 </div>
-</section>
 <section id="package-contents">
-<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading">#</a></h2>
+<h3>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading">#</a></h3>
+</section>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -312,7 +312,7 @@
 <td><p>A transform using pivot time series and sampled distance metrics.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.ProximityTransform" title="wildboar.transform.ProximityTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProximityTransform</span></code></a></p></td>
-<td><p>Mixin class for all transformers in scikit-learn.</p></td>
+<td><p>Transform time series based on class conditional pivots.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.RandomShapeletTransform" title="wildboar.transform.RandomShapeletTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletTransform</span></code></a></p></td>
 <td><p>Random shapelet tranform.</p></td>
@@ -328,7 +328,7 @@
 </div>
 </section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -343,36 +343,97 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.FeatureTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">FeatureTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L197-L236"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.FeatureTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">FeatureTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L204-L236"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.FeatureTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.transform.IntervalTransform" title="wildboar.transform.IntervalTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></p>
 <p>Transform a time series as a number of features.</p>
-<p>Construct a new feature transform.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>summarizer</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – <p>The method to summarize each interval.</p>
-<ul>
+<dd class="field-odd"><dl>
+<dt><strong>summarizer</strong><span class="classifier">str or list, optional</span></dt><dd><p>The method to summarize each interval.</p>
+<ul class="simple">
 <li><p>if str, the summarizer is determined by <cite>_SUMMARIZERS.keys()</cite>.</p></li>
-<li><p>if list, the summarizer is a list of functions f(x) -&gt; float, where
-x is a numpy array.</p></li>
+<li><p>if list, the summarizer is a list of functions f(x) -&gt; float, where x
+is a numpy array.</p></li>
 </ul>
-<p>The default summarizer summarizes each time series using catch22-features</p>
-</p></li>
-<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of cores to use on multi-core.</p></li>
-</ul>
+<p>The default summarizer summarizes each time series using <cite>catch22</cite>-features.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of cores to use on multi-core.</p>
 </dd>
 </dl>
-<p class="rubric">References</p>
-<blockquote>
-<div><p>Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.</p>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.IntervalTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">IntervalTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean_var_slope'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L110-L194"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.IntervalTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">IntervalTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean_var_slope'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L110-L201"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.IntervalTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalMixin</span></code>, <a class="reference internal" href="_base/index.html#wildboar.transform._base.BaseFeatureEngineerTransform" title="wildboar.transform._base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform._base.BaseFeatureEngineerTransform</span></code></a></p>
 <p>Embed a time series as a collection of features per interval.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_intervals</strong><span class="classifier">str, int or float, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
+<ul class="simple">
+<li><p>if “log2”, the number of intervals is <cite>log2(n_timestep)</cite>.</p></li>
+<li><p>if “sqrt”, the number of intervals is <cite>sqrt(n_timestep)</cite>.</p></li>
+<li><p>if int, the number of intervals is <cite>n_intervals</cite>.</p></li>
+<li><dl class="simple">
+<dt>if float, the number of intervals is <cite>n_intervals * n_timestep</cite>, with</dt><dd><p><cite>0 &lt; n_intervals &lt; 1</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The method for selecting intervals</p>
+<ul class="simple">
+<li><p>if “fixed”, <cite>n_intervals</cite> non-overlapping intervals.</p></li>
+<li><p>if “sample”, <cite>n_intervals * sample_size</cite> non-overlapping intervals.</p></li>
+<li><dl class="simple">
+<dt>if “random”, <cite>n_intervals</cite> possibly overlapping intervals of randomly</dt><dd><p>sampled in <cite>[min_size * n_timestep, max_size * n_timestep]</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><strong>sample_size</strong><span class="classifier">float, optional</span></dt><dd><p>The sample size of fixed intervals if <cite>intervals=”sample”</cite>.</p>
+</dd>
+<dt><strong>min_size</strong><span class="classifier">float, optional</span></dt><dd><p>The minimum interval size if <cite>intervals=”random”</cite>.</p>
+</dd>
+<dt><strong>max_size</strong><span class="classifier">float, optional</span></dt><dd><p>The maximum interval size if <cite>intervals=”random”</cite>.</p>
+</dd>
+<dt><strong>summarizer</strong><span class="classifier">str or list, optional</span></dt><dd><p>The method to summarize each interval.</p>
+<ul class="simple">
+<li><p>if str, the summarizer is determined by <cite>_SUMMARIZERS.keys()</cite>.</p></li>
+<li><dl class="simple">
+<dt>if list, the summarizer is a list of functions <cite>f(x) -&gt; float</cite>, where</dt><dd><p>x is a numpy array.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The default summarizer summarizes each interval as its mean, standard
+deviation and slope.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of cores to use on multi-core.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
+<li><dl class="simple">
+<dt>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used</dt><dd><p>by <cite>np.random</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz,             Ben D. Fulcher, and Nick S. Jones.</dt><dd><p>catch22: Canonical time-series characteristics.
+Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;GunPoint&quot;</span><span class="p">)</span>
@@ -387,59 +448,35 @@ x is a numpy array.</p></li>
 </div>
 <p>Each interval (150 // 12 timepoints) are transformed to two features. The mean
 and the standard deviation.</p>
-<p>Construct a new interval transform.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
-<ul>
-<li><p>if “log2”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
-<li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
-<li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
-<li><p>if float, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span> <span class="pre">*</span> <span class="pre">n_timestep</span></code>, with
-<code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">n_intervals</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p></li>
-</ul>
-</p></li>
-<li><p><strong>intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The method for selecting intervals</p>
-<ul>
-<li><p>if “fixed”, <cite>n_intervals</cite> non-overlapping intervals.</p></li>
-<li><p>if “sample”, <code class="docutils literal notranslate"><span class="pre">n_intervals</span> <span class="pre">*</span> <span class="pre">sample_size</span></code> non-overlapping intervals.</p></li>
-<li><p>if “random”, <cite>n_intervals</cite> possibly overlapping intervals of randomly
-sampled in <code class="docutils literal notranslate"><span class="pre">[min_size</span> <span class="pre">*</span> <span class="pre">n_timestep,</span> <span class="pre">max_size</span> <span class="pre">*</span> <span class="pre">n_timestep]</span></code></p></li>
-</ul>
-</p></li>
-<li><p><strong>sample_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The sample size of fixed intervals if <code class="docutils literal notranslate"><span class="pre">intervals=&quot;sample&quot;</span></code></p></li>
-<li><p><strong>min_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum interval size if <code class="docutils literal notranslate"><span class="pre">intervals=&quot;random&quot;</span></code></p></li>
-<li><p><strong>max_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum interval size if <code class="docutils literal notranslate"><span class="pre">intervals=&quot;random&quot;</span></code></p></li>
-<li><p><strong>summarizer</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – <p>The method to summarize each interval.</p>
-<ul>
-<li><p>if str, the summarizer is determined by <code class="docutils literal notranslate"><span class="pre">_SUMMARIZERS.keys()</span></code>.</p></li>
-<li><p>if list, the summarizer is a list of functions <code class="docutils literal notranslate"><span class="pre">f(x)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code>, where
-x is a numpy array.</p></li>
-</ul>
-<p>The default summarizer summarizes each interval as its mean, standard
-deviation and slope.</p>
-</p></li>
-<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of cores to use on multi-core.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
-<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
-<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
-<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used
-by <cite>np.random</cite>.</p></li>
-</ul>
-</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.MatrixProfileTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">MatrixProfileTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L13-L127"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">MatrixProfileTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L13-L127"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></a>, <a class="reference internal" href="../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Matrix profile transform.</p>
 <p>Transform each time series in a dataset to its MatrixProfile similarity
 self-join.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>window</strong><span class="classifier">int or float, optional</span></dt><dd><p>The subsequence size, by default 0.1.</p>
+<ul class="simple">
+<li><p>if float, a fraction of n_timestep.</p></li>
+<li><p>if int, the exact subsequence size.</p></li>
+</ul>
+</dd>
+<dt><strong>exclude</strong><span class="classifier">int or float, optional</span></dt><dd><p>The size of the exclusion zone. The default exclusion zone is 0.2.</p>
+<ul class="simple">
+<li><p>if float, expressed as a fraction of the windows size.</p></li>
+<li><p>if int, exact size (0 &lt; exclude).</p></li>
+</ul>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to use when computing the profile.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">MatrixProfileTransform</span>
@@ -448,60 +485,45 @@ self-join.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Construct a new matrix profile transform.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>window</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The subsequence size, by default 0.1.</p>
-<ul>
-<li><p>if float, a fraction of n_timestep.</p></li>
-<li><p>if int, the exact subsequence size.</p></li>
-</ul>
-</p></li>
-<li><p><strong>exclude</strong> (<em>int</em><em> or </em><em>float</em><em>, </em><em>optional</em>) – <p>The size of the exclusion zone. The default exclusion zone is 0.2.</p>
-<ul>
-<li><p>if float, expressed as a fraction of the windows size.</p></li>
-<li><p>if int, exact size (0 &lt; exclude).</p></li>
-</ul>
-</p></li>
-<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of jobs to use when computing the profile.</p></li>
-</ul>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.MatrixProfileTransform.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L63-L88"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_matrix_profile.py#L62-L88"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the matrix profile.</p>
 <p>Sets the expected input dimensions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)         or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – The samples</p></li>
-<li><p><strong>y</strong> (<em>ignored</em>) – The optional labels.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)</span></dt><dd><p>The samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ignored</span></dt><dd><p>The optional labels.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>self</strong></p>
+<dd class="field-even"><dl class="simple">
+<dt>self</dt><dd><p>A fitted instance.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>a fitted instance</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.MatrixProfileTransform.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform.transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.MatrixProfileTransform.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the samples to their MatrixProfile self-join.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timesteps</em><em>)         or </em><em>(</em><em>n_samples</em><em>, </em><em>n_dims</em><em>, </em><em>n_timesteps</em><em>)</em>) – The samples</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>mp</strong> – The matrix matrix profile of each sample</p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timesteps)</dt><dd><p>The matrix matrix profile of each sample.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples, n_timestep)         or (n_samples, n_dims, n_timesteps)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -510,109 +532,195 @@ self-join.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.PAA">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">PAA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L194-L250"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">PAA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L232-L297"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></a>, <a class="reference internal" href="../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Peicewise aggregate approximation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_intervals</strong><span class="classifier">{“sqrt”, “log2”}, int or float, optional</span></dt><dd><p>The number of intervals.</p>
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The size of an interval. If <cite>window</cite>, is given then <cite>n_intervals</cite> is ignored.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="wildboar.transform.PAA.intervals">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.intervals" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.intervals" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.PAA.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L210-L228"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L257-L275"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.fit" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.PAA.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L235-L243"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.inverse_transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L282-L290"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.inverse_transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.PAA.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA.transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.PivotTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">PivotTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L79-L134"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PivotTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">PivotTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L81-L136"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PivotTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">PivotMixin</span></code>, <a class="reference internal" href="_base/index.html#wildboar.transform._base.BaseFeatureEngineerTransform" title="wildboar.transform._base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform._base.BaseFeatureEngineerTransform</span></code></a></p>
 <p>A transform using pivot time series and sampled distance metrics.</p>
-<p>Construct a new pivot transform.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_pivot</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of pivot time series.</p></li>
-<li><p><strong>metric</strong> (<em>{'auto'}</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – <ul>
+<dd class="field-odd"><dl>
+<dt><strong>n_pivots</strong><span class="classifier">int, optional</span></dt><dd><p>The number of pivot time series.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">{‘auto’} or list, optional</span></dt><dd><ul class="simple">
 <li><p>If str, the metric to compute the distance.</p></li>
-<li><p>If list, multiple metrics specified as a list of tuples, where the first
-element of the tuple is a metric name and the second element a dictionary
+<li><dl class="simple">
+<dt>If list, multiple metrics specified as a list of tuples, where the first</dt><dd><p>element of the tuple is a metric name and the second element a dictionary
 with a parameter grid specification. A parameter grid specification is a
 dict with two mandatory and one optional key-value pairs defining the
 lower and upper bound on the values and number of values in the grid. For
 example, to specifiy a grid over the argument ‘r’ with 10 values in the
-range 0 to 1, we would give the following specification: <code class="docutils literal notranslate"><span class="pre">dict(min_r=0,</span>
-<span class="pre">max_r=1,</span> <span class="pre">num_r=10)</span></code>.</p></li>
+range 0 to 1, we would give the following specification: <cite>dict(min_r=0,
+max_r=1, num_r=10)</cite>.</p>
+</dd>
+</dl>
+</li>
 </ul>
 <p>Read more about the metrics and their parameters in the <a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-subsequence-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
-</p></li>
-<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Parameters for the distance measure. Ignored unless metric is a string.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Parameters for the distance measure. Ignored unless metric is a string.</p>
 <p>Read more about the parameters in the <a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
-</p></li>
-<li><p><strong>metric_sample</strong> (<em>{&quot;uniform&quot;</em><em>, </em><em>&quot;weighted&quot;}</em><em>, </em><em>optional</em>) – If multiple metrics are specified this parameter controls how they are
+</dd>
+<dt><strong>metric_sample</strong><span class="classifier">{“uniform”, “weighted”}, optional</span></dt><dd><p>If multiple metrics are specified this parameter controls how they are
 sampled. “uniform” samples each metric configuration with equal probability
 and “weighted” samples each metric with equal probability. By default,
-metric configurations are sampled with equal probability.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>np.RandomState</em><em>, </em><em>optional</em>) – The random state</p></li>
-<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of cores to use.</p></li>
-</ul>
+metric configurations are sampled with equal probability.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or np.RandomState, optional</span></dt><dd><p>The random state.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of cores to use.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.ProximityTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">ProximityTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L137-L172"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ProximityTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">ProximityTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_pivots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'weighted'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L139-L209"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ProximityTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></a>, <a class="reference internal" href="../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
-<p>Mixin class for all transformers in scikit-learn.</p>
-<p>If <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-get_feature_names_out" title="(in scikit-learn v1.3)"><span class="xref std std-term">get_feature_names_out</span></a> is defined, then <cite>BaseEstimator</cite> will
-automatically wrap <cite>transform</cite> and <cite>fit_transform</cite> to follow the <cite>set_output</cite>
-API. See the <a class="reference external" href="https://scikit-learn.org/stable/developers/develop.html#developer-api-set-output" title="(in scikit-learn v1.3)"><span>Developer API for set_output</span></a> for details.</p>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">base.OneToOneFeatureMixin</span></code> and
-<code class="xref py py-class docutils literal notranslate"><span class="pre">base.ClassNamePrefixFeaturesOutMixin</span></code> are helpful mixins for
-defining <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-get_feature_names_out" title="(in scikit-learn v1.3)"><span class="xref std std-term">get_feature_names_out</span></a>.</p>
+<p>Transform time series based on class conditional pivots.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_pivots</strong><span class="classifier">int, optional</span></dt><dd><p>The number of pivot time series per class.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">{‘auto’} or list, optional</span></dt><dd><ul class="simple">
+<li><p>If str, the metric to compute the distance.</p></li>
+<li><dl class="simple">
+<dt>If list, multiple metrics specified as a list of tuples, where the first</dt><dd><p>element of the tuple is a metric name and the second element a dictionary
+with a parameter grid specification. A parameter grid specification is a
+dict with two mandatory and one optional key-value pairs defining the
+lower and upper bound on the values and number of values in the grid. For
+example, to specifiy a grid over the argument ‘r’ with 10 values in the
+range 0 to 1, we would give the following specification: <cite>dict(min_r=0,
+max_r=1, num_r=10)</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Read more about the metrics and their parameters in the <a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-subsequence-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Parameters for the distance measure. Ignored unless metric is a string.</p>
+<p>Read more about the parameters in the <a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>metric_sample</strong><span class="classifier">{“uniform”, “weighted”}, optional</span></dt><dd><p>If multiple metrics are specified this parameter controls how they are
+sampled. “uniform” samples each metric configuration with equal probability
+and “weighted” samples each metric with equal probability. By default,
+metric configurations are sampled with equal probability.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or np.RandomState, optional</span></dt><dd><p>The random state.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of cores to use.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.ProximityTransform.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L154-L169"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ProximityTransform.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_pivot.py#L191-L206"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ProximityTransform.fit" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.ProximityTransform.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ProximityTransform.transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.ProximityTransform.transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.RandomShapeletTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">RandomShapeletTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L106-L202"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RandomShapeletTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">RandomShapeletTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_shapelet.py#L108-L204"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RandomShapeletTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletMixin</span></code>, <a class="reference internal" href="_base/index.html#wildboar.transform._base.BaseFeatureEngineerTransform" title="wildboar.transform._base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform._base.BaseFeatureEngineerTransform</span></code></a></p>
 <p>Random shapelet tranform.</p>
 <p>Transform a time series to the distances to a selection of random
 shapelets.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="wildboar.transform.RandomShapeletTransform.embedding_">
-<span class="sig-name descname"><span class="pre">embedding_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RandomShapeletTransform.embedding_" title="Permalink to this definition">#</a></dt>
-<dd><p>The underlying embedding object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Embedding</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_shapelets</strong><span class="classifier">int, optional</span></dt><dd><p>The number of shapelets in the resulting transform.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str or list, optional</span></dt><dd><ul class="simple">
+<li><p>If str, the distance metric used to identify the best shapelet.</p></li>
+<li><dl class="simple">
+<dt>If list, multiple metrics specified as a list of tuples, where the first</dt><dd><p>element of the tuple is a metric name and the second element a dictionary
+with a parameter grid specification. A parameter grid specification is a
+dict with two mandatory and one optional key-value pairs defining the
+lower and upper bound on the values and number of values in the grid. For
+example, to specifiy a grid over the argument ‘r’ with 10 values in the
+range 0 to 1, we would give the following specification: <code class="docutils literal notranslate"><span class="pre">dict(min_r=0,</span>
+<span class="pre">max_r=1,</span> <span class="pre">num_r=10)</span></code>.</p>
 </dd>
 </dl>
-</dd></dl>
-
+</li>
+</ul>
+<p>Read more about the metrics and their parameters in the
+<a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-subsequence-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Parameters for the distance measure. Ignored unless metric is a string.</p>
+<p>Read more about the parameters in the <a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-subsequence-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>min_shapelet_size</strong><span class="classifier">float, optional</span></dt><dd><p>Minimum shapelet size.</p>
+</dd>
+<dt><strong>max_shapelet_size</strong><span class="classifier">float, optional</span></dt><dd><p>Maximum shapelet size.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to run in parallel. None means 1 and -1 means using all
+processors.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
+<li><dl class="simple">
+<dt>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used</dt><dd><p>by <cite>np.random</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.</dt><dd><p>Ultra-fast shapelets for time series classification. arXiv preprint
+arXiv:1503.05018 (2015).</p>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
 <p>Transform each time series to the minimum DTW distance to each shapelet</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.dataset</span> <span class="kn">import</span> <span class="n">load_gunpoint</span><span class="p">()</span>
@@ -632,66 +740,75 @@ set set between 0 and 1 or ERP distance with g between 0 and 1.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric">References</p>
-<dl class="simple">
-<dt>Wistuba, Martin, Josif Grabocka, and Lars Schmidt-Thieme.</dt><dd><p>Ultra-fast shapelets for time series classification. arXiv preprint
-arXiv:1503.05018 (2015).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>embedding_</strong><span class="classifier">Embedding</span></dt><dd><p>The underlying embedding object.</p>
 </dd>
 </dl>
-<p>Construct a new random shapelet transform.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_shapelets</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of shapelets in the resulting transform.</p></li>
-<li><p><strong>metric</strong> (<em>str</em><em> or </em><em>list</em><em>, </em><em>optional</em>) – <ul>
-<li><p>If str, the distance metric used to identify the best shapelet.</p></li>
-<li><p>If list, multiple metrics specified as a list of tuples, where the first
-element of the tuple is a metric name and the second element a dictionary
-with a parameter grid specification. A parameter grid specification is a
-dict with two mandatory and one optional key-value pairs defining the
-lower and upper bound on the values and number of values in the grid. For
-example, to specifiy a grid over the argument ‘r’ with 10 values in the
-range 0 to 1, we would give the following specification: <code class="docutils literal notranslate"><span class="pre">dict(min_r=0,</span>
-<span class="pre">max_r=1,</span> <span class="pre">num_r=10)</span></code>.</p></li>
-</ul>
-<p>Read more about the metrics and their parameters in the
-<a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-subsequence-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
-</p></li>
-<li><p><strong>metric_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>Parameters for the distance measure. Ignored unless metric is a string.</p>
-<p>Read more about the parameters in the <a class="reference external" href="https://wildboar.dev/main/wildboar/docs/guide/metrics.html#list-of-subsequence-metrics" title="(in Wildboar)"><span class="xref std std-ref">User guide</span></a>.</p>
-</p></li>
-<li><p><strong>min_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum shapelet size.</p></li>
-<li><p><strong>max_shapelet_size</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum shapelet size.</p></li>
-<li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of jobs to run in parallel. None means 1 and -1 means using all
-processors.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
-<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
-<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
-<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used
-by <cite>np.random</cite>.</p></li>
-</ul>
-</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.RocketTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">RocketTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_rocket.py#L89-L176"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RocketTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">RocketTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding_prob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_rocket.py#L91-L185"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RocketTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketMixin</span></code>, <a class="reference internal" href="_base/index.html#wildboar.transform._base.BaseFeatureEngineerTransform" title="wildboar.transform._base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform._base.BaseFeatureEngineerTransform</span></code></a></p>
 <p>Transform a time series using random convolution features.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="wildboar.transform.RocketTransform.embedding_">
-<span class="sig-name descname"><span class="pre">embedding_</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.RocketTransform.embedding_" title="Permalink to this definition">#</a></dt>
-<dd><p>The underlying embedding</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Embedding</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_kernels</strong><span class="classifier">int, optional</span></dt><dd><p>The number of kernels to sample at each node.</p>
+</dd>
+<dt><strong>sampling</strong><span class="classifier">{“normal”, “uniform”, “shapelet”}, optional</span></dt><dd><p>The sampling of convolutional filters.</p>
+<ul class="simple">
+<li><p>if “normal”, sample filter according to a normal distribution with
+<code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code>.</p></li>
+<li><p>if “uniform”, sample filter according to a uniform distribution with
+<code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code>.</p></li>
+<li><p>if “shapelet”, sample filters as subsequences in the training data.</p></li>
+</ul>
+</dd>
+<dt><strong>sampling_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Parameters for the sampling strategy.</p>
+<ul class="simple">
+<li><p>if “normal”, <code class="docutils literal notranslate"><span class="pre">{&quot;mean&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;scale&quot;:</span> <span class="pre">float}</span></code>, defaults to
+<code class="docutils literal notranslate"><span class="pre">{&quot;mean&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;scale&quot;:</span> <span class="pre">1}</span></code>.</p></li>
+<li><p>if “uniform”, <code class="docutils literal notranslate"><span class="pre">{&quot;lower&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;upper&quot;:</span> <span class="pre">float}</span></code>, defaults to
+<code class="docutils literal notranslate"><span class="pre">{&quot;lower&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;upper&quot;:</span> <span class="pre">1}</span></code>.</p></li>
+</ul>
+</dd>
+<dt><strong>kernel_size</strong><span class="classifier">array-like, optional</span></dt><dd><p>The kernel size, by default <code class="docutils literal notranslate"><span class="pre">[7,</span> <span class="pre">11,</span> <span class="pre">13]</span></code>.</p>
+</dd>
+<dt><strong>min_size</strong><span class="classifier">float, optional</span></dt><dd><p>The minimum timestep size used for generating kernel sizes, If set,
+<code class="docutils literal notranslate"><span class="pre">kernel_size</span></code> is ignored.</p>
+</dd>
+<dt><strong>max_size</strong><span class="classifier">float, optional</span></dt><dd><p>The maximum timestep size used for generating kernel sizes, If set,
+<code class="docutils literal notranslate"><span class="pre">kernel_size</span></code> is ignored.</p>
+</dd>
+<dt><strong>bias_prob</strong><span class="classifier">float, optional</span></dt><dd><p>The probability of using the bias term.</p>
+</dd>
+<dt><strong>normalize_prob</strong><span class="classifier">float, optional</span></dt><dd><p>The probability of performing normalization.</p>
+</dd>
+<dt><strong>padding_prob</strong><span class="classifier">float, optional</span></dt><dd><p>The probability of padding with zeros.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to run in parallel. A value of <code class="docutils literal notranslate"><span class="pre">None</span></code> means using
+a single core and a value of <code class="docutils literal notranslate"><span class="pre">-1</span></code> means using all cores. Positive
+integers mean the exact number of cores.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Controls the random resampling of the original dataset.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the random number
+generator.</p></li>
+<li><p>If <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code> instance, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is
+the random number generator.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the random number generator is the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code> instance used by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
+</ul>
 </dd>
 </dl>
-</dd></dl>
-
+</dd>
+</dl>
 <p class="rubric">References</p>
 <dl class="simple">
 <dt>Dempster, Angus, François Petitjean, and Geoffrey I. Webb.</dt><dd><p>ROCKET: exceptionally fast and accurate time series classification using
@@ -699,126 +816,96 @@ random convolutional kernels.
 Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.</p>
 </dd>
 </dl>
-<p>Construct a new rocket transform.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>n_kernels</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of kernels to sample at each node.</p></li>
-<li><p><strong>sampling</strong> (<em>{&quot;normal&quot;</em><em>, </em><em>&quot;uniform&quot;</em><em>, </em><em>&quot;shapelet&quot;}</em><em>, </em><em>optional</em>) – <p>The sampling of convolutional filters.</p>
-<ul>
-<li><p>if “normal”, sample filter according to a normal distribution with
-<code class="docutils literal notranslate"><span class="pre">mean</span></code> and <code class="docutils literal notranslate"><span class="pre">scale</span></code>.</p></li>
-<li><p>if “uniform”, sample filter according to a uniform distribution with
-<code class="docutils literal notranslate"><span class="pre">lower</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span></code>.</p></li>
-<li><p>if “shapelet”, sample filters as subsequences in the training data.</p></li>
-</ul>
-</p></li>
-<li><p><strong>sampling_params</strong> (<em>dict</em><em>, </em><em>optional</em>) – <p>The parameters for the sampling.</p>
-<ul>
-<li><dl class="simple">
-<dt>if “normal”, <code class="docutils literal notranslate"><span class="pre">{&quot;mean&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;scale&quot;:</span> <span class="pre">float}</span></code>, defaults to</dt><dd><p><code class="docutils literal notranslate"><span class="pre">{&quot;mean&quot;:</span> <span class="pre">0,</span> <span class="pre">&quot;scale&quot;:</span> <span class="pre">1}</span></code>.</p>
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>embedding_</strong><span class="classifier">Embedding</span></dt><dd><p>The underlying embedding</p>
 </dd>
 </dl>
-</li>
-<li><dl class="simple">
-<dt>if “uniform”, <code class="docutils literal notranslate"><span class="pre">{&quot;lower&quot;:</span> <span class="pre">float,</span> <span class="pre">&quot;upper&quot;:</span> <span class="pre">float}</span></code>, defaults to</dt><dd><p><code class="docutils literal notranslate"><span class="pre">{&quot;lower&quot;:</span> <span class="pre">-1,</span> <span class="pre">&quot;upper&quot;:</span> <span class="pre">1}</span></code>.</p>
-</dd>
-</dl>
-</li>
-</ul>
-</p></li>
-<li><p><strong>kernel_size</strong> (<em>array-like</em><em>, </em><em>optional</em>) – The kernel size, by default <code class="docutils literal notranslate"><span class="pre">[7,</span> <span class="pre">11,</span> <span class="pre">13]</span></code>.</p></li>
-<li><p><strong>min_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The minimum timestep fraction to generate kernel sizes. If set,
-<code class="docutils literal notranslate"><span class="pre">kernel_size</span></code> cannot be set.</p></li>
-<li><p><strong>max_size</strong> (<em>float</em><em>, </em><em>optional</em>) – The maximum timestep fractio to generate kernel sizes, If set,
-<code class="docutils literal notranslate"><span class="pre">kernel_size</span></code> cannot be set.</p></li>
-<li><p><strong>bias_prob</strong> (<em>float</em><em>, </em><em>optional</em>) – The probability of using a bias term.</p></li>
-<li><p><strong>normalize_prob</strong> (<em>float</em><em>, </em><em>optional</em>) – The probability of performing normalization.</p></li>
-<li><p><strong>padding_prob</strong> (<em>float</em><em>, </em><em>optional</em>) – The probability of padding with zeros.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
-<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
-<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
-<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used
-by <cite>np.random</cite>.</p></li>
-</ul>
-</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.SAX">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">SAX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L86-L191"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">SAX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L126-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></a>, <a class="reference internal" href="../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Symbolic aggregate approximation.</p>
-<p>Construct a new SAX transform.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input data.</p></li>
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
-<ul>
-<li><p>if “log”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
-<li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
-<li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
+<dd class="field-odd"><dl>
+<dt><strong>n_intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
+<ul class="simple">
+<li><p>if “log”, the number of intervals is <cite>log2(n_timestep)</cite>.</p></li>
+<li><p>if “sqrt”, the number of intervals is <cite>sqrt(n_timestep)</cite>.</p></li>
+<li><p>if int, the number of intervals is <cite>n_intervals</cite>.</p></li>
 <li><dl class="simple">
-<dt>if float, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span> <span class="pre">*</span> <span class="pre">n_timestep</span></code>, with</dt><dd><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">n_intervals</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p>
+<dt>if float, the number of intervals is <cite>n_intervals * n_timestep</cite>, with</dt><dd><p><cite>0 &lt; n_intervals &lt; 1</cite>.</p>
 </dd>
 </dl>
 </li>
 </ul>
-</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
-effect.</p></li>
-<li><p><strong>n_bins</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of bins.</p></li>
-<li><p><strong>binning</strong> (<em>str</em><em>, </em><em>optional</em>) – The bin construction. By default the bins are defined according to the
-normal distribution. Possible values are <code class="docutils literal notranslate"><span class="pre">&quot;normal&quot;</span></code> for normally
-distributed bins or <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> for uniformly distributed bins.</p></li>
-<li><p><strong>estimate</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>Estimate the distribution parameters for the binning from data.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">estimate=False</span></code>, it is assumed that each time series are:</p>
-<ul>
-<li><p>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.normalize</span></code> when
-<code class="docutils literal notranslate"><span class="pre">binning=&quot;normal&quot;</span></code>.</p></li>
-<li><p>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.minmax_scale</span></code>. when
-<code class="docutils literal notranslate"><span class="pre">binning=&quot;uniform&quot;</span></code></p></li>
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The window size. If <cite>window</cite> is set, the value of <cite>n_intervals</cite> has no
+effect.</p>
+</dd>
+<dt><strong>n_bins</strong><span class="classifier">int, optional</span></dt><dd><p>The number of bins.</p>
+</dd>
+<dt><strong>binning</strong><span class="classifier">str, optional</span></dt><dd><p>The bin construction. By default the bins are defined according to the
+normal distribution. Possible values are “normal” for normally
+distributed bins or “uniform” for uniformly distributed bins.</p>
+</dd>
+<dt><strong>estimate</strong><span class="classifier">bool, optional</span></dt><dd><p>Estimate the distribution parameters for the binning from data.</p>
+<p>If <cite>estimate=False</cite>, it is assumed that each time series are:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.normalize</span></code> when</dt><dd><p><cite>binning=”normal”</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.minmax_scale</span></code>. when</dt><dd><p><cite>binning=”uniform”</cite></p>
+</dd>
+</dl>
+</li>
 </ul>
-</p></li>
-</ul>
+</dd>
+</dl>
 </dd>
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="wildboar.transform.SAX.intervals">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.intervals" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.intervals" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.SAX.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L149-L155"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L187-L193"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.fit" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.SAX.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L167-L182"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.inverse_transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L205-L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.inverse_transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform.SAX.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.SAX.transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.transform.piecewice_aggregate_approximation">
-<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">piecewice_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L295-L319"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.piecewice_aggregate_approximation" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">piecewice_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L344-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.piecewice_aggregate_approximation" title="Link to this definition">#</a></dt>
 <dd><p>Peicewise aggregate approximation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input data.</p></li>
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep)</span></dt><dd><p>The input data.</p>
+</dd>
+<dt><strong>n_intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
+<ul class="simple">
 <li><p>if “log2”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
 <li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
 <li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
@@ -828,30 +915,32 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 </dl>
 </li>
 </ul>
-</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
-effect.</p></li>
-</ul>
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
+effect.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>paa</strong> – The symbolic aggregate approximation</p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_intervals)</dt><dd><p>The symbolic aggregate approximation.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples, n_intervals)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.transform.symbolic_aggregate_approximation">
-<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">symbolic_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L253-L292"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.symbolic_aggregate_approximation" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">symbolic_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L300-L341"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.symbolic_aggregate_approximation" title="Link to this definition">#</a></dt>
 <dd><p>Symbolic aggregate approximation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input data.</p></li>
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep)</span></dt><dd><p>The input data.</p>
+</dd>
+<dt><strong>n_intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
+<ul class="simple">
 <li><p>if “log2”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
 <li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
 <li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
@@ -861,20 +950,23 @@ effect.</p></li>
 </dl>
 </li>
 </ul>
-</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
-effect.</p></li>
-<li><p><strong>n_bins</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of bins.</p></li>
-<li><p><strong>binning</strong> (<em>str</em><em>, </em><em>optional</em>) – The bin construction. By default the bins are defined according to the
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
+effect.</p>
+</dd>
+<dt><strong>n_bins</strong><span class="classifier">int, optional</span></dt><dd><p>The number of bins.</p>
+</dd>
+<dt><strong>binning</strong><span class="classifier">str, optional</span></dt><dd><p>The bin construction. By default the bins are defined according to the
 normal distribution. Possible values are <code class="docutils literal notranslate"><span class="pre">&quot;normal&quot;</span></code> for normally
-distributed bins or <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> for uniformly distributed bins.</p></li>
-</ul>
+distributed bins or <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> for uniformly distributed bins.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>sax</strong> – The symbolic aggregate approximation</p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_intervals)</dt><dd><p>The symbolic aggregate approximation.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples, n_intervals)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
@@ -939,8 +1031,8 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a><ul>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#package-contents">Package Contents</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li><a class="reference internal" href="#package-contents">Package Contents</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.transform.FeatureTransform"><code class="docutils literal notranslate"><span class="pre">FeatureTransform</span></code></a></li>
@@ -963,14 +1055,8 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 <li><a class="reference internal" href="#wildboar.transform.ProximityTransform.transform"><code class="docutils literal notranslate"><span class="pre">ProximityTransform.transform</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.transform.RandomShapeletTransform"><code class="docutils literal notranslate"><span class="pre">RandomShapeletTransform</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.transform.RandomShapeletTransform.embedding_"><code class="docutils literal notranslate"><span class="pre">RandomShapeletTransform.embedding_</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#wildboar.transform.RocketTransform"><code class="docutils literal notranslate"><span class="pre">RocketTransform</span></code></a><ul>
-<li><a class="reference internal" href="#wildboar.transform.RocketTransform.embedding_"><code class="docutils literal notranslate"><span class="pre">RocketTransform.embedding_</span></code></a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#wildboar.transform.RandomShapeletTransform"><code class="docutils literal notranslate"><span class="pre">RandomShapeletTransform</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.transform.RocketTransform"><code class="docutils literal notranslate"><span class="pre">RocketTransform</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform.SAX"><code class="docutils literal notranslate"><span class="pre">SAX</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.transform.SAX.intervals"><code class="docutils literal notranslate"><span class="pre">SAX.intervals</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform.SAX.fit"><code class="docutils literal notranslate"><span class="pre">SAX.fit</span></code></a></li>
@@ -996,9 +1082,9 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
     </aside>
   </div>
 </div>
-<script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=3653749c"></script>
+<script src="../../../_static/documentation_options.js?v=53783bbf"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>

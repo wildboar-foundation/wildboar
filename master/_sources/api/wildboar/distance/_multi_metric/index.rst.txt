@@ -1,7 +1,9 @@
 :orphan:
 
+
+*****************************************
 :py:mod:`wildboar.distance._multi_metric`
-=========================================
+*****************************************
 
 .. py:module:: wildboar.distance._multi_metric
 
@@ -11,7 +13,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 

@@ -1,7 +1,9 @@
 :orphan:
 
+
+***********************************
 :py:mod:`wildboar.annotate._motifs`
-===================================
+***********************************
 
 .. py:module:: wildboar.annotate._motifs
 
@@ -11,7 +13,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -21,42 +23,67 @@ Functions
 
 .. py:function:: motifs(x, mp=None, *, window='auto', exclude=0.2, max_distance='best', max_neighbours=10, min_neighbours=1, max_motif=1, return_distance=False)
 
+   
    Find motifs.
 
-   :param x: The time series
-   :type x: array-like of shape (n_samples, n_timestep)
-   :param mp: The matrix profile. The matrix profile is computed if None.
-   :type mp: ndarray or shape (n_samples, profile_size), optional
-   :param window: The window size of the matrix profile.
 
-                  - if "auto" the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
-                    window of the matrix profile if mp is not None.
-                  - if float, a fraction of n_timestep
-                  - if int, the exact window size
-   :type window: "auto", int or float, optional
-   :param exclude: The size of the exclusion zone.
-   :type exclude: float, optional
-   :param max_distance: The maximum distance between motifs.
-   :type max_distance: str, optional
-   :param max_matches: The maximum number of neighbours
-   :type max_matches: int, optional
-   :param min_neighbours: The minimum number of neighbours
-   :type min_neighbours: int, optional
-   :param max_motif: The maximum number of motifs to return.
-   :type max_motif: int, optional
-   :param return_distance: Return the distance from main to neighbours
-   :type return_distance: bool, optional
+   :Parameters:
 
-   :returns: * **motif_indicies** (*list*) -- List of arrays of motif neighbour indicies
-             * **motif_distance** (*list, optional*) -- List of arrays of distance from motif to neighbours
+       **x** : array-like of shape (n_samples, n_timestep)
+           The time series
+
+       **mp** : ndarray or shape (n_samples, profile_size), optional
+           The matrix profile. The matrix profile is computed if None.
+
+       **window** : "auto", int or float, optional
+           The window size of the matrix profile.
+           
+           - if "auto" the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
+             window of the matrix profile if mp is not None.
+           - if float, a fraction of n_timestep
+           - if int, the exact window size
+
+       **exclude** : float, optional
+           The size of the exclusion zone.
+
+       **max_distance** : str, optional
+           The maximum distance between motifs.
+
+       **max_neighbours** : int, optional
+           The maximum number of neighbours
+
+       **min_neighbours** : int, optional
+           The minimum number of neighbours
+
+       **max_motif** : int, optional
+           The maximum number of motifs to return.
+
+       **return_distance** : bool, optional
+           Return the distance from main to neighbours
+
+   :Returns:
+
+       **motif_indicies** : list
+           List of arrays of motif neighbour indicies
+
+       **motif_distance** : list, optional
+           List of arrays of distance from motif to neighbours
+
+
+
+
+
+
 
    .. seealso::
 
-      :obj:`wildboar.distance.subsequence_match`
-          find subsequence matches
-
-      :obj:`wildboar.distance.matrix_profile`
-          compute the matrix profile
+       
+       :obj:`wildboar.distance.subsequence_match`
+           find subsequence matches
+       :obj:`wildboar.distance.matrix_profile`
+           compute the matrix profile
+       
+       
 
    .. rubric:: References
 
@@ -65,4 +92,13 @@ Functions
        that includes motifs, discords and shapelets. In 2016 IEEE 16th international
        conference on data mining (ICDM)
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

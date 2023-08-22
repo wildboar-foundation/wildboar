@@ -1,7 +1,9 @@
 :orphan:
 
+
+************************************
 :py:mod:`wildboar.annotate._segment`
-====================================
+************************************
 
 .. py:module:: wildboar.annotate._segment
 
@@ -11,7 +13,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -21,34 +23,58 @@ Functions
 
 .. py:function:: segment(x=None, *, mpi=None, n_segments=1, window=0.1, exclude=0.2, boundry=1.0, return_arc_curve=False)
 
+   
    Find change regimes in a time series.
 
-   :param x: The time series. If x is given, the matrix profile of x is computed.
-   :type x: array-like of shape (n_samples, n_timestep) or (n_timestep, ), optional
-   :param mpi: The matrix profile index. Must be given unless x is given.
-   :type mpi: array-like of shape (n_samples, profile_size) or (profile_size), optional
-   :param n_segments: The number of segmentations to identify
-   :type n_segments: int, optional
-   :param window: The window size. The window parameter is ignored if mpi is not None.
 
-                  - if float, a fraction of n_timestep
-                  - if int, the exact window size
-   :type window: int or float, optional
-   :param exclude: The self-join exclusion for the matrix profile. Ignored if `mpi` is given.
-   :type exclude: float, optional
-   :param boundry: The region around an identified segmentation that is ignored when searching
-                   for subsequent segmentations
-   :type boundry: float, optional
-   :param return_arc_curve: Return the arc curve.
-   :type return_arc_curve: bool, optional
+   :Parameters:
 
-   :returns: * **segments** (*ndarray of shape (n_samples, n_segments), (n_segments) or int*) -- The start index of a segment
-             * **arc_curves** (*ndarray of shape (n_samples, profile_size) or (profile_size, )*) -- The arc curves
+       **x** : array-like of shape (n_samples, n_timestep) or (n_timestep, ), optional
+           The time series. If x is given, the matrix profile of x is computed.
+
+       **mpi** : array-like of shape (n_samples, profile_size) or (profile_size), optional
+           The matrix profile index. Must be given unless x is given.
+
+       **n_segments** : int, optional
+           The number of segmentations to identify
+
+       **window** : int or float, optional
+           The window size. The window parameter is ignored if mpi is not None.
+           
+           - if float, a fraction of n_timestep
+           - if int, the exact window size
+
+       **exclude** : float, optional
+           The self-join exclusion for the matrix profile. Ignored if `mpi` is given.
+
+       **boundry** : float, optional
+           Ignore the region around each identified segmentation. Expressed as a
+           fraction of `window`.
+
+       **return_arc_curve** : bool, optional
+           Return the arc curve.
+
+   :Returns:
+
+       **segments** : ndarray of shape (n_samples, n_segments), (n_segments) or int
+           The start index of a segment
+
+       **arc_curves** : ndarray of shape (n_samples, profile_size) or (profile_size, )
+           The arc curves
+
+
+
+
+
+
 
    .. seealso::
 
-      :obj:`wildboar.distance.matrix_profile`
-          compute the matrix profile
+       
+       :obj:`wildboar.distance.matrix_profile`
+           compute the matrix profile
+       
+       
 
    .. rubric:: References
 
@@ -56,4 +82,13 @@ Functions
        Matrix profile VIII: domain agnostic online semantic segmentation at superhuman
        performance levels. In proceedings of International Conference on Data Mining
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

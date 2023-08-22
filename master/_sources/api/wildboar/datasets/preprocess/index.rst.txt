@@ -1,5 +1,7 @@
+
+**************************************
 :py:mod:`wildboar.datasets.preprocess`
-======================================
+**************************************
 
 .. py:module:: wildboar.datasets.preprocess
 
@@ -7,6 +9,8 @@
 
    Utilities for preprocessing time series.
 
+   ..
+       !! processed by numpydoc !!
 
 
 Module Contents
@@ -14,7 +18,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -28,66 +32,167 @@ Functions
 
 .. py:function:: maxabs_scale(x)
 
+   
    Scale each time series by its maximum absolute value.
 
-   :param x: The dataset
-   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
 
-   :returns: **x** -- The transformed dataset
-   :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+   :Parameters:
 
+       **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The dataset
+
+   :Returns:
+
+       **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The transformed dataset
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: minmax_scale(x, min=0, max=1)
 
+   
    Scale x along the time dimension.
 
    Each time series is scaled such that each value is between min and max.
 
-   :param x: The dataset
-   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-   :param min: The minimum value
-   :type min: float, optional
-   :param max: The maximum value
-   :type max: float, optional
+   :Parameters:
 
-   :returns: **x** -- The transformed dataset
-   :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+       **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The dataset
 
+       **min** : float, optional
+           The minimum value
+
+       **max** : float, optional
+           The maximum value
+
+   :Returns:
+
+       **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The transformed dataset
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: named_preprocess(name)
 
+   
    Get a named preprocessor.
 
-   :param name: The name
-   :type name: str
 
-   :returns: The preprocessor function.
-   :rtype: callable
+   :Parameters:
 
+       **name** : str
+           The name
+
+   :Returns:
+
+       callable
+           The preprocessor function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: standardize(x)
 
+   
    Scale x along the time dimension.
 
    The resulting array will have zero mean and unit standard deviation.
 
-   :param x: The dataset
-   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+   :Parameters:
 
-   :returns: **x** -- The standardized dataset
-   :rtype: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+       **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The dataset
 
+   :Returns:
+
+       **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The standardized dataset
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: truncate(x, n_shortest=None)
 
+   
    Truncate x to the shortest sequence.
 
-   :param x: The dataset
-   :type x: ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-   :param n_shortest: The maximum size
-   :type n_shortest: int, optional
 
-   :returns: **x** -- The truncated dataset
-   :rtype: ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
+   :Parameters:
 
+       **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The dataset
+
+       **n_shortest** : int, optional
+           The maximum size
+
+   :Returns:
+
+       **x** : ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
+           The truncated dataset
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

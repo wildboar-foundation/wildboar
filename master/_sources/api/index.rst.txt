@@ -2,11 +2,28 @@
 
 :py:mod:`wildboar`
 ~~~~~~~~~~~~~~~~~~
+
 Wildboar - a library for temporal machine learning.
 
 Wildboar includes numerous temporal machine learning algorithms and seamlessly
 integrates them with `scikit-learn <https://scikit-learn.org>`_.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions
@@ -20,11 +37,28 @@ integrates them with `scikit-learn <https://scikit-learn.org>`_.
 
 :py:mod:`wildboar.annotate`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Annotation of time series.
 
 See the :doc:`annotation section in the User Guide
 <wildboar:guide/annotate>` for more details and examples.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions
@@ -44,6 +78,8 @@ See the :doc:`annotation section in the User Guide
 ~~~~~~~~~~~~~~~~~~~~~~~
 Base classes for all estimators.
 
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -71,11 +107,28 @@ Base classes for all estimators.
 
 :py:mod:`wildboar.datasets`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Dataset loading utilities.
 
-See the :doc:`dataset section in the User Guide
-<wildboar:guide/datasets>` for more details and examples.
+See the dataset section in the :doc:`User Guide <wildboar:guide/datasets>` for
+more details and examples.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -139,6 +192,8 @@ See the :doc:`User Guide
 <wildboar:guide/unsupervised/outlier/generation` for more details and
 example uses.
 
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions
@@ -162,6 +217,8 @@ example uses.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Utilities for preprocessing time series.
 
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions
@@ -183,6 +240,7 @@ Utilities for preprocessing time series.
 
 :py:mod:`wildboar.distance`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Fast distance computations.
 
 The :py:mod:`wildboar.distance` module includes functions for computing
@@ -192,6 +250,22 @@ subsequences.
 See the :doc:`User Guide <wildboar:guide/metrics/distance>` for more details and
 examples.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions
@@ -225,6 +299,8 @@ DTW alignment and distance computations.
 The :mod:`wildboar.distance.dtw` module implements several functions for
 computing DTW alignments and distances.
 
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions
@@ -258,8 +334,26 @@ computing DTW alignments and distances.
 
 :py:mod:`wildboar.ensemble`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ensemble methods for classification, regression and outlier detection.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -267,15 +361,15 @@ Ensemble methods for classification, regression and outlier detection.
   :class: autosummary
 
   * - :py:obj:`~wildboar.ensemble.BaggingClassifier`
-    - Base estimator for Wildboar ensemble estimators.
+    - A bagging classifier.
   * - :py:obj:`~wildboar.ensemble.BaggingRegressor`
-    - Base estimator for Wildboar ensemble estimators.
+    - A bagging regressor.
   * - :py:obj:`~wildboar.ensemble.BaseBagging`
     - Base estimator for Wildboar ensemble estimators.
   * - :py:obj:`~wildboar.ensemble.ExtraShapeletTreesClassifier`
     - An ensemble of extremely random shapelet trees.
   * - :py:obj:`~wildboar.ensemble.ExtraShapeletTreesRegressor`
-    - An ensemble of extremely random shapelet trees.
+    - An ensemble of extremely random shapelet tree regressors.
   * - :py:obj:`~wildboar.ensemble.IntervalForestClassifier`
     - An ensemble of interval tree classifiers.
   * - :py:obj:`~wildboar.ensemble.IntervalForestRegressor`
@@ -295,15 +389,33 @@ Ensemble methods for classification, regression and outlier detection.
   * - :py:obj:`~wildboar.ensemble.ShapeletForestEmbedding`
     - An ensemble of random shapelet trees.
   * - :py:obj:`~wildboar.ensemble.ShapeletForestRegressor`
-    - An ensemble of random shapelet regression trees.
+    - An ensemble of random shapelet tree regressors.
 
 
 
 
 :py:mod:`wildboar.explain`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Explanation methods for classifiers and regressors.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -330,11 +442,28 @@ Explanation methods for classifiers and regressors.
 
 :py:mod:`wildboar.explain.counterfactual`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Counterfactual explanations.
 
 The :mod:`wildboar.explain.counterfactual` module includes numerous
 methods for generating counterfactual explanations.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -366,8 +495,26 @@ methods for generating counterfactual explanations.
 
 :py:mod:`wildboar.linear_model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Linear methods for both classification and regression.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -390,8 +537,26 @@ Linear methods for both classification and regression.
 
 :py:mod:`wildboar.metrics`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Evaluation metrics.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions
@@ -414,8 +579,26 @@ Evaluation metrics.
 
 :py:mod:`wildboar.model_selection`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Methods for model selection.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -439,8 +622,26 @@ Methods for model selection.
 
 :py:mod:`wildboar.transform`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Transform raw time series to tabular representations.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -458,7 +659,7 @@ Transform raw time series to tabular representations.
   * - :py:obj:`~wildboar.transform.PivotTransform`
     - A transform using pivot time series and sampled distance metrics.
   * - :py:obj:`~wildboar.transform.ProximityTransform`
-    - Mixin class for all transformers in scikit-learn.
+    - Transform time series based on class conditional pivots.
   * - :py:obj:`~wildboar.transform.RandomShapeletTransform`
     - Random shapelet tranform.
   * - :py:obj:`~wildboar.transform.RocketTransform`
@@ -488,8 +689,26 @@ Transform raw time series to tabular representations.
 
 :py:mod:`wildboar.tree`
 ~~~~~~~~~~~~~~~~~~~~~~~
+
 Tree-based estimators for classification and regression.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 .. list-table:: Classes
   :header-rows: 0
@@ -524,8 +743,26 @@ Tree-based estimators for classification and regression.
 
 :py:mod:`wildboar.utils`
 ~~~~~~~~~~~~~~~~~~~~~~~~
+
 Utility functions.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
 
 
 .. list-table:: Functions

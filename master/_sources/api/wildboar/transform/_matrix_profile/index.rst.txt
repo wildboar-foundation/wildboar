@@ -1,7 +1,9 @@
 :orphan:
 
+
+********************************************
 :py:mod:`wildboar.transform._matrix_profile`
-============================================
+********************************************
 
 .. py:module:: wildboar.transform._matrix_profile
 
@@ -10,7 +12,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -24,10 +26,38 @@ Classes
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
+   
    Matrix profile transform.
 
    Transform each time series in a dataset to its MatrixProfile similarity
    self-join.
+
+   :Parameters:
+
+       **window** : int or float, optional
+           The subsequence size, by default 0.1.
+           
+           - if float, a fraction of n_timestep.
+           - if int, the exact subsequence size.
+
+       **exclude** : int or float, optional
+           The size of the exclusion zone. The default exclusion zone is 0.2.
+           
+           - if float, expressed as a fraction of the windows size.
+           - if int, exact size (0 < exclude).
+
+       **n_jobs** : int, optional
+           The number of jobs to use when computing the profile.
+
+
+
+
+
+
+
+
+
+
 
    .. rubric:: Examples
 
@@ -37,45 +67,74 @@ Classes
    >>> t = MatrixProfileTransform()
    >>> t.fit_transform(x)
 
-   Construct a new matrix profile transform.
 
-   :param window: The subsequence size, by default 0.1.
 
-                  - if float, a fraction of n_timestep.
-                  - if int, the exact subsequence size.
-   :type window: int or float, optional
-   :param exclude: The size of the exclusion zone. The default exclusion zone is 0.2.
-
-                   - if float, expressed as a fraction of the windows size.
-                   - if int, exact size (0 < exclude).
-   :type exclude: int or float, optional
-   :param n_jobs: The number of jobs to use when computing the profile.
-   :type n_jobs: int, optional
-
+   ..
+       !! processed by numpydoc !!
    .. py:method:: fit(x, y=None)
 
+      
       Fit the matrix profile.
 
       Sets the expected input dimensions.
 
-      :param x: The samples
-      :type x: array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)
-      :param y: The optional labels.
-      :type y: ignored
+      :Parameters:
 
-      :returns: **self**
-      :rtype: a fitted instance
+          **x** : array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)
+              The samples.
 
+          **y** : ignored
+              The optional labels.
+
+      :Returns:
+
+          self
+              A fitted instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: transform(x)
 
+      
       Transform the samples to their MatrixProfile self-join.
 
-      :param x: The samples
-      :type x: array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)
 
-      :returns: **mp** -- The matrix matrix profile of each sample
-      :rtype: ndarray of shape (n_samples, n_timestep)         or (n_samples, n_dims, n_timesteps)
+      :Parameters:
 
+          **x** : array-like of shape (n_samples, n_timesteps)         or (n_samples, n_dims, n_timesteps)
+              The samples.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timesteps)
+              The matrix matrix profile of each sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 

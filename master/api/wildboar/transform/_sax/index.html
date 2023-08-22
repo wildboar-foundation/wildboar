@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
-    <!-- Generated with Sphinx 7.1.1 and Furo 2023.07.26 -->
-        <title>wildboar.transform._sax - Wildboar 1.1.1.dev100 documentation</title>
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19 -->
+        <title>wildboar.transform._sax - Wildboar 1.1.1.dev106 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev100 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev106 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -278,20 +278,22 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-wildboar.transform._sax">
-<span id="wildboar-transform-sax"></span><h1><a class="reference internal" href="#module-wildboar.transform._sax" title="wildboar.transform._sax"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform._sax</span></code></a><a class="headerlink" href="#module-wildboar.transform._sax" title="Permalink to this heading">#</a></h1>
+          <section id="wildboar-transform-sax">
+<h1><a class="reference internal" href="#module-wildboar.transform._sax" title="wildboar.transform._sax"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform._sax</span></code></a><a class="headerlink" href="#wildboar-transform-sax" title="Link to this heading">#</a></h1>
+<p id="module-wildboar.transform._sax">Symbolic aggregate approximation and piecewice aggregate approximation.</p>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+</section>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform._sax.Binning" title="wildboar.transform._sax.Binning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Binning</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Abstract base class for binning strategies.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform._sax.NormalBinning" title="wildboar.transform._sax.NormalBinning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NormalBinning</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Bin using a normal distribution.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform._sax.PAA" title="wildboar.transform._sax.PAA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PAA</span></code></a></p></td>
 <td><p>Peicewise aggregate approximation.</p></td>
@@ -300,14 +302,14 @@
 <td><p>Symbolic aggregate approximation.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform._sax.UniformBinning" title="wildboar.transform._sax.UniformBinning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UniformBinning</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Bin using a uniform distribution.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -322,140 +324,213 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._sax.Binning">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">Binning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bins</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L23-L40"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.Binning" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">Binning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bins</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L27-L76"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.Binning" title="Link to this definition">#</a></dt>
+<dd><p>Abstract base class for binning strategies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_bins</strong><span class="classifier">int</span></dt><dd><p>The number of bins.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.Binning.get_thresholds">
-<span class="sig-name descname"><span class="pre">get_thresholds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L32-L36"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.Binning.get_thresholds" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">get_thresholds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L53-L72"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.Binning.get_thresholds" title="Link to this definition">#</a></dt>
+<dd><p>Get thresholds for binning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep), optional</span></dt><dd><p>The samples.</p>
+</dd>
+<dt><strong>estimate</strong><span class="classifier">bool, optional</span></dt><dd><p>Calculate the thresholds from the samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_bins - 1, )</dt><dd><p>The thresholds.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.Binning.scale">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L28-L30"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.Binning.scale" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L41-L51"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.Binning.scale" title="Link to this definition">#</a></dt>
+<dd><p>Scale the input such that it is suitable for binning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._sax.NormalBinning">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">NormalBinning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bins</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L43-L60"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.NormalBinning" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">NormalBinning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bins</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L79-L98"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.NormalBinning" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.transform._sax.Binning" title="wildboar.transform._sax.Binning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Binning</span></code></a></p>
+<p>Bin using a normal distribution.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.NormalBinning.scale">
-<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L44-L48"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.NormalBinning.scale" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L82-L86"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.NormalBinning.scale" title="Link to this definition">#</a></dt>
+<dd><p>Scale the input such that it is suitable for binning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._sax.PAA">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">PAA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L194-L250"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">PAA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L232-L297"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></a>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Peicewise aggregate approximation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_intervals</strong><span class="classifier">{“sqrt”, “log2”}, int or float, optional</span></dt><dd><p>The number of intervals.</p>
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The size of an interval. If <cite>window</cite>, is given then <cite>n_intervals</cite> is ignored.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="wildboar.transform._sax.PAA.intervals">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.intervals" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.intervals" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.PAA.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L210-L228"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L257-L275"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.fit" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.PAA.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L235-L243"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.inverse_transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L282-L290"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.inverse_transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.PAA.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.PAA.transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._sax.SAX">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">SAX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L86-L191"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">SAX</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">estimate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L126-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></a>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Symbolic aggregate approximation.</p>
-<p>Construct a new SAX transform.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input data.</p></li>
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
-<ul>
-<li><p>if “log”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
-<li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
-<li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
+<dd class="field-odd"><dl>
+<dt><strong>n_intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
+<ul class="simple">
+<li><p>if “log”, the number of intervals is <cite>log2(n_timestep)</cite>.</p></li>
+<li><p>if “sqrt”, the number of intervals is <cite>sqrt(n_timestep)</cite>.</p></li>
+<li><p>if int, the number of intervals is <cite>n_intervals</cite>.</p></li>
 <li><dl class="simple">
-<dt>if float, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span> <span class="pre">*</span> <span class="pre">n_timestep</span></code>, with</dt><dd><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;</span> <span class="pre">n_intervals</span> <span class="pre">&lt;</span> <span class="pre">1</span></code>.</p>
+<dt>if float, the number of intervals is <cite>n_intervals * n_timestep</cite>, with</dt><dd><p><cite>0 &lt; n_intervals &lt; 1</cite>.</p>
 </dd>
 </dl>
 </li>
 </ul>
-</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
-effect.</p></li>
-<li><p><strong>n_bins</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of bins.</p></li>
-<li><p><strong>binning</strong> (<em>str</em><em>, </em><em>optional</em>) – The bin construction. By default the bins are defined according to the
-normal distribution. Possible values are <code class="docutils literal notranslate"><span class="pre">&quot;normal&quot;</span></code> for normally
-distributed bins or <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> for uniformly distributed bins.</p></li>
-<li><p><strong>estimate</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>Estimate the distribution parameters for the binning from data.</p>
-<p>If <code class="docutils literal notranslate"><span class="pre">estimate=False</span></code>, it is assumed that each time series are:</p>
-<ul>
-<li><p>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.normalize</span></code> when
-<code class="docutils literal notranslate"><span class="pre">binning=&quot;normal&quot;</span></code>.</p></li>
-<li><p>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.minmax_scale</span></code>. when
-<code class="docutils literal notranslate"><span class="pre">binning=&quot;uniform&quot;</span></code></p></li>
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The window size. If <cite>window</cite> is set, the value of <cite>n_intervals</cite> has no
+effect.</p>
+</dd>
+<dt><strong>n_bins</strong><span class="classifier">int, optional</span></dt><dd><p>The number of bins.</p>
+</dd>
+<dt><strong>binning</strong><span class="classifier">str, optional</span></dt><dd><p>The bin construction. By default the bins are defined according to the
+normal distribution. Possible values are “normal” for normally
+distributed bins or “uniform” for uniformly distributed bins.</p>
+</dd>
+<dt><strong>estimate</strong><span class="classifier">bool, optional</span></dt><dd><p>Estimate the distribution parameters for the binning from data.</p>
+<p>If <cite>estimate=False</cite>, it is assumed that each time series are:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.normalize</span></code> when</dt><dd><p><cite>binning=”normal”</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>preprocessed using <code class="xref py py-func docutils literal notranslate"><span class="pre">datasets.preprocess.minmax_scale</span></code>. when</dt><dd><p><cite>binning=”uniform”</cite></p>
+</dd>
+</dl>
+</li>
 </ul>
-</p></li>
-</ul>
+</dd>
+</dl>
 </dd>
 </dl>
 <dl class="py property">
 <dt class="sig sig-object py" id="wildboar.transform._sax.SAX.intervals">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.intervals" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intervals</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.intervals" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.SAX.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L149-L155"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.fit" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L187-L193"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.fit" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.SAX.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L167-L182"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.inverse_transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L205-L220"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.inverse_transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.SAX.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.transform" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.SAX.transform" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._sax.UniformBinning">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">UniformBinning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bins</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L63-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.UniformBinning" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">UniformBinning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_bins</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L101-L120"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.UniformBinning" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.transform._sax.Binning" title="wildboar.transform._sax.Binning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Binning</span></code></a></p>
+<p>Bin using a uniform distribution.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._sax.UniformBinning.scale">
-<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L64-L68"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.UniformBinning.scale" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L104-L108"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.UniformBinning.scale" title="Link to this definition">#</a></dt>
+<dd><p>Scale the input such that it is suitable for binning.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps)</span></dt><dd><p>The samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.transform._sax.piecewice_aggregate_approximation">
-<span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">piecewice_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L295-L319"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.piecewice_aggregate_approximation" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">piecewice_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L344-L370"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.piecewice_aggregate_approximation" title="Link to this definition">#</a></dt>
 <dd><p>Peicewise aggregate approximation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input data.</p></li>
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep)</span></dt><dd><p>The input data.</p>
+</dd>
+<dt><strong>n_intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
+<ul class="simple">
 <li><p>if “log2”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
 <li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
 <li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
@@ -465,30 +540,32 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 </dl>
 </li>
 </ul>
-</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
-effect.</p></li>
-</ul>
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
+effect.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>paa</strong> – The symbolic aggregate approximation</p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_intervals)</dt><dd><p>The symbolic aggregate approximation.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples, n_intervals)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.transform._sax.symbolic_aggregate_approximation">
-<span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">symbolic_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L253-L292"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.symbolic_aggregate_approximation" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.transform._sax.</span></span><span class="sig-name descname"><span class="pre">symbolic_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_sax.py#L300-L341"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._sax.symbolic_aggregate_approximation" title="Link to this definition">#</a></dt>
 <dd><p>Symbolic aggregate approximation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input data.</p></li>
-<li><p><strong>n_intervals</strong> (<em>str</em><em>, </em><em>optional</em>) – <p>The number of intervals to use for the transform.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timestep)</span></dt><dd><p>The input data.</p>
+</dd>
+<dt><strong>n_intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
+<ul class="simple">
 <li><p>if “log2”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">log2(n_timestep)</span></code>.</p></li>
 <li><p>if “sqrt”, the number of intervals is <code class="docutils literal notranslate"><span class="pre">sqrt(n_timestep)</span></code>.</p></li>
 <li><p>if int, the number of intervals is <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>.</p></li>
@@ -498,25 +575,27 @@ effect.</p></li>
 </dl>
 </li>
 </ul>
-</p></li>
-<li><p><strong>window</strong> (<em>int</em><em>, </em><em>optional</em>) – The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
-effect.</p></li>
-<li><p><strong>n_bins</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of bins.</p></li>
-<li><p><strong>binning</strong> (<em>str</em><em>, </em><em>optional</em>) – The bin construction. By default the bins are defined according to the
+</dd>
+<dt><strong>window</strong><span class="classifier">int, optional</span></dt><dd><p>The window size. If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set, the value of <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code> has no
+effect.</p>
+</dd>
+<dt><strong>n_bins</strong><span class="classifier">int, optional</span></dt><dd><p>The number of bins.</p>
+</dd>
+<dt><strong>binning</strong><span class="classifier">str, optional</span></dt><dd><p>The bin construction. By default the bins are defined according to the
 normal distribution. Possible values are <code class="docutils literal notranslate"><span class="pre">&quot;normal&quot;</span></code> for normally
-distributed bins or <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> for uniformly distributed bins.</p></li>
-</ul>
+distributed bins or <code class="docutils literal notranslate"><span class="pre">&quot;uniform&quot;</span></code> for uniformly distributed bins.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>sax</strong> – The symbolic aggregate approximation</p>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_intervals)</dt><dd><p>The symbolic aggregate approximation.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>ndarray of shape (n_samples, n_intervals)</p>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
-</section>
 </section>
 </section>
 
@@ -558,7 +637,7 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform._sax</span></code></a><ul>
-<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.transform._sax.Binning"><code class="docutils literal notranslate"><span class="pre">Binning</span></code></a><ul>
@@ -595,8 +674,6 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 </ul>
 </li>
 </ul>
-</li>
-</ul>
 
           </div>
         </div>
@@ -606,9 +683,9 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
     </aside>
   </div>
 </div>
-<script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=3653749c"></script>
+<script src="../../../../_static/documentation_options.js?v=53783bbf"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>

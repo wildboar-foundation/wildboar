@@ -1,10 +1,13 @@
+
+***************************
 :py:mod:`wildboar.annotate`
-===========================
+***************************
 
 .. py:module:: wildboar.annotate
 
 .. autoapi-nested-parse::
 
+   
    Annotation of time series.
 
    See the :doc:`annotation section in the User Guide
@@ -12,12 +15,28 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
 Package Contents
 ----------------
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -28,42 +47,67 @@ Functions
 
 .. py:function:: motifs(x, mp=None, *, window='auto', exclude=0.2, max_distance='best', max_neighbours=10, min_neighbours=1, max_motif=1, return_distance=False)
 
+   
    Find motifs.
 
-   :param x: The time series
-   :type x: array-like of shape (n_samples, n_timestep)
-   :param mp: The matrix profile. The matrix profile is computed if None.
-   :type mp: ndarray or shape (n_samples, profile_size), optional
-   :param window: The window size of the matrix profile.
 
-                  - if "auto" the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
-                    window of the matrix profile if mp is not None.
-                  - if float, a fraction of n_timestep
-                  - if int, the exact window size
-   :type window: "auto", int or float, optional
-   :param exclude: The size of the exclusion zone.
-   :type exclude: float, optional
-   :param max_distance: The maximum distance between motifs.
-   :type max_distance: str, optional
-   :param max_matches: The maximum number of neighbours
-   :type max_matches: int, optional
-   :param min_neighbours: The minimum number of neighbours
-   :type min_neighbours: int, optional
-   :param max_motif: The maximum number of motifs to return.
-   :type max_motif: int, optional
-   :param return_distance: Return the distance from main to neighbours
-   :type return_distance: bool, optional
+   :Parameters:
 
-   :returns: * **motif_indicies** (*list*) -- List of arrays of motif neighbour indicies
-             * **motif_distance** (*list, optional*) -- List of arrays of distance from motif to neighbours
+       **x** : array-like of shape (n_samples, n_timestep)
+           The time series
+
+       **mp** : ndarray or shape (n_samples, profile_size), optional
+           The matrix profile. The matrix profile is computed if None.
+
+       **window** : "auto", int or float, optional
+           The window size of the matrix profile.
+           
+           - if "auto" the window is math.ceil(0.1 * n_timesteps) if mp=None, and the
+             window of the matrix profile if mp is not None.
+           - if float, a fraction of n_timestep
+           - if int, the exact window size
+
+       **exclude** : float, optional
+           The size of the exclusion zone.
+
+       **max_distance** : str, optional
+           The maximum distance between motifs.
+
+       **max_neighbours** : int, optional
+           The maximum number of neighbours
+
+       **min_neighbours** : int, optional
+           The minimum number of neighbours
+
+       **max_motif** : int, optional
+           The maximum number of motifs to return.
+
+       **return_distance** : bool, optional
+           Return the distance from main to neighbours
+
+   :Returns:
+
+       **motif_indicies** : list
+           List of arrays of motif neighbour indicies
+
+       **motif_distance** : list, optional
+           List of arrays of distance from motif to neighbours
+
+
+
+
+
+
 
    .. seealso::
 
-      :obj:`wildboar.distance.subsequence_match`
-          find subsequence matches
-
-      :obj:`wildboar.distance.matrix_profile`
-          compute the matrix profile
+       
+       :obj:`wildboar.distance.subsequence_match`
+           find subsequence matches
+       :obj:`wildboar.distance.matrix_profile`
+           compute the matrix profile
+       
+       
 
    .. rubric:: References
 
@@ -72,37 +116,70 @@ Functions
        that includes motifs, discords and shapelets. In 2016 IEEE 16th international
        conference on data mining (ICDM)
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: segment(x=None, *, mpi=None, n_segments=1, window=0.1, exclude=0.2, boundry=1.0, return_arc_curve=False)
 
+   
    Find change regimes in a time series.
 
-   :param x: The time series. If x is given, the matrix profile of x is computed.
-   :type x: array-like of shape (n_samples, n_timestep) or (n_timestep, ), optional
-   :param mpi: The matrix profile index. Must be given unless x is given.
-   :type mpi: array-like of shape (n_samples, profile_size) or (profile_size), optional
-   :param n_segments: The number of segmentations to identify
-   :type n_segments: int, optional
-   :param window: The window size. The window parameter is ignored if mpi is not None.
 
-                  - if float, a fraction of n_timestep
-                  - if int, the exact window size
-   :type window: int or float, optional
-   :param exclude: The self-join exclusion for the matrix profile. Ignored if `mpi` is given.
-   :type exclude: float, optional
-   :param boundry: The region around an identified segmentation that is ignored when searching
-                   for subsequent segmentations
-   :type boundry: float, optional
-   :param return_arc_curve: Return the arc curve.
-   :type return_arc_curve: bool, optional
+   :Parameters:
 
-   :returns: * **segments** (*ndarray of shape (n_samples, n_segments), (n_segments) or int*) -- The start index of a segment
-             * **arc_curves** (*ndarray of shape (n_samples, profile_size) or (profile_size, )*) -- The arc curves
+       **x** : array-like of shape (n_samples, n_timestep) or (n_timestep, ), optional
+           The time series. If x is given, the matrix profile of x is computed.
+
+       **mpi** : array-like of shape (n_samples, profile_size) or (profile_size), optional
+           The matrix profile index. Must be given unless x is given.
+
+       **n_segments** : int, optional
+           The number of segmentations to identify
+
+       **window** : int or float, optional
+           The window size. The window parameter is ignored if mpi is not None.
+           
+           - if float, a fraction of n_timestep
+           - if int, the exact window size
+
+       **exclude** : float, optional
+           The self-join exclusion for the matrix profile. Ignored if `mpi` is given.
+
+       **boundry** : float, optional
+           Ignore the region around each identified segmentation. Expressed as a
+           fraction of `window`.
+
+       **return_arc_curve** : bool, optional
+           Return the arc curve.
+
+   :Returns:
+
+       **segments** : ndarray of shape (n_samples, n_segments), (n_segments) or int
+           The start index of a segment
+
+       **arc_curves** : ndarray of shape (n_samples, profile_size) or (profile_size, )
+           The arc curves
+
+
+
+
+
+
 
    .. seealso::
 
-      :obj:`wildboar.distance.matrix_profile`
-          compute the matrix profile
+       
+       :obj:`wildboar.distance.matrix_profile`
+           compute the matrix profile
+       
+       
 
    .. rubric:: References
 
@@ -110,4 +187,13 @@ Functions
        Matrix profile VIII: domain agnostic online semantic segmentation at superhuman
        performance levels. In proceedings of International Conference on Data Mining
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

@@ -1,7 +1,9 @@
 :orphan:
 
+
+******************************************
 :py:mod:`wildboar.linear_model._transform`
-==========================================
+******************************************
 
 .. py:module:: wildboar.linear_model._transform
 
@@ -10,7 +12,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -28,8 +30,26 @@ Classes
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`BaseTransformEstimator`
 
+   
    Mixin class for all classifiers in scikit-learn.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:property:: classes_
 
 
@@ -51,8 +71,26 @@ Classes
 
    Bases: :py:obj:`wildboar.base.BaseEstimator`
 
+   
    Base estimator for all Wildboar estimators.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: fit(x, y, sample_weight=None)
 
 
@@ -62,8 +100,26 @@ Classes
 
    Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`BaseTransformEstimator`
 
+   
    Mixin class for all regression estimators in scikit-learn.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: decision_function(x)
 
 
@@ -76,16 +132,52 @@ Classes
 
    Bases: :py:obj:`BaseTransformRegressor`
 
+   
    Mixin class for all regression estimators in scikit-learn.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:class:: TransformRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize=True, n_jobs=None, random_state=None)
 
 
    Bases: :py:obj:`BaseTransformClassifier`
 
+   
    Mixin class for all classifiers in scikit-learn.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: predict_proba(x)
 
 

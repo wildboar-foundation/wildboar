@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" /><link rel="next" title="wildboar.datasets.preprocess" href="../preprocess/index.html" /><link rel="prev" title="wildboar.datasets" href="../index.html" />
 
-    <!-- Generated with Sphinx 7.1.1 and Furo 2023.07.26 -->
-        <title>wildboar.datasets.outlier - Wildboar 1.1.1.dev100 documentation</title>
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19 -->
+        <title>wildboar.datasets.outlier - Wildboar 1.1.1.dev106 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev100 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev106 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -278,16 +278,17 @@
           </label>
         </div>
         <article role="main">
-          <section id="module-wildboar.datasets.outlier">
-<span id="wildboar-datasets-outlier"></span><h1><a class="reference internal" href="#module-wildboar.datasets.outlier" title="wildboar.datasets.outlier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><a class="headerlink" href="#module-wildboar.datasets.outlier" title="Permalink to this heading">#</a></h1>
-<p>Utilities for generating synthetic outlier datasets.</p>
+          <section id="wildboar-datasets-outlier">
+<h1><a class="reference internal" href="#module-wildboar.datasets.outlier" title="wildboar.datasets.outlier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><a class="headerlink" href="#wildboar-datasets-outlier" title="Link to this heading">#</a></h1>
+<p id="module-wildboar.datasets.outlier">Utilities for generating synthetic outlier datasets.</p>
 <p>See the <span class="xref std std-doc">User Guide
 &lt;wildboar:guide/unsupervised/outlier/generation</span> for more details and
 example uses.</p>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+</section>
 <section id="functions">
-<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
@@ -311,99 +312,112 @@ example uses.</p>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.density_outliers">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">density_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dbscan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L226-L298"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.density_outliers" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">density_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dbscan'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L219-L291"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.density_outliers" title="Link to this definition">#</a></dt>
 <dd><p>Densitiy based outlier generation.</p>
 <p>Labels samples as outliers if a density cluster algorithm fail to assign
 them to a cluster.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input samples</p></li>
-<li><p><strong>y</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – Ignored.</p></li>
-<li><p><strong>n_outliers</strong> (<em>float</em><em>, </em><em>optional</em>) – The number of outlier samples expressed as a fraction of the inlier samples.
-By default, all samples of the minority class is considered as outliers.</p></li>
-<li><p><strong>method</strong> (<em>{&quot;dbscan&quot;</em><em>, </em><em>&quot;optics&quot;}</em><em>, </em><em>optional</em>) – The density based clustering method.</p></li>
-<li><p><strong>eps</strong> (<em>float</em><em>, </em><em>optional</em>) – The eps parameter, when <code class="docutils literal notranslate"><span class="pre">method=&quot;dbscan&quot;</span></code>.</p></li>
-<li><p><strong>min_sample</strong> (<em>int</em><em>, </em><em>optional</em>) – The <code class="docutils literal notranslate"><span class="pre">min_sample</span></code> parameter to the cluter method</p></li>
-<li><p><strong>metric</strong> (<em>str</em><em>, </em><em>optional</em>) – The <code class="docutils literal notranslate"><span class="pre">metric</span></code> parameter to the cluster method</p></li>
-<li><p><strong>max_eps</strong> (<em>float</em><em>, </em><em>optional</em>) – The <code class="docutils literal notranslate"><span class="pre">max_eps</span></code> parameter, when <code class="docutils literal notranslate"><span class="pre">method=&quot;optics&quot;</span></code>.</p></li>
-</ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_samples, n_timestep)</span></dt><dd><p>The input samples</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray of shape (n_samples, ), optional</span></dt><dd><p>Ignored.</p>
+</dd>
+<dt><strong>n_outliers</strong><span class="classifier">float, optional</span></dt><dd><p>The number of outlier samples expressed as a fraction of the inlier samples.
+By default, all samples of the minority class is considered as outliers.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">{“dbscan”, “optics”}, optional</span></dt><dd><p>The density based clustering method.</p>
+</dd>
+<dt><strong>eps</strong><span class="classifier">float, optional</span></dt><dd><p>The eps parameter, when <code class="docutils literal notranslate"><span class="pre">method=&quot;dbscan&quot;</span></code>.</p>
+</dd>
+<dt><strong>min_sample</strong><span class="classifier">int, optional</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">min_sample</span></code> parameter to the cluter method</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">metric</span></code> parameter to the cluster method</p>
+</dd>
+<dt><strong>max_eps</strong><span class="classifier">float, optional</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">max_eps</span></code> parameter, when <code class="docutils literal notranslate"><span class="pre">method=&quot;optics&quot;</span></code>.</p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>x_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, n_timestep)</em>) – The samples</p></li>
-<li><p><strong>y_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, )</em>) – The inliers (labeled as 1) and outlier (labled as -1)</p></li>
-</ul>
-</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, n_timestep)</span></dt><dd><p>The samples</p>
+</dd>
+<dt><strong>y_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, )</span></dt><dd><p>The inliers (labeled as 1) and outlier (labled as -1)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.emmott_outliers">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">emmott_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confusion_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interval'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'simplest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L393-L638"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.emmott_outliers" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">emmott_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confusion_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'interval'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'simplest'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tight'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L386-L621"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.emmott_outliers" title="Link to this definition">#</a></dt>
 <dd><p>Difficulty based outlier generation.</p>
 <p>Create a synthetic outlier detection dataset from a labeled classification
 dataset using the method described by Emmott et.al. (2013).</p>
 <p>The Emmott labeler can reliably label both binary and multiclass datasets. For
 binary datasets a random label is selected as the outlier class. For multiclass
 datasets a set of classes with maximal confusion (as measured by
-<code class="docutils literal notranslate"><span class="pre">confusion_estimator</span></code> is selected as outlier label. For each outlier sample the
-<code class="docutils literal notranslate"><span class="pre">difficulty_estimator</span></code> assigns a difficulty score which is digitized into ranges
-and selected according to the <code class="docutils literal notranslate"><span class="pre">difficulty</span></code> parameters. Finally a sample of
-approximately <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> is selected either maximally dispersed or tight.</p>
+<cite>confusion_estimator</cite> is selected as outlier label. For each outlier sample the
+<cite>difficulty_estimator</cite> assigns a difficulty score which is digitized into ranges
+and selected according to the <cite>difficulty</cite> parameters. Finally a sample of
+approximately <cite>n_outlier</cite> is selected either maximally dispersed or tight.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input samples</p></li>
-<li><p><strong>y</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em>) – The input labels.</p></li>
-<li><p><strong>n_outliers</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>The number of outlier samples expressed as a fraction of the inlier samples.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_samples, n_timestep)</span></dt><dd><p>The input samples</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray of shape (n_samples, )</span></dt><dd><p>The input labels.</p>
+</dd>
+<dt><strong>n_outliers</strong><span class="classifier">float, optional</span></dt><dd><p>The number of outlier samples expressed as a fraction of the inlier samples.</p>
+<ul class="simple">
 <li><p>if float, the number of outliers are guaranteed but an error is raised
 if the the requested difficulty has to few samples or the labels selected
 for the outlier label has to few samples.</p></li>
 </ul>
-</p></li>
-<li><p><strong>confusion_estimator</strong> (<em>object</em><em>, </em><em>optional</em>) – Estimator of class confusion for datasets where <code class="docutils literal notranslate"><span class="pre">n_classes</span> <span class="pre">&gt;</span> <span class="pre">2</span></code>. Default to a
-random forest classifier.</p></li>
-<li><p><strong>difficulty_estimator</strong> (<em>object</em><em>, </em><em>optional</em>) – Estimator for sample difficulty. The difficulty estimator must support
+</dd>
+<dt><strong>confusion_estimator</strong><span class="classifier">object, optional</span></dt><dd><p>Estimator of class confusion for datasets where <code class="docutils literal notranslate"><span class="pre">n_classes</span> <span class="pre">&gt;</span> <span class="pre">2</span></code>. Default to a
+random forest classifier.</p>
+</dd>
+<dt><strong>difficulty_estimator</strong><span class="classifier">object, optional</span></dt><dd><p>Estimator for sample difficulty. The difficulty estimator must support
 <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>. Defaults to a kernel logistic regression model with
-a RBF-kernel.</p></li>
-<li><p><strong>transform</strong> (<em>'interval'</em><em> or </em><em>Transform</em><em>, </em><em>optional</em>) – <p>Transform x before the confusion and difficulty estimator.</p>
-<ul>
+a RBF-kernel.</p>
+</dd>
+<dt><strong>transform</strong><span class="classifier">‘interval’ or Transform, optional</span></dt><dd><p>Transform x before the confusion and difficulty estimator.</p>
+<ul class="simple">
 <li><p>if None, no transformation is applied.</p></li>
 <li><p>if ‘interval’, use the <code class="xref py py-class docutils literal notranslate"><span class="pre">transform.IntervalTransform</span></code> with default
 parameters.</p></li>
 <li><p>otherwise, use the supplied transform</p></li>
 </ul>
-</p></li>
-<li><p><strong>difficulty</strong> (<em>{'any'</em><em>, </em><em>'simplest'</em><em>, </em><em>'hardest'}</em><em>, </em><em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The difficulty of the outlier points quantized according to scale. The value
+</dd>
+<dt><strong>difficulty</strong><span class="classifier">{‘any’, ‘simplest’, ‘hardest’}, int or array-like, optional</span></dt><dd><p>The difficulty of the outlier points quantized according to scale. The value
 should be in the range <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">len(scale)]</span></code> with lower difficulty denoting
 simpler outliers. If an array is given, multiple difficulties can be
 included, e.g., <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">4]</span></code> would mix easy and difficult outliers.</p>
-<ul>
+<ul class="simple">
 <li><p>if ‘any’ outliers are sampled from all scores</p></li>
 <li><p>if ‘simplest’ the simplest n_outliers are selected</p></li>
 <li><p>if ‘hardest’ the hardest n_outliers are selected</p></li>
 </ul>
-</p></li>
-<li><p><strong>scale</strong> (<em>int</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – <p>The scale of quantized difficulty scores. Defaults to <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">0.16,</span> <span class="pre">0.3,</span> <span class="pre">0.5]</span></code>.
+</dd>
+<dt><strong>scale</strong><span class="classifier">int or array-like, optional</span></dt><dd><p>The scale of quantized difficulty scores. Defaults to <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">0.16,</span> <span class="pre">0.3,</span> <span class="pre">0.5]</span></code>.
 Scores (which are probabilities in the range [0, 1]) are fit into the ranges
 using <code class="docutils literal notranslate"><span class="pre">np.digitize(difficulty,</span> <span class="pre">scale)</span></code>.</p>
-<ul>
+<ul class="simple">
 <li><p>if int, use <cite>scale</cite> percentiles based in the difficulty scores.</p></li>
 </ul>
-</p></li>
-<li><p><strong>variation</strong> (<em>{'tight'</em><em>, </em><em>'dispersed'}</em><em>, </em><em>optional</em>) – <p>Selection procedure for sampling outlier samples. If <code class="docutils literal notranslate"><span class="pre">difficulty=&quot;simplest&quot;</span></code>
+</dd>
+<dt><strong>variation</strong><span class="classifier">{‘tight’, ‘dispersed’}, optional</span></dt><dd><p>Selection procedure for sampling outlier samples. If <code class="docutils literal notranslate"><span class="pre">difficulty=&quot;simplest&quot;</span></code>
 or <code class="docutils literal notranslate"><span class="pre">difficulty=&quot;hardest&quot;</span></code>, this parameter has no effect.</p>
-<ul>
+<ul class="simple">
 <li><p>if ‘tight’ a pivot point is selected and the <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> closest samples
 are selected according to their euclidean distance.</p></li>
 <li><p>if ‘dispersed’ <code class="docutils literal notranslate"><span class="pre">n_outlier</span></code> points are selected according to a facility
 location algorithm such that they are distributed among the outliers.</p></li>
 </ul>
-</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><ul class="simple">
 <li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
 <li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
 <li><dl class="simple">
@@ -412,25 +426,18 @@ location algorithm such that they are distributed among the outliers.</p></li>
 </dl>
 </li>
 </ul>
-</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>x_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, n_timestep)</em>) – The samples</p></li>
-<li><p><strong>y_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, )</em>) – The inliers (labeled as 1) and outlier (labled as -1)</p></li>
-</ul>
-</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<ul class="simple">
-<li><p>For multiclass datasets the Emmott labeler require the package <cite>networkx</cite></p></li>
-<li><p>For dispersed outlier selection the Emmott labeler require the package
-<cite>scikit-learn-extra</cite></p></li>
-</ul>
-<p>The difficulty parameters ‘simplest’ and ‘hardest’ are not described by
-Emmott et.al. (2013)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, n_timestep)</span></dt><dd><p>The samples</p>
+</dd>
+<dt><strong>y_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, )</span></dt><dd><p>The inliers (labeled as 1) and outlier (labled as -1)</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <dl class="simple">
@@ -441,6 +448,14 @@ n_outliers may be returned.</p>
 </dd>
 </dl>
 </div>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>For multiclass datasets the Emmott labeler require the package <cite>networkx</cite></p></li>
+<li><p>For dispersed outlier selection the Emmott labeler require the package
+<cite>scikit-learn-extra</cite></p></li>
+</ul>
+<p>The difficulty parameters ‘simplest’ and ‘hardest’ are not described by
+Emmott et.al. (2013)</p>
 <p class="rubric">References</p>
 <dl class="simple">
 <dt>Emmott, A. F., Das, S., Dietterich, T., Fern, A., &amp; Wong, W. K. (2013).</dt><dd><p>Systematic construction of anomaly detection benchmarks from real data.
@@ -452,24 +467,27 @@ In Proceedings of the ACM SIGKDD workshop on outlier detection and description
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.kmeans_outliers">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">kmeans_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L152-L223"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.kmeans_outliers" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">kmeans_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L150-L216"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.kmeans_outliers" title="Link to this definition">#</a></dt>
 <dd><p>K-means outlier generation.</p>
 <p>Label the samples of the cluster farthers from the other clusters as
 outliers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input samples</p></li>
-<li><p><strong>y</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – Ignored.</p></li>
-<li><p><strong>n_outliers</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>The number of outlier samples expressed as a fraction of the inlier samples.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_samples, n_timestep)</span></dt><dd><p>The input samples</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray of shape (n_samples, ), optional</span></dt><dd><p>Ignored.</p>
+</dd>
+<dt><strong>n_outliers</strong><span class="classifier">float, optional</span></dt><dd><p>The number of outlier samples expressed as a fraction of the inlier samples.</p>
+<ul class="simple">
 <li><p>if float, the number of outliers are guaranteed but an error is raised
 if no cluster can satisfy the constraints. Lowering the <code class="docutils literal notranslate"><span class="pre">n_cluster</span></code>
 parameter to allow for more samples per cluster.</p></li>
 </ul>
-</p></li>
-<li><p><strong>n_clusters</strong> (<em>int</em><em>, </em><em>optional</em>) – The number of clusters.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+</dd>
+<dt><strong>n_clusters</strong><span class="classifier">int, optional</span></dt><dd><p>The number of clusters.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><ul class="simple">
 <li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
 <li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
 <li><dl class="simple">
@@ -478,30 +496,34 @@ parameter to allow for more samples per cluster.</p></li>
 </dl>
 </li>
 </ul>
-</p></li>
-</ul>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>x_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, n_timestep)</em>) – The samples</p></li>
-<li><p><strong>y_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, )</em>) – The inliers (labeled as 1) and outlier (labled as -1)</p></li>
-</ul>
-</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, n_timestep)</span></dt><dd><p>The samples</p>
+</dd>
+<dt><strong>y_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, )</span></dt><dd><p>The inliers (labeled as 1) and outlier (labled as -1)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.majority_outliers">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">majority_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L301-L342"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.majority_outliers" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">majority_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L294-L335"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.majority_outliers" title="Link to this definition">#</a></dt>
 <dd><p>Labels the majority class as inliers.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input samples</p></li>
-<li><p><strong>y</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em>) – The input labels.</p></li>
-<li><p><strong>n_outliers</strong> (<em>float</em><em>, </em><em>optional</em>) – The number of outlier samples expressed as a fraction of the inlier samples.</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_samples, n_timestep)</span></dt><dd><p>The input samples</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray of shape (n_samples, )</span></dt><dd><p>The input labels.</p>
+</dd>
+<dt><strong>n_outliers</strong><span class="classifier">float, optional</span></dt><dd><p>The number of outlier samples expressed as a fraction of the inlier samples.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><ul class="simple">
 <li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
 <li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
 <li><dl class="simple">
@@ -510,35 +532,38 @@ parameter to allow for more samples per cluster.</p></li>
 </dl>
 </li>
 </ul>
-</p></li>
-</ul>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>x_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, n_timestep)</em>) – The samples</p></li>
-<li><p><strong>y_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, )</em>) – The inliers (labeled as 1) and outlier (labled as -1)</p></li>
-</ul>
-</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, n_timestep)</span></dt><dd><p>The samples</p>
+</dd>
+<dt><strong>y_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, )</span></dt><dd><p>The inliers (labeled as 1) and outlier (labled as -1)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets.outlier.minority_outliers">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">minority_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L345-L390"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.minority_outliers" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets.outlier.</span></span><span class="sig-name descname"><span class="pre">minority_outliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_outliers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/outlier.py#L338-L383"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets.outlier.minority_outliers" title="Link to this definition">#</a></dt>
 <dd><p>Labels (a fraction of) the minority class as the outlier.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The input samples</p></li>
-<li><p><strong>y</strong> (<em>ndarray</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em>) – The input labels.</p></li>
-<li><p><strong>n_outliers</strong> (<em>float</em><em>, </em><em>optional</em>) – <p>The number of outlier samples expressed as a fraction of the inlier samples.</p>
-<ul>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_samples, n_timestep)</span></dt><dd><p>The input samples</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">ndarray of shape (n_samples, )</span></dt><dd><p>The input labels.</p>
+</dd>
+<dt><strong>n_outliers</strong><span class="classifier">float, optional</span></dt><dd><p>The number of outlier samples expressed as a fraction of the inlier samples.</p>
+<ul class="simple">
 <li><p>if float, the number of outliers are guaranteed but an error is raised
 if the minority class has to few samples.</p></li>
 </ul>
-</p></li>
-<li><p><strong>random_state</strong> (<em>int</em><em> or </em><em>RandomState</em>) – <ul>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><ul class="simple">
 <li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
 <li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
 <li><dl class="simple">
@@ -547,20 +572,20 @@ if the minority class has to few samples.</p></li>
 </dl>
 </li>
 </ul>
-</p></li>
-</ul>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>x_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, n_timestep)</em>) – The samples</p></li>
-<li><p><strong>y_outlier</strong> (<em>ndarray of shape (n_inliers + n_outliers, )</em>) – The inliers (labeled as 1) and outlier (labled as -1)</p></li>
-</ul>
-</p>
+<dd class="field-even"><dl class="simple">
+<dt><strong>x_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, n_timestep)</span></dt><dd><p>The samples</p>
+</dd>
+<dt><strong>y_outlier</strong><span class="classifier">ndarray of shape (n_inliers + n_outliers, )</span></dt><dd><p>The inliers (labeled as 1) and outlier (labled as -1)</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
-</section>
 </section>
 </section>
 
@@ -620,15 +645,13 @@ if the minority class has to few samples.</p></li>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><ul>
-<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a></li>
 <li><a class="reference internal" href="#functions">Functions</a><ul>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.density_outliers"><code class="docutils literal notranslate"><span class="pre">density_outliers</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.emmott_outliers"><code class="docutils literal notranslate"><span class="pre">emmott_outliers</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.kmeans_outliers"><code class="docutils literal notranslate"><span class="pre">kmeans_outliers</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.majority_outliers"><code class="docutils literal notranslate"><span class="pre">majority_outliers</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.datasets.outlier.minority_outliers"><code class="docutils literal notranslate"><span class="pre">minority_outliers</span></code></a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -643,9 +666,9 @@ if the minority class has to few samples.</p></li>
     </aside>
   </div>
 </div>
-<script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js?v=3653749c"></script>
+<script src="../../../../_static/documentation_options.js?v=53783bbf"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../../_static/copybutton.js?v=f281be69"></script>

@@ -1,7 +1,9 @@
 :orphan:
 
+
+***********************************
 :py:mod:`wildboar.transform._pivot`
-===================================
+***********************************
 
 .. py:module:: wildboar.transform._pivot
 
@@ -10,7 +12,7 @@ Module Contents
 ---------------
 
 Classes
-~~~~~~~
+-------
 
 .. autoapisummary::
 
@@ -24,62 +26,148 @@ Classes
 .. py:class:: PivotMixin
 
 
+   
+   Mixin for Pivot based estimators.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:class:: PivotTransform(n_pivots=100, *, metric='auto', metric_params=None, metric_sample=None, random_state=None, n_jobs=None)
 
 
    Bases: :py:obj:`PivotMixin`, :py:obj:`wildboar.transform._base.BaseFeatureEngineerTransform`
 
+   
    A transform using pivot time series and sampled distance metrics.
 
-   Construct a new pivot transform.
 
-   :param n_pivot: The number of pivot time series.
-   :type n_pivot: int, optional
-   :param metric:
-                  - If str, the metric to compute the distance.
-                  - If list, multiple metrics specified as a list of tuples, where the first
-                    element of the tuple is a metric name and the second element a dictionary
-                    with a parameter grid specification. A parameter grid specification is a
-                    dict with two mandatory and one optional key-value pairs defining the
-                    lower and upper bound on the values and number of values in the grid. For
-                    example, to specifiy a grid over the argument 'r' with 10 values in the
-                    range 0 to 1, we would give the following specification: ``dict(min_r=0,
-                    max_r=1, num_r=10)``.
+   :Parameters:
 
-                  Read more about the metrics and their parameters in the :ref:`User guide
-                  <list_of_subsequence_metrics>`.
-   :type metric: {'auto'} or list, optional
-   :param metric_params: Parameters for the distance measure. Ignored unless metric is a string.
+       **n_pivots** : int, optional
+           The number of pivot time series.
 
-                         Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
-   :type metric_params: dict, optional
-   :param metric_sample: If multiple metrics are specified this parameter controls how they are
-                         sampled. "uniform" samples each metric configuration with equal probability
-                         and "weighted" samples each metric with equal probability. By default,
-                         metric configurations are sampled with equal probability.
-   :type metric_sample: {"uniform", "weighted"}, optional
-   :param random_state: The random state
-   :type random_state: int or np.RandomState, optional
-   :param n_jobs: The number of cores to use.
-   :type n_jobs: int, optional
+       **metric** : {'auto'} or list, optional
+           - If str, the metric to compute the distance.
+           - If list, multiple metrics specified as a list of tuples, where the first
+               element of the tuple is a metric name and the second element a dictionary
+               with a parameter grid specification. A parameter grid specification is a
+               dict with two mandatory and one optional key-value pairs defining the
+               lower and upper bound on the values and number of values in the grid. For
+               example, to specifiy a grid over the argument 'r' with 10 values in the
+               range 0 to 1, we would give the following specification: `dict(min_r=0,
+               max_r=1, num_r=10)`.
+           
+           Read more about the metrics and their parameters in the :ref:`User guide
+           <list_of_subsequence_metrics>`.
 
+       **metric_params** : dict, optional
+           Parameters for the distance measure. Ignored unless metric is a string.
+           
+           Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
+
+       **metric_sample** : {"uniform", "weighted"}, optional
+           If multiple metrics are specified this parameter controls how they are
+           sampled. "uniform" samples each metric configuration with equal probability
+           and "weighted" samples each metric with equal probability. By default,
+           metric configurations are sampled with equal probability.
+
+       **random_state** : int or np.RandomState, optional
+           The random state.
+
+       **n_jobs** : int, optional
+           The number of cores to use.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:class:: ProximityTransform(n_pivots=100, metric='auto', metric_params=None, metric_sample='weighted', random_state=None, n_jobs=None)
 
 
    Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
 
-   Mixin class for all transformers in scikit-learn.
+   
+   Transform time series based on class conditional pivots.
 
-   If :term:`get_feature_names_out` is defined, then `BaseEstimator` will
-   automatically wrap `transform` and `fit_transform` to follow the `set_output`
-   API. See the :ref:`developer_api_set_output` for details.
 
-   :class:`base.OneToOneFeatureMixin` and
-   :class:`base.ClassNamePrefixFeaturesOutMixin` are helpful mixins for
-   defining :term:`get_feature_names_out`.
+   :Parameters:
 
+       **n_pivots** : int, optional
+           The number of pivot time series per class.
+
+       **metric** : {'auto'} or list, optional
+           - If str, the metric to compute the distance.
+           - If list, multiple metrics specified as a list of tuples, where the first
+               element of the tuple is a metric name and the second element a dictionary
+               with a parameter grid specification. A parameter grid specification is a
+               dict with two mandatory and one optional key-value pairs defining the
+               lower and upper bound on the values and number of values in the grid. For
+               example, to specifiy a grid over the argument 'r' with 10 values in the
+               range 0 to 1, we would give the following specification: `dict(min_r=0,
+               max_r=1, num_r=10)`.
+           
+           Read more about the metrics and their parameters in the :ref:`User guide
+           <list_of_subsequence_metrics>`.
+
+       **metric_params** : dict, optional
+           Parameters for the distance measure. Ignored unless metric is a string.
+           
+           Read more about the parameters in the :ref:`User guide <list_of_metrics>`.
+
+       **metric_sample** : {"uniform", "weighted"}, optional
+           If multiple metrics are specified this parameter controls how they are
+           sampled. "uniform" samples each metric configuration with equal probability
+           and "weighted" samples each metric with equal probability. By default,
+           metric configurations are sampled with equal probability.
+
+       **random_state** : int or np.RandomState, optional
+           The random state.
+
+       **n_jobs** : int, optional
+           The number of cores to use.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: fit(X, y)
 
 

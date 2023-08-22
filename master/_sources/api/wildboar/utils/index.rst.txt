@@ -1,16 +1,37 @@
+
+************************
 :py:mod:`wildboar.utils`
-========================
+************************
 
 .. py:module:: wildboar.utils
 
 .. autoapi-nested-parse::
 
+   
    Utility functions.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
 Submodules
-----------
+==========
+
 .. toctree::
    :titlesonly:
    :maxdepth: 1
@@ -27,7 +48,7 @@ Package Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -41,6 +62,7 @@ Functions
 
 .. py:function:: check_array(array, *, dtype='numeric', order='C', copy=False, ravel_1d=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, allow_eos=False, force_all_finite=True, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, estimator=None, input_name='')
 
+   
    Input validation on time-series.
 
    Delegate array validation to scikit-learn
@@ -56,60 +78,92 @@ Functions
    only finite values, with at least 1 sample, 1 timestep and 1 dimension. If the dtype
    of the array is object, attempt converting to float, raising on failure.
 
-   :param array: Input object to check / convert.
-   :type array: object
-   :param dtype: Data type of result. If None, the dtype of the input is preserved.
-                 If "numeric", dtype is preserved unless array.dtype is object.
-                 If dtype is a list of types, conversion on the first type is only
-                 performed if the dtype of the input is not in the list.
-   :type dtype: 'numeric', type, list of type or None, optional
-   :param order: Whether an array will be forced to be fortran or c-style.
-                 When order is None, then if copy=False, nothing is ensured
-                 about the memory layout of the output array; otherwise (copy=True)
-                 the memory layout of the returned array is kept as close as possible
-                 to the original array.
-   :type order: {'F', 'C', 'T'} or None, optional
-   :param copy: Whether a forced copy will be triggered. If copy=False, a copy might
-                be triggered by a conversion.
-   :type copy: bool, optional
-   :param ravel_1d: Whether to ravel 1d arrays or column vectors, it the array is neither an
-                    error is raised.
-   :type ravel_1d: bool, optional
-   :param ensure_2d: Whether to raise a value error if array is not 2D.
-   :type ensure_2d: bool, optional
-   :param allow_3d: Whether to allow array.ndim == 3
-   :type allow_3d: bool, optional
-   :param allow_nd: Whether to allow array.ndim > 2.
-   :type allow_nd: bool, optional
-   :param allow_eos: Whether to raise an error on `wildboar.utils.variable_len.eos` in the
-                     array.
-   :type allow_eos: bool, optional
-   :param force_all_finite: Whether to raise an error on np.inf, np.nan, pd.NA in array. The
-                            possibilities are:
+   :Parameters:
 
-                            - True: Force all values of array to be finite.
-                            - False: accepts np.inf, np.nan, pd.NA in array.
-                            - 'allow-nan': accepts only np.nan and pd.NA values in array. Values
-                              cannot be infinite.
-   :type force_all_finite: bool or 'allow-nan', default=True
-   :param ensure_min_samples: Make sure that the array has a minimum number of samples in its first
-                              axis (rows for a 2D array). Setting to 0 disables this check.
-   :type ensure_min_samples: int, optional
-   :param ensure_min_timesteps: Make sure that the 2D array has some minimum number of timesteps
-                                (columns). The default value of 1 rejects empty datasets.
-                                This check is only enforced when the input data has effectively 2
-                                dimensions or is originally 1D and ``ensure_2d`` is True. Setting to 0
-                                disables this check.
-   :type ensure_min_timesteps: int, optional
-   :param ensure_min_dims: Make sure that the array has a minimum number of dimensions. Setting to 0
-                           disables this check.
-   :type ensure_min_dims: int, optional
-   :param estimator: If passed, include the name of the estimator in warning messages.
-   :type estimator: str or estimator instance, default=None
-   :param input_name: The data name used to construct the error message.
-   :type input_name: str, default=""
+       **array** : object
+           Input object to check / convert.
 
-   :returns: **array_converted** -- The converted and validated array.
-   :rtype: object
+       **dtype** : 'numeric', type, list of type or None, optional
+           Data type of result. If None, the dtype of the input is preserved.
+           If "numeric", dtype is preserved unless array.dtype is object.
+           If dtype is a list of types, conversion on the first type is only
+           performed if the dtype of the input is not in the list.
 
+       **order** : {'F', 'C', 'T'} or None, optional
+           Whether an array will be forced to be fortran or c-style.
+           When order is None, then if copy=False, nothing is ensured
+           about the memory layout of the output array; otherwise (copy=True)
+           the memory layout of the returned array is kept as close as possible
+           to the original array.
+
+       **copy** : bool, optional
+           Whether a forced copy will be triggered. If copy=False, a copy might
+           be triggered by a conversion.
+
+       **ravel_1d** : bool, optional
+           Whether to ravel 1d arrays or column vectors, it the array is neither an
+           error is raised.
+
+       **ensure_2d** : bool, optional
+           Whether to raise a value error if array is not 2D.
+
+       **allow_3d** : bool, optional
+           Whether to allow array.ndim == 3
+
+       **allow_nd** : bool, optional
+           Whether to allow array.ndim > 2.
+
+       **allow_eos** : bool, optional
+           Whether to raise an error on `wildboar.utils.variable_len.eos` in the
+           array.
+
+       **force_all_finite** : bool or 'allow-nan', default=True
+           Whether to raise an error on np.inf, np.nan, pd.NA in array. The
+           possibilities are:
+           
+           - True: Force all values of array to be finite.
+           - False: accepts np.inf, np.nan, pd.NA in array.
+           - 'allow-nan': accepts only np.nan and pd.NA values in array. Values
+             cannot be infinite.
+
+       **ensure_min_samples** : int, optional
+           Make sure that the array has a minimum number of samples in its first
+           axis (rows for a 2D array). Setting to 0 disables this check.
+
+       **ensure_min_timesteps** : int, optional
+           Make sure that the 2D array has some minimum number of timesteps
+           (columns). The default value of 1 rejects empty datasets.
+           This check is only enforced when the input data has effectively 2
+           dimensions or is originally 1D and ``ensure_2d`` is True. Setting to 0
+           disables this check.
+
+       **ensure_min_dims** : int, optional
+           Make sure that the array has a minimum number of dimensions. Setting to 0
+           disables this check.
+
+       **estimator** : str or estimator instance, default=None
+           If passed, include the name of the estimator in warning messages.
+
+       **input_name** : str, default=""
+           The data name used to construct the error message.
+
+   :Returns:
+
+       **array_converted** : object
+           The converted and validated array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 

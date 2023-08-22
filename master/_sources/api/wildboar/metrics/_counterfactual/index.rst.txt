@@ -1,7 +1,9 @@
 :orphan:
 
+
+******************************************
 :py:mod:`wildboar.metrics._counterfactual`
-==========================================
+******************************************
 
 .. py:module:: wildboar.metrics._counterfactual
 
@@ -11,7 +13,7 @@ Module Contents
 
 
 Functions
-~~~~~~~~~
+---------
 
 .. autoapisummary::
 
@@ -25,25 +27,45 @@ Functions
 
 .. py:function:: compactness_score(x_true, x_counterfactuals, *, window=None, n_bins=None, atol=1e-08, average=True)
 
+   
    Compute compactness score.
 
    The compactness of counterfactuals as measured by the fraction of changed
    timesteps. The fewer timesteps have changed between the original and the
    counterfactual, the lower the score.
 
-   :param x_true: The true samples
-   :type x_true: array-like of shape (n_samples, n_timesteps)     or (n_samples, n_dims, n_timeteps)
-   :param x_counterfactuals: The counterfactual samples
-   :type x_counterfactuals: array-like of shape (n_samples, n_timesteps)     or (n_samples, n_dims, n_timeteps)
-   :param atol: The absolute tolerance.
-   :type atol: float,
-   :param window: If set, evaluate the difference between windows of specified size.
-   :type window: int, optional
-   :param n_bins: If set, evaluate the set overlap of SAX transformed series.
-   :type n_bins: int, optional
+   :Parameters:
 
-   :returns: **score** -- The compactness score. Lower score indicates more compact counterfactuals.
-   :rtype: float
+       **x_true** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
+           The true samples.
+
+       **x_counterfactuals** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
+           The counterfactual samples.
+
+       **window** : int, optional
+           If set, evaluate the difference between windows of specified size.
+
+       **n_bins** : int, optional
+           If set, evaluate the set overlap of SAX transformed series.
+
+       **atol** : float,
+           The absolute tolerance.
+
+       **average** : bool, optional
+           Compute average score over all dimensions.
+
+   :Returns:
+
+       float
+           The compactness score. Lower score indicates more compact counterfactuals.
+
+
+
+
+
+
+
+
 
    .. rubric:: References
 
@@ -51,35 +73,64 @@ Functions
        Locally and globally explainable time series tweaking.
        Knowledge and Information Systems, 62(5), 1671-1700.
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: plausability_score(X_plausible, X_counterfactuals, *, y_plausible=None, y_counterfactual=None, estimator=None, method='accuracy', average=True)
 
+   
    Compute plausibility score.
 
-   :param X_plausible: The plausible time series, typically the training or testing samples.
-   :type X_plausible: array-like of shape (n_samples, n_timesteps)
-   :param X_counterfactuals: The generated counterfactuals.
-   :type X_counterfactuals: array-like of shape (m_samples, n_timesteps)
-   :param y_plausible: The labels of the plausible samples.
-   :type y_plausible: array-like of shape (n_samples, ), optional
-   :param y_counterfactual: The desired label of the counterfactuals.
-   :type y_counterfactual: array-like of shape (m_samples, ), optional
-   :param estimator: The outlier estimator.
-   :type estimator: Estimator, optional
-   :param method: The score function.
-   :type method: {'score', 'accuracy'}, optional
-   :param average: If True, return the average score for all labels in y_counterfactual;
-                   otherwise, return the score for the individual labels (ordered as np.unique)
-   :type average: bool, optional
 
-   :returns: **score** -- The plausability.
+   :Parameters:
 
-             - if method='scores', the mean score is returned, with larger score incicating
-               better performance.
-             - if method='accuracy', the fraction of plausible counterfactuals are returned.
-             - if y_counterfactual is None and average=False, the scores or accuracy for each
-               counterfactual label is returned.
-   :rtype: ndarray or float
+       **X_plausible** : array-like of shape (n_samples, n_timesteps)
+           The plausible time series, typically the training or testing samples.
+
+       **X_counterfactuals** : array-like of shape (m_samples, n_timesteps)
+           The generated counterfactuals.
+
+       **y_plausible** : array-like of shape (n_samples, ), optional
+           The labels of the plausible samples.
+
+       **y_counterfactual** : array-like of shape (m_samples, ), optional
+           The desired label of the counterfactuals.
+
+       **estimator** : Estimator, optional
+           The outlier estimator.
+
+       **method** : {'score', 'accuracy'}, optional
+           The score function.
+
+       **average** : bool, optional
+           If True, return the average score for all labels in y_counterfactual;
+           otherwise, return the score for the individual labels (ordered as np.unique).
+
+   :Returns:
+
+       ndarray or float
+           The plausability.
+           
+           - if method='scores', the mean score is returned, with larger score incicating
+             better performance.
+           - if method='accuracy', the fraction of plausible counterfactuals are returned.
+           - if y_counterfactual is None and average=False, the scores or accuracy for each
+             counterfactual label is returned.
+
+
+
+
+
+
+
+
 
    .. rubric:: References
 
@@ -87,29 +138,54 @@ Functions
        Instance-based Counterfactual Explanations for Time Series Classification.
        arXiv, 2009.13211v2.
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: proximity_score(x_true, x_counterfactuals, metric='normalized_euclidean', metric_params=None)
 
+   
    Compute proximity score.
 
    The closer the counterfactual is to the original, the lower the score.
 
-   :param x_true: The true samples
-   :type x_true: array-like of shape (n_samples, n_timestep)
-   :param x_counterfactuals: The counterfactual samples
-   :type x_counterfactuals: array-like of shape (n_samples, n_timestep)
-   :param metric: The distance metric
+   :Parameters:
 
-                  See ``_METRICS.keys()`` for a list of supported metrics.
-   :type metric: str or callable, optional
-   :param metric_params: Parameters to the metric.
+       **x_true** : array-like of shape (n_samples, n_timestep)
+           The true samples.
 
-                         Read more about the parameters in the
-                         :ref:`User guide <list_of_metrics>`.
-   :type metric_params: dict, optional
+       **x_counterfactuals** : array-like of shape (n_samples, n_timestep)
+           The counterfactual samples.
 
-   :returns: **score** -- The mean proximity.
-   :rtype: float
+       **metric** : str or callable, optional
+           The distance metric
+           
+           See ``_METRICS.keys()`` for a list of supported metrics.
+
+       **metric_params** : dict, optional
+           Parameters to the metric.
+           
+           Read more about the parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+   :Returns:
+
+       float
+           The mean proximity.
+
+
+
+
+
+
+
+
 
    .. rubric:: References
 
@@ -120,41 +196,70 @@ Functions
        Locally and globally explainable time series tweaking.
        Knowledge and Information Systems, 62(5), 1671-1700.
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: relative_proximity_score(X_native, X_test, X_counterfactual, *, y_native=None, y_counterfactual=None, metric='euclidean', metric_params=None, average=True)
 
+   
    Compute relative proximity score.
 
    The relative proximity score captures the mean proximity of counterfactual
    and test sample pairs over mean proximity of the closest native
    counterfactual. The lower the score, the better.
 
-   :param X_native: The native counterfactual candidates. If y_counterfactual is None, the full
-                    array is considered as possible native counterfactuals.
-   :type X_native: array-like of shape (n_natives, n_timesteps)
-   :param X_test: The test samples.
-   :type X_test: array-like of shape (n_counterfactuals, n_timesteps)
-   :param X_counterfactuals: The counterfactual samples.
-   :type X_counterfactuals: array-like of shape (n_counterfactuals, n_timesteps)
-   :param y_native: The label of the native counterfactual candidates.
-   :type y_native: array-like of shape (n_natives, ), optional
-   :param y_counterfactual: The desired counterfactual label.
-   :type y_counterfactual: array-like of shape (n_counterfactuals, )
-   :param metric: The distance metric
+   :Parameters:
 
-                  See ``_METRICS.keys()`` for a list of supported metrics.
-   :type metric: str or callable, optional
-   :param metric_params: Parameters to the metric.
+       **X_native** : array-like of shape (n_natives, n_timesteps)
+           The native counterfactual candidates. If y_counterfactual is None, the full
+           array is considered as possible native counterfactuals.
 
-                         Read more about the parameters in the
-                         :ref:`User guide <list_of_metrics>`.
-   :type metric_params: dict, optional
-   :param average: Average the relative proximity of all labels in y_counterfactual.
-   :type average: bool, optional
+       **X_test** : array-like of shape (n_counterfactuals, n_timesteps)
+           The test samples.
 
-   :returns: **score** -- The relative proximity. If avarege=False and y_counterfactual is not None,
-             return the relative proximity for each counterfactual label.
-   :rtype: ndarray or float
+       **X_counterfactual** : array-like of shape (n_counterfactuals, n_timesteps)
+           The counterfactual samples.
+
+       **y_native** : array-like of shape (n_natives, ), optional
+           The label of the native counterfactual candidates.
+
+       **y_counterfactual** : array-like of shape (n_counterfactuals, )
+           The desired counterfactual label.
+
+       **metric** : str or callable, optional
+           The distance metric
+           
+           See ``_METRICS.keys()`` for a list of supported metrics.
+
+       **metric_params** : dict, optional
+           Parameters to the metric.
+           
+           Read more about the parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+       **average** : bool, optional
+           Average the relative proximity of all labels in y_counterfactual.
+
+   :Returns:
+
+       ndarray or float
+           The relative proximity. If avarege=False and y_counterfactual is not None,
+           return the relative proximity for each counterfactual label.
+
+
+
+
+
+
+
+
 
    .. rubric:: References
 
@@ -162,22 +267,46 @@ Functions
        A Few Good Counterfactuals: Generating Interpretable, Plausible and Diverse
        Counterfactual Explanations. arXiv, 2101.09056v1.
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: validity_score(y_pred, y_counterfactual, sample_weight=None)
 
+   
    Compute validity score.
 
    The number counterfactuals that have the desired label.
 
-   :param y_pred: The desired label
-   :type y_pred: array-like of shape (n_samples, )
-   :param y_counterfactual: The predicted label
-   :type y_counterfactual: array-like of shape (n_samples, )
-   :param sample_weight: The sample weight
-   :type sample_weight: array-like of shape (n_samples, ), optional
+   :Parameters:
 
-   :returns: **score** -- The fraction of counterfactuals with the correct label. Larger is better.
-   :rtype: float
+       **y_pred** : array-like of shape (n_samples, )
+           The desired label.
+
+       **y_counterfactual** : array-like of shape (n_samples, )
+           The predicted label.
+
+       **sample_weight** : array-like of shape (n_samples, ), optional
+           The sample weight.
+
+   :Returns:
+
+       float
+           The fraction of counterfactuals with the correct label. Larger is better.
+
+
+
+
+
+
+
+
 
    .. rubric:: References
 
@@ -188,4 +317,13 @@ Functions
        Locally and globally explainable time series tweaking.
        Knowledge and Information Systems, 62(5), 1671-1700.
 
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
 
