@@ -1,13 +1,13 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html class="no-js" lang="en" data-content_root="../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Interval permutation importance" href="importance.html" /><link rel="prev" title="Explainability" href="../explain.html" />
 
-    <!-- Generated with Sphinx 7.1.1 and Furo 2023.07.26 -->
-        <title>Counterfactual explanations - Wildboar 1.1.2.dev11 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
+    <!-- Generated with Sphinx 7.2.2 and Furo 2023.08.19 -->
+        <title>Counterfactual explanations - Wildboar 1.1.2.dev15 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -129,7 +129,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.2.dev11 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.2.dev15 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -345,7 +345,7 @@
         </div>
         <article role="main">
           <section id="Counterfactual-explanations">
-<h1>Counterfactual explanations<a class="headerlink" href="#Counterfactual-explanations" title="Permalink to this heading">#</a></h1>
+<h1>Counterfactual explanations<a class="headerlink" href="#Counterfactual-explanations" title="Link to this heading">#</a></h1>
 <p>wildboar can explain predictions of nearest neighbors classifiers and shapelet forest classifiers using counterfactual samples. In this scenario, counterfactuals are samples that are transformed such that the labeling of the sample changes. For instance, we might want to explain what changes are required to transforms a sample labeled as <code class="docutils literal notranslate"><span class="pre">abnormal</span></code> to <code class="docutils literal notranslate"><span class="pre">normal</span></code>. In this scenario, the normal sample would be the counterfactual sample.</p>
 <p>In wildboar, counterfactual explainers are in the module <code class="docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code>. The easiest way to generate counterfactuals is to use the function <code class="docutils literal notranslate"><span class="pre">counterfactuals</span></code>:</p>
 <div class="nbinput nblast docutils container">
@@ -431,7 +431,7 @@
 <p><code class="docutils literal notranslate"><span class="pre">KNeighborsCounterfactuals</span></code> only supports <code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code> fit with the Euclidean distance.</p>
 </div>
 <section id="Evaluating-counterfactuals">
-<h2>Evaluating counterfactuals<a class="headerlink" href="#Evaluating-counterfactuals" title="Permalink to this heading">#</a></h2>
+<h2>Evaluating counterfactuals<a class="headerlink" href="#Evaluating-counterfactuals" title="Link to this heading">#</a></h2>
 <p>Good counterfactuals should be plausible (i.e., inside the distribution), valid (i.e., of the desired label as measured by the classifier), close to the original (i.e., have low proximity) and sparse (i.e., have as few changes introduced as possible).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -534,7 +534,7 @@
 </div>
 </section>
 <section id="Example">
-<h2>Example<a class="headerlink" href="#Example" title="Permalink to this heading">#</a></h2>
+<h2>Example<a class="headerlink" href="#Example" title="Link to this heading">#</a></h2>
 <p>In the following example, we explain the a nearest neighbors classifier and a shapelet forest classifier for the datasets <code class="docutils literal notranslate"><span class="pre">TwoLeadECG</span></code> and explaining samples classified as <code class="docutils literal notranslate"><span class="pre">2.0</span></code> if they instead where classified as <code class="docutils literal notranslate"><span class="pre">1.0</span></code> (in the legend denoted as <code class="docutils literal notranslate"><span class="pre">abnormal</span></code> and <code class="docutils literal notranslate"><span class="pre">normal</span></code> respectively).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -725,9 +725,9 @@
     </aside>
   </div>
 </div>
-<script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=4bea542b"></script>
+<script src="../../_static/documentation_options.js?v=6d6e9e02"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
