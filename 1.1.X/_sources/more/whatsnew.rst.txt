@@ -15,7 +15,17 @@ Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 
 
 Version 1.1.2
 =============
-**Unreleased** 
+
+Version 1.1.2 is a small maintenance release that fixes interoperability with
+recent scikit-learn releases and drops the dependency upper bounds. We also
+include a small number of bug fixes.
+
+- |Fix| Correctly interoprates with scikit-learn 1.2 and 1.3.
+
+- |Fix| Drop upper bound on some dependencies and limit the build dependency on
+  cython to `<3.0`
+
+- |Fix| Default all wildboar estimators not allow nan.
 
 .. grid:: 1
   
