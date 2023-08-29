@@ -690,7 +690,7 @@ cdef Py_ssize_t normalized_euclidean_distance_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches,
-) nogil except -1:
+) except -1 nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -735,7 +735,7 @@ cdef Py_ssize_t euclidean_distance_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches,
-) nogil except -1:
+) except -1 nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity

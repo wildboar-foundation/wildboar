@@ -761,7 +761,7 @@ cdef class Tree:
         self._node_count += 1
         return node_id
 
-    cdef Py_ssize_t _increase_capacity(self) nogil except -1:
+    cdef Py_ssize_t _increase_capacity(self) except -1 nogil:
         cdef Py_ssize_t new_capacity = self._node_count * 2
         cdef Py_ssize_t ret
         ret = safe_realloc(<void**> &self._features, sizeof(Feature*) * new_capacity)
