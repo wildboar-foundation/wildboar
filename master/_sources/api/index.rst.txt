@@ -686,7 +686,6 @@ Transform raw time series to tabular representations.
 
 
 
-
 :py:mod:`wildboar.tree`
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -774,7 +773,6 @@ Utility functions.
     - Input validation on time-series.
   * - :py:obj:`~wildboar.utils.check_X_y`
     - 
-
 
 
 

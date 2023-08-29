@@ -29,16 +29,6 @@
        !! processed by numpydoc !!
 
 
-Subpackages
-===========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   catch22/index.rst
-
-
 Package Contents
 ----------------
 
