@@ -85,6 +85,9 @@ Changelog
      - |Fix| Fix a bug where ``sampling`` was incorrectly set for :class:`ensemble.RocketForestClassifier`
        and :class:`ensemble.RocketForestRegressor`.
 
+     - |API| Change the default value of ``n_shapelets`` to "log2" for :class:`ensemble.ShapeletForestClassifier`
+       and :class:`ensemble.ShapeletForestRegressor`.
+
   .. grid-item-card:: 
     
      :mod:`wildboar.linear_model`
@@ -129,6 +132,9 @@ Changelog
      - |API| The ``metric_factories`` parameter of :class:`tree.ProximityTreeClassifier` has
        been renamed to ``metric``. We have deprecated ``metric_factories`` and it will be
        removed in 1.4. We also introduce the ``metric_params`` argument for single metric uses.
+
+     - |API| Change the default value of ``n_shapelets`` to "log2" for :class:`tree.ShapeletTreeClassifier`
+       and :class:`tree.ShapeletTreeRegressor`.
 
 Other improvements
 ------------------

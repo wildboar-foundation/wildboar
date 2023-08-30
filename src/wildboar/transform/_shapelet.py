@@ -3,7 +3,6 @@
 
 import math
 import numbers
-import warnings
 
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
@@ -23,7 +22,7 @@ class ShapeletMixin:
     _parameter_constraints: dict = {
         "n_shapelets": [
             Interval(numbers.Integral, 1, None, closed="left"),
-            StrOptions({"log2", "sqrt", "warn"}),
+            StrOptions({"log2", "sqrt"}),
             callable,
         ],
         "metric": [
@@ -61,14 +60,7 @@ class ShapeletMixin:
             else:
                 min_shapelet_size = 2
 
-        # TODO(1.2): change the default value
-        if self.n_shapelets == "warn":
-            warnings.warn(
-                "The default value of n_shapelets will change from 10 to 'log2' in 1.2",
-                FutureWarning,
-            )
-            n_shapelets = 10
-        elif isinstance(self.n_shapelets, str) or callable(self.n_shapelets):
+        if isinstance(self.n_shapelets, str) or callable(self.n_shapelets):
             if min_shapelet_size < max_shapelet_size:
                 possible_shapelets = sum(
                     self.n_timesteps_in_ - curr_len + 1
@@ -177,7 +169,6 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
     ...     ]
     ... )
     >>> t.fit_transform(X)
-
     """
 
     _parameter_constraints: dict = {

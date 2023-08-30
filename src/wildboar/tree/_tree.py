@@ -212,7 +212,7 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        n_shapelets="warn",
+        n_shapelets="log2",
         min_shapelet_size=0,
         max_shapelet_size=1,
         alpha=None,
@@ -436,7 +436,7 @@ class ShapeletTreeClassifier(
     def __init__(
         self,
         *,
-        n_shapelets="warn",
+        n_shapelets="log2",
         max_depth=None,
         min_samples_split=2,
         min_samples_leaf=1,
