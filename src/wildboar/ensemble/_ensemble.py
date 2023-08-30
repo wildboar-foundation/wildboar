@@ -984,10 +984,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
     criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 
-        .. deprecated:: 1.0
-            Criterion "mse" was deprecated in v1.1 and will be
-            removed in version 1.2. Use ``criterion="squared_error"``
-            which is equivalent.
+        .. deprecated:: 1.1
+            Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional
@@ -1132,10 +1130,8 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
     criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 
-        .. deprecated:: 1.0
-            Criterion "mse" was deprecated in v1.1 and will be
-            removed in version 1.2. Use ``criterion="squared_error"``
-            which is equivalent.
+        .. deprecated:: 1.1
+            Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
     warm_start : bool, optional
         When set to ``True``, reuse the solution of the previous call to
         fit and add more estimators to the ensemble, otherwise, just fit a
@@ -1291,10 +1287,8 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 
-        .. deprecated:: 1.0
-            Criterion "mse" was deprecated in v1.1 and will be
-            removed in version 1.2. Use ``criterion="squared_error"``
-            which is equivalent.
+        .. deprecated:: 1.1
+            Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional
@@ -1771,10 +1765,8 @@ class RocketForestRegressor(BaseForestRegressor):
     criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 
-        .. deprecated:: 1.0
-            Criterion "mse" was deprecated in v1.1 and will be
-            removed in version 1.2. Use ``criterion="squared_error"``
-            which is equivalent.
+        .. deprecated:: 1.1
+            Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional

@@ -88,6 +88,9 @@ Changelog
      - |API| Change the default value of ``n_shapelets`` to "log2" for :class:`ensemble.ShapeletForestClassifier`
        and :class:`ensemble.ShapeletForestRegressor`.
 
+     - |API| Drop support for ``criterion="mse"`` in :class:`ensemble.ShapeletForestRegressor`
+       and :class:`ensemble.ExtraShapeletTreesRegressor`.
+
   .. grid-item-card:: 
     
      :mod:`wildboar.linear_model`
@@ -135,6 +138,9 @@ Changelog
 
      - |API| Change the default value of ``n_shapelets`` to "log2" for :class:`tree.ShapeletTreeClassifier`
        and :class:`tree.ShapeletTreeRegressor`.
+
+     - |API| Drop support for ``criterion="mse"`` in :class:`tree.ShapeletTreeRegressor` and
+       :class:`tree.ExtraShapeletTreeRegressor`.
 
 Other improvements
 ------------------

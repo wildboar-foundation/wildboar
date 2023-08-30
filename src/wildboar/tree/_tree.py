@@ -1,7 +1,6 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-import warnings
 
 from sklearn.utils._param_validation import StrOptions
 
@@ -174,15 +173,14 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
             Added support for multi-metric shapelet transform
     metric_params : dict, optional
         Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the `User guide
+        <list_of_subsequence_metrics>`_.
     criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 
-        .. deprecated:: 1.0
-            Criterion "mse" was deprecated in v1.1 and will be
-            removed in version 1.2. Use ``criterion="squared_error"``
-            which is equivalent.
-        Read more about the parameters in the `User guide
-        <list_of_subsequence_metrics>`_.
+        .. deprecated:: 1.1
+            Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
     random_state : int or RandomState
         - If ``int``, ``random_state`` is the seed used by the
             random number generator
@@ -256,12 +254,11 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
         The minimum number of samples in a leaf.
-    criterion : {"mse"}, optional
+    criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 
-        .. deprecated:: 1.0
-            Criterion "mse" was deprecated in v1.1 and will be removed in
-            version 1.2. Use `criterion="squared_error"` which is equivalent.
+        .. deprecated:: 1.1
+            Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger than or
         equal to this value.
@@ -325,14 +322,6 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
     def _get_tree_builder(
         self, x, y, sample_weights, feature_engineer, random_state, max_depth
     ):
-        # TODO(1.2): remove
-        if self.criterion == "mse":
-            warnings.warn(
-                "Criterion 'mse' was deprecated in v1.1 and will be "
-                "removed in version 1.2. Use criterion='squared_error' "
-                "which is equivalent.",
-                FutureWarning,
-            )
         Criterion = check_option(REG_CRITERION, self.criterion, "criterion")
         return ExtraTreeBuilder(
             x,
@@ -958,9 +947,8 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
         criterion : {"squared_error"}, optional
             The criterion used to evaluate the utility of a split.
 
-            .. deprecated:: 1.0
-                Criterion "mse" was deprecated in v1.1 and will be removed in
-                version 1.2. Use `criterion="squared_error"` which is equivalent.
+            .. deprecated:: 1.1
+                Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
         intervals : {"fixed", "sample", "random"}, optional
             - if "fixed", `n_intervals` non-overlapping intervals.
             - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.

@@ -52,9 +52,6 @@ class ShapeletMixin:
             # in future versions we keep the limit of 2 timesteps for a shapelet as long
             # as the time series is at least 2 timesteps. Otherwise we fall back to 1
             # timestep.
-            #
-            # TODO(1.2): consider breaking backwards compatibility and always limit to
-            #            1 timestep.
             if self.n_timesteps_in_ < 2:
                 min_shapelet_size = 1
             else:
