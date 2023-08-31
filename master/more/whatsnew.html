@@ -5,8 +5,8 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="wildboar" href="../api/wildboar/index.html" /><link rel="prev" title="Wildboar" href="../index.html" />
 
-    <!-- Generated with Sphinx 7.2.4 and Furo 2023.08.19 -->
-        <title>What’s new - Wildboar 1.1.1.dev315 documentation</title>
+    <!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19 -->
+        <title>What’s new - Wildboar 1.1.1.dev115 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
@@ -139,7 +139,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev315 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev115 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -349,6 +349,10 @@ change in scikit-learn.</p></li>
 This change affect <code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketForestClassifier</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketForestRegressor</span></code>.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Fix a bug where <code class="docutils literal notranslate"><span class="pre">sampling</span></code> was incorrectly set for <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier" title="wildboar.ensemble.RocketForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.RocketForestClassifier</span></code></a>
 and <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor" title="wildboar.ensemble.RocketForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.RocketForestRegressor</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Change the default value of <code class="docutils literal notranslate"><span class="pre">n_shapelets</span></code> to “log2” for <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier" title="wildboar.ensemble.ShapeletForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestClassifier</span></code></a>
+and <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor" title="wildboar.ensemble.ShapeletForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestRegressor</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Drop support for <code class="docutils literal notranslate"><span class="pre">criterion=&quot;mse&quot;</span></code> in <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor" title="wildboar.ensemble.ShapeletForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestRegressor</span></code></a>
+and <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor" title="wildboar.ensemble.ExtraShapeletTreesRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ExtraShapeletTreesRegressor</span></code></a>.</p></li>
 </ul>
 </div>
 </div>
@@ -402,6 +406,10 @@ This change affect <a class="reference internal" href="../api/wildboar/tree/inde
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The <code class="docutils literal notranslate"><span class="pre">metric_factories</span></code> parameter of <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier" title="wildboar.tree.ProximityTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ProximityTreeClassifier</span></code></a> has
 been renamed to <code class="docutils literal notranslate"><span class="pre">metric</span></code>. We have deprecated <code class="docutils literal notranslate"><span class="pre">metric_factories</span></code> and it will be
 removed in 1.4. We also introduce the <code class="docutils literal notranslate"><span class="pre">metric_params</span></code> argument for single metric uses.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Change the default value of <code class="docutils literal notranslate"><span class="pre">n_shapelets</span></code> to “log2” for <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier" title="wildboar.tree.ShapeletTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeClassifier</span></code></a>
+and <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor" title="wildboar.tree.ShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeRegressor</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Drop support for <code class="docutils literal notranslate"><span class="pre">criterion=&quot;mse&quot;</span></code> in <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor" title="wildboar.tree.ShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeRegressor</span></code></a> and
+<a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor" title="wildboar.tree.ExtraShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ExtraShapeletTreeRegressor</span></code></a>.</p></li>
 </ul>
 </div>
 </div>
@@ -494,7 +502,7 @@ removed in 1.4. We also introduce the <code class="docutils literal notranslate"
     </aside>
   </div>
 </div>
-<script src="../_static/documentation_options.js?v=e3e5f523"></script>
+<script src="../_static/documentation_options.js?v=004f6191"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>

@@ -160,12 +160,11 @@ Classes
        **min_samples_leaf** : int, optional
            The minimum number of samples in a leaf.
 
-       **criterion** : {"mse"}, optional
+       **criterion** : {"squared_error"}, optional
            The criterion used to evaluate the utility of a split.
            
-           .. deprecated:: 1.0
-               Criterion "mse" was deprecated in v1.1 and will be removed in
-               version 1.2. Use `criterion="squared_error"` which is equivalent.
+           .. deprecated:: 1.1
+               Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
 
        **min_impurity_decrease** : float, optional
            A split will be introduced only if the impurity decrease is larger than or
@@ -486,7 +485,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-.. py:class:: ShapeletTreeClassifier(*, n_shapelets='warn', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
+.. py:class:: ShapeletTreeClassifier(*, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', class_weight=None, random_state=None)
 
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`wildboar.transform._shapelet.ShapeletMixin`, :py:obj:`BaseFeatureTreeClassifier`
@@ -597,7 +596,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='warn', min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
+.. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, n_shapelets='log2', min_shapelet_size=0, max_shapelet_size=1, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', random_state=None)
 
 
    Bases: :py:obj:`DynamicTreeMixin`, :py:obj:`wildboar.transform._shapelet.ShapeletMixin`, :py:obj:`BaseFeatureTreeRegressor`
@@ -669,16 +668,15 @@ Classes
 
        **metric_params** : dict, optional
            Parameters for the distance measure. Ignored unless metric is a string.
+           
+           Read more about the parameters in the `User guide
+           <list_of_subsequence_metrics>`_.
 
        **criterion** : {"squared_error"}, optional
            The criterion used to evaluate the utility of a split.
            
-           .. deprecated:: 1.0
-               Criterion "mse" was deprecated in v1.1 and will be
-               removed in version 1.2. Use ``criterion="squared_error"``
-               which is equivalent.
-           Read more about the parameters in the `User guide
-           <list_of_subsequence_metrics>`_.
+           .. deprecated:: 1.1
+               Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
 
        **random_state** : int or RandomState
            - If ``int``, ``random_state`` is the seed used by the
