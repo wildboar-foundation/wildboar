@@ -231,6 +231,4 @@ class FeatureTransform(IntervalTransform):
         summarizer="catch22",
         n_jobs=None,
     ):
-        super(FeatureTransform).__init__(
-            self, n_intervals=1, summarizer=summarizer, n_jobs=n_jobs
-        )
+        super().__init__(n_intervals=1, summarizer=summarizer, n_jobs=n_jobs)
