@@ -507,7 +507,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
         max_iter=100,
         step_size=0.1,
         n_prototypes="auto",
-        target="auto",
+        target="predict",
         method="sample",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
