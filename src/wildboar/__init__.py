@@ -1,7 +1,8 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-"""Wildboar - a library for temporal machine learning.
+"""
+Wildboar - a library for temporal machine learning.
 
 Wildboar includes numerous temporal machine learning algorithms and seamlessly
 integrates them with `scikit-learn <https://scikit-learn.org>`_.
@@ -29,17 +30,18 @@ __all__ = [
     "To be removed in 1.4. Use wildboar.utils.variable_len.is_end_of_series instead."
 )
 def iseos(x):
-    """Boolean indicator if a value is the end-of-sequence value.
+    """
+    Boolean indicator if a value is the end-of-sequence value.
 
     Parameters
     ----------
     x : array-like
-        The array
+        The array.
 
     Returns
     -------
     ndarray
-        boolean indicator array
+        Boolean indicator array.
     """
     isneginf = np.isneginf(x)
     if isneginf.any():
