@@ -29,8 +29,8 @@ from ..base import is_counterfactual, is_explainer
 
 def _yield_classifier_test(estimator):
     if has_fit_parameter(estimator, "sample_weight"):
-        yield partial(check_sample_weights_invariance_samples_order, kind="ones")
-        yield partial(check_sample_weights_invariance_samples_order, kind="zeros")
+        yield partial(_check_sample_weights_invariance_samples_order, kind="ones")
+        yield partial(_check_sample_weights_invariance_samples_order, kind="zeros")
 
     # if not _safe_tags(estimator).get("poor_score", False):
     #     yield check_decent_score
@@ -73,15 +73,17 @@ def _yield_all_checks(estimator):
 
     if not is_explainer(estimator):
         if hasattr(estimator, "estimator_params"):
-            yield check_consistent_estimator_params
+            yield _check_consistent_estimator_params
 
         if "3darray" in _safe_tags(estimator, "X_types"):
-            yield check_force_n_dims_raises
-            yield check_force_n_dims
+            yield _check_force_n_dims_raises
+            yield _check_force_n_dims
 
 
+# noqa: H0002
 def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False):
-    """Check if estimator adheres to scikit-learn (and wildboar) conventions.
+    """
+    Check if estimator adheres to scikit-learn (and wildboar) conventions.
 
     This method delegates to `check_estimator` in scikit-learn but monkey-patches
     the estimator with tags to skip some tests related to performance.
@@ -96,22 +98,19 @@ def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=Fal
     ----------
     estimator : estimator object
         Estimator instance to check.
-
     generate_only : bool, default=False
         When `False`, checks are evaluated when `check_estimator` is called.
         When `True`, `check_estimator` returns a generator that yields
         (estimator, check) tuples. The check is run by calling
         `check(estimator)`.
-
     ignore : list, optional
         Ignore the checks in the list.
-
     skip_scikit : bool, optional
         Skip all scikit-learn tests.
 
     Returns
     -------
-    checks_generator : generator
+    generator
         Generator that yields (estimator, check) tuples. Returned when
         `generate_only=True`.
     """
@@ -148,16 +147,14 @@ def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=Fal
 
                 # Silently ignore any scikit-learn tess in the ignore list
                 if check_name not in ignore:
-                    check = _maybe_skip(estimator, check)
-                    yield estimator, partial(check, name)
+                    yield estimator, partial(_maybe_skip(estimator, check), name)
 
             if estimator is not None:
                 # Reset the old _more_tags() method
                 setattr(estimator.__class__, "_more_tags", old_more_tags)
 
         for check in _yield_all_checks(estimator):
-            check = _maybe_skip(estimator, check)
-            yield estimator, partial(check, name)
+            yield estimator, partial(_maybe_skip(estimator, check), name)
 
     if generate_only:
         return checks_generator()
@@ -170,7 +167,7 @@ def check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=Fal
 
 
 @ignore_warnings(category=FutureWarning)
-def check_sample_weights_invariance_samples_order(name, estimator_orig, kind="ones"):
+def _check_sample_weights_invariance_samples_order(name, estimator_orig, kind="ones"):
     # For kind="ones" check that the estimators yield same results for
     # unit weights and no weights
     # For kind="zeros" check that setting sample_weight to 0 is equivalent
@@ -254,7 +251,7 @@ def _dataset_shape(*shape):
     return np.arange(np.prod(shape)).reshape(*shape), np.zeros(shape[0])
 
 
-def check_consistent_estimator_params(name, estimator):
+def _check_consistent_estimator_params(name, estimator):
     x, y = _dummy_dataset()
     estimator = clone(estimator)
     estimator.fit(x, y)
@@ -267,7 +264,7 @@ def check_consistent_estimator_params(name, estimator):
             )
 
 
-def check_force_n_dims_raises(name, estimator):
+def _check_force_n_dims_raises(name, estimator):
     X1, y1 = _dataset_shape(10, 3, 10)
     X2, y2 = _dataset_shape(10, 10)
 
@@ -299,7 +296,7 @@ def check_force_n_dims_raises(name, estimator):
                 getattr(estimator, method)(X1)
 
 
-def check_force_n_dims(name, estimator):
+def _check_force_n_dims(name, estimator):
     X1, y1 = _dataset_shape(10, 3, 10)
     X2, y2 = _dataset_shape(10, 3 * 10)
     estimator = clone(estimator)
