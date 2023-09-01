@@ -15,20 +15,19 @@ from sklearn.utils.validation import check_array as sklearn_check_array
 from .variable_len import is_end_of_series, is_variable_length
 
 
+# noqa: H0002
 def check_type(x, name, target_type, required=True):
-    """Check that the type of x is of a target type.
+    """
+    Check that the type of x is of a target type.
 
     Parameters
     ----------
     x : object
         The object to check.
-
     name : str
         The name of the parameter.
-
     target_type : type or tuple
         The required type(s) of x.
-
     required : bool, optional
         If required=False, None is an allowed.
     """
@@ -62,11 +61,34 @@ def check_type(x, name, target_type, required=True):
         )
 
 
-def check_option(dict, key, name):
-    if key in dict:
-        return dict[key]
+# noqa: H0002
+def check_option(options, key, name):
+    """
+    Check that `key` is a valid option.
+
+    Parameters
+    ----------
+    options : dict
+        The dictionary of option value pairs.
+    key : str
+        The option key.
+    name : str
+        The name of the parameter.
+
+    Returns
+    -------
+    option_value
+        The value of `key` in `option`.
+
+    Raises
+    ------
+    ValueError
+       If `key` is not a valid option.
+    """
+    if key in options:
+        return options[key]
     else:
-        keys = ["'%s'" % key for key in sorted(list(dict.keys()))]
+        keys = ["'%s'" % key for key in sorted(list(options.keys()))]
         if len(keys) == 1:
             msg = f"{name} must be {keys[0]}, got {key}"
         else:
@@ -108,7 +130,8 @@ def _num_timesteps_dim(dim):
 
 
 def _num_timesteps(X):
-    """Return the number of timesteps and dimensions of ``X``.
+    """
+    Return the number of timesteps and dimensions of `X`.
 
     Parameters
     ----------
@@ -119,7 +142,6 @@ def _num_timesteps(X):
     -------
     n_timesteps : int
         The number of timesteps
-
     n_dims : int
         The number of dimensions
     """
@@ -164,7 +186,7 @@ def _num_timesteps(X):
         raise TypeError(message) from err
 
 
-def check_X_y(
+def check_X_y(  # noqa: PLR0913, N802
     x,
     y,
     *,
@@ -185,6 +207,55 @@ def check_X_y(
     y_contiguous=True,
     estimator=None,
 ):
+    """
+    Check both X and y.
+
+    Parameters
+    ----------
+    x : array-like
+        The samples.
+    y : array-like
+        The labels.
+    dtype : dtype, optional
+        The data type for `X`.
+    order : {"C", "F"}, optional
+        The order of data in memory.
+    copy : bool, optional
+        Force a copy of `X`.
+    ensure_2d : bool, optional
+        Ensure that the array is 2d, i.e., (n_samples, n_timesteps).
+    ensure_ts_array : bool, optional
+        Ensure that the array is a valid time series array.
+    allow_3d : bool, optional
+        Allow `X` to be 3d, i.e., (n_samples, n_dimensions, n_timesteps).
+    allow_nd : bool, optional
+        Allow `X` to have 2 or more dimensions.
+    force_all_finite : bool, optional
+        Require every value in `X` to be finite.
+    multi_output : bool, optional
+        Allow `y` to be a multi output array.
+    ensure_min_samples : int, optional
+        Require `X` to have at least this many samples.
+    ensure_min_timesteps : int, optional
+        Require `X` to have at least this many timesteps.
+    ensure_min_dims : int, optional
+        Require `X` to have at least this many dimensions.
+    allow_eos : bool, optional
+        Allow `X` to be of variale length.
+    y_numeric : bool, optional
+        Ensure that `y` is numeric with dtype `float`.
+    y_contiguous : bool, optional
+        Ensure that `y` is memory contiguous.
+    estimator : object, optional
+        An estimator object for error reporting.
+
+    Returns
+    -------
+    X : ndarray
+        The validated array `X`.
+    y : ndarray
+        The validated array `y`.
+    """
     if y is None:
         if estimator is None:
             estimator_name = "estimator"
@@ -241,7 +312,8 @@ def check_array(
     estimator=None,
     input_name="",
 ):
-    """Input validation on time-series.
+    """
+    Input validation on time-series.
 
     Delegate array validation to scikit-learn
     :func:`sklearn.utils.validation.check_array` with wildboar defaults and
@@ -260,41 +332,32 @@ def check_array(
     ----------
     array : object
         Input object to check / convert.
-
     dtype : 'numeric', type, list of type or None, optional
         Data type of result. If None, the dtype of the input is preserved.
         If "numeric", dtype is preserved unless array.dtype is object.
         If dtype is a list of types, conversion on the first type is only
         performed if the dtype of the input is not in the list.
-
     order : {'F', 'C', 'T'} or None, optional
         Whether an array will be forced to be fortran or c-style.
         When order is None, then if copy=False, nothing is ensured
         about the memory layout of the output array; otherwise (copy=True)
         the memory layout of the returned array is kept as close as possible
         to the original array.
-
     copy : bool, optional
         Whether a forced copy will be triggered. If copy=False, a copy might
         be triggered by a conversion.
-
     ravel_1d : bool, optional
         Whether to ravel 1d arrays or column vectors, it the array is neither an
         error is raised.
-
     ensure_2d : bool, optional
         Whether to raise a value error if array is not 2D.
-
     allow_3d : bool, optional
-        Whether to allow array.ndim == 3
-
+        Whether to allow array.ndim == 3.
     allow_nd : bool, optional
         Whether to allow array.ndim > 2.
-
     allow_eos : bool, optional
         Whether to raise an error on `wildboar.utils.variable_len.eos` in the
         array.
-
     force_all_finite : bool or 'allow-nan', default=True
         Whether to raise an error on np.inf, np.nan, pd.NA in array. The
         possibilities are:
@@ -303,31 +366,26 @@ def check_array(
         - False: accepts np.inf, np.nan, pd.NA in array.
         - 'allow-nan': accepts only np.nan and pd.NA values in array. Values
           cannot be infinite.
-
     ensure_min_samples : int, optional
         Make sure that the array has a minimum number of samples in its first
         axis (rows for a 2D array). Setting to 0 disables this check.
-
     ensure_min_timesteps : int, optional
         Make sure that the 2D array has some minimum number of timesteps
         (columns). The default value of 1 rejects empty datasets.
         This check is only enforced when the input data has effectively 2
         dimensions or is originally 1D and ``ensure_2d`` is True. Setting to 0
         disables this check.
-
     ensure_min_dims : int, optional
         Make sure that the array has a minimum number of dimensions. Setting to 0
         disables this check.
-
     estimator : str or estimator instance, default=None
         If passed, include the name of the estimator in warning messages.
-
     input_name : str, default=""
         The data name used to construct the error message.
 
     Returns
     -------
-    array_converted : object
+    object
         The converted and validated array.
     """
     check_params = dict(
@@ -429,7 +487,8 @@ def check_array(
 
 
 def _check_ts_array(array):
-    """Ensure a time-series array.
+    """
+    Ensure a time-series array.
 
     Force the array to (1) be 3D (n_samples, n_dims, n_timesteps) and (2)
     have the final dimension contiguous in memory, and (3) have dtype=float.
