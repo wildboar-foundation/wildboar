@@ -29,3 +29,11 @@ install:
 	$(SYSTEM_PYTHON) -m pip install .
 
 .PHONY: build install
+
+docs-deps:
+	$(PYTHON) -m pip install -r docs/requirements.txt
+
+docs:
+	$(PYTHON) -m sphinx docs html
+
+.PHONY: docs docs-deps
