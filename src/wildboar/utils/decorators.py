@@ -17,6 +17,7 @@ def _array_or_scalar(x, squeeze=True):
         return np.squeeze(x) if squeeze else x
 
 
+# noqa: H0002
 def array_or_scalar(optional_f=None, squeeze=True):
     """
     Decorate a function returning.
@@ -29,6 +30,11 @@ def array_or_scalar(optional_f=None, squeeze=True):
         Used if the decorator is used without arguments.
     squeeze : bool, optional
         Remove axis of length one from the returned arrays.
+
+    Returns
+    -------
+    function
+        Decorated function.
     """
 
     def decorator(f):
@@ -57,6 +63,7 @@ def _singleton(x):
         return x
 
 
+# noqa: H0002
 def singleton(f):
     """
     Recursivley try to unwrap list return arguments.
@@ -85,6 +92,7 @@ def singleton(f):
     return wrap
 
 
+# noqa: H0002
 def unstable(optional_f=None, stability="beta", description=None):
     """
     Decorate a function as unsatable.
@@ -97,6 +105,11 @@ def unstable(optional_f=None, stability="beta", description=None):
         The stability of the feature.
     description : str, optional
         The description of the feature.
+
+    Returns
+    -------
+    function
+        Decorated function.
     """
     import warnings
 
