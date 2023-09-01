@@ -23,11 +23,23 @@ except ModuleNotFoundError as e:
     Line2D = matplotlib_missing
 
 
+# noqa: H0002
 class MidpointNormalize(Normalize):
-    """Normalise the colorbar."""
+    """
+    Normalise values with a specified midpoint.
 
-    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
-        super().__init__(vmin, vmax, clip)
+    Parameters
+    ----------
+    vmin : float, optional
+        The minumum value.
+    vmax : float, optional
+        The maximum value.
+    midpoint : float, optional
+        The midpoint of the values.
+    """
+
+    def __init__(self, vmin=None, vmax=None, midpoint=None):
+        super().__init__(vmin, vmax, clip=False)
         self.midpoint = midpoint
 
     def __call__(self, value, clip=None):
@@ -47,36 +59,29 @@ def plot_time_domain(
     cmap="Dark2",
     show_legend=8,
 ):
-    """Plot the samples in the time domain.
+    """
+    Plot the samples in the time domain.
 
     Parameters
     ----------
     x : array-like of shape (n_sample, n_timestep)
-        The samples
-
+        The samples.
     y : array-like of shape (n_samples, ), optional
-        The labels
-
+        The labels, assumed to be discrete labels.
     n_samples : int, optional
         The maximum number of samples to plot. If n_samples is larger than the number
         of samples in x or None, all samples are plotted.
-
     ax : Axes, optional
-        The matplotlib Axes-object
-
+        The matplotlib Axes-object.
     alpha : float, optional
         The opacity of the samples.
-
     linewidth : float, optional
         The width of the sample lines.
-
     zorder : int, optional
         The order where the samples are plotted. By default we plot the samples
         at -1.
-
     cmap : str, optional
         The colormap used to colorize samples according to its label.
-
     show_legend : bool or int, optional
         Whether the legend of labels are show.
 
@@ -86,8 +91,15 @@ def plot_time_domain(
 
     Returns
     -------
-    ax : Axes
+    Axes
         The axes object that has been plotted.
+
+    Examples
+    --------
+    >>> from wildboar.utils.plot import plot_time_domain
+    >>> from wildboar.datasets import load_gun_point
+    >>> X, y = load_gun_point(X, y)
+    >>> plot_time_domain(X, y, n_sample=10)
     """
     if ax is None:
         fig, ax = plt.subplots()
@@ -151,24 +163,40 @@ def plot_frequency_domain(
     frequency=False,
     cmap="Dark2",
 ):
-    """Plot the samples in the freqency domain.
+    """
+    Plot the samples in the freqency domain.
 
     Parameters
     ----------
     x : array-like of shape (n_sample, n_timestep)
-        The samples
+        The samples.
     y : array-like of shape (n_samples, ), optional
-        The labels, by default None
+        The labels.
     ax : Axes, optional
-        The matplotlib Axes-object, by default None
+        The matplotlib Axes-object.
+    n_samples : int, optional
+        The maximum number of samples to plot. If n_samples is larger than the number
+        of samples in x or None, all samples are plotted.
     jitter : bool, optional
-        Add jitter to the amplitude lines, by default False
+        Add jitter to the amplitude lines.
     sample_spacing : int, optional
-        The frequency domain sample spacing, by default 1
+        The frequency domain sample spacing.
     frequency : bool, optional
-        Show the frequency bins, by default False
+        Show the frequency bins.
     cmap : str, optional
-        The colormap, by default "Dark2"
+        The colormap.
+
+    Returns
+    -------
+    Axes
+        The axes object that has been plotted.
+
+    Examples
+    --------
+    >>> from wildboar.utils.plot import plot_frequency_domain
+    >>> from wildboar.datasets import load_gun_point
+    >>> X, y = load_gun_point(X, y)
+    >>> plot_frequency_domain(X, y, n_sample=10)
     """
     if ax is None:
         fig, ax = plt.subplots()
