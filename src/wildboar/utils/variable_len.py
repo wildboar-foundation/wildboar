@@ -1,3 +1,6 @@
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
 """Utilities for variable length series."""
 import numpy as np
 
@@ -15,7 +18,8 @@ _END_OF_SERIES_MASK = np.array(0x000000000000000F, dtype=np.uint64)
 
 
 def is_end_of_series(x):
-    """Test element-wise for EoS and return result as a boolean array.
+    """
+    Test element-wise for EoS and return result as a boolean array.
 
     Parameters
     ----------
@@ -24,8 +28,8 @@ def is_end_of_series(x):
 
     Returns
     -------
-    ndarray or bool
-        boolean indicator array
+    ndarray
+        Boolean indicator array.
     """
     return np.logical_and(
         np.isnan(x),
@@ -34,7 +38,8 @@ def is_end_of_series(x):
 
 
 def is_variable_length(x):
-    """Test if time-series is variable length.
+    """
+    Test if time-series is variable length.
 
     Parameters
     ----------
@@ -44,7 +49,7 @@ def is_variable_length(x):
     Returns
     -------
     bool
-        True if time series contains EoS
+        True if time series contains EoS.
     """
     if not np.issubdtype(x.dtype, np.float64):
         raise ValueError(f"Array must have dtype=float64, got {x.dtype}")
@@ -53,17 +58,18 @@ def is_variable_length(x):
 
 
 def get_variable_length(x):
-    """Return the length of each time-series.
+    """
+    Return the length of each time-series.
 
     Parameters
     ----------
     x : time-series
-        The input
+        The input.
 
     Returns
     -------
-    length : float or ndarray
-        The lenght of the time series
+    float or ndarray
+        The lenght of the time series.
 
     Examples
     --------
