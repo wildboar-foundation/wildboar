@@ -18,6 +18,44 @@ __all__ = [
 
 
 class DependencyMissing:
+    """
+    Class to flag dependencies as missing.
+
+    Parameters
+    ----------
+    e : ModuleNotFoundError, optional
+        An exception.
+    package : str, optional
+        The package (installable using `pip`) required for the
+        desired functionality.
+    context : str, optional
+        The context in which the error was raised.
+
+    Examples
+    --------
+    In the following example we assume that `matplotlib` has not been installed
+    by the user.
+
+    >>> import numpy as np
+    >>> from wildboar.utils import DependencyMissing
+    >>> try:
+    ...     import matplotlib.pylab as plt
+    ... except ModuleNotFoundError as e:
+    ...     plt = DependencyMissing(e, package="matplotlib", context="plot")
+    >>> plt.plot(np.arange(10))
+    Traceback (most recent call last):
+    File "<stdin>", line 2, in <module>
+    ModuleNotFoundError: No module named 'matplotlib'
+
+    The above exception was the direct cause of the following exception:
+
+    Traceback (most recent call last):
+    ....
+    ModuleNotFoundError: 'matplotlib' is required for 'plot', but not included
+    in the default wildboar installation. Please run: `pip install matplotlib`
+    to install the required package.
+    """
+
     def __init__(self, e=None, *, package=None, context=None):
         if context is None:
             import inspect
@@ -53,17 +91,18 @@ class DependencyMissing:
 
 
 def os_cache_path(dir):
-    """Get the path to a operating system specific cache directory.
+    """
+    Get the path to a operating system specific cache directory.
 
     Parameters
     ----------
     dir : str
-        The sub-directory in the cache location
+        The sub-directory in the cache location.
 
     Returns
     -------
-    path : str
-        The cache path
+    str
+        The cache path.
     """
     if platform.system() == "Windows":
         cache_dir = os.path.expandvars(r"%LOCALAPPDATA%\cache")
@@ -99,11 +138,10 @@ def _soft_dependency_error(e=None, package=None, context=None, warning=False):
     )
     if warning:
         warnings.warn(msg, UserWarning)
+    elif e is not None:
+        raise ModuleNotFoundError(msg) from e
     else:
-        if e is not None:
-            raise ModuleNotFoundError(msg) from e
-        else:
-            raise ModuleNotFoundError(msg)
+        raise ModuleNotFoundError(msg)
 
 
 def _safe_jagged_array(lst):
