@@ -190,7 +190,9 @@ def kmeans_outliers(
     x = check_array(x)
     random_state = check_random_state(random_state)
     k_means_ = KMeans(
-        n_clusters=n_clusters, random_state=random_state.randint(np.iinfo(np.int32).max)
+        n_init=10,  # TODO(1.4) Move to "auto"
+        n_clusters=n_clusters,
+        random_state=random_state.randint(np.iinfo(np.int32).max),
     )
 
     k_means_.fit(x)

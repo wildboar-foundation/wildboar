@@ -58,7 +58,10 @@ class KNeighborsCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimato
 
         classes = estimator.classes_
         n_clusters = x.shape[0] // estimator.n_neighbors
-        kmeans = KMeans(n_clusters=n_clusters, random_state=self.random_state).fit(x)
+        # TODO(1.4): Change n_init to "auto"
+        kmeans = KMeans(
+            n_clusters=n_clusters, n_init=10, random_state=self.random_state
+        ).fit(x)
         n_classes = len(classes)
 
         label_nn = {}
