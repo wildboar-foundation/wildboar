@@ -613,21 +613,6 @@ class RocketTreeRegressor(RocketMixin, BaseFeatureTreeRegressor):
             equal to this value.
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split.
-        sampling : {"normal", "uniform", "shapelet"}, optional
-            The sampling of convolutional filters.
-
-            - if "normal", sample filter according to a normal distribution with
-              ``mean`` and ``scale``.
-            - if "uniform", sample filter according to a uniform distribution with
-              ``lower`` and ``upper``.
-            - if "shapelet", sample filters as subsequences in the training data.
-        sampling_params : dict, optional
-            The parameters for the sampling.
-
-            - if "normal", ``{"mean": float, "scale": float}``, defaults to
-               ``{"mean": 0, "scale": 1}``.
-            - if "uniform", ``{"lower": float, "upper": float}``, defaults to
-               ``{"lower": -1, "upper": 1}``.
         kernel_size : array-like, optional
             The kernel size, by default ``[7, 11, 13]``.
         min_size : float, optional

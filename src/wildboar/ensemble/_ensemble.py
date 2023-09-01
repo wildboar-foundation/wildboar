@@ -191,53 +191,53 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
     Parameters
     ----------
     estimator : object, optional
-        Base estimator of the ensemble. If ``None``, the base estimator
+        Base estimator of the ensemble. If `None`, the base estimator
         is a :class:`~wildboar.tree.ShapeletTreeRegressor`.
     n_estimators : int, optional
         The number of base estimators in the ensemble.
     max_samples : int or float, optional
-        The number of samples to draw from ``X`` to train each base estimator.
+        The number of samples to draw from `X` to train each base estimator.
 
-        - if ``int``, then draw ``max_samples`` samples.
-        - if ``float``, then draw ``max_samples * n_samples`` samples.
+        - if `int`, then draw `max_samples` samples.
+        - if `float`, then draw `max_samples * n_samples` samples.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     class_weight : dict or "balanced", optional
         Weights associated with the labels
 
-        - if ``dict``, weights on the form ``{label: weight}``.
+        - if `dict`, weights on the form `{label: weight}`.
         - if "balanced" each class weight inversely proportional to
           the class frequency.
-        - if ``None``, each class has equal weight.
+        - if `None`, each class has equal weight.
     oob_score : bool, optional
         Use out-of-bag samples to estimate generalization performance. Requires
-        ``bootstrap=True``.
+        `bootstrap=True`.
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call
+        When set to `True`, reuse the solution of the previous call
         to fit and add more estimators to the ensemble, otherwise, just fit
         a whole new ensemble.
     n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means
-        using a single core and a value of ``-1`` means using all cores.
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator.
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator.
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
     verbose : int, optional
         Controls the output to standard error while fitting and predicting.
     base_estimator : object, optional
-        Use ``estimator`` instead.
+        Use `estimator` instead.
 
         .. deprecated:: 1.2
-            ``base_estimator`` has been deprecated and will be removed in 1.4.
-            Use ``estimator`` instead.
+            `base_estimator` has been deprecated and will be removed in 1.4.
+            Use `estimator` instead.
     """
 
     _parameter_constraints: dict = {**BaseBagging._parameter_constraints}
@@ -407,9 +407,9 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
     n_shapelets : int, optional
         The number of shapelets to sample at each node.
     max_depth : int, optional
-        The maximum depth of the tree. If ``None`` the tree is
+        The maximum depth of the tree. If `None` the tree is
         expanded until all leaves are pure or until all leaves contain less
-        than ``min_samples_split`` samples.
+        than `min_samples_split` samples.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
@@ -430,25 +430,25 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         ::
             w = 1 - exp(-abs(alpha) * depth)
 
-        - if ``alpha < 0``, the number of sampled shapelets decrease from
-          ``n_shapelets`` towards 1 with increased depth.
-        - if ``alpha > 0``, the number of sampled shapelets increase from ``1``
-          towards ``n_shapelets`` with increased depth.
-        - if ``None``, the number of sampled shapelets are the same
+        - if `alpha < 0`, the number of sampled shapelets decrease from
+          `n_shapelets` towards 1 with increased depth.
+        - if `alpha > 0`, the number of sampled shapelets increase from `1`
+          towards `n_shapelets` with increased depth.
+        - if `None`, the number of sampled shapelets are the same
           independeth of depth.
     metric : str or list, optional
         The distance metric.
 
-        - If ``str``, the distance metric used to identify the best
+        - If `str`, the distance metric used to identify the best
           shapelet.
-        - If ``list``, multiple metrics specified as a list of tuples,
+        - If `list`, multiple metrics specified as a list of tuples,
           where the first element of the tuple is a metric name and the second
           element a dictionary with a parameter grid specification. A parameter
           grid specification is a dict with two mandatory and one optional
           key-value pairs defining the lower and upper bound on the values and
           number of values in the grid. For example, to specifiy a grid over
-          the argument ``r`` with 10 values in the range 0 to 1, we would give
-          the following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+          the argument `r` with 10 values in the range 0 to 1, we would give
+          the following specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
           Read more about metric specifications in the `User guide
           <metric_specification>`__.
@@ -464,32 +464,32 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         The criterion used to evaluate the utility of a split
     oob_score : bool, optional
         Use out-of-bag samples to estimate generalization performance. Requires
-        ``bootstrap=True``.
+        `bootstrap=True`.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call to
+        When set to `True`, reuse the solution of the previous call to
         fit and add more estimators to the ensemble, otherwise, just fit a
         whole new ensemble.
     class_weight : dict or "balanced", optional
         Weights associated with the labels
 
-        - if ``dict``, weights on the form ``{label: weight}``.
+        - if `dict`, weights on the form `{label: weight}`.
         - if "balanced" each class weight inversely proportional to
           the class frequency.
-        - if ``None``, each class has equal weight.
+        - if `None`, each class has equal weight.
     n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means
-        using a single core and a value of ``-1`` means using all cores.
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
 
@@ -577,9 +577,9 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
     n_estimators : int, optional
         The number of estimators.
     max_depth : int, optional
-        The maximum depth of the tree. If ``None`` the tree is expanded
+        The maximum depth of the tree. If `None` the tree is expanded
         until all leaves are pure or until all leaves contain less than
-        ``min_samples_split`` samples.
+        `min_samples_split` samples.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
@@ -596,16 +596,16 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
     metric : str or list, optional
         The distance metric.
 
-        - If ``str``, the distance metric used to identify the best
+        - If `str`, the distance metric used to identify the best
           shapelet.
-        - If ``list``, multiple metrics specified as a list of tuples,
+        - If `list`, multiple metrics specified as a list of tuples,
           where the first element of the tuple is a metric name and the second
           element a dictionary with a parameter grid specification. A parameter
           grid specification is a dict with two mandatory and one optional
           key-value pairs defining the lower and upper bound on the values and
           number of values in the grid. For example, to specifiy a grid over
-          the argument ``r`` with 10 values in the range 0 to 1, we would give
-          the following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+          the argument `r` with 10 values in the range 0 to 1, we would give
+          the following specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
           Read more about metric specifications in the `User guide
           <metric_specification>`__.
@@ -621,32 +621,32 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         The criterion used to evaluate the utility of a split
     oob_score : bool, optional
         Use out-of-bag samples to estimate generalization performance. Requires
-        ``bootstrap=True``.
+        `bootstrap=True`.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call to
+        When set to `True`, reuse the solution of the previous call to
         fit and add more estimators to the ensemble, otherwise, just fit a
         whole new ensemble.
     class_weight : dict or "balanced", optional
         Weights associated with the labels
 
-        - if ``dict``, weights on the form ``{label: weight}``
+        - if `dict`, weights on the form `{label: weight}`
         - if "balanced" each class weight inversely proportional to
           the class frequency
         - if :class:`None`, each class has equal weight
     n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means
-        using a single core and a value of ``-1`` means using all cores.
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
 
@@ -731,46 +731,46 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
     Parameters
     ----------
     estimator : object, optional
-        Base estimator of the ensemble. If ``None``, the base estimator
+        Base estimator of the ensemble. If `None`, the base estimator
         is a :class:`~wildboar.tree.ShapeletTreeRegressor`.
     n_estimators : int, optional
         The number of base estimators in the ensemble.
     max_samples : int or float, optional
-        The number of samples to draw from ``X`` to train each base estimator.
+        The number of samples to draw from `X` to train each base estimator.
 
-        - if ``int``, then draw ``max_samples`` samples.
-        - if ``float``, then draw ``max_samples * n_samples`` samples.
+        - if `int`, then draw `max_samples` samples.
+        - if `float`, then draw `max_samples * n_samples` samples.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     oob_score : bool, optional
         Use out-of-bag samples to estimate generalization performance. Requires
-        ``bootstrap=True``.
+        `bootstrap=True`.
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call
+        When set to `True`, reuse the solution of the previous call
         to fit and add more estimators to the ensemble, otherwise, just fit
         a whole new ensemble.
     n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means
-        using a single core and a value of ``-1`` means using all cores.
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
     random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the random
+        - If `int`, `random_state` is the seed used by the random
           number generator.
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator.
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
     verbose : int, optional
         Controls the output to standard error while fitting and predicting.
     base_estimator : object, optional
-        Use ``estimator`` instead.
+        Use `estimator` instead.
 
         .. deprecated:: 1.2
-            ``base_estimator`` has been deprecated and will be removed in 1.4.
-            Use ``estimator`` instead.
+            `base_estimator` has been deprecated and will be removed in 1.4.
+            Use `estimator` instead.
     """
 
     _parameter_constraints: dict = {**BaseBagging._parameter_constraints}
@@ -860,7 +860,8 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
 
 
 class BaseShapeletForestRegressor(BaseForestRegressor):
-    """Base class for shapelet forest classifiers.
+    """
+    Base class for shapelet forest classifiers.
 
     Warnings
     --------
@@ -922,19 +923,17 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
     Parameters
     ----------
     n_estimators : int, optional
-        The number of estimators
+        The number of estimators.
     n_shapelets : int, optional
         The number of shapelets to sample at each node.
-    n_estimators : int, optional
-        The number of estimators
     max_depth : int, optional
-        The maximum depth of the tree. If ``None`` the tree is
+        The maximum depth of the tree. If `None` the tree is
         expanded until all leaves are pure or until all leaves contain less
-        than ``min_samples_split`` samples.
+        than `min_samples_split` samples.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
-        The minimum number of samples in a leaf
+        The minimum number of samples in a leaf.
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger
         than or equal to this value.
@@ -951,25 +950,25 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         ::
             w = 1 - exp(-abs(alpha) * depth)
 
-        - if ``alpha < 0``, the number of sampled shapelets decrease from
-          ``n_shapelets`` towards 1 with increased depth.
-        - if ``alpha > 0``, the number of sampled shapelets increase from ``1``
-          towards ``n_shapelets`` with increased depth.
-        - if ``None``, the number of sampled shapelets are the same
+        - if `alpha < 0`, the number of sampled shapelets decrease from
+          `n_shapelets` towards 1 with increased depth.
+        - if `alpha > 0`, the number of sampled shapelets increase from `1`
+          towards `n_shapelets` with increased depth.
+        - if `None`, the number of sampled shapelets are the same
           independeth of depth.
     metric : str or list, optional
         The distance metric.
 
-        - If ``str``, the distance metric used to identify the best
+        - If `str`, the distance metric used to identify the best
           shapelet.
-        - If ``list``, multiple metrics specified as a list of tuples,
+        - If `list`, multiple metrics specified as a list of tuples,
           where the first element of the tuple is a metric name and the second
           element a dictionary with a parameter grid specification. A parameter
           grid specification is a dict with two mandatory and one optional
           key-value pairs defining the lower and upper bound on the values and
           number of values in the grid. For example, to specifiy a grid over
-          the argument ``r`` with 10 values in the range 0 to 1, we would give
-          the following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+          the argument `r` with 10 values in the range 0 to 1, we would give
+          the following specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
           Read more about metric specifications in the `User guide
           <metric_specification>`__.
@@ -986,22 +985,25 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
 
         .. deprecated:: 1.1
             Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call to
+        When set to `True`, reuse the solution of the previous call to
         fit and add more estimators to the ensemble, otherwise, just fit a
         whole new ensemble.
     n_jobs : int, optional
-        The number of processor cores used for fitting the ensemble
+        The number of processor cores used for fitting the ensemble.
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
 
@@ -1021,7 +1023,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         **ShapeletTreeRegressor._parameter_constraints,
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -1042,7 +1044,6 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         n_jobs=None,
         random_state=None,
     ):
-        """Construct a new shapelet forest regressor."""
         super().__init__(
             estimator=ShapeletTreeRegressor(),
             estimator_params=(
@@ -1085,18 +1086,13 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
     Parameters
     ----------
     n_estimators : int, optional
-        The number of estimators
+        The number of estimators.
     max_depth : int, optional
-        The maximum depth of the tree. If ``None`` the tree is expanded
+        The maximum depth of the tree. If `None` the tree is expanded
         until all leaves are pure or until all leaves contain less than
-        ``min_samples_split`` samples.
+        `min_samples_split` samples.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
-    min_samples_leaf : int, optional
-        The minimum number of samples in a leaf
-    min_impurity_decrease : float, optional
-        A split will be introduced only if the impurity decrease is larger than
-        or equal to this value.
     min_shapelet_size : float, optional
         The minimum length of a shapelets expressed as a fraction of
         *n_timestep*.
@@ -1106,16 +1102,16 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
     metric : str or list, optional
         The distance metric.
 
-        - If ``str``, the distance metric used to identify the best
+        - If `str`, the distance metric used to identify the best
           shapelet.
-        - If ``list``, multiple metrics specified as a list of tuples,
+        - If `list`, multiple metrics specified as a list of tuples,
           where the first element of the tuple is a metric name and the second
           element a dictionary with a parameter grid specification. A parameter
           grid specification is a dict with two mandatory and one optional
           key-value pairs defining the lower and upper bound on the values and
           number of values in the grid. For example, to specifiy a grid over
-          the argument ``r`` with 10 values in the range 0 to 1, we would give
-          the following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+          the argument `r` with 10 values in the range 0 to 1, we would give
+          the following specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
           Read more about metric specifications in the `User guide
           <metric_specification>`__.
@@ -1132,31 +1128,27 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
 
         .. deprecated:: 1.1
             Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
-    warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call to
-        fit and add more estimators to the ensemble, otherwise, just fit a
-        whole new ensemble.
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
+    warm_start : bool, optional
+        When set to `True`, reuse the solution of the previous call to
+        fit and add more estimators to the ensemble, otherwise, just fit a
+        whole new ensemble.
     n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means
-        using a single core and a value of ``-1`` means using all cores.
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
-    class_weight : dict or "balanced", optional
-        Weights associated with the labels
-
-        - if ``dict``, weights on the form ``{label: weight}``
-        - if "balanced" each class weight inversely proportional to
-          the class frequency
-        - if :class:`None`, each class has equal weight
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If int, ``random_state`` is the seed used by the
+        - If int, `random_state` is the seed used by the
           random number generator
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
 
@@ -1194,7 +1186,6 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         n_jobs=None,
         random_state=None,
     ):
-        """Construct an extra shapelet trees regressor."""
         super().__init__(
             estimator=ExtraShapeletTreeRegressor(),
             estimator_params=(
@@ -1234,8 +1225,8 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     that it falls into. This leads to a binary coding of a time series with as
     many ones as trees in the forest.
 
-    The dimensionality of the resulting representation is ``<= n_estimators *
-    2^max_depth``
+    The dimensionality of the resulting representation is `<= n_estimators *
+    2^max_depth`
 
     Parameters
     ----------
@@ -1244,13 +1235,13 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     n_shapelets : int, optional
         The number of shapelets to sample at each node.
     max_depth : int, optional
-        The maximum depth of the tree. If ``None`` the tree is expanded
+        The maximum depth of the tree. If `None` the tree is expanded
         until all leaves are pure or until all leaves contain less than
-        ``min_samples_split`` samples.
+        `min_samples_split` samples.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
-        The minimum number of samples in a leaf
+        The minimum number of samples in a leaf.
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger than
         or equal to this value.
@@ -1263,16 +1254,16 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     metric : str or list, optional
         The distance metric.
 
-        - If ``str``, the distance metric used to identify the best
+        - If `str`, the distance metric used to identify the best
           shapelet.
-        - If ``list``, multiple metrics specified as a list of tuples,
+        - If `list`, multiple metrics specified as a list of tuples,
           where the first element of the tuple is a metric name and the second
           element a dictionary with a parameter grid specification. A parameter
           grid specification is a dict with two mandatory and one optional
           key-value pairs defining the lower and upper bound on the values and
           number of values in the grid. For example, to specifiy a grid over
-          the argument ``r`` with 10 values in the range 0 to 1, we would give
-          the following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+          the argument `r` with 10 values in the range 0 to 1, we would give
+          the following specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
           Read more about metric specifications in the `User guide
           <metric_specification>`__.
@@ -1292,23 +1283,23 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call to
+        When set to `True`, reuse the solution of the previous call to
         fit and add more estimators to the ensemble, otherwise, just fit a
         whole new ensemble.
     n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means
-        using a single core and a value of ``-1`` means using all cores.
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
     sparse_output : bool, optional
         Return a sparse CSR-matrix.
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator.
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator.
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
     """
@@ -1319,7 +1310,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         "sparse_output": ["boolean"],
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -1339,7 +1330,6 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         sparse_output=True,
         random_state=None,
     ):
-        """Construct a new shapelet forest embedding."""
         super().__init__(
             estimator=ExtraShapeletTreeRegressor(),
             estimator_params=(
@@ -1407,49 +1397,48 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         The number of estimators in the ensemble.
     n_shapelets : int, optional
         The number of shapelets to sample at each node.
+    bootstrap : bool, optional
+        If the samples are drawn with replacement.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. A value of `None` means using a
+        single core and a value of `-1` means using all cores. Positive
+        integers mean the exact number of cores.
     min_shapelet_size : float, optional
         The minimum length of a shapelets expressed as a fraction of
         *n_timestep*.
     max_shapelet_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
-    bootstrap : bool, optional
-        If the samples are drawn with replacement.
-    n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means using a
-        single core and a value of ``-1`` means using all cores. Positive
-        integers mean the exact number of cores.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
     max_samples : "auto", float or int, optional
-        The number of samples to draw to train each base estimator
+        The number of samples to draw to train each base estimator.
     contamination : 'auto' or float, optional
         The strategy for computing the offset.
 
-        - if "auto" then ``offset_`` is set to ``-0.5``.
-        - if float ``offset_`` is computed as the c:th percentile of
+        - if "auto" then `offset_` is set to `-0.5`.
+        - if float `offset_` is computed as the c:th percentile of
           scores.
 
-        If ``bootstrap=True``, out-of-bag samples are used for computing
+        If `bootstrap=True`, out-of-bag samples are used for computing
         the scores.
-
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call to
+        When set to `True`, reuse the solution of the previous call to
         fit and add more estimators to the ensemble, otherwise, just fit a
         whole new ensemble.
     metric : str or list, optional
         The distance metric.
 
-        - If ``str``, the distance metric used to identify the best
+        - If `str`, the distance metric used to identify the best
           shapelet.
-        - If ``list``, multiple metrics specified as a list of tuples,
+        - If `list`, multiple metrics specified as a list of tuples,
           where the first element of the tuple is a metric name and the second
           element a dictionary with a parameter grid specification. A parameter
           grid specification is a dict with two mandatory and one optional
           key-value pairs defining the lower and upper bound on the values and
           number of values in the grid. For example, to specifiy a grid over
-          the argument ``r`` with 10 values in the range 0 to 1, we would give
-          the following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+          the argument `r` with 10 values in the range 0 to 1, we would give
+          the following specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
           Read more about metric specifications in the `User guide
           <metric_specification>`__.
@@ -1464,11 +1453,11 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator.
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator.
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
 
@@ -1526,7 +1515,6 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
         metric_params=None,
         random_state=None,
     ):
-        """Construct a shapelet isolation forest."""
         super(IsolationShapeletForest, self).__init__(
             estimator=ExtraShapeletTreeRegressor(),
             bootstrap=bootstrap,
@@ -1703,65 +1691,52 @@ class RocketForestRegressor(BaseForestRegressor):
     Parameters
     ----------
     n_estimators : int, optional
-        The number of estimators
+        The number of estimators.
     n_kernels : int, optional
         The number of shapelets to sample at each node.
-    n_estimators : int, optional
-        The number of estimators
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
     max_depth : int, optional
-        The maximum depth of the tree. If ``None`` the tree is
+        The maximum depth of the tree. If `None` the tree is
         expanded until all leaves are pure or until all leaves contain less
-        than ``min_samples_split`` samples.
+        than `min_samples_split` samples.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
-        The minimum number of samples in a leaf
+        The minimum number of samples in a leaf.
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger
         than or equal to this value.
-    min_shapelet_size : float, optional
+    sampling : {"normal", "uniform", "shapelet"}, optional
+        The sampling of convolutional filters.
+
+        - if "normal", sample filter according to a normal distribution with
+            ``mean`` and ``scale``.
+        - if "uniform", sample filter according to a uniform distribution with
+            ``lower`` and ``upper``.
+        - if "shapelet", sample filters as subsequences in the training data.
+    sampling_params : dict, optional
+        The parameters for the sampling.
+
+        - if "normal", ``{"mean": float, "scale": float}``, defaults to
+            ``{"mean": 0, "scale": 1}``.
+        - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+            ``{"lower": -1, "upper": 1}``.
+    kernel_size : array-like, optional
+        The kernel size, by default ``[7, 11, 13]``.
+    min_size : float, optional
         The minimum length of a shapelets expressed as a fraction of
         *n_timestep*.
-    max_shapelet_size : float, optional
+    max_size : float, optional
         The maximum length of a shapelets expressed as a fraction of
         *n_timestep*.
-    alpha : float, optional
-        Dynamically decrease the number of sampled shapelets at each node
-        according to the current depth, i.e.:
-
-        ::
-            w = 1 - exp(-abs(alpha) * depth)
-
-        - if ``alpha < 0``, the number of sampled shapelets decrease from
-          ``n_shapelets`` towards 1 with increased depth.
-        - if ``alpha > 0``, the number of sampled shapelets increase from ``1``
-          towards ``n_shapelets`` with increased depth.
-        - if ``None``, the number of sampled shapelets are the same
-          independeth of depth.
-    metric : str or list, optional
-        The distance metric.
-
-        - If ``str``, the distance metric used to identify the best
-          shapelet.
-        - If ``list``, multiple metrics specified as a list of tuples,
-          where the first element of the tuple is a metric name and the second
-          element a dictionary with a parameter grid specification. A parameter
-          grid specification is a dict with two mandatory and one optional
-          key-value pairs defining the lower and upper bound on the values and
-          number of values in the grid. For example, to specifiy a grid over
-          the argument ``r`` with 10 values in the range 0 to 1, we would give
-          the following specification: ``dict(min_r=0, max_r=1, num_r=10)``.
-
-          Read more about metric specifications in the `User guide
-          <metric_specification>`__.
-
-        .. versionchanged:: 1.2
-            Added support for multi-metric shapelet transform
-    metric_params : dict, optional
-        Parameters for the distance measure. Ignored unless metric is a string.
-
-        Read more about the parameters in the `User guide
-        <list_of_subsequence_metrics>`__.
+    bias_prob : float, optional
+        The probability of using a bias term.
+    normalize_prob : float, optional
+        The probability of performing normalization.
+    padding_prob : float, optional
+        The probability of padding with zeros.
     criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 
@@ -1770,19 +1745,19 @@ class RocketForestRegressor(BaseForestRegressor):
     bootstrap : bool, optional
         If the samples are drawn with replacement.
     warm_start : bool, optional
-        When set to ``True``, reuse the solution of the previous call to
+        When set to `True`, reuse the solution of the previous call to
         fit and add more estimators to the ensemble, otherwise, just fit a
         whole new ensemble.
     n_jobs : int, optional
-        The number of processor cores used for fitting the ensemble
+        The number of processor cores used for fitting the ensemble.
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
           the random number generator
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
     """
@@ -1792,7 +1767,7 @@ class RocketForestRegressor(BaseForestRegressor):
         **RocketTreeRegressor._parameter_constraints,
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -2135,6 +2110,82 @@ class ProximityForestClassifier(BaseForestClassifier):
     """
     A forest of proximity trees.
 
+    Parameters
+    ----------
+    n_estimators : int, optional
+        The number of estimators.
+    n_pivot : int, optional
+        The number of pivots to sample at each node.
+    pivot_sample : {"label", "uniform"}, optional
+        The pivot sampling method.
+    metric_sample : {"uniform", "weighted"}, optional
+        The metric sampling method.
+    metric : {"auto", "default"}, str or list, optional
+        The distance metrics. By default, we use the parameterization suggested by
+        Lucas et.al (2019).
+
+        - If "auto", use the default metric specification, suggested by
+          (Lucas et. al, 2020).
+        - If str, use a single metric or default metric specification.
+        - If list, custom metric specification can be given as a list of
+          tuples, where the first element of the tuple is a metric name and the
+          second element a dictionary with a parameter grid specification. A
+          parameter grid specification is a `dict` with two mandatory and one
+          optional key-value pairs defining the lower and upper bound on the
+          values as well as the number of values in the grid. For example, to
+          specifiy a grid over the argument 'r' with 10 values in the range 0
+          to 1, we would give the following specification: 
+          `dict(min_r=0, max_r=1, num_r=10)`.
+
+        Read more about the metrics and their parameters in the
+        :ref:`User guide <list_of_metrics>`.
+    metric_params : dict, optional
+        Parameters for the distance measure. Ignored unless metric is a string.
+
+        Read more about the parameters in the :ref:`User guide
+        <list_of_metrics>`.
+    metric_factories : dict, optional
+        A metric specification.
+
+        .. deprecated:: 1.2
+            Use the combination of metric and metric params.
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
+    max_depth : int, optional
+        The maximum tree depth.
+    min_samples_split : int, optional
+        The minimum number of samples to consider a split.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        The minimum impurity decrease to build a sub-tree.
+    criterion : {"entropy", "gini"}, optional
+        The impurity criterion.
+    bootstrap : bool, optional
+        If the samples are drawn with replacement.
+    warm_start : bool, optional
+        When set to `True`, reuse the solution of the previous call
+        to fit and add more estimators to the ensemble, otherwise, just fit
+        a whole new ensemble.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
+        Positive integers mean the exact number of cores.
+    class_weight : dict or "balanced", optional
+        Weights associated with the labels.
+
+        - if dict, weights on the form {label: weight}.
+        - if "balanced" each class weight inversely proportional to the class
+            frequency.
+        - if None, each class has equal weight.
+    random_state : int or RandomState
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
+
+    
     References
     ----------
     Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi, \
@@ -2148,14 +2199,15 @@ class ProximityForestClassifier(BaseForestClassifier):
         **ProximityTreeClassifier._parameter_constraints,
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_estimators=100,
         *,
         n_pivot=1,
         pivot_sample="label",
         metric_sample="weighted",
-        metrics="auto",
+        metric="auto",
+        metric_params=None,
         metric_factories=None,
         oob_score=False,
         max_depth=None,
@@ -2174,7 +2226,8 @@ class ProximityForestClassifier(BaseForestClassifier):
             estimator_params=(
                 "n_pivot",
                 "metric_factories",
-                "metrics",
+                "metric",
+                "metric_params",
                 "pivot_sample",
                 "metric_sample",
                 "max_depth",
@@ -2197,8 +2250,9 @@ class ProximityForestClassifier(BaseForestClassifier):
             random_state=random_state,
         )
         self.n_pivot = n_pivot
-        self.metric_factories = metric_factories  # TODO(1.4)
-        self.metrics = metrics
+        self.metric_factories = metric_factories
+        self.metric = metric
+        self.metric_params = metric_params
         self.pivot_sample = pivot_sample
         self.metric_sample = metric_sample
 
