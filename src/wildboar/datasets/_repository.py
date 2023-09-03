@@ -735,16 +735,25 @@ class RepositoryCollection:
 
 
 class Bundle(metaclass=ABCMeta):
-    """Base class for handling dataset bundles.
+    """
+    Base class for handling dataset bundles.
 
-    Attributes
+    Parameters
     ----------
+    key : str
+        A unique key of the bundle.
+    version : str
+        The version of the bundle.
     name : str
-        Human-readable name of the bundle
+        Human-readable name of the bundle.
+    tag : str, optional
+        A bundle tag.
+    arrays : list
+        The arrays of the dataset.
     description : str
-        Description of the bundle
-    label_index : int or array-like
-        Index of the class label(s)
+        Description of the bundle.
+    collections : dict, optional
+        A list of collections.
     """
 
     def __init__(
@@ -758,21 +767,6 @@ class Bundle(metaclass=ABCMeta):
         description=None,
         collections=None,
     ):
-        """Construct a new Bundle.
-
-        Parameters
-        ----------
-        key : str
-            A unique key of the bundle
-        version : str
-            The version of the bundle
-        name : str
-            Human-readable name of the bundle
-        description : str
-            Description of the bundle
-        arrays : list
-            The arrays of the dataset
-        """
         self.key = key
         self.version = version
         self.name = name
@@ -782,6 +776,23 @@ class Bundle(metaclass=ABCMeta):
         self.arrays = arrays or ["x", "y"]
 
     def get_filename(self, version=None, tag=None, ext=None):
+        """
+        Get the cache name of the bundle.
+
+        Parameters
+        ----------
+        version : str, optional
+            The bundle version.
+        tag : str, optional
+            The tag.
+        ext : str, optional
+            The extension of the file.
+
+        Returns
+        -------
+        str
+            The filename.
+        """
         filename = "%s-v%s" % (self.key, version or self.version)
         if tag:
             filename += "-%s" % tag
@@ -790,6 +801,19 @@ class Bundle(metaclass=ABCMeta):
         return filename
 
     def get_collection(self, collection):
+        """
+        Get a dataset collection.
+
+        Parameters
+        ----------
+        collection : str, optional
+            The name of the collection.
+
+        Returns
+        -------
+        list
+            List of datasets in the collection.
+        """
         if self.collections is None:
             raise ValueError("The collection %s cannot be found." % collection)
         else:
@@ -799,19 +823,20 @@ class Bundle(metaclass=ABCMeta):
             return c
 
     def list(self, archive, collection=None):
-        """List all datasets in this bundle.
+        """
+        List all datasets in this bundle.
 
         Parameters
         ----------
         archive : ZipFile
-            The bundle file
+            The bundle file.
         collection : str, optional
-            The collection name
+            The collection name.
 
         Returns
         -------
-        dataset_names : list
-            A sorted list of datasets in the bundle
+        list
+            A sorted list of datasets in the bundle.
         """
         names = []
         if collection is not None:
@@ -833,25 +858,26 @@ class Bundle(metaclass=ABCMeta):
         name,
         archive,
     ):
-        """Load a dataset from the bundle.
+        """
+        Load a dataset from the bundle.
 
         Parameters
         ----------
         name : str
-            Name of the dataset
+            Name of the dataset.
         archive : ZipFile
-            The zip-file bundle
+            The zip-file bundle.
 
         Returns
         -------
         x : ndarray
-            Data samples
+            Data samples.
         y : ndarray
-            Data labels
+            Data labels.
         n_training_samples : int
-            Number of samples that are for training. The value is <= x.shape[0]
+            Number of samples that are for training. The value is <= x.shape[0].
         extras : dict, optional
-            Extra numpy arrays
+            Extra numpy arrays.
         """
         datasets = []
         for dataset in map(_Dataset, archive.filelist):
@@ -935,10 +961,8 @@ class Bundle(metaclass=ABCMeta):
 
     @abstractmethod
     def _is_dataset(self, file_name, ext):
-        """Check if a path and extension is to be considered a dataset.
-
-        .. note::
-            Overridden by subclasses.
+        """
+        Check if a path and extension is to be considered a dataset.
 
         The check should be simple and only consider the filename and or
         extension of the file. Validation of the file should be deferred to
@@ -947,36 +971,34 @@ class Bundle(metaclass=ABCMeta):
         Parameters
         ----------
         file_name : str
-            Name of the dataset file
+            Name of the dataset file.
 
         ext : str
-            Extension of the dataset file
+            Extension of the dataset file.
 
         Returns
         -------
         bool
-            True if it is a dataset
+            True if it is a dataset.
         """
         pass
 
     @abstractmethod
     def _load_array(self, archive, file):
-        """Load the file inside the archive and convert to a numpy array.
-
-        .. note::
-            Overridden by subclasses.
+        """
+        Load the file inside the archive and convert to a numpy array.
 
         Parameters
         ----------
         archive : ZipFile
-            The zip-archive in which the file reside
+            The zip-archive in which the file reside.
         file : str
-            Path to the file inside the zip-archive
+            Path to the file inside the zip-archive.
 
         Returns
         -------
         ndarray
-            The dataset converted to a ndarray
+            The dataset converted to a ndarray.
         """
         pass
 

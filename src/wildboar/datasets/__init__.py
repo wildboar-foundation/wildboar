@@ -1,10 +1,19 @@
-"""Dataset loading utilities.
+# Authors: Isak Samsten
+# License: BSD 3 clause
+
+"""
+Dataset loading utilities.
 
 See the dataset section in the :doc:`User Guide <wildboar:guide/datasets>` for
 more details and examples.
+
+Examples
+--------
+>>> from wildboar.datasets import load_dataset
+>>> X, y = load_dataset("GunPoint")
+>>> X.shape
+(200, 60)
 """
-# Authors: Isak Samsten
-# License: BSD 3 clause
 
 import re
 
@@ -47,7 +56,8 @@ __all__ = [
 
 
 def _split_repo_bundle(repo_bundle_name):
-    """Split a repository bundle string of the format {repo}/{bundle}.
+    """
+    Split a repository bundle string of the format {repo}/{bundle}.
 
     Parameters
     ----------
@@ -81,14 +91,18 @@ def _split_repo_bundle(repo_bundle_name):
         raise ValueError("Invalid repository/bundle string '%s'." % repo_bundle_name)
 
 
+# noqa: H0002
 def set_cache_dir(cache_dir=None):
-    """Change the global cache directory.
+    """
+    Change the global cache directory.
 
     If called without arguments, the cache directory is reset to the default
     directory.
 
+    Parameters
+    ----------
     cache_dir : str, optional
-        The cache directory root
+        The cache directory root.
     """
     global _CACHE_DIR  # noqa: PLW0603
     _CACHE_DIR = cache_dir
@@ -98,8 +112,32 @@ def _default_cache_dir():
     return os_cache_path("wildboar") if not _CACHE_DIR else _CACHE_DIR
 
 
+# noqa: H0002
 def load_synthetic_control(merge_train_test=True):
-    """Load the Synthetic_Control dataset.
+    """
+    Load the Synthetic_Control dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
 
     See Also
     --------
@@ -113,8 +151,32 @@ def load_synthetic_control(merge_train_test=True):
     )
 
 
+# noqa: H0002
 def load_two_lead_ecg(merge_train_test=True):
-    """Load the TwoLeadECG dataset.
+    """
+    Load the TwoLeadECG dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
 
     See Also
     --------
@@ -128,8 +190,32 @@ def load_two_lead_ecg(merge_train_test=True):
     )
 
 
+# noqa: H0002
 def load_gun_point(merge_train_test=True):
-    """Load the GunPoint dataset.
+    """
+    Load the GunPoint dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
 
     See Also
     --------
@@ -154,30 +240,31 @@ def load_datasets(
     filter=None,
     **kwargs,
 ):
-    """Load all datasets as a generator.
+    """
+    Load all datasets as a generator.
 
     Parameters
     ----------
     repository : str
-        The repository string
+        The repository string.
     collection : str, optional
         A collection of named datasets.
-    progress : bool, optional
-        If progress indicator is shown while downloading the repository.
     cache_dir : str, optional
         The cache directory for downloaded dataset repositories.
     create_cache_dir : bool, optional
         Create the cache directory if it does not exist.
+    progress : bool, optional
+        If progress indicator is shown while downloading the repository.
     force : bool, optional
-        Force re-download of cached repository
-    filter: str, dict, list or callable, optional
+        Force re-download of cached repository.
+    filter : str, dict, list or callable, optional
         Filter the datasets
 
-        - if callable, only yield those datasets for which the callable returns True.
-          ``f(dataset, x, y) -> bool``
+        - if callable, only yield those datasets for which the callable returns
+          `True`. ``f(dataset, x, y) -> bool``
 
-        - if dict, filter based on the keys and values, where keys are attributes and
-          values comparison specs
+        - if dict, filter based on the keys and values, where keys are
+          attributes and values comparison specs
 
         - if list, filter based on conjunction of attribute comparisons
 
@@ -279,7 +366,8 @@ def load_dataset(  # noqa: PLR0912
     refresh=False,
     timeout=None,
 ):
-    """Load a dataset from a repository.
+    """
+    Load a dataset from a repository.
 
     Parameters
     ----------
@@ -290,57 +378,58 @@ def load_dataset(  # noqa: PLR0912
         ``{repository}/{bundle}[:{version}][:{tag}]``. Read more in the `User
         guide <datasets_repositories>`_.
     dtype : dtype, optional
-        The data type of x (train and test)
-    contiguous : bool, optional
-        Ensure that the returned dataset is memory contiguous.
+        The data type of x (train and test).
     preprocess : str, list or callable, optional
         Preprocess the dataset
 
         - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
-          for valid keys)
-        - if callable, function taking a np.ndarray and returns the preprocessed dataset
-        - if list, a list of callable or str
+          for valid keys).
+        - if callable, function taking a np.ndarray and returns the
+          preprocessed dataset.
+        - if list, a list of callable or str.
+    contiguous : bool, optional
+        Ensure that the returned dataset is memory contiguous.
     merge_train_test : bool, optional
         Merge the existing training and testing partitions.
-    progress: bool, optional
+    cache_dir : str, optional
+        The directory where downloaded files are cached.
+    create_cache_dir : bool, optional
+        Create cache directory if missing (default=True).
+    progress : bool, optional
         Show a progress bar while downloading a bundle.
-    cache_dir: str, optional
-        The directory where downloaded files are cached
-    create_cache_dir: bool, optional
-        Create cache directory if missing (default=True)
     return_extras : bool, optional
-        Return optional extras
+        Return optional extras.
 
-        .. versionadded :: 1.1
+        .. versionadded:: 1.1
     force : bool, optional
-        Force re-download of already cached bundle
+        Force re-download of already cached bundle.
 
-        .. versionadded :: 1.0.4
+        .. versionadded:: 1.0.4
     refresh : bool, optional
-        Refresh the repository
+        Refresh the repository.
 
-        .. versionadded :: 1.1
+        .. versionadded:: 1.1
     timeout : float, optional
-        Timeout for json request
+        Timeout for json request.
 
-        .. versionadded :: 1.1
+        .. versionadded:: 1.1
 
     Returns
     -------
-    x : ndarray
-        The data samples, optional
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
     y : ndarray, optional
-        The labels
+        The labels, if `merge_train_test=False`.
     x_train : ndarray, optional
-        The training samples if `merge_train_test=False`
+        The training samples if `merge_train_test=False`.
     x_test : ndarray, optional
-        The testing samples if `merge_train_test=False`
+        The testing samples if `merge_train_test=False`.
     y_train : ndarray, optional
-        The training labels if `merge_train_test=False`
+        The training labels if `merge_train_test=False`.
     y_test : ndarray, optional
-        The testing labels if `merge_train_test=False`
+        The testing labels if `merge_train_test=False`.
     extras : dict, optional
-        The optional extras if `return_extras=True`
+        The optional extras if `return_extras=True`.
 
     Examples
     --------
@@ -452,6 +541,7 @@ def load_dataset(  # noqa: PLR0912
         return ret_val
 
 
+# noqa: H0002
 def list_datasets(
     repository="wildboar/ucr",
     *,
@@ -463,37 +553,38 @@ def list_datasets(
     refresh=False,
     timeout=None,
 ):
-    """List the datasets in the repository.
+    """
+    List the datasets in the repository.
 
     Parameters
     ----------
     repository : str or Bundle, optional
         The data repository
 
-        - if str load a named bundle, format `{repository}/{bundle}`
+        - if str load a named bundle, format `{repository}/{bundle}`.
     collection : str, optional
         A collection of named datasets.
-    progress: bool, optional
+    cache_dir : str, optional
+        The directory where downloaded files are cached (default='wildboar_cache').
+    create_cache_dir : bool, optional
+        Create cache directory if missing (default=True).
+    progress : bool, optional
         Show a progress bar while downloading a bundle.
-    cache_dir: str, optional
-        The directory where downloaded files are cached (default='wildboar_cache')
-    create_cache_dir: bool, optional
-        Create cache directory if missing (default=True)
     force : bool, optional
-        Force re-download of cached bundle
+        Force re-download of cached bundle.
     refresh : bool, optional
-        Refresh the repository
+        Refresh the repository.
 
-        .. versionadded :: 1.1
+        .. versionadded:: 1.1
     timeout : float, optional
-        Timeout for json request
+        Timeout for json request.
 
-        .. versionadded :: 1.1
+        .. versionadded:: 1.1
 
     Returns
     -------
-        dataset : set
-            A set of dataset names
+    set
+        A set of dataset names.
     """
     (
         repository_name,
@@ -517,17 +608,19 @@ def list_datasets(
     )
 
 
+# noqa: H0002
 def clear_cache(repository=None, *, cache_dir=None, keep_last_version=True):
-    """Clear the cache by deleting cached datasets.
+    """
+    Clear the cache by deleting cached datasets.
 
     Parameters
     ----------
     repository : str, optional
         The name of the repository to clear cache.
 
-        - if None, clear cache of all repositories
+        - if None, clear cache of all repositories.
     cache_dir : str, optional
-        The cache directory
+        The cache directory.
     keep_last_version : bool, optional
         If true, keep the latest version of each repository.
     """
@@ -541,41 +634,45 @@ def clear_cache(repository=None, *, cache_dir=None, keep_last_version=True):
         )
 
 
+# noqa: H0002
 def get_repository(repository):
-    """Get repository by name.
+    """
+    Get repository by name.
 
     Parameters
     ----------
     repository : str
-        Repository name
+        Repository name.
 
     Returns
     -------
-    repository : Repository
-        A repository
+    Repository
+        A repository.
     """
     return _REPOSITORIES[repository]
 
 
+# noqa: H0002
 def install_repository(repository, *, refresh=True, timeout=None, cache_dir=None):
-    """Install repository.
+    """
+    Install repository.
 
     Parameters
     ----------
     repository : str or Repository
-        A repository
+        A repository.
     refresh : bool, optional
-        Refresh the repository
+        Refresh the repository.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     timeout : float, optional
-        Timeout for json request
+        Timeout for json request.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     cache_dir : str, optional
-        Cache directory
+        Cache directory.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     """
     if isinstance(repository, str):
         repository = JSONRepository(repository)
@@ -586,43 +683,50 @@ def install_repository(repository, *, refresh=True, timeout=None, cache_dir=None
     )
 
 
+# noqa: H0002
 def refresh_repositories(repository=None, *, timeout=None, cache_dir=None):
-    """Refresh the installed repositories.
+    """
+    Refresh the installed repositories.
 
+    Parameters
+    ----------
     repository : str, optional
         The repository. None means all repositories.
     timeout : float, optional
-        Timeout for request
+        Timeout for request.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     cache_dir : str, optional
-        Cache directory
+        Cache directory.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     """
     cache_dir = cache_dir or _default_cache_dir()
     _REPOSITORIES.refresh(repository=repository, timeout=timeout, cache_dir=cache_dir)
 
 
+# noqa: H0002
 def get_bundles(repository, *, refresh=False, timeout=None):
-    """Get all bundles in the repository.
+    """
+    Get all bundles in the repository.
 
     Parameters
     ----------
     repository : str
-        Name of the repository
+        Name of the repository.
     refresh : bool, optional
-        Refresh the repository
+        Refresh the repository.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     timeout : float, optional
-        Timeout for json request
+        Timeout for json request.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
 
     Returns
     -------
-    dict : A dict of key Bundle pairs
+    dict
+        A dict of key Bundle pairs.
     """
     repository = _REPOSITORIES[repository]
     if refresh:
@@ -632,42 +736,57 @@ def get_bundles(repository, *, refresh=False, timeout=None):
 
 
 def list_bundles(repository, *, refresh=False, timeout=None):
-    """Get a list of all bundle names in the specified repository.
+    """
+    Get a list of all bundle names in the specified repository.
 
     Parameters
     ----------
     repository : str
-        The name of the repository
+        The name of the repository.
     refresh : bool, optional
-        Refresh the repository
+        Refresh the repository.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     timeout : float, optional
-        Timeout for json request
+        Timeout for json request.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
 
     Returns
     -------
-    bundle : str
-        The name of the bundle
+    list
+        A list of bundle names.
+
+    Examples
+    --------
+    >>> from wildboar.datasets import list_bundles
+    >>> list_bundles("wildboar")
+    ["ucr", "ucr-tiny", ...]
     """
     return sorted(get_bundles(repository, refresh=refresh, timeout=timeout).keys())
 
 
 def list_collections(repository):
-    """List the collections of the repository.
+    """
+    List the collections of the repository.
 
     Parameters
     ----------
     repository : str or Bundle, optional
         The data repository
 
-        - if str load a named bundle, format {repository}/{bundle}
+        - if str load a named bundle, format {repository}/{bundle}.
 
     Returns
     -------
-    list : a list of collections
+    collections
+        A list of collections.
+
+    Examples
+    --------
+    >>> from wildboar.datasets import list_collections
+    >>> list_collections("wildboar/ucr")
+    ["bake-off", ...]
     """
     (
         repository_name,
@@ -681,20 +800,39 @@ def list_collections(repository):
 
 
 def list_repositories(*, refresh=False, timeout=None, cache_dir=None):
-    """List the key of all installed repositories.
+    """
+    List the key of all installed repositories.
 
+    Parameters
+    ----------
     refresh : bool, optional
-        Refresh all repositories
+        Refresh all repositories.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     timeout : float, optional
-        Timeout for json request
+        Timeout for json request.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
     cache_dir : str, optional
-        Cache directory
+        Cache directory.
 
-        ..versionadded :: 1.1
+        .. versionadded:: 1.1
+
+    Returns
+    -------
+    repositories
+        A list of installed repositories.
+
+    Examples
+    --------
+    >>> from wildboar.datasets import list_repositories
+    >>> list_repositories()
+    ["wildboar", ...]
+
+    We can also refresh the repositories, to load any newly added
+    but still pending repositories.
+
+    >>> list_repositories(refresh=True)
     """
     if refresh:
         cache_dir = cache_dir or _default_cache_dir()
@@ -719,7 +857,7 @@ def _get_dataset_version():
         return "%d.%d" % (v.major, v.minor)
 
 
-# TODO: Update the url to datasets.wildboar.dev
+# TODO(1.2): Update the url to datasets.wildboar.dev
 install_repository(
     "https://isaksamsten.github.io/wildboar-datasets/%s/repo.json"
     % _get_dataset_version(),
