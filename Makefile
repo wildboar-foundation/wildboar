@@ -34,6 +34,6 @@ docs-deps:
 	$(PYTHON) -m pip install -r docs/requirements.txt
 
 docs:
-	$(PYTHON) -m sphinx docs html
+	$(PYTHON) -m sphinx docs build/html
 
 .PHONY: docs docs-deps
