@@ -37,12 +37,12 @@ Functions
    :Parameters:
 
        **x** : time-series
-           The input
+           The input.
 
    :Returns:
 
-       **length** : float or ndarray
-           The lenght of the time series
+       float or ndarray
+           The lenght of the time series.
 
 
 
@@ -90,8 +90,8 @@ Functions
 
    :Returns:
 
-       ndarray or bool
-           boolean indicator array
+       ndarray
+           Boolean indicator array.
 
 
 
@@ -122,7 +122,7 @@ Functions
    :Returns:
 
        bool
-           True if time series contains EoS
+           True if time series contains EoS.
 
 
 

@@ -15,15 +15,8 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.utils.estimator_checks.check_consistent_estimator_params
    wildboar.utils.estimator_checks.check_estimator
-   wildboar.utils.estimator_checks.check_force_n_dims
-   wildboar.utils.estimator_checks.check_force_n_dims_raises
-   wildboar.utils.estimator_checks.check_sample_weights_invariance_samples_order
 
-
-
-.. py:function:: check_consistent_estimator_params(name, estimator)
 
 
 .. py:function:: check_estimator(estimator, generate_only=False, ignore=None, skip_scikit=False)
@@ -59,7 +52,7 @@ Functions
 
    :Returns:
 
-       **checks_generator** : generator
+       generator
            Generator that yields (estimator, check) tuples. Returned when
            `generate_only=True`.
 
@@ -77,13 +70,4 @@ Functions
 
    ..
        !! processed by numpydoc !!
-
-.. py:function:: check_force_n_dims(name, estimator)
-
-
-.. py:function:: check_force_n_dims_raises(name, estimator)
-
-
-.. py:function:: check_sample_weights_invariance_samples_order(name, estimator_orig, kind='ones')
-
 

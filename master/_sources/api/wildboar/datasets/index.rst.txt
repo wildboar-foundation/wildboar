@@ -24,6 +24,12 @@
 
 
 
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_dataset
+   >>> X, y = load_dataset("GunPoint")
+   >>> X.shape
+   (200, 60)
 
 
 
@@ -87,37 +93,111 @@ Functions
    Base class for handling dataset bundles.
 
 
+   :Parameters:
 
+       **key** : str
+           A unique key of the bundle.
 
-
-
-
-
-
-
-
-
-
-
-   :Attributes:
+       **version** : str
+           The version of the bundle.
 
        **name** : str
-           Human-readable name of the bundle
+           Human-readable name of the bundle.
+
+       **tag** : str, optional
+           A bundle tag.
+
+       **arrays** : list
+           The arrays of the dataset.
 
        **description** : str
-           Description of the bundle
+           Description of the bundle.
 
-       **label_index** : int or array-like
-           Index of the class label(s)
+       **collections** : dict, optional
+           A list of collections.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
        !! processed by numpydoc !!
    .. py:method:: get_collection(collection)
 
+      
+      Get a dataset collection.
+
+
+      :Parameters:
+
+          **collection** : str, optional
+              The name of the collection.
+
+      :Returns:
+
+          list
+              List of datasets in the collection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: get_filename(version=None, tag=None, ext=None)
 
+      
+      Get the cache name of the bundle.
+
+
+      :Parameters:
+
+          **version** : str, optional
+              The bundle version.
+
+          **tag** : str, optional
+              The tag.
+
+          **ext** : str, optional
+              The extension of the file.
+
+      :Returns:
+
+          str
+              The filename.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: list(archive, collection=None)
 
@@ -128,15 +208,15 @@ Functions
       :Parameters:
 
           **archive** : ZipFile
-              The bundle file
+              The bundle file.
 
           **collection** : str, optional
-              The collection name
+              The collection name.
 
       :Returns:
 
-          **dataset_names** : list
-              A sorted list of datasets in the bundle
+          list
+              A sorted list of datasets in the bundle.
 
 
 
@@ -162,24 +242,24 @@ Functions
       :Parameters:
 
           **name** : str
-              Name of the dataset
+              Name of the dataset.
 
           **archive** : ZipFile
-              The zip-file bundle
+              The zip-file bundle.
 
       :Returns:
 
           **x** : ndarray
-              Data samples
+              Data samples.
 
           **y** : ndarray
-              Data labels
+              Data labels.
 
           **n_training_samples** : int
-              Number of samples that are for training. The value is <= x.shape[0]
+              Number of samples that are for training. The value is <= x.shape[0].
 
           **extras** : dict, optional
-              Extra numpy arrays
+              Extra numpy arrays.
 
 
 
@@ -637,10 +717,10 @@ Functions
        **repository** : str, optional
            The name of the repository to clear cache.
            
-           - if None, clear cache of all repositories
+           - if None, clear cache of all repositories.
 
        **cache_dir** : str, optional
-           The cache directory
+           The cache directory.
 
        **keep_last_version** : bool, optional
            If true, keep the latest version of each repository.
@@ -670,22 +750,22 @@ Functions
    :Parameters:
 
        **repository** : str
-           Name of the repository
+           Name of the repository.
 
        **refresh** : bool, optional
-           Refresh the repository
+           Refresh the repository.
            
-           ..versionadded :: 1.1
+           .. versionadded:: 1.1
 
        **timeout** : float, optional
-           Timeout for json request
+           Timeout for json request.
            
-           ..versionadded :: 1.1
+           .. versionadded:: 1.1
 
    :Returns:
 
-       **dict** : A dict of key Bundle pairs
-           ..
+       dict
+           A dict of key Bundle pairs.
 
 
 
@@ -711,12 +791,12 @@ Functions
    :Parameters:
 
        **repository** : str
-           Repository name
+           Repository name.
 
    :Returns:
 
-       **repository** : Repository
-           A repository
+       Repository
+           A repository.
 
 
 
@@ -742,22 +822,22 @@ Functions
    :Parameters:
 
        **repository** : str or Repository
-           A repository
+           A repository.
 
        **refresh** : bool, optional
-           Refresh the repository
+           Refresh the repository.
            
-           ..versionadded :: 1.1
+           .. versionadded:: 1.1
 
        **timeout** : float, optional
-           Timeout for json request
+           Timeout for json request.
            
-           ..versionadded :: 1.1
+           .. versionadded:: 1.1
 
        **cache_dir** : str, optional
-           Cache directory
+           Cache directory.
            
-           ..versionadded :: 1.1
+           .. versionadded:: 1.1
 
 
 
@@ -784,22 +864,22 @@ Functions
    :Parameters:
 
        **repository** : str
-           The name of the repository
+           The name of the repository.
 
        **refresh** : bool, optional
-           Refresh the repository
+           Refresh the repository.
            
-           ..versionadded :: 1.1
+           .. versionadded:: 1.1
 
        **timeout** : float, optional
-           Timeout for json request
+           Timeout for json request.
            
-           ..versionadded :: 1.1
+           .. versionadded:: 1.1
 
    :Returns:
 
-       **bundle** : str
-           The name of the bundle
+       list
+           A list of bundle names.
 
 
 
@@ -810,6 +890,11 @@ Functions
 
 
 
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import list_bundles
+   >>> list_bundles("wildboar")
+   ["ucr", "ucr-tiny", ...]
 
 
 
@@ -827,12 +912,12 @@ Functions
        **repository** : str or Bundle, optional
            The data repository
            
-           - if str load a named bundle, format {repository}/{bundle}
+           - if str load a named bundle, format {repository}/{bundle}.
 
    :Returns:
 
-       **list** : a list of collections
-           ..
+       collections
+           A list of collections.
 
 
 
@@ -843,6 +928,11 @@ Functions
 
 
 
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import list_collections
+   >>> list_collections("wildboar/ucr")
+   ["bake-off", ...]
 
 
 
@@ -860,37 +950,37 @@ Functions
        **repository** : str or Bundle, optional
            The data repository
            
-           - if str load a named bundle, format `{repository}/{bundle}`
+           - if str load a named bundle, format `{repository}/{bundle}`.
 
        **collection** : str, optional
            A collection of named datasets.
 
-       **progress: bool, optional**
+       **cache_dir** : str, optional
+           The directory where downloaded files are cached (default='wildboar_cache').
+
+       **create_cache_dir** : bool, optional
+           Create cache directory if missing (default=True).
+
+       **progress** : bool, optional
            Show a progress bar while downloading a bundle.
 
-       **cache_dir: str, optional**
-           The directory where downloaded files are cached (default='wildboar_cache')
-
-       **create_cache_dir: bool, optional**
-           Create cache directory if missing (default=True)
-
        **force** : bool, optional
-           Force re-download of cached bundle
+           Force re-download of cached bundle.
 
        **refresh** : bool, optional
-           Refresh the repository
+           Refresh the repository.
            
-           .. versionadded :: 1.1
+           .. versionadded:: 1.1
 
        **timeout** : float, optional
-           Timeout for json request
+           Timeout for json request.
            
-           .. versionadded :: 1.1
+           .. versionadded:: 1.1
 
    :Returns:
 
-       **dataset** : set
-           A set of dataset names
+       set
+           A set of dataset names.
 
 
 
@@ -912,18 +1002,28 @@ Functions
    
    List the key of all installed repositories.
 
-   refresh : bool, optional
-       Refresh all repositories
 
-       ..versionadded :: 1.1
-   timeout : float, optional
-       Timeout for json request
+   :Parameters:
 
-       ..versionadded :: 1.1
-   cache_dir : str, optional
-       Cache directory
+       **refresh** : bool, optional
+           Refresh all repositories.
+           
+           .. versionadded:: 1.1
 
-       ..versionadded :: 1.1
+       **timeout** : float, optional
+           Timeout for json request.
+           
+           .. versionadded:: 1.1
+
+       **cache_dir** : str, optional
+           Cache directory.
+           
+           .. versionadded:: 1.1
+
+   :Returns:
+
+       repositories
+           A list of installed repositories.
 
 
 
@@ -934,8 +1034,16 @@ Functions
 
 
 
+   .. rubric:: Examples
 
+   >>> from wildboar.datasets import list_repositories
+   >>> list_repositories()
+   ["wildboar", ...]
 
+   We can also refresh the repositories, to load any newly added
+   but still pending repositories.
+
+   >>> list_repositories(refresh=True)
 
 
 
@@ -959,73 +1067,74 @@ Functions
            guide <datasets_repositories>`_.
 
        **dtype** : dtype, optional
-           The data type of x (train and test)
-
-       **contiguous** : bool, optional
-           Ensure that the returned dataset is memory contiguous.
+           The data type of x (train and test).
 
        **preprocess** : str, list or callable, optional
            Preprocess the dataset
            
            - if str, use named preprocess function (see ``preprocess._PREPROCESS.keys()``
-             for valid keys)
-           - if callable, function taking a np.ndarray and returns the preprocessed dataset
-           - if list, a list of callable or str
+             for valid keys).
+           - if callable, function taking a np.ndarray and returns the
+             preprocessed dataset.
+           - if list, a list of callable or str.
+
+       **contiguous** : bool, optional
+           Ensure that the returned dataset is memory contiguous.
 
        **merge_train_test** : bool, optional
            Merge the existing training and testing partitions.
 
-       **progress: bool, optional**
+       **cache_dir** : str, optional
+           The directory where downloaded files are cached.
+
+       **create_cache_dir** : bool, optional
+           Create cache directory if missing (default=True).
+
+       **progress** : bool, optional
            Show a progress bar while downloading a bundle.
 
-       **cache_dir: str, optional**
-           The directory where downloaded files are cached
-
-       **create_cache_dir: bool, optional**
-           Create cache directory if missing (default=True)
-
        **return_extras** : bool, optional
-           Return optional extras
+           Return optional extras.
            
-           .. versionadded :: 1.1
+           .. versionadded:: 1.1
 
        **force** : bool, optional
-           Force re-download of already cached bundle
+           Force re-download of already cached bundle.
            
-           .. versionadded :: 1.0.4
+           .. versionadded:: 1.0.4
 
        **refresh** : bool, optional
-           Refresh the repository
+           Refresh the repository.
            
-           .. versionadded :: 1.1
+           .. versionadded:: 1.1
 
        **timeout** : float, optional
-           Timeout for json request
+           Timeout for json request.
            
-           .. versionadded :: 1.1
+           .. versionadded:: 1.1
 
    :Returns:
 
-       **x** : ndarray
-           The data samples, optional
+       **x** : ndarray, optional
+           The samples if `merge_train_test=False`.
 
        **y** : ndarray, optional
-           The labels
+           The labels, if `merge_train_test=False`.
 
        **x_train** : ndarray, optional
-           The training samples if `merge_train_test=False`
+           The training samples if `merge_train_test=False`.
 
        **x_test** : ndarray, optional
-           The testing samples if `merge_train_test=False`
+           The testing samples if `merge_train_test=False`.
 
        **y_train** : ndarray, optional
-           The training labels if `merge_train_test=False`
+           The training labels if `merge_train_test=False`.
 
        **y_test** : ndarray, optional
-           The testing labels if `merge_train_test=False`
+           The testing labels if `merge_train_test=False`.
 
        **extras** : dict, optional
-           The optional extras if `return_extras=True`
+           The optional extras if `return_extras=True`.
 
 
 
@@ -1072,13 +1181,10 @@ Functions
    :Parameters:
 
        **repository** : str
-           The repository string
+           The repository string.
 
        **collection** : str, optional
            A collection of named datasets.
-
-       **progress** : bool, optional
-           If progress indicator is shown while downloading the repository.
 
        **cache_dir** : str, optional
            The cache directory for downloaded dataset repositories.
@@ -1086,17 +1192,20 @@ Functions
        **create_cache_dir** : bool, optional
            Create the cache directory if it does not exist.
 
-       **force** : bool, optional
-           Force re-download of cached repository
+       **progress** : bool, optional
+           If progress indicator is shown while downloading the repository.
 
-       **filter: str, dict, list or callable, optional**
+       **force** : bool, optional
+           Force re-download of cached repository.
+
+       **filter** : str, dict, list or callable, optional
            Filter the datasets
            
-           - if callable, only yield those datasets for which the callable returns True.
-             ``f(dataset, x, y) -> bool``
+           - if callable, only yield those datasets for which the callable returns
+             `True`. ``f(dataset, x, y) -> bool``
            
-           - if dict, filter based on the keys and values, where keys are attributes and
-             values comparison specs
+           - if dict, filter based on the keys and values, where keys are
+             attributes and values comparison specs
            
            - if list, filter based on conjunction of attribute comparisons
            
@@ -1176,7 +1285,33 @@ Functions
    Load the GunPoint dataset.
 
 
+   :Parameters:
 
+       **merge_train_test** : bool, optional
+           Merge the existing training and testing partitions.
+
+   :Returns:
+
+       **x** : ndarray, optional
+           The samples if `merge_train_test=False`.
+
+       **y** : ndarray, optional
+           The labels, if `merge_train_test=False`.
+
+       **x_train** : ndarray, optional
+           The training samples if `merge_train_test=False`.
+
+       **x_test** : ndarray, optional
+           The testing samples if `merge_train_test=False`.
+
+       **y_train** : ndarray, optional
+           The training labels if `merge_train_test=False`.
+
+       **y_test** : ndarray, optional
+           The testing labels if `merge_train_test=False`.
+
+       **extras** : dict, optional
+           The optional extras if `return_extras=True`.
 
 
 
@@ -1205,7 +1340,33 @@ Functions
    Load the Synthetic_Control dataset.
 
 
+   :Parameters:
 
+       **merge_train_test** : bool, optional
+           Merge the existing training and testing partitions.
+
+   :Returns:
+
+       **x** : ndarray, optional
+           The samples if `merge_train_test=False`.
+
+       **y** : ndarray, optional
+           The labels, if `merge_train_test=False`.
+
+       **x_train** : ndarray, optional
+           The training samples if `merge_train_test=False`.
+
+       **x_test** : ndarray, optional
+           The testing samples if `merge_train_test=False`.
+
+       **y_train** : ndarray, optional
+           The training labels if `merge_train_test=False`.
+
+       **y_test** : ndarray, optional
+           The testing labels if `merge_train_test=False`.
+
+       **extras** : dict, optional
+           The optional extras if `return_extras=True`.
 
 
 
@@ -1234,7 +1395,33 @@ Functions
    Load the TwoLeadECG dataset.
 
 
+   :Parameters:
 
+       **merge_train_test** : bool, optional
+           Merge the existing training and testing partitions.
+
+   :Returns:
+
+       **x** : ndarray, optional
+           The samples if `merge_train_test=False`.
+
+       **y** : ndarray, optional
+           The labels, if `merge_train_test=False`.
+
+       **x_train** : ndarray, optional
+           The training samples if `merge_train_test=False`.
+
+       **x_test** : ndarray, optional
+           The testing samples if `merge_train_test=False`.
+
+       **y_train** : ndarray, optional
+           The training labels if `merge_train_test=False`.
+
+       **y_test** : ndarray, optional
+           The testing labels if `merge_train_test=False`.
+
+       **extras** : dict, optional
+           The optional extras if `return_extras=True`.
 
 
 
@@ -1262,17 +1449,21 @@ Functions
    
    Refresh the installed repositories.
 
-   repository : str, optional
-       The repository. None means all repositories.
-   timeout : float, optional
-       Timeout for request
 
-       ..versionadded :: 1.1
-   cache_dir : str, optional
-       Cache directory
+   :Parameters:
 
-       ..versionadded :: 1.1
+       **repository** : str, optional
+           The repository. None means all repositories.
 
+       **timeout** : float, optional
+           Timeout for request.
+           
+           .. versionadded:: 1.1
+
+       **cache_dir** : str, optional
+           Cache directory.
+           
+           .. versionadded:: 1.1
 
 
 
@@ -1298,9 +1489,10 @@ Functions
    If called without arguments, the cache directory is reset to the default
    directory.
 
-   cache_dir : str, optional
-       The cache directory root
+   :Parameters:
 
+       **cache_dir** : str, optional
+           The cache directory root.
 
 
 

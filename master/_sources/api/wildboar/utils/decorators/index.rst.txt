@@ -36,6 +36,10 @@ Functions
        **squeeze** : bool, optional
            Remove axis of length one from the returned arrays.
 
+   :Returns:
+
+       function
+           Decorated function.
 
 
 
@@ -101,6 +105,10 @@ Functions
        **description** : str, optional
            The description of the feature.
 
+   :Returns:
+
+       function
+           Decorated function.
 
 
 

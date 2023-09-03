@@ -40,37 +40,111 @@ Attributes
    Base class for handling dataset bundles.
 
 
+   :Parameters:
 
+       **key** : str
+           A unique key of the bundle.
 
-
-
-
-
-
-
-
-
-
-
-   :Attributes:
+       **version** : str
+           The version of the bundle.
 
        **name** : str
-           Human-readable name of the bundle
+           Human-readable name of the bundle.
+
+       **tag** : str, optional
+           A bundle tag.
+
+       **arrays** : list
+           The arrays of the dataset.
 
        **description** : str
-           Description of the bundle
+           Description of the bundle.
 
-       **label_index** : int or array-like
-           Index of the class label(s)
+       **collections** : dict, optional
+           A list of collections.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
    ..
        !! processed by numpydoc !!
    .. py:method:: get_collection(collection)
 
+      
+      Get a dataset collection.
+
+
+      :Parameters:
+
+          **collection** : str, optional
+              The name of the collection.
+
+      :Returns:
+
+          list
+              List of datasets in the collection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: get_filename(version=None, tag=None, ext=None)
 
+      
+      Get the cache name of the bundle.
+
+
+      :Parameters:
+
+          **version** : str, optional
+              The bundle version.
+
+          **tag** : str, optional
+              The tag.
+
+          **ext** : str, optional
+              The extension of the file.
+
+      :Returns:
+
+          str
+              The filename.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: list(archive, collection=None)
 
@@ -81,15 +155,15 @@ Attributes
       :Parameters:
 
           **archive** : ZipFile
-              The bundle file
+              The bundle file.
 
           **collection** : str, optional
-              The collection name
+              The collection name.
 
       :Returns:
 
-          **dataset_names** : list
-              A sorted list of datasets in the bundle
+          list
+              A sorted list of datasets in the bundle.
 
 
 
@@ -115,24 +189,24 @@ Attributes
       :Parameters:
 
           **name** : str
-              Name of the dataset
+              Name of the dataset.
 
           **archive** : ZipFile
-              The zip-file bundle
+              The zip-file bundle.
 
       :Returns:
 
           **x** : ndarray
-              Data samples
+              Data samples.
 
           **y** : ndarray
-              Data labels
+              Data labels.
 
           **n_training_samples** : int
-              Number of samples that are for training. The value is <= x.shape[0]
+              Number of samples that are for training. The value is <= x.shape[0].
 
           **extras** : dict, optional
-              Extra numpy arrays
+              Extra numpy arrays.
 
 
 

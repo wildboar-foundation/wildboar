@@ -84,12 +84,12 @@ Functions
    :Parameters:
 
        **x** : array-like
-           The array
+           The array.
 
    :Returns:
 
        ndarray
-           boolean indicator array
+           Boolean indicator array.
 
 
 

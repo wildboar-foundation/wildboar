@@ -36,15 +36,25 @@ Attributes
    wildboar.utils.plot.matplotlib_missing
 
 
-.. py:class:: MidpointNormalize(vmin=None, vmax=None, midpoint=None, clip=False)
+.. py:class:: MidpointNormalize(vmin=None, vmax=None, midpoint=None)
 
 
    Bases: :py:obj:`matplotlib.colors.Normalize`
 
    
-   Normalise the colorbar.
+   Normalise values with a specified midpoint.
 
 
+   :Parameters:
+
+       **vmin** : float, optional
+           The minumum value.
+
+       **vmax** : float, optional
+           The maximum value.
+
+       **midpoint** : float, optional
+           The midpoint of the values.
 
 
 
@@ -71,25 +81,34 @@ Attributes
    :Parameters:
 
        **x** : array-like of shape (n_sample, n_timestep)
-           The samples
+           The samples.
 
        **y** : array-like of shape (n_samples, ), optional
-           The labels, by default None
+           The labels.
 
        **ax** : Axes, optional
-           The matplotlib Axes-object, by default None
+           The matplotlib Axes-object.
+
+       **n_samples** : int, optional
+           The maximum number of samples to plot. If n_samples is larger than the number
+           of samples in x or None, all samples are plotted.
 
        **jitter** : bool, optional
-           Add jitter to the amplitude lines, by default False
+           Add jitter to the amplitude lines.
 
        **sample_spacing** : int, optional
-           The frequency domain sample spacing, by default 1
+           The frequency domain sample spacing.
 
        **frequency** : bool, optional
-           Show the frequency bins, by default False
+           Show the frequency bins.
 
        **cmap** : str, optional
-           The colormap, by default "Dark2"
+           The colormap.
+
+   :Returns:
+
+       Axes
+           The axes object that has been plotted.
 
 
 
@@ -100,7 +119,12 @@ Attributes
 
 
 
+   .. rubric:: Examples
 
+   >>> from wildboar.utils.plot import plot_frequency_domain
+   >>> from wildboar.datasets import load_gun_point
+   >>> X, y = load_gun_point(X, y)
+   >>> plot_frequency_domain(X, y, n_sample=10)
 
 
 
@@ -116,17 +140,17 @@ Attributes
    :Parameters:
 
        **x** : array-like of shape (n_sample, n_timestep)
-           The samples
+           The samples.
 
        **y** : array-like of shape (n_samples, ), optional
-           The labels
+           The labels, assumed to be discrete labels.
 
        **n_samples** : int, optional
            The maximum number of samples to plot. If n_samples is larger than the number
            of samples in x or None, all samples are plotted.
 
        **ax** : Axes, optional
-           The matplotlib Axes-object
+           The matplotlib Axes-object.
 
        **alpha** : float, optional
            The opacity of the samples.
@@ -150,7 +174,7 @@ Attributes
 
    :Returns:
 
-       **ax** : Axes
+       Axes
            The axes object that has been plotted.
 
 
@@ -162,6 +186,12 @@ Attributes
 
 
 
+   .. rubric:: Examples
+
+   >>> from wildboar.utils.plot import plot_time_domain
+   >>> from wildboar.datasets import load_gun_point
+   >>> X, y = load_gun_point(X, y)
+   >>> plot_time_domain(X, y, n_sample=10)
 
 
 

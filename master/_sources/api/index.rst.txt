@@ -124,6 +124,12 @@ more details and examples.
 
 
 
+.. rubric:: Examples
+
+>>> from wildboar.datasets import load_dataset
+>>> X, y = load_dataset("GunPoint")
+>>> X.shape
+(200, 60)
 
 
 
@@ -772,7 +778,7 @@ Utility functions.
   * - :py:obj:`~wildboar.utils.check_array`
     - Input validation on time-series.
   * - :py:obj:`~wildboar.utils.check_X_y`
-    - 
+    - Check both X and y.
 
 
 
