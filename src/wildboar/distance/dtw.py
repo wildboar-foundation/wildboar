@@ -1,7 +1,8 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
-"""DTW alignment and distance computations.
+"""
+DTW alignment and distance computations.
 
 The :mod:`wildboar.distance.dtw` module implements several functions for
 computing DTW alignments and distances.
@@ -40,21 +41,22 @@ def _compute_warp_size(x_size, r, *, y_size=0):
 
 
 def dtw_distance(x, y, *, r=1.0):
-    """Compute the dynamic time warping distance.
+    """
+    Compute the dynamic time warping distance.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep, )
-        The first time series
+        The first time series.
     y : array-like of shape (y_timestep, )
-        The second time series
+        The second time series.
     r : float, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+        The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
 
     Returns
     -------
-    distance : float
-        The dynamic time warping distance
+    float
+        The dynamic time warping distance.
 
     See Also
     --------
@@ -66,21 +68,22 @@ def dtw_distance(x, y, *, r=1.0):
 
 
 def ddtw_distance(x, y, *, r=1.0):
-    """Compute the derivative dynamic time warping distance.
+    """
+    Compute the derivative dynamic time warping distance.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep, )
-        The first time series
+        The first time series.
     y : array-like of shape (y_timestep, )
-        The second time series
+        The second time series.
     r : float, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep).
 
     Returns
     -------
-    distance : float
-        The dynamic time warping distance
+    float
+        The dynamic time warping distance.
 
     See Also
     --------
@@ -92,23 +95,24 @@ def ddtw_distance(x, y, *, r=1.0):
 
 
 def wdtw_distance(x, y, *, r=1.0, g=0.05):
-    """Compute the weighted dynamic time warping distance.
+    """
+    Compute the weighted dynamic time warping distance.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep, )
-        The first time series
+        The first time series.
     y : array-like of shape (y_timestep, )
-        The second time series
+        The second time series.
     r : float, optional
-        The warping window in [0, 1] as a fraction of ``max(x_timestep, y_timestep)``
+        The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
     g : float, optional
         Penalization for points deviating the diagonal.
 
     Returns
     -------
-    distance : float
-        The dynamic time warping distance
+    float
+        The dynamic time warping distance.
 
     See Also
     --------
@@ -120,23 +124,24 @@ def wdtw_distance(x, y, *, r=1.0, g=0.05):
 
 
 def wddtw_distance(x, y, *, r=1.0, g=0.05):
-    """Compute the weighted derivative dynamic time warping distance.
+    """
+    Compute the weighted derivative dynamic time warping distance.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep, )
-        The first time series
+        The first time series.
     y : array-like of shape (y_timestep, )
-        The second time series
+        The second time series.
     r : float, optional
-        The warping window in [0, 1] as a fraction of ``max(x_timestep, y_timestep)``
+        The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
     g : float, optional
         Penalization for points deviating the diagonal.
 
     Returns
     -------
-    distance : float
-        The dynamic time warping distance
+    float
+        The dynamic time warping distance.
 
     See Also
     --------
@@ -148,21 +153,22 @@ def wddtw_distance(x, y, *, r=1.0, g=0.05):
 
 
 def dtw_envelop(x, *, r=1.0):
-    """Compute the envelop for LB_keogh.
+    """
+    Compute the envelop for LB_keogh.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep,)
-        The time series
+        The time series.
     r : float, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+        The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
 
     Returns
     -------
     lower : ndarray of shape (x_timestep,)
-        The min value of the envelop
+        The min value of the envelop.
     upper : ndarray of shape (x_timestep,)
-        The max value of the envelop
+        The max value of the envelop.
 
     References
     ----------
@@ -176,27 +182,28 @@ def dtw_envelop(x, *, r=1.0):
 
 
 def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
-    """LB_keogh lower bound.
+    """
+    LB_keogh lower bound.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep,)
-        The first time series
+        The first time series.
     y : array-like of shape (x_timestep,), optional
-        The second time series (same size as x)
+        The second time series (same size as x).
     lower : ndarray of shape (x_timestep,), optional
-        The min value of the envelop
+        The min value of the envelop.
     upper : ndarray of shape (x_timestep,), optional
-        The max value of the envelop
+        The max value of the envelop.
     r : float, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+        The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
 
     Returns
     -------
     min_dist : float
         The cumulative minimum distance.
     lb_keogh : ndarray of shape (x_timestep,),
-        The lower bound at each time step
+        The lower bound at each time step.
 
     Notes
     -----
@@ -235,39 +242,35 @@ def dtw_lb_keogh(x, y=None, *, lower=None, upper=None, r=1.0):
 
 
 def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
-    """Compute the Dynamic time warping alignment matrix.
+    """
+    Compute the Dynamic time warping alignment matrix.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep,)
-        The first time series
+        The first time series.
     y : array-like of shape (y_timestep,)
-        The second time series
+        The second time series.
     r : float, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
-    out : array-like of shape (x_timestep, y_timestep), optional
-        Store the warping path in this array.
+        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep).
     weight : array-like of shape (max(x_timestep, y_timestep), ), optional
         A weighting vector to penalize warping.
+    out : array-like of shape (x_timestep, y_timestep), optional
+        Store the warping path in this array.
 
     Returns
     -------
-    alignment : ndarray of shape (x_timestep, y_timestep)
-        The dynamic time warping alignment matrix
-
-    Notes
-    -----
-    If only the distance between two series is required use `dtw_distance` instead
+    ndarray of shape (x_timestep, y_timestep)
+        The dynamic time warping alignment matrix.
 
     See Also
     --------
     dtw_distance : compute the dtw distance
 
-    References
-    ----------
-    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
-        Weighted dynamic time warping for time series classification.
-        Pattern Recognition 44, 2231-2240
+    Notes
+    -----
+    If only the distance between two series is required use `dtw_distance`
+    instead.
     """
     x = check_array(x, ravel_1d=True, ensure_2d=False, dtype=float, input_name="x")
     y = check_array(y, ravel_1d=True, ensure_2d=False, dtype=float, input_name="y")
@@ -286,33 +289,35 @@ def dtw_alignment(x, y, *, r=1.0, weight=None, out=None):
 
 
 def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
-    r"""Weighted dynamic time warping alignment.
+    """
+    Weighted dynamic time warping alignment.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep,)
-        The first time series
+        The first time series.
     y : array-like of shape (y_timestep,)
-        The second time series
+        The second time series.
     r : float, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+        The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
     g : float, optional
-        Weighting described by Jeong et. al. (2011) using ``g`` as penalty control.
+        Weighting described by Jeong et. al. (2011)[1]_ using `g` as penalty
+        control.
 
         ::
-            w(x)= 1.0 / 1.0 + exp(-g(x-m/2)),
 
+            w = 1.0 / 1.0 + np.exp(-g * (x - n_samples / 2))
     out : array-like of shape (x_timestep, y_timestep), optional
         Store the warping path in this array.
 
     Returns
     -------
-    alignment : ndarray of shape (x_timestep, y_timestep)
-        The dynamic time warping alignment matrix
+    ndarray of shape (x_timestep, y_timestep)
+        The dynamic time warping alignment matrix.
 
     References
     ----------
-    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+    .. [1] Jeong, Y., Jeong, M., Omitaomu, O. (2021)
         Weighted dynamic time warping for time series classification.
         Pattern Recognition 44, 2231-2240
     """
@@ -321,12 +326,14 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
 
 
 def jeong_weight(n, g=0.05):
-    r"""Weighting described by Jeong et. al. (2011).
+    """
+    Weighting described by Jeong et. al. (2011)[1]_.
 
-    Uses ``g`` as the penalty control.
+    Uses `g` as the penalty control.
 
     ::
-        w(x)= 1.0 / 1.0 + exp(-g(x-m/2)),
+
+        w = 1.0 / 1.0 + np.exp(-g * (x - n_samples / 2))
 
     Parameters
     ----------
@@ -337,12 +344,12 @@ def jeong_weight(n, g=0.05):
 
     Returns
     -------
-    weight : ndarray of shape (n, )
-        The weights
+    ndarray of shape (n, )
+        The weights.
 
     References
     ----------
-    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+    .. [1] Jeong, Y., Jeong, M., Omitaomu, O. (2021)
         Weighted dynamic time warping for time series classification.
         Pattern Recognition 44, 2231-2240
     """
@@ -351,28 +358,29 @@ def jeong_weight(n, g=0.05):
 
 
 def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
-    """Optimal warping path between two series or from a given alignment matrix.
+    """
+    Optimal warping path between two series or from a given alignment matrix.
 
     Parameters
     ----------
     x : array-like of shape (x_timestep,), optional
-        The first time series
+        The first time series.
     y : array-like of shape (y_timestep,), optional
-        The second time series
+        The second time series.
     alignment : ndarray of shape (x_timestep, y_timestep), optional
-        Precomputed alignment
+        Precomputed alignment.
     r : float, optional
-        The warping window in [0, 1] as a fraction of max(x_timestep, y_timestep)
+        The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
     return_index : bool, optional
-        Return the indices of the warping path
+        Return the indices of the warping path.
 
     Returns
     -------
     indicator : ndarray of shape (x_timestep, y_timestep)
-        Boolean array with the dtw path
+        Boolean array with the dtw path.
     (x_indices, y_indices) : tuple, optional
         The indices of the first and second dimension of
-        the optimal alignment path.
+        the optimal alignment path..
 
     Notes
     -----
@@ -429,23 +437,26 @@ def dtw_average(
     verbose=False,
     random_state=None,
 ):
-    r"""Compute the DTW barycenter average (DBA).
+    """
+    Compute the DTW barycenter average (DBA).
 
     Parameters
     ----------
     X : array-like of shape (n_samples, n_timestep)
-        The samples.
+        The samples to average.
     r : float, optional
         The warping window as a fraction of n_timestep.
     g : float, optional
-        If set, use the weighted DTW alignment with ``g`` as penalty control.
+        If set, use the weighted DTW alignment with `g` as penalty control.
 
         ::
-            w(x)= 1.0 / 1.0 + exp(-g(x-m/2)),
+
+            w(x)= 1.0 / 1.0 + np.exp(-g * (x - m / 2)),
     sample_weight : array-like of shape (n_samples, ), optional
-        The sample weight.
+        The sample weight. This influences how much each sample
+        contributes to the average.
     init : "random" or array-like of shape (m_timestep, ), optional
-        The initial sample used for the average.
+        The initial sample used for average.
     method : {"mm", "ssg"}, optional
         The method for computing the DBA.
 
@@ -455,15 +466,17 @@ def dtw_average(
         - if "ssg", use the stochastic subgradient mean algorithm [1].
     max_stable : int, optional
         The maximum number of epoch where the average with lowest cost is unchanged
-        if ``method='ssg'``.
+        if `method='ssg'`.
     learning_rate : float, optional
-        The learning rate, if ``method="ssg"``.
+        The learning rate, if `method="ssg"`.
     decay : float, optional
-        The learning rate decay, if ``method="ssg"``.
+        The learning rate decay, if `method="ssg"`.
     tol : float, optional
-        The minmum change in cost between two epochs, if ``method="mm"``.
+        The minmum change in cost between two epochs, if `method="mm"`.
     max_epoch : int, optional
         The maximum number of epochs.
+    return_cost : bool, optional
+        Return the averaging cost if `True`.
     verbose : bool, optional
         If set, show runtime information.
     random_state : int or RandomState, optional
@@ -474,7 +487,35 @@ def dtw_average(
     mean : array-like of shape (m_timestep, ) or (n_timestep, )
         The mean time series.
     cost : float, optional
-        Return the cost of the average
+        Return the cost of the average, if `return_cost=True`.
+
+    Examples
+    --------
+    >>> from wildboar.datasets import load_two_lead_ecg
+    >>> from wildboar.distance.dtw import dtw_average
+    >>> X, y = load_two_lead_ecg()
+    >>> dtw_average(X[:5], method="mm", random_state=1)
+    array([-2.27442791e-01,  3.19807473e-02,  1.77490053e-01,  1.60441308e-01,
+            2.31930140e-01,  2.17437783e-01,  2.43925941e-01,  2.60983434e-01,
+            2.72118437e-01,  7.73352049e-02, -1.56701557e-02, -5.53269314e-02,
+           -7.33366128e-02, -1.09010828e-01, -1.97539989e-01, -1.71443248e-01,
+           -1.71443248e-01, -1.71443248e-01, -2.42492836e-01, -1.71408958e-01,
+           -1.71408958e-01, -1.71408958e-01, -1.71408958e-01, -1.71408958e-01,
+           -1.71408958e-01, -1.71408958e-01, -1.82518334e-01, -3.35671953e-01,
+            1.26442901e-01, -7.38342948e-02, -9.11248815e-01, -1.99355168e+00,
+           -2.08588712e+00, -2.35954194e+00, -2.78345146e+00, -2.41023092e+00,
+           -1.99915956e+00, -1.82717462e+00, -1.82717462e+00, -1.71687181e+00,
+           -1.55819192e+00, -1.28805337e+00, -1.06653283e+00, -7.25159669e-01,
+           -4.02389872e-01, -2.39410523e-01,  2.34687887e-03,  2.98654485e-01,
+            4.85832342e-01,  6.56436416e-01,  7.25302660e-01,  7.77697444e-01,
+            8.24606299e-01,  8.76357782e-01,  9.27083874e-01,  9.44590342e-01,
+            9.44590342e-01,  9.44590342e-01,  9.44590342e-01,  9.44590342e-01,
+            9.64184026e-01,  1.03608265e+00,  1.13964118e+00,  1.33595675e+00,
+            1.09954847e+00,  9.61924171e-01,  9.61924171e-01,  9.61924171e-01,
+            9.61924171e-01,  9.61924171e-01,  9.61924171e-01,  9.47433305e-01,
+            8.29583168e-01,  7.00425122e-01,  5.80524683e-01,  4.70210329e-01,
+            4.40259039e-01,  3.59657389e-01,  3.52170730e-01,  3.54666287e-01,
+            1.93690730e-01,  2.23968406e-01])
     """
     X = check_array(X, ensure_min_samples=2)
     r = check_scalar(r, "r", numbers.Real, min_val=0.0, max_val=1.0)
