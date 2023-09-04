@@ -25,17 +25,17 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
     random_state : int or RandomState
         Controls the random resampling of the original dataset.
 
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
           random number generator.
-        - If :class:`numpy.random.RandomState` instance, ``random_state`` is
-          the random number generator.
-        - If ``None``, the random number generator is the
+        - If :class:`numpy.random.RandomState` instance, `random_state` is the
+          random number generator.
+        - If `None`, the random number generator is the
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
     n_jobs : int, optional
-        The number of jobs to run in parallel. A value of ``None`` means
-        using a single core and a value of ``-1`` means using all cores.
-        Positive integers mean the exact number of cores.
+        The number of jobs to run in parallel. A value of `None` means using a
+        single core and a value of `-1` means using all cores. Positive
+        integers mean the exact number of cores.
 
     Attributes
     ----------
@@ -69,7 +69,6 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         -------
         BaseFeatureEngineerTransform
             This object.
-
         """
         self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
@@ -94,7 +93,6 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         -------
         ndarray of shape (n_samples, n_outputs)
             The transformation.
-
         """
         check_is_fitted(self, attributes="embedding_")
         x = self._validate_data(x, reset=False, allow_3d=True, dtype=np.double)

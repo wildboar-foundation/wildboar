@@ -29,7 +29,15 @@ _SUMMARIZER = {
 }
 
 
+# noqa: H0002
 class IntervalMixin:
+    """
+    Mixin for interval based estimators.
+
+    It provides an implementation for the `_get_feature_engineer` method
+    which supports interval based transformation.
+    """
+
     _parameter_constraints: dict = {
         "n_intervals": [
             Interval(numbers.Integral, 1, None, closed="left"),
@@ -51,7 +59,7 @@ class IntervalMixin:
         "summarizer": [StrOptions(_SUMMARIZER.keys()), list],
     }
 
-    def _get_feature_engineer(self, n_samples):
+    def _get_feature_engineer(self, n_samples):  # noqa: PLR0912
         if isinstance(self.summarizer, list):
             if not all(callable(func) for func in self.summarizer):
                 raise ValueError(
@@ -64,11 +72,12 @@ class IntervalMixin:
 
         if self.n_intervals == "sqrt":
             n_intervals = math.ceil(math.sqrt(self.n_timesteps_in_))
-        elif self.n_intervals == "log2" or self.n_intervals == "log":
+        elif self.n_intervals in ("log2", "log"):
+            # TODO(1.4) Remove
             if self.n_intervals == "log":
                 warnings.warn(
-                    "The value 'log' has been renamed to 'log2' and will "
-                    "be removed in 1.4",
+                    "The value 'log' for `n_intervals` has been renamed to 'log2' "
+                    "and will be removed in 1.4",
                     DeprecationWarning,
                 )
 
@@ -120,14 +129,17 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
         - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
         - if int, the number of intervals is `n_intervals`.
         - if float, the number of intervals is `n_intervals * n_timestep`, with
-            `0 < n_intervals < 1`.
+          `0 < n_intervals < 1`.
+
+        .. deprecated:: 1.2
+            The option "log" has been renamed to "log2".
     intervals : str, optional
         The method for selecting intervals
 
         - if "fixed", `n_intervals` non-overlapping intervals.
         - if "sample", `n_intervals * sample_size` non-overlapping intervals.
         - if "random", `n_intervals` possibly overlapping intervals of randomly
-            sampled in `[min_size * n_timestep, max_size * n_timestep]`.
+          sampled in `[min_size * n_timestep, max_size * n_timestep]`.
     sample_size : float, optional
         The sample size of fixed intervals if `intervals="sample"`.
     min_size : float, optional
@@ -139,7 +151,7 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
 
         - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
         - if list, the summarizer is a list of functions `f(x) -> float`, where
-            x is a numpy array.
+          `x` is a numpy array.
 
         The default summarizer summarizes each interval as its mean, standard
         deviation and slope.
@@ -149,7 +161,17 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
         - If `None`, the random number generator is the `RandomState` instance used
-            by `np.random`.
+          by `np.random`.
+
+    Notes
+    -----
+    Paralellization dependes on releasing the global interpreter lock (GIL). As
+    such, custom functions as summarizers reduces the performance. Wildboar
+    implements summarizers for taking the mean ("mean"), variance ("variance")
+    and slope ("slope") as well as their combination ("mean_var_slope") and the
+    full suite of `catch22` features ("catch22"). In the future, we will allow
+    downstream projects to implement their own summarizers in Cython which will
+    allow for releasing the GIL.
 
     References
     ----------
@@ -170,9 +192,8 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
     >>> t = IntervalTransform(n_intervals="sqrt", summarizer=[np.mean, np.std])
     >>> t.fit_transform(x)
 
-    Each interval (150 // 12 timepoints) are transformed to two features. The mean
-    and the standard deviation.
-
+    Each interval (`150 // 12` timepoints) are transformed to two features. The
+    mean and the standard deviation.
     """
 
     _parameter_constraints: dict = {
@@ -218,6 +239,18 @@ class FeatureTransform(IntervalTransform):
     n_jobs : int, optional
         The number of cores to use on multi-core.
 
+    Examples
+    --------
+    >>> from wildboar.datasets import load_gun_point
+    >>> X, y = load_gun_point()
+    >>> X_t = FeatureTransform().fit_transform(X)
+    >>> X_t[0]
+    array([-5.19633603e-01, -6.51047206e-01,  1.90000000e+01,  4.80000000e+01,
+            7.48441896e-01, -2.73293560e-05,  2.21476510e-01,  4.70000000e+01,
+            4.00000000e-02,  0.00000000e+00,  2.70502518e+00,  2.60000000e+01,
+            6.42857143e-01,  1.00000000e-01, -3.26666667e-01,  9.89974643e-01,
+            2.90000000e+01,  1.31570726e+00,  1.50000000e-01,  8.50000000e-01,
+            4.90873852e-02,  1.47311800e-01])
     """
 
     _parameter_constraints: dict = {
