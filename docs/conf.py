@@ -28,6 +28,7 @@ author = "Isak Samsten"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "matplotlib.sphinxext.plot_directive",
     "sphinx_simpleversion",
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
@@ -138,7 +139,7 @@ def linkcode_resolve(domain, info):
     except:
         filename = info["module"].replace(".", "/") + ".py"
 
-    return "https://github.com/isaksamsten/wildboar/blob/%s/src/%s" % (
+    return "https://github.com/wildboar-foundation/wildboar/blob/%s/src/%s" % (
         current_branch_name,
         filename,
     )
