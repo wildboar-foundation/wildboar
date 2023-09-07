@@ -149,12 +149,11 @@ class SAX(TransformerMixin, BaseEstimator):
     estimate : bool, optional
         Estimate the distribution parameters for the binning from data.
 
-        If `estimate=False`, it is assumed that each time series are:
+        If `estimate=False`, it is assumed that each time series is
+        preprocessed using:
 
-        - preprocessed using :func:`datasets.preprocess.normalize` when
-            `binning="normal"`.
-        - preprocessed using :func:`datasets.preprocess.minmax_scale`. when
-            `binning="uniform"`
+        - :func:`datasets.preprocess.normalize` when `binning="normal"`.
+        - :func:`datasets.preprocess.minmax_scale`. when `binning="uniform"`.
     """
 
     _parameter_constraints: dict = {
@@ -245,7 +244,7 @@ class PAA(TransformerMixin, BaseEstimator):
         "n_intervals": [
             Interval(numbers.Integral, 1, None, closed="left"),
             Interval(numbers.Real, 0, 1, closed="right"),
-            StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
+            StrOptions({"sqrt", "log2"}),
         ],
         "window": [None, Interval(numbers.Integral, 1, None, closed="left")],
     }

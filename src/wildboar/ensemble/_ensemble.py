@@ -142,6 +142,10 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
 
 
 class ForestMixin:
+    """
+    Mixin for tree based ensembles.
+    """
+
     _parameter_constraints: dict = {
         "n_estimators": [Interval(Integral, 1, None, closed="left")],
         "bootstrap": ["boolean"],
@@ -202,6 +206,9 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         - if `float`, then draw `max_samples * n_samples` samples.
     bootstrap : bool, optional
         If the samples are drawn with replacement.
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
     class_weight : dict or "balanced", optional
         Weights associated with the labels
 
@@ -209,9 +216,6 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         - if "balanced" each class weight inversely proportional to
           the class frequency.
         - if `None`, each class has equal weight.
-    oob_score : bool, optional
-        Use out-of-bag samples to estimate generalization performance. Requires
-        `bootstrap=True`.
     warm_start : bool, optional
         When set to `True`, reuse the solution of the previous call
         to fit and add more estimators to the ensemble, otherwise, just fit

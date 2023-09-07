@@ -29,7 +29,8 @@ DEFAULT_TAG = "default"
 
 
 def _replace_placeholders(url, **kwargs):
-    """Replace placeholder values of the format {key} with kwargs[key].
+    """
+    Replace placeholder values of the format {key} with kwargs[key].
 
     Parameters
     ----------
@@ -48,7 +49,8 @@ def _replace_placeholders(url, **kwargs):
 
 
 def _check_integrity(bundle_file, hash_file, throws=True):
-    """Check the integrity of the downloaded or cached file.
+    """
+    Check the integrity of the downloaded or cached file.
 
     Parameters
     ----------
@@ -61,7 +63,8 @@ def _check_integrity(bundle_file, hash_file, throws=True):
 
     Returns
     -------
-    bool : true if the hash of bundle file matches the contents of the hash file
+    bool
+        true if the hash of bundle file matches the contents of the hash file
     """
     with open(hash_file, "r") as f:
         hash = f.readline().strip()
@@ -80,7 +83,8 @@ def _check_integrity(bundle_file, hash_file, throws=True):
 
 
 def _sha1_is_sane(hash_file):
-    """Check the sanity of a hash file.
+    """
+    Check the sanity of a hash file.
 
     Parameters
     ----------
@@ -89,7 +93,8 @@ def _sha1_is_sane(hash_file):
 
     Returns
     -------
-    bool : Returns true if hash is 40 characters long; otherwise false.
+    bool
+        Returns true if hash is 40 characters long; otherwise false.
     """
     with open(hash_file, "r") as f:
         return len(f.readline().strip()) == 40
@@ -104,27 +109,28 @@ def _load_archive(
     progress=True,
     force=False,
 ):
-    """Load or download a bundle.
+    """
+    Load or download a bundle.
 
     Parameters
     ----------
     bundle_name : str
-        The name of the cached file
+        The name of the cached file.
     download_url : str
-        The download url to the bundle and hash file
+        The download url to the bundle and hash file.
     cache_dir : str
-        The cache directory
+        The cache directory.
     create_cache_dir : bool
-        Create the cache directory if missing
+        Create the cache directory if missing.
     progress : bool
         Show progress information
     force : bool
-        Remove any cached files and force re-download
+        Remove any cached files and force re-download.
 
     Returns
     -------
-    archive : zipfile.ZipFile
-        A zip-archive with datasets
+    zipfile.ZipFile
+        A zip-archive with datasets.
     """
     if not os.path.exists(cache_dir):
         if create_cache_dir:
@@ -161,16 +167,17 @@ def _load_archive(
 
 
 def _download_hash_file(cached_hash, hash_url, filename):
-    """Download the.
+    """
+    Download the hash file.
 
     Parameters
     ----------
     cached_hash : str, bytes or PathLike
-        The path to the cached hash
+        The path to the cached hash.
     hash_url : str
-        The download url
+        The download url.
     filename : str
-        The filename of the bundle
+        The filename of the bundle.
     """
     with open(cached_hash, "w") as f:
         response = requests.get(hash_url)
@@ -233,7 +240,8 @@ def _print_progress(
 
 
 def _download_bundle_file(cached_bundle, bundle_url, filename, progress):
-    """Download the bundle.
+    """
+    Download the bundle.
 
     Parameters
     ----------
@@ -306,54 +314,64 @@ class Repository(metaclass=ABCMeta):
     @property
     @abstractmethod
     def name(self):
-        """Name of the repository.
+        """
+        Name of the repository.
 
         Returns
         -------
-        str : the name of the repository
+        str
+            The name of the repository.
         """
         pass
 
     @property
     @abstractmethod
     def version(self):
-        """The repository version.
+        """
+        The repository version.
 
         Returns
         -------
-        str : the version of the repository
+        str
+            The version of the repository.
         """
         pass
 
     @property
     @abstractmethod
     def download_url(self):
-        """The url template for downloading bundles.
+        """
+        The url template for downloading bundles.
 
         Returns
         -------
-        str : the download url
+        str
+            The download url.
         """
         pass
 
     @property
     @abstractmethod
     def wildboar_requires(self):
-        """The minimum required wildboar version.
+        """
+        The minimum required wildboar version.
 
         Returns
         -------
-        str : the min version
+        str
+            The min version.
         """
         pass
 
     @abstractmethod
     def get_bundles(self):
-        """Get all bundles.
+        """
+        Get all bundles.
 
         Returns
         -------
-        dict : a dictionary of key and bundle
+        dict
+            A dictionary of key and bundle.
         """
         pass
 
@@ -362,17 +380,18 @@ class Repository(metaclass=ABCMeta):
         return self._active
 
     def get_bundle(self, key):
-        """Get a bundle with the specified key.
+        """
+        Get a bundle with the specified key.
 
         Parameters
         ----------
         key : str
-            Key of the bundle
+            Key of the bundle.
 
         Returns
         -------
-        bundle : Bundle, optional
-            A bundle or None
+        Bundle, optional
+            A bundle or None.
         """
         bundle = self.get_bundles().get(key)
         if bundle is None:
@@ -1004,7 +1023,7 @@ class Bundle(metaclass=ABCMeta):
 
 
 class NpBundle(Bundle):
-    """bundle of numpy binary files."""
+    """Bundle of numpy binary files."""
 
     def _is_dataset(self, file_name, ext):
         return ext in [".npy", ".npz"]

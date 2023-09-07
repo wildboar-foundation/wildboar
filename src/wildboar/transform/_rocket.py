@@ -22,7 +22,27 @@ _SAMPLING_METHOD = {
 
 
 class RocketMixin:
-    """Mixin for ROCKET based estimators."""
+    """
+    Mixin for ROCKET based estimators.
+
+    The class provides an implementation for the `_get_feature_engineer` method
+    with support for rocket convolution.
+
+    The implementing class must have the following properties:
+
+    - `n_kernels`
+    - `kernel_size`
+    - `min_size`
+    - `max_size`
+    - `sampling`
+    - `sampling_params`
+    - `bias_prob`
+    - `padding_prob`
+    - `normalize_prob`
+
+    See :class:`transform.RocketTransform` for information about the
+    properties.
+    """
 
     _parameter_constraints: dict = {
         "n_kernels": [
@@ -151,6 +171,27 @@ class RocketTransform(RocketMixin, BaseFeatureEngineerTransform):
         ROCKET: exceptionally fast and accurate time series classification using
         random convolutional kernels.
         Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
+
+    Examples
+    --------
+    >>> from wildboar.datasets import load_gun_point
+    >>> from wildboar.transform import RocketTransform
+    >>> X, y = load_gun_point()
+    >>> t = RocketTransform(n_kernels=10, random_state=1)
+    >>> t.fit_transform(X)
+    array([[0.51333333, 5.11526939, 0.47333333, ..., 2.04712544, 0.24      ,
+            0.82912261],
+           [0.52666667, 5.26611524, 0.54      , ..., 1.98047216, 0.24      ,
+            0.81260641],
+           [0.54666667, 4.71210092, 0.35333333, ..., 2.28841158, 0.25333333,
+            0.82203705],
+           ...,
+           [0.54666667, 4.72938203, 0.45333333, ..., 2.53756324, 0.24666667,
+            0.8380654 ],
+           [0.68666667, 3.80533684, 0.26      , ..., 2.41709413, 0.25333333,
+            0.65634235],
+           [0.66      , 3.94724793, 0.32666667, ..., 1.85575661, 0.25333333,
+            0.67630249]])
     """
 
     _parameter_constraints: dict = {

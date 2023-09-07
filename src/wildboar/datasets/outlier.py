@@ -4,7 +4,7 @@
 """Utilities for generating synthetic outlier datasets.
 
 See the :doc:`User Guide
-<wildboar:guide/unsupervised/outlier/generation` for more details and
+<wildboar:guide/unsupervised/outlier/generation>` for more details and
 example uses.
 """
 
@@ -38,7 +38,46 @@ __all__ = [
 
 
 class KernelLogisticRegression(LogisticRegression):
-    """Kernel logistic implementation using a Nystroem kernel approximation.
+    """
+    Kernel logistic implementation using a Nystroem kernel approximation.
+
+    Parameters
+    ----------
+    kernel : str, optional
+        The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
+        for kernels. The default kernel is 'rbf'.
+    kernel_params : dict, optional
+        Parameters to the kernel function.
+    n_components : int, optional
+        Number of features to construct.
+    penalty : {'l1', 'l2', 'elasticnet', None}, default='l2'
+        Penelty norm, for :class:`sklearn.linear_model.LogisticRegression`.
+    dual : bool, default=False
+        Dual or primal formulation, for
+        :class:`sklearn.linear_model.LogisticRegression`.
+    tol : float, default=1e-4
+        Tolerance for stopping criteria.
+    C : float, default=1.0
+        Inverse of regularization strength; must be a positive float.
+    fit_intercept : bool, default=True
+        Specifies if a constant (a.k.a. bias or intercept) should be
+        added to the decision function.
+    intercept_scaling : float, default=1
+        Intercept scaling, for :class:`sklearn.linear_model.LogisticRegression`.
+    class_weight : dict or 'balanced', default=None
+        Class weights, for :class:`sklearn.linear_model.LogisticRegression`.
+    random_state : int, RandomState instance, default=None
+        Random state, for :class:`sklearn.linear_model.LogisticRegression`.
+    solver : {'lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga'}, \
+            default='lbfgs'
+        Algorithm to use in the optimization problem.
+    max_iter : int, default=100
+        Maximum number of iterations taken for the solvers to converge.
+    warm_start : bool, default=False
+        When set to True, reuse the solution of the previous call to fit.
+    l1_ratio : float, default=None
+        The Elastic-Net mixing parameter, for
+        :class:`sklearn.linear_model.LogisticRegression`.
 
     See Also
     --------
@@ -61,24 +100,9 @@ class KernelLogisticRegression(LogisticRegression):
         random_state=None,
         solver="lbfgs",
         max_iter=100,
-        multi_class="auto",
-        verbose=0,
         warm_start=False,
-        n_jobs=None,
         l1_ratio=None,
     ):
-        """Construct a new estimator.
-
-        Parameters
-        ----------
-        kernel : str, optional
-            The kernel function to use. See `sklearn.metrics.pairwise.kernel_metric`
-            for kernels. The default kernel is 'rbf'.
-        kernel_params : dict, optional
-            Parameters to the kernel function.
-        n_components : int, optional
-            Number of features to construct
-        """
         super().__init__(
             penalty=penalty,
             dual=dual,
@@ -90,10 +114,10 @@ class KernelLogisticRegression(LogisticRegression):
             random_state=random_state,
             solver=solver,
             max_iter=max_iter,
-            multi_class=multi_class,
-            verbose=verbose,
+            multi_class="auto",
+            verbose=0,
             warm_start=warm_start,
-            n_jobs=n_jobs,
+            n_jobs=None,
             l1_ratio=l1_ratio,
         )
         self.kernel = kernel
@@ -101,7 +125,8 @@ class KernelLogisticRegression(LogisticRegression):
         self.n_components = n_components
 
     def fit(self, x, y, sample_weight=None):
-        """Fit the estimator.
+        """
+        Fit the estimator.
 
         Parameters
         ----------
@@ -131,7 +156,8 @@ class KernelLogisticRegression(LogisticRegression):
         return self
 
     def decision_function(self, x):
-        """Predict confidence scores for the estimator.
+        """
+        Predict confidence scores for the estimator.
 
         Parameters
         ----------
@@ -149,13 +175,13 @@ class KernelLogisticRegression(LogisticRegression):
 
 def kmeans_outliers(
     x,
-    y=None,
     *,
     n_outliers=0.05,
     n_clusters=5,
     random_state=None,
 ):
-    """K-means outlier generation.
+    """
+    K-mean outlier generation.
 
     Label the samples of the cluster farthers from the other clusters as
     outliers.
@@ -163,14 +189,12 @@ def kmeans_outliers(
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep)
-        The input samples
-    y : ndarray of shape (n_samples, ), optional
-        Ignored.
+        The input samples.
     n_outliers : float, optional
         The number of outlier samples expressed as a fraction of the inlier samples.
 
         - if float, the number of outliers are guaranteed but an error is raised
-          if no cluster can satisfy the constraints. Lowering the ``n_cluster``
+          if no cluster can satisfy the constraints. Lowering the `n_cluster`
           parameter to allow for more samples per cluster.
     n_clusters : int, optional
         The number of clusters.
@@ -183,9 +207,9 @@ def kmeans_outliers(
     Returns
     -------
     x_outlier : ndarray of shape (n_inliers + n_outliers, n_timestep)
-        The samples
+        The samples.
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
-        The inliers (labeled as 1) and outlier (labled as -1)
+        The inliers (labeled as 1) and outlier (labled as -1).
     """
     x = check_array(x)
     random_state = check_random_state(random_state)
@@ -220,7 +244,6 @@ def kmeans_outliers(
 
 def density_outliers(
     x,
-    y=None,
     *,
     n_outliers=0.05,
     method="dbscan",
@@ -230,7 +253,8 @@ def density_outliers(
     max_eps=np.inf,
     random_state=None,
 ):
-    """Densitiy based outlier generation.
+    """
+    Densitiy based outlier generation.
 
     Labels samples as outliers if a density cluster algorithm fail to assign
     them to a cluster.
@@ -238,37 +262,33 @@ def density_outliers(
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep)
-        The input samples
-
-    y : ndarray of shape (n_samples, ), optional
-        Ignored.
-
+        The input samples.
     n_outliers : float, optional
         The number of outlier samples expressed as a fraction of the inlier samples.
         By default, all samples of the minority class is considered as outliers.
-
     method : {"dbscan", "optics"}, optional
         The density based clustering method.
-
     eps : float, optional
-        The eps parameter, when ``method="dbscan"``.
-
+        The eps parameter, when `method="dbscan"`.
     min_sample : int, optional
-        The ``min_sample`` parameter to the cluter method
-
+        The `min_sample` parameter to the cluter method.
     metric : str, optional
-        The ``metric`` parameter to the cluster method
-
+        The `metric` parameter to the cluster method.
     max_eps : float, optional
-        The ``max_eps`` parameter, when ``method="optics"``.
+        The `max_eps` parameter, when `method="optics"`.
+    random_state : int or RandomState
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
 
     Returns
     -------
     x_outlier : ndarray of shape (n_inliers + n_outliers, n_timestep)
-        The samples
+        The samples.
 
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
-        The inliers (labeled as 1) and outlier (labled as -1)
+        The inliers (labeled as 1) and outlier (labled as -1).
     """
     if method == "dbscan":
         estimator = DBSCAN(eps=eps, min_samples=min_sample, metric=metric)
@@ -294,19 +314,17 @@ def density_outliers(
 
 
 def majority_outliers(x, y, *, n_outliers=0.05, random_state=None):
-    """Labels the majority class as inliers.
+    """
+    Label the majority class as inliers.
 
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep)
-        The input samples
-
+        The input samples.
     y : ndarray of shape (n_samples, )
         The input labels.
-
     n_outliers : float, optional
         The number of outlier samples expressed as a fraction of the inlier samples.
-
     random_state : int or RandomState
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
@@ -316,10 +334,9 @@ def majority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     Returns
     -------
     x_outlier : ndarray of shape (n_inliers + n_outliers, n_timestep)
-        The samples
-
+        The samples.
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
-        The inliers (labeled as 1) and outlier (labled as -1)
+        The inliers (labeled as 1) and outlier (labled as -1).
     """
     x = check_array(x, allow_3d=True)
     y = check_array(y, ensure_2d=False)
@@ -338,22 +355,20 @@ def majority_outliers(x, y, *, n_outliers=0.05, random_state=None):
 
 
 def minority_outliers(x, y, *, n_outliers=0.05, random_state=None):
-    """Labels (a fraction of) the minority class as the outlier.
+    """
+    Label (a fraction of) the minority class as the outlier.
 
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep)
-        The input samples
-
+        The input samples.
     y : ndarray of shape (n_samples, )
         The input labels.
-
     n_outliers : float, optional
         The number of outlier samples expressed as a fraction of the inlier samples.
 
         - if float, the number of outliers are guaranteed but an error is raised
           if the minority class has to few samples.
-
     random_state : int or RandomState
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
@@ -363,10 +378,9 @@ def minority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     Returns
     -------
     x_outlier : ndarray of shape (n_inliers + n_outliers, n_timestep)
-        The samples
-
+        The samples.
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
-        The inliers (labeled as 1) and outlier (labled as -1)
+        The inliers (labeled as 1) and outlier (labled as -1).
     """
     x = check_array(x, allow_3d=True)
     y = check_array(y, ensure_2d=False)
@@ -385,7 +399,7 @@ def minority_outliers(x, y, *, n_outliers=0.05, random_state=None):
     )
 
 
-def emmott_outliers(  # noqa: PLR
+def emmott_outliers(  # noqa: PLR0912, PLR0915
     x,
     y,
     *,
@@ -398,7 +412,8 @@ def emmott_outliers(  # noqa: PLR
     variation="tight",
     random_state=None,
 ):
-    """Difficulty based outlier generation.
+    """
+    Difficulty based outlier generation.
 
     Create a synthetic outlier detection dataset from a labeled classification
     dataset using the method described by Emmott et.al. (2013).
@@ -414,7 +429,7 @@ def emmott_outliers(  # noqa: PLR
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep)
-        The input samples
+        The input samples.
     y : ndarray of shape (n_samples, )
         The input labels.
     n_outliers : float, optional
@@ -424,11 +439,11 @@ def emmott_outliers(  # noqa: PLR
           if the the requested difficulty has to few samples or the labels selected
           for the outlier label has to few samples.
     confusion_estimator : object, optional
-        Estimator of class confusion for datasets where ``n_classes > 2``. Default to a
+        Estimator of class confusion for datasets where `n_classes > 2`. Default to a
         random forest classifier.
     difficulty_estimator : object, optional
         Estimator for sample difficulty. The difficulty estimator must support
-        ``predict_proba``. Defaults to a kernel logistic regression model with
+        `predict_proba`. Defaults to a kernel logistic regression model with
         a RBF-kernel.
     transform : 'interval' or Transform, optional
         Transform x before the confusion and difficulty estimator.
@@ -436,29 +451,29 @@ def emmott_outliers(  # noqa: PLR
         - if None, no transformation is applied.
         - if 'interval', use the :class:`transform.IntervalTransform` with default
           parameters.
-        - otherwise, use the supplied transform
+        - otherwise, use the supplied transform.
     difficulty : {'any', 'simplest', 'hardest'}, int or array-like, optional
         The difficulty of the outlier points quantized according to scale. The value
-        should be in the range ``[1, len(scale)]`` with lower difficulty denoting
+        should be in the range `[1, len(scale)]` with lower difficulty denoting
         simpler outliers. If an array is given, multiple difficulties can be
-        included, e.g., ``[1, 4]`` would mix easy and difficult outliers.
+        included, e.g., `[1, 4]` would mix easy and difficult outliers.
 
-        - if 'any' outliers are sampled from all scores
-        - if 'simplest' the simplest n_outliers are selected
-        - if 'hardest' the hardest n_outliers are selected
+        - if 'any' outliers are sampled from all scores.
+        - if 'simplest' the simplest n_outliers are selected.
+        - if 'hardest' the hardest n_outliers are selected.
     scale : int or array-like, optional
-        The scale of quantized difficulty scores. Defaults to ``[0, 0.16, 0.3, 0.5]``.
+        The scale of quantized difficulty scores. Defaults to `[0, 0.16, 0.3, 0.5]`.
         Scores (which are probabilities in the range [0, 1]) are fit into the ranges
-        using ``np.digitize(difficulty, scale)``.
+        using `np.digitize(difficulty, scale)`.
 
         - if int, use `scale` percentiles based in the difficulty scores.
     variation : {'tight', 'dispersed'}, optional
-        Selection procedure for sampling outlier samples. If ``difficulty="simplest"``
-        or ``difficulty="hardest"``, this parameter has no effect.
+        Selection procedure for sampling outlier samples. If `difficulty="simplest"`
+        or `difficulty="hardest"`, this parameter has no effect.
 
-        - if 'tight' a pivot point is selected and the ``n_outlier`` closest samples
+        - if 'tight' a pivot point is selected and the `n_outlier` closest samples
           are selected according to their euclidean distance.
-        - if 'dispersed' ``n_outlier`` points are selected according to a facility
+        - if 'dispersed' `n_outlier` points are selected according to a facility
           location algorithm such that they are distributed among the outliers.
     random_state : int or RandomState
         - If `int`, `random_state` is the seed used by the random number generator
@@ -469,9 +484,17 @@ def emmott_outliers(  # noqa: PLR
     Returns
     -------
     x_outlier : ndarray of shape (n_inliers + n_outliers, n_timestep)
-        The samples
+        The samples.
     y_outlier : ndarray of shape (n_inliers + n_outliers, )
-        The inliers (labeled as 1) and outlier (labled as -1)
+        The inliers (labeled as 1) and outlier (labled as -1).
+
+    Warnings
+    --------
+    n_outliers
+        The number of outliers returned is dependent on the difficulty setting and the
+        available number of samples of the minority class. If the minority class does
+        not contain sufficient number of samples of the desired difficulty, fewer than
+        n_outliers may be returned.
 
     Notes
     -----
@@ -481,14 +504,6 @@ def emmott_outliers(  # noqa: PLR
 
     The difficulty parameters 'simplest' and 'hardest' are not described by
     Emmott et.al. (2013)
-
-    Warnings
-    --------
-    n_outliers
-        The number of outliers returned is dependent on the difficulty setting and the
-        available number of samples of the minority class. If the minority class does
-        not contain sufficient number of samples of the desired difficulty, fewer than
-        n_outliers may be returned.
 
     References
     ----------

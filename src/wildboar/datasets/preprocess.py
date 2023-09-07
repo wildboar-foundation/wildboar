@@ -20,12 +20,13 @@ __all__ = [
 
 
 def named_preprocess(name):
-    """Get a named preprocessor.
+    """
+    Get a named preprocessor.
 
     Parameters
     ----------
     name : str
-        The name
+        The name of the preprocessor.
 
     Returns
     -------
@@ -36,19 +37,20 @@ def named_preprocess(name):
 
 
 def standardize(x):
-    """Scale x along the time dimension.
+    """
+    Scale x along the time dimension.
 
     The resulting array will have zero mean and unit standard deviation.
 
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The dataset
+        The samples.
 
     Returns
     -------
-    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The standardized dataset
+    ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The standardized samples.
     """
     x = check_array(x, allow_3d=True, force_all_finite="allow-nan")
     return (x - np.nanmean(x, axis=-1, keepdims=True)) / np.nanstd(
@@ -57,23 +59,24 @@ def standardize(x):
 
 
 def minmax_scale(x, min=0, max=1):
-    """Scale x along the time dimension.
+    """
+    Scale x along the time dimension.
 
     Each time series is scaled such that each value is between min and max.
 
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The dataset
+        The samples.
     min : float, optional
-        The minimum value
+        The minimum value.
     max : float, optional
-        The maximum value
+        The maximum value.
 
     Returns
     -------
-    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The transformed dataset
+    ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The transformed samples.
     """
     if min > max:
         raise ValueError("min must be smaller than max.")
@@ -85,17 +88,18 @@ def minmax_scale(x, min=0, max=1):
 
 
 def maxabs_scale(x):
-    """Scale each time series by its maximum absolute value.
+    """
+    Scale each time series by its maximum absolute value.
 
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The dataset
+        The samples.
 
     Returns
     -------
-    x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The transformed dataset
+    ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The transformed samples.
     """
     x = check_array(x, allow_3d=True, force_all_finite="allow-nan")
     x_max = np.nanmax(np.abs(x), axis=-1, keepdims=True)
@@ -103,19 +107,20 @@ def maxabs_scale(x):
 
 
 def truncate(x, n_shortest=None):
-    """Truncate x to the shortest sequence.
+    """
+    Truncate x to the shortest sequence.
 
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The dataset
+        The samples.
     n_shortest : int, optional
-        The maximum size
+        The maximum size.
 
     Returns
     -------
-    x : ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
-        The truncated dataset
+    ndarray of shape (n_samples, n_shortest) or (n_samples, n_dims, n_shortest)
+        The truncated samples.
     """
     x = check_array(x, allow_3d=True, allow_eos=True, force_all_finite="allow-nan")
     if n_shortest is None:

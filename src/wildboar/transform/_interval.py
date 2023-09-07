@@ -36,13 +36,25 @@ class IntervalMixin:
 
     It provides an implementation for the `_get_feature_engineer` method
     which supports interval based transformation.
+
+    The implementing class must have the following properties:
+
+    - `n_intervals`
+    - `intervals`
+    - `min_size`
+    - `max_size`
+    - `sample_size`
+    - `summarizer`
+
+    See :class:`transform.IntervalTransform` for information about the
+    properties.
     """
 
     _parameter_constraints: dict = {
         "n_intervals": [
             Interval(numbers.Integral, 1, None, closed="left"),
             Interval(numbers.Real, 0, 1, closed="right"),
-            StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
+            StrOptions({"sqrt", "log2"}),
         ],
         "intervals": [
             StrOptions({"fixed", "sample", "random"}),
@@ -134,7 +146,7 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
         .. deprecated:: 1.2
             The option "log" has been renamed to "log2".
     intervals : str, optional
-        The method for selecting intervals
+        The method for selecting intervals.
 
         - if "fixed", `n_intervals` non-overlapping intervals.
         - if "sample", `n_intervals * sample_size` non-overlapping intervals.

@@ -47,17 +47,18 @@ def __new_composite_filter(filters):
 
 
 def make_filter(filter):
-    """Create a new filter.
+    """
+    Create a new filter.
 
     Parameters
     ----------
     filter : str, list or dict
-        The filter
+        The filter.
 
     Returns
     -------
-    function
-        The filter function
+    callable
+        The filter function.
     """
     if isinstance(filter, list):
         return make_list_filter(filter)
@@ -72,17 +73,18 @@ def make_filter(filter):
 
 
 def make_list_filter(filter):
-    """Make a new filter based on a list of filter strings.
+    """
+    Make a new filter based on a list of filter strings.
 
     Parameters
     ----------
     filter : list
-        A list of filter strings
+        A list of filter strings.
 
     Returns
     -------
-    function
-        The filter function
+    callable
+        The filter function.
     """
     filters = []
     for str_filter in filter:
@@ -92,17 +94,18 @@ def make_list_filter(filter):
 
 
 def make_dict_filter(filter):
-    """Make a new filter.
+    """
+    Make a new filter.
 
     Parameters
     ----------
     filter : dict
-        The dict of [subject] -> [op][verb]
+        The dict of `[subject] -> [op][verb]`.
 
     Returns
     -------
-    function
-        The filter function
+    callable
+        The filter function.
     """
     filters = []
     for subject, verb in filter.items():
@@ -116,17 +119,18 @@ def make_dict_filter(filter):
 
 
 def make_str_filter(filter):
-    """Make a new filter.
+    """
+    Make a new filter.
 
     Parameters
     ----------
     filter : str
-        The filter string [subject][op][verb]
+        The filter string `[subject][op][verb]`.
 
     Returns
     -------
-    function
-        The filter function
+    callable
+        The filter function.
     """
     match = re.match(__SUBJECT_VERB_PATTERN, filter)
     if match:
