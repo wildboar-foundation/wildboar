@@ -13,7 +13,7 @@
 	<a href="https://doi.org/10.5281/zenodo.4264063"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.4264063.svg" /></a>
 </p>
 
-[wildboar](https://isaksamsten.github.io/wildboar/) is a Python module for temporal machine learning and fast
+[wildboar](https://docs.wildboar.dev/) is a Python module for temporal machine learning and fast
 distance computations built on top of
 [scikit-learn](https://scikit-learn.org) and [numpy](https://numpy.org)
 distributed under the BSD 3-Clause license.
@@ -46,7 +46,8 @@ See the [documentation](https://docs.wildboar.dev/master/examples.html) for exam
 
     pip install wildboar
 
-Universal binaries are compiled for  Python 3.8, 3.9, 3.10 and 3.11 running on GNU/Linux, Windows and macOS.
+Universal binaries are compiled for Python 3.8, 3.9, 3.10 and 3.11 running on
+GNU/Linux, Windows and macOS.
 
 ### Compilation
 
@@ -59,7 +60,7 @@ To install the requirements, use:
 
     pip install -r requirements.txt
 
-For complete instructions see the [documentation](https://isaksamsten.github.io/wildboar/master/install.html#build-and-compile-from-source)
+For complete instructions see the [documentation](https://docs.wildboar.dev/master/install.html#build-and-compile-from-source)
 
 ## Usage
 
@@ -72,15 +73,19 @@ c.fit(x_train, y_train)
 c.score(x_test, y_test)
 ```
 
-The [User guide](https://docs.wildboar.dev/master/guide.html) includes more detailed usage instructions.
+The [User guide](https://docs.wildboar.dev/master/guide.html) includes more
+detailed usage instructions.
 
 ## Changelog
 
-The [changelog](https://isaksamsten.github.io/wildboar/master/more/whatsnew.html) records a history of notable changes to `wildboar`.
+The [changelog](https://docs.wildboar.dev/master/more/whatsnew.html) records a
+history of notable changes to `wildboar`.
 
 ## Development
 
-Contributions are welcome! The [developer's guide](https://docs.wildboar.dev/master/more/contributing.html) has detailed information about contributing code and more!
+Contributions are welcome! The [developer's
+guide](https://docs.wildboar.dev/master/more/contributing.html) has detailed
+information about contributing code and more!
 
 In short, pull requests should:
 

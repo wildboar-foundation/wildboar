@@ -11,6 +11,8 @@
 auto-save-list
 tramp
 .\#*
+.virtual_documents
+.benchmarks
 
 # Org-mode
 .org-id-locations
