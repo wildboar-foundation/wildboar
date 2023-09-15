@@ -5,10 +5,11 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
-    <!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19 -->
-        <title>wildboar.datasets._filter - Wildboar 1.1.1.dev130 documentation</title>
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>wildboar.datasets._filter - Wildboar 1.1.1.dev137 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -139,7 +140,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev130 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev137 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -302,18 +303,18 @@
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets._filter.make_dict_filter">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_dict_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/_filter.py#L94-L115"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_dict_filter" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_dict_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/datasets/_filter.py#L96-L118"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_dict_filter" title="Link to this definition">#</a></dt>
 <dd><p>Make a new filter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">dict</span></dt><dd><p>The dict of [subject] -&gt; [op][verb]</p>
+<dt><strong>filter</strong><span class="classifier">dict</span></dt><dd><p>The dict of <cite>[subject] -&gt; [op][verb]</cite>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>function</dt><dd><p>The filter function</p>
+<dt>callable</dt><dd><p>The filter function.</p>
 </dd>
 </dl>
 </dd>
@@ -322,18 +323,18 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets._filter.make_filter">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/_filter.py#L49-L71"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_filter" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/datasets/_filter.py#L49-L72"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_filter" title="Link to this definition">#</a></dt>
 <dd><p>Create a new filter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">str, list or dict</span></dt><dd><p>The filter</p>
+<dt><strong>filter</strong><span class="classifier">str, list or dict</span></dt><dd><p>The filter.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>function</dt><dd><p>The filter function</p>
+<dt>callable</dt><dd><p>The filter function.</p>
 </dd>
 </dl>
 </dd>
@@ -342,18 +343,18 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets._filter.make_list_filter">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_list_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/_filter.py#L74-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_list_filter" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_list_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/datasets/_filter.py#L75-L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_list_filter" title="Link to this definition">#</a></dt>
 <dd><p>Make a new filter based on a list of filter strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">list</span></dt><dd><p>A list of filter strings</p>
+<dt><strong>filter</strong><span class="classifier">list</span></dt><dd><p>A list of filter strings.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>function</dt><dd><p>The filter function</p>
+<dt>callable</dt><dd><p>The filter function.</p>
 </dd>
 </dl>
 </dd>
@@ -362,18 +363,18 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.datasets._filter.make_str_filter">
-<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_str_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/datasets/_filter.py#L118-L143"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_str_filter" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.datasets._filter.</span></span><span class="sig-name descname"><span class="pre">make_str_filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/datasets/_filter.py#L121-L147"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.datasets._filter.make_str_filter" title="Link to this definition">#</a></dt>
 <dd><p>Make a new filter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>filter</strong><span class="classifier">str</span></dt><dd><p>The filter string [subject][op][verb]</p>
+<dt><strong>filter</strong><span class="classifier">str</span></dt><dd><p>The filter string <cite>[subject][op][verb]</cite>.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>function</dt><dd><p>The filter function</p>
+<dt>callable</dt><dd><p>The filter function.</p>
 </dd>
 </dl>
 </dd>
@@ -441,7 +442,7 @@
     </aside>
   </div>
 </div>
-<script src="../../../../_static/documentation_options.js?v=91d95fa7"></script>
+<script src="../../../../_static/documentation_options.js?v=5a50cf6a"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>

@@ -5,10 +5,11 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
-    <!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19 -->
-        <title>wildboar.transform._base - Wildboar 1.1.1.dev130 documentation</title>
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>wildboar.transform._base - Wildboar 1.1.1.dev137 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -139,7 +140,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev130 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev137 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -293,7 +294,7 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._base.BaseFeatureEngineerTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._base.</span></span><span class="sig-name descname"><span class="pre">BaseFeatureEngineerTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_base.py#L19-L135"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._base.</span></span><span class="sig-name descname"><span class="pre">BaseFeatureEngineerTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_base.py#L19-L133"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="(in scikit-learn v1.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sklearn.base.TransformerMixin</span></code></a>, <a class="reference internal" href="../../base/index.html#wildboar.base.BaseEstimator" title="wildboar.base.BaseEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.base.BaseEstimator</span></code></a></p>
 <p>Base feature engineer transform.</p>
 <dl class="field-list simple">
@@ -301,18 +302,18 @@
 <dd class="field-odd"><dl class="simple">
 <dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><p>Controls the random resampling of the original dataset.</p>
 <ul class="simple">
-<li><p>If <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is the seed used by the
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the
 random number generator.</p></li>
-<li><p>If <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code> instance, <code class="docutils literal notranslate"><span class="pre">random_state</span></code> is
-the random number generator.</p></li>
-<li><p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the random number generator is the
+<li><p>If <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code> instance, <cite>random_state</cite> is the
+random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the
 <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code> instance used by
 <code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
 </ul>
 </dd>
-<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to run in parallel. A value of <code class="docutils literal notranslate"><span class="pre">None</span></code> means
-using a single core and a value of <code class="docutils literal notranslate"><span class="pre">-1</span></code> means using all cores.
-Positive integers mean the exact number of cores.</p>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to run in parallel. A value of <cite>None</cite> means using a
+single core and a value of <cite>-1</cite> means using all cores. Positive
+integers mean the exact number of cores.</p>
 </dd>
 </dl>
 </dd>
@@ -325,7 +326,7 @@ Positive integers mean the exact number of cores.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._base.BaseFeatureEngineerTransform.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_base.py#L56-L81"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform.fit" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_base.py#L56-L80"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform.fit" title="Link to this definition">#</a></dt>
 <dd><p>Fit the transform.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -347,7 +348,7 @@ Positive integers mean the exact number of cores.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._base.BaseFeatureEngineerTransform.fit_transform">
-<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform.fit_transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform.fit_transform" title="Link to this definition">#</a></dt>
 <dd><p>Fit the embedding and return the transform of x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -369,7 +370,7 @@ Positive integers mean the exact number of cores.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.transform._base.BaseFeatureEngineerTransform.transform">
-<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform.transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._base.BaseFeatureEngineerTransform.transform" title="Link to this definition">#</a></dt>
 <dd><p>Transform the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -452,7 +453,7 @@ Positive integers mean the exact number of cores.</p>
     </aside>
   </div>
 </div>
-<script src="../../../../_static/documentation_options.js?v=91d95fa7"></script>
+<script src="../../../../_static/documentation_options.js?v=5a50cf6a"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>

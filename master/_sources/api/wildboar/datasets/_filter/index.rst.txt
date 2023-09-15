@@ -33,12 +33,12 @@ Functions
    :Parameters:
 
        **filter** : dict
-           The dict of [subject] -> [op][verb]
+           The dict of `[subject] -> [op][verb]`.
 
    :Returns:
 
-       function
-           The filter function
+       callable
+           The filter function.
 
 
 
@@ -64,12 +64,12 @@ Functions
    :Parameters:
 
        **filter** : str, list or dict
-           The filter
+           The filter.
 
    :Returns:
 
-       function
-           The filter function
+       callable
+           The filter function.
 
 
 
@@ -95,12 +95,12 @@ Functions
    :Parameters:
 
        **filter** : list
-           A list of filter strings
+           A list of filter strings.
 
    :Returns:
 
-       function
-           The filter function
+       callable
+           The filter function.
 
 
 
@@ -126,12 +126,12 @@ Functions
    :Parameters:
 
        **filter** : str
-           The filter string [subject][op][verb]
+           The filter string `[subject][op][verb]`.
 
    :Returns:
 
-       function
-           The filter function
+       callable
+           The filter function.
 
 
 

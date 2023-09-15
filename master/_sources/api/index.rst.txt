@@ -146,7 +146,7 @@ more details and examples.
   * - :py:obj:`~wildboar.datasets.JSONRepository`
     - A repository is a collection of bundles.
   * - :py:obj:`~wildboar.datasets.NpBundle`
-    - bundle of numpy binary files.
+    - Bundle of numpy binary files.
   * - :py:obj:`~wildboar.datasets.Repository`
     - A repository is a collection of bundles.
 
@@ -195,7 +195,7 @@ more details and examples.
 Utilities for generating synthetic outlier datasets.
 
 See the :doc:`User Guide
-<wildboar:guide/unsupervised/outlier/generation` for more details and
+<wildboar:guide/unsupervised/outlier/generation>` for more details and
 example uses.
 
 ..
@@ -212,11 +212,11 @@ example uses.
   * - :py:obj:`~wildboar.datasets.outlier.emmott_outliers`
     - Difficulty based outlier generation.
   * - :py:obj:`~wildboar.datasets.outlier.kmeans_outliers`
-    - K-means outlier generation.
+    - K-mean outlier generation.
   * - :py:obj:`~wildboar.datasets.outlier.majority_outliers`
-    - Labels the majority class as inliers.
+    - Label the majority class as inliers.
   * - :py:obj:`~wildboar.datasets.outlier.minority_outliers`
-    - Labels (a fraction of) the minority class as the outlier.
+    - Label (a fraction of) the minority class as the outlier.
 
 
 :py:mod:`wildboar.datasets.preprocess`
@@ -329,7 +329,7 @@ computing DTW alignments and distances.
   * - :py:obj:`~wildboar.distance.dtw.dtw_mapping`
     - Optimal warping path between two series or from a given alignment matrix.
   * - :py:obj:`~wildboar.distance.dtw.jeong_weight`
-    - Weighting described by Jeong et. al. (2011).
+    - Weighting described by Jeong et. al. (2011)[R4bf7d056babf-1]_.
   * - :py:obj:`~wildboar.distance.dtw.wddtw_distance`
     - Compute the weighted derivative dynamic time warping distance.
   * - :py:obj:`~wildboar.distance.dtw.wdtw_alignment`

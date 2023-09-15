@@ -69,6 +69,10 @@ Classes
        **bootstrap** : bool, optional
            If the samples are drawn with replacement.
 
+       **oob_score** : bool, optional
+           Use out-of-bag samples to estimate generalization performance. Requires
+           `bootstrap=True`.
+
        **class_weight** : dict or "balanced", optional
            Weights associated with the labels
            
@@ -76,10 +80,6 @@ Classes
            - if "balanced" each class weight inversely proportional to
              the class frequency.
            - if `None`, each class has equal weight.
-
-       **oob_score** : bool, optional
-           Use out-of-bag samples to estimate generalization performance. Requires
-           `bootstrap=True`.
 
        **warm_start** : bool, optional
            When set to `True`, reuse the solution of the previous call
@@ -363,71 +363,9 @@ Classes
    Bases: :py:obj:`ForestMixin`, :py:obj:`BaggingClassifier`
 
    
-   A bagging classifier.
+   Mixin for tree based ensembles.
 
-   A bagging regressor is a meta-estimator that fits base classifiers
-   on random subsets of the original data.
 
-   :Parameters:
-
-       **estimator** : object, optional
-           Base estimator of the ensemble. If `None`, the base estimator
-           is a :class:`~wildboar.tree.ShapeletTreeRegressor`.
-
-       **n_estimators** : int, optional
-           The number of base estimators in the ensemble.
-
-       **max_samples** : int or float, optional
-           The number of samples to draw from `X` to train each base estimator.
-           
-           - if `int`, then draw `max_samples` samples.
-           - if `float`, then draw `max_samples * n_samples` samples.
-
-       **bootstrap** : bool, optional
-           If the samples are drawn with replacement.
-
-       **class_weight** : dict or "balanced", optional
-           Weights associated with the labels
-           
-           - if `dict`, weights on the form `{label: weight}`.
-           - if "balanced" each class weight inversely proportional to
-             the class frequency.
-           - if `None`, each class has equal weight.
-
-       **oob_score** : bool, optional
-           Use out-of-bag samples to estimate generalization performance. Requires
-           `bootstrap=True`.
-
-       **warm_start** : bool, optional
-           When set to `True`, reuse the solution of the previous call
-           to fit and add more estimators to the ensemble, otherwise, just fit
-           a whole new ensemble.
-
-       **n_jobs** : int, optional
-           The number of jobs to run in parallel. A value of `None` means
-           using a single core and a value of `-1` means using all cores.
-           Positive integers mean the exact number of cores.
-
-       **random_state** : int or RandomState
-           Controls the random resampling of the original dataset.
-           
-           - If `int`, `random_state` is the seed used by the
-             random number generator.
-           - If :class:`numpy.random.RandomState` instance, `random_state` is
-             the random number generator.
-           - If `None`, the random number generator is the
-             :class:`numpy.random.RandomState` instance used by
-             :func:`numpy.random`.
-
-       **verbose** : int, optional
-           Controls the output to standard error while fitting and predicting.
-
-       **base_estimator** : object, optional
-           Use `estimator` instead.
-           
-           .. deprecated:: 1.2
-               `base_estimator` has been deprecated and will be removed in 1.4.
-               Use `estimator` instead.
 
 
 
@@ -451,63 +389,9 @@ Classes
    Bases: :py:obj:`ForestMixin`, :py:obj:`BaggingRegressor`
 
    
-   A bagging regressor.
+   Mixin for tree based ensembles.
 
-   A bagging regressor is a meta-estimator that fits base classifiers
-   on random subsets of the original data.
 
-   :Parameters:
-
-       **estimator** : object, optional
-           Base estimator of the ensemble. If `None`, the base estimator
-           is a :class:`~wildboar.tree.ShapeletTreeRegressor`.
-
-       **n_estimators** : int, optional
-           The number of base estimators in the ensemble.
-
-       **max_samples** : int or float, optional
-           The number of samples to draw from `X` to train each base estimator.
-           
-           - if `int`, then draw `max_samples` samples.
-           - if `float`, then draw `max_samples * n_samples` samples.
-
-       **bootstrap** : bool, optional
-           If the samples are drawn with replacement.
-
-       **oob_score** : bool, optional
-           Use out-of-bag samples to estimate generalization performance. Requires
-           `bootstrap=True`.
-
-       **warm_start** : bool, optional
-           When set to `True`, reuse the solution of the previous call
-           to fit and add more estimators to the ensemble, otherwise, just fit
-           a whole new ensemble.
-
-       **n_jobs** : int, optional
-           The number of jobs to run in parallel. A value of `None` means
-           using a single core and a value of `-1` means using all cores.
-           Positive integers mean the exact number of cores.
-
-       **random_state** : int or RandomState, optional
-           Controls the random resampling of the original dataset.
-           
-           - If `int`, `random_state` is the seed used by the random
-             number generator.
-           - If :class:`numpy.random.RandomState` instance, `random_state` is
-             the random number generator.
-           - If `None`, the random number generator is the
-             :class:`numpy.random.RandomState` instance used by
-             :func:`numpy.random`.
-
-       **verbose** : int, optional
-           Controls the output to standard error while fitting and predicting.
-
-       **base_estimator** : object, optional
-           Use `estimator` instead.
-           
-           .. deprecated:: 1.2
-               `base_estimator` has been deprecated and will be removed in 1.4.
-               Use `estimator` instead.
 
 
 
@@ -829,6 +713,26 @@ Classes
 .. py:class:: ForestMixin
 
 
+   
+   Mixin for tree based ensembles.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
    .. py:method:: apply(x)
 
 

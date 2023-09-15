@@ -5,10 +5,11 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
 
-    <!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19 -->
-        <title>wildboar - Wildboar 1.1.1.dev130 documentation</title>
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>wildboar - Wildboar 1.1.1.dev137 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -139,7 +140,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev130 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev137 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -365,7 +366,7 @@ more details and examples.</p>
 <td><p>A repository is a collection of bundles.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/datasets/index.html#wildboar.datasets.NpBundle" title="wildboar.datasets.NpBundle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NpBundle</span></code></a></p></td>
-<td><p>bundle of numpy binary files.</p></td>
+<td><p>Bundle of numpy binary files.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="wildboar/datasets/index.html#wildboar.datasets.Repository" title="wildboar.datasets.Repository"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Repository</span></code></a></p></td>
 <td><p>A repository is a collection of bundles.</p></td>
@@ -429,8 +430,7 @@ more details and examples.</p>
 <section id="wildboar-datasets-outlier">
 <h1><a class="reference internal" href="wildboar/datasets/outlier/index.html#module-wildboar.datasets.outlier" title="wildboar.datasets.outlier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><a class="headerlink" href="#wildboar-datasets-outlier" title="Link to this heading">#</a></h1>
 <p>Utilities for generating synthetic outlier datasets.</p>
-<p>See the <span class="xref std std-doc">User Guide
-&lt;wildboar:guide/unsupervised/outlier/generation</span> for more details and
+<p>See the <a class="reference external" href="https://wildboar.dev/main/guide/unsupervised/outlier/generation.html" title="(in Wildboar)"><span class="xref std std-doc">User Guide</span></a> for more details and
 example uses.</p>
 <div class="table-wrapper colwidths-auto autosummary docutils container" id="id7">
 <table class="autosummary docutils align-default" id="id7">
@@ -443,13 +443,13 @@ example uses.</p>
 <td><p>Difficulty based outlier generation.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.kmeans_outliers" title="wildboar.datasets.outlier.kmeans_outliers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kmeans_outliers</span></code></a></p></td>
-<td><p>K-means outlier generation.</p></td>
+<td><p>K-mean outlier generation.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.majority_outliers" title="wildboar.datasets.outlier.majority_outliers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">majority_outliers</span></code></a></p></td>
-<td><p>Labels the majority class as inliers.</p></td>
+<td><p>Label the majority class as inliers.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/datasets/outlier/index.html#wildboar.datasets.outlier.minority_outliers" title="wildboar.datasets.outlier.minority_outliers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">minority_outliers</span></code></a></p></td>
-<td><p>Labels (a fraction of) the minority class as the outlier.</p></td>
+<td><p>Label (a fraction of) the minority class as the outlier.</p></td>
 </tr>
 </tbody>
 </table>
@@ -552,7 +552,7 @@ computing DTW alignments and distances.</p>
 <td><p>Optimal warping path between two series or from a given alignment matrix.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/dtw/index.html#wildboar.distance.dtw.jeong_weight" title="wildboar.distance.dtw.jeong_weight"><code class="xref py py-obj docutils literal notranslate"><span class="pre">jeong_weight</span></code></a></p></td>
-<td><p>Weighting described by Jeong et. al. (2011).</p></td>
+<td><p>Weighting described by Jeong et. al. (2011)[R4bf7d056babf-1]_.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/dtw/index.html#wildboar.distance.dtw.wddtw_distance" title="wildboar.distance.dtw.wddtw_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wddtw_distance</span></code></a></p></td>
 <td><p>Compute the weighted derivative dynamic time warping distance.</p></td>
@@ -903,7 +903,7 @@ methods for generating counterfactual explanations.</p>
     </aside>
   </div>
 </div>
-<script src="../_static/documentation_options.js?v=91d95fa7"></script>
+<script src="../_static/documentation_options.js?v=5a50cf6a"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=32e29ea5"></script>

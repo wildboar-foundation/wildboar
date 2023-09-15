@@ -85,6 +85,10 @@ Classes
        **bootstrap** : bool, optional
            If the samples are drawn with replacement.
 
+       **oob_score** : bool, optional
+           Use out-of-bag samples to estimate generalization performance. Requires
+           `bootstrap=True`.
+
        **class_weight** : dict or "balanced", optional
            Weights associated with the labels
            
@@ -92,10 +96,6 @@ Classes
            - if "balanced" each class weight inversely proportional to
              the class frequency.
            - if `None`, each class has equal weight.
-
-       **oob_score** : bool, optional
-           Use out-of-bag samples to estimate generalization performance. Requires
-           `bootstrap=True`.
 
        **warm_start** : bool, optional
            When set to `True`, reuse the solution of the previous call

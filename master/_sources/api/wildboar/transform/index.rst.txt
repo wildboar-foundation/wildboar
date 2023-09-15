@@ -92,6 +92,18 @@ Functions
 
 
 
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_gun_point
+   >>> X, y = load_gun_point()
+   >>> X_t = FeatureTransform().fit_transform(X)
+   >>> X_t[0]
+   array([-5.19633603e-01, -6.51047206e-01,  1.90000000e+01,  4.80000000e+01,
+           7.48441896e-01, -2.73293560e-05,  2.21476510e-01,  4.70000000e+01,
+           4.00000000e-02,  0.00000000e+00,  2.70502518e+00,  2.60000000e+01,
+           6.42857143e-01,  1.00000000e-01, -3.26666667e-01,  9.89974643e-01,
+           2.90000000e+01,  1.31570726e+00,  1.50000000e-01,  8.50000000e-01,
+           4.90873852e-02,  1.47311800e-01])
 
 
 
@@ -116,15 +128,18 @@ Functions
            - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
            - if int, the number of intervals is `n_intervals`.
            - if float, the number of intervals is `n_intervals * n_timestep`, with
-               `0 < n_intervals < 1`.
+             `0 < n_intervals < 1`.
+           
+           .. deprecated:: 1.2
+               The option "log" has been renamed to "log2".
 
        **intervals** : str, optional
-           The method for selecting intervals
+           The method for selecting intervals.
            
            - if "fixed", `n_intervals` non-overlapping intervals.
            - if "sample", `n_intervals * sample_size` non-overlapping intervals.
            - if "random", `n_intervals` possibly overlapping intervals of randomly
-               sampled in `[min_size * n_timestep, max_size * n_timestep]`.
+             sampled in `[min_size * n_timestep, max_size * n_timestep]`.
 
        **sample_size** : float, optional
            The sample size of fixed intervals if `intervals="sample"`.
@@ -140,7 +155,7 @@ Functions
            
            - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
            - if list, the summarizer is a list of functions `f(x) -> float`, where
-               x is a numpy array.
+             `x` is a numpy array.
            
            The default summarizer summarizes each interval as its mean, standard
            deviation and slope.
@@ -152,7 +167,7 @@ Functions
            - If `int`, `random_state` is the seed used by the random number generator
            - If `RandomState` instance, `random_state` is the random number generator
            - If `None`, the random number generator is the `RandomState` instance used
-               by `np.random`.
+             by `np.random`.
 
 
 
@@ -162,6 +177,15 @@ Functions
 
 
 
+   .. rubric:: Notes
+
+   Paralellization dependes on releasing the global interpreter lock (GIL). As
+   such, custom functions as summarizers reduces the performance. Wildboar
+   implements summarizers for taking the mean ("mean"), variance ("variance")
+   and slope ("slope") as well as their combination ("mean_var_slope") and the
+   full suite of `catch22` features ("catch22"). In the future, we will allow
+   downstream projects to implement their own summarizers in Cython which will
+   allow for releasing the GIL.
 
    .. rubric:: References
 
@@ -185,8 +209,8 @@ Functions
    >>> t = IntervalTransform(n_intervals="sqrt", summarizer=[np.mean, np.std])
    >>> t.fit_transform(x)
 
-   Each interval (150 // 12 timepoints) are transformed to two features. The mean
-   and the standard deviation.
+   Each interval (`150 // 12` timepoints) are transformed to two features. The
+   mean and the standard deviation.
 
 
 
@@ -670,6 +694,26 @@ Functions
 
       
 
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_gun_point
+   >>> from wildboar.transform import RocketTransform
+   >>> X, y = load_gun_point()
+   >>> t = RocketTransform(n_kernels=10, random_state=1)
+   >>> t.fit_transform(X)
+   array([[0.51333333, 5.11526939, 0.47333333, ..., 2.04712544, 0.24      ,
+           0.82912261],
+          [0.52666667, 5.26611524, 0.54      , ..., 1.98047216, 0.24      ,
+           0.81260641],
+          [0.54666667, 4.71210092, 0.35333333, ..., 2.28841158, 0.25333333,
+           0.82203705],
+          ...,
+          [0.54666667, 4.72938203, 0.45333333, ..., 2.53756324, 0.24666667,
+           0.8380654 ],
+          [0.68666667, 3.80533684, 0.26      , ..., 2.41709413, 0.25333333,
+           0.65634235],
+          [0.66      , 3.94724793, 0.32666667, ..., 1.85575661, 0.25333333,
+           0.67630249]])
 
    :Attributes:
 
@@ -715,12 +759,11 @@ Functions
        **estimate** : bool, optional
            Estimate the distribution parameters for the binning from data.
            
-           If `estimate=False`, it is assumed that each time series are:
+           If `estimate=False`, it is assumed that each time series is
+           preprocessed using:
            
-           - preprocessed using :func:`datasets.preprocess.normalize` when
-               `binning="normal"`.
-           - preprocessed using :func:`datasets.preprocess.minmax_scale`. when
-               `binning="uniform"`
+           - :func:`datasets.preprocess.normalize` when `binning="normal"`.
+           - :func:`datasets.preprocess.minmax_scale`. when `binning="uniform"`.
 
 
 

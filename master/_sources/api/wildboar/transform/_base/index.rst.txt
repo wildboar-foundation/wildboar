@@ -35,18 +35,18 @@ Classes
        **random_state** : int or RandomState
            Controls the random resampling of the original dataset.
            
-           - If ``int``, ``random_state`` is the seed used by the
+           - If `int`, `random_state` is the seed used by the
              random number generator.
-           - If :class:`numpy.random.RandomState` instance, ``random_state`` is
-             the random number generator.
-           - If ``None``, the random number generator is the
+           - If :class:`numpy.random.RandomState` instance, `random_state` is the
+             random number generator.
+           - If `None`, the random number generator is the
              :class:`numpy.random.RandomState` instance used by
              :func:`numpy.random`.
 
        **n_jobs** : int, optional
-           The number of jobs to run in parallel. A value of ``None`` means
-           using a single core and a value of ``-1`` means using all cores.
-           Positive integers mean the exact number of cores.
+           The number of jobs to run in parallel. A value of `None` means using a
+           single core and a value of `-1` means using all cores. Positive
+           integers mean the exact number of cores.
 
 
 

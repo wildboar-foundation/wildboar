@@ -311,8 +311,8 @@ Functions
 
       :Returns:
 
-          **str** : the download url
-              ..
+          str
+              The download url.
 
 
 
@@ -341,8 +341,8 @@ Functions
 
       :Returns:
 
-          **str** : the name of the repository
-              ..
+          str
+              The name of the repository.
 
 
 
@@ -368,8 +368,8 @@ Functions
 
       :Returns:
 
-          **str** : the version of the repository
-              ..
+          str
+              The version of the repository.
 
 
 
@@ -395,8 +395,8 @@ Functions
 
       :Returns:
 
-          **str** : the min version
-              ..
+          str
+              The min version.
 
 
 
@@ -427,8 +427,8 @@ Functions
 
       :Returns:
 
-          **dict** : a dictionary of key and bundle
-              ..
+          dict
+              A dictionary of key and bundle.
 
 
 
@@ -452,7 +452,7 @@ Functions
    Bases: :py:obj:`Bundle`
 
    
-   bundle of numpy binary files.
+   Bundle of numpy binary files.
 
 
 
@@ -508,8 +508,8 @@ Functions
 
       :Returns:
 
-          **str** : the download url
-              ..
+          str
+              The download url.
 
 
 
@@ -540,8 +540,8 @@ Functions
 
       :Returns:
 
-          **str** : the name of the repository
-              ..
+          str
+              The name of the repository.
 
 
 
@@ -568,8 +568,8 @@ Functions
 
       :Returns:
 
-          **str** : the version of the repository
-              ..
+          str
+              The version of the repository.
 
 
 
@@ -596,8 +596,8 @@ Functions
 
       :Returns:
 
-          **str** : the min version
-              ..
+          str
+              The min version.
 
 
 
@@ -626,12 +626,12 @@ Functions
       :Parameters:
 
           **key** : str
-              Key of the bundle
+              Key of the bundle.
 
       :Returns:
 
-          **bundle** : Bundle, optional
-              A bundle or None
+          Bundle, optional
+              A bundle or None.
 
 
 
@@ -658,8 +658,8 @@ Functions
 
       :Returns:
 
-          **dict** : a dictionary of key and bundle
-              ..
+          dict
+              A dictionary of key and bundle.
 
 
 

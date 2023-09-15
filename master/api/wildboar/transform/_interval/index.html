@@ -5,10 +5,11 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
-    <!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19 -->
-        <title>wildboar.transform._interval - Wildboar 1.1.1.dev130 documentation</title>
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>wildboar.transform._interval - Wildboar 1.1.1.dev137 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -139,7 +140,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev130 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev137 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -289,7 +290,7 @@
 <td><p>Transform a time series as a number of features.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform._interval.IntervalMixin" title="wildboar.transform._interval.IntervalMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalMixin</span></code></a></p></td>
-<td><p></p></td>
+<td><p>Mixin for interval based estimators.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform._interval.IntervalTransform" title="wildboar.transform._interval.IntervalTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></p></td>
 <td><p>Embed a time series as a collection of features per interval.</p></td>
@@ -299,7 +300,7 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._interval.FeatureTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">FeatureTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L204-L234"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.FeatureTransform" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">FeatureTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'catch22'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_interval.py#L237-L279"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.FeatureTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.transform._interval.IntervalTransform" title="wildboar.transform._interval.IntervalTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalTransform</span></code></a></p>
 <p>Transform a time series as a number of features.</p>
 <dl class="field-list">
@@ -318,16 +319,43 @@ is a numpy array.</p></li>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_gun_point</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_gun_point</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_t</span> <span class="o">=</span> <span class="n">FeatureTransform</span><span class="p">()</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">array([-5.19633603e-01, -6.51047206e-01,  1.90000000e+01,  4.80000000e+01,</span>
+<span class="go">        7.48441896e-01, -2.73293560e-05,  2.21476510e-01,  4.70000000e+01,</span>
+<span class="go">        4.00000000e-02,  0.00000000e+00,  2.70502518e+00,  2.60000000e+01,</span>
+<span class="go">        6.42857143e-01,  1.00000000e-01, -3.26666667e-01,  9.89974643e-01,</span>
+<span class="go">        2.90000000e+01,  1.31570726e+00,  1.50000000e-01,  8.50000000e-01,</span>
+<span class="go">        4.90873852e-02,  1.47311800e-01])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._interval.IntervalMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalMixin</span></span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L32-L107"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.IntervalMixin" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalMixin</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_interval.py#L33-L128"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.IntervalMixin" title="Link to this definition">#</a></dt>
+<dd><p>Mixin for interval based estimators.</p>
+<p>It provides an implementation for the <cite>_get_feature_engineer</cite> method
+which supports interval based transformation.</p>
+<p>The implementing class must have the following properties:</p>
+<ul class="simple">
+<li><p><cite>n_intervals</cite></p></li>
+<li><p><cite>intervals</cite></p></li>
+<li><p><cite>min_size</cite></p></li>
+<li><p><cite>max_size</cite></p></li>
+<li><p><cite>sample_size</cite></p></li>
+<li><p><cite>summarizer</cite></p></li>
+</ul>
+<p>See <code class="xref py py-class docutils literal notranslate"><span class="pre">transform.IntervalTransform</span></code> for information about the
+properties.</p>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform._interval.IntervalTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean_var_slope'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/isaksamsten/wildboar/blob/master/src/wildboar/transform/_interval.py#L110-L201"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.IntervalTransform" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform._interval.</span></span><span class="sig-name descname"><span class="pre">IntervalTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">summarizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean_var_slope'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_interval.py#L131-L234"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform._interval.IntervalTransform" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#wildboar.transform._interval.IntervalMixin" title="wildboar.transform._interval.IntervalMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalMixin</span></code></a>, <a class="reference internal" href="../_base/index.html#wildboar.transform._base.BaseFeatureEngineerTransform" title="wildboar.transform._base.BaseFeatureEngineerTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.transform._base.BaseFeatureEngineerTransform</span></code></a></p>
 <p>Embed a time series as a collection of features per interval.</p>
 <dl class="field-list">
@@ -338,22 +366,19 @@ is a numpy array.</p></li>
 <li><p>if “log2”, the number of intervals is <cite>log2(n_timestep)</cite>.</p></li>
 <li><p>if “sqrt”, the number of intervals is <cite>sqrt(n_timestep)</cite>.</p></li>
 <li><p>if int, the number of intervals is <cite>n_intervals</cite>.</p></li>
-<li><dl class="simple">
-<dt>if float, the number of intervals is <cite>n_intervals * n_timestep</cite>, with</dt><dd><p><cite>0 &lt; n_intervals &lt; 1</cite>.</p>
-</dd>
-</dl>
-</li>
+<li><p>if float, the number of intervals is <cite>n_intervals * n_timestep</cite>, with
+<cite>0 &lt; n_intervals &lt; 1</cite>.</p></li>
 </ul>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.2: </span>The option “log” has been renamed to “log2”.</p>
+</div>
 </dd>
-<dt><strong>intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The method for selecting intervals</p>
+<dt><strong>intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The method for selecting intervals.</p>
 <ul class="simple">
 <li><p>if “fixed”, <cite>n_intervals</cite> non-overlapping intervals.</p></li>
 <li><p>if “sample”, <cite>n_intervals * sample_size</cite> non-overlapping intervals.</p></li>
-<li><dl class="simple">
-<dt>if “random”, <cite>n_intervals</cite> possibly overlapping intervals of randomly</dt><dd><p>sampled in <cite>[min_size * n_timestep, max_size * n_timestep]</cite>.</p>
-</dd>
-</dl>
-</li>
+<li><p>if “random”, <cite>n_intervals</cite> possibly overlapping intervals of randomly
+sampled in <cite>[min_size * n_timestep, max_size * n_timestep]</cite>.</p></li>
 </ul>
 </dd>
 <dt><strong>sample_size</strong><span class="classifier">float, optional</span></dt><dd><p>The sample size of fixed intervals if <cite>intervals=”sample”</cite>.</p>
@@ -365,11 +390,8 @@ is a numpy array.</p></li>
 <dt><strong>summarizer</strong><span class="classifier">str or list, optional</span></dt><dd><p>The method to summarize each interval.</p>
 <ul class="simple">
 <li><p>if str, the summarizer is determined by <cite>_SUMMARIZERS.keys()</cite>.</p></li>
-<li><dl class="simple">
-<dt>if list, the summarizer is a list of functions <cite>f(x) -&gt; float</cite>, where</dt><dd><p>x is a numpy array.</p>
-</dd>
-</dl>
-</li>
+<li><p>if list, the summarizer is a list of functions <cite>f(x) -&gt; float</cite>, where
+<cite>x</cite> is a numpy array.</p></li>
 </ul>
 <p>The default summarizer summarizes each interval as its mean, standard
 deviation and slope.</p>
@@ -379,16 +401,21 @@ deviation and slope.</p>
 <dt><strong>random_state</strong><span class="classifier">int or RandomState</span></dt><dd><ul class="simple">
 <li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator</p></li>
 <li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator</p></li>
-<li><dl class="simple">
-<dt>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used</dt><dd><p>by <cite>np.random</cite>.</p>
-</dd>
-</dl>
-</li>
+<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used
+by <cite>np.random</cite>.</p></li>
 </ul>
 </dd>
 </dl>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>Paralellization dependes on releasing the global interpreter lock (GIL). As
+such, custom functions as summarizers reduces the performance. Wildboar
+implements summarizers for taking the mean (“mean”), variance (“variance”)
+and slope (“slope”) as well as their combination (“mean_var_slope”) and the
+full suite of <cite>catch22</cite> features (“catch22”). In the future, we will allow
+downstream projects to implement their own summarizers in Cython which will
+allow for releasing the GIL.</p>
 <p class="rubric">References</p>
 <dl class="simple">
 <dt>Lubba, Carl H., Sarab S. Sethi, Philip Knaute, Simon R. Schultz,             Ben D. Fulcher, and Nick S. Jones.</dt><dd><p>catch22: Canonical time-series characteristics.
@@ -407,8 +434,8 @@ Data Mining and Knowledge Discovery 33, no. 6 (2019): 1821-1852.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Each interval (150 // 12 timepoints) are transformed to two features. The mean
-and the standard deviation.</p>
+<p>Each interval (<cite>150 // 12</cite> timepoints) are transformed to two features. The
+mean and the standard deviation.</p>
 </dd></dl>
 
 </section>
@@ -471,7 +498,7 @@ and the standard deviation.</p>
     </aside>
   </div>
 </div>
-<script src="../../../../_static/documentation_options.js?v=91d95fa7"></script>
+<script src="../../../../_static/documentation_options.js?v=5a50cf6a"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>
