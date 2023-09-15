@@ -13,6 +13,7 @@ tramp
 .\#*
 .virtual_documents
 .benchmarks
+src/**/*.html
 
 # Org-mode
 .org-id-locations
