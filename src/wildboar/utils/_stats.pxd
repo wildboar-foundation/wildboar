@@ -9,19 +9,19 @@ cdef struct IncStats:
     double sum_square
     double sum
 
-cdef void inc_stats_init(IncStats *inc_stats) nogil
+cdef void inc_stats_init(IncStats *inc_stats) noexcept nogil
 
-cdef void inc_stats_add(IncStats *inc_stats, double weight, double value) nogil
+cdef void inc_stats_add(IncStats *inc_stats, double weight, double value) noexcept nogil
 
-cdef void inc_stats_remove(IncStats *inc_stats, double weight, double value) nogil
+cdef void inc_stats_remove(IncStats *inc_stats, double weight, double value) noexcept nogil
 
-cdef double inc_stats_mean(IncStats *inc_stats) nogil
+cdef double inc_stats_mean(IncStats *inc_stats) noexcept nogil
 
-cdef double inc_stats_variance(IncStats *inc_stats, bint sample=*) nogil
+cdef double inc_stats_variance(IncStats *inc_stats, bint sample=*) noexcept nogil
 
-cdef double inc_stats_n_samples(IncStats *inc_stats) nogil
+cdef double inc_stats_n_samples(IncStats *inc_stats) noexcept nogil
 
-cdef double inc_stats_sum(IncStats *inc_stats) nogil
+cdef double inc_stats_sum(IncStats *inc_stats) noexcept nogil
 
 cdef void cumulative_mean_std(
     const double *x,
@@ -29,23 +29,23 @@ cdef void cumulative_mean_std(
     Py_ssize_t y_length, 
     double *x_mean, 
     double *x_std
-) nogil
+) noexcept nogil
 
-cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=*) nogil
+cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=*) noexcept nogil
 
-cdef double mean(const double *x, Py_ssize_t length) nogil
+cdef double mean(const double *x, Py_ssize_t length) noexcept nogil
 
-cdef double variance(const double *x, Py_ssize_t length) nogil
+cdef double variance(const double *x, Py_ssize_t length) noexcept nogil
 
-cdef double slope(const double *x, Py_ssize_t length) nogil
+cdef double slope(const double *x, Py_ssize_t length) noexcept nogil
 
-cdef double covariance(const double *x, const double *y, Py_ssize_t length) nogil
+cdef double covariance(const double *x, const double *y, Py_ssize_t length) noexcept nogil
 
-cdef void auto_correlation(const double *x, Py_ssize_t n, double *out) nogil
+cdef void auto_correlation(const double *x, Py_ssize_t n, double *out) noexcept nogil
 
-cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex *fft) nogil
+cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex *fft) noexcept nogil
 
-cdef Py_ssize_t next_power_of_2(Py_ssize_t n) nogil
+cdef Py_ssize_t next_power_of_2(Py_ssize_t n) noexcept nogil
 
 cdef int welch(
     const double *x, 
@@ -56,7 +56,7 @@ cdef int welch(
     int windowWidth,
     double *Pxx, 
     double *f,
-) nogil
+) noexcept nogil
 
 
 cdef void fast_mean_std(
@@ -64,4 +64,4 @@ cdef void fast_mean_std(
     Py_ssize_t length,
     double *mean,
     double* std,
-) nogil
+) noexcept nogil

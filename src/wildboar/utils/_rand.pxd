@@ -13,23 +13,23 @@ cdef struct VoseRand:
     Py_ssize_t *alias
     double *prob
 
-cdef void vose_rand_init(VoseRand *vr, Py_ssize_t n) nogil
+cdef void vose_rand_init(VoseRand *vr, Py_ssize_t n) noexcept nogil
 
-cdef void vose_rand_free(VoseRand *vr) nogil
+cdef void vose_rand_free(VoseRand *vr) noexcept nogil
 
-cdef void vose_rand_precompute(VoseRand *vr, const double *p) nogil
+cdef void vose_rand_precompute(VoseRand *vr, const double *p) noexcept nogil
 
-cdef Py_ssize_t vose_rand_int(VoseRand *vr, uint32_t *seed) nogil
+cdef Py_ssize_t vose_rand_int(VoseRand *vr, uint32_t *seed) noexcept nogil
 
-cdef uint32_t rand_r(uint32_t *seed) nogil
+cdef uint32_t rand_r(uint32_t *seed) noexcept nogil
 
-cdef int rand_int(int min_val, int max_val, uint32_t *seed) nogil
+cdef int rand_int(int min_val, int max_val, uint32_t *seed) noexcept nogil
 
-cdef double rand_uniform(double low, double high, uint32_t *random_state) nogil
+cdef double rand_uniform(double low, double high, uint32_t *random_state) noexcept nogil
 
-cdef double rand_normal(double mean, double std, uint32_t *random_state) nogil
+cdef double rand_normal(double mean, double std, uint32_t *random_state) noexcept nogil
 
-cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) nogil
+cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) noexcept nogil
 
 cdef class RandomSampler:
 
@@ -39,4 +39,4 @@ cdef class RandomSampler:
 
     cdef VoseRand vr
 
-    cdef Py_ssize_t rand_int(self, uint32_t *seed) nogil
+    cdef Py_ssize_t rand_int(self, uint32_t *seed) noexcept nogil

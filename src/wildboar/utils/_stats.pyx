@@ -2,6 +2,7 @@
 # cython: cdivision=True
 # cython: boundscheck=False
 # cython: wraparound=False
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -23,7 +24,7 @@ cdef void fast_mean_std(
     Py_ssize_t length,
     double *mean,
     double* std,
-) nogil:
+) noexcept nogil:
     """Update the mean and standard deviation"""
     cdef double ex = 0
     cdef double ex2 = 0
@@ -41,13 +42,13 @@ cdef void fast_mean_std(
         std[0] = 0.0
 
 
-cdef void inc_stats_init(IncStats *self) nogil:
+cdef void inc_stats_init(IncStats *self) noexcept nogil:
     self.mean = 0.0
     self.n_samples = 0.0
     self.sum_square = 0.0
     self.sum = 0.0
 
-cdef void inc_stats_add(IncStats *self, double weight, double value) nogil:
+cdef void inc_stats_add(IncStats *self, double weight, double value) noexcept nogil:
     cdef double next_m
     self.n_samples += weight
     next_m = self.mean + (value - self.mean) / self.n_samples
@@ -55,7 +56,7 @@ cdef void inc_stats_add(IncStats *self, double weight, double value) nogil:
     self.mean = next_m
     self.sum += weight * value
 
-cdef void inc_stats_remove(IncStats *self, double weight, double value) nogil:
+cdef void inc_stats_remove(IncStats *self, double weight, double value) noexcept nogil:
     cdef double old_m
     if self.n_samples == 1.0:
         self.n_samples = 0.0
@@ -68,16 +69,16 @@ cdef void inc_stats_remove(IncStats *self, double weight, double value) nogil:
         self.n_samples -= weight
     self.sum -= weight * value
 
-cdef double inc_stats_n_samples(IncStats *self) nogil:
+cdef double inc_stats_n_samples(IncStats *self) noexcept nogil:
     return self.n_samples
 
-cdef double inc_stats_sum(IncStats *self) nogil:
+cdef double inc_stats_sum(IncStats *self) noexcept nogil:
     return self.sum
 
-cdef double inc_stats_mean(IncStats *self) nogil:
+cdef double inc_stats_mean(IncStats *self) noexcept nogil:
     return self.mean
 
-cdef double inc_stats_variance(IncStats *self, bint sample=False) nogil:
+cdef double inc_stats_variance(IncStats *self, bint sample=False) noexcept nogil:
     cdef double n_samples, var
     if sample:
         n_samples = self.n_samples - 1
@@ -97,7 +98,7 @@ cdef void cumulative_mean_std(
     Py_ssize_t y_length, 
     double *x_mean, 
     double *x_std
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef IncStats stats
     inc_stats_init(&stats)
@@ -109,14 +110,14 @@ cdef void cumulative_mean_std(
             x_std[i - (y_length - 1)] = std 
             inc_stats_remove(&stats, 1.0, x[i - (y_length - 1)])
 
-cdef double mean(const double *x, Py_ssize_t length) nogil:
+cdef double mean(const double *x, Py_ssize_t length) noexcept nogil:
     cdef double v = 0.0
     cdef Py_ssize_t i
     for i in range(length):
         v += x[i]
     return v / length
 
-cdef double variance(const double *x, Py_ssize_t length) nogil:
+cdef double variance(const double *x, Py_ssize_t length) noexcept nogil:
     if length == 1:
         return 0.0
 
@@ -129,7 +130,7 @@ cdef double variance(const double *x, Py_ssize_t length) nogil:
         sum += v * v
     return sum / length
 
-cdef double slope(const double *x, Py_ssize_t length) nogil:
+cdef double slope(const double *x, Py_ssize_t length) noexcept nogil:
     if length == 1:
         return 0.0
     cdef double y_mean = (length + 1) / 2.0
@@ -148,7 +149,7 @@ cdef double slope(const double *x, Py_ssize_t length) nogil:
     x_mean /= length
     return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
 
-cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) nogil:
+cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) noexcept nogil:
     cdef double min_val = INFINITY
     cdef Py_ssize_t i
 
@@ -160,7 +161,7 @@ cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) 
 
     return min_val
 
-cdef double covariance(const double *x, const double *y, Py_ssize_t length) nogil:
+cdef double covariance(const double *x, const double *y, Py_ssize_t length) noexcept nogil:
     cdef:
         double sum_x = 0.0
         double sum_y = 0.0
@@ -186,7 +187,7 @@ cdef double covariance(const double *x, const double *y, Py_ssize_t length) nogi
 
 
 
-cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex *fft) nogil:
+cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex *fft) noexcept nogil:
     cdef double avg = mean(x, n)
     cdef Py_ssize_t fft_length = n * 2 - 1
     cdef Py_ssize_t i
@@ -207,13 +208,13 @@ cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex 
     for i in range(n):
         out[i] = (fft[i] / first).real
 
-cdef void auto_correlation(const double *x, Py_ssize_t n, double *out) nogil:
+cdef void auto_correlation(const double *x, Py_ssize_t n, double *out) noexcept nogil:
     cdef Py_ssize_t fft_length = n * 2 - 1
     cdef complex *fft = <complex *> malloc(sizeof(complex) * fft_length)
     _auto_correlation(x, n, out, fft)
     free(fft)
 
-cdef Py_ssize_t next_power_of_2(Py_ssize_t n) nogil:
+cdef Py_ssize_t next_power_of_2(Py_ssize_t n) noexcept nogil:
     n = n - 1
     while n & n - 1:
         n = n & n - 1
@@ -228,7 +229,7 @@ cdef int welch(
     int windowWidth,
     double *Pxx, 
     double *f,
-) nogil:
+) noexcept nogil:
     cdef double dt = 1.0 / Fs
     cdef double df = 1.0 / next_power_of_2(windowWidth) / dt
     cdef double m = mean(x, size)

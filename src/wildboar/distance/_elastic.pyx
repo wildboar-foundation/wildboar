@@ -2,6 +2,7 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -32,7 +33,7 @@ cdef struct DtwExtra:
     double *lower
     double *upper
 
-cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
+cdef void deque_init(Deque *c, Py_ssize_t capacity) noexcept nogil:
     c.capacity = capacity
     c.size = 0
     c.queue = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
@@ -40,19 +41,19 @@ cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil:
     c.back = capacity - 1
 
 
-cdef void deque_reset(Deque *c) nogil:
+cdef void deque_reset(Deque *c) noexcept nogil:
     c.size = 0
     c.front = 0
     c.back = c.capacity - 1
 
 
-cdef void deque_destroy(Deque *c) nogil:
+cdef void deque_destroy(Deque *c) noexcept nogil:
     if c.queue != NULL:
         free(c.queue)
         c.queue = NULL
 
 
-cdef void deque_push_back(Deque *c, Py_ssize_t v) nogil:
+cdef void deque_push_back(Deque *c, Py_ssize_t v) noexcept nogil:
     c.queue[c.back] = v
     c.back -= 1
     if c.back < 0:
@@ -61,35 +62,35 @@ cdef void deque_push_back(Deque *c, Py_ssize_t v) nogil:
     c.size += 1
 
 
-cdef void deque_pop_front(Deque *c) nogil:
+cdef void deque_pop_front(Deque *c) noexcept nogil:
     c.front -= 1
     if c.front < 0:
         c.front = c.capacity - 1
     c.size -= 1
 
 
-cdef void deque_pop_back(Deque *c) nogil:
+cdef void deque_pop_back(Deque *c) noexcept nogil:
     c.back = (c.back + 1) % c.capacity
     c.size -= 1
 
 
-cdef Py_ssize_t deque_front(Deque *c) nogil:
+cdef Py_ssize_t deque_front(Deque *c) noexcept nogil:
     cdef int tmp = c.front - 1
     if tmp < 0:
         tmp = c.capacity - 1
     return c.queue[tmp]
 
 
-cdef Py_ssize_t deque_back(Deque *c) nogil:
+cdef Py_ssize_t deque_back(Deque *c) noexcept nogil:
     cdef int tmp = (c.back + 1) % c.capacity
     return c.queue[tmp]
 
 
-cdef bint deque_empty(Deque *c) nogil:
+cdef bint deque_empty(Deque *c) noexcept nogil:
     return c.size == 0
 
 
-cdef Py_ssize_t deque_size(Deque *c) nogil:
+cdef Py_ssize_t deque_size(Deque *c) noexcept nogil:
     return c.size
 
 
@@ -101,7 +102,7 @@ cdef void find_min_max(
     double *upper,
     Deque *dl,
     Deque *du,
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t k
 
@@ -148,7 +149,7 @@ cdef void find_min_max(
             deque_pop_front(dl)
 
 
-cdef inline double dist(double x, double y) nogil:
+cdef inline double dist(double x, double y) noexcept nogil:
     cdef double s = x - y
     return s * s
 
@@ -162,7 +163,7 @@ cdef double constant_lower_bound(
     double t_std,
     Py_ssize_t length,
     double best_dist,
-) nogil:
+) noexcept nogil:
     cdef double t_x0, t_y0, s_x0, s_y0
     cdef double t_x1, ty1, s_x1, s_y1
     cdef double t_x2, t_y2, s_x2, s_y2
@@ -233,7 +234,7 @@ cdef double cumulative_bound(
     double *upper,
     double *cb,
     double best_so_far,
-) nogil:
+) noexcept nogil:
     cdef double min_dist = 0
     cdef double x, d, us, ls
     cdef Py_ssize_t i
@@ -270,7 +271,7 @@ cdef inline double inner_scaled_dtw_subsequence_distance(
     double *cost,
     double *cost_prev,
     double min_dist,
-) nogil:
+) noexcept nogil:
     cdef int i = 0
     cdef int j = 0
     cdef int k = 0
@@ -366,7 +367,7 @@ cdef double scaled_dtw_subsequence_distance(
     double *cb_1,
     double *cb_2,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     cdef double current_value = 0
     cdef double mean = 0
     cdef double std = 0
@@ -500,7 +501,7 @@ cdef Py_ssize_t scaled_dtw_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches,
-) nogil:
+) noexcept nogil:
     cdef double current_value = 0
     cdef double mean = 0
     cdef double std = 0
@@ -633,7 +634,7 @@ cdef double dtw_subsequence_distance(
     double *cost_prev,
     double *weight_vector,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -669,7 +670,7 @@ cdef Py_ssize_t dtw_subsequence_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -714,7 +715,7 @@ cdef double ddtw_subsequence_distance(
     double *weight_vector,
     double *T_buffer,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     if s_length < 3:
         return 0
 
@@ -755,7 +756,7 @@ cdef Py_ssize_t ddtw_subsequence_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -803,7 +804,7 @@ cdef double dtw_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
@@ -974,7 +975,7 @@ cdef double lcss_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
@@ -1032,7 +1033,7 @@ cdef double lcss_subsequence_distance(
     double *cost_prev,
     double *weight_vector,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -1071,7 +1072,7 @@ cdef Py_ssize_t lcss_subsequence_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -1116,7 +1117,7 @@ cdef double erp_distance(
     double *gY,
     double *cost,
     double *cost_prev,
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
@@ -1185,7 +1186,7 @@ cdef double erp_subsequence_distance(
     double *cost,
     double *cost_prev,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -1226,7 +1227,7 @@ cdef Py_ssize_t erp_subsequence_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -1271,7 +1272,7 @@ cdef double edr_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
@@ -1326,7 +1327,7 @@ cdef double edr_subsequence_distance(
     double *cost_prev,
     double *weight_vector,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -1365,7 +1366,7 @@ cdef Py_ssize_t edr_subsequence_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -1399,7 +1400,7 @@ cdef Py_ssize_t edr_subsequence_matches(
     return n_matches
 
 
-cdef inline double _msm_cost(float x, float y, float z, float c) nogil:
+cdef inline double _msm_cost(float x, float y, float z, float c) noexcept nogil:
     if y <= x <= z or y >= x >= z:
         return c
     else:
@@ -1418,7 +1419,7 @@ cdef double msm_distance(
     double *cost,
     double *cost_prev,
     double *cost_y,
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
@@ -1469,7 +1470,7 @@ cdef double msm_subsequence_distance(
     double *cost_prev,
     double *cost_y,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -1508,7 +1509,7 @@ cdef Py_ssize_t msm_subsequence_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -1552,7 +1553,7 @@ cdef double twe_distance(
     double stiffness,
     double *cost,
     double *cost_prev,
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef Py_ssize_t j_start
@@ -1644,7 +1645,7 @@ cdef double twe_subsequence_distance(
     double *cost_prev,
     double *weight_vector,
     Py_ssize_t *index,
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef double min_dist = INFINITY
 
@@ -1684,7 +1685,7 @@ cdef Py_ssize_t twe_subsequence_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches
-) nogil:
+) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
     cdef Py_ssize_t tmp_capacity
@@ -1718,14 +1719,14 @@ cdef Py_ssize_t twe_subsequence_matches(
     return n_matches
 
 
-cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) nogil:
+cdef Py_ssize_t _compute_warp_width(Py_ssize_t length, double r) noexcept nogil:
     if r == 1:
         return length - 1
     else:
         return <Py_ssize_t> floor(length * r)
 
 
-cdef inline Py_ssize_t _compute_r(Py_ssize_t length, double r) nogil:
+cdef inline Py_ssize_t _compute_r(Py_ssize_t length, double r) noexcept nogil:
     return <Py_ssize_t> max(floor(length * r), 1)
 
 
@@ -1763,7 +1764,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         if self.X_buffer != NULL:
             free(self.X_buffer)
             self.X_buffer = NULL
@@ -1795,7 +1796,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
     def __reduce__(self):
         return self.__class__, (self.r, )
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
         cdef Py_ssize_t n_timestep = X.shape[2]
         self.cost_size = _compute_warp_width(n_timestep, self.r) * 2 + 1
@@ -1828,7 +1829,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(
@@ -1868,7 +1869,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         cdef DtwExtra *extra = <DtwExtra*> s.extra
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
 
@@ -1914,7 +1915,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
         cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
         find_min_max(
@@ -1958,7 +1959,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         cdef double *s_lower
         cdef double *s_upper
         cdef DtwExtra *extra = <DtwExtra*> s.extra
@@ -2005,7 +2006,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
-    ) nogil:
+    ) noexcept nogil:
         cdef int err = ScaledSubsequenceMetric.init_transient(
             self, X, t, index, start, length, dim
         )
@@ -2057,7 +2058,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         TSArray X,
         SubsequenceView* v,
         Subsequence* s,
-    ) nogil:
+    ) noexcept nogil:
         cdef int err = ScaledSubsequenceMetric.init_persistent(self, X, v, s)
         if err == -1:
             return -1
@@ -2072,14 +2073,14 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         s.extra = dtw_extra
         return 0
 
-    cdef int free_transient(self, SubsequenceView *t) nogil:
+    cdef int free_transient(self, SubsequenceView *t) noexcept nogil:
         cdef DtwExtra *extra = <DtwExtra*> t.extra
         free(extra.lower)
         free(extra.upper)
         free(extra)
         return 0
 
-    cdef int free_persistent(self, Subsequence *t) nogil:
+    cdef int free_persistent(self, Subsequence *t) noexcept nogil:
         if t.data != NULL:
             free(t.data)
             t.data = NULL
@@ -2104,7 +2105,7 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
         self.cost = NULL
         self.cost_prev = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
         self.cost = <double*> malloc(sizeof(double) * X.shape[2])
         self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
@@ -2115,7 +2116,7 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -2137,7 +2138,7 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return dtw_subsequence_distance(
             s, 
             s_len,
@@ -2162,7 +2163,7 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return dtw_subsequence_matches(
             s,
             s_len,
@@ -2192,7 +2193,7 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
     def __cinit__(self, *args, **kwargs):
         self.weights = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         DtwSubsequenceMetric.reset(self, X)
         self.weights = <double*> malloc(sizeof(double) * X.shape[2])
         if self.weights == NULL:
@@ -2207,7 +2208,7 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         DtwSubsequenceMetric._free(self)
         if self.weights != NULL:
             free(self.weights)
@@ -2226,7 +2227,7 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return dtw_subsequence_distance(
             s, 
             s_len,
@@ -2251,7 +2252,7 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return dtw_subsequence_matches(
             s,
             s_len,
@@ -2274,7 +2275,7 @@ cdef class DerivativeDtwSubsequenceMetric(DtwSubsequenceMetric):
     def __cinit__(self, *args, **kwargs):
         self.T_buffer = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         DtwSubsequenceMetric.reset(self, X)
         self.T_buffer = <double*> malloc(sizeof(double) * X.shape[2])
         self.S_buffer = <double*> malloc(sizeof(double) * X.shape[2])
@@ -2286,7 +2287,7 @@ cdef class DerivativeDtwSubsequenceMetric(DtwSubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         DtwSubsequenceMetric._free(self)
         if self.T_buffer != NULL:
             free(self.T_buffer)
@@ -2302,7 +2303,7 @@ cdef class DerivativeDtwSubsequenceMetric(DtwSubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_distance(
             self.S_buffer, 
@@ -2329,7 +2330,7 @@ cdef class DerivativeDtwSubsequenceMetric(DtwSubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_matches(
             self.S_buffer,
@@ -2360,7 +2361,7 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
     def __cinit__(self, *args, **kwargs):
         self.weights = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         DerivativeDtwSubsequenceMetric.reset(self, X)
         self.weights = <double*> malloc(sizeof(double) * X.shape[2])
         if self.weights == NULL:
@@ -2376,7 +2377,7 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         DerivativeDtwSubsequenceMetric._free(self)
         if self.weights != NULL:
             free(self.weights)
@@ -2395,7 +2396,7 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_distance(
             self.S_buffer, 
@@ -2422,7 +2423,7 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_matches(
             self.S_buffer,
@@ -2463,7 +2464,7 @@ cdef class LcssSubsequenceMetric(SubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -2472,7 +2473,7 @@ cdef class LcssSubsequenceMetric(SubsequenceMetric):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
         self.cost = <double*> malloc(sizeof(double) * X.shape[2])
         self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
@@ -2489,7 +2490,7 @@ cdef class LcssSubsequenceMetric(SubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return lcss_subsequence_distance(
             s, 
             s_len,
@@ -2515,7 +2516,7 @@ cdef class LcssSubsequenceMetric(SubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return lcss_subsequence_matches(
             s,
             s_len,
@@ -2558,7 +2559,7 @@ cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -2567,7 +2568,7 @@ cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
         self.cost = <double*> malloc(sizeof(double) * X.shape[2])
         self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
@@ -2584,7 +2585,7 @@ cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         if isnan(self.epsilon):
             epsilon = s_std / 4.0
         else:
@@ -2615,7 +2616,7 @@ cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         if isnan(self.epsilon):
             epsilon = s_std / 4.0
         else:
@@ -2663,7 +2664,7 @@ cdef class TweSubsequenceMetric(SubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -2672,7 +2673,7 @@ cdef class TweSubsequenceMetric(SubsequenceMetric):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
         self.cost = <double*> malloc(sizeof(double) * X.shape[2])
         self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
@@ -2689,7 +2690,7 @@ cdef class TweSubsequenceMetric(SubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return twe_subsequence_distance(
             s, 
             s_len,
@@ -2716,7 +2717,7 @@ cdef class TweSubsequenceMetric(SubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return twe_subsequence_matches(
             s,
             s_len,
@@ -2759,7 +2760,7 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -2772,7 +2773,7 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
             free(self.cost_y)
             self.cost_y = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
         self.cost = <double*> malloc(sizeof(double) * X.shape[2])
         self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
@@ -2790,7 +2791,7 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return msm_subsequence_distance(
             s, 
             s_len,
@@ -2816,7 +2817,7 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return msm_subsequence_matches(
             s,
             s_len,
@@ -2860,7 +2861,7 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
     def __dealloc__(self):
         self._free()
 
-    cdef void _free(self) nogil:
+    cdef void _free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -2877,7 +2878,7 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
             free(self.gY)
             self.gY = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
         self.cost = <double*> malloc(sizeof(double) * X.shape[2])
         self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
@@ -2896,7 +2897,7 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return erp_subsequence_distance(
             s, 
             s_len,
@@ -2923,7 +2924,7 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return erp_subsequence_matches(
             s,
             s_len,
@@ -2962,7 +2963,7 @@ cdef class DtwMetric(Metric):
     def __dealloc__(self):
         self.__free()
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -2971,7 +2972,7 @@ cdef class DtwMetric(Metric):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
@@ -2984,7 +2985,7 @@ cdef class DtwMetric(Metric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil:
+    ) noexcept nogil:
         cdef double dist = dtw_distance(
             x,
             x_len,
@@ -3003,7 +3004,7 @@ cdef class DtwMetric(Metric):
         return True
 
 
-cdef void average_slope(const double *q, Py_ssize_t len, double *d) nogil:
+cdef void average_slope(const double *q, Py_ssize_t len, double *d) noexcept nogil:
     cdef Py_ssize_t i, j
     j = 0
     for i in range(1, len - 1):
@@ -3023,7 +3024,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
         self.d_x = NULL
         self.d_y = NULL
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         DtwMetric.__free(self)
         if self.d_x != NULL:
             free(self.d_x)
@@ -3033,7 +3034,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
             free(self.d_y)
             self.d_y = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         DtwMetric.reset(self, Y, X)
         if min(X.shape[2], Y.shape[2]) < 3:
             return 0
@@ -3052,7 +3053,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-    ) nogil:
+    ) noexcept nogil:
         if min(x_len, y_len) < 3:
             return 0
 
@@ -3088,13 +3089,13 @@ cdef class WeightedDtwMetric(DtwMetric):
     def __reduce__(self):
         return self.__class__, (self.r, self.g)
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         DtwMetric.__free(self)
         if self.weights != NULL:
             free(self.weights)
             self.weights = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         DtwMetric.reset(self, X, Y)
         cdef Py_ssize_t i
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
@@ -3109,7 +3110,7 @@ cdef class WeightedDtwMetric(DtwMetric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-    ) nogil:
+    ) noexcept nogil:
         cdef double dist = dtw_distance(
             x,
             x_len,
@@ -3143,7 +3144,7 @@ cdef class WeightedDerivativeDtwMetric(DtwMetric):
     def __reduce__(self):
         return self.__class__, (self.r, self.g)
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         DtwMetric.__free(self)
         if self.d_x != NULL:
             free(self.d_x)
@@ -3157,7 +3158,7 @@ cdef class WeightedDerivativeDtwMetric(DtwMetric):
             free(self.weights)
             self.weights = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         DtwMetric.reset(self, X, Y)
         if min(X.shape[2], Y.shape[2]) < 3:
             return 0
@@ -3183,7 +3184,7 @@ cdef class WeightedDerivativeDtwMetric(DtwMetric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-    ) nogil:
+    ) noexcept nogil:
         if min(x_len, y_len) < 3:
             return 0
         average_slope(x, x_len, self.d_x)
@@ -3234,7 +3235,7 @@ cdef class LcssMetric(Metric):
     def __dealloc__(self):
         self.__free()
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -3243,7 +3244,7 @@ cdef class LcssMetric(Metric):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
@@ -3256,7 +3257,7 @@ cdef class LcssMetric(Metric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil:
+    ) noexcept nogil:
         cdef double dist = lcss_distance(
             x,
             x_len,
@@ -3293,13 +3294,13 @@ cdef class WeightedLcssMetric(LcssMetric):
     def __reduce__(self):
         return self.__class__, (self.r, self.epsilon, self.g)
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         LcssMetric.__free(self)
         if self.weights != NULL:
             free(self.weights)
             self.weights = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         LcssMetric.reset(self, X, Y)
         cdef Py_ssize_t i
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
@@ -3314,7 +3315,7 @@ cdef class WeightedLcssMetric(LcssMetric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-    ) nogil:
+    ) noexcept nogil:
         cdef double dist = lcss_distance(
             x,
             x_len,
@@ -3357,7 +3358,7 @@ cdef class ErpMetric(Metric):
     def __dealloc__(self):
         self.__free()
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -3374,7 +3375,7 @@ cdef class ErpMetric(Metric):
             free(self.gY)
             self.gY = NULL    
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
@@ -3389,7 +3390,7 @@ cdef class ErpMetric(Metric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil:
+    ) noexcept nogil:
         cdef double dist = erp_distance(
             x,
             x_len,
@@ -3451,7 +3452,7 @@ cdef class EdrMetric(Metric):
     def __dealloc__(self):
         self.__free()
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -3468,7 +3469,7 @@ cdef class EdrMetric(Metric):
             free(self.std_y)
             self.std_y = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
@@ -3495,7 +3496,7 @@ cdef class EdrMetric(Metric):
         TSArray Y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
-    ) nogil:
+    ) noexcept nogil:
         if isnan(self.epsilon):
             epsilon = max(self.std_x[x_index], self.std_y[y_index]) / 4.0
         else:
@@ -3519,7 +3520,7 @@ cdef class EdrMetric(Metric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-    ) nogil:
+    ) noexcept nogil:
         cdef double mean, std_x, std_y, epsilon
         if isnan(self.epsilon):
             fast_mean_std(x, x_len, &mean, &std_x)
@@ -3572,7 +3573,7 @@ cdef class MsmMetric(Metric):
     def __dealloc__(self):
         self.__free()
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -3585,7 +3586,7 @@ cdef class MsmMetric(Metric):
             free(self.cost_y)
             self.cost_y = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
@@ -3599,7 +3600,7 @@ cdef class MsmMetric(Metric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil:
+    ) noexcept nogil:
         return msm_distance(
             x,
             x_len,
@@ -3649,7 +3650,7 @@ cdef class TweMetric(Metric):
     def __dealloc__(self):
         self.__free()
 
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         if self.cost != NULL:
             free(self.cost)
             self.cost = NULL
@@ -3658,7 +3659,7 @@ cdef class TweMetric(Metric):
             free(self.cost_prev)
             self.cost_prev = NULL
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
@@ -3671,7 +3672,7 @@ cdef class TweMetric(Metric):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil:
+    ) noexcept nogil:
         return twe_distance(
             x,
             x_len,

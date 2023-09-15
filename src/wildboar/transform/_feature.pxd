@@ -15,11 +15,11 @@ cdef struct Feature:
 
 cdef class FeatureEngineer:
 
-    cdef int reset(self, TSArray X) nogil
+    cdef int reset(self, TSArray X) noexcept nogil
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) nogil
+    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil
 
     cdef Py_ssize_t next_feature(
         self,
@@ -29,7 +29,7 @@ cdef class FeatureEngineer:
         Py_ssize_t n_samples,
         Feature *transient,
         uint32_t *seed
-    ) nogil
+    ) noexcept nogil
 
     # Initialize a persisent feature from a transient feature
     cdef Py_ssize_t init_persistent_feature(
@@ -37,11 +37,11 @@ cdef class FeatureEngineer:
         TSArray X,
         Feature *transient, 
         Feature *persistent
-    ) nogil
+    ) noexcept nogil
     
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil
 
     # Calculate the feature value for sample using the transient feature
     cdef double transient_feature_value(
@@ -49,7 +49,7 @@ cdef class FeatureEngineer:
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil
+    ) noexcept nogil
 
     cdef Py_ssize_t transient_feature_fill(
         self, 
@@ -59,7 +59,7 @@ cdef class FeatureEngineer:
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t out_feature,
-    ) nogil
+    ) noexcept nogil
 
     # Calculate the feature value for sample using the persistent feature
     cdef double persistent_feature_value(
@@ -67,7 +67,7 @@ cdef class FeatureEngineer:
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil
+    ) noexcept nogil
 
     cdef Py_ssize_t persistent_feature_fill(
         self, 
@@ -77,7 +77,7 @@ cdef class FeatureEngineer:
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t out_feature,
-    ) nogil
+    ) noexcept nogil
     
     # Calculate the feature value for all samples using the transient featuer
     cdef void transient_feature_values(
@@ -87,7 +87,7 @@ cdef class FeatureEngineer:
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
-    ) nogil
+    ) noexcept nogil
     
     # Calculate the feature value for all samples using the persistent feature
     cdef void persistent_feature_values(
@@ -97,7 +97,7 @@ cdef class FeatureEngineer:
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
-    ) nogil
+    ) noexcept nogil
 
     cdef object persistent_feature_to_object(self, Feature *feature)
 

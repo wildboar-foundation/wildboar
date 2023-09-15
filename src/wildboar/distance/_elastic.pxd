@@ -10,25 +10,25 @@ cdef struct Deque:
     Py_ssize_t front
     Py_ssize_t back
 
-cdef void deque_init(Deque *c, Py_ssize_t capacity) nogil
+cdef void deque_init(Deque *c, Py_ssize_t capacity) noexcept nogil
 
-cdef void deque_reset(Deque *c) nogil
+cdef void deque_reset(Deque *c) noexcept nogil
 
-cdef void deque_destroy(Deque *c) nogil
+cdef void deque_destroy(Deque *c) noexcept nogil
 
-cdef void deque_push_back(Deque *c, Py_ssize_t v) nogil
+cdef void deque_push_back(Deque *c, Py_ssize_t v) noexcept nogil
 
-cdef void deque_pop_front(Deque *c) nogil
+cdef void deque_pop_front(Deque *c) noexcept nogil
 
-cdef void deque_pop_back(Deque *c) nogil
+cdef void deque_pop_back(Deque *c) noexcept nogil
 
-cdef Py_ssize_t deque_front(Deque *c) nogil
+cdef Py_ssize_t deque_front(Deque *c) noexcept nogil
 
-cdef Py_ssize_t deque_back(Deque *c) nogil
+cdef Py_ssize_t deque_back(Deque *c) noexcept nogil
 
-cdef bint deque_empty(Deque *c) nogil
+cdef bint deque_empty(Deque *c) noexcept nogil
 
-cdef Py_ssize_t deque_size(Deque *c) nogil
+cdef Py_ssize_t deque_size(Deque *c) noexcept nogil
 
 cdef void find_min_max(
     const double *T,
@@ -38,7 +38,7 @@ cdef void find_min_max(
     double *upper,
     Deque *dl,
     Deque *du,
-) nogil
+) noexcept nogil
 
 cdef double scaled_dtw_subsequence_distance(
     const double *S,
@@ -59,7 +59,7 @@ cdef double scaled_dtw_subsequence_distance(
     double *cb_1,
     double *cb_2,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef double dtw_subsequence_distance(
     const double *S,
@@ -71,7 +71,7 @@ cdef double dtw_subsequence_distance(
     double *cost_prev,
     double *weight_vector,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef double dtw_distance(
     const double *X,
@@ -82,7 +82,7 @@ cdef double dtw_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
-) nogil
+) noexcept nogil
 
 cdef double lcss_distance(
     const double *X,
@@ -94,7 +94,7 @@ cdef double lcss_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
-) nogil
+) noexcept nogil
 
 cdef double erp_distance(
     const double *X,
@@ -107,7 +107,7 @@ cdef double erp_distance(
     double *gY,
     double *cost,
     double *cost_prev,
-) nogil
+) noexcept nogil
 
 cdef double edr_distance(
     const double *X,
@@ -119,7 +119,7 @@ cdef double edr_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
-) nogil
+) noexcept nogil
 
 cdef double msm_distance(
     const double *X,
@@ -131,7 +131,7 @@ cdef double msm_distance(
     double *cost,
     double *cost_prev,
     double *cost_y,
-) nogil
+) noexcept nogil
 
 cdef double twe_distance(
     const double *X,

@@ -1,8 +1,8 @@
 # cython: language_level=3
 # cython: boundscheck=False
 # cython: cdivision=True
-# cython: boundscheck=False
 # cython: wraparound=False
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -42,7 +42,7 @@ cdef void _matrix_profile_stmp(
     double *dist_buffer,
     double *mp,
     Py_ssize_t *mpi,
-) nogil:
+) noexcept nogil:
     """Compute the matrix profile using the STMP algorithm
 
     Parameters

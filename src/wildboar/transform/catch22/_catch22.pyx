@@ -1,5 +1,8 @@
+# cython: cdivision=True
 # cython: boundscheck=False
+# cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -54,27 +57,27 @@ cdef extern from "catch22.h":
 
 cdef double transition_matrix_3ac_sumdiagcov(
     const double *x, double *ac, Py_ssize_t length,
-) nogil:
+) noexcept nogil:
     return transition_matrix_ac_sumdiagcov(x, ac, length, 3)
 
 
-cdef double histogram_ami_even_2_5(const double *x, Py_ssize_t length) nogil:
+cdef double histogram_ami_even_2_5(const double *x, Py_ssize_t length) noexcept nogil:
     return histogram_ami_even(x, length, 2, 5)
 
 
 cdef double histogram_mode10(
     const double *x, Py_ssize_t length, int *bin_count, double *bin_edges
-) nogil:
+) noexcept nogil:
     return histogram_mode(x, length, bin_count, bin_edges, 10)
 
 
 cdef double histogram_mode5(
     const double *x, Py_ssize_t length, int *bin_count, double *bin_edges
-) nogil:
+) noexcept nogil:
     return histogram_mode(x, length, bin_count, bin_edges, 5)
 
 
-cdef double f1ecac(const double *ac, Py_ssize_t n) nogil:
+cdef double f1ecac(const double *ac, Py_ssize_t n) noexcept nogil:
     if n <= 1:
         return 0.0
 
@@ -86,7 +89,7 @@ cdef double f1ecac(const double *ac, Py_ssize_t n) nogil:
     return n
 
 
-cdef double first_min(double *ac, Py_ssize_t n) nogil:
+cdef double first_min(double *ac, Py_ssize_t n) noexcept nogil:
     if n <= 2:
         return 0.0
     
@@ -97,7 +100,7 @@ cdef double first_min(double *ac, Py_ssize_t n) nogil:
     return n
 
 
-cdef double trev_1_num(const double *x, Py_ssize_t n) nogil:
+cdef double trev_1_num(const double *x, Py_ssize_t n) noexcept nogil:
     if n <= 1:
         return 0.0
 
@@ -108,7 +111,7 @@ cdef double trev_1_num(const double *x, Py_ssize_t n) nogil:
     return sum / (n - 1)
 
 
-cdef double local_mean_std(const double *x, Py_ssize_t n, Py_ssize_t lag) nogil:
+cdef double local_mean_std(const double *x, Py_ssize_t n, Py_ssize_t lag) noexcept nogil:
     if n <= lag:
         return 0.0
 
@@ -128,7 +131,7 @@ cdef double local_mean_std(const double *x, Py_ssize_t n, Py_ssize_t lag) nogil:
     return sqrt(_stats.inc_stats_variance(&inc_stats, True))
 
 
-cdef double hrv_classic_pnn(const double *x, Py_ssize_t n, double pnn) nogil:
+cdef double hrv_classic_pnn(const double *x, Py_ssize_t n, double pnn) noexcept nogil:
     if n <= 1:
         return 0.0
     
@@ -142,7 +145,7 @@ cdef double hrv_classic_pnn(const double *x, Py_ssize_t n, double pnn) nogil:
     return value / (n - 1)
 
 
-cdef double above_mean_stretch(const double *x, Py_ssize_t n) nogil:
+cdef double above_mean_stretch(const double *x, Py_ssize_t n) noexcept nogil:
     cdef double mean = _stats.mean(x, n)
     cdef double stretch = 0
     cdef double longest = 0
@@ -162,7 +165,7 @@ cdef double above_mean_stretch(const double *x, Py_ssize_t n) nogil:
         return longest
 
 
-cdef double below_diff_stretch(const double *x, Py_ssize_t n) nogil:
+cdef double below_diff_stretch(const double *x, Py_ssize_t n) noexcept nogil:
     cdef double stretch = 0
     cdef double max_stretch = 0
     cdef double last_i = 0
@@ -180,7 +183,7 @@ cdef double below_diff_stretch(const double *x, Py_ssize_t n) nogil:
 
 cdef double local_mean_tauresrat(
     const double *x, double *ac, Py_ssize_t n, Py_ssize_t lag
-) nogil:
+) noexcept nogil:
     if n <= lag or lag == 0:
         return 0.0
     cdef:

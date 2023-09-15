@@ -2,6 +2,7 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -33,7 +34,7 @@ cdef class RandomSampler:
         if self.weights is not None:
             vose_rand_free(&self.vr)
 
-    cdef Py_ssize_t rand_int(self, uint32_t *seed) nogil:
+    cdef Py_ssize_t rand_int(self, uint32_t *seed) noexcept nogil:
         if self.weights is not None:
             return vose_rand_int(&self.vr, seed)
         else:
@@ -41,16 +42,16 @@ cdef class RandomSampler:
 
 
 # https://jugit.fz-juelich.de/mlz/ransampl/-/blob/master/lib/ransampl.c
-cdef void vose_rand_init(VoseRand *vr, Py_ssize_t n) nogil:
+cdef void vose_rand_init(VoseRand *vr, Py_ssize_t n) noexcept nogil:
     vr.prob = <double*> malloc(sizeof(double) * n)
     vr.alias = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * n)
     vr.n = n
 
-cdef void vose_rand_free(VoseRand *vr) nogil:
+cdef void vose_rand_free(VoseRand *vr) noexcept nogil:
     free(vr.prob)
     free(vr.alias)
 
-cdef void vose_rand_precompute(VoseRand *vr, const double *p) nogil:
+cdef void vose_rand_precompute(VoseRand *vr, const double *p) noexcept nogil:
     cdef Py_ssize_t n = vr.n
     cdef Py_ssize_t i, a, g
     cdef double *P = <double*> malloc(sizeof(double) * n)
@@ -102,7 +103,7 @@ cdef void vose_rand_precompute(VoseRand *vr, const double *p) nogil:
     free(L)
 
 
-cdef Py_ssize_t vose_rand_int(VoseRand *vr, uint32_t *seed) nogil:
+cdef Py_ssize_t vose_rand_int(VoseRand *vr, uint32_t *seed) noexcept nogil:
     cdef double r1 = rand_uniform(0, 1, seed)
     cdef double r2 = rand_uniform(0, 1, seed)
     cdef Py_ssize_t i = <Py_ssize_t> (vr.n * r1)
@@ -120,14 +121,14 @@ cdef Py_ssize_t vose_rand_int(VoseRand *vr, uint32_t *seed) nogil:
 #    seed[0] ^= <uint32_t>(seed[0] >> 17)
 #    seed[0] ^= <uint32_t>(seed[0] << 5)
 #    return seed[0] % ((<uint32_t>RAND_R_MAX) + 1)
-cdef inline uint32_t rand_r(uint32_t *seed) nogil:
+cdef inline uint32_t rand_r(uint32_t *seed) noexcept nogil:
     """Returns a pesudo-random number based on the seed."""
     seed[0] = seed[0] * 1103515245 + 12345
     return seed[0] % (<uint32_t> RAND_R_MAX + 1)
 
 
 
-cdef int rand_int(int min_val, int max_val, uint32_t *seed) nogil:
+cdef int rand_int(int min_val, int max_val, uint32_t *seed) noexcept nogil:
     """Returns a pseudo-random number in the range [`min_val` `max_val`["""
     if min_val == max_val:
         return min_val
@@ -135,12 +136,12 @@ cdef int rand_int(int min_val, int max_val, uint32_t *seed) nogil:
         return min_val + rand_r(seed) % (max_val - min_val)
 
 
-cdef double rand_uniform(double low, double high, uint32_t *random_state) nogil:
+cdef double rand_uniform(double low, double high, uint32_t *random_state) noexcept nogil:
     """Generate a random double in the range [`low` `high`[."""
     return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
 
 
-cdef double rand_normal(double mu, double sigma, uint32_t *random_state) nogil:
+cdef double rand_normal(double mu, double sigma, uint32_t *random_state) noexcept nogil:
     cdef double x1, x2, w, _y1
     x1 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
     x2 = 2.0 * rand_uniform(0, 1, random_state) - 1.0
@@ -156,7 +157,7 @@ cdef double rand_normal(double mu, double sigma, uint32_t *random_state) nogil:
     return mu + _y1 * sigma
 
 
-cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) nogil:
+cdef void shuffle(Py_ssize_t *values, Py_ssize_t length, uint32_t *seed) noexcept nogil:
     cdef Py_ssize_t i, j
     for i in range(length - 1, 0, -1):
         j = rand_int(0, i, seed)

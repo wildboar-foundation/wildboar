@@ -1,8 +1,8 @@
 # cython: language_level=3
 # cython: boundscheck=False
 # cython: cdivision=True
-# cython: boundscheck=False
 # cython: wraparound=False
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -42,16 +42,16 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self.metric.reset(X)
         return 1
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
         if feature.feature != NULL:
             self.metric.free_transient(<SubsequenceView*> feature.feature)
             free(feature.feature)
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         cdef Subsequence *s
         if feature.feature != NULL:
             self.metric.free_persistent(<Subsequence*> feature.feature)
@@ -62,7 +62,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         TSArray X,
         Feature *transient, 
         Feature *persistent
-    ) nogil:
+    ) noexcept nogil:
         cdef SubsequenceView *v = <SubsequenceView*> transient.feature
         cdef Subsequence *s = <Subsequence*> malloc(sizeof(Subsequence))
         self.metric.init_persistent(X, v, s)
@@ -75,7 +75,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         return self.metric.transient_distance(
             <SubsequenceView*> feature.feature, X, sample
         )
@@ -85,7 +85,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         return self.metric.persistent_distance(
             <Subsequence*> feature.feature, X, sample
         )
@@ -98,7 +98,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
-    ) nogil:
+    ) noexcept nogil:
         out[out_sample, feature_id] = self.metric.transient_distance(
             <SubsequenceView*> feature.feature, X, sample
         )
@@ -112,7 +112,7 @@ cdef class ShapeletFeatureEngineer(FeatureEngineer):
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
-    ) nogil:
+    ) noexcept nogil:
         out[out_sample, feature_id] = self.metric.persistent_distance(
             <Subsequence*> feature.feature, X, sample
         )
@@ -139,7 +139,7 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
         super().__init__(metric, min_shapelet_size, max_shapelet_size)
         self.n_shapelets = n_shapelets
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
         return self.n_shapelets
 
     cdef Py_ssize_t next_feature(
@@ -150,7 +150,7 @@ cdef class RandomShapeletFeatureEngineer(ShapeletFeatureEngineer):
         Py_ssize_t n_samples,
         Feature *transient,
         uint32_t *random_seed
-    ) nogil:
+    ) noexcept nogil:
         if feature_id >= self.n_shapelets:
             return -1
         
@@ -221,21 +221,21 @@ cdef class MultiMetricShapeletFeatureEngineer(FeatureEngineer):
         if self.weighted:
             vose_rand_free(&self.vr)
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         cdef Py_ssize_t metric
         for metric in range(self.metrics.size):
             self.metrics.reset(metric, X)
 
         return 1
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
         cdef MetricSubsequenceView *msv
         if feature.feature != NULL:
             msv = <MetricSubsequenceView*> feature.feature
             self.metrics.free_transient(msv.metric, &msv.view)
             free(feature.feature)
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         cdef MetricSubsequence *ms
         if feature.feature != NULL:
             ms = <MetricSubsequence*> feature.feature
@@ -247,7 +247,7 @@ cdef class MultiMetricShapeletFeatureEngineer(FeatureEngineer):
         TSArray X,
         Feature *transient, 
         Feature *persistent
-    ) nogil:
+    ) noexcept nogil:
         cdef MetricSubsequenceView *msv = <MetricSubsequenceView*> transient.feature 
         cdef MetricSubsequence *ms = <MetricSubsequence*> malloc(sizeof(MetricSubsequence))
         
@@ -260,7 +260,7 @@ cdef class MultiMetricShapeletFeatureEngineer(FeatureEngineer):
 
     cdef double transient_feature_value(
         self, Feature *feature, TSArray X, Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         cdef MetricSubsequenceView *msv = <MetricSubsequenceView*> feature.feature 
         return self.metrics.transient_distance(
             msv.metric, &msv.view, X, sample, NULL
@@ -268,7 +268,7 @@ cdef class MultiMetricShapeletFeatureEngineer(FeatureEngineer):
 
     cdef double persistent_feature_value(
         self, Feature *feature, TSArray X, Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         cdef MetricSubsequence *ms = <MetricSubsequence*> feature.feature
         return self.metrics.persistent_distance(
             ms.metric, &ms.subsequence, X, sample, NULL
@@ -282,7 +282,7 @@ cdef class MultiMetricShapeletFeatureEngineer(FeatureEngineer):
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
-    ) nogil:
+    ) noexcept nogil:
         out[out_sample, feature_id] = self.transient_feature_value(feature, X, sample)
         return 0
 
@@ -294,7 +294,7 @@ cdef class MultiMetricShapeletFeatureEngineer(FeatureEngineer):
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
-    ) nogil:
+    ) noexcept nogil:
         out[out_sample, feature_id] = self.persistent_feature_value(feature, X, sample)
         return 0
 
@@ -335,7 +335,7 @@ cdef class RandomMultiMetricShapeletFeatureEngineer(MultiMetricShapeletFeatureEn
             np.asarray(self.weights)
         )
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
         return self.n_shapelets
 
     cdef Py_ssize_t next_feature(
@@ -346,7 +346,7 @@ cdef class RandomMultiMetricShapeletFeatureEngineer(MultiMetricShapeletFeatureEn
         Py_ssize_t n_samples,
         Feature *transient,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         if feature_id >= self.n_shapelets:
             return -1
         

@@ -2,6 +2,7 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -25,7 +26,7 @@ from ..utils.validation import check_array
 
 cdef class MetricList(List):
 
-    cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) nogil:
+    cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) noexcept nogil:
         return (<Metric> self.get(metric)).reset(X, Y)
 
     cdef double distance(
@@ -36,7 +37,7 @@ cdef class MetricList(List):
         TSArray Y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
-    ) nogil:
+    ) noexcept nogil:
         return (<Metric> self.get(metric)).distance(X, x_index, Y, y_index, dim)
 
     cdef double _distance(
@@ -46,13 +47,13 @@ cdef class MetricList(List):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil:
+    ) noexcept nogil:
         return (<Metric> self.get(metric))._distance(x, x_len, y, y_len)
 
 
 cdef class SubsequenceMetricList(List):
 
-    cdef int reset(self, Py_ssize_t metric, TSArray X) nogil:
+    cdef int reset(self, Py_ssize_t metric, TSArray X) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).reset(X)
 
     cdef int init_transient(
@@ -64,7 +65,7 @@ cdef class SubsequenceMetricList(List):
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
-    ) nogil:
+    ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).init_transient(
             X, v, index, start, length, dim
         )
@@ -75,13 +76,13 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         SubsequenceView* v,
         Subsequence* s,
-    ) nogil:
+    ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).init_persistent(X, v, s)
 
-    cdef int free_transient(self, Py_ssize_t metric, SubsequenceView *t) nogil:
+    cdef int free_transient(self, Py_ssize_t metric, SubsequenceView *t) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).free_transient(t)
 
-    cdef int free_persistent(self, Py_ssize_t metric, Subsequence *t) nogil:
+    cdef int free_persistent(self, Py_ssize_t metric, Subsequence *t) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).free_persistent(t)
 
     cdef int from_array(
@@ -106,7 +107,7 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index,
-    ) nogil:
+    ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).transient_distance(
             v, X, index, return_index
         )
@@ -119,7 +120,7 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index,
-    ) nogil:
+    ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).persistent_distance(
             s, X, index, return_index
         )
@@ -133,7 +134,7 @@ cdef class SubsequenceMetricList(List):
         double threshold,
         double **distances,
         Py_ssize_t **indices,
-    ) nogil:
+    ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).transient_matches(
             v, X, index, threshold, distances, indices
         )
@@ -147,13 +148,13 @@ cdef class SubsequenceMetricList(List):
         double threshold,
         double **distances,
         Py_ssize_t **indices,
-    ) nogil:
+    ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).persistent_matches(
             s, X, index, threshold, distances, indices
         )
 
 
-cdef int _ts_view_update_statistics(SubsequenceView *v, const double* sample) nogil:
+cdef int _ts_view_update_statistics(SubsequenceView *v, const double* sample) noexcept nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef double ex = 0
     cdef double ex2 = 0
@@ -174,7 +175,7 @@ cdef int _ts_view_update_statistics(SubsequenceView *v, const double* sample) no
 
 cdef class SubsequenceMetric:
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         pass
 
     cdef int init_transient(
@@ -185,7 +186,7 @@ cdef class SubsequenceMetric:
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
-    ) nogil:
+    ) noexcept nogil:
         v.index = index
         v.dim = dim
         v.start = start
@@ -197,7 +198,7 @@ cdef class SubsequenceMetric:
 
     cdef int init_persistent(
         self, TSArray X, SubsequenceView* v, Subsequence* s
-    ) nogil:
+    ) noexcept nogil:
         s.dim = v.dim
         s.length = v.length
         s.mean = v.mean
@@ -215,10 +216,10 @@ cdef class SubsequenceMetric:
             s.data[i] = sample[i]
         return 0
 
-    cdef int free_transient(self, SubsequenceView *v) nogil:
+    cdef int free_transient(self, SubsequenceView *v) noexcept nogil:
         return 0
 
-    cdef int free_persistent(self, Subsequence *v) nogil:
+    cdef int free_persistent(self, Subsequence *v) noexcept nogil:
         if v.data != NULL:
             free(v.data)
             v.data = NULL
@@ -255,7 +256,7 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return self._distance(
             &X[v.index, v.dim, v.start],
             v.length,
@@ -273,7 +274,7 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return self._distance(
             v.data,
             v.length,
@@ -293,7 +294,7 @@ cdef class SubsequenceMetric:
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return self._matches(
             &X[v.index, v.dim, v.start],
             v.length,
@@ -315,7 +316,7 @@ cdef class SubsequenceMetric:
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return self._matches(
             s.data,
             s.length,
@@ -339,7 +340,7 @@ cdef class SubsequenceMetric:
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         return NAN
 
     cdef Py_ssize_t _matches(
@@ -354,7 +355,7 @@ cdef class SubsequenceMetric:
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         return -1
 
 
@@ -368,7 +369,7 @@ cdef class ScaledSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
-    ) nogil:
+    ) noexcept nogil:
         cdef int err = SubsequenceMetric.init_transient(
             self, X, v, index, start, length, dim
         )
@@ -396,7 +397,7 @@ cdef class ScaledSubsequenceMetric(SubsequenceMetric):
 
 cdef class Metric:
 
-    cdef int reset(self, TSArray x, TSArray y) nogil:
+    cdef int reset(self, TSArray x, TSArray y) noexcept nogil:
         return 0
 
     cdef double distance(
@@ -406,7 +407,7 @@ cdef class Metric:
         TSArray y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
-    ) nogil:
+    ) noexcept nogil:
         return self._distance(
             &x[x_index, dim, 0],
             x.shape[2],
@@ -420,7 +421,7 @@ cdef class Metric:
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil:
+    ) noexcept nogil:
         return NAN
 
     @property

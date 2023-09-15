@@ -12,7 +12,7 @@ cdef double EPSILON = 1e-13
 
 cdef class MetricList(List):
 
-    cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) nogil
+    cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) noexcept nogil
 
     cdef double distance(
         self, 
@@ -22,7 +22,7 @@ cdef class MetricList(List):
         TSArray Y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
-    ) nogil
+    ) noexcept nogil
 
     cdef double _distance(
         self,
@@ -31,11 +31,11 @@ cdef class MetricList(List):
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil
+    ) noexcept nogil
 
 cdef class SubsequenceMetricList(List):
 
-    cdef int reset(self, Py_ssize_t metric, TSArray X) nogil
+    cdef int reset(self, Py_ssize_t metric, TSArray X) noexcept nogil
 
     cdef int init_transient(
         self,
@@ -46,7 +46,7 @@ cdef class SubsequenceMetricList(List):
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
-    ) nogil
+    ) noexcept nogil
 
     cdef int init_persistent(
         self,
@@ -54,11 +54,11 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         SubsequenceView* v,
         Subsequence* s,
-    ) nogil
+    ) noexcept nogil
 
-    cdef int free_transient(self, Py_ssize_t metric, SubsequenceView *t) nogil
+    cdef int free_transient(self, Py_ssize_t metric, SubsequenceView *t) noexcept nogil
 
-    cdef int free_persistent(self, Py_ssize_t metric, Subsequence *t) nogil
+    cdef int free_persistent(self, Py_ssize_t metric, Subsequence *t) noexcept nogil
 
     cdef int from_array(
         self,
@@ -80,7 +80,7 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index,
-    ) nogil
+    ) noexcept nogil
 
     cdef double persistent_distance(
         self,
@@ -89,7 +89,7 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index,
-    ) nogil
+    ) noexcept nogil
 
     cdef Py_ssize_t transient_matches(
         self,
@@ -100,7 +100,7 @@ cdef class SubsequenceMetricList(List):
         double threshold,
         double **distances,
         Py_ssize_t **indices,
-    ) nogil
+    ) noexcept nogil
 
     cdef Py_ssize_t persistent_matches(
         self,
@@ -111,7 +111,7 @@ cdef class SubsequenceMetricList(List):
         double threshold,
         double **distances,
         Py_ssize_t **indices,
-    ) nogil
+    ) noexcept nogil
 
 
 cdef struct SubsequenceView:
@@ -136,7 +136,7 @@ cdef struct Subsequence:
 
 cdef class SubsequenceMetric:
 
-    cdef int reset(self, TSArray X) nogil
+    cdef int reset(self, TSArray X) noexcept nogil
 
     cdef int init_transient(
         self,
@@ -146,18 +146,18 @@ cdef class SubsequenceMetric:
         Py_ssize_t start,
         Py_ssize_t length,
         Py_ssize_t dim,
-    ) nogil
+    ) noexcept nogil
 
     cdef int init_persistent(
         self,
         TSArray X,
         SubsequenceView* v,
         Subsequence* s,
-    ) nogil
+    ) noexcept nogil
 
-    cdef int free_transient(self, SubsequenceView *t) nogil
+    cdef int free_transient(self, SubsequenceView *t) noexcept nogil
 
-    cdef int free_persistent(self, Subsequence *t) nogil
+    cdef int free_persistent(self, Subsequence *t) noexcept nogil
 
     cdef int from_array(
         self,
@@ -176,7 +176,7 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=*,
-    ) nogil
+    ) noexcept nogil
 
     cdef double persistent_distance(
         self,
@@ -184,7 +184,7 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=*,
-    ) nogil
+    ) noexcept nogil
 
     cdef Py_ssize_t transient_matches(
         self,
@@ -194,7 +194,7 @@ cdef class SubsequenceMetric:
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil
+    ) noexcept nogil
 
     cdef Py_ssize_t persistent_matches(
         self,
@@ -204,7 +204,7 @@ cdef class SubsequenceMetric:
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil
+    ) noexcept nogil
 
     cdef double _distance(
         self,
@@ -216,7 +216,7 @@ cdef class SubsequenceMetric:
         const double *x,
         Py_ssize_t x_len,
         Py_ssize_t *return_index=*,
-    ) nogil
+    ) noexcept nogil
 
     cdef Py_ssize_t _matches(
         self,
@@ -230,7 +230,7 @@ cdef class SubsequenceMetric:
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil
+    ) noexcept nogil
 
 
 cdef class ScaledSubsequenceMetric(SubsequenceMetric):
@@ -239,7 +239,7 @@ cdef class ScaledSubsequenceMetric(SubsequenceMetric):
 
 cdef class Metric:
 
-    cdef int reset(self, TSArray X, TSArray Y) nogil
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil
 
     cdef double distance(
         self,
@@ -248,7 +248,7 @@ cdef class Metric:
         TSArray Y,
         Py_ssize_t y_index,
         Py_ssize_t dim,
-    ) nogil
+    ) noexcept nogil
 
     cdef double _distance(
         self,
@@ -256,4 +256,4 @@ cdef class Metric:
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
-    ) nogil
+    ) noexcept nogil

@@ -2,6 +2,7 @@
 # cython: cdivision=True
 # cython: boundscheck=False
 # cython: wraparound=False
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -26,47 +27,47 @@ cdef struct Interval:
 
 
 cdef class Summarizer:
-    cdef void summarize_all(self, const double *x, Py_ssize_t length, double *out) nogil:
+    cdef void summarize_all(self, const double *x, Py_ssize_t length, double *out) noexcept nogil:
         cdef Py_ssize_t i
         for i in range(self.n_outputs()):
             out[i] = self.summarize(i, x, length)
 
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) nogil:
+    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
         pass
 
-    cdef void reset(self, TSArray X) nogil:
+    cdef void reset(self, TSArray X) noexcept nogil:
         pass
 
-    cdef Py_ssize_t n_outputs(self) nogil:
+    cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return -1
 
 
 cdef class MeanSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) nogil:
+    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
         return _stats.mean(x, length)
         
-    cdef Py_ssize_t n_outputs(self) nogil:
+    cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 1
 
 
 cdef class VarianceSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) nogil:
+    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
         return _stats.variance(x, length)
 
-    cdef Py_ssize_t n_outputs(self) nogil:
+    cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 1
 
 
 cdef class SlopeSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) nogil:
+    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
         return _stats.slope(x, length)
 
-    cdef Py_ssize_t n_outputs(self) nogil:
+    cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 1
 
 
 cdef class MeanVarianceSlopeSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) nogil:
+    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
         if i == 0:
             return _stats.mean(x, length)
         elif i == 1:
@@ -76,7 +77,7 @@ cdef class MeanVarianceSlopeSummarizer(Summarizer):
         else:
             return NAN
 
-    cdef Py_ssize_t n_outputs(self) nogil:
+    cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 3
 
 
@@ -98,7 +99,7 @@ cdef class Catch22Summarizer(Summarizer):
         if self.bin_count == NULL or self.bin_edges == NULL:
             raise MemoryError()
 
-    cdef void reset(self, TSArray X) nogil:
+    cdef void reset(self, TSArray X) noexcept nogil:
         if self.ac != NULL:
             free(self.ac)
 
@@ -149,7 +150,7 @@ cdef class Catch22Summarizer(Summarizer):
         return self.__class__, ( )
 
     # This is ugly
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) nogil:
+    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
         cdef Py_ssize_t welch_length = -1
         cdef int n_welch = -1
         
@@ -215,7 +216,7 @@ cdef class Catch22Summarizer(Summarizer):
             return NAN
 
 
-    cdef Py_ssize_t n_outputs(self) nogil:
+    cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 22
 
 cdef class PyFuncSummarizer(Summarizer):
@@ -229,7 +230,7 @@ cdef class PyFuncSummarizer(Summarizer):
     def __reduce__(self):
         return self.__class__, (self.func, )
 
-    cdef void reset(self, TSArray X) nogil:
+    cdef void reset(self, TSArray X) noexcept nogil:
         with gil:
             self.x_buffer = np.empty(X.shape[2], dtype=float)
 
@@ -238,7 +239,7 @@ cdef class PyFuncSummarizer(Summarizer):
             double *x,
             Py_ssize_t length,
             double *out
-    ) nogil:
+    ) noexcept nogil:
         cdef double value
         cdef Py_ssize_t i
         with gil:
@@ -250,7 +251,7 @@ cdef class PyFuncSummarizer(Summarizer):
                 value = self.func[i](self.x_buffer[0:length])
             out[i] = value
 
-    cdef double summarize(self, Py_ssize_t m, const double *x, Py_ssize_t length) nogil:
+    cdef double summarize(self, Py_ssize_t m, const double *x, Py_ssize_t length) noexcept nogil:
         cdef double value
         cdef Py_ssize_t i
         with gil:
@@ -259,12 +260,12 @@ cdef class PyFuncSummarizer(Summarizer):
             value = self.func[m](self.x_buffer[0:length])
         return value
 
-    cdef Py_ssize_t n_outputs(self) nogil:
+    cdef Py_ssize_t n_outputs(self) noexcept nogil:
         with gil:
             return len(self.func)
 
 
-cdef inline Py_ssize_t _imin(Py_ssize_t a, Py_ssize_t b) nogil:
+cdef inline Py_ssize_t _imin(Py_ssize_t a, Py_ssize_t b) noexcept nogil:
     return a if a < b else b
 
 
@@ -279,14 +280,14 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.n_intervals, self.summarizer)
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self.summarizer.reset(X)
         return 0
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
         return X.shape[1] * self.n_intervals
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
         return self.get_n_features(X) * self.summarizer.n_outputs()
 
     cdef Py_ssize_t next_feature(
@@ -297,7 +298,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
             Py_ssize_t n_samples,
             Feature *transient,
             uint32_t *seed,
-    ) nogil:
+    ) noexcept nogil:
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
         interval.length = X.shape[2] // self.n_intervals
         interval.start = (feature_id % self.n_intervals) * interval.length + _imin(
@@ -315,12 +316,12 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         transient.feature = interval
         return 0
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
         if feature.feature != NULL:
             free(feature.feature)
         return 0
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         if feature.feature != NULL:
             free(feature.feature)
         return 0
@@ -330,7 +331,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
             TSArray X,
             Feature *transient,
             Feature *persistent
-    ) nogil:
+    ) noexcept nogil:
         cdef Interval *from_interval = <Interval*> transient.feature
         cdef Interval *to_interval = <Interval*> malloc(sizeof(Interval))
         to_interval.start = from_interval.start
@@ -345,7 +346,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
             Feature *feature,
             TSArray X,
             Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         cdef Interval *interval = <Interval*> feature.feature
         return self.summarizer.summarize(
             interval.random_output,
@@ -358,7 +359,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
             Feature *feature,
             TSArray X,
             Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         return self.transient_feature_value(feature, X, sample)
 
     cdef Py_ssize_t transient_feature_fill(
@@ -369,7 +370,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
             double[:, :] out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t n_summarizers = self.summarizer.n_outputs()
         cdef Interval *interval = <Interval*> feature.feature
         self.summarizer.summarize_all(
@@ -387,7 +388,7 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
             double[:, :] out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
-    ) nogil:
+    ) noexcept nogil:
         return self.transient_feature_fill(
             feature, X, sample, out, out_sample, out_feature
         )
@@ -425,7 +426,7 @@ cdef class RandomFixedIntervalFeatureEngineer(IntervalFeatureEngineer):
         for i in range(n_intervals):
             self.random_feature_id[i] = i
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
         return X.shape[1] * self.n_random_interval
 
     cdef Py_ssize_t next_feature(
@@ -436,7 +437,7 @@ cdef class RandomFixedIntervalFeatureEngineer(IntervalFeatureEngineer):
             Py_ssize_t n_samples,
             Feature *transient,
             uint32_t *seed,
-    ) nogil:
+    ) noexcept nogil:
         # reshuffle the feature_ids for each dimension
         if feature_id % self.n_random_interval == 0:
             shuffle(self.random_feature_id, self.n_intervals, seed)
@@ -480,7 +481,7 @@ cdef class RandomIntervalFeatureEngineer(IntervalFeatureEngineer):
             self.max_length,
         )
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
         return self.n_intervals
 
     cdef Py_ssize_t next_feature(
@@ -491,7 +492,7 @@ cdef class RandomIntervalFeatureEngineer(IntervalFeatureEngineer):
             Py_ssize_t n_samples,
             Feature *transient,
             uint32_t *seed,
-    ) nogil:
+    ) noexcept nogil:
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
 
         interval.length = rand_int(self.min_length, self.max_length, seed)

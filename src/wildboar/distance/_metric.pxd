@@ -12,7 +12,7 @@ cdef double scaled_euclidean_distance(
     Py_ssize_t t_length,
     double *X_buffer,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef double euclidean_distance(
     const double *S,
@@ -20,7 +20,7 @@ cdef double euclidean_distance(
     const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef double normalized_euclidean_distance(
     const double *S,
@@ -28,7 +28,7 @@ cdef double normalized_euclidean_distance(
     const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef double manhattan_distance(
     const double *S,
@@ -36,7 +36,7 @@ cdef double manhattan_distance(
     const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef Py_ssize_t manhattan_distance_matches(
     const double *S,
@@ -46,7 +46,7 @@ cdef Py_ssize_t manhattan_distance_matches(
     double threshold,
     double **distances,
     Py_ssize_t **matches,
-) nogil
+) noexcept nogil
 
 cdef double minkowski_distance(
     double p,
@@ -55,7 +55,7 @@ cdef double minkowski_distance(
     const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef double chebyshev_distance(
     const double *S,
@@ -63,7 +63,7 @@ cdef double chebyshev_distance(
     const double *T,
     Py_ssize_t t_length,
     Py_ssize_t *index,
-) nogil
+) noexcept nogil
 
 cdef double cosine_similarity(
     const double *S,

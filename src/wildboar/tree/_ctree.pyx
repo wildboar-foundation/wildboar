@@ -2,6 +2,7 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -46,10 +47,10 @@ cdef class TreeFeatureEngineer:
     def __reduce__(self):
         return self.__class__, (self.feature_engineer, )
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         return self.feature_engineer.reset(X)
 
-    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) noexcept nogil:
         return self.feature_engineer.get_n_features(X)
 
     cdef Py_ssize_t next_feature(
@@ -60,7 +61,7 @@ cdef class TreeFeatureEngineer:
         Py_ssize_t n_samples,
         Feature *transient,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         return self.feature_engineer.next_feature(
             feature_id, X, samples, n_samples, transient, seed
         )
@@ -70,13 +71,13 @@ cdef class TreeFeatureEngineer:
         TSArray X,
         Feature *transient, 
         Feature *persistent
-    ) nogil:
+    ) noexcept nogil:
         return self.feature_engineer.init_persistent_feature(X, transient, persistent)
     
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
         return self.feature_engineer.free_transient_feature(feature)
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         return self.feature_engineer.free_persistent_feature(feature)
 
     cdef double transient_feature_value(
@@ -84,7 +85,7 @@ cdef class TreeFeatureEngineer:
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         return self.feature_engineer.transient_feature_value(feature, X, sample)
 
     cdef double persistent_feature_value(
@@ -92,7 +93,7 @@ cdef class TreeFeatureEngineer:
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         return self.feature_engineer.persistent_feature_value(feature, X, sample)
     
     cdef void transient_feature_values(
@@ -102,7 +103,7 @@ cdef class TreeFeatureEngineer:
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
-    ) nogil:
+    ) noexcept nogil:
         self.feature_engineer.transient_feature_values(
             feature, X, samples, n_samples, values
         )
@@ -114,7 +115,7 @@ cdef class TreeFeatureEngineer:
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
-    ) nogil:
+    ) noexcept nogil:
         self.feature_engineer.persistent_feature_values(
             feature, X, samples, n_samples, values
         )
@@ -137,7 +138,7 @@ cdef class DynamicTreeFeatureEngineer(TreeFeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.feature_engineer, self.alpha)
 
-    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) noexcept nogil:
         cdef Py_ssize_t n_features = self.feature_engineer.get_n_features(X)
         cdef double weight = 1.0 - exp(-fabs(self.alpha) * depth)
         if self.alpha < 0:
@@ -162,28 +163,28 @@ cdef class Criterion:
         Py_ssize_t end,
         Py_ssize_t *samples,
         const double[:] sample_weights,
-    ) nogil:
+    ) noexcept nogil:
         self.start = start
         self.end = end
         self.samples = samples
         self.sample_weight = sample_weights
 
-    cdef void reset(self) nogil:
+    cdef void reset(self) noexcept nogil:
         pass
 
-    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
+    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) noexcept nogil:
         pass
 
-    cdef double proxy_impurity(self) nogil:
+    cdef double proxy_impurity(self) noexcept nogil:
         cdef double left_impurity
         cdef double right_impurity
         self.child_impurity(&left_impurity, &right_impurity)
         return -self.weighted_n_right * right_impurity - self.weighted_n_left * left_impurity
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         pass
 
-    cdef void child_impurity(self, double *left, double *right) nogil:
+    cdef void child_impurity(self, double *left, double *right) noexcept nogil:
         pass
 
     cdef double impurity_improvement(
@@ -192,12 +193,12 @@ cdef class Criterion:
         double impurity_left,
         double impurity_right,
         double weighted_n_samples,
-    ) nogil:
+    ) noexcept nogil:
         return ((self.weighted_n_total / weighted_n_samples) *
                 (impurity_parent - (self.weighted_n_right / self.weighted_n_total * impurity_right)
                                  - (self.weighted_n_left / self.weighted_n_total * impurity_left)))
 
-    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) nogil:
+    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) noexcept nogil:
         pass
 
 cdef class ClassificationCriterion(Criterion):
@@ -226,7 +227,7 @@ cdef class ClassificationCriterion(Criterion):
         Py_ssize_t end,
         Py_ssize_t *samples,
         double[:] sample_weights,
-    ) nogil:
+    ) noexcept nogil:
         Criterion.init(self, start, end, samples, sample_weights)
         self.weighted_n_total = 0
 
@@ -244,13 +245,13 @@ cdef class ClassificationCriterion(Criterion):
 
         self.reset()
 
-    cdef void reset(self) nogil:
+    cdef void reset(self) noexcept nogil:
         self.weighted_n_left = 0
         self.weighted_n_right = self.weighted_n_total
         memset(self.sum_left, 0, self.n_labels * sizeof(double))
         memcpy(self.sum_right, self.sum_total, self.n_labels * sizeof(double))
 
-    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
+    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) noexcept nogil:
         cdef Py_ssize_t i, j
         cdef double w = 1.0
 
@@ -266,13 +267,13 @@ cdef class ClassificationCriterion(Criterion):
         for i in range(self.n_labels):
             self.sum_right[i] = self.sum_total[i] - self.sum_left[i]
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         pass
 
-    cdef void child_impurity(self, double* left, double *right) nogil:
+    cdef void child_impurity(self, double* left, double *right) noexcept nogil:
         pass
 
-    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) nogil:
+    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) noexcept nogil:
         cdef Py_ssize_t i
         cdef double prob
         for i in range(self.n_labels):
@@ -281,7 +282,7 @@ cdef class ClassificationCriterion(Criterion):
 
 cdef class GiniCriterion(ClassificationCriterion):
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         cdef double sq_count = 0.0
         cdef double c
         cdef Py_ssize_t i
@@ -291,7 +292,7 @@ cdef class GiniCriterion(ClassificationCriterion):
 
         return 1.0 - sq_count / (self.weighted_n_total * self.weighted_n_total)
 
-    cdef void child_impurity(self, double *left, double *right) nogil:
+    cdef void child_impurity(self, double *left, double *right) noexcept nogil:
         cdef double sq_left = 0
         cdef double sq_right = 0
         cdef double v
@@ -309,7 +310,7 @@ cdef class GiniCriterion(ClassificationCriterion):
 
 cdef class EntropyCriterion(ClassificationCriterion):
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         cdef double c
         cdef double entropy = 0
         cdef Py_ssize_t i
@@ -321,7 +322,7 @@ cdef class EntropyCriterion(ClassificationCriterion):
 
         return entropy
 
-    cdef void child_impurity(self, double *left, double *right) nogil:
+    cdef void child_impurity(self, double *left, double *right) noexcept nogil:
         left[0] = 0
         right[0] = 0
         cdef double v
@@ -359,7 +360,7 @@ cdef class RegressionCriterion(Criterion):
         Py_ssize_t end,
         Py_ssize_t *samples,
         double[:] sample_weights,
-    ) nogil:
+    ) noexcept nogil:
         Criterion.init(self, start, end, samples, sample_weights)
         self.sum_total = 0
         self.sum_sq_total = 0
@@ -382,14 +383,14 @@ cdef class RegressionCriterion(Criterion):
         self.reset()
         self.start = start
 
-    cdef void reset(self) nogil:
+    cdef void reset(self) noexcept nogil:
         self.weighted_n_left = 0
         self.weighted_n_right = self.weighted_n_total
         self.sum_left = 0
         self.sum_right = self.sum_total
         self.pos = 0
 
-    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) nogil:
+    cdef void update(self, Py_ssize_t pos, Py_ssize_t new_pos) noexcept nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t j
         cdef double w = 1.0
@@ -405,23 +406,23 @@ cdef class RegressionCriterion(Criterion):
         self.sum_right = self.sum_total - self.sum_left
         self.pos = new_pos
 
-    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) nogil:
+    cdef void leaf_value(self, Tree tree, Py_ssize_t node_id) noexcept nogil:
         tree.set_leaf_value(node_id, 0, self.sum_total / self.weighted_n_total)
 
 cdef class MSECriterion(RegressionCriterion):
 
-    cdef double proxy_impurity(self) nogil:
+    cdef double proxy_impurity(self) noexcept nogil:
         cdef double proxy_impurity_left = self.sum_left * self.sum_left
         cdef double proxy_impurity_right = self.sum_right * self.sum_right
         return proxy_impurity_left / self.weighted_n_left + proxy_impurity_right / self.weighted_n_right
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         cdef double impurity
         impurity = self.sum_sq_total / self.weighted_n_total
         impurity -= (self.sum_total / self.weighted_n_total) ** 2
         return impurity
 
-    cdef void child_impurity(self, double* left, double *right) nogil:
+    cdef void child_impurity(self, double* left, double *right) noexcept nogil:
         cdef double left_sq_sum = 0
         cdef double right_sq_sum = 0
         cdef double w = 1.0
@@ -704,7 +705,7 @@ cdef class Tree:
         bint is_left,
         Py_ssize_t n_node_samples,
         double n_weighted_node_samples,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t node_id = self._node_count
         if node_id >= self._capacity:
             if self._increase_capacity() == -1:
@@ -729,7 +730,7 @@ cdef class Tree:
         Py_ssize_t node_id,
         Py_ssize_t out_label,
         double out_value,
-    ) nogil:
+    ) noexcept nogil:
         self._values[out_label + node_id * self._n_labels] = out_value
 
     cdef Py_ssize_t add_branch_node(
@@ -741,7 +742,7 @@ cdef class Tree:
         Feature *feature,
         double threshold,
         double impurity,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t node_id = self._node_count
         if node_id >= self._capacity:
             if self._increase_capacity() == -1:
@@ -761,7 +762,7 @@ cdef class Tree:
         self._node_count += 1
         return node_id
 
-    cdef Py_ssize_t _increase_capacity(self) except -1 nogil:
+    cdef Py_ssize_t _increase_capacity(self) noexcept nogil:
         cdef Py_ssize_t new_capacity = self._node_count * 2
         cdef Py_ssize_t ret
         ret = safe_realloc(<void**> &self._features, sizeof(Feature*) * new_capacity)
@@ -917,7 +918,7 @@ cdef class TreeBuilder:
         Py_ssize_t end,
         Py_ssize_t parent,
         bint is_left,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t node_id = self.tree.add_leaf_node(
             parent, is_left, end - start, self.criterion.weighted_n_total
         )
@@ -932,7 +933,7 @@ cdef class TreeBuilder:
         Feature *persistent_feature,
         Py_ssize_t parent,
         bint is_left,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t node_id
         node_id = self.tree.add_branch_node(
             parent,
@@ -954,7 +955,7 @@ cdef class TreeBuilder:
         bint is_left,
         double impurity,
         Py_ssize_t *max_depth,
-    ) nogil:
+    ) noexcept nogil:
         """Recursive function for building the tree
 
         Each call to this function is allowed to access and transpose
@@ -1048,7 +1049,7 @@ cdef class TreeBuilder:
         Py_ssize_t end, 
         Py_ssize_t depth, 
         double parent_impurity
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t i, n_samples
         cdef Py_ssize_t current_split_point
         cdef double current_threshold
@@ -1139,7 +1140,7 @@ cdef class TreeBuilder:
         Py_ssize_t *best_split_point,
         double *best_threshold,
         double *best_impurity,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t i  # real index of samples (in `range(start, end)`)
         cdef Py_ssize_t j  # sample index (in `samples`)
         cdef Py_ssize_t pos
@@ -1189,7 +1190,7 @@ cdef class ExtraTreeBuilder(TreeBuilder):
         Py_ssize_t *split_point,
         double *threshold,
         double *impurity,
-    ) nogil:
+    ) noexcept nogil:
         cdef double min_feature = self.feature_buffer[start + 1]
         cdef double max_feature = self.feature_buffer[end - 1]
         cdef double rand_threshold = rand_uniform(

@@ -2,6 +2,7 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -43,7 +44,7 @@ cdef struct Split:
     double *child_impurity # n_split + 1
 
 
-cdef void free_split(Split *split) nogil:
+cdef void free_split(Split *split) noexcept nogil:
     if split.split_point != NULL:
         free(split.split_point)
         split.split_point = NULL
@@ -146,7 +147,7 @@ cdef class Tree:
         Py_ssize_t *pivots,
         Py_ssize_t metric,
         Py_ssize_t n_split,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t node_id = self._node_count
         if node_id >= self._capacity:
             if self._increase_capacity() < 0:
@@ -171,7 +172,7 @@ cdef class Tree:
         self._node_count += 1
         return node_id
 
-    cdef Py_ssize_t add_leaf_node(self, Py_ssize_t parent, Py_ssize_t branch) nogil:
+    cdef Py_ssize_t add_leaf_node(self, Py_ssize_t parent, Py_ssize_t branch) noexcept nogil:
         cdef Py_ssize_t node_id = self._node_count
         if node_id >= self._capacity:
             if self._increase_capacity() < 0:
@@ -192,10 +193,10 @@ cdef class Tree:
         Py_ssize_t node_id,
         Py_ssize_t label,
         double value
-    ) nogil:
+    ) noexcept nogil:
         self._values[label + node_id * self._n_labels] = value
 
-    cdef Py_ssize_t _increase_capacity(self) nogil:
+    cdef Py_ssize_t _increase_capacity(self) noexcept nogil:
         cdef Py_ssize_t new_capacity = self._node_count * 2
         cdef Py_ssize_t i
         for i in range(self._n_labels):
@@ -273,7 +274,7 @@ cdef Py_ssize_t find_min_branch(
     MetricList metrics,
     Pivot *pivot,
     const double *sample,
-) nogil:
+) noexcept nogil:
     cdef double dist
     cdef double min_dist = INFINITY
     cdef Py_ssize_t min_branch = -1
@@ -321,7 +322,7 @@ cdef class Criterion:
         Py_ssize_t end,
         Py_ssize_t *samples,
         const double[:] sample_weight,
-    ) nogil:
+    ) noexcept nogil:
         self.start = start
         self.end = end
         self.samples = samples
@@ -341,7 +342,7 @@ cdef class Criterion:
             self.weighted_label_count[self.labels[j]] += w
             self.label_count[self.labels[j]] += 1
 
-    cdef void reset(self, double *samples_branch) nogil:
+    cdef void reset(self, double *samples_branch) noexcept nogil:
         cdef Py_ssize_t i, j
         cdef Py_ssize_t label, branch
         cdef double w = 1.0
@@ -361,13 +362,13 @@ cdef class Criterion:
             self.weighted_n_branch[branch] += w
             self.weighted_label_branch_count[label + branch * self.n_labels] += w
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         return NAN
 
-    cdef void child_impurity(self, double *branches, Py_ssize_t n_branches) nogil:
+    cdef void child_impurity(self, double *branches, Py_ssize_t n_branches) noexcept nogil:
         pass
 
-    cdef double proxy_impurity(self, double* branches, Py_ssize_t n_branches) nogil:
+    cdef double proxy_impurity(self, double* branches, Py_ssize_t n_branches) noexcept nogil:
         self.child_impurity(branches, n_branches)
         cdef double impurity = 0.0
         for i in range(n_branches):
@@ -380,7 +381,7 @@ cdef class Criterion:
         double *child_impurity,
         Py_ssize_t n_branches,
         double n_weighted_samples,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t i
         for i in range(n_branches):
             impurity_parent -= self.weighted_n_branch[i] / self.weighted_n_total * child_impurity[i]
@@ -389,7 +390,7 @@ cdef class Criterion:
 
 cdef class GiniCriterion(Criterion):
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         cdef double sq_count = 0.0
         cdef double c
         cdef Py_ssize_t i
@@ -398,7 +399,7 @@ cdef class GiniCriterion(Criterion):
             sq_count += c * c
         return 1.0 - sq_count / (self.weighted_n_total * self.weighted_n_total)
 
-    cdef void child_impurity(self, double *branches, Py_ssize_t n_branches) nogil:
+    cdef void child_impurity(self, double *branches, Py_ssize_t n_branches) noexcept nogil:
         cdef Py_ssize_t label, branch
         cdef double v
         for branch in range(n_branches):
@@ -416,7 +417,7 @@ cdef class GiniCriterion(Criterion):
 
 cdef class EntropyCriterion(Criterion):
 
-    cdef double impurity(self) nogil:
+    cdef double impurity(self) noexcept nogil:
         cdef double c
         cdef double entropy = 0
         cdef Py_ssize_t i
@@ -427,7 +428,7 @@ cdef class EntropyCriterion(Criterion):
                 entropy -= c * log2(c)
         return entropy
 
-    cdef void child_impurity(self, double *branches, Py_ssize_t n_branches) nogil:
+    cdef void child_impurity(self, double *branches, Py_ssize_t n_branches) noexcept nogil:
         cdef double v
         cdef Py_ssize_t label, branch
         for branch in range(n_branches):
@@ -457,7 +458,7 @@ cdef class MetricSampler:
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         pass
 
 cdef class UniformMetricSampler(MetricSampler):
@@ -467,7 +468,7 @@ cdef class UniformMetricSampler(MetricSampler):
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         return rand_int(0, self.n_measures, seed)
 
 
@@ -478,7 +479,7 @@ cdef class WeightedMetricSampler(MetricSampler):
         Py_ssize_t *samples,
         Py_ssize_t n_samples,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         return vose_rand_int(&self.vr, seed)
 
 
@@ -492,7 +493,7 @@ cdef class PivotSampler:
         Py_ssize_t label,
         Py_ssize_t *label_count,
         uint32_t *seed,
-    ) nogil:
+    ) noexcept nogil:
         pass
 
 
@@ -506,7 +507,7 @@ cdef class LabelPivotSampler(PivotSampler):
         Py_ssize_t label,
         Py_ssize_t *label_count,
         uint32_t *seed,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t n_labels = rand_int(0, label_count[label], seed)
         cdef Py_ssize_t i, j
         cdef Py_ssize_t label_index = 0
@@ -531,7 +532,7 @@ cdef class UniformPivotSampler(PivotSampler):
         Py_ssize_t label,
         Py_ssize_t *label_count,
         uint32_t *seed,
-    ) nogil:
+    ) noexcept nogil:
         return samples[rand_int(0, n_samples, seed)]
 
 cdef class TreeBuilder:
@@ -654,7 +655,7 @@ cdef class TreeBuilder:
         Py_ssize_t branch,
         double impurity,
         Py_ssize_t *max_depth
-    ) nogil:
+    ) noexcept nogil:
         if depth > max_depth[0]:
             max_depth[0] = depth
 
@@ -724,7 +725,7 @@ cdef class TreeBuilder:
 
         free_split(&split)
 
-    cdef void _new_leaf_node(self, Py_ssize_t parent, Py_ssize_t branch) nogil:
+    cdef void _new_leaf_node(self, Py_ssize_t parent, Py_ssize_t branch) noexcept nogil:
         cdef Py_ssize_t node_id = self.tree.add_leaf_node(parent, branch)
         cdef Py_ssize_t i
         for i in range(self.criterion.n_labels):
@@ -739,7 +740,7 @@ cdef class TreeBuilder:
         Py_ssize_t start,
         Py_ssize_t end,
         double impurity_parent,
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t n_samples = end - start
         cdef Py_ssize_t n_branches = 0
         cdef Py_ssize_t i, j
@@ -854,7 +855,7 @@ cdef class TreeBuilder:
         Py_ssize_t start,
         Py_ssize_t end,
         Split *split
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t i, current_split
         current_split = 0
         for i in range(start + 1, end):
@@ -873,7 +874,7 @@ cdef class TreeBuilder:
         Py_ssize_t *pivots,
         Py_ssize_t metric,
         Py_ssize_t n_branches
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t i, j
         cdef Py_ssize_t pivot
         cdef Py_ssize_t min_pivot = -1

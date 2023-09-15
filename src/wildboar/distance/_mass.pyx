@@ -1,8 +1,8 @@
 # cython: language_level=3
 # cython: boundscheck=False
 # cython: cdivision=True
-# cython: boundscheck=False
 # cython: wraparound=False
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -54,7 +54,7 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
     def __reduce__(self):
         return self.__class__, ()
     
-    cdef void __free(self) nogil:
+    cdef void __free(self) noexcept nogil:
         if self.mean_x != NULL:
             free(self.mean_x)
             self.mean_x = NULL
@@ -71,7 +71,7 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
             free(self.y_buffer)
             self.y_buffer = NULL
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         self.__free() 
         cdef Py_ssize_t n_timestep = X.shape[2]
         self.x_buffer = <complex*> malloc(sizeof(complex) * n_timestep)
@@ -87,7 +87,7 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         cumulative_mean_std(
             &X[index, s.dim, 0],
             X.shape[2],
@@ -118,7 +118,7 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         TSArray X,
         Py_ssize_t index,
         Py_ssize_t *return_index=NULL,
-    ) nogil:
+    ) noexcept nogil:
         cumulative_mean_std(
             &X[index, s.dim, 0],
             X.shape[2],
@@ -151,7 +151,7 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         distances[0] = <double*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         cumulative_mean_std(
@@ -190,7 +190,7 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
-    ) nogil:
+    ) noexcept nogil:
         distances[0] = <double*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         cumulative_mean_std(
@@ -236,7 +236,7 @@ cdef void _mass_distance(
     complex *y_buffer, # length x_length
     complex *x_buffer, # length x_length
     double *dist,      # length x_length - y_length + 1
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t i
     cdef double z
     for i in range(x_length):

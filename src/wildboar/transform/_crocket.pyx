@@ -2,6 +2,7 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -38,7 +39,7 @@ cdef class WeightSampler:
         Py_ssize_t length,
         double *mean,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         pass
 
 
@@ -59,7 +60,7 @@ cdef class NormalWeightSampler(WeightSampler):
         Py_ssize_t length,
         double *mean,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t i
         mean[0] = 0
         for i in range(length):
@@ -87,7 +88,7 @@ cdef class UniformWeightSampler(WeightSampler):
         Py_ssize_t length,
         double *mean,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t i
         mean[0] = 0
         for i in range(length):
@@ -107,7 +108,7 @@ cdef class ShapeletWeightSampler(WeightSampler):
         Py_ssize_t length,
         double *mean,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         cdef Py_ssize_t start
         cdef Py_ssize_t index
         cdef Py_ssize_t dim
@@ -173,10 +174,10 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
     def __dealloc__(self):
         free(self.kernel_size)
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
         return self.n_kernels
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
         return self.get_n_features(X) * 2
 
     cdef Py_ssize_t next_feature(
@@ -187,7 +188,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         Py_ssize_t n_samples,
         Feature *transient,
         uint32_t *seed
-    ) nogil:
+    ) noexcept nogil:
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
         cdef Py_ssize_t i
         cdef double mean
@@ -224,7 +225,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         transient.feature = rocket
         return 0
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
         cdef Rocket *rocket
         if feature.feature != NULL:
             rocket = <Rocket*> feature.feature
@@ -233,7 +234,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             free(feature.feature)
         return 0
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         return self.free_transient_feature(feature)
 
     cdef Py_ssize_t init_persistent_feature(
@@ -241,7 +242,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         TSArray X,
         Feature *transient, 
         Feature *persistent
-    ) nogil:
+    ) noexcept nogil:
         cdef Rocket *transient_rocket = <Rocket*> transient.feature
         cdef Rocket *persistent_rocket = <Rocket*> malloc(sizeof(Rocket))
         
@@ -265,7 +266,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         cdef double mean_val, max_val
         cdef Rocket* rocket = <Rocket*> feature.feature
         apply_convolution(
@@ -289,7 +290,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         Feature *feature,
         TSArray X,
         Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         return self.transient_feature_value(feature, X, sample)
 
     cdef Py_ssize_t transient_feature_fill(
@@ -300,7 +301,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
-    ) nogil:
+    ) noexcept nogil:
         cdef double mean_val, max_val
         cdef Rocket* rocket = <Rocket*> feature.feature
         apply_convolution(
@@ -327,7 +328,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t out_feature,
-    ) nogil:
+    ) noexcept nogil:
         return self.transient_feature_fill(
             feature, X, sample, out, out_sample, out_feature
         )
@@ -378,7 +379,7 @@ cdef void apply_convolution(
     Py_ssize_t x_length,
     double* mean_val,
     double* max_val
-) nogil:
+) noexcept nogil:
     cdef Py_ssize_t out_len, end
     cdef Py_ssize_t i, j, k
     cdef double ppv

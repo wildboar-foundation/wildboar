@@ -2,6 +2,7 @@
 # cython: boundscheck=False
 # cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -23,22 +24,22 @@ cdef class List:
         self.py_list = py_list
         self.size = len(py_list)
 
-    cdef void* get(self, Py_ssize_t i) nogil:
+    cdef void* get(self, Py_ssize_t i) noexcept nogil:
         return PyList_GET_ITEM(self.py_list, i)
 
 
-cdef inline void argsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
+cdef inline void argsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) noexcept nogil:
     if n == 0:
         return
     cdef Py_ssize_t maxd = 2 * <Py_ssize_t> log2(n)
     introsort(values, samples, n, maxd)
 
 cdef inline void swap(double_or_int *values, Py_ssize_t *samples,
-                      Py_ssize_t i, Py_ssize_t j) nogil:
+                      Py_ssize_t i, Py_ssize_t j) noexcept nogil:
     values[i], values[j] = values[j], values[i]
     samples[i], samples[j] = samples[j], samples[i]
 
-cdef inline double_or_int median3(double_or_int *values, Py_ssize_t n) nogil:
+cdef inline double_or_int median3(double_or_int *values, Py_ssize_t n) noexcept nogil:
     cdef double_or_int a = values[0]
     cdef double_or_int b = values[n / 2]
     cdef double_or_int c = values[n - 1]
@@ -62,7 +63,7 @@ cdef void introsort(
     Py_ssize_t *samples,
     Py_ssize_t n, 
     Py_ssize_t maxd
-) nogil:
+) noexcept nogil:
     cdef double_or_int pivot, value
     cdef Py_ssize_t i, l, r
 
@@ -94,7 +95,7 @@ cdef void introsort(
         n -= r
 
 cdef inline void sift_down(double_or_int *values, Py_ssize_t *samples,
-                           Py_ssize_t start, Py_ssize_t end) nogil:
+                           Py_ssize_t start, Py_ssize_t end) noexcept nogil:
     cdef Py_ssize_t child, maxind, root
     root = start
     while True:
@@ -111,7 +112,7 @@ cdef inline void sift_down(double_or_int *values, Py_ssize_t *samples,
             swap(values, samples, root, maxind)
             root = maxind
 
-cdef void heapsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) nogil:
+cdef void heapsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) noexcept nogil:
     cdef Py_ssize_t start, end
 
     start = (n - 2) / 2
@@ -128,7 +129,7 @@ cdef void heapsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) nog
         sift_down(values, samples, 0, end)
         end = end - 1
 
-cdef int realloc_array(void** ptr, Py_ssize_t old_size, Py_ssize_t ptr_size, Py_ssize_t *capacity)  nogil except -1:
+cdef int realloc_array(void** ptr, Py_ssize_t old_size, Py_ssize_t ptr_size, Py_ssize_t *capacity)  except -1 nogil:
     cdef void *tmp = ptr[0]
     if old_size >= capacity[0]:
         capacity[0] = old_size * 2
@@ -138,7 +139,7 @@ cdef int realloc_array(void** ptr, Py_ssize_t old_size, Py_ssize_t ptr_size, Py_
     ptr[0] = tmp
     return 0
 
-cdef int safe_realloc(void** ptr, Py_ssize_t new_size) nogil except -1:
+cdef int safe_realloc(void** ptr, Py_ssize_t new_size) except -1 nogil:
     cdef void *tmp = ptr[0]
     tmp = realloc(ptr[0], new_size)
     if tmp == NULL:

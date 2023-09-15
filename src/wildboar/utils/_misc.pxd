@@ -7,14 +7,14 @@ cdef class List:
     cdef list py_list
     cdef readonly Py_ssize_t size
 
-    cdef void* get(self, Py_ssize_t i) nogil
+    cdef void* get(self, Py_ssize_t i) noexcept nogil
 
 
 ctypedef fused double_or_int:
     Py_ssize_t
     double
 
-cdef void argsort(double_or_int *values, Py_ssize_t *order, Py_ssize_t length) nogil
+cdef void argsort(double_or_int *values, Py_ssize_t *order, Py_ssize_t length) noexcept nogil
 
 cdef int realloc_array(void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap) except -1 nogil
 

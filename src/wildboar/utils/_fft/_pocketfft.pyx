@@ -1,4 +1,8 @@
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -22,22 +26,22 @@ cdef extern from "pocketfft.h":
     cdef int cfft_forward(cfft_plan plan, double *c, double fct) nogil
     cdef size_t cfft_length(cfft_plan plan) nogil
 
-cdef void fft(complex *x, Py_ssize_t n, double fct) nogil:
+cdef void fft(complex *x, Py_ssize_t n, double fct) noexcept nogil:
     cdef cfft_plan fft_plan = make_cfft_plan(n)
     cfft_forward(fft_plan, <double *> x, fct)
     destroy_cfft_plan(fft_plan)
 
-cdef void ifft(complex *x, Py_ssize_t n, double fct) nogil:
+cdef void ifft(complex *x, Py_ssize_t n, double fct) noexcept nogil:
     cdef cfft_plan fft_plan = make_cfft_plan(n)
     cfft_backward(fft_plan, <double *> x, fct)
     destroy_cfft_plan(fft_plan)
 
-cdef void rfft(double *x, Py_ssize_t n, double fct) nogil:
+cdef void rfft(double *x, Py_ssize_t n, double fct) noexcept nogil:
     cdef rfft_plan fft_plan = make_rfft_plan(n)
     rfft_forward(fft_plan, x, fct)
     destroy_rfft_plan(fft_plan)
 
-cdef void irfft(double *x, Py_ssize_t n, double fct) nogil:
+cdef void irfft(double *x, Py_ssize_t n, double fct) noexcept nogil:
     cdef rfft_plan fft_plan = make_rfft_plan(n)
     rfft_backward(fft_plan, x, fct)
     destroy_rfft_plan(fft_plan)

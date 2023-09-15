@@ -1,4 +1,8 @@
+# cython: cdivision=True
+# cython: boundscheck=False
+# cython: wraparound=False
 # cython: language_level=3
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -145,7 +149,7 @@ cdef class FeatureEmbedding:
             self.features,
         )
 
-    cdef Py_ssize_t set_feature(self, Py_ssize_t i, Feature *feature) nogil:
+    cdef Py_ssize_t set_feature(self, Py_ssize_t i, Feature *feature) noexcept nogil:
         """Add a feature to the embedding
 
         feature : Feature*
@@ -156,7 +160,7 @@ cdef class FeatureEmbedding:
         self._features[i] = feature
         return 0
 
-    cdef Feature* get_feature(self, Py_ssize_t i) nogil:
+    cdef Feature* get_feature(self, Py_ssize_t i) noexcept nogil:
         return self._features[i]
 
     @property

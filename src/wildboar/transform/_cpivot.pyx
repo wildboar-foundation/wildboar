@@ -1,8 +1,8 @@
 # cython: language_level=3
 # cython: boundscheck=False
 # cython: cdivision=True
-# cython: boundscheck=False
 # cython: wraparound=False
+# cython: initializedcheck=False
 
 # Authors: Isak Samsten
 # License: BSD 3 clause
@@ -45,16 +45,16 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
     def __reduce__(self):
         return self.__class__, (self.n_pivots, self.metrics.py_list, self.sampler)
 
-    cdef int reset(self, TSArray X) nogil:
+    cdef int reset(self, TSArray X) noexcept nogil:
         cdef Py_ssize_t i
         for i in range(self.metrics.size):
             self.metrics.reset(i, X, X)
         return 0
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
         return self.n_pivots
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) nogil:
+    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
         return self.get_n_features(X)
 
     cdef Py_ssize_t next_feature(
@@ -65,7 +65,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Py_ssize_t n_samples,
             Feature *transient,
             uint32_t *seed,
-    ) nogil:
+    ) noexcept nogil:
         cdef TransientPivot *pivot = <TransientPivot*> malloc(sizeof(TransientPivot))
         pivot.sample = samples[rand_int(0, n_samples, seed)]
         pivot.metric = self.sampler.rand_int(seed)
@@ -73,13 +73,13 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
         transient.feature = pivot
         return 0
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
         if feature.feature != NULL:
             free(feature.feature)
             feature.feature = NULL
         return 0
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) nogil:
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         cdef PersitentPivot *pivot
         if feature.feature != NULL:
             pivot = <PersitentPivot*> feature.feature
@@ -93,7 +93,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             TSArray X,
             Feature *transient,
             Feature *persistent
-    ) nogil:
+    ) noexcept nogil:
         cdef TransientPivot *pivot = <TransientPivot*> transient.feature
         cdef PersitentPivot *persistent_pivot = <PersitentPivot*> malloc(sizeof(PersitentPivot))
         
@@ -115,7 +115,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Feature *feature,
             TSArray X,
             Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         cdef TransientPivot* pivot = <TransientPivot*>feature.feature
         return self.metrics.distance(
             pivot.metric, X, sample, X, pivot.sample, feature.dim
@@ -126,7 +126,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             Feature *feature,
             TSArray X,
             Py_ssize_t sample
-    ) nogil:
+    ) noexcept nogil:
         cdef PersitentPivot* pivot = <PersitentPivot*> feature.feature
         return self.metrics._distance(
             pivot.metric,
@@ -144,7 +144,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             double[:, :] out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
-    ) nogil:
+    ) noexcept nogil:
         out[out_sample, out_feature] = self.transient_feature_value(feature, X, sample)
         return 0
 
@@ -156,7 +156,7 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             double[:, :] out,
             Py_ssize_t out_sample,
             Py_ssize_t out_feature,
-    ) nogil:
+    ) noexcept nogil:
         out[out_sample, out_feature] = self.persistent_feature_value(feature, X, sample)
         return 0
 
