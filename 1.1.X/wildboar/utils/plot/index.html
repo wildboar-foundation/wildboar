@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.utils.validation" href="../validation/index.html" /><link rel="prev" title="wildboar.utils.estimator_checks" href="../estimator_checks/index.html" />
 
-    <!-- Generated with Sphinx 7.2.5 and Furo 2023.08.19 -->
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>wildboar.utils.plot - Wildboar 1.1.3.dev1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
@@ -399,12 +399,16 @@ processed; i.e., <code class="docutils literal notranslate"><span class="pre">__
 <li><p><strong>vmax</strong> (<em>float</em><em> or </em><em>None</em>) – If <em>vmin</em> and/or <em>vmax</em> is not given, they are initialized from the
 minimum and maximum value, respectively, of the first input
 processed; i.e., <code class="docutils literal notranslate"><span class="pre">__call__(A)</span></code> calls <code class="docutils literal notranslate"><span class="pre">autoscale_None(A)</span></code>.</p></li>
-<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>default: False</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> values falling outside the range <code class="docutils literal notranslate"><span class="pre">[vmin,</span> <span class="pre">vmax]</span></code>,
-are mapped to 0 or 1, whichever is closer, and masked values are
-set to 1.  If <code class="docutils literal notranslate"><span class="pre">False</span></code> masked values remain masked.</p>
-<p>Clipping silently defeats the purpose of setting the over, under,
-and masked colors in a colormap, so it is likely to lead to
-surprises; therefore the default is <code class="docutils literal notranslate"><span class="pre">clip=False</span></code>.</p>
+<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>default: False</em>) – <p>Determines the behavior for mapping values outside the range
+<code class="docutils literal notranslate"><span class="pre">[vmin,</span> <span class="pre">vmax]</span></code>.</p>
+<p>If clipping is off, values outside the range <code class="docutils literal notranslate"><span class="pre">[vmin,</span> <span class="pre">vmax]</span></code> are also
+transformed linearly, resulting in values outside <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code>. For a
+standard use with colormaps, this behavior is desired because colormaps
+mark these outside values with specific colors for <em>over</em> or <em>under</em>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> values falling outside the range <code class="docutils literal notranslate"><span class="pre">[vmin,</span> <span class="pre">vmax]</span></code>,
+are mapped to 0 or 1, whichever is closer. This makes these values
+indistinguishable from regular boundary values and can lead to
+misinterpretation of the data.</p>
 </p></li>
 </ul>
 </dd>
@@ -420,8 +424,10 @@ surprises; therefore the default is <code class="docutils literal notranslate"><
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>value</strong> – Data to normalize.</p></li>
-<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to <code class="docutils literal notranslate"><span class="pre">self.clip</span></code> (which defaults to
-<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p></li>
+<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>See the description of the parameter <em>clip</em> in <cite>.Normalize</cite>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, defaults to <code class="docutils literal notranslate"><span class="pre">self.clip</span></code> (which defaults to
+<code class="docutils literal notranslate"><span class="pre">False</span></code>).</p>
+</p></li>
 </ul>
 </dd>
 </dl>
