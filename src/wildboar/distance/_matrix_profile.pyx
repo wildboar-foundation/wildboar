@@ -47,52 +47,38 @@ cdef void _matrix_profile_stmp(
 
     Parameters
     ----------
-
     x : double*
         The time series.
-
     x_length : int
         The size of x.
-
     y : double*
         A time series.
-
     y_length : int
         The size of y
-
     window : int
         The size of subsequences used to form the profile.
-
     exclude : double
         The size of the exclusion zone, expressed as a fraction of `window`.
-
     mean_x : double*
         The buffer of cumulative mean of subsequences of size `window` in x, with size
         `profile_length`.
-
     std_x : double
         The buffer of cumulative std of subsequences of size `window` in x, with size
         `profile_length`.
-
     x_buffer : complex*
         The buffer used for the distance computation, with size `x_length`
-
     y_buffer : complex*
         The buffer used for the distance computation, with size `x_length`
-
     dist_buffer : double*
         The buffer used to store distances at the i:th iteration, with size
         `profile_length`.
-
     mp : double*
         The matrix profile, with size `profile_length`
-
     mpi : int*
         The matrix profile index, with size `profile_length`
 
     Notes
     =====
-
     - The `profile_length` is computed as `y_length - window + 1`
     - The buffer-parameters can be empty on entry.
     """

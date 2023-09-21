@@ -167,7 +167,7 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
             specification: ``dict(min_r=0, max_r=1, num_r=10)``.
 
             Read more about metric specifications in the `User guide
-            <metric_specification>`_
+            <metric_specification>`__
 
         .. versionchanged:: 1.2
             Added support for multi-metric shapelet transform
@@ -175,7 +175,7 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         Parameters for the distance measure. Ignored unless metric is a string.
 
         Read more about the parameters in the `User guide
-        <list_of_subsequence_metrics>`_.
+        <list_of_subsequence_metrics>`__.
     criterion : {"squared_error"}, optional
         The criterion used to evaluate the utility of a split.
 

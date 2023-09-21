@@ -1,10 +1,11 @@
-"""Fast distance computations.
+"""
+Fast distance computations.
 
 The :py:mod:`wildboar.distance` module includes functions for computing
 paired and pairwise distances between time series and between time series and
 subsequences.
 
-See the :doc:`User Guide <wildboar:guide/metrics/distance>` for more details and
+See the :ref:`User Guide <guide-metrics>` for more details and
 examples.
 """
 
@@ -199,7 +200,7 @@ def pairwise_subsequence_distance(
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-    metric_params: dict, optional
+    metric_params : dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
@@ -218,6 +219,7 @@ def pairwise_subsequence_distance(
         - if len(y) == 1, return an array of shape (n_samples, ).
         - if x.ndim == 1, return an array of shape (n_subsequences, ).
         - if x.ndim == 1 and len(y) == 1, return scalar.
+
     indices : int, ndarray, optional
          The start index of the minumum distance. Return dependes on input:
 
@@ -226,6 +228,7 @@ def pairwise_subsequence_distance(
         - if len(y) == 1, return an array of shape (n_samples, ).
         - if x.ndim == 1, return an array of shape (n_subsequences, ).
         - if x.ndim == 1 and len(y) == 1, return scalar.
+
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
@@ -280,7 +283,7 @@ def paired_subsequence_distance(
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-    metric_params: dict, optional
+    metric_params : dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
@@ -383,7 +386,7 @@ def subsequence_match(  # noqa: PLR0912
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-    metric_params: dict, optional
+    metric_params : dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
@@ -528,27 +531,27 @@ def paired_subsequence_match(  # noqa: PLR0912
     - If no `threshold` is given, the default behaviour is to return the top 10
       matching indicies ordered by distance
     - If both `threshold` and `max_matches` are given, the top matches are returned
-      ordered by distance.
-    and time series.
+      ordered by distance and time series.
 
     Parameters
     ----------
     y : list or ndarray of shape (n_samples, n_timestep)
         Input time series.
 
-        - if list, a list of array-like of shape (n_timestep, ) with length n_samples
+        - if list, a list of array-like of shape (n_timestep, ) with length n_samples.
+
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The input data
-    threshold : float
+        The input data.
+    threshold : float, optional
         The distance threshold used to consider a subsequence matching. If no threshold
         is selected, `max_matches` defaults to 10.
     dim : int, optional
-        The dim to search for shapelets
+        The dim to search for shapelets.
     metric : str or callable, optional
         The distance metric
 
         See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-    metric_params: dict, optional
+    metric_params : dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
@@ -563,9 +566,9 @@ def paired_subsequence_match(  # noqa: PLR0912
         - If both `threshold` and `max_matches` are given the top matches are returned
           ordered by distance.
     return_distance : bool, optional
-        - if True, return the distance of the match
+        If True, return the distance of the match.
     n_jobs : int, optional
-        The number of parallel jobs to run. Ignored
+        The number of parallel jobs to run. Ignored.
 
     Returns
     -------
@@ -580,7 +583,7 @@ def paired_subsequence_match(  # noqa: PLR0912
         The distances of matching subsequences. Return depends on input:
 
         - if x.ndim > 1, return an ndarray of shape (n_samples, )
-        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None.
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, dtype=np.double)
@@ -668,16 +671,16 @@ def paired_distance(  # noqa: PLR0912
     Parameters
     ----------
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The input data. y will be broadcast to the shape of x if possible.
+        The input data.
     y : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The input data
-    dim : int or {'mean', 'full'} optional
-        The dim to compute distance
-     metric : str or callable, optional
+        The input data. y will be broadcasted to the shape of x.
+    dim : int or {'mean', 'full'}, optional
+        The dim to compute distance.
+    metric : str or callable, optional
         The distance metric
 
         See ``_METRICS.keys()`` for a list of supported metrics.
-    metric_params: dict, optional
+    metric_params : dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
@@ -687,12 +690,12 @@ def paired_distance(  # noqa: PLR0912
 
     Returns
     -------
-    distance : ndarray
+    ndarray
         The distances. Return depends on input:
 
-        - if x.ndim == 1, return scalar
-        - if dim='full', return ndarray of shape (n_dims, n_samples)
-        - if x.ndim > 1, return an ndarray of shape (n_samples, )
+        - if x.ndim == 1, return scalar.
+        - if dim='full', return ndarray of shape (n_dims, n_samples).
+        - if x.ndim > 1, return an ndarray of shape (n_samples, ).
     """
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
     y = check_array(y, allow_3d=True, ensure_2d=False, dtype=float)
@@ -757,6 +760,7 @@ def paired_distance(  # noqa: PLR0912
 
 @np.deprecate(new_name="paired_distance(dim='mean')")
 def mean_paired_distance(x, y, *, metric="euclidean", metric_params=None):
+    """ """
     return paired_distance(x, y, dim="mean", metric=metric, metric_params=metric_params)
 
 
@@ -769,23 +773,24 @@ def pairwise_distance(  # noqa: PLR
     metric_params=None,
     n_jobs=None,
 ):
-    """Compute the distance between subsequences and time series.
+    """
+    Compute the distance between subsequences and time series.
 
     Parameters
     ----------
     x : ndarray of shape (n_timestep, ), (x_samples, n_timestep) or \
             (x_samples, n_dims, n_timestep)
-        The input data
+        The input data.
     y : ndarray of shape (n_timestep, ), (y_samples, n_timestep) or \
             (y_samples, n_dims, n_timestep), optional
-        The input data
-    dim : int or {'mean', 'full'} optional
-        The dim to compute distance
-     metric : str or callable, optional
+        The input data.
+    dim : int or {'mean', 'full'}, optional
+        The dim to compute distance.
+    metric : str or callable, optional
         The distance metric
 
         See ``_METRICS.keys()`` for a list of supported metrics.
-    metric_params: dict, optional
+    metric_params : dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
@@ -795,16 +800,17 @@ def pairwise_distance(  # noqa: PLR
 
     Returns
     -------
-    dist : float or ndarray
+    float or ndarray
         The distances. Return depends on input.
 
-        - if x.ndim == 1 and y.ndim == 1, scalar
-        - if dim="full", array of shape (n_dims, x_samples, y_samples)
-        - if dim="full" and y is None, array of shape (n_dims, x_samples, x_samples)
-        - if x.ndim > 1 and y is None, array of shape (x_samples, x_samples)
-        - if x.ndim > 1 and y.ndim > 1, array of shape (x_samples, y_samples)
-        - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, )
-        - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, )
+        - if x.ndim == 1 and y.ndim == 1, scalar.
+        - if dim="full", array of shape (n_dims, x_samples, y_samples).
+        - if dim="full" and y is None, array of shape (n_dims, x_samples, x_samples).
+        - if x.ndim > 1 and y is None, array of shape (x_samples, x_samples).
+        - if x.ndim > 1 and y.ndim > 1, array of shape (x_samples, y_samples).
+        - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, ).
+        - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, ).
+
     """
     Metric = check_option(_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params if metric_params is not None else {}

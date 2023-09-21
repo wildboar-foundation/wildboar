@@ -4,7 +4,7 @@
 """
 Dataset loading utilities.
 
-See the dataset section in the :doc:`User Guide <wildboar:guide/datasets>` for
+See the dataset section in the :ref:`User Guide <guide-datasets>` for
 more details and examples.
 
 Examples
@@ -270,7 +270,7 @@ def load_datasets(
 
         - if str, filter based on attribute comparison
 
-        Read more in the `User guide <wildboar:datasets_filter>`_
+        Read more in the :ref:`User guide <datasets_filter>`.
 
         .. warning::
 
@@ -375,8 +375,8 @@ def load_dataset(  # noqa: PLR0912
         The name of the dataset to load.
     repository : str, optional
         The data repository formatted as
-        ``{repository}/{bundle}[:{version}][:{tag}]``. Read more in the `User
-        guide <datasets_repositories>`_.
+        ``{repository}/{bundle}[:{version}][:{tag}]``. Read more in the
+        :ref:`User guide <guide-datasets-repositories>`.
     dtype : dtype, optional
         The data type of x (train and test).
     preprocess : str, list or callable, optional

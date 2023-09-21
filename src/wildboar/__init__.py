@@ -5,7 +5,7 @@
 Wildboar - a library for temporal machine learning.
 
 Wildboar includes numerous temporal machine learning algorithms and seamlessly
-integrates them with `scikit-learn <https://scikit-learn.org>`_.
+integrates them with `scikit-learn <https://scikit-learn.org>`__.
 """
 
 import warnings

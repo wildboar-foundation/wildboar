@@ -108,4 +108,4 @@ non-strict = false
 
 [tool.numpydoc-lint]
 exclude = ["tests/**/*.py"]
-ignore = ["H0002"]
+ignore-pattern = ["H0002"]

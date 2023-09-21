@@ -56,6 +56,24 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         pass
 
     def decision_path(self, x, check_input=True):
+        """
+        Compute the decision path of the tree.
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep) or\
+ (n_samples, n_dims, n_timestep)
+            The input samples.
+        check_input : bool, optional
+            Bypass array validation. Only set to True if you are sure your data
+            is valid.
+
+        Returns
+        -------
+        sparse matrix of shape (n_samples, n_nodes)
+            An indicator array where each nonzero values indicate that the sample
+            traverses a node.
+        """
         check_is_fitted(self, attributes="tree_")
         if check_input:
             x = self._validate_data(
@@ -67,6 +85,41 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         return self.tree_.decision_path(x)
 
     def apply(self, x, check_input=True):
+        """
+        Return the index of the leaf that each sample is predicted by.
+
+        Parameters
+        ----------
+        x : array-like of shape (n_samples, n_timestep) or\
+ (n_samples, n_dims, n_timestep)
+            The input samples.
+        check_input : bool, optional
+            Bypass array validation. Only set to True if you are sure your data
+            is valid.
+
+        Returns
+        -------
+        ndarray of shape (n_samples, )
+            For every sample, return the index of the leaf that the sample
+            ends up in. The index is in the range [0; node_count].
+
+        Examples
+        --------
+        Get the leaf probability distribution of a prediction:
+
+        >>> from wildboar.datasets import load_gun_point
+        >>> from wildboar.tree import ShapeletTreeClassifier
+        >>> X, y = load_gun_point()
+        >>> tree = ShapeletTreeClassifier()
+        >>> tree.fit(X, y)
+        >>> leaves = tree.apply(X)
+        >>> tree.tree_.value.take(leaves, axis=0)
+        array([[0., 1.],
+               [0., 1.],
+               [1., 0.]])
+
+        This is equvivalent to using `tree.predict_proba`.
+        """
         check_is_fitted(self, attributes="tree_")
         if check_input:
             x = self._validate_data(
@@ -92,7 +145,7 @@ class BaseTreeRegressor(RegressorMixin, BaseTree, metaclass=ABCMeta):
             The training time series.
         y : array-like of shape (n_samples,)
             Target values as floating point values.
-        sample_weight : array-like of shape (n_samples,)
+        sample_weight : array-like of shape (n_samples,), optional
             If `None`, then samples are equally weighted. Splits that would create child
             nodes with net zero or negative weight are ignored while searching for a
             split in each node. Splits are also ignored if they would result in any
@@ -169,7 +222,7 @@ class BaseTreeClassifier(ClassifierMixin, BaseTree, metaclass=ABCMeta):
             The training time series.
         y : array-like of shape (n_samples,)
             The target values.
-        sample_weight : array-like of shape (n_samples,)
+        sample_weight : array-like of shape (n_samples,), optional
             If `None`, then samples are equally weighted. Splits that would create child
             nodes with net zero or negative weight are ignored while searching for a
             split in each node. Splits are also ignored if they would result in any

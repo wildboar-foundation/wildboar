@@ -7,9 +7,18 @@
 # -- Path setup --------------------------------------------------------------
 
 import os
+import pkgutil
+import pathlib
+import sys
 
 from pkg_resources import get_distribution, parse_version
 from sphinx_simpleversion import get_current_branch
+from sphinx.util.logging import getLogger
+
+sys.path.insert(0, os.path.abspath("_gen_figures"))
+sys.path.insert(0, os.path.abspath(".") + "/_extensions")
+
+logger = getLogger(__name__)
 
 current_release = parse_version(get_distribution("wildboar").version)
 release = current_release.public
@@ -28,15 +37,18 @@ author = "Isak Samsten"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "matplotlib.sphinxext.plot_directive",
-    "sphinx_simpleversion",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.mathjax",
-    "numpydoc",
-    "sphinx.ext.linkcode",
     "autoapi.extension",
-    "sphinx_design",
+    "lightdarkimg",
+    "matplotlib.sphinxext.plot_directive",
+    "numpydoc",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.linkcode",
+    "sphinx.ext.mathjax",
     "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx_inline_tabs",
+    "sphinx_simpleversion",
+    "sphinx_toggleprompt",
 ]
 
 
@@ -49,7 +61,7 @@ templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 intersphinx_mapping = {
-    "wildboar": ("https://wildboar.dev/main", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
     "sklearn": ("https://scikit-learn.org/stable/", None),
 }
 
@@ -57,13 +69,6 @@ pygments_style = "github-light-colorblind"
 pygments_dark_style = "github-dark-colorblind"
 syntax_highlight = "short"
 add_function_parentheses = False
-
-# TODO: Enable once we have fewer warnings
-# numpydoc_validation_checks = {
-#     "all",
-#     "SA01",
-#     "EX01",
-# }
 
 versions_develop_branch = "master"
 
@@ -78,11 +83,12 @@ autoapi_member_order = "groupwise"
 
 autoapi_options = [
     "members",
-    "undoc-members",
-    "show-inheritance",
+    # "undoc-members",
+    # "show-inheritance",
     "show-module-summary",
     # "special-members",
     "imported-members",
+    "inherited-members",
 ]
 
 html_theme = "furo"
@@ -104,6 +110,7 @@ html_sidebars = {
 html_static_path = ["_static"]
 html_css_files = [
     "css/custom.css",
+    "css/pygments-override.css",
 ]
 current_branch_name = get_current_branch()
 
@@ -143,3 +150,19 @@ def linkcode_resolve(domain, info):
         current_branch_name,
         filename,
     )
+
+
+regenerate_plots = os.environ.get("REGENERATE_PLOTS", False)
+
+basepath = pathlib.Path("_static", "fig")
+for modinfo in pkgutil.iter_modules(["_gen_figures"]):
+    if modinfo.name.startswith("gen"):
+        logger.info(f"Generating figures for: '{modinfo.name}'")
+        module = modinfo.module_finder.find_module(modinfo.name).load_module(
+            modinfo.name
+        )
+        funcs = list(module.__dict__.values())
+        for func in funcs:
+            if callable(func) and func.__name__.startswith("gen_"):
+                logger.info(f" - '{func.__name__}'")
+                func(basepath, force=regenerate_plots)

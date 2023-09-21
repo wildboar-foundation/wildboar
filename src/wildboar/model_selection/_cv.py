@@ -15,15 +15,13 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
     """
     Repeated random outlier cross-validator.
 
-    Yields indicies that split the dataset into training and test sets.
-
     Parameters
     ----------
     n_splits : int, optional
         The maximum number of splits.
-        - if None, the number of splits is determined by the number of
-            outliers as, `total_n_outliers/(n_inliers * n_outliers)`
-        - if int, the number of splits is an upper-bound
+        - if None, the number of splits is determined by the number of outliers
+        as, `total_n_outliers/(n_inliers * n_outliers)`
+        - if int, the number of splits is an upper-bound.
     test_size : float, optional
         The size of the test set.
     n_outlier : float, optional
@@ -31,7 +29,7 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
     shuffle : bool, optional
         Shuffle the training indicies in each iteration.
     random_state : int or RandomState, optional
-        The psudo-random number generator
+        The psudo-random number generator.
 
     Notes
     -----
@@ -63,17 +61,16 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         Parameters
         ----------
         X : object
-            The samples
+            The samples.
         y : object
-            The labels
-        groups : object
+            The labels.
+        groups : object, optional
             Always ignored, exists for compatibility.
 
         Returns
         -------
         int
             Returns the number of splitting iterations in the cross-validator.
-
         """
         outlier_index = (y == -1).nonzero()[0]
         inlier_index = (y == 1).nonzero()[0]
@@ -96,7 +93,7 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         x : object
             Always ignored, exists for compatibility.
         y : object
-            The labels
+            The labels.
         groups : object, optional
             Always ignored, exists for compatibility.
 
@@ -104,7 +101,6 @@ class RepeatedOutlierSplit(metaclass=ABCMeta):
         ------
         train_idx, test_idx : ndarray
             The training and test indicies
-
         """
         y = check_array(y, ensure_2d=False)
         random_state = check_random_state(self.random_state)

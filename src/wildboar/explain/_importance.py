@@ -41,7 +41,8 @@ Importance = namedtuple("Importance", ["mean", "std", "full"])
 
 
 def plot_importances(importances, ax=None, labels=None):
-    """Plot the importances as a boxplot.
+    """
+    Plot the importances as a boxplot.
 
     Parameters
     ----------
@@ -55,7 +56,7 @@ def plot_importances(importances, ax=None, labels=None):
 
     Returns
     -------
-    ax : Axes
+    Axes
         The plotted Axes.
     """
     n_importances = len(importances) if isinstance(importances, dict) else 1
@@ -182,7 +183,31 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
 
 
 class IntervalImportance(ExplainerMixin, PermuteImportance):
-    """Interval importance for time series.
+    """
+    Interval importance for time series.
+
+    Parameters
+    ----------
+    scoring : str, list, dict or callable, optional
+        The scoring function. By default the estimators score function is used.
+    n_repeat : int, optional
+        The number of repeated permutations.
+    n_intervals : str, optional
+        The number of intervals.
+
+        - if "sqrt", the number of intervals is the square root of n_timestep.
+        - if "log2", the number of intervals is the log2 of n_timestep.
+        - if int, exact number of intervals.
+    window : int, optional
+        The window size. If specicied, n_intervals is ignored and the number of
+        intervals is computed such that each interval is (at least) of size window.
+    verbose : bool, optional
+        Show extra progress information.
+    random_state : int or RandomState
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
 
     Attributes
     ----------
@@ -214,33 +239,6 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         verbose=0,
         random_state=None,
     ):
-        """Construct new interval importance estimator.
-
-        Parameters
-        ----------
-        scoring : str, list, dict or callable, optional
-            The scoring function. By default the estimators score function is used.
-        n_repeat : int, optional
-            The number of repeated permutations
-        n_intervals : str, optional
-            The number of intervals.
-
-            - if "sqrt", the number of intervals is the square root of n_timestep.
-            - if "log2", the number of intervals is the log2 of n_timestep.
-            - if int, exact number of intervals.
-        window : int, optional
-            The window size. If specicied, n_intervals is ignored and the number of
-            intervals is computed such that each interval is (at least) of size window.
-        domain : {"time", "frequency"}, optional
-            Compute the importance in the time or frequency domain.
-        verbose : bool, optional
-            Show extra progress information.
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator
-            - If `RandomState` instance, `random_state` is the random number generator
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
         super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
         self.n_intervals = n_intervals
         self.window = window
@@ -534,7 +532,8 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         show_bins=False,
         show_grid=True,
     ):
-        """Plot the importances.
+        """
+        Plot the importances.
 
         If x is given, the importances are plotted over the samples optionally
         labeling each sample using the supplied labels. If x is not give, the
@@ -543,12 +542,14 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         Parameters
         ----------
         x : array-like of shape (n_samples, n_timesteps), optional
-            The samples
+            The samples.
         y : array-like of shape (n_samples, ), optional
-            The labels
+            The labels.
         ax : Axes, optional
             Axes to plot. If ax is set, x is None and scoring is None, the number of
             axes must be the same as the number of scorers.
+        n_samples : int or float, optional
+            The number of samples to plot, set to `None` to plot all.
         scoring : str, optional
             The scoring to plot if multiple scorers were used when fitting.
         preprocess : bool, optional
@@ -557,7 +558,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
             The number of top bins to plot, ignored if x is not None.
 
             - if int, the specified number of bins are shown
-            - if float, a fraction of the number of bins are shown
+            - if float, a fraction of the number of bins are shown.
         show_bins : bool, optional
             Annotate the plot with the index of the bin, ignored if x is not None.
         show_grid : bool, optional
@@ -566,7 +567,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         Returns
         -------
         ax : Axis
-            The axis
+            The axis.
         mappable : ScalarMappable, optional
             Return the mappable used to plot the colorbar.
             Only returned if ax is not None and x is not None.
@@ -683,10 +684,38 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
 
 
 class ShapeletImportance(ExplainerMixin, PermuteImportance):
-    """Compute the importance of shapelets.
+    """
+    Compute the importance of shapelets.
 
     The importance is given by permuting time series sections with
     the minimum distance to shapelets.
+
+    Parameters
+    ----------
+    scoring : str, list, dict or callable, optional
+        The scoring function. By default the estimators score function is used.
+    n_repeat : int, optional
+        The number of repeated permutations.
+    n_shapelets : int, optional
+        The number of shapelets to sample for the explanation.
+    min_shapelet_size : float, optional
+        The minimum size of shapelets used for explanation.
+    max_shapelet_size : float, optional
+        The maximum size of shapelets used for explanation.
+    metric : str, optional
+        The metric.
+    metric_params : str, optional
+        The metric parameters.
+    random_state : int or RandomState, optional
+        Controls the random resampling of the original dataset.
+
+        - If `int`, `random_state` is the seed used by the
+          random number generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is the
+          random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
 
     Attributes
     ----------
@@ -709,7 +738,6 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         max_shapelet_size=1.0,
         metric="euclidean",
         metric_params=None,
-        verbose=0,
         random_state=None,
     ):
         super().__init__(

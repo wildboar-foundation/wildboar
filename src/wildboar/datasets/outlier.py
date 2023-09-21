@@ -3,8 +3,8 @@
 
 """Utilities for generating synthetic outlier datasets.
 
-See the :doc:`User Guide
-<wildboar:guide/unsupervised/outlier/generation>` for more details and
+See the :ref:`User Guide
+<guide-outlier-generation>` for more details and
 example uses.
 """
 
@@ -733,6 +733,33 @@ def _emmott_multiclass_outlier_class(x, y, *, confusion_estimator, transform, n_
 
 
 def _variation_dispersed(x, n_outliers, random_state):
+    """
+    Find the indices of the medoids for a given dataset using the KMedoids algorithm.
+
+    Parameters
+    ----------
+    x : array-like
+        The input dataset to find the medoids for.
+    n_outliers : int
+        The number of medoids to find. This value should be less than or equal
+        to the number of samples in the dataset.
+
+    random_state : int or RandomState instance, optional (default=None)
+        Determines random number generation for centroid initialization. Use an
+        int to make the randomness deterministic. See
+        :class:`~numpy.random.RandomState` for details.
+
+    Returns
+    -------
+    array-like
+        The indices of the medoids in the input dataset.
+
+    Raises
+    ------
+    ModuleNotFoundError
+        If the required module 'sklearn_extra.cluster' is not found.
+    """
+
     try:
         from sklearn_extra.cluster import KMedoids
 

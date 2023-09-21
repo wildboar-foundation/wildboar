@@ -22,7 +22,7 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
 
     Parameters
     ----------
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
