@@ -114,15 +114,13 @@ class PermuteImportance(BaseEstimator, metaclass=ABCMeta):
     _parameter_constraints: dict = {
         "scoring": [None, str, list, dict, callable],
         "n_repeat": [Interval(numbers.Integral, 1, None, closed="left")],
-        "verbose": ["verbose"],
         "random_state": ["random_state"],
     }
 
-    def __init__(self, *, scoring=None, n_repeat=1, verbose=0, random_state=None):
+    def __init__(self, *, scoring=None, n_repeat=1, random_state=None):
         self.scoring = scoring
         self.n_repeat = n_repeat
         self.random_state = random_state
-        self.verbose = verbose
 
     @abstractmethod
     def _yield_components(self):
@@ -201,8 +199,6 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
     window : int, optional
         The window size. If specicied, n_intervals is ignored and the number of
         intervals is computed such that each interval is (at least) of size window.
-    verbose : bool, optional
-        Show extra progress information.
     random_state : int or RandomState
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
@@ -236,13 +232,11 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         n_repeat=5,
         n_intervals="sqrt",
         window=None,
-        verbose=0,
         random_state=None,
     ):
         super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
         self.n_intervals = n_intervals
         self.window = window
-        self.verbose = verbose
 
     def _yield_components(self):
         if self.window is not None:
@@ -425,13 +419,11 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         binning="normal",
         n_bins=4,
         n_repeat=1,
-        verbose=0,
         random_state=None,
     ):
         super().__init__(
             scoring=scoring,
             n_repeat=n_repeat,
-            verbose=verbose,
             random_state=random_state,
         )
         self.n_intervals = n_intervals
@@ -743,7 +735,6 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         super().__init__(
             scoring=scoring,
             n_repeat=n_repeat,
-            verbose=verbose,
             random_state=random_state,
         )
         self.n_shapelets = n_shapelets
