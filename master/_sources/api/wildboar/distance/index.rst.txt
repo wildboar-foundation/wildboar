@@ -14,7 +14,7 @@
    paired and pairwise distances between time series and between time series and
    subsequences.
 
-   See the :doc:`User Guide <wildboar:guide/metrics/distance>` for more details and
+   See the :ref:`User Guide <guide-metrics>` for more details and
    examples.
 
 
@@ -146,8 +146,6 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: mean_paired_distance(x, y, *, metric='euclidean', metric_params=None)
-
 
 .. py:function:: paired_distance(x, y, *, dim='warn', metric='euclidean', metric_params=None, n_jobs=None)
 
@@ -158,19 +156,20 @@ Functions
    :Parameters:
 
        **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-           The input data. y will be broadcast to the shape of x if possible.
+           The input data.
 
        **y** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-           The input data
+           The input data. y will be broadcasted to the shape of x.
 
-       **dim** : int or {'mean', 'full'} optional
-              The dim to compute distance
-           metric : str or callable, optional
-              The distance metric
+       **dim** : int or {'mean', 'full'}, optional
+           The dim to compute distance.
+
+       **metric** : str or callable, optional
+           The distance metric
            
-              See ``_METRICS.keys()`` for a list of supported metrics.
+           See ``_METRICS.keys()`` for a list of supported metrics.
 
-       **metric_params: dict, optional**
+       **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the
@@ -181,12 +180,12 @@ Functions
 
    :Returns:
 
-       **distance** : ndarray
+       ndarray
            The distances. Return depends on input:
            
-           - if x.ndim == 1, return scalar
-           - if dim='full', return ndarray of shape (n_dims, n_samples)
-           - if x.ndim > 1, return an ndarray of shape (n_samples, )
+           - if x.ndim == 1, return scalar.
+           - if dim='full', return ndarray of shape (n_dims, n_samples).
+           - if x.ndim > 1, return an ndarray of shape (n_samples, ).
 
 
 
@@ -227,7 +226,7 @@ Functions
            
            See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
-       **metric_params: dict, optional**
+       **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the
@@ -278,32 +277,31 @@ Functions
    - If no `threshold` is given, the default behaviour is to return the top 10
      matching indicies ordered by distance
    - If both `threshold` and `max_matches` are given, the top matches are returned
-     ordered by distance.
-   and time series.
+     ordered by distance and time series.
 
    :Parameters:
 
        **y** : list or ndarray of shape (n_samples, n_timestep)
            Input time series.
            
-           - if list, a list of array-like of shape (n_timestep, ) with length n_samples
+           - if list, a list of array-like of shape (n_timestep, ) with length n_samples.
 
        **x** : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-           The input data
+           The input data.
 
-       **threshold** : float
+       **threshold** : float, optional
            The distance threshold used to consider a subsequence matching. If no threshold
            is selected, `max_matches` defaults to 10.
 
        **dim** : int, optional
-           The dim to search for shapelets
+           The dim to search for shapelets.
 
        **metric** : str or callable, optional
            The distance metric
            
            See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
-       **metric_params: dict, optional**
+       **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the
@@ -320,10 +318,10 @@ Functions
              ordered by distance.
 
        **return_distance** : bool, optional
-           - if True, return the distance of the match
+           If True, return the distance of the match.
 
        **n_jobs** : int, optional
-           The number of parallel jobs to run. Ignored
+           The number of parallel jobs to run. Ignored.
 
    :Returns:
 
@@ -339,7 +337,7 @@ Functions
            The distances of matching subsequences. Return depends on input:
            
            - if x.ndim > 1, return an ndarray of shape (n_samples, )
-           - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+           - if x.ndim == 1, return ndarray of shape (n_matches, ) or None.
 
 
 
@@ -365,19 +363,20 @@ Functions
    :Parameters:
 
        **x** : ndarray of shape (n_timestep, ), (x_samples, n_timestep) or             (x_samples, n_dims, n_timestep)
-           The input data
+           The input data.
 
        **y** : ndarray of shape (n_timestep, ), (y_samples, n_timestep) or             (y_samples, n_dims, n_timestep), optional
-           The input data
+           The input data.
 
-       **dim** : int or {'mean', 'full'} optional
-              The dim to compute distance
-           metric : str or callable, optional
-              The distance metric
+       **dim** : int or {'mean', 'full'}, optional
+           The dim to compute distance.
+
+       **metric** : str or callable, optional
+           The distance metric
            
-              See ``_METRICS.keys()`` for a list of supported metrics.
+           See ``_METRICS.keys()`` for a list of supported metrics.
 
-       **metric_params: dict, optional**
+       **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the
@@ -388,16 +387,16 @@ Functions
 
    :Returns:
 
-       **dist** : float or ndarray
+       float or ndarray
            The distances. Return depends on input.
            
-           - if x.ndim == 1 and y.ndim == 1, scalar
-           - if dim="full", array of shape (n_dims, x_samples, y_samples)
-           - if dim="full" and y is None, array of shape (n_dims, x_samples, x_samples)
-           - if x.ndim > 1 and y is None, array of shape (x_samples, x_samples)
-           - if x.ndim > 1 and y.ndim > 1, array of shape (x_samples, y_samples)
-           - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, )
-           - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, )
+           - if x.ndim == 1 and y.ndim == 1, scalar.
+           - if dim="full", array of shape (n_dims, x_samples, y_samples).
+           - if dim="full" and y is None, array of shape (n_dims, x_samples, x_samples).
+           - if x.ndim > 1 and y is None, array of shape (x_samples, x_samples).
+           - if x.ndim > 1 and y.ndim > 1, array of shape (x_samples, y_samples).
+           - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, ).
+           - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, ).
 
 
 
@@ -438,7 +437,7 @@ Functions
            
            See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
-       **metric_params: dict, optional**
+       **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the
@@ -523,7 +522,7 @@ Functions
            
            See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
-       **metric_params: dict, optional**
+       **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the

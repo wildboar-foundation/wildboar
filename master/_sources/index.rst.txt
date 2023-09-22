@@ -8,7 +8,8 @@ This is the API reference manual for `Wildboar <https://wildboar.dev>`__.
   :maxdepth: 3
   :hidden:
 
-  User guide <https://wildboar.dev/main>
+  quickstart
+  guide
   more/whatsnew
   API Reference <api/wildboar/index> 
 

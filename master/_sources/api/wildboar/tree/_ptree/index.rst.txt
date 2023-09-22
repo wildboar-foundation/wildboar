@@ -24,7 +24,7 @@ Classes
 .. py:class:: ProximityTreeClassifier(n_pivot=1, *, criterion='entropy', pivot_sample='label', metric_sample='weighted', metric='auto', metric_params=None, metric_factories=None, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, class_weight=None, random_state=None)
 
 
-   Bases: :py:obj:`wildboar.tree._base.BaseTreeClassifier`
+
 
    
    A classifier that uses a k-branching tree based on pivot-time series.
@@ -142,4 +142,345 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: apply(x, check_input=True)
+
+      
+      Return the index of the leaf that each sample is predicted by.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+              The input samples.
+
+          **check_input** : bool, optional
+              Bypass array validation. Only set to True if you are sure your data
+              is valid.
+
+      :Returns:
+
+          ndarray of shape (n_samples, )
+              For every sample, return the index of the leaf that the sample
+              ends up in. The index is in the range [0; node_count].
+
+
+
+
+
+
+
+
+
+
+      .. rubric:: Examples
+
+      Get the leaf probability distribution of a prediction:
+
+      >>> from wildboar.datasets import load_gun_point
+      >>> from wildboar.tree import ShapeletTreeClassifier
+      >>> X, y = load_gun_point()
+      >>> tree = ShapeletTreeClassifier()
+      >>> tree.fit(X, y)
+      >>> leaves = tree.apply(X)
+      >>> tree.tree_.value.take(leaves, axis=0)
+      array([[0., 1.],
+             [0., 1.],
+             [1., 0.]])
+
+      This is equvivalent to using `tree.predict_proba`.
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_path(x, check_input=True)
+
+      
+      Compute the decision path of the tree.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+              The input samples.
+
+          **check_input** : bool, optional
+              Bypass array validation. Only set to True if you are sure your data
+              is valid.
+
+      :Returns:
+
+          sparse matrix of shape (n_samples, n_nodes)
+              An indicator array where each nonzero values indicate that the sample
+              traverses a node.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None, check_input=True)
+
+      
+      Fit a classification tree.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timesteps)
+              The training time series.
+
+          **y** : array-like of shape (n_samples,)
+              The target values.
+
+          **sample_weight** : array-like of shape (n_samples,), optional
+              If `None`, then samples are equally weighted. Splits that would create child
+              nodes with net zero or negative weight are ignored while searching for a
+              split in each node. Splits are also ignored if they would result in any
+              single class carrying a negative weight in either child node.
+
+          **check_input** : bool, optional
+              Allow to bypass several input checks.
+
+      :Returns:
+
+          self
+              This instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(x, check_input=True)
+
+      
+      Predict the regression of the input samples x.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timesteps)
+              The input time series.
+
+          **check_input** : bool, optional
+              Allow to bypass several input checking. Don't use this parameter unless you
+              know what you do.
+
+      :Returns:
+
+          ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(x, check_input=True)
+
+      
+      Predict class probabilities of the input samples X.
+
+      The predicted class probability is the fraction of samples of the same
+      class in a leaf.
+
+      :Parameters:
+
+          **x** :  array-like of shape (n_samples, n_timesteps)
+              The input time series.
+
+          **check_input** : bool, optional
+              Allow to bypass several input checking. Don't use this parameter unless you
+              know what you do.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the classes
+              corresponds to that in the attribute `classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 

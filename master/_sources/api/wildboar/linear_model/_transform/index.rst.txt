@@ -28,7 +28,7 @@ Classes
 .. py:class:: BaseTransformClassifier(*, random_state=None, n_jobs=None)
 
 
-   Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`BaseTransformEstimator`
+
 
    
    Mixin class for all classifiers in scikit-learn.
@@ -50,26 +50,148 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: classes_
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
 
 
-   .. py:method:: decision_function(x)
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
 
 
-   .. py:method:: predict(x)
 
 
-   .. py:method:: predict_log_proba(x)
 
 
-   .. py:method:: predict_proba(x)
 
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: BaseTransformEstimator(*, random_state=None, n_jobs=None)
 
 
-   Bases: :py:obj:`wildboar.base.BaseEstimator`
+
 
    
    Base estimator for all Wildboar estimators.
@@ -91,14 +213,108 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:method:: fit(x, y, sample_weight=None)
+   .. py:method:: get_metadata_routing()
 
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: BaseTransformRegressor(*, random_state=None, n_jobs=None)
 
 
-   Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`BaseTransformEstimator`
+
 
    
    Mixin class for all regression estimators in scikit-learn.
@@ -120,17 +336,164 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:method:: decision_function(x)
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
 
 
-   .. py:method:: predict(x)
+      :Returns:
 
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: TransformRidgeCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, gcv_mode=None, normalize=True, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseTransformRegressor`
+
 
    
    Mixin class for all regression estimators in scikit-learn.
@@ -152,11 +515,164 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: TransformRidgeClassifierCV(*, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize=True, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseTransformClassifier`
+
 
    
    Mixin class for all classifiers in scikit-learn.
@@ -178,7 +694,141 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:method:: predict_proba(x)
+   .. py:method:: get_metadata_routing()
 
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 

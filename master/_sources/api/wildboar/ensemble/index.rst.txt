@@ -59,7 +59,7 @@ Classes
 .. py:class:: BaggingClassifier(estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, class_weight=None, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
 
-   Bases: :py:obj:`BaseBagging`, :py:obj:`sklearn.ensemble.BaggingClassifier`
+
 
    
    A bagging classifier.
@@ -143,6 +143,94 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_function(X)
+
+      
+      Average of the decision functions of the base classifiers.
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **score** : ndarray of shape (n_samples, k)
+              The decision function of the input samples. The columns correspond
+              to the classes in sorted order, as they appear in the attribute
+              ``classes_``. Regression and binary classification are special
+              cases with ``k == 1``, otherwise ``k==n_classes``.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -184,11 +272,258 @@ Classes
       ..
           !! processed by numpydoc !!
 
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict class for X.
+
+      The predicted class of an input sample is computed as the class with
+      the highest mean predicted probability. If base estimators do not
+      implement a ``predict_proba`` method, then it resorts to voting.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_log_proba(X)
+
+      
+      Predict class log-probabilities for X.
+
+      The predicted class log-probabilities of an input sample is computed as
+      the log of the mean predicted class probabilities of the base
+      estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class log-probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(X)
+
+      
+      Predict class probabilities for X.
+
+      The predicted class probabilities of an input sample is computed as
+      the mean predicted class probabilities of the base estimators in the
+      ensemble. If base estimators do not implement a ``predict_proba``
+      method, then it resorts to voting and the predicted class probabilities
+      of an input sample represents the proportion of estimators predicting
+      each class.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: BaggingRegressor(estimator, n_estimators=100, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
 
-   Bases: :py:obj:`BaseBagging`, :py:obj:`sklearn.ensemble.BaggingRegressor`
+
 
    
    A bagging regressor.
@@ -264,6 +599,59 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -305,11 +693,198 @@ Classes
       ..
           !! processed by numpydoc !!
 
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict regression target for X.
+
+      The predicted regression target of an input sample is computed as the
+      mean predicted regression targets of the estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: BaseBagging(estimator=None, n_estimators=10, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
 
-   Bases: :py:obj:`wildboar.base.BaseEstimator`, :py:obj:`sklearn.ensemble._bagging.BaseBagging`
+
 
    
    Base estimator for Wildboar ensemble estimators.
@@ -331,6 +906,59 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
    .. py:method:: fit(x, y, sample_weight=None)
 
       
@@ -372,11 +1000,108 @@ Classes
       ..
           !! processed by numpydoc !!
 
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: ExtraShapeletTreesClassifier(n_estimators=100, *, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseShapeletForestClassifier`
+
 
    
    An ensemble of extremely random shapelet trees.
@@ -499,11 +1224,387 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_function(X)
+
+      
+      Average of the decision functions of the base classifiers.
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **score** : ndarray of shape (n_samples, k)
+              The decision function of the input samples. The columns correspond
+              to the classes in sorted order, as they appear in the attribute
+              ``classes_``. Regression and binary classification are special
+              cases with ``k == 1``, otherwise ``k==n_classes``.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict class for X.
+
+      The predicted class of an input sample is computed as the class with
+      the highest mean predicted probability. If base estimators do not
+      implement a ``predict_proba`` method, then it resorts to voting.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_log_proba(X)
+
+      
+      Predict class log-probabilities for X.
+
+      The predicted class log-probabilities of an input sample is computed as
+      the log of the mean predicted class probabilities of the base
+      estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class log-probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(X)
+
+      
+      Predict class probabilities for X.
+
+      The predicted class probabilities of an input sample is computed as
+      the mean predicted class probabilities of the base estimators in the
+      ensemble. If base estimators do not implement a ``predict_proba``
+      method, then it resorts to voting and the predicted class probabilities
+      of an input sample represents the proportion of estimators predicting
+      each class.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: ExtraShapeletTreesRegressor(n_estimators=100, *, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseShapeletForestRegressor`
+
 
    
    An ensemble of extremely random shapelet tree regressors.
@@ -614,11 +1715,292 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict regression target for X.
+
+      The predicted regression target of an input sample is computed as the
+      mean predicted regression targets of the estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: IntervalForestClassifier(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='mean_var_std', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseForestClassifier`
+
 
    
    An ensemble of interval tree classifiers.
@@ -640,11 +2022,387 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_function(X)
+
+      
+      Average of the decision functions of the base classifiers.
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **score** : ndarray of shape (n_samples, k)
+              The decision function of the input samples. The columns correspond
+              to the classes in sorted order, as they appear in the attribute
+              ``classes_``. Regression and binary classification are special
+              cases with ``k == 1``, otherwise ``k==n_classes``.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict class for X.
+
+      The predicted class of an input sample is computed as the class with
+      the highest mean predicted probability. If base estimators do not
+      implement a ``predict_proba`` method, then it resorts to voting.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_log_proba(X)
+
+      
+      Predict class log-probabilities for X.
+
+      The predicted class log-probabilities of an input sample is computed as
+      the log of the mean predicted class probabilities of the base
+      estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class log-probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(X)
+
+      
+      Predict class probabilities for X.
+
+      The predicted class probabilities of an input sample is computed as
+      the mean predicted class probabilities of the base estimators in the
+      ensemble. If base estimators do not implement a ``predict_proba``
+      method, then it resorts to voting and the predicted class probabilities
+      of an input sample represents the proportion of estimators predicting
+      each class.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: IntervalForestRegressor(n_estimators=100, *, n_intervals='sqrt', intervals='fixed', summarizer='auto', sample_size=0.5, min_size=0.0, max_size=1.0, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseForestRegressor`
+
 
    
    An ensemble of interval tree regressors.
@@ -666,11 +2424,292 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict regression target for X.
+
+      The predicted regression target of an input sample is computed as the
+      mean predicted regression targets of the estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: IsolationShapeletForest(n_estimators=100, *, n_shapelets=1, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
 
 
-   Bases: :py:obj:`sklearn.base.OutlierMixin`, :py:obj:`ForestMixin`, :py:obj:`BaseBagging`
+
 
    
    An isolation shapelet forest.
@@ -796,8 +2835,58 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:method:: decision_function(x)
+   .. py:property:: base_estimator_
 
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: fit(x, y=None, sample_weight=None)
 
@@ -840,17 +2929,143 @@ Classes
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: predict(x)
+   .. py:method:: fit_predict(X, y=None)
+
+      
+      Perform fit on X and returns labels for X.
+
+      Returns -1 for outliers and 1 for inliers.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The input samples.
+
+          **y** : Ignored
+              Not used, present for API consistency by convention.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              1 for inliers, -1 for outliers.
 
 
-   .. py:method:: score_samples(x)
 
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: PivotForestClassifier(n_estimators=100, *, n_pivot='sqrt', metrics='all', oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseForestClassifier`
+
 
    
    An ensemble of interval tree classifiers.
@@ -872,11 +3087,387 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_function(X)
+
+      
+      Average of the decision functions of the base classifiers.
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **score** : ndarray of shape (n_samples, k)
+              The decision function of the input samples. The columns correspond
+              to the classes in sorted order, as they appear in the attribute
+              ``classes_``. Regression and binary classification are special
+              cases with ``k == 1``, otherwise ``k==n_classes``.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict class for X.
+
+      The predicted class of an input sample is computed as the class with
+      the highest mean predicted probability. If base estimators do not
+      implement a ``predict_proba`` method, then it resorts to voting.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_log_proba(X)
+
+      
+      Predict class log-probabilities for X.
+
+      The predicted class log-probabilities of an input sample is computed as
+      the log of the mean predicted class probabilities of the base
+      estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class log-probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(X)
+
+      
+      Predict class probabilities for X.
+
+      The predicted class probabilities of an input sample is computed as
+      the mean predicted class probabilities of the base estimators in the
+      ensemble. If base estimators do not implement a ``predict_proba``
+      method, then it resorts to voting and the predicted class probabilities
+      of an input sample represents the proportion of estimators predicting
+      each class.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: ProximityForestClassifier(n_estimators=100, *, n_pivot=1, pivot_sample='label', metric_sample='weighted', metric='auto', metric_params=None, metric_factories=None, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0, criterion='entropy', bootstrap=True, warm_start=False, n_jobs=None, class_weight=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseForestClassifier`
+
 
    
    A forest of proximity trees.
@@ -998,11 +3589,387 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_function(X)
+
+      
+      Average of the decision functions of the base classifiers.
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **score** : ndarray of shape (n_samples, k)
+              The decision function of the input samples. The columns correspond
+              to the classes in sorted order, as they appear in the attribute
+              ``classes_``. Regression and binary classification are special
+              cases with ``k == 1``, otherwise ``k==n_classes``.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict class for X.
+
+      The predicted class of an input sample is computed as the class with
+      the highest mean predicted probability. If base estimators do not
+      implement a ``predict_proba`` method, then it resorts to voting.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_log_proba(X)
+
+      
+      Predict class log-probabilities for X.
+
+      The predicted class log-probabilities of an input sample is computed as
+      the log of the mean predicted class probabilities of the base
+      estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class log-probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(X)
+
+      
+      Predict class probabilities for X.
+
+      The predicted class probabilities of an input sample is computed as
+      the mean predicted class probabilities of the base estimators in the
+      ensemble. If base estimators do not implement a ``predict_proba``
+      method, then it resorts to voting and the predicted class probabilities
+      of an input sample represents the proportion of estimators predicting
+      each class.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: RocketForestClassifier(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='entropy', bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseForestClassifier`
+
 
    
    An ensemble of rocket tree classifiers.
@@ -1024,11 +3991,387 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_function(X)
+
+      
+      Average of the decision functions of the base classifiers.
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **score** : ndarray of shape (n_samples, k)
+              The decision function of the input samples. The columns correspond
+              to the classes in sorted order, as they appear in the attribute
+              ``classes_``. Regression and binary classification are special
+              cases with ``k == 1``, otherwise ``k==n_classes``.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict class for X.
+
+      The predicted class of an input sample is computed as the class with
+      the highest mean predicted probability. If base estimators do not
+      implement a ``predict_proba`` method, then it resorts to voting.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_log_proba(X)
+
+      
+      Predict class log-probabilities for X.
+
+      The predicted class log-probabilities of an input sample is computed as
+      the log of the mean predicted class probabilities of the base
+      estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class log-probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(X)
+
+      
+      Predict class probabilities for X.
+
+      The predicted class probabilities of an input sample is computed as
+      the mean predicted class probabilities of the base estimators in the
+      ensemble. If base estimators do not implement a ``predict_proba``
+      method, then it resorts to voting and the predicted class probabilities
+      of an input sample represents the proportion of estimators predicting
+      each class.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: RocketForestRegressor(n_estimators=100, *, n_kernels=10, oob_score=False, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseForestRegressor`
+
 
    
    An ensemble of rocket tree regressors.
@@ -1141,11 +4484,292 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict regression target for X.
+
+      The predicted regression target of an input sample is computed as the
+      mean predicted regression targets of the estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: ShapeletForestClassifier(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='entropy', oob_score=False, bootstrap=True, warm_start=False, class_weight=None, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseShapeletForestClassifier`
+
 
    
    An ensemble of random shapelet tree classifiers.
@@ -1286,11 +4910,387 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: decision_function(X)
+
+      
+      Average of the decision functions of the base classifiers.
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **score** : ndarray of shape (n_samples, k)
+              The decision function of the input samples. The columns correspond
+              to the classes in sorted order, as they appear in the attribute
+              ``classes_``. Regression and binary classification are special
+              cases with ``k == 1``, otherwise ``k==n_classes``.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict class for X.
+
+      The predicted class of an input sample is computed as the class with
+      the highest mean predicted probability. If base estimators do not
+      implement a ``predict_proba`` method, then it resorts to voting.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted classes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_log_proba(X)
+
+      
+      Predict class log-probabilities for X.
+
+      The predicted class log-probabilities of an input sample is computed as
+      the log of the mean predicted class probabilities of the base
+      estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class log-probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(X)
+
+      
+      Predict class probabilities for X.
+
+      The predicted class probabilities of an input sample is computed as
+      the mean predicted class probabilities of the base estimators in the
+      ensemble. If base estimators do not implement a ``predict_proba``
+      method, then it resorts to voting and the predicted class probabilities
+      of an input sample represents the proportion of estimators predicting
+      each class.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **p** : ndarray of shape (n_samples, n_classes)
+              The class probabilities of the input samples. The order of the
+              classes corresponds to that in the attribute :term:`classes_`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, metric='euclidean', metric_params=None, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
 
 
-   Bases: :py:obj:`BaseShapeletForestRegressor`
+
 
    
    An ensemble of random shapelet trees.
@@ -1408,6 +5408,59 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
    .. py:method:: fit(x, y=None, sample_weight=None)
 
       
@@ -1449,17 +5502,198 @@ Classes
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: fit_transform(x, y=None, sample_weight=None)
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
 
 
-   .. py:method:: transform(x)
+      :Returns:
 
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict regression target for X.
+
+      The predicted regression target of an input sample is computed as the
+      mean predicted regression targets of the estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: ShapeletForestRegressor(n_estimators=100, *, n_shapelets='log2', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, min_shapelet_size=0.0, max_shapelet_size=1.0, alpha=None, metric='euclidean', metric_params=None, criterion='squared_error', oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`BaseShapeletForestRegressor`
+
 
    
    An ensemble of random shapelet tree regressors.
@@ -1592,4 +5826,285 @@ Classes
 
    ..
        !! processed by numpydoc !!
+   .. py:property:: base_estimator_
+
+      
+      Estimator used to grow the ensemble.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:property:: estimators_samples_
+
+      
+      The subset of drawn samples for each base estimator.
+
+      Returns a dynamically generated list of indices identifying
+      the samples used for fitting each member of the ensemble, i.e.,
+      the in-bag samples.
+
+      Note: the list is re-created at each call to the property in order
+      to reduce the object memory footprint by not storing the sampling
+      data. Thus fetching the property may be slower than expected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit(x, y, sample_weight=None)
+
+      
+      Build a Bagging ensemble of estimators from the training set (X, y).
+
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+          **y** : array-like of shape (n_samples,)
+              The target values (class labels in classification, real numbers in
+              regression).
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights. If None, then samples are equally weighted.
+              Note that this is supported only if the base estimator supports
+              sample weighting.
+
+      :Returns:
+
+          **self** : object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(X)
+
+      
+      Predict regression target for X.
+
+      The predicted regression target of an input sample is computed as the
+      mean predicted regression targets of the estimators in the ensemble.
+
+      :Parameters:
+
+          **X** : {array-like, sparse matrix} of shape (n_samples, n_features)
+              The training input samples. Sparse matrices are accepted only if
+              they are supported by the base estimator.
+
+      :Returns:
+
+          **y** : ndarray of shape (n_samples,)
+              The predicted values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the coefficient of determination of the prediction.
+
+      The coefficient of determination :math:`R^2` is defined as
+      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
+      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
+      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
+      The best possible score is 1.0 and it can be negative (because the
+      model can be arbitrarily worse). A constant model that always predicts
+      the expected value of `y`, disregarding the input features, would get
+      a :math:`R^2` score of 0.0.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples. For some estimators this may be a precomputed
+              kernel matrix or a list of generic objects instead with shape
+              ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
+              is the number of samples used in the fitting for the estimator.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True values for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      The :math:`R^2` score used when calling ``score`` on a regressor uses
+      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
+      with default value of :func:`~sklearn.metrics.r2_score`.
+      This influences the ``score`` method of all the multioutput
+      regressors (except for
+      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 

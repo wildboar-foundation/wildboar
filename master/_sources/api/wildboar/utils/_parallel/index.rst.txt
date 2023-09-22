@@ -17,12 +17,8 @@ Functions
 
 .. autoapisummary::
 
-   wildboar.utils._parallel.partition_n_jobs
    wildboar.utils._parallel.run_in_parallel
 
-
-
-.. py:function:: partition_n_jobs(n_jobs, n)
 
 
 .. py:function:: run_in_parallel(work, n_jobs=-1, **parallel_args)

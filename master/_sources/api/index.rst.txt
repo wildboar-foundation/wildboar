@@ -6,7 +6,7 @@
 Wildboar - a library for temporal machine learning.
 
 Wildboar includes numerous temporal machine learning algorithms and seamlessly
-integrates them with `scikit-learn <https://scikit-learn.org>`_.
+integrates them with `scikit-learn <https://scikit-learn.org>`__.
 
 
 
@@ -40,8 +40,8 @@ integrates them with `scikit-learn <https://scikit-learn.org>`_.
 
 Annotation of time series.
 
-See the :doc:`annotation section in the User Guide
-<wildboar:guide/annotate>` for more details and examples.
+See the :ref:`annotation section in the User Guide
+<guide-annotate>` for more details and examples.
 
 
 
@@ -110,7 +110,7 @@ Base classes for all estimators.
 
 Dataset loading utilities.
 
-See the dataset section in the :doc:`User Guide <wildboar:guide/datasets>` for
+See the dataset section in the :ref:`User Guide <guide-datasets>` for
 more details and examples.
 
 
@@ -194,8 +194,8 @@ more details and examples.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Utilities for generating synthetic outlier datasets.
 
-See the :doc:`User Guide
-<wildboar:guide/unsupervised/outlier/generation>` for more details and
+See the :ref:`User Guide
+<guide-outlier-generation>` for more details and
 example uses.
 
 ..
@@ -253,7 +253,7 @@ The :py:mod:`wildboar.distance` module includes functions for computing
 paired and pairwise distances between time series and between time series and
 subsequences.
 
-See the :doc:`User Guide <wildboar:guide/metrics/distance>` for more details and
+See the :ref:`User Guide <guide-metrics>` for more details and
 examples.
 
 

@@ -20,17 +20,8 @@ Classes
    wildboar.datasets._repository.JSONRepository
    wildboar.datasets._repository.NpBundle
    wildboar.datasets._repository.Repository
-   wildboar.datasets._repository.RepositoryCollection
 
 
-
-
-Attributes
-----------
-
-.. autoapisummary::
-
-   wildboar.datasets._repository.DEFAULT_TAG
 
 
 .. py:class:: Bundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
@@ -227,7 +218,7 @@ Attributes
 .. py:class:: JSONRepository(url)
 
 
-   Bases: :py:obj:`Repository`
+
 
    
    A repository is a collection of bundles.
@@ -275,9 +266,6 @@ Attributes
 
       ..
           !! processed by numpydoc !!
-
-   .. py:property:: identifier
-
 
    .. py:property:: name
 
@@ -360,10 +348,36 @@ Attributes
       ..
           !! processed by numpydoc !!
 
-   .. py:attribute:: supported_version
-      :value: '1.1'
+   .. py:method:: get_bundle(key)
 
       
+      Get a bundle with the specified key.
+
+
+      :Parameters:
+
+          **key** : str
+              Key of the bundle.
+
+      :Returns:
+
+          Bundle, optional
+              A bundle or None.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
    .. py:method:: get_bundles()
 
@@ -392,11 +406,34 @@ Attributes
       ..
           !! processed by numpydoc !!
 
+   .. py:method:: refresh(timeout=None)
+
+      
+      Refresh the repository.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: NpBundle(*, key, version, name, tag=None, arrays=None, description=None, collections=None)
 
 
-   Bases: :py:obj:`Bundle`
+
 
    
    Bundle of numpy binary files.
@@ -418,6 +455,151 @@ Attributes
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: get_collection(collection)
+
+      
+      Get a dataset collection.
+
+
+      :Parameters:
+
+          **collection** : str, optional
+              The name of the collection.
+
+      :Returns:
+
+          list
+              List of datasets in the collection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_filename(version=None, tag=None, ext=None)
+
+      
+      Get the cache name of the bundle.
+
+
+      :Parameters:
+
+          **version** : str, optional
+              The bundle version.
+
+          **tag** : str, optional
+              The tag.
+
+          **ext** : str, optional
+              The extension of the file.
+
+      :Returns:
+
+          str
+              The filename.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: list(archive, collection=None)
+
+      
+      List all datasets in this bundle.
+
+
+      :Parameters:
+
+          **archive** : ZipFile
+              The bundle file.
+
+          **collection** : str, optional
+              The collection name.
+
+      :Returns:
+
+          list
+              A sorted list of datasets in the bundle.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: load(name, archive)
+
+      
+      Load a dataset from the bundle.
+
+
+      :Parameters:
+
+          **name** : str
+              Name of the dataset.
+
+          **archive** : ZipFile
+              The zip-file bundle.
+
+      :Returns:
+
+          **x** : ndarray
+              Data samples.
+
+          **y** : ndarray
+              Data labels.
+
+          **n_training_samples** : int
+              Number of samples that are for training. The value is <= x.shape[0].
+
+          **extras** : dict, optional
+              Extra numpy arrays.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: Repository
 
@@ -442,9 +624,6 @@ Attributes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: active
-
-
    .. py:property:: download_url
       :abstractmethod:
 
@@ -472,10 +651,6 @@ Attributes
 
       ..
           !! processed by numpydoc !!
-
-   .. py:property:: identifier
-      :abstractmethod:
-
 
    .. py:property:: name
       :abstractmethod:
@@ -560,9 +735,6 @@ Attributes
 
       ..
           !! processed by numpydoc !!
-
-   .. py:method:: clear_cache(cache_dir, keep_last_version=True)
-
 
    .. py:method:: get_bundle(key)
 
@@ -623,12 +795,6 @@ Attributes
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: list_datasets(bundle, *, cache_dir, collection=None, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
-
-
-   .. py:method:: load_dataset(bundle, dataset, *, cache_dir, version=None, tag=None, create_cache_dir=True, progress=True, force=False)
-
-
    .. py:method:: refresh(timeout=None)
 
       
@@ -652,25 +818,4 @@ Attributes
       ..
           !! processed by numpydoc !!
 
-
-.. py:class:: RepositoryCollection
-
-
-   .. py:method:: install(repository, refresh=True, timeout=None, cache_dir=None)
-
-
-   .. py:method:: load_repository(repository, cache_dir=None)
-
-
-   .. py:method:: refresh(repository=None, timeout=None, cache_dir=None)
-
-
-   .. py:method:: save_repository(repository, cache_dir=None)
-
-
-
-.. py:data:: DEFAULT_TAG
-   :value: 'default'
-
-   
 

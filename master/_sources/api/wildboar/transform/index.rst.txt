@@ -62,7 +62,7 @@ Functions
 .. py:class:: FeatureTransform(*, summarizer='catch22', n_jobs=None)
 
 
-   Bases: :py:obj:`IntervalTransform`
+
 
    
    Transform a time series as a number of features.
@@ -109,11 +109,244 @@ Functions
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: fit(x, y=None)
+
+      
+      Fit the transform.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          BaseFeatureEngineerTransform
+              This object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(x, y=None)
+
+      
+      Fit the embedding and return the transform of x.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The embedding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(x)
+
+      
+      Transform the dataset.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`IntervalMixin`, :py:obj:`wildboar.transform._base.BaseFeatureEngineerTransform`
+
 
    
    Embed a time series as a collection of features per interval.
@@ -216,11 +449,244 @@ Functions
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: fit(x, y=None)
+
+      
+      Fit the transform.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          BaseFeatureEngineerTransform
+              This object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(x, y=None)
+
+      
+      Fit the embedding and return the transform of x.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The embedding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(x)
+
+      
+      Transform the dataset.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: MatrixProfileTransform(window=0.1, exclude=None, n_jobs=None)
 
 
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
 
    
    Matrix profile transform.
@@ -302,6 +768,179 @@ Functions
       ..
           !! processed by numpydoc !!
 
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
    .. py:method:: transform(x)
 
       
@@ -337,7 +976,7 @@ Functions
 .. py:class:: PAA(n_intervals='sqrt', window=None)
 
 
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
 
    
    Peicewise aggregate approximation.
@@ -366,23 +1005,184 @@ Functions
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: intervals
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
 
 
-   .. py:method:: fit(x, y=None)
 
 
-   .. py:method:: inverse_transform(x)
 
 
-   .. py:method:: transform(x)
 
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: PivotTransform(n_pivots=100, *, metric='auto', metric_params=None, metric_sample=None, random_state=None, n_jobs=None)
 
 
-   Bases: :py:obj:`PivotMixin`, :py:obj:`wildboar.transform._base.BaseFeatureEngineerTransform`
+
 
    
    A transform using pivot time series and sampled distance metrics.
@@ -439,11 +1239,244 @@ Functions
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: fit(x, y=None)
+
+      
+      Fit the transform.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          BaseFeatureEngineerTransform
+              This object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(x, y=None)
+
+      
+      Fit the embedding and return the transform of x.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The embedding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(x)
+
+      
+      Transform the dataset.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: ProximityTransform(n_pivots=100, metric='auto', metric_params=None, metric_sample='weighted', random_state=None, n_jobs=None)
 
 
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
 
    
    Transform time series based on class conditional pivots.
@@ -500,17 +1533,184 @@ Functions
 
    ..
        !! processed by numpydoc !!
-   .. py:method:: fit(X, y)
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
 
 
-   .. py:method:: transform(X, y=None)
 
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: RandomShapeletTransform(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.0, max_shapelet_size=1.0, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`ShapeletMixin`, :py:obj:`wildboar.transform._base.BaseFeatureEngineerTransform`
+
 
    
    Random shapelet tranform.
@@ -606,11 +1806,244 @@ Functions
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: fit(x, y=None)
+
+      
+      Fit the transform.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          BaseFeatureEngineerTransform
+              This object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(x, y=None)
+
+      
+      Fit the embedding and return the transform of x.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The embedding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(x)
+
+      
+      Transform the dataset.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
 
 
-   Bases: :py:obj:`RocketMixin`, :py:obj:`wildboar.transform._base.BaseFeatureEngineerTransform`
+
 
    
    Transform a time series using random convolution features.
@@ -723,11 +2156,244 @@ Functions
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: fit(x, y=None)
+
+      
+      Fit the transform.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          BaseFeatureEngineerTransform
+              This object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(x, y=None)
+
+      
+      Fit the embedding and return the transform of x.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The embedding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(x)
+
+      
+      Transform the dataset.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate=True)
 
 
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
 
    
    Symbolic aggregate approximation.
@@ -780,17 +2446,178 @@ Functions
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: intervals
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
 
 
-   .. py:method:: fit(x, y=None)
 
 
-   .. py:method:: inverse_transform(x)
 
 
-   .. py:method:: transform(x)
 
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:function:: piecewice_aggregate_approximation(x, *, n_intervals='sqrt', window=None)

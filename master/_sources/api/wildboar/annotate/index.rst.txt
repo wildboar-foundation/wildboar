@@ -10,8 +10,8 @@
    
    Annotation of time series.
 
-   See the :doc:`annotation section in the User Guide
-   <wildboar:guide/annotate>` for more details and examples.
+   See the :ref:`annotation section in the User Guide
+   <guide-annotate>` for more details and examples.
 
 
 

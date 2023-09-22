@@ -1,3 +1,5 @@
+:orphan:
+
 
 *****************************************
 :py:mod:`wildboar.utils.estimator_checks`

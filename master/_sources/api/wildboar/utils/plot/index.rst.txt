@@ -1,3 +1,5 @@
+:orphan:
+
 
 *****************************
 :py:mod:`wildboar.utils.plot`
@@ -28,18 +30,10 @@ Functions
 
 
 
-Attributes
-----------
-
-.. autoapisummary::
-
-   wildboar.utils.plot.matplotlib_missing
-
-
 .. py:class:: MidpointNormalize(vmin=None, vmax=None, midpoint=None)
 
 
-   Bases: :py:obj:`matplotlib.colors.Normalize`
+
 
    
    Normalise values with a specified midpoint.
@@ -71,6 +65,113 @@ Attributes
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: autoscale(A)
+
+      
+      Set *vmin*, *vmax* to min, max of *A*.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: autoscale_None(A)
+
+      
+      If vmin or vmax are not set, use the min/max of *A* to set them.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: process_value(value)
+      :staticmethod:
+
+      
+      Homogenize the input *value* for easy and efficient normalization.
+
+      *value* can be a scalar or sequence.
+
+
+      :Returns:
+
+          **result** : masked array
+              Masked array with the same shape as *value*.
+
+          **is_scalar** : bool
+              Whether *value* is a scalar.
+
+
+
+
+
+
+
+
+      .. rubric:: Notes
+
+      Float dtypes are preserved; integer types with two bytes or smaller are
+      converted to np.float32, and larger types are converted to np.float64.
+      Preserving float32 when possible, and using in-place operations,
+      greatly improves speed for large arrays.
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: scaled()
+
+      
+      Return whether vmin and vmax are set.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
 
 .. py:function:: plot_frequency_domain(x, y=None, *, ax=None, n_samples=100, jitter=False, sample_spacing=1, frequency=False, cmap='Dark2')
 
@@ -197,8 +298,4 @@ Attributes
 
    ..
        !! processed by numpydoc !!
-
-.. py:data:: matplotlib_missing
-
-   
 

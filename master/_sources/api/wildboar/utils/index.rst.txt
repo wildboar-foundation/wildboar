@@ -36,10 +36,6 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   decorators/index.rst
-   estimator_checks/index.rst
-   plot/index.rst
-   validation/index.rst
    variable_len/index.rst
 
 

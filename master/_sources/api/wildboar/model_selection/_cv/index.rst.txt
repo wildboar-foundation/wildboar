@@ -27,15 +27,14 @@ Classes
    
    Repeated random outlier cross-validator.
 
-   Yields indicies that split the dataset into training and test sets.
 
    :Parameters:
 
        **n_splits** : int, optional
            The maximum number of splits.
-           - if None, the number of splits is determined by the number of
-               outliers as, `total_n_outliers/(n_inliers * n_outliers)`
-           - if int, the number of splits is an upper-bound
+           - if None, the number of splits is determined by the number of outliers
+           as, `total_n_outliers/(n_inliers * n_outliers)`
+           - if int, the number of splits is an upper-bound.
 
        **test_size** : float, optional
            The size of the test set.
@@ -47,7 +46,7 @@ Classes
            Shuffle the training indicies in each iteration.
 
        **random_state** : int or RandomState, optional
-           The psudo-random number generator
+           The psudo-random number generator.
 
 
 
@@ -79,12 +78,12 @@ Classes
       :Parameters:
 
           **X** : object
-              The samples
+              The samples.
 
           **y** : object
-              The labels
+              The labels.
 
-          **groups** : object
+          **groups** : object, optional
               Always ignored, exists for compatibility.
 
       :Returns:
@@ -119,7 +118,7 @@ Classes
               Always ignored, exists for compatibility.
 
           **y** : object
-              The labels
+              The labels.
 
           **groups** : object, optional
               Always ignored, exists for compatibility.

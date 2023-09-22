@@ -134,7 +134,7 @@ Functions
 .. py:class:: NormalBinning(n_bins)
 
 
-   Bases: :py:obj:`Binning`
+
 
    
    Bin using a normal distribution.
@@ -156,6 +156,40 @@ Functions
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: get_thresholds(x=None, estimate=False)
+
+      
+      Get thresholds for binning.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep), optional
+              The samples.
+
+          **estimate** : bool, optional
+              Calculate the thresholds from the samples.
+
+      :Returns:
+
+          ndarray of shape (n_bins - 1, )
+              The thresholds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
    .. py:method:: scale(x)
 
       
@@ -187,7 +221,7 @@ Functions
 .. py:class:: PAA(n_intervals='sqrt', window=None)
 
 
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
 
    
    Peicewise aggregate approximation.
@@ -216,23 +250,184 @@ Functions
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: intervals
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
 
 
-   .. py:method:: fit(x, y=None)
 
 
-   .. py:method:: inverse_transform(x)
 
 
-   .. py:method:: transform(x)
 
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: SAX(*, n_intervals='sqrt', window=None, n_bins=4, binning='normal', estimate=True)
 
 
-   Bases: :py:obj:`sklearn.base.TransformerMixin`, :py:obj:`wildboar.base.BaseEstimator`
+
 
    
    Symbolic aggregate approximation.
@@ -285,23 +480,184 @@ Functions
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: intervals
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
 
 
-   .. py:method:: fit(x, y=None)
 
 
-   .. py:method:: inverse_transform(x)
 
 
-   .. py:method:: transform(x)
 
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: UniformBinning(n_bins)
 
 
-   Bases: :py:obj:`Binning`
+
 
    
    Bin using a uniform distribution.
@@ -323,6 +679,40 @@ Functions
 
    ..
        !! processed by numpydoc !!
+   .. py:method:: get_thresholds(x=None, estimate=False)
+
+      
+      Get thresholds for binning.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep), optional
+              The samples.
+
+          **estimate** : bool, optional
+              Calculate the thresholds from the samples.
+
+      :Returns:
+
+          ndarray of shape (n_bins - 1, )
+              The thresholds.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
    .. py:method:: scale(x)
 
       

@@ -9,8 +9,8 @@
 
    Utilities for generating synthetic outlier datasets.
 
-   See the :doc:`User Guide
-   <wildboar:guide/unsupervised/outlier/generation>` for more details and
+   See the :ref:`User Guide
+   <guide-outlier-generation>` for more details and
    example uses.
 
    ..
