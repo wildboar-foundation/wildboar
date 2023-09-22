@@ -93,7 +93,9 @@ jobs:
           python -m pip install -r docs/requirements.txt
 
       - name: Install current version
-        run: pip install --force-reinstall .
+        run: |
+          pip install --force-reinstall .
+          pip install -r requirements-dev.txt
 
       - name: Build docmentation
         run: |
