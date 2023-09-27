@@ -7,7 +7,7 @@
 import numpy as np
 
 from libc.math cimport INFINITY, floor, log2, pow, sqrt, fabs
-from libc.stdlib cimport free, malloc
+from libc.stdlib cimport free, malloc, labs
 from numpy cimport uint32_t
 
 from ._feature cimport Feature, FeatureEngineer
@@ -219,27 +219,28 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
     ) noexcept nogil:
         cdef Py_ssize_t dilation, q, i, j
         cdef Py_ssize_t padding
-        cdef Py_ssize_t max_exponent = <Py_ssize_t> floor(
-            log2((X.shape[2] - 1) / (self.kernel_size - 1))
+        cdef Py_ssize_t max_exponent = min(
+            1,
+            <Py_ssize_t> floor(log2((X.shape[2] - 1) / (self.kernel_size - 1)))
         )
         cdef Hydra *hydra = <Hydra*> feature.feature
         cdef double *kernel 
         cdef double mean_val
-        if max_exponent < 1:
-            max_exponent = 1
 
         # Hydra (2023), D (transform, Line 5)
         for dilation in range(max_exponent + 1):
-            padding = ((self.kernel_size - 1) * pow(2, dilation)) // 2
+            padding = <Py_ssize_t> ((self.kernel_size - 1) * pow(2, dilation)) // 2
 
             for i in range(self.n_kernels):
-                kernel = hydra.kernels + (i * self.kernel_size)
-                apply_convolution(
+                kernel = hydra.kernels + i * self.kernel_size
+                convolution_1d(
+                    1,
                     dilation,
                     padding,
+                    1.0,
                     kernel,
                     self.kernel_size,
-                    &X[sample, feature.dim],
+                    &X[sample, feature.dim, 0],
                     X.shape[2],
                     self.conv_values,
                 )
@@ -257,23 +258,142 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
             feature, X, sample, out, out_sample, out_feature
         )
 
-cdef void apply_convolution(
+cdef void convolution_1d(
+    Py_ssize_t stride,
     Py_ssize_t dilation,
     Py_ssize_t padding,
-    double *weight,
-    Py_ssize_t length,
+    double bias,
+    double *kernel,
+    Py_ssize_t k_len,
     const double* x,
-    Py_ssize_t x_length,
-    double* value,
+    Py_ssize_t x_len,
+    double* out,
 ) noexcept nogil:
-    cdef Py_ssize_t i, j, k
-    cdef Py_ssize_t out_len = (x_length + 2 * padding) - ((length - 1) * dilation)
-    cdef Py_ssize_t end = (x_length + padding) - ((length - 1) * dilation)
-    for i in range(-padding, end):
-        inner_prod = 0.0
-        k = i
-        for j in range(length):
-            if -1 < k < x_length:
-                inner_prod += weight[j] * x[k]
-            k += dilation
-        value[i + padding] = inner_prod
+    """
+    Compute the 1d convolution.
+
+    Parameters
+    ----------
+    stride : int
+        The stride in x.
+    dilation : int
+        Inflate the kernel by inserting spaces between kernel values.
+    padding : int
+        Increase the size of the input by padding.
+    bias : double
+        The bias.
+    kernel : double*
+        The kernel values.
+    k_len : int
+        The length of the kernel.
+    x : double*
+        The input sample.
+    x_len : int
+        The length of the sample.
+    out : double*, output
+        The output buffer. The length of `out` must be at least:
+            ((x_len + 2 * padding) - (k_len - 1) * dilation + 1)
+            ---------------------------------------------------- + 1
+                                stride
+
+        The invariant is not checked.
+    """
+    cdef Py_ssize_t input_size = x_len + 2 * padding
+    cdef Py_ssize_t kernel_size = (k_len - 1) * dilation + 1
+    cdef Py_ssize_t output_size = <Py_ssize_t> floor((input_size - kernel_size) / stride) + 1
+
+    cdef Py_ssize_t j  # the index in the kernel and input array
+    cdef Py_ssize_t i  # the index of the output array
+    cdef Py_ssize_t padding_offset
+    cdef Py_ssize_t input_offset
+    cdef Py_ssize_t kernel_offset
+    cdef Py_ssize_t convolution_size
+    cdef double inner_prod
+
+    for i in range(output_size):
+        padding_offset = padding - i * stride
+        
+        # This part of the code ensures that the iterators responsible
+        # for selecting the correct values in `kernel` and `x` start
+        # at the correct location. The main idea is to always start
+        # the index at the first non-dilated index *after* padding.
+        #
+        # Example:
+        #  k = [1, 1, 2]
+        #  d = 2
+        #  k_d = [1, 0, 1, 0, 2]
+        #  x = [1, 2, 3, 4, 5, 6]
+        #  p = 2
+        #  x_p = [0, 0, 1, 2, 3, 4, 5, 6, 0, 0]
+        # 
+        #  First convoluton:
+        #          
+        #          / start the kernel index here, which is given by
+        #          | since 2 % 2 == 0, which is given by padding_offset
+        #          |
+        # k_p  1 0 1 0 2
+        #      | | | | |
+        # x_p  0 0 1 2 3 4 5 6 0 0 (Result: 7)
+        #      |   |
+        #      |   \ Start the input index here, which is given by
+        #      |     kernel_offset - padding_offset (2 - 2 = 0)            
+        #      |
+        #      \ padding_offset is 2, so we are at the first padded value
+        #        but we can ignore this part since the pad is all zeros
+        #        so we move head of the kernel iterator to first non-dilated
+        #        value, which is located at imaginary index 2, which also
+        #        happens to be at the start of the input.
+        # 
+        #  Second convolution
+        # 
+        #
+        #            / Since 1 % 2 != 0, we move the start of the kernel to the
+        #            | the first non-dilated value, which is given by
+        #            | 1 + 2 - (1 % 2) = 2
+        #            |
+        # k_p    1 0 1 0 2
+        #        | | | | |
+        # x_p  0 0 1 2 3 4 5 6 0 0 (Result: 10)
+        #        | |
+        #        | \ We move the input iterator the the index where the
+        #        |   first non dilated value is, kernel_offset (2) - padding_offset (1)
+        #        \ 
+        #         padding_offset = 1, so we are at the second padded value.
+        #
+        #  Third convolution
+        #
+        #          / padding_offset = 0, so we should start the kernel
+        #          | with the first value (which by definition is non-dilated).
+        #          |
+        # k_p      1 0 1 0 2
+        #          | | | | |
+        # x_p  0 0 1 2 3 4 5 6 0 0 (Result: 14)
+        #          |
+        #          \ we should start x at the current (strided) index.
+        # 
+        # We continue iterating, until we have visited all start locations
+        # but stopping the convolution at the end of the input array.
+        if padding_offset > 0:
+            if padding_offset % dilation == 0:
+                kernel_offset = padding_offset
+            else:
+                kernel_offset = padding_offset + dilation - (padding_offset % dilation) 
+            input_offset = kernel_offset - padding_offset
+        else:
+            kernel_offset = 0
+            input_offset = labs(padding_offset)
+            
+        # The iteration should be performed up until but not including the
+        # padding. So, the last value we should convolve over is either the
+        # last value of the input, or a value before that located where the
+        # kernel ends. The kernel size here takes into account dilation. We
+        # express this as a length from input_offset until the end.
+        convolution_size = (
+            min(x_len, input_offset + kernel_size - max(0, padding_offset))
+            - input_offset
+        )
+        inner_prod = bias
+        for j from 0 <= j < convolution_size by dilation:
+            inner_prod += x[input_offset + j] * kernel[((j + kernel_offset) // dilation)]
+            
+        out[i] = inner_prod
