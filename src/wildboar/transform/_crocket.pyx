@@ -16,7 +16,7 @@ from numpy cimport uint32_t
 
 from ..utils cimport TSArray
 from ..utils._misc cimport to_ndarray_int
-from ..utils._rand cimport RAND_R_MAX, rand_int, rand_normal, rand_uniform
+from ..utils._rand cimport rand_int, rand_normal, rand_uniform
 from ._feature cimport Feature, FeatureEngineer
 
 
@@ -389,6 +389,7 @@ cdef void apply_convolution(
     out_len = (x_length + 2 * padding) - ((length - 1) * dilation)
     end = (x_length + padding) - ((length - 1) * dilation)
     max_val[0] = -INFINITY
+    min_val[0] = INFINITY
     mean_val[0] = 0.0
     for i in range(-padding, end):
         inner_prod = bias
@@ -399,6 +400,8 @@ cdef void apply_convolution(
             k += dilation
         if inner_prod > max_val[0]:
             max_val[0] = inner_prod
+        if inner_prod < min_val[0]:
+            min_val[0] = inner_prod
 
         if inner_prod > 0:
             mean_val[0] += 1
