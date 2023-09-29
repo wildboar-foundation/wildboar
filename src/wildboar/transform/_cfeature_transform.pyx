@@ -108,11 +108,6 @@ cdef class BatchFitTransform(Batch):
                     &transient_feature,
                     &seed,
                 )
-                persistent_feature = <Feature*> malloc(sizeof(Feature))
-                feature_engineer.init_persistent_feature(
-                    self.x_in, &transient_feature, persistent_feature
-                )
-                self.embedding.set_feature(feature_offset + j, persistent_feature)
                 for i in range(self.x_in.shape[0]):
                     feature_engineer.transient_feature_fill(
                         &transient_feature,
@@ -122,7 +117,11 @@ cdef class BatchFitTransform(Batch):
                         i,
                         feature_offset + j,
                     )
-
+                persistent_feature = <Feature*> malloc(sizeof(Feature))
+                feature_engineer.init_persistent_feature(
+                    self.x_in, &transient_feature, persistent_feature
+                )
+                self.embedding.set_feature(feature_offset + j, persistent_feature)
                 feature_engineer.free_transient_feature(&transient_feature)
 
 cdef class FeatureEmbedding:

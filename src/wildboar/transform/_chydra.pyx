@@ -8,12 +8,15 @@ import numpy as np
 
 from libc.math cimport INFINITY, floor, log2, pow, sqrt, fabs
 from libc.stdlib cimport free, malloc, labs
+from libc.string cimport memset
+
 from numpy cimport uint32_t
 
 from ._feature cimport Feature, FeatureEngineer
 
 from ..utils cimport TSArray
 from ..utils._rand cimport rand_normal
+from ..utils._cconv cimport convolution_1d
 
 # Hydra group
 cdef struct Hydra:
@@ -23,7 +26,7 @@ cdef struct Hydra:
     # size: kernel_size * n_kernels
     double *kernels
 
-cdef class WeightSampler:
+cdef class KernelSampler:
 
     cdef void sample(
         self,
@@ -36,7 +39,7 @@ cdef class WeightSampler:
         pass
 
 
-cdef class NormalWeightSampler(WeightSampler):
+cdef class NormalKernelSampler(KernelSampler):
     cdef double mean
     cdef double scale
 
@@ -61,28 +64,48 @@ cdef class NormalWeightSampler(WeightSampler):
             sum_abs[0] += fabs(data[i])
 
         mean[0] = mean[0] / length
+
+
+cdef inline Py_ssize_t _max_exponent(
+    Py_ssize_t n_timestep, Py_ssize_t kernel_size
+) noexcept nogil:
+    cdef Py_ssize_t max_exponent = <Py_ssize_t> floor(
+        log2((n_timestep - 1) / <double> (kernel_size - 1))
+    )
+    if max_exponent < 0:
+        max_exponent = 0
+    max_exponent += 1
+
+    return max_exponent
+
   
 cdef class HydraFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_kernels
     cdef Py_ssize_t kernel_size
     cdef Py_ssize_t n_groups
-    cdef WeightSampler weight_sampler
+    cdef KernelSampler kernel_sampler
 
-    # Temporary buffers for storing values while computing the convolution.
+    # Temporary buffers to store values while computing the convolution.
     cdef double *conv_values
-    
+
+    # Temporary buffers to store the min/max kernel values
+    cdef double *min_values
+    cdef double *max_values
+
     def __cinit__(
         self,
         Py_ssize_t n_groups,
         Py_ssize_t n_kernels,
         Py_ssize_t kernel_size,
-        WeightSampler weight_sampler,
+        KernelSampler kernel_sampler,
     ):
         self.n_groups = n_groups
         self.n_kernels = n_kernels
         self.kernel_size = kernel_size
-        self.weight_sampler = weight_sampler
+        self.kernel_sampler = kernel_sampler
         self.conv_values = NULL
+        self.min_values = NULL
+        self.max_values = NULL
 
     def __dealloc__(self):
         self._free() 
@@ -90,24 +113,36 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
     cdef void _free(self) noexcept nogil:
         if self.conv_values != NULL:
             free(self.conv_values)
+            self.conv_values = NULL
+        if self.min_values != NULL:
+            free(self.min_values)
+            self.min_values = NULL
+        if self.max_values != NULL:
+            free(self.max_values)
+            self.max_values = NULL
 
     def __reduce__(self):
         return self.__class__, (
-            self.n_groups, self.n_kernels, self.kernel_size, self.weight_sampler
+            self.n_groups, self.n_kernels, self.kernel_size, self.kernel_sampler
         )
 
     cdef int reset(self, TSArray X) noexcept nogil:
         self._free()
-        self.conv_values = <double*> malloc(sizeof(double) * X.shape[2] - 1)
+        self.conv_values = <double*> malloc(sizeof(double) * X.shape[2] * self.n_kernels)
+        self.max_values = <double*> malloc(sizeof(double) * self.n_kernels)
+        self.min_values = <double*> malloc(sizeof(double) * self.n_kernels)
    
     cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
-        return self.n_groups * self.n_kernels
+        return self.n_groups
 
     # Each timeseries is represented by:
-    #   n_groups * n_kernels * 2 (soft_max, hard_min) * 2 (X, diff(X))
+    #   n_groups * n_kernels * max_exponent * 2 (soft_max, hard_min) * 2 (X, diff(X))
     # features.
+    #
+    # TODO: implement support for diff(X)
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_features(X) * 2 * 1 # soft_max and hard_min and (TODO) X and diff(X)
+        cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.kernel_size)
+        return self.get_n_features(X) * max_exponent * self.n_kernels * 2 * 1 # soft_max and hard_min and (TODO) X and diff(X)
 
     cdef Py_ssize_t next_feature(
         self,
@@ -119,7 +154,7 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
         uint32_t *seed
     ) noexcept nogil:
         cdef Hydra *hydra = <Hydra*> malloc(sizeof(Hydra))
-        cdef Py_ssize_t i
+        cdef Py_ssize_t i, j
         cdef double mean
         cdef double sum_abs
         cdef double *kernels = <double*> malloc(sizeof(double) * self.kernel_size * self.n_kernels)
@@ -128,11 +163,11 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
         # Randomly sample and rescale n_kernels Hydra (2023), D (fit, Line 4)
         for i in range(self.n_kernels):
             kernel = kernels + i * self.kernel_size
-            self.weight_sampler.sample(kernel, self.kernel_size, &mean, &sum_abs, seed) 
+            self.kernel_sampler.sample(kernel, self.kernel_size, &mean, &sum_abs, seed) 
 
             # Hydra (2023), D (fit, Line 6)
             for j in range(self.kernel_size):
-                kernel[i] = (kernel[i] - mean) / sum_abs
+                kernel[j] = (kernel[j] - mean) / sum_abs
        
         hydra.kernel_size = self.kernel_size
         hydra.n_kernels = self.n_kernels
@@ -161,19 +196,20 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
 
     # NOTE: feature.feature will be NULL if we have called
     # `init_persistent_feature` which has moved ownership to the persistent
-    # feature. Still, we should free the data occupied by the transient feature
-    # if ownership has not been transfered.
+    # feature.
     cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
+        return 0
+
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         cdef Hydra *hydra
         if feature.feature != NULL:
             hydra = <Hydra*> feature.feature
             if hydra.kernels != NULL:
                 free(hydra.kernels)
+                hydra.kernels = NULL
             free(feature.feature)
-        return 0
-
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
-        return self.free_transient_feature(feature)
+            feature.feature = NULL
+        return 0 
 
     # NOTE: We move ownership of the feature here to a persistent feature, which will
     # be freed by `free_persistent_feature`.
@@ -185,7 +221,7 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
     ) noexcept nogil:
         persistent.dim = transient.dim
         persistent.feature = transient.feature
-        transient.feature = NULL
+        # transient.feature = NULL
         return 0
 
     cdef object persistent_feature_to_object(self, Feature *feature):
@@ -217,33 +253,82 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
         Py_ssize_t out_sample,
         Py_ssize_t feature_id,
     ) noexcept nogil:
-        cdef Py_ssize_t dilation, q, i, j
-        cdef Py_ssize_t padding
-        cdef Py_ssize_t max_exponent = min(
-            1,
-            <Py_ssize_t> floor(log2((X.shape[2] - 1) / (self.kernel_size - 1)))
-        )
+        cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.kernel_size)
+        cdef Py_ssize_t i, exponent, padding, dilation
+        cdef Py_ssize_t kernel_feature_offset
+
+        cdef Py_ssize_t min_index, max_index
+        cdef double min_value, max_value
+
         cdef Hydra *hydra = <Hydra*> feature.feature
-        cdef double *kernel 
-        cdef double mean_val
+
+        # Place the pointer inside correct feature group, as given by feature_id
+        cdef Py_ssize_t feature_offset = (
+            feature_id * self.n_kernels * max_exponent * 2
+        )
 
         # Hydra (2023), D (transform, Line 5)
-        for dilation in range(max_exponent + 1):
-            padding = <Py_ssize_t> ((self.kernel_size - 1) * pow(2, dilation)) // 2
+        for exponent in range(max_exponent):
+            dilation = <Py_ssize_t> pow(2, exponent)
+            padding = <Py_ssize_t> ((self.kernel_size - 1) * dilation) // 2
 
+            # We store the output of the convolution in an array
+            # of shape X.shape[2] * self.n_kernels
             for i in range(self.n_kernels):
-                kernel = hydra.kernels + i * self.kernel_size
                 convolution_1d(
                     1,
                     dilation,
                     padding,
-                    1.0,
-                    kernel,
+                    0.0,
+                    hydra.kernels + i * self.kernel_size,
                     self.kernel_size,
                     &X[sample, feature.dim, 0],
                     X.shape[2],
-                    self.conv_values,
+                    self.conv_values + i * X.shape[2],
                 )
+
+            memset(self.min_values, 0, sizeof(double) * self.n_kernels)
+            memset(self.max_values, 0, sizeof(double) * self.n_kernels)
+
+            # Find the timestep-wise kernel with the minimum and maximum
+            # values. We iterate self.conv_values with a stride equal
+            # to the number of timesteps.
+            for i in range(X.shape[2]):
+                find_min_max(
+                    i,
+                    X.shape[2],
+                    self.conv_values, 
+                    self.n_kernels,
+                    &min_index, 
+                    &min_value, 
+                    &max_index, 
+                    &max_value
+                )
+
+                # NOTE: min_index and max_index are bounded by self.n_kernels
+                self.min_values[min_index] += 1
+                self.max_values[max_index] += max_value
+           
+            # We allocate each feature to an array with the following layout,
+            # self.n_kernels * self.max_exponent * 2:
+            #
+            #        d=0            d=1
+            # --------------- ---------------
+            #   k=0     k=1     k=1     k=1
+            # ------- ------- ------- -------
+            # f=0 f=1 f=0 f=1 f=0 f=1 f=0 f=1
+            # --- --- --- --- --- --- --- ---
+            #
+            # With self.n_groups such groups (one for each feature_id)
+            #
+            # Here we move the pointer to first kernel of the d:th dilation
+            # making sure that we account for the fact that each kernel
+            # is descrived by two features.
+            kernel_feature_offset = feature_offset + exponent * self.n_kernels * 2 
+            for i in range(self.n_kernels):
+                # NOTE: *2 is the number of features (min/max)
+                out[out_sample, kernel_feature_offset + i * 2] = self.min_values[i]
+                out[out_sample, kernel_feature_offset + i * 2 + 1] = self.max_values[i]
             
     cdef Py_ssize_t persistent_feature_fill(
         self, 
@@ -258,142 +343,29 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
             feature, X, sample, out, out_sample, out_feature
         )
 
-cdef void convolution_1d(
+cdef void find_min_max(
+    Py_ssize_t offset,
     Py_ssize_t stride,
-    Py_ssize_t dilation,
-    Py_ssize_t padding,
-    double bias,
-    double *kernel,
-    Py_ssize_t k_len,
-    const double* x,
-    Py_ssize_t x_len,
-    double* out,
+    double* values,
+    Py_ssize_t length, 
+    Py_ssize_t *min_index,
+    double *min_value,
+    Py_ssize_t *max_index,
+    double *max_value
 ) noexcept nogil:
-    """
-    Compute the 1d convolution.
+    cdef Py_ssize_t i
+    cdef double value
+    min_index[0] = -1
+    max_index[0] = -1
+    max_value[0] = -INFINITY
+    min_value[0] = INFINITY
 
-    Parameters
-    ----------
-    stride : int
-        The stride in x.
-    dilation : int
-        Inflate the kernel by inserting spaces between kernel values.
-    padding : int
-        Increase the size of the input by padding.
-    bias : double
-        The bias.
-    kernel : double*
-        The kernel values.
-    k_len : int
-        The length of the kernel.
-    x : double*
-        The input sample.
-    x_len : int
-        The length of the sample.
-    out : double*, output
-        The output buffer. The length of `out` must be at least:
-            ((x_len + 2 * padding) - (k_len - 1) * dilation + 1)
-            ---------------------------------------------------- + 1
-                                stride
+    for i in range(length):
+        value = values[offset + i * stride]
+        if value > max_value[0]:
+            max_value[0] = value
+            max_index[0] = i
 
-        The invariant is not checked.
-    """
-    cdef Py_ssize_t input_size = x_len + 2 * padding
-    cdef Py_ssize_t kernel_size = (k_len - 1) * dilation + 1
-    cdef Py_ssize_t output_size = <Py_ssize_t> floor((input_size - kernel_size) / stride) + 1
-
-    cdef Py_ssize_t j  # the index in the kernel and input array
-    cdef Py_ssize_t i  # the index of the output array
-    cdef Py_ssize_t padding_offset
-    cdef Py_ssize_t input_offset
-    cdef Py_ssize_t kernel_offset
-    cdef Py_ssize_t convolution_size
-    cdef double inner_prod
-
-    for i in range(output_size):
-        padding_offset = padding - i * stride
-        
-        # This part of the code ensures that the iterators responsible
-        # for selecting the correct values in `kernel` and `x` start
-        # at the correct location. The main idea is to always start
-        # the index at the first non-dilated index *after* padding.
-        #
-        # Example:
-        #  k = [1, 1, 2]
-        #  d = 2
-        #  k_d = [1, 0, 1, 0, 2]
-        #  x = [1, 2, 3, 4, 5, 6]
-        #  p = 2
-        #  x_p = [0, 0, 1, 2, 3, 4, 5, 6, 0, 0]
-        # 
-        #  First convoluton:
-        #          
-        #          / start the kernel index here, which is given by
-        #          | since 2 % 2 == 0, which is given by padding_offset
-        #          |
-        # k_p  1 0 1 0 2
-        #      | | | | |
-        # x_p  0 0 1 2 3 4 5 6 0 0 (Result: 7)
-        #      |   |
-        #      |   \ Start the input index here, which is given by
-        #      |     kernel_offset - padding_offset (2 - 2 = 0)            
-        #      |
-        #      \ padding_offset is 2, so we are at the first padded value
-        #        but we can ignore this part since the pad is all zeros
-        #        so we move head of the kernel iterator to first non-dilated
-        #        value, which is located at imaginary index 2, which also
-        #        happens to be at the start of the input.
-        # 
-        #  Second convolution
-        # 
-        #
-        #            / Since 1 % 2 != 0, we move the start of the kernel to the
-        #            | the first non-dilated value, which is given by
-        #            | 1 + 2 - (1 % 2) = 2
-        #            |
-        # k_p    1 0 1 0 2
-        #        | | | | |
-        # x_p  0 0 1 2 3 4 5 6 0 0 (Result: 10)
-        #        | |
-        #        | \ We move the input iterator the the index where the
-        #        |   first non dilated value is, kernel_offset (2) - padding_offset (1)
-        #        \ 
-        #         padding_offset = 1, so we are at the second padded value.
-        #
-        #  Third convolution
-        #
-        #          / padding_offset = 0, so we should start the kernel
-        #          | with the first value (which by definition is non-dilated).
-        #          |
-        # k_p      1 0 1 0 2
-        #          | | | | |
-        # x_p  0 0 1 2 3 4 5 6 0 0 (Result: 14)
-        #          |
-        #          \ we should start x at the current (strided) index.
-        # 
-        # We continue iterating, until we have visited all start locations
-        # but stopping the convolution at the end of the input array.
-        if padding_offset > 0:
-            if padding_offset % dilation == 0:
-                kernel_offset = padding_offset
-            else:
-                kernel_offset = padding_offset + dilation - (padding_offset % dilation) 
-            input_offset = kernel_offset - padding_offset
-        else:
-            kernel_offset = 0
-            input_offset = labs(padding_offset)
-            
-        # The iteration should be performed up until but not including the
-        # padding. So, the last value we should convolve over is either the
-        # last value of the input, or a value before that located where the
-        # kernel ends. The kernel size here takes into account dilation. We
-        # express this as a length from input_offset until the end.
-        convolution_size = (
-            min(x_len, input_offset + kernel_size - max(0, padding_offset))
-            - input_offset
-        )
-        inner_prod = bias
-        for j from 0 <= j < convolution_size by dilation:
-            inner_prod += x[input_offset + j] * kernel[((j + kernel_offset) // dilation)]
-            
-        out[i] = inner_prod
+        if value < min_value[0]:
+            min_value[0] = value
+            min_index[0] = i
