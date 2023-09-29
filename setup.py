@@ -11,6 +11,11 @@ BUILD_ARGS = {
         "extra_link_args": [],
         "libraries": [],
     },
+    "debug": {
+        "extra_compile_args": ["-O0", "-glldb"],
+        "extra_link_args": [],
+        "libraries": [],
+    },
     "optimized": {
         "extra_compile_args": [
             "-O3",

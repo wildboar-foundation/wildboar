@@ -34,7 +34,8 @@ It is currently maintained by Isak Samsten
 |                                                                      | `IntervalForestClassifier`     | `IntervalForestRegressor`     |                                | LCSS       | Motif discovery           |                           |
 |                                                                      | `ProximityTreeClassifier`      |                               |                                | ERP        | `SAX`                     |                           |
 |                                                                      | `ProximityForestClassifier`    |                               |                                | EDR        | `PAA`                     |                           |
-|                                                                      |                                |                               |                                |            | `MatrixProfileTransform`  |                           |
+|                                                                      | `HydraClassifier`              |                               |                                |            | `MatrixProfileTransform`  |                           |
+|                                                                      |                                |                               |                                |            | `HydraTransform`          |                           |
 
 See the [documentation](https://docs.wildboar.dev/master/examples.html) for examples.
 

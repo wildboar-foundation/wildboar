@@ -1,35 +1,11 @@
-import numbers
+# Authors: Isak Samsten
+# License: BSD 3 clause
 
-from sklearn.utils._param_validation import Interval, StrOptions
-
-from ._base import BaseFeatureEngineerTransform
-from ._chydra import HydraFeatureEngineer, NormalKernelSampler
-
-_SAMPLING_METHOD = {
-    "normal": NormalKernelSampler,
-}
+from ..transform import RocketTransform
+from ._transform import TransformRidgeClassifierCV
 
 
-class HydraMixin:
-    _parameter_constraints: dict = {
-        "n_kernels": [Interval(numbers.Integral, 1, None, closed="left")],
-        "kernel_size": [Interval(numbers.Integral, 2, None, closed="left")],
-        "n_groups": [Interval(numbers.Integral, 1, None, closed="left")],
-        "sampling": [StrOptions({"normal"})],
-        "sampling_params": [dict, None],
-    }
-
-    def _get_feature_engineer(self, n_samples):
-        sampling_params = {} if self.sampling_params is None else self.sampling_params
-        return HydraFeatureEngineer(
-            self.n_groups,
-            self.n_kernels,
-            self.kernel_size,
-            _SAMPLING_METHOD[self.sampling](**sampling_params),
-        )
-
-
-class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
+class HydraClassifier(TransformRidgeClassifierCV):
     """
     A Dictionary based method using convolutional kernels.
 
@@ -48,6 +24,19 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
     sampling_params : dict, optional
         Parameters to the sampling approach. The "normal" sampler
         accepts two parameters: `mean` and `scale`.
+    alphas : array-like of shape (n_alphas,), optional
+        Array of alpha values to try.
+    fit_intercept : bool, optional
+        Whether to calculate the intercept for this model.
+    scoring : str, callable, optional
+        A string or a scorer callable object with signature
+        `scorer(estimator, X, y)`.
+    cv : int, cross-validation generator or an iterable, optional
+        Determines the cross-validation splitting strategy.
+    class_weight : dict or 'balanced', optional
+        Weights associated with classes in the form `{class_label: weight}`.
+    normalize : bool, optional
+        Standardize before fitting.
     n_jobs : int, optional
         The number of jobs to run in parallel. A value of `None` means using
         a single core and a value of `-1` means using all cores. Positive
@@ -63,28 +52,12 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
           :class:`numpy.random.RandomState` instance used by
           :func:`numpy.random`.
 
-    Attributes
-    ----------
-    embedding_ : Embedding
-        The underlying embedding
-
-    Notes
-    -----
-    The implementation is almost feature complete in relation to the algorithm
-    described by Dempster et. al. (2023) with the execption of applying the
-    convulution of half of the groups to the first order differences.
-
     References
     ----------
     Dempster, A., Schmidt, D. F., & Webb, G. I. (2023).
         Hydra: competing convolutional kernels for fast and accurate
         time series classification. Data Mining and Knowledge Discovery
     """
-
-    _parameter_constraints: dict = {
-        **HydraMixin._parameter_constraints,
-        **BaseFeatureEngineerTransform._parameter_constraints,
-    }
 
     def __init__(
         self,
@@ -94,12 +67,38 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
         kernel_size=9,
         sampling="normal",
         sampling_params=None,
+        alphas=(0.1, 1.0, 10.0),
+        fit_intercept=True,
+        scoring=None,
+        cv=None,
+        class_weight=None,
+        normalize=True,
         n_jobs=None,
         random_state=None,
     ):
-        super().__init__(n_jobs=n_jobs, random_state=random_state)
+        super().__init__(
+            alphas=alphas,
+            fit_intercept=fit_intercept,
+            scoring=scoring,
+            cv=cv,
+            class_weight=class_weight,
+            n_jobs=n_jobs,
+            normalize=normalize,
+            random_state=random_state,
+        )
         self.n_groups = n_groups
         self.n_kernels = n_kernels
         self.kernel_size = kernel_size
         self.sampling = sampling
         self.sampling_params = sampling_params
+
+    def _get_transform(self, random_state):
+        return RocketTransform(
+            n_groups=self.n_groups,
+            n_kernels=self.n_kernels,
+            kernel_size=self.kernel_size,
+            sampling=self.sampling,
+            sampling_params=self.sampling_params,
+            random_state=random_state,
+            n_jobs=self.n_jobs,
+        )
