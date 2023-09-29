@@ -142,6 +142,14 @@ Classes
 
    Bases: :py:obj:`ForestMixin`, :py:obj:`BaggingClassifier`
 
+   Base class for all estimators in scikit-learn.
+
+   .. rubric:: Notes
+
+   All estimators should specify all the parameters that can be set
+   at the class level in their ``__init__`` as explicit keyword
+   arguments (no ``*args`` or ``**kwargs``).
+
 
 .. py:class:: BaseForestRegressor(*, base_estimator, estimator_params=tuple(), oob_score=False, n_estimators=100, max_depth=None, min_samples_split=2, min_samples_leaf=1, min_impurity_decrease=0.0, criterion='squared_error', bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
