@@ -2,6 +2,8 @@
 # License: BSD 3 clause
 """Transform raw time series to tabular representations."""
 
+from ._diff import DiffTransform
+from ._hydra import HydraTransform
 from ._interval import FeatureTransform, IntervalTransform
 from ._matrix_profile import MatrixProfileTransform
 from ._pivot import PivotTransform, ProximityTransform
@@ -26,4 +28,6 @@ __all__ = [
     "SAX",
     "PAA",
     "MatrixProfileTransform",
+    "HydraTransform",
+    "DiffTransform",
 ]

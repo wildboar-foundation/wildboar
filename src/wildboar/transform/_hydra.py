@@ -53,7 +53,7 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
         a single core and a value of `-1` means using all cores. Positive
         integers mean the exact number of cores.
     random_state : int or RandomState, optional
-        Controls the random resampling of the original dataset.
+        Controls the random sampling of kernels.
 
         - If `int`, `random_state` is the seed used by the random number
           generator.
@@ -68,17 +68,41 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
     embedding_ : Embedding
         The underlying embedding
 
+    See Also
+    --------
+    HydraClassifier : A classifier using hydra transform.
+
     Notes
     -----
-    The implementation is almost feature complete in relation to the algorithm
-    described by Dempster et. al. (2023) with the execption of applying the
-    convulution of half of the groups to the first order differences.
+    The implementation does not implement the first order descrete dirivaties
+    described by Dempster et. al. (2023).
+
+    If this is desired, one can use native scikit-learn functionalities and
+    the :class:`transform.DiffTransform`:
+
+    >>> from sklearn.pipeline import make_pipeline, make_union
+    >>> from wildboar.transform import DiffTransform, HydraTransform
+    >>> dempster_hydra = make_union(
+    ...     HydraTransform(n_groups=32),
+    ...     make_pipeline(
+    ...         DiffTransform(),
+    ...         HydraTransform(n_groups=32)
+    ...     )
+    ... )
 
     References
     ----------
     Dempster, A., Schmidt, D. F., & Webb, G. I. (2023).
         Hydra: competing convolutional kernels for fast and accurate
         time series classification. Data Mining and Knowledge Discovery
+
+    Examples
+    --------
+    >>> from wildboar.datasets import load_gun_point
+    >>> from wildboar.transform import HydraTransform
+    >>> X, y = load_gun_point()
+    >>> t = HydraTransform(n_groups=3, n_kernels=4, random_state=1)
+    >>> t.fit_transform(X)
     """
 
     _parameter_constraints: dict = {

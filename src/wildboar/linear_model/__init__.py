@@ -3,10 +3,12 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+from ._hydra import HydraClassifier
 from ._rocket import RocketClassifier, RocketRegressor
 from ._shapelet import RandomShapeletClassifier, RandomShapeletRegressor
 
 __all__ = [
+    "HydraClassifier",
     "RocketClassifier",
     "RocketRegressor",
     "RandomShapeletClassifier",

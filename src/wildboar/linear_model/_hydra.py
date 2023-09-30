@@ -1,7 +1,10 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
+import numpy as np
+from sklearn.pipeline import make_pipeline, make_union
+from sklearn.utils import check_random_state
 
-from ..transform import RocketTransform
+from ..transform import DiffTransform, HydraTransform
 from ._transform import TransformRidgeClassifierCV
 
 
@@ -24,6 +27,10 @@ class HydraClassifier(TransformRidgeClassifierCV):
     sampling_params : dict, optional
         Parameters to the sampling approach. The "normal" sampler
         accepts two parameters: `mean` and `scale`.
+    order : int, optional
+        The order of difference. If set, half the groups with corresponding
+        kernels will be convolved with the `order` discrete difference along
+        the time dimension.
     alphas : array-like of shape (n_alphas,), optional
         Array of alpha values to try.
     fit_intercept : bool, optional
@@ -67,6 +74,7 @@ class HydraClassifier(TransformRidgeClassifierCV):
         kernel_size=9,
         sampling="normal",
         sampling_params=None,
+        order=1,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
         scoring=None,
@@ -91,14 +99,42 @@ class HydraClassifier(TransformRidgeClassifierCV):
         self.kernel_size = kernel_size
         self.sampling = sampling
         self.sampling_params = sampling_params
+        self.order = order
 
     def _get_transform(self, random_state):
-        return RocketTransform(
-            n_groups=self.n_groups,
-            n_kernels=self.n_kernels,
-            kernel_size=self.kernel_size,
-            sampling=self.sampling,
-            sampling_params=self.sampling_params,
-            random_state=random_state,
-            n_jobs=self.n_jobs,
-        )
+        if self.order is not None and self.order > 0 and self.n_groups > 1:
+            random_state = check_random_state(self.random_state)
+            return make_union(
+                HydraTransform(
+                    n_groups=self.n_groups // 2,
+                    n_kernels=self.n_kernels,
+                    kernel_size=self.kernel_size,
+                    sampling=self.sampling,
+                    sampling_params=self.sampling_params,
+                    random_state=random_state.randint(np.iinfo(np.int32).max),
+                    n_jobs=self.n_jobs,
+                ),
+                make_pipeline(
+                    DiffTransform(order=self.order),
+                    HydraTransform(
+                        n_groups=self.n_groups // 2,
+                        n_kernels=self.n_kernels,
+                        kernel_size=self.kernel_size,
+                        sampling=self.sampling,
+                        sampling_params=self.sampling_params,
+                        random_state=random_state.randint(np.iinfo(np.int32).max),
+                        n_jobs=self.n_jobs,
+                    ),
+                ),
+            )
+
+        else:
+            return HydraTransform(
+                n_groups=self.n_groups,
+                n_kernels=self.n_kernels,
+                kernel_size=self.kernel_size,
+                sampling=self.sampling,
+                sampling_params=self.sampling_params,
+                random_state=random_state,
+                n_jobs=self.n_jobs,
+            )
