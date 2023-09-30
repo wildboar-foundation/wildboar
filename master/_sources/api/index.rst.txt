@@ -527,6 +527,8 @@ Linear methods for both classification and regression.
   :widths: auto
   :class: autosummary
 
+  * - :py:obj:`~wildboar.linear_model.HydraClassifier`
+    - A Dictionary based method using convolutional kernels.
   * - :py:obj:`~wildboar.linear_model.RandomShapeletClassifier`
     - A classifier that uses random shapelets.
   * - :py:obj:`~wildboar.linear_model.RandomShapeletRegressor`
@@ -535,6 +537,7 @@ Linear methods for both classification and regression.
     - Implements the ROCKET classifier.
   * - :py:obj:`~wildboar.linear_model.RocketRegressor`
     - Implements the ROCKET regressor.
+
 
 
 
@@ -654,8 +657,12 @@ Transform raw time series to tabular representations.
   :widths: auto
   :class: autosummary
 
+  * - :py:obj:`~wildboar.transform.DiffTransform`
+    - Mixin class for all transformers in scikit-learn.
   * - :py:obj:`~wildboar.transform.FeatureTransform`
     - Transform a time series as a number of features.
+  * - :py:obj:`~wildboar.transform.HydraTransform`
+    - A Dictionary based method using convolutional kernels.
   * - :py:obj:`~wildboar.transform.IntervalTransform`
     - Embed a time series as a collection of features per interval.
   * - :py:obj:`~wildboar.transform.MatrixProfileTransform`
@@ -683,6 +690,8 @@ Transform raw time series to tabular representations.
     - Peicewise aggregate approximation.
   * - :py:obj:`~wildboar.transform.symbolic_aggregate_approximation`
     - Symbolic aggregate approximation.
+
+
 
 
 

@@ -37,12 +37,244 @@ Classes
 
 .. autoapisummary::
 
+   wildboar.linear_model.HydraClassifier
    wildboar.linear_model.RandomShapeletClassifier
    wildboar.linear_model.RandomShapeletRegressor
    wildboar.linear_model.RocketClassifier
    wildboar.linear_model.RocketRegressor
 
 
+
+
+.. py:class:: HydraClassifier(*, n_groups=64, n_kernels=8, kernel_size=9, sampling='normal', sampling_params=None, order=1, alphas=(0.1, 1.0, 10.0), fit_intercept=True, scoring=None, cv=None, class_weight=None, normalize=True, n_jobs=None, random_state=None)
+
+
+
+
+   
+   A Dictionary based method using convolutional kernels.
+
+
+   :Parameters:
+
+       **n_groups** : int, optional
+           The number of groups of kernels.
+
+       **n_kernels** : int, optional
+           The number of kernels per group.
+
+       **kernel_size** : int, optional
+           The size of the kernel.
+
+       **sampling** : {"normal"}, optional
+           The strategy for sampling kernels. By default kernel weights
+           are sampled from a normal distribution with zero mean and unit
+           standard deviation.
+
+       **sampling_params** : dict, optional
+           Parameters to the sampling approach. The "normal" sampler
+           accepts two parameters: `mean` and `scale`.
+
+       **order** : int, optional
+           The order of difference. If set, half the groups with corresponding
+           kernels will be convolved with the `order` discrete difference along
+           the time dimension.
+
+       **alphas** : array-like of shape (n_alphas,), optional
+           Array of alpha values to try.
+
+       **fit_intercept** : bool, optional
+           Whether to calculate the intercept for this model.
+
+       **scoring** : str, callable, optional
+           A string or a scorer callable object with signature
+           `scorer(estimator, X, y)`.
+
+       **cv** : int, cross-validation generator or an iterable, optional
+           Determines the cross-validation splitting strategy.
+
+       **class_weight** : dict or 'balanced', optional
+           Weights associated with classes in the form `{class_label: weight}`.
+
+       **normalize** : bool, optional
+           Standardize before fitting.
+
+       **n_jobs** : int, optional
+           The number of jobs to run in parallel. A value of `None` means using
+           a single core and a value of `-1` means using all cores. Positive
+           integers mean the exact number of cores.
+
+       **random_state** : int or RandomState, optional
+           Controls the random resampling of the original dataset.
+           
+           - If `int`, `random_state` is the seed used by the random number
+             generator.
+           - If :class:`numpy.random.RandomState` instance, `random_state` is
+             the random number generator.
+           - If `None`, the random number generator is the
+             :class:`numpy.random.RandomState` instance used by
+             :func:`numpy.random`.
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: References
+
+   Dempster, A., Schmidt, D. F., & Webb, G. I. (2023).
+       Hydra: competing convolutional kernels for fast and accurate
+       time series classification. Data Mining and Knowledge Discovery
+
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:class:: RandomShapeletClassifier(n_shapelets=1000, *, metric='euclidean', metric_params=None, min_shapelet_size=0.1, max_shapelet_size=1.0, alphas=(0.1, 1.0, 10.0), fit_intercept=True, normalize=False, scoring=None, cv=None, class_weight=None, n_jobs=None, random_state=None)

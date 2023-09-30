@@ -799,7 +799,7 @@ Classes
                frequency
            - if None, each class has equal weight.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            - If `int`, `random_state` is the seed used by the random number generator;
            - If `RandomState` instance, `random_state` is the random number generator;
            - If `None`, the random number generator is the `RandomState` instance used
@@ -1202,9 +1202,6 @@ Classes
        **min_impurity_decrease** : float, optional
            A split will be introduced only if the impurity decrease is larger than or
            equal to this value.
-
-       **n_shapelets** : int, optional
-           The number of shapelets to sample at each node.
 
        **min_shapelet_size** : float, optional
            The minimum length of a sampled shapelet expressed as a fraction, computed

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.metrics" href="../metrics/index.html" /><link rel="prev" title="wildboar.explain.counterfactual" href="../explain/counterfactual/index.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>wildboar.linear_model - Wildboar 1.1.1.dev140 documentation</title>
+        <title>wildboar.linear_model - Wildboar 1.1.1.dev145 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev140 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev145 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -215,7 +215,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../guide/glossary.html">Glossary</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of wildboar.datasets</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -244,6 +243,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../../more/whatsnew.html">What’s new</a></li>
 </ul>
 
 </div>
@@ -319,21 +319,176 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model.RandomShapeletClassifier" title="wildboar.linear_model.RandomShapeletClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletClassifier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model.HydraClassifier" title="wildboar.linear_model.HydraClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HydraClassifier</span></code></a></p></td>
+<td><p>A Dictionary based method using convolutional kernels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model.RandomShapeletClassifier" title="wildboar.linear_model.RandomShapeletClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletClassifier</span></code></a></p></td>
 <td><p>A classifier that uses random shapelets.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model.RandomShapeletRegressor" title="wildboar.linear_model.RandomShapeletRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletRegressor</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model.RandomShapeletRegressor" title="wildboar.linear_model.RandomShapeletRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletRegressor</span></code></a></p></td>
 <td><p>A regressor that uses random shapelets.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketClassifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketClassifier</span></code></a></p></td>
 <td><p>Implements the ROCKET classifier.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketRegressor</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketRegressor</span></code></a></p></td>
 <td><p>Implements the ROCKET regressor.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.linear_model.HydraClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model.</span></span><span class="sig-name descname"><span class="pre">HydraClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">1.0,</span> <span class="pre">10.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/linear_model/_hydra.py#L11-L140"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.HydraClassifier" title="Permalink to this definition">#</a></dt>
+<dd><p>A Dictionary based method using convolutional kernels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_groups</strong><span class="classifier">int, optional</span></dt><dd><p>The number of groups of kernels.</p>
+</dd>
+<dt><strong>n_kernels</strong><span class="classifier">int, optional</span></dt><dd><p>The number of kernels per group.</p>
+</dd>
+<dt><strong>kernel_size</strong><span class="classifier">int, optional</span></dt><dd><p>The size of the kernel.</p>
+</dd>
+<dt><strong>sampling</strong><span class="classifier">{“normal”}, optional</span></dt><dd><p>The strategy for sampling kernels. By default kernel weights
+are sampled from a normal distribution with zero mean and unit
+standard deviation.</p>
+</dd>
+<dt><strong>sampling_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Parameters to the sampling approach. The “normal” sampler
+accepts two parameters: <cite>mean</cite> and <cite>scale</cite>.</p>
+</dd>
+<dt><strong>order</strong><span class="classifier">int, optional</span></dt><dd><p>The order of difference. If set, half the groups with corresponding
+kernels will be convolved with the <cite>order</cite> discrete difference along
+the time dimension.</p>
+</dd>
+<dt><strong>alphas</strong><span class="classifier">array-like of shape (n_alphas,), optional</span></dt><dd><p>Array of alpha values to try.</p>
+</dd>
+<dt><strong>fit_intercept</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to calculate the intercept for this model.</p>
+</dd>
+<dt><strong>scoring</strong><span class="classifier">str, callable, optional</span></dt><dd><p>A string or a scorer callable object with signature
+<cite>scorer(estimator, X, y)</cite>.</p>
+</dd>
+<dt><strong>cv</strong><span class="classifier">int, cross-validation generator or an iterable, optional</span></dt><dd><p>Determines the cross-validation splitting strategy.</p>
+</dd>
+<dt><strong>class_weight</strong><span class="classifier">dict or ‘balanced’, optional</span></dt><dd><p>Weights associated with classes in the form <cite>{class_label: weight}</cite>.</p>
+</dd>
+<dt><strong>normalize</strong><span class="classifier">bool, optional</span></dt><dd><p>Standardize before fitting.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to run in parallel. A value of <cite>None</cite> means using
+a single core and a value of <cite>-1</cite> means using all cores. Positive
+integers mean the exact number of cores.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Controls the random resampling of the original dataset.</p>
+<ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number
+generator.</p></li>
+<li><p>If <a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance, <cite>random_state</cite> is
+the random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the
+<a class="reference external" href="https://numpy.org/doc/stable/reference/random/legacy.html#numpy.random.RandomState" title="(in NumPy v1.26)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.random.RandomState</span></code></a> instance used by
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.random</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>Dempster, A., Schmidt, D. F., &amp; Webb, G. I. (2023).</dt><dd><p>Hydra: competing convolutional kernels for fast and accurate
+time series classification. Data Mining and Knowledge Discovery</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model.HydraClassifier.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/linear_model.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.HydraClassifier.get_metadata_routing" title="Permalink to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.3)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model.HydraClassifier.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/linear_model.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.HydraClassifier.get_params" title="Permalink to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model.HydraClassifier.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/linear_model.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.HydraClassifier.score" title="Permalink to this definition">#</a></dt>
+<dd><p>Return the mean accuracy on the given test data and labels.</p>
+<p>In multi-label classification, this is the subset accuracy
+which is a harsh metric since you require for each sample that
+each label set be correctly predicted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Test samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs)</span></dt><dd><p>True labels for <cite>X</cite>.</p>
+</dd>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,), default=None</span></dt><dd><p>Sample weights.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>Mean accuracy of <code class="docutils literal notranslate"><span class="pre">self.predict(X)</span></code> w.r.t. <cite>y</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.linear_model.HydraClassifier.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/linear_model.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.HydraClassifier.set_params" title="Permalink to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.linear_model.RandomShapeletClassifier">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.linear_model.</span></span><span class="sig-name descname"><span class="pre">RandomShapeletClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_shapelets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">1.0,</span> <span class="pre">10.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/linear_model/_shapelet.py#L8-L53"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.linear_model.RandomShapeletClassifier" title="Permalink to this definition">#</a></dt>
@@ -805,6 +960,13 @@ possible to update each component of a nested object.</p>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a><ul>
 <li><a class="reference internal" href="#package-contents">Package Contents</a></li>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model.HydraClassifier"><code class="docutils literal notranslate"><span class="pre">HydraClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model.HydraClassifier.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">HydraClassifier.get_metadata_routing</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model.HydraClassifier.get_params"><code class="docutils literal notranslate"><span class="pre">HydraClassifier.get_params</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model.HydraClassifier.score"><code class="docutils literal notranslate"><span class="pre">HydraClassifier.score</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model.HydraClassifier.set_params"><code class="docutils literal notranslate"><span class="pre">HydraClassifier.set_params</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#wildboar.linear_model.RandomShapeletClassifier"><code class="docutils literal notranslate"><span class="pre">RandomShapeletClassifier</span></code></a><ul>
 <li><a class="reference internal" href="#wildboar.linear_model.RandomShapeletClassifier.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">RandomShapeletClassifier.get_metadata_routing</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.linear_model.RandomShapeletClassifier.get_params"><code class="docutils literal notranslate"><span class="pre">RandomShapeletClassifier.get_params</span></code></a></li>
