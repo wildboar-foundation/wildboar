@@ -32,6 +32,10 @@ cdef class FeatureEngineer:
     ) noexcept nogil
 
     # Initialize a persisent feature from a transient feature
+    #
+    # NOTE: We permit moving of ownership of `transient.feature`.
+    #       If is unsafe to use `transient.feature` after `init_persistent_feature`
+    #       has been called.
     cdef Py_ssize_t init_persistent_feature(
         self, 
         TSArray X,

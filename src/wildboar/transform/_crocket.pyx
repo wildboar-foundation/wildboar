@@ -9,9 +9,8 @@
 
 import numpy as np
 
-from libc.math cimport INFINITY, floor, log2, pow, sqrt
+from libc.math cimport INFINITY, floor, log2, pow
 from libc.stdlib cimport free, malloc
-from libc.string cimport memcpy
 from numpy cimport uint32_t
 
 from ..utils cimport TSArray
@@ -28,7 +27,7 @@ cdef struct Rocket:
     double bias
     double *weight
 
-cdef class WeightSampler:
+cdef class KernelSampler:
 
     cdef void sample(
         self,
@@ -43,7 +42,7 @@ cdef class WeightSampler:
         pass
 
 
-cdef class NormalWeightSampler(WeightSampler):
+cdef class NormalKernelSampler(KernelSampler):
     cdef double mean
     cdef double scale
 
@@ -70,7 +69,7 @@ cdef class NormalWeightSampler(WeightSampler):
         mean[0] = mean[0] / length
 
 
-cdef class UniformWeightSampler(WeightSampler):
+cdef class UniformKernelSampler(KernelSampler):
 
     cdef double lower
     cdef double upper
@@ -98,7 +97,7 @@ cdef class UniformWeightSampler(WeightSampler):
         mean[0] = mean[0] / length
 
 
-cdef class ShapeletWeightSampler(WeightSampler):
+cdef class ShapeletKernelSampler(KernelSampler):
     cdef void sample(
         self,
         TSArray X,
@@ -132,7 +131,7 @@ cdef class ShapeletWeightSampler(WeightSampler):
 
 cdef class RocketFeatureEngineer(FeatureEngineer):
     cdef Py_ssize_t n_kernels
-    cdef WeightSampler weight_sampler
+    cdef KernelSampler weight_sampler
     cdef double padding_prob
     cdef double bias_prob
     cdef double normalize_prob
@@ -142,7 +141,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
     def __cinit__(
         self,
         Py_ssize_t n_kernels,
-        WeightSampler weight_sampler,
+        KernelSampler weight_sampler,
         object kernel_size,
         double bias_prob,
         double padding_prob,
@@ -226,39 +225,28 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         return 0
 
     cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
+        return self.free_persistent_feature(feature)
+
+    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         cdef Rocket *rocket
         if feature.feature != NULL:
             rocket = <Rocket*> feature.feature
             if rocket.weight != NULL:
                 free(rocket.weight)
             free(feature.feature)
+            feature.feature = NULL
         return 0
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
-        return self.free_transient_feature(feature)
-
+    # NOTE: We move ownership of `transient.feature` to `persistent.feature`.
     cdef Py_ssize_t init_persistent_feature(
         self, 
         TSArray X,
         Feature *transient, 
         Feature *persistent
     ) noexcept nogil:
-        cdef Rocket *transient_rocket = <Rocket*> transient.feature
-        cdef Rocket *persistent_rocket = <Rocket*> malloc(sizeof(Rocket))
-        
-        persistent_rocket.dilation = transient_rocket.dilation
-        persistent_rocket.bias = transient_rocket.bias
-        persistent_rocket.length = transient_rocket.length
-        persistent_rocket.padding = transient_rocket.padding
-        persistent_rocket.return_mean = transient_rocket.return_mean
-        persistent_rocket.weight = <double*> malloc(sizeof(double) * transient_rocket.length)
-        memcpy(
-            persistent_rocket.weight, 
-            transient_rocket.weight, 
-            sizeof(double) * transient_rocket.length,
-        )
         persistent.dim = transient.dim
-        persistent.feature = persistent_rocket
+        persistent.feature = transient.feature
+        transient.feature = NULL
         return 0
 
     cdef double transient_feature_value(
@@ -269,6 +257,8 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
     ) noexcept nogil:
         cdef double mean_val, max_val
         cdef Rocket* rocket = <Rocket*> feature.feature
+        
+        # TODO: (1.3) use utils._cconv.convolution_1d
         apply_convolution(
             rocket.dilation,
             rocket.padding,
@@ -369,6 +359,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         feature.dim = dim
         return 0
 
+# TODO(1.3): Remove
 cdef void apply_convolution(
     Py_ssize_t dilation,
     Py_ssize_t padding,

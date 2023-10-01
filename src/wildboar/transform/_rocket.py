@@ -8,16 +8,16 @@ from sklearn.utils._param_validation import Interval, StrOptions
 
 from ._base import BaseFeatureEngineerTransform
 from ._crocket import (
-    NormalWeightSampler,
+    NormalKernelSampler,
     RocketFeatureEngineer,
-    ShapeletWeightSampler,
-    UniformWeightSampler,
+    ShapeletKernelSampler,
+    UniformKernelSampler,
 )
 
 _SAMPLING_METHOD = {
-    "normal": NormalWeightSampler,
-    "uniform": UniformWeightSampler,
-    "shapelet": ShapeletWeightSampler,
+    "normal": NormalKernelSampler,
+    "uniform": UniformKernelSampler,
+    "shapelet": ShapeletKernelSampler,
 }
 
 
@@ -96,11 +96,11 @@ class RocketMixin:
             if np.min(kernel_size) < 2:
                 raise ValueError("The minimum kernel size is 2.")
 
-        WeightSampler = _SAMPLING_METHOD[self.sampling]
+        KernelSampler = _SAMPLING_METHOD[self.sampling]
         sampling_params = {} if self.sampling_params is None else self.sampling_params
         return RocketFeatureEngineer(
             self.n_kernels,
-            WeightSampler(**sampling_params),
+            KernelSampler(**sampling_params),
             kernel_size,
             self.bias_prob,
             self.padding_prob,
