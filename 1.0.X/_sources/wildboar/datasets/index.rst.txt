@@ -53,6 +53,7 @@ Functions
 
 .. py:class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
 
+
    Bases: :py:obj:`Bundle`
 
    bundle of .arff-files
@@ -60,12 +61,14 @@ Functions
 
 .. py:class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
 
+
    Bases: :py:obj:`Bundle`
 
    bundle of numpy binary files
 
 
 .. py:class:: Bundle(*, key, version, name, description=None, class_index=-1)
+
 
    Base class for handling dataset bundles
 
@@ -119,6 +122,7 @@ Functions
 
 
 .. py:class:: Repository
+
 
    A repository is a collection of bundles
 
@@ -190,6 +194,7 @@ Functions
 
 
 .. py:class:: JSONRepository(url)
+
 
    Bases: :py:obj:`Repository`
 

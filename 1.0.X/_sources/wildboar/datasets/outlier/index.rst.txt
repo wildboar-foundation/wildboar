@@ -24,6 +24,7 @@ Classes
 
 .. py:class:: OutlierLabeler
 
+
    Base-class for outlier labelers
 
    .. py:method:: fit(x, y=None)
@@ -56,6 +57,7 @@ Classes
 
 
 .. py:class:: KMeansLabeler(*, n_clusters=None, n_outliers=None, random_state=None)
+
 
    Bases: :py:obj:`OutlierLabeler`
 
@@ -104,6 +106,7 @@ Classes
 
 .. py:class:: DensityLabeler(*, estimator=None, estimator_params=None)
 
+
    Bases: :py:obj:`OutlierLabeler`
 
    Density based clustering labeler
@@ -138,6 +141,7 @@ Classes
 
 
 .. py:class:: MajorityLabeler(n_outliers=None, random_state=None)
+
 
    Bases: :py:obj:`OutlierLabeler`
 
@@ -175,6 +179,7 @@ Classes
 
 .. py:class:: MinorityLabeler(n_outliers=None, random_state=None)
 
+
    Bases: :py:obj:`OutlierLabeler`
 
    Labels the minority class as the outlier
@@ -210,6 +215,7 @@ Classes
 
 
 .. py:class:: EmmottLabeler(n_outliers=None, *, confusion_estimator=None, difficulty_estimator=None, difficulty='simplest', scale=None, variation='tight', random_state=None)
+
 
    Bases: :py:obj:`OutlierLabeler`
 

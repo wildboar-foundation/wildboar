@@ -40,6 +40,7 @@ Attributes
 
 .. py:class:: PredictionPaths(classes)
 
+
    .. py:method:: __contains__(item)
 
 
@@ -48,6 +49,7 @@ Attributes
 
 
 .. py:class:: ShapeletForestCounterfactual(*, epsilon=1.0, batch_size=1, random_state=10)
+
 
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 

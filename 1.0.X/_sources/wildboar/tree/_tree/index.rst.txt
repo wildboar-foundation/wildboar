@@ -25,6 +25,7 @@ Classes
 
 .. py:class:: BaseShapeletTree(*, max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
+
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
    Base class for all estimators in scikit-learn.
@@ -43,6 +44,7 @@ Classes
 
 
 .. py:class:: ShapeletTreeRegressor(*, max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+
 
    Bases: :py:obj:`sklearn.base.RegressorMixin`, :py:obj:`BaseShapeletTree`
 
@@ -90,6 +92,7 @@ Classes
 
 .. py:class:: ExtraShapeletTreeRegressor(*, max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
 
+
    Bases: :py:obj:`ShapeletTreeRegressor`
 
    An extra shapelet tree regressor.
@@ -105,6 +108,7 @@ Classes
 
 
 .. py:class:: ShapeletTreeClassifier(max_depth=None, min_samples_split=2, n_shapelets=10, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+
 
    Bases: :py:obj:`sklearn.base.ClassifierMixin`, :py:obj:`BaseShapeletTree`
 
@@ -187,6 +191,7 @@ Classes
 
 
 .. py:class:: ExtraShapeletTreeClassifier(max_depth=None, n_shapelets=1, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, force_dim=None, random_state=None)
+
 
    Bases: :py:obj:`ShapeletTreeClassifier`
 

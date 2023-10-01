@@ -1,18 +1,17 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.distance" href="../../distance/index.html" /><link rel="prev" title="wildboar.datasets" href="../index.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.09.29"/>
-        <title>wildboar.datasets.outlier - Wildboar 1.0.13.dev9 documentation</title>
+    <!-- Generated with Sphinx 6.0.0 and Furo 2022.12.07 -->
+        <title>wildboar.datasets.outlier - Wildboar 1.0.13.dev10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-dropdown.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -139,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.0.13.dev9 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.0.13.dev10 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +165,7 @@
         <small>1.0</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -279,17 +278,13 @@
         </div>
         <article role="main">
           <section id="module-wildboar.datasets.outlier">
-<span id="wildboar-datasets-outlier"></span><h1><a class="reference internal" href="#module-wildboar.datasets.outlier" title="wildboar.datasets.outlier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><a class="headerlink" href="#module-wildboar.datasets.outlier" title="Permalink to this headline">#</a></h1>
+<span id="wildboar-datasets-outlier"></span><h1><a class="reference internal" href="#module-wildboar.datasets.outlier" title="wildboar.datasets.outlier"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><a class="headerlink" href="#module-wildboar.datasets.outlier" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">#</a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler" title="wildboar.datasets.outlier.OutlierLabeler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OutlierLabeler</span></code></a></p></td>
 <td><p>Base-class for outlier labelers</p></td>
@@ -321,10 +316,10 @@
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.OutlierLabeler.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
 </dl>
@@ -335,13 +330,13 @@
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.OutlierLabeler.transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>x_new</strong> (<em>array-like of shape (n_samples_new, n_timestep)</em>) – The outlier and inlier samples</p></li>
 <li><p><strong>y_new</strong> (<em>array-like of shape (n_samples_new, )</em>) – The labels</p></li>
@@ -368,7 +363,7 @@
 <span class="sig-name descname"><span class="pre">k_means_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.KMeansLabeler.k_means_" title="Permalink to this definition">#</a></dt>
 <dd><p>The estimator for assigning points to the outlier class</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -379,7 +374,7 @@
 <span class="sig-name descname"><span class="pre">outlier_cluster_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.KMeansLabeler.outlier_cluster_" title="Permalink to this definition">#</a></dt>
 <dd><p>The cluster index that is considered as outlier</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -394,10 +389,10 @@
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.KMeansLabeler.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
 </dl>
@@ -413,13 +408,13 @@
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.KMeansLabeler.transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>x_new</strong> (<em>array-like of shape (n_samples_new, n_timestep)</em>) – The outlier and inlier samples</p></li>
 <li><p><strong>y_new</strong> (<em>array-like of shape (n_samples_new, )</em>) – The labels</p></li>
@@ -442,10 +437,10 @@
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
 </dl>
@@ -461,13 +456,13 @@
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.DensityLabeler.transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>x_new</strong> (<em>array-like of shape (n_samples_new, n_timestep)</em>) – The outlier and inlier samples</p></li>
 <li><p><strong>y_new</strong> (<em>array-like of shape (n_samples_new, )</em>) – The labels</p></li>
@@ -489,7 +484,7 @@
 <span class="sig-name descname"><span class="pre">outlier_labels_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.outlier_labels_" title="Permalink to this definition">#</a></dt>
 <dd><p>The outlier labels</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray</p>
 </dd>
 </dl>
@@ -500,10 +495,10 @@
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
 </dl>
@@ -514,13 +509,13 @@
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MajorityLabeler.transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>x_new</strong> (<em>array-like of shape (n_samples_new, n_timestep)</em>) – The outlier and inlier samples</p></li>
 <li><p><strong>y_new</strong> (<em>array-like of shape (n_samples_new, )</em>) – The labels</p></li>
@@ -542,7 +537,7 @@
 <span class="sig-name descname"><span class="pre">outlier_label_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.outlier_label_" title="Permalink to this definition">#</a></dt>
 <dd><p>The label of the outlier class</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -553,10 +548,10 @@
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
 </dl>
@@ -567,13 +562,13 @@
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.MinorityLabeler.transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>x_new</strong> (<em>array-like of shape (n_samples_new, n_timestep)</em>) – The outlier and inlier samples</p></li>
 <li><p><strong>y_new</strong> (<em>array-like of shape (n_samples_new, )</em>) – The labels</p></li>
@@ -602,7 +597,7 @@ ranges and selected according to the <code class="docutils literal notranslate">
 <span class="sig-name descname"><span class="pre">outlier_label_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.outlier_label_" title="Permalink to this definition">#</a></dt>
 <dd><p>The class or collection of classes used as outliers</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -613,7 +608,7 @@ ranges and selected according to the <code class="docutils literal notranslate">
 <span class="sig-name descname"><span class="pre">difficulty_estimator_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.difficulty_estimator_" title="Permalink to this definition">#</a></dt>
 <dd><p>The estimator used to assess the difficulty of outlier samples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -624,7 +619,7 @@ ranges and selected according to the <code class="docutils literal notranslate">
 <span class="sig-name descname"><span class="pre">confusion_estimator_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.confusion_estimator_" title="Permalink to this definition">#</a></dt>
 <dd><p>The estimator used to asses the class confusion (only if n_classes &gt; 2)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -635,7 +630,7 @@ ranges and selected according to the <code class="docutils literal notranslate">
 <span class="sig-name descname"><span class="pre">n_classes_</span></span><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.n_classes_" title="Permalink to this definition">#</a></dt>
 <dd><p>The number of classes</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
 </dd>
 </dl>
@@ -667,10 +662,10 @@ In Proceedings of the ACM SIGKDD workshop on outlier detection and description (
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the outlier labeler to the give samples</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>) </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
 </dl>
@@ -686,13 +681,13 @@ In Proceedings of the ACM SIGKDD workshop on outlier detection and description (
 <span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.datasets.outlier.EmmottLabeler.transform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform the labels of (a subset) of samples in x to inlier and outliers</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
+<li><p><strong>x</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_timestep</em><em>)</em>) – The time series samples</p></li>
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>)</em><em>, </em><em>optional</em>) – The optional original labels</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>x_new</strong> (<em>array-like of shape (n_samples_new, n_timestep)</em>) – The outlier and inlier samples</p></li>
 <li><p><strong>y_new</strong> (<em>array-like of shape (n_samples_new, )</em>) – The labels</p></li>
@@ -745,9 +740,7 @@ In Proceedings of the ACM SIGKDD workshop on outlier detection and description (
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -768,46 +761,46 @@ In Proceedings of the ACM SIGKDD workshop on outlier detection and description (
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler">OutlierLabeler</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler.transform">transform</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler.fit_transform">fit_transform</a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler"><code class="docutils literal notranslate"><span class="pre">OutlierLabeler</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler.fit"><code class="docutils literal notranslate"><span class="pre">OutlierLabeler.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler.transform"><code class="docutils literal notranslate"><span class="pre">OutlierLabeler.transform()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.OutlierLabeler.fit_transform"><code class="docutils literal notranslate"><span class="pre">OutlierLabeler.fit_transform()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler">KMeansLabeler</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.k_means_">k_means_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.outlier_cluster_">outlier_cluster_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.fit_transform">fit_transform</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler"><code class="docutils literal notranslate"><span class="pre">KMeansLabeler</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.k_means_"><code class="docutils literal notranslate"><span class="pre">KMeansLabeler.k_means_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.outlier_cluster_"><code class="docutils literal notranslate"><span class="pre">KMeansLabeler.outlier_cluster_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.fit"><code class="docutils literal notranslate"><span class="pre">KMeansLabeler.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.fit_transform"><code class="docutils literal notranslate"><span class="pre">KMeansLabeler.fit_transform()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.KMeansLabeler.transform"><code class="docutils literal notranslate"><span class="pre">KMeansLabeler.transform()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler">DensityLabeler</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler.fit_transform">fit_transform</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler"><code class="docutils literal notranslate"><span class="pre">DensityLabeler</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler.fit"><code class="docutils literal notranslate"><span class="pre">DensityLabeler.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler.fit_transform"><code class="docutils literal notranslate"><span class="pre">DensityLabeler.fit_transform()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.DensityLabeler.transform"><code class="docutils literal notranslate"><span class="pre">DensityLabeler.transform()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler">MajorityLabeler</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler.outlier_labels_">outlier_labels_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler"><code class="docutils literal notranslate"><span class="pre">MajorityLabeler</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler.outlier_labels_"><code class="docutils literal notranslate"><span class="pre">MajorityLabeler.outlier_labels_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler.fit"><code class="docutils literal notranslate"><span class="pre">MajorityLabeler.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MajorityLabeler.transform"><code class="docutils literal notranslate"><span class="pre">MajorityLabeler.transform()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler">MinorityLabeler</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler.outlier_label_">outlier_label_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler"><code class="docutils literal notranslate"><span class="pre">MinorityLabeler</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler.outlier_label_"><code class="docutils literal notranslate"><span class="pre">MinorityLabeler.outlier_label_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler.fit"><code class="docutils literal notranslate"><span class="pre">MinorityLabeler.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.MinorityLabeler.transform"><code class="docutils literal notranslate"><span class="pre">MinorityLabeler.transform()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler">EmmottLabeler</a><ul>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.outlier_label_">outlier_label_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.difficulty_estimator_">difficulty_estimator_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.confusion_estimator_">confusion_estimator_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.n_classes_">n_classes_</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.fit_transform">fit_transform</a></li>
-<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.outlier_label_"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler.outlier_label_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.difficulty_estimator_"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler.difficulty_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.confusion_estimator_"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler.confusion_estimator_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.n_classes_"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler.n_classes_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.fit"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.fit_transform"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler.fit_transform()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.datasets.outlier.EmmottLabeler.transform"><code class="docutils literal notranslate"><span class="pre">EmmottLabeler.transform()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -827,9 +820,8 @@ In Proceedings of the ACM SIGKDD workshop on outlier detection and description (
   </div>
 </div>
 <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>
 </html>

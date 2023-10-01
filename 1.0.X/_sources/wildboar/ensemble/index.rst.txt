@@ -24,6 +24,7 @@ Classes
 
 .. py:class:: ShapeletForestClassifier(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`BaseShapeletForestClassifier`
 
    An ensemble of random shapelet tree classifiers.
@@ -39,6 +40,7 @@ Classes
 
 
 .. py:class:: ExtraShapeletTreesClassifier(*, n_estimators=100, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
+
 
    Bases: :py:obj:`BaseShapeletForestClassifier`
 
@@ -56,6 +58,7 @@ Classes
 
 .. py:class:: ShapeletForestRegressor(*, n_estimators=100, n_shapelets=10, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
    An ensemble of random shapelet regression trees.
@@ -72,6 +75,7 @@ Classes
 
 .. py:class:: ExtraShapeletTreesRegressor(*, n_estimators=100, max_depth=None, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, oob_score=False, bootstrap=True, warm_start=False, n_jobs=None, random_state=None)
 
+
    Bases: :py:obj:`BaseShapeletForestRegressor`
 
    An ensemble of extremely random shapelet trees for time series regression.
@@ -87,6 +91,7 @@ Classes
 
 
 .. py:class:: IsolationShapeletForest(*, n_estimators=100, bootstrap=False, n_jobs=None, min_shapelet_size=0, max_shapelet_size=1, min_samples_split=2, max_samples='auto', contamination='auto', contamination_set='training', warm_start=False, metric='euclidean', metric_params=None, random_state=None)
+
 
    Bases: :py:obj:`ShapeletForestMixin`, :py:obj:`sklearn.base.OutlierMixin`, :py:obj:`sklearn.ensemble._bagging.BaseBagging`
 
@@ -156,6 +161,7 @@ Classes
 
 
 .. py:class:: ShapeletForestEmbedding(n_estimators=100, *, n_shapelets=1, max_depth=5, min_samples_split=2, min_shapelet_size=0, max_shapelet_size=1, metric='euclidean', metric_params=None, bootstrap=True, warm_start=False, n_jobs=None, sparse_output=True, random_state=None)
+
 
    Bases: :py:obj:`BaseShapeletForestRegressor`
 

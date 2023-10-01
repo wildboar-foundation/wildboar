@@ -21,6 +21,7 @@ Classes
 
 .. py:class:: RepeatedOutlierSplit(n_splits=None, *, test_size=0.2, n_outlier=0.05, shuffle=True, random_state=None)
 
+
    Repeated random outlier cross-validator
 
    Yields indicies that split the dataset into training and test sets.

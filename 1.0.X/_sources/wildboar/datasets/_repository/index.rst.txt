@@ -39,6 +39,7 @@ Attributes
 
 .. py:class:: Repository
 
+
    A repository is a collection of bundles
 
    .. py:property:: name
@@ -110,6 +111,7 @@ Attributes
 
 .. py:class:: JSONRepository(url)
 
+
    Bases: :py:obj:`Repository`
 
    A repository is a collection of bundles
@@ -158,6 +160,7 @@ Attributes
 
 .. py:class:: RepositoryCollection
 
+
    .. py:method:: __getitem__(item)
 
 
@@ -172,6 +175,7 @@ Attributes
 
 
 .. py:class:: Bundle(*, key, version, name, description=None, class_index=-1)
+
 
    Base class for handling dataset bundles
 
@@ -226,12 +230,14 @@ Attributes
 
 .. py:class:: ArffBundle(*, key, version, name, description=None, class_index=-1, encoding='utf-8')
 
+
    Bases: :py:obj:`Bundle`
 
    bundle of .arff-files
 
 
 .. py:class:: NpyBundle(*, key, version, name, description=None, class_index=-1)
+
 
    Bases: :py:obj:`Bundle`
 

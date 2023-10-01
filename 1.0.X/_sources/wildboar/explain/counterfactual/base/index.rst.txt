@@ -19,6 +19,7 @@ Classes
 
 .. py:class:: BaseCounterfactual
 
+
    Bases: :py:obj:`sklearn.base.BaseEstimator`
 
    Base estimator for counterfactual explanations

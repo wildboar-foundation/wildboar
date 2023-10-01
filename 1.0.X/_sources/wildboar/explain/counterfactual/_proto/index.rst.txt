@@ -32,6 +32,7 @@ Classes
 
 .. py:class:: PrototypeCounterfactual(background_x, background_y, *, metric='euclidean', metric_params=None, max_iter=100, step_size=0.1, n_prototypes='auto', target='auto', method='sample', method_params=None, random_state=None)
 
+
    Bases: :py:obj:`wildboar.explain.counterfactual.base.BaseCounterfactual`
 
    Model agnostic approach for constructing counterfactual explanations
@@ -92,6 +93,7 @@ Classes
 
 .. py:class:: TargetEvaluator(estimator)
 
+
    Bases: :py:obj:`abc.ABC`
 
    Evaluate if a sample is a counterfactual
@@ -112,6 +114,7 @@ Classes
 
 .. py:class:: PredictEvaluator(estimator)
 
+
    Bases: :py:obj:`TargetEvaluator`
 
    Evaluate if a counterfactual is predicted as y
@@ -119,12 +122,14 @@ Classes
 
 .. py:class:: ProbabilityEvaluator(estimator, probability=0.5)
 
+
    Bases: :py:obj:`TargetEvaluator`
 
    Evaluate if the probability of a counterfactual is at least a given constant
 
 
 .. py:class:: PrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+
 
    Bases: :py:obj:`abc.ABC`
 
@@ -170,6 +175,7 @@ Classes
 
 .. py:class:: UniformPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
 
+
    Bases: :py:obj:`PrototypeSampler`
 
    Sample a prototype uniformly at random from the initial prototype sample
@@ -187,6 +193,7 @@ Classes
 
 
 .. py:class:: KNearestPrototypeSampler(x, y, n_prototypes, metric_transform, random_state)
+
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -216,6 +223,7 @@ Classes
 
 
 .. py:class:: ShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
+
 
    Bases: :py:obj:`PrototypeSampler`
 
@@ -260,6 +268,7 @@ Classes
 
 .. py:class:: KNearestShapeletPrototypeSampler(x, y, n_prototypes, metric_transform, random_state, min_shapelet_size=0, max_shapelet_size=1)
 
+
    Bases: :py:obj:`PrototypeSampler`
 
    Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler
@@ -293,6 +302,7 @@ Classes
 
 .. py:class:: MetricTransform(gamma)
 
+
    Bases: :py:obj:`abc.ABC`
 
    Move a time series towards a prototype
@@ -314,6 +324,7 @@ Classes
 
 .. py:class:: EuclideanTransform(gamma)
 
+
    Bases: :py:obj:`MetricTransform`
 
    Transform a sample by moving it closer in euclidean space
@@ -333,6 +344,7 @@ Classes
 
 
 .. py:class:: DynamicTimeWarpTransform(gamma, r=1.0)
+
 
    Bases: :py:obj:`MetricTransform`
 

@@ -1,18 +1,17 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.09.29"/>
-        <title>wildboar.linear_model._kernel_logistic - Wildboar 1.0.13.dev9 documentation</title>
+    <!-- Generated with Sphinx 6.0.0 and Furo 2022.12.07 -->
+        <title>wildboar.linear_model._kernel_logistic - Wildboar 1.0.13.dev10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-dropdown.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -139,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.0.13.dev9 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.0.13.dev10 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +165,7 @@
         <small>1.0</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -279,17 +278,13 @@
         </div>
         <article role="main">
           <section id="module-wildboar.linear_model._kernel_logistic">
-<span id="wildboar-linear-model-kernel-logistic"></span><h1><a class="reference internal" href="#module-wildboar.linear_model._kernel_logistic" title="wildboar.linear_model._kernel_logistic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model._kernel_logistic</span></code></a><a class="headerlink" href="#module-wildboar.linear_model._kernel_logistic" title="Permalink to this headline">#</a></h1>
+<span id="wildboar-linear-model-kernel-logistic"></span><h1><a class="reference internal" href="#module-wildboar.linear_model._kernel_logistic" title="wildboar.linear_model._kernel_logistic"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model._kernel_logistic</span></code></a><a class="headerlink" href="#module-wildboar.linear_model._kernel_logistic" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">#</a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression" title="wildboar.linear_model._kernel_logistic.KernelLogisticRegression"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KernelLogisticRegression</span></code></a></p></td>
 <td><p>A simple kernel logistic implementation using a Nystroem kernel approximation</p></td>
@@ -318,12 +313,12 @@
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit the model according to the given training data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vector, where <cite>n_samples</cite> is the number of samples and
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – Training vector, where <cite>n_samples</cite> is the number of samples and
 <cite>n_features</cite> is the number of features.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target vector relative to X.</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>) </em><em>default=None</em>) – <p>Array of weights that are assigned to individual samples.
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – Target vector relative to X.</p></li>
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>) </em><em>default=None</em>) – <p>Array of weights that are assigned to individual samples.
 If not provided, then each sample is given unit weight.</p>
 <div class="versionadded">
 <p><span class="versionmodified added">New in version 0.17: </span><em>sample_weight</em> support to LogisticRegression.</p>
@@ -331,10 +326,10 @@ If not provided, then each sample is given unit weight.</p>
 </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted estimator.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>self</p>
 </dd>
 </dl>
@@ -349,15 +344,15 @@ If not provided, then each sample is given unit weight.</p>
 <p>The confidence score for a sample is proportional to the signed
 distance of that sample to the hyperplane.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data matrix for which we want to get the confidence scores.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The data matrix for which we want to get the confidence scores.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>scores</strong> – Confidence scores per <cite>(n_samples, n_classes)</cite> combination. In the
 binary case, confidence score for <cite>self.classes_[1]</cite> where &gt;0 means
 this class would be predicted.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples,) or (n_samples, n_classes)</p>
 </dd>
 </dl>
@@ -388,9 +383,7 @@ this class would be predicted.</p>
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -411,9 +404,9 @@ this class would be predicted.</p>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model._kernel_logistic</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
-<li><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression">KernelLogisticRegression</a><ul>
-<li><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.decision_function">decision_function</a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.fit"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.linear_model._kernel_logistic.KernelLogisticRegression.decision_function"><code class="docutils literal notranslate"><span class="pre">KernelLogisticRegression.decision_function()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -433,9 +426,8 @@ this class would be predicted.</p>
   </div>
 </div>
 <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>
 </html>

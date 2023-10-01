@@ -1,18 +1,17 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.09.29"/>
-        <title>wildboar.ensemble._ensemble - Wildboar 1.0.13.dev9 documentation</title>
+    <!-- Generated with Sphinx 6.0.0 and Furo 2022.12.07 -->
+        <title>wildboar.ensemble._ensemble - Wildboar 1.0.13.dev10 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=d81277517bee4d6b0349d71bb2661d4890b5617c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.5fd3999ee7762ccc51105388f4a9d115.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-dropdown.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -139,7 +138,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.0.13.dev9 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.0.13.dev10 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -166,7 +165,7 @@
         <small>1.0</small></span>
     
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -279,17 +278,13 @@
         </div>
         <article role="main">
           <section id="module-wildboar.ensemble._ensemble">
-<span id="wildboar-ensemble-ensemble"></span><h1><a class="reference internal" href="#module-wildboar.ensemble._ensemble" title="wildboar.ensemble._ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble._ensemble</span></code></a><a class="headerlink" href="#module-wildboar.ensemble._ensemble" title="Permalink to this headline">#</a></h1>
+<span id="wildboar-ensemble-ensemble"></span><h1><a class="reference internal" href="#module-wildboar.ensemble._ensemble" title="wildboar.ensemble._ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble._ensemble</span></code></a><a class="headerlink" href="#module-wildboar.ensemble._ensemble" title="Permalink to this heading">#</a></h1>
 <section id="module-contents">
-<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">#</a></h2>
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
 <section id="classes">
-<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">#</a></h3>
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this heading">#</a></h3>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestMixin" title="wildboar.ensemble._ensemble.ShapeletForestMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletForestMixin</span></code></a></p></td>
 <td><p></p></td>
@@ -354,14 +349,14 @@ instead.</p>
 the highest mean predicted probability. If base estimators do not
 implement a <code class="docutils literal notranslate"><span class="pre">predict_proba</span></code> method, then it resorts to voting.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>y</strong> – The predicted classes.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
 </dd>
 </dl>
@@ -378,15 +373,15 @@ method, then it resorts to voting and the predicted class probabilities
 of an input sample represents the proportion of estimators predicting
 each class.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>p</strong> – The class probabilities of the input samples. The order of the
 classes corresponds to that in the attribute <span class="xref std std-term">classes_</span>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples, n_classes)</p>
 </dd>
 </dl>
@@ -400,15 +395,15 @@ classes corresponds to that in the attribute <span class="xref std std-term">cla
 the log of the mean predicted class probabilities of the base
 estimators in the ensemble.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>p</strong> – The class log-probabilities of the input samples. The order of the
 classes corresponds to that in the attribute <span class="xref std std-term">classes_</span>.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples, n_classes)</p>
 </dd>
 </dl>
@@ -471,14 +466,14 @@ instead.</p>
 <p>The predicted regression target of an input sample is computed as the
 mean predicted regression targets of the estimators in the ensemble.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>y</strong> – The predicted values.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>ndarray of shape (n_samples,)</p>
 </dd>
 </dl>
@@ -566,7 +561,7 @@ coding of a time series with as many ones as trees in the forest.</p>
 <span class="sig-name descname"><span class="pre">offset_</span></span><a class="headerlink" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.offset_" title="Permalink to this definition">#</a></dt>
 <dd><p>The offset for computing the final decision</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -603,21 +598,21 @@ coding of a time series with as many ones as trees in the forest.</p>
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.fit" title="Permalink to this definition">#</a></dt>
 <dd><p>Build a Bagging ensemble of estimators from the training set (X, y).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix} of shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
+<li><p><strong>X</strong> (<em>{array-like</em><em>, </em><em>sparse matrix}</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>, </em><em>n_features</em><em>)</em>) – The training input samples. Sparse matrices are accepted only if
 they are supported by the base estimator.</p></li>
-<li><p><strong>y</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
+<li><p><strong>y</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em>) – The target values (class labels in classification, real numbers in
 regression).</p></li>
-<li><p><strong>sample_weight</strong> (<em>array-like of shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
+<li><p><strong>sample_weight</strong> (<em>array-like</em><em> of </em><em>shape</em><em> (</em><em>n_samples</em><em>,</em><em>)</em><em>, </em><em>default=None</em>) – Sample weights. If None, then samples are equally weighted.
 Note that this is supported only if the base estimator supports
 sample weighting.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>self</strong> – Fitted estimator.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>object</p>
 </dd>
 </dl>
@@ -663,9 +658,7 @@ sample weighting.</p></li>
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -686,39 +679,39 @@ sample weighting.</p></li>
 <li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble._ensemble</span></code></a><ul>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#classes">Classes</a><ul>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestMixin">ShapeletForestMixin</a><ul>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestMixin.apply">apply</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestMixin.decision_function">decision_function</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestMixin"><code class="docutils literal notranslate"><span class="pre">ShapeletForestMixin</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestMixin.apply"><code class="docutils literal notranslate"><span class="pre">ShapeletForestMixin.apply()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestMixin.decision_function"><code class="docutils literal notranslate"><span class="pre">ShapeletForestMixin.decision_function()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier">BaseShapeletForestClassifier</a><ul>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.predict">predict</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.predict_proba">predict_proba</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.predict_log_proba">predict_log_proba</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.predict"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestClassifier.predict()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.predict_proba"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestClassifier.predict_proba()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.predict_log_proba"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestClassifier.predict_log_proba()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestClassifier.fit"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestClassifier.fit()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestClassifier">ShapeletForestClassifier</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ExtraShapeletTreesClassifier">ExtraShapeletTreesClassifier</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestRegressor">BaseShapeletForestRegressor</a><ul>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestRegressor.predict">predict</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestRegressor.fit">fit</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestClassifier"><code class="docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ExtraShapeletTreesClassifier"><code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreesClassifier</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestRegressor"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestRegressor</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestRegressor.predict"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestRegressor.predict()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.BaseShapeletForestRegressor.fit"><code class="docutils literal notranslate"><span class="pre">BaseShapeletForestRegressor.fit()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestRegressor">ShapeletForestRegressor</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ExtraShapeletTreesRegressor">ExtraShapeletTreesRegressor</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding">ShapeletForestEmbedding</a><ul>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit_transform">fit_transform</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.transform">transform</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestRegressor"><code class="docutils literal notranslate"><span class="pre">ShapeletForestRegressor</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ExtraShapeletTreesRegressor"><code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreesRegressor</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.fit_transform"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding.fit_transform()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.ShapeletForestEmbedding.transform"><code class="docutils literal notranslate"><span class="pre">ShapeletForestEmbedding.transform()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest">IsolationShapeletForest</a><ul>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.offset_">offset_</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.fit">fit</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.predict">predict</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.decision_function">decision_function</a></li>
-<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.score_samples">score_samples</a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.offset_"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.offset_</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.fit"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.fit()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.predict"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.predict()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.decision_function"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.decision_function()</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble._ensemble.IsolationShapeletForest.score_samples"><code class="docutils literal notranslate"><span class="pre">IsolationShapeletForest.score_samples()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -738,9 +731,8 @@ sample weighting.</p></li>
   </div>
 </div>
 <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/scripts/furo.js"></script>
     </body>
 </html>
