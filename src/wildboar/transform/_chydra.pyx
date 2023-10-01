@@ -194,11 +194,8 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
         feature.dim = dim
         return 0
 
-    # NOTE: feature.feature will be NULL if we have called
-    # `init_persistent_feature` which has moved ownership to the persistent
-    # feature.
     cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
-        return 0
+        return self.free_persistent_feature(feature)
 
     cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
         cdef Hydra *hydra
@@ -206,7 +203,6 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
             hydra = <Hydra*> feature.feature
             if hydra.kernels != NULL:
                 free(hydra.kernels)
-                hydra.kernels = NULL
             free(feature.feature)
             feature.feature = NULL
         return 0 
@@ -221,7 +217,7 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
     ) noexcept nogil:
         persistent.dim = transient.dim
         persistent.feature = transient.feature
-        # transient.feature = NULL
+        transient.feature = NULL
         return 0
 
     cdef object persistent_feature_to_object(self, Feature *feature):
