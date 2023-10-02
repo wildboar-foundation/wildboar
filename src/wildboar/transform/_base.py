@@ -9,14 +9,14 @@ from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ..base import BaseEstimator
 from ..utils.validation import _check_ts_array
-from ._cfeature_transform import (
-    feature_transform_fit,
-    feature_transform_fit_transform,
-    feature_transform_transform,
+from ._attribute_transform import (
+    fit,
+    fit_transform,
+    transform,
 )
 
 
-class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
+class BaseAttributeTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta):
     """
     Base feature engineer transform.
 
@@ -67,13 +67,13 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
 
         Returns
         -------
-        BaseFeatureEngineerTransform
+        BaseAttributeTransform
             This object.
         """
         self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
-        self.embedding_ = feature_transform_fit(
-            self._get_feature_engineer(x.shape[0]),
+        self.embedding_ = fit(
+            self._get_generator(x.shape[0]),
             _check_ts_array(x),
             check_random_state(self.random_state),
         )
@@ -96,9 +96,7 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         """
         check_is_fitted(self, attributes="embedding_")
         x = self._validate_data(x, reset=False, allow_3d=True, dtype=np.double)
-        return feature_transform_transform(
-            self.embedding_, _check_ts_array(x), self.n_jobs
-        )
+        return transform(self.embedding_, _check_ts_array(x), self.n_jobs)
 
     def fit_transform(self, x, y=None):
         """
@@ -119,8 +117,8 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         """
         self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
-        embedding, x_out = feature_transform_fit_transform(
-            self._get_feature_engineer(x.shape[0]),
+        embedding, x_out = fit_transform(
+            self._get_generator(x.shape[0]),
             _check_ts_array(x),
             check_random_state(self.random_state),
             self.n_jobs,
@@ -129,5 +127,5 @@ class BaseFeatureEngineerTransform(TransformerMixin, BaseEstimator, metaclass=AB
         return x_out
 
     @abstractmethod
-    def _get_feature_engineer(self, n_samples):
+    def _get_generator(self, n_samples):
         pass

@@ -14,89 +14,89 @@ from numpy cimport uint32_t
 from ..utils cimport TSArray
 
 
-cdef class FeatureEngineer:
+cdef class AttributeGenerator:
 
     cdef int reset(self, TSArray X) noexcept nogil:
         return 0
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return -1
 
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_features(X)
+        return self.get_n_attributess(X)
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
         self,
-        Py_ssize_t feature_id,
+        Py_ssize_t attribute_id,
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
-        Feature *transient,
+        Attribute *transient,
         uint32_t *seed,
     ) noexcept nogil:
         return -1
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
+    cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
         return -1
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
+    cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
         return -1
 
-    cdef Py_ssize_t init_persistent_feature(
+    cdef Py_ssize_t init_persistent(
         self, 
         TSArray X,
-        Feature *transient, 
-        Feature *persistent
+        Attribute *transient, 
+        Attribute *persistent
     ) noexcept nogil:
         return 0
 
-    cdef double transient_feature_value(
+    cdef double transient_value(
         self,
-        Feature *feature,
+        Attribute *attribute,
         TSArray X,
         Py_ssize_t sample
     ) noexcept nogil:
         return NAN
 
-    cdef double persistent_feature_value(
+    cdef double persistent_value(
         self,
-        Feature *feature,
+        Attribute *attribute,
         TSArray X,
         Py_ssize_t sample
     ) noexcept nogil:
         return NAN
 
-    cdef Py_ssize_t transient_feature_fill(
+    cdef Py_ssize_t transient_fill(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
-        Py_ssize_t out_feature,
+        Py_ssize_t out_attribute,
     ) noexcept nogil:
         return -1
 
-    cdef Py_ssize_t persistent_feature_fill(
+    cdef Py_ssize_t persistent_fill(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
-        Py_ssize_t out_feature,
+        Py_ssize_t out_attribute,
     ) noexcept nogil:
         return -1
 
-    cdef object persistent_feature_to_object(self, Feature *feature):
+    cdef object persistent_to_object(self, Attribute *attribute):
         return None
 
-    cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
+    cdef Py_ssize_t persistent_from_object(self, object object, Attribute *attribute):
         return 0
 
-    cdef void transient_feature_values(
+    cdef void transient_values(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
@@ -104,11 +104,11 @@ cdef class FeatureEngineer:
     ) noexcept nogil:
         cdef Py_ssize_t i
         for i in range(n_samples):
-            values[i] = self.transient_feature_value(feature, X, samples[i])
+            values[i] = self.transient_value(attribute, X, samples[i])
     
-    cdef void persistent_feature_values(
+    cdef void persistent_values(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
@@ -116,4 +116,4 @@ cdef class FeatureEngineer:
     ) noexcept nogil:
         cdef Py_ssize_t i
         for i in range(n_samples):
-            values[i] = self.persistent_feature_value(feature, X, samples[i])
+            values[i] = self.persistent_value(attribute, X, samples[i])

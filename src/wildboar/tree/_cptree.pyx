@@ -537,7 +537,7 @@ cdef class UniformPivotSampler(PivotSampler):
 
 cdef class TreeBuilder:
 
-    cdef Py_ssize_t n_features
+    cdef Py_ssize_t n_attributes
     cdef Py_ssize_t max_depth
     cdef Py_ssize_t min_samples_split
     cdef Py_ssize_t min_samples_leaf
@@ -571,14 +571,14 @@ cdef class TreeBuilder:
         Criterion criterion,
         Tree tree,
         object random_state,
-        Py_ssize_t n_features=1,
+        Py_ssize_t n_attributes=1,
         Py_ssize_t max_depth=2**10,
         Py_ssize_t min_samples_split=2,
         Py_ssize_t min_samples_leaf=1,
         double min_impurity_decrease=0.0
     ):
         self.max_depth = max_depth
-        self.n_features = n_features
+        self.n_attributes = n_attributes
         self.min_samples_split = min_samples_split
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
@@ -770,7 +770,7 @@ cdef class TreeBuilder:
             split.child_impurity = <double*> malloc(sizeof(double) * self.criterion.n_labels)
             best_impurity = -INFINITY
             # TODO: we should not stop until a split with improvement is found.
-            for _ in range(self.n_features):
+            for _ in range(self.n_attributes):
                 pivot_index = 0
                 for label in range(self.criterion.n_labels):
                     if self.criterion.label_count[label] > 0:

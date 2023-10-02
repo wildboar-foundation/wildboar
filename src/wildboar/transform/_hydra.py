@@ -2,8 +2,8 @@ import numbers
 
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ._base import BaseFeatureEngineerTransform
-from ._chydra import HydraFeatureEngineer, NormalKernelSampler
+from ._base import BaseAttributeTransform
+from ._chydra import HydraAttributeGenerator, NormalKernelSampler
 
 _SAMPLING_METHOD = {
     "normal": NormalKernelSampler,
@@ -19,9 +19,9 @@ class HydraMixin:
         "sampling_params": [dict, None],
     }
 
-    def _get_feature_engineer(self, n_samples):
+    def _get_generator(self, n_samples):
         sampling_params = {} if self.sampling_params is None else self.sampling_params
-        return HydraFeatureEngineer(
+        return HydraAttributeGenerator(
             self.n_groups,
             self.n_kernels,
             self.kernel_size,
@@ -29,7 +29,7 @@ class HydraMixin:
         )
 
 
-class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
+class HydraTransform(HydraMixin, BaseAttributeTransform):
     """
     A Dictionary based method using convolutional kernels.
 
@@ -106,7 +106,7 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
 
     _parameter_constraints: dict = {
         **HydraMixin._parameter_constraints,
-        **BaseFeatureEngineerTransform._parameter_constraints,
+        **BaseAttributeTransform._parameter_constraints,
     }
 
     def __init__(

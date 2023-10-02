@@ -292,7 +292,10 @@ class PAA(TransformerMixin, BaseEstimator):
     def intervals(self):
         return [
             (start, start + length)
-            for (_, (start, length, _)) in self.interval_transform_.embedding_.features
+            for (
+                _,
+                (start, length, _),
+            ) in self.interval_transform_.embedding_.attributes
         ]
 
 

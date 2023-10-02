@@ -9,10 +9,10 @@ from sklearn.utils._param_validation import Interval, StrOptions
 
 from ..distance import _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
-from ._base import BaseFeatureEngineerTransform
+from ._base import BaseAttributeTransform
 from ._cshapelet import (
-    RandomMultiMetricShapeletFeatureEngineer,
-    RandomShapeletFeatureEngineer,
+    RandomMultiMetricShapeletAttributeGenerator,
+    RandomShapeletAttributeGenerator,
 )
 
 
@@ -38,7 +38,7 @@ class ShapeletMixin:
         ],
     }
 
-    def _get_feature_engineer(self, n_samples):
+    def _get_generator(self, n_samples):
         if self.min_shapelet_size > self.max_shapelet_size:
             raise ValueError(
                 f"The min_shapelet_size parameter of {type(self).__qualname__} "
@@ -77,7 +77,7 @@ class ShapeletMixin:
 
         if isinstance(self.metric, str):
             metric_params = self.metric_params if self.metric_params is not None else {}
-            return RandomShapeletFeatureEngineer(
+            return RandomShapeletAttributeGenerator(
                 _SUBSEQUENCE_METRICS[self.metric](**metric_params),
                 min_shapelet_size,
                 max_shapelet_size,
@@ -85,7 +85,7 @@ class ShapeletMixin:
             )
         else:
             metrics, weights = make_subsequence_metrics(self.metric)
-            return RandomMultiMetricShapeletFeatureEngineer(
+            return RandomMultiMetricShapeletAttributeGenerator(
                 max(1, n_shapelets),
                 min_shapelet_size,
                 max_shapelet_size,
@@ -94,7 +94,7 @@ class ShapeletMixin:
             )
 
 
-class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
+class RandomShapeletTransform(ShapeletMixin, BaseAttributeTransform):
     """
     Random shapelet tranform.
 
@@ -170,7 +170,7 @@ class RandomShapeletTransform(ShapeletMixin, BaseFeatureEngineerTransform):
 
     _parameter_constraints: dict = {
         **ShapeletMixin._parameter_constraints,
-        **BaseFeatureEngineerTransform._parameter_constraints,
+        **BaseAttributeTransform._parameter_constraints,
     }
 
     def __init__(

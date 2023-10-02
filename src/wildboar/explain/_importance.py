@@ -753,7 +753,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         )
 
     def _yield_components(self):
-        for _dim, (_, shapelet) in self.shapelet_transform_.embedding_.features:
+        for _dim, (_, shapelet) in self.shapelet_transform_.embedding_.attributes:
             yield shapelet
 
     def _permute_component(self, X, component, random_state):

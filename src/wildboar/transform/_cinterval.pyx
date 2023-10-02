@@ -16,7 +16,7 @@ from numpy cimport uint32_t
 from ..utils cimport TSArray, _stats
 from ..utils._misc cimport to_ndarray_double
 from ..utils._rand cimport RAND_R_MAX, rand_int, shuffle
-from ._feature cimport Feature, FeatureEngineer
+from ._attr_gen cimport Attribute, AttributeGenerator
 from .catch22 cimport _catch22
 
 
@@ -269,7 +269,7 @@ cdef inline Py_ssize_t _imin(Py_ssize_t a, Py_ssize_t b) noexcept nogil:
     return a if a < b else b
 
 
-cdef class IntervalFeatureEngineer(FeatureEngineer):
+cdef class IntervalAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_intervals
     cdef Summarizer summarizer
 
@@ -284,135 +284,135 @@ cdef class IntervalFeatureEngineer(FeatureEngineer):
         self.summarizer.reset(X)
         return 0
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return X.shape[1] * self.n_intervals
 
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_features(X) * self.summarizer.n_outputs()
+        return self.get_n_attributess(X) * self.summarizer.n_outputs()
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
             self,
-            Py_ssize_t feature_id,
+            Py_ssize_t attribute_id,
             TSArray X,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
-            Feature *transient,
+            Attribute *transient,
             uint32_t *seed,
     ) noexcept nogil:
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
         interval.length = X.shape[2] // self.n_intervals
-        interval.start = (feature_id % self.n_intervals) * interval.length + _imin(
-            feature_id % self.n_intervals, X.shape[2] % self.n_intervals
+        interval.start = (attribute_id % self.n_intervals) * interval.length + _imin(
+            attribute_id % self.n_intervals, X.shape[2] % self.n_intervals
         )
 
-        if feature_id % self.n_intervals < X.shape[2] % self.n_intervals:
+        if attribute_id % self.n_intervals < X.shape[2] % self.n_intervals:
             interval.length += 1
 
         interval.random_output = 0
         if self.summarizer.n_outputs() > 1:
             interval.random_output = rand_int(0, self.summarizer.n_outputs(), seed)
 
-        transient.dim = feature_id // self.n_intervals
-        transient.feature = interval
+        transient.dim = attribute_id // self.n_intervals
+        transient.attribute = interval
         return 0
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
-        if feature.feature != NULL:
-            free(feature.feature)
+    cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
+        if attribute.attribute != NULL:
+            free(attribute.attribute)
         return 0
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
-        if feature.feature != NULL:
-            free(feature.feature)
+    cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
+        if attribute.attribute != NULL:
+            free(attribute.attribute)
         return 0
 
-    cdef Py_ssize_t init_persistent_feature(
+    cdef Py_ssize_t init_persistent(
             self,
             TSArray X,
-            Feature *transient,
-            Feature *persistent
+            Attribute *transient,
+            Attribute *persistent
     ) noexcept nogil:
-        cdef Interval *from_interval = <Interval*> transient.feature
+        cdef Interval *from_interval = <Interval*> transient.attribute
         cdef Interval *to_interval = <Interval*> malloc(sizeof(Interval))
         to_interval.start = from_interval.start
         to_interval.length = from_interval.length
         to_interval.random_output = from_interval.random_output
         persistent.dim = transient.dim
-        persistent.feature = to_interval
+        persistent.attribute = to_interval
         return 0
 
-    cdef double transient_feature_value(
+    cdef double transient_value(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample
     ) noexcept nogil:
-        cdef Interval *interval = <Interval*> feature.feature
+        cdef Interval *interval = <Interval*> attribute.attribute
         return self.summarizer.summarize(
             interval.random_output,
-            &X[sample, feature.dim, interval.start],
+            &X[sample, attribute.dim, interval.start],
             interval.length,
         )
 
-    cdef double persistent_feature_value(
+    cdef double persistent_value(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample
     ) noexcept nogil:
-        return self.transient_feature_value(feature, X, sample)
+        return self.transient_value(attribute, X, sample)
 
-    cdef Py_ssize_t transient_feature_fill(
+    cdef Py_ssize_t transient_fill(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample,
             double[:, :] out,
             Py_ssize_t out_sample,
-            Py_ssize_t out_feature,
+            Py_ssize_t out_attribute,
     ) noexcept nogil:
         cdef Py_ssize_t n_summarizers = self.summarizer.n_outputs()
-        cdef Interval *interval = <Interval*> feature.feature
+        cdef Interval *interval = <Interval*> attribute.attribute
         self.summarizer.summarize_all(
-            &X[sample, feature.dim, interval.start],
+            &X[sample, attribute.dim, interval.start],
             interval.length,
-            &out[out_sample, out_feature * n_summarizers], # TODO: non-contig
+            &out[out_sample, out_attribute * n_summarizers], # TODO: non-contig
         )
         return 0
 
-    cdef Py_ssize_t persistent_feature_fill(
+    cdef Py_ssize_t persistent_fill(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample,
             double[:, :] out,
             Py_ssize_t out_sample,
-            Py_ssize_t out_feature,
+            Py_ssize_t out_attribute,
     ) noexcept nogil:
-        return self.transient_feature_fill(
-            feature, X, sample, out, out_sample, out_feature
+        return self.transient_fill(
+            attribute, X, sample, out, out_sample, out_attribute
         )
 
-    cdef object persistent_feature_to_object(self, Feature *feature):
-        cdef Interval *interval = <Interval*> feature.feature
-        return feature.dim, (interval.start, interval.length, interval.random_output)
+    cdef object persistent_to_object(self, Attribute *attribute):
+        cdef Interval *interval = <Interval*> attribute.attribute
+        return attribute.dim, (interval.start, interval.length, interval.random_output)
 
-    cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
+    cdef Py_ssize_t persistent_from_object(self, object object, Attribute *attribute):
         dim, (start, length, random_output) = object
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
         interval.start = start
         interval.length = length
         interval.random_output = random_output
 
-        feature.dim = dim
-        feature.feature = interval
+        attribute.dim = dim
+        attribute.attribute = interval
         return 0
 
 
-cdef class RandomFixedIntervalFeatureEngineer(IntervalFeatureEngineer):
+cdef class RandomFixedIntervalAttributeGenerator(IntervalAttributeGenerator):
 
     cdef Py_ssize_t n_random_interval
-    cdef Py_ssize_t *random_feature_id
+    cdef Py_ssize_t *random_attribute_id
 
     def __cinit__(
             self,
@@ -421,32 +421,32 @@ cdef class RandomFixedIntervalFeatureEngineer(IntervalFeatureEngineer):
             Py_ssize_t n_random_interval
     ):
         self.n_random_interval = n_random_interval
-        self.random_feature_id = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * n_intervals)
+        self.random_attribute_id = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * n_intervals)
         cdef Py_ssize_t i
         for i in range(n_intervals):
-            self.random_feature_id[i] = i
+            self.random_attribute_id[i] = i
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return X.shape[1] * self.n_random_interval
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
             self,
-            Py_ssize_t feature_id,
+            Py_ssize_t attribute_id,
             TSArray X,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
-            Feature *transient,
+            Attribute *transient,
             uint32_t *seed,
     ) noexcept nogil:
-        # reshuffle the feature_ids for each dimension
-        if feature_id % self.n_random_interval == 0:
-            shuffle(self.random_feature_id, self.n_intervals, seed)
+        # reshuffle the attribute_ids for each dimension
+        if attribute_id % self.n_random_interval == 0:
+            shuffle(self.random_attribute_id, self.n_intervals, seed)
 
-        # we need to rescale the feature_id for the correct dimension
-        cdef Py_ssize_t padding = feature_id // self.n_random_interval + 1
-        return IntervalFeatureEngineer.next_feature(
+        # we need to rescale the attribute_id for the correct dimension
+        cdef Py_ssize_t padding = attribute_id // self.n_random_interval + 1
+        return IntervalAttributeGenerator.next_attribute(
             self,
-            self.random_feature_id[feature_id] * padding,
+            self.random_attribute_id[attribute_id] * padding,
             X,
             samples,
             n_samples,
@@ -458,7 +458,7 @@ cdef class RandomFixedIntervalFeatureEngineer(IntervalFeatureEngineer):
         return self.__class__, (self.n_intervals, self.summarizer, self.n_random_interval)
 
 
-cdef class RandomIntervalFeatureEngineer(IntervalFeatureEngineer):
+cdef class RandomIntervalAttributeGenerator(IntervalAttributeGenerator):
 
     cdef Py_ssize_t min_length
     cdef Py_ssize_t max_length
@@ -481,16 +481,16 @@ cdef class RandomIntervalFeatureEngineer(IntervalFeatureEngineer):
             self.max_length,
         )
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return self.n_intervals
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
             self,
-            Py_ssize_t feature_id,
+            Py_ssize_t attribute_id,
             TSArray X,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
-            Feature *transient,
+            Attribute *transient,
             uint32_t *seed,
     ) noexcept nogil:
         cdef Interval *interval = <Interval*> malloc(sizeof(Interval))
@@ -505,5 +505,5 @@ cdef class RandomIntervalFeatureEngineer(IntervalFeatureEngineer):
         if X.shape[1] > 1:
             transient.dim = rand_int(1, X.shape[1], seed)
 
-        transient.feature = interval
+        transient.attribute = interval
         return 0

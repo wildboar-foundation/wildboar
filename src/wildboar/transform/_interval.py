@@ -7,15 +7,15 @@ import warnings
 
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ._base import BaseFeatureEngineerTransform
+from ._base import BaseAttributeTransform
 from ._cinterval import (
     Catch22Summarizer,
-    IntervalFeatureEngineer,
+    IntervalAttributeGenerator,
     MeanSummarizer,
     MeanVarianceSlopeSummarizer,
     PyFuncSummarizer,
-    RandomFixedIntervalFeatureEngineer,
-    RandomIntervalFeatureEngineer,
+    RandomFixedIntervalAttributeGenerator,
+    RandomIntervalAttributeGenerator,
     SlopeSummarizer,
     VarianceSummarizer,
 )
@@ -34,7 +34,7 @@ class IntervalMixin:
     """
     Mixin for interval based estimators.
 
-    It provides an implementation for the `_get_feature_engineer` method
+    It provides an implementation for the `_get_generator` method
     which supports interval based transformation.
 
     The implementing class must have the following properties:
@@ -71,7 +71,7 @@ class IntervalMixin:
         "summarizer": [StrOptions(_SUMMARIZER.keys()), list],
     }
 
-    def _get_feature_engineer(self, n_samples):  # noqa: PLR0912
+    def _get_generator(self, n_samples):  # noqa: PLR0912
         if isinstance(self.summarizer, list):
             if not all(callable(func) for func in self.summarizer):
                 raise ValueError(
@@ -100,9 +100,9 @@ class IntervalMixin:
             n_intervals = math.ceil(self.n_intervals * self.n_timesteps_in_)
 
         if self.intervals == "fixed":
-            return IntervalFeatureEngineer(n_intervals, summarizer)
+            return IntervalAttributeGenerator(n_intervals, summarizer)
         elif self.intervals == "sample":
-            return RandomFixedIntervalFeatureEngineer(
+            return RandomFixedIntervalAttributeGenerator(
                 n_intervals, summarizer, math.floor(self.sample_size * n_intervals)
             )
         else:  # "random"
@@ -123,12 +123,12 @@ class IntervalMixin:
                 else:
                     min_size = 2
 
-            return RandomIntervalFeatureEngineer(
+            return RandomIntervalAttributeGenerator(
                 n_intervals, summarizer, min_size, max_size
             )
 
 
-class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
+class IntervalTransform(IntervalMixin, BaseAttributeTransform):
     """
     Embed a time series as a collection of features per interval.
 
@@ -210,7 +210,7 @@ class IntervalTransform(IntervalMixin, BaseFeatureEngineerTransform):
 
     _parameter_constraints: dict = {
         **IntervalMixin._parameter_constraints,
-        **BaseFeatureEngineerTransform._parameter_constraints,
+        **BaseAttributeTransform._parameter_constraints,
     }
 
     def __init__(

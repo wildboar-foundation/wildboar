@@ -12,7 +12,7 @@ from libc.string cimport memset
 
 from numpy cimport uint32_t
 
-from ._feature cimport Feature, FeatureEngineer
+from ._attr_gen cimport Attribute, AttributeGenerator
 
 from ..utils cimport TSArray
 from ..utils._rand cimport rand_normal
@@ -79,7 +79,7 @@ cdef inline Py_ssize_t _max_exponent(
     return max_exponent
 
   
-cdef class HydraFeatureEngineer(FeatureEngineer):
+cdef class HydraAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_kernels
     cdef Py_ssize_t kernel_size
     cdef Py_ssize_t n_groups
@@ -132,25 +132,25 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
         self.max_values = <double*> malloc(sizeof(double) * self.n_kernels)
         self.min_values = <double*> malloc(sizeof(double) * self.n_kernels)
    
-    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return self.n_groups
 
     # Each timeseries is represented by:
     #   n_groups * n_kernels * max_exponent * 2 (soft_max, hard_min) * 2 (X, diff(X))
-    # features.
+    # attributes.
     #
     # TODO: implement support for diff(X)
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
         cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.kernel_size)
-        return self.get_n_features(X) * max_exponent * self.n_kernels * 2 * 1 # soft_max and hard_min and (TODO) X and diff(X)
+        return self.get_n_attributess(X) * max_exponent * self.n_kernels * 2 * 1 # soft_max and hard_min and (TODO) X and diff(X)
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
         self,
-        Py_ssize_t feature_id,
+        Py_ssize_t attribute_id,
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
-        Feature *transient,
+        Attribute *transient,
         uint32_t *seed
     ) noexcept nogil:
         cdef Hydra *hydra = <Hydra*> malloc(sizeof(Hydra))
@@ -174,11 +174,11 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
         hydra.kernels = kernels
 
         transient.dim = 0
-        transient.feature = hydra
+        transient.attribute = hydra
         return 0 
    
     # Restore a Hydra group from a numpy array
-    cdef Py_ssize_t persistent_feature_from_object(self, object obj, Feature *feature):
+    cdef Py_ssize_t persistent_from_object(self, object obj, Attribute *attribute):
         dim, array = obj
         cdef Hydra *hydra = <Hydra*> malloc(sizeof(Hydra))
 
@@ -190,77 +190,77 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
         for i in range(array.shape[0]):
             hydra.kernels[i] = array[i]
 
-        feature.feature = hydra
-        feature.dim = dim
+        attribute.attribute = hydra
+        attribute.dim = dim
         return 0
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
-        return self.free_persistent_feature(feature)
+    cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
+        return self.free_persistent(attribute)
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
+    cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
         cdef Hydra *hydra
-        if feature.feature != NULL:
-            hydra = <Hydra*> feature.feature
+        if attribute.attribute != NULL:
+            hydra = <Hydra*> attribute.attribute
             if hydra.kernels != NULL:
                 free(hydra.kernels)
-            free(feature.feature)
-            feature.feature = NULL
+            free(attribute.attribute)
+            attribute.attribute = NULL
         return 0 
 
-    # NOTE: We move ownership of the feature here to a persistent feature, which will
-    # be freed by `free_persistent_feature`.
-    cdef Py_ssize_t init_persistent_feature(
+    # NOTE: We move ownership of the attribute here to a persistent attribute, which will
+    # be freed by `free_persistent`.
+    cdef Py_ssize_t init_persistent(
         self, 
         TSArray X,
-        Feature *transient, 
-        Feature *persistent
+        Attribute *transient, 
+        Attribute *persistent
     ) noexcept nogil:
         persistent.dim = transient.dim
-        persistent.feature = transient.feature
-        transient.feature = NULL
+        persistent.attribute = transient.attribute
+        transient.attribute = NULL
         return 0
 
-    cdef object persistent_feature_to_object(self, Feature *feature):
+    cdef object persistent_to_object(self, Attribute *attribute):
         cdef Py_ssize_t i
-        cdef Hydra *hydra = <Hydra*> feature.feature
+        cdef Hydra *hydra = <Hydra*> attribute.attribute
         cdef n = hydra.n_kernels * hydra.kernel_size
         data = np.empty(n, dtype=float)
         for i in range(n):
             data[i] = hydra.kernels[i]
 
-        return feature.dim, data
+        return attribute.dim, data
 
-    cdef double transient_feature_value(
-        self, Feature *feature, TSArray X, Py_ssize_t sample
+    cdef double transient_value(
+        self, Attribute *attribute, TSArray X, Py_ssize_t sample
     ) noexcept nogil:
        return 0 # TODO
 
-    cdef double persistent_feature_value(
-        self, Feature *feature, TSArray X, Py_ssize_t sample
+    cdef double persistent_value(
+        self, Attribute *attribute, TSArray X, Py_ssize_t sample
     ) noexcept nogil:
-        return self.transient_feature_value(feature, X, sample)
+        return self.transient_value(attribute, X, sample)
 
-    cdef Py_ssize_t transient_feature_fill(
+    cdef Py_ssize_t transient_fill(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
-        Py_ssize_t feature_id,
+        Py_ssize_t attribute_id,
     ) noexcept nogil:
         cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.kernel_size)
         cdef Py_ssize_t i, exponent, padding, dilation
-        cdef Py_ssize_t kernel_feature_offset
+        cdef Py_ssize_t kernel_attribute_offset
 
         cdef Py_ssize_t min_index, max_index
         cdef double min_value, max_value
 
-        cdef Hydra *hydra = <Hydra*> feature.feature
+        cdef Hydra *hydra = <Hydra*> attribute.attribute
 
-        # Place the pointer inside correct feature group, as given by feature_id
-        cdef Py_ssize_t feature_offset = (
-            feature_id * self.n_kernels * max_exponent * 2
+        # Place the pointer inside correct attribute group, as given by attribute_id
+        cdef Py_ssize_t attribute_offset = (
+            attribute_id * self.n_kernels * max_exponent * 2
         )
 
         # Hydra (2023), D (transform, Line 5)
@@ -278,7 +278,7 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
                     0.0,
                     hydra.kernels + i * self.kernel_size,
                     self.kernel_size,
-                    &X[sample, feature.dim, 0],
+                    &X[sample, attribute.dim, 0],
                     X.shape[2],
                     self.conv_values + i * X.shape[2],
                 )
@@ -305,7 +305,7 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
                 self.min_values[min_index] += 1
                 self.max_values[max_index] += max_value
            
-            # We allocate each feature to an array with the following layout,
+            # We allocate each attribute to an array with the following layout,
             # self.n_kernels * self.max_exponent * 2:
             #
             #        d=0            d=1
@@ -315,28 +315,28 @@ cdef class HydraFeatureEngineer(FeatureEngineer):
             # f=0 f=1 f=0 f=1 f=0 f=1 f=0 f=1
             # --- --- --- --- --- --- --- ---
             #
-            # With self.n_groups such groups (one for each feature_id)
+            # With self.n_groups such groups (one for each attribute_id)
             #
             # Here we move the pointer to first kernel of the d:th dilation
             # making sure that we account for the fact that each kernel
-            # is descrived by two features.
-            kernel_feature_offset = feature_offset + exponent * self.n_kernels * 2 
+            # is descrived by two attributes.
+            kernel_attribute_offset = attribute_offset + exponent * self.n_kernels * 2 
             for i in range(self.n_kernels):
-                # NOTE: *2 is the number of features (min/max)
-                out[out_sample, kernel_feature_offset + i * 2] = self.min_values[i]
-                out[out_sample, kernel_feature_offset + i * 2 + 1] = self.max_values[i]
+                # NOTE: *2 is the number of attributes (min/max)
+                out[out_sample, kernel_attribute_offset + i * 2] = self.min_values[i]
+                out[out_sample, kernel_attribute_offset + i * 2 + 1] = self.max_values[i]
             
-    cdef Py_ssize_t persistent_feature_fill(
+    cdef Py_ssize_t persistent_fill(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
-        Py_ssize_t out_feature,
+        Py_ssize_t out_attribute,
     ) noexcept nogil:
-        return self.transient_feature_fill(
-            feature, X, sample, out, out_sample, out_feature
+        return self.transient_fill(
+            attribute, X, sample, out, out_sample, out_attribute
         )
 
 cdef void find_min_max(

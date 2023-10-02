@@ -9,14 +9,14 @@ from ..transform._pivot import PivotMixin
 from ..transform._rocket import RocketMixin
 from ..transform._shapelet import ShapeletMixin
 from ..tree._ctree import (
-    DynamicTreeFeatureEngineer,
+    DynamicTreeAttributeGenerator,
     EntropyCriterion,
     ExtraTreeBuilder,
     GiniCriterion,
     MSECriterion,
     Tree,
+    TreeAttributeGenerator,
     TreeBuilder,
-    TreeFeatureEngineer,
 )
 from ..utils.validation import check_option
 from ._base import BaseTree, BaseTreeClassifier, BaseTreeRegressor
@@ -26,18 +26,16 @@ REG_CRITERION = {"squared_error": MSECriterion}
 
 
 class FeatureTreeMixin:
-    def _wrap_feature_engineer(self, feature_engineer):
-        return TreeFeatureEngineer(feature_engineer)
+    def _wrap_generator(self, generator):
+        return TreeAttributeGenerator(generator)
 
     def _fit(self, x, y, sample_weights, max_depth, random_state):
-        feature_engineer = self._wrap_feature_engineer(
-            self._get_feature_engineer(self.n_timesteps_in_)
-        )
+        generator = self._wrap_generator(self._get_generator(self.n_timesteps_in_))
         tree_builder = self._get_tree_builder(
             x,
             y,
             sample_weights,
-            feature_engineer,
+            generator,
             random_state,
             max_depth,
         )
@@ -54,15 +52,15 @@ class BaseFeatureTreeRegressor(FeatureTreeMixin, BaseTreeRegressor):
     }
 
     def _get_tree_builder(
-        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+        self, x, y, sample_weights, generator, random_state, max_depth
     ):
         Criterion = REG_CRITERION[self.criterion]
         return TreeBuilder(
             x,
             sample_weights,
-            feature_engineer,
+            generator,
             Criterion(y),
-            Tree(feature_engineer, 1),
+            Tree(generator, 1),
             random_state,
             max_depth=max_depth,
             min_sample_split=self.min_samples_split,
@@ -85,15 +83,15 @@ class BaseFeatureTreeClassifier(FeatureTreeMixin, BaseTreeClassifier):
     }
 
     def _get_tree_builder(
-        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+        self, x, y, sample_weights, generator, random_state, max_depth
     ):
         Criterion = CLF_CRITERION[self.criterion]
         return TreeBuilder(
             x,
             sample_weights,
-            feature_engineer,
+            generator,
             Criterion(y, self.n_classes_),
-            Tree(feature_engineer, self.n_classes_),
+            Tree(generator, self.n_classes_),
             random_state,
             max_depth=max_depth,
             min_sample_split=self.min_samples_split,
@@ -105,14 +103,14 @@ class BaseFeatureTreeClassifier(FeatureTreeMixin, BaseTreeClassifier):
 class DynamicTreeMixin:
     _parameter_constraints: dict = {"alpha": [float, None]}
 
-    def _wrap_feature_engineer(self, feature_engineer):
+    def _wrap_generator(self, generator):
         if hasattr(self, "alpha") and self.alpha is not None:
             if self.alpha == 0.0:
                 raise ValueError("alpha == 0.0, must be != 0")
 
-            return DynamicTreeFeatureEngineer(feature_engineer, self.alpha)
+            return DynamicTreeAttributeGenerator(generator, self.alpha)
 
-        return TreeFeatureEngineer(feature_engineer)
+        return TreeAttributeGenerator(generator)
 
 
 class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegressor):
@@ -318,15 +316,15 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
         )
 
     def _get_tree_builder(
-        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+        self, x, y, sample_weights, generator, random_state, max_depth
     ):
         Criterion = check_option(REG_CRITERION, self.criterion, "criterion")
         return ExtraTreeBuilder(
             x,
             sample_weights,
-            feature_engineer,
+            generator,
             Criterion(y),
-            Tree(feature_engineer, 1),
+            Tree(generator, 1),
             random_state,
             max_depth=max_depth,
             min_sample_split=self.min_samples_split,
@@ -542,15 +540,15 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
         )
 
     def _get_tree_builder(
-        self, x, y, sample_weights, feature_engineer, random_state, max_depth
+        self, x, y, sample_weights, generator, random_state, max_depth
     ):
         Criterion = check_option(CLF_CRITERION, self.criterion, "criterion")
         return ExtraTreeBuilder(
             x,
             sample_weights,
-            feature_engineer,
+            generator,
             Criterion(y, self.n_classes_),
-            Tree(feature_engineer, self.n_classes_),
+            Tree(generator, self.n_classes_),
             random_state,
             max_depth=max_depth,
             min_sample_split=self.min_samples_split,

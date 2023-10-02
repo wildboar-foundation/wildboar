@@ -12,8 +12,8 @@ from ..distance import _METRICS
 from ..distance._multi_metric import make_metrics
 from ..utils._rand import RandomSampler
 from ..utils.validation import check_option
-from ._base import BaseFeatureEngineerTransform
-from ._cpivot import PivotFeatureEngineer
+from ._base import BaseAttributeTransform
+from ._cpivot import PivotAttributeGenerator
 
 _METRIC_NAMES = set(_METRICS.keys())
 _METRIC_NAMES.add("auto")
@@ -30,7 +30,7 @@ class PivotMixin:
         "metric_sample": [StrOptions({"uniform", "weighted"}), None],
     }
 
-    def _get_feature_engineer(self, n_samples):
+    def _get_generator(self, n_samples):
         if isinstance(self.metric, str) and self.metric == "auto":
             metric_specs = [
                 ("euclidean", None),
@@ -73,12 +73,12 @@ class PivotMixin:
         if self.metric_sample is None or self.metric_sample == "uniform":
             weights = None
 
-        return PivotFeatureEngineer(
+        return PivotAttributeGenerator(
             self.n_pivots, metrics, RandomSampler(len(metrics), weights)
         )
 
 
-class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
+class PivotTransform(PivotMixin, BaseAttributeTransform):
     """
     A transform using pivot time series and sampled distance metrics.
 
@@ -116,7 +116,7 @@ class PivotTransform(PivotMixin, BaseFeatureEngineerTransform):
 
     _parameter_constraints: dict = {
         **PivotMixin._parameter_constraints,
-        **BaseFeatureEngineerTransform._parameter_constraints,
+        **BaseAttributeTransform._parameter_constraints,
     }
 
     def __init__(

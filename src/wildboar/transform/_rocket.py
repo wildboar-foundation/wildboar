@@ -6,10 +6,10 @@ import numbers
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ._base import BaseFeatureEngineerTransform
+from ._base import BaseAttributeTransform
 from ._crocket import (
     NormalKernelSampler,
-    RocketFeatureEngineer,
+    RocketAttributeGenerator,
     ShapeletKernelSampler,
     UniformKernelSampler,
 )
@@ -25,7 +25,7 @@ class RocketMixin:
     """
     Mixin for ROCKET based estimators.
 
-    The class provides an implementation for the `_get_feature_engineer` method
+    The class provides an implementation for the `_get_generator` method
     with support for rocket convolution.
 
     The implementing class must have the following properties:
@@ -64,7 +64,7 @@ class RocketMixin:
         "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
     }
 
-    def _get_feature_engineer(self, n_samples):
+    def _get_generator(self, n_samples):
         if self.min_size is not None or self.max_size is not None:
             if self.kernel_size is not None:
                 raise ValueError(
@@ -98,7 +98,7 @@ class RocketMixin:
 
         KernelSampler = _SAMPLING_METHOD[self.sampling]
         sampling_params = {} if self.sampling_params is None else self.sampling_params
-        return RocketFeatureEngineer(
+        return RocketAttributeGenerator(
             self.n_kernels,
             KernelSampler(**sampling_params),
             kernel_size,
@@ -108,7 +108,7 @@ class RocketMixin:
         )
 
 
-class RocketTransform(RocketMixin, BaseFeatureEngineerTransform):
+class RocketTransform(RocketMixin, BaseAttributeTransform):
     """
     Transform a time series using random convolution features.
 
@@ -196,7 +196,7 @@ class RocketTransform(RocketMixin, BaseFeatureEngineerTransform):
 
     _parameter_constraints: dict = {
         **RocketMixin._parameter_constraints,
-        **BaseFeatureEngineerTransform._parameter_constraints,
+        **BaseAttributeTransform._parameter_constraints,
     }
 
     def __init__(

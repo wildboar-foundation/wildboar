@@ -47,7 +47,7 @@ def iseos(x):
     if isneginf.any():
         # TODO(1.4)
         warnings.warn(
-            "Using -np.inf as eos has been deprecated in 1.3 and support will "
+            "Using -np.inf as eos has been deprecated in 1.2 and support will "
             "be removed in 1.4. Use wildboar.utils.variable_len.is_end_of_series",
             DeprecationWarning,
         )

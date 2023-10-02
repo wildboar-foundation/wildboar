@@ -20,13 +20,13 @@ from ..distance._distance cimport Metric
 
 from ..distance import _METRICS
 
-from ..transform._feature cimport Feature, FeatureEngineer
+from ..transform._attr_gen cimport Attribute, AttributeGenerator
 from ..utils cimport TSArray
 from ..utils._misc cimport List, argsort, safe_realloc
 from ..utils._rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
-cdef double FEATURE_THRESHOLD = 1e-7
+cdef double ATTRIBUTE_THRESHOLD = 1e-7
 
 
 cdef struct SplitPoint:
@@ -35,116 +35,116 @@ cdef struct SplitPoint:
     double impurity_improvement
     double impurity_left
     double impurity_right
-    Feature feature
+    Attribute attribute
 
 
-cdef class TreeFeatureEngineer:
-    cdef FeatureEngineer feature_engineer
+cdef class TreeAttributeGenerator:
+    cdef AttributeGenerator generator
 
-    def __init__(self, FeatureEngineer feature_engineer):
-        self.feature_engineer = feature_engineer
+    def __init__(self, AttributeGenerator generator):
+        self.generator = generator
     
     def __reduce__(self):
-        return self.__class__, (self.feature_engineer, )
+        return self.__class__, (self.generator, )
 
     cdef int reset(self, TSArray X) noexcept nogil:
-        return self.feature_engineer.reset(X)
+        return self.generator.reset(X)
 
-    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) noexcept nogil:
-        return self.feature_engineer.get_n_features(X)
+    cdef Py_ssize_t get_n_attributess(self, TSArray X, Py_ssize_t depth) noexcept nogil:
+        return self.generator.get_n_attributess(X)
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
         self,
-        Py_ssize_t feature_id,
+        Py_ssize_t attribute_id,
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
-        Feature *transient,
+        Attribute *transient,
         uint32_t *seed
     ) noexcept nogil:
-        return self.feature_engineer.next_feature(
-            feature_id, X, samples, n_samples, transient, seed
+        return self.generator.next_attribute(
+            attribute_id, X, samples, n_samples, transient, seed
         )
 
-    cdef Py_ssize_t init_persistent_feature(
+    cdef Py_ssize_t init_persistent(
         self, 
         TSArray X,
-        Feature *transient, 
-        Feature *persistent
+        Attribute *transient, 
+        Attribute *persistent
     ) noexcept nogil:
-        return self.feature_engineer.init_persistent_feature(X, transient, persistent)
+        return self.generator.init_persistent(X, transient, persistent)
     
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
-        return self.feature_engineer.free_transient_feature(feature)
+    cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
+        return self.generator.free_transient(attribute)
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
-        return self.feature_engineer.free_persistent_feature(feature)
+    cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
+        return self.generator.free_persistent(attribute)
 
-    cdef double transient_feature_value(
+    cdef double transient_value(
         self,
-        Feature *feature,
+        Attribute *attribute,
         TSArray X,
         Py_ssize_t sample
     ) noexcept nogil:
-        return self.feature_engineer.transient_feature_value(feature, X, sample)
+        return self.generator.transient_value(attribute, X, sample)
 
-    cdef double persistent_feature_value(
+    cdef double persistent_value(
         self,
-        Feature *feature,
+        Attribute *attribute,
         TSArray X,
         Py_ssize_t sample
     ) noexcept nogil:
-        return self.feature_engineer.persistent_feature_value(feature, X, sample)
+        return self.generator.persistent_value(attribute, X, sample)
     
-    cdef void transient_feature_values(
+    cdef void transient_values(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil:
-        self.feature_engineer.transient_feature_values(
-            feature, X, samples, n_samples, values
+        self.generator.transient_values(
+            attribute, X, samples, n_samples, values
         )
     
-    cdef void persistent_feature_values(
+    cdef void persistent_values(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil:
-        self.feature_engineer.persistent_feature_values(
-            feature, X, samples, n_samples, values
+        self.generator.persistent_values(
+            attribute, X, samples, n_samples, values
         )
 
-    cdef object persistent_feature_to_object(self, Feature *feature):
-        return self.feature_engineer.persistent_feature_to_object(feature)
+    cdef object persistent_to_object(self, Attribute *attribute):
+        return self.generator.persistent_to_object(attribute)
 
-    cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
-        return self.feature_engineer.persistent_feature_from_object(object, feature)
+    cdef Py_ssize_t persistent_from_object(self, object object, Attribute *attribute):
+        return self.generator.persistent_from_object(object, attribute)
 
 
-cdef class DynamicTreeFeatureEngineer(TreeFeatureEngineer):
+cdef class DynamicTreeAttributeGenerator(TreeAttributeGenerator):
 
     cdef double alpha
 
-    def __init__(self, FeatureEngineer feature_engineer, double alpha):
-        super().__init__(feature_engineer)
+    def __init__(self, AttributeGenerator generator, double alpha):
+        super().__init__(generator)
         self.alpha = alpha
 
     def __reduce__(self):
-        return self.__class__, (self.feature_engineer, self.alpha)
+        return self.__class__, (self.generator, self.alpha)
 
-    cdef Py_ssize_t get_n_features(self, TSArray X, Py_ssize_t depth) noexcept nogil:
-        cdef Py_ssize_t n_features = self.feature_engineer.get_n_features(X)
+    cdef Py_ssize_t get_n_attributess(self, TSArray X, Py_ssize_t depth) noexcept nogil:
+        cdef Py_ssize_t n_attributes = self.generator.get_n_attributess(X)
         cdef double weight = 1.0 - exp(-fabs(self.alpha) * depth)
         if self.alpha < 0:
             weight = 1 - weight
         
-        return <Py_ssize_t> max(1, ceil(n_features * weight))
+        return <Py_ssize_t> max(1, ceil(n_attributes * weight))
 
 
 cdef class Criterion:
@@ -444,10 +444,10 @@ cdef class MSECriterion(RegressionCriterion):
         right[0] -= (self.sum_right / self.weighted_n_right) ** 2
 
 cpdef Tree _make_tree(
-    TreeFeatureEngineer feature_engineer,
+    TreeAttributeGenerator generator,
     Py_ssize_t n_labels,
     Py_ssize_t max_depth,
-    list features,
+    list attributes,
     object threshold,
     object value,
     object left,
@@ -456,23 +456,23 @@ cpdef Tree _make_tree(
     object n_node_samples,
     object n_weighted_node_samples
 ):
-    cdef Tree tree = Tree(feature_engineer, n_labels, capacity=len(features) + 1)
+    cdef Tree tree = Tree(generator, n_labels, capacity=len(attributes) + 1)
     tree._max_depth = max_depth
-    cdef Py_ssize_t node_count = len(features)
+    cdef Py_ssize_t node_count = len(attributes)
     cdef Py_ssize_t i
     cdef Py_ssize_t dim
     cdef object arr
-    cdef Feature *feature
+    cdef Attribute *attribute
     cdef object value_reshape = value.reshape(-1)
 
     tree._node_count = node_count
     for i in range(node_count):
-        if features[i] is not None:
-            feature = <Feature*> malloc(sizeof(Feature))
-            feature_engineer.persistent_feature_from_object(features[i], feature)
-            tree._features[i] = feature
+        if attributes[i] is not None:
+            attribute = <Attribute*> malloc(sizeof(Attribute))
+            generator.persistent_from_object(attributes[i], attribute)
+            tree._attributes[i] = attribute
         else:
-            tree._features[i] = NULL
+            tree._attributes[i] = NULL
         tree._thresholds[i] = threshold[i]
         tree._left[i] = left[i]
         tree._right[i] = right[i]
@@ -487,7 +487,7 @@ cpdef Tree _make_tree(
 
 cdef class Tree:
 
-    cdef TreeFeatureEngineer feature_engineer
+    cdef TreeAttributeGenerator generator
 
     cdef Py_ssize_t _max_depth
     cdef Py_ssize_t _capacity
@@ -496,7 +496,7 @@ cdef class Tree:
     cdef Py_ssize_t _node_count
     cdef Py_ssize_t *_left
     cdef Py_ssize_t *_right
-    cdef Feature **_features
+    cdef Attribute **_attributes
     cdef double *_thresholds
     cdef double *_impurity
     cdef double *_values
@@ -505,15 +505,15 @@ cdef class Tree:
 
     def __cinit__(
         self,
-        TreeFeatureEngineer feature_engineer,
+        TreeAttributeGenerator generator,
         Py_ssize_t n_labels,
         Py_ssize_t capacity=10
     ):
-        self.feature_engineer = feature_engineer
+        self.generator = generator
         self._node_count = 0
         self._capacity = capacity
         self._n_labels = n_labels
-        self._features = <Feature**> malloc(self._capacity * sizeof(Feature*))
+        self._attributes = <Attribute**> malloc(self._capacity * sizeof(Attribute*))
         self._thresholds = <double*> malloc(self._capacity * sizeof(double))
         self._values = <double*> malloc(self._capacity * self._n_labels * sizeof(double))
         self._left = <Py_ssize_t*> malloc(self._capacity * sizeof(Py_ssize_t))
@@ -524,12 +524,12 @@ cdef class Tree:
 
     def __dealloc__(self):
         cdef Py_ssize_t i
-        if self._features != NULL:
+        if self._attributes != NULL:
             for i in range(self._node_count):
-                if self._features[i] != NULL:
-                    self.feature_engineer.free_persistent_feature(self._features[i])
-                    free(self._features[i])
-            free(self._features)
+                if self._attributes[i] != NULL:
+                    self.generator.free_persistent(self._attributes[i])
+                    free(self._attributes[i])
+            free(self._attributes)
 
         if self._thresholds != NULL:
             free(self._thresholds)
@@ -554,10 +554,10 @@ cdef class Tree:
 
     def __reduce__(self):
         return _make_tree, (
-            self.feature_engineer,
+            self.generator,
             self._n_labels,
             self._max_depth,
-            self.feature,
+            self.attribute,
             self.threshold,
             self.value,
             self.left,
@@ -580,19 +580,28 @@ cdef class Tree:
         return arr.reshape(self._node_count, self._n_labels)
 
     @property
-    def feature(self):
+    def attribute(self):
         cdef Py_ssize_t i, j
-        cdef Feature* feature
+        cdef Attribute* attribute
         cdef object object
         cdef list ret = []
         for i in range(self._node_count):
-            feature = self._features[i]
-            if feature != NULL:
-                object = self.feature_engineer.persistent_feature_to_object(feature)
+            attribute = self._attributes[i]
+            if attribute != NULL:
+                object = self.generator.persistent_to_object(attribute)
                 ret.append(object)
             else:
                 ret.append(None)
         return ret
+
+    @property
+    def feature(self):
+        import warnings
+        warnings.warn(
+            "`feature` has been renamed to `attribute` in 1.2 and will be removed in 1.4",
+            DeprecationWarning, 
+        )
+        return self.attribute
 
     @property
     def n_node_samples(self):
@@ -648,21 +657,21 @@ cdef class Tree:
 
     def apply(self, TSArray X):
         cdef Py_ssize_t[:] out = np.zeros((X.shape[0],), dtype=np.intp)
-        cdef Feature *feature
-        cdef double threshold, feature_value
+        cdef Attribute *attribute
+        cdef double threshold, attribute_value
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
         with nogil:
-            self.feature_engineer.reset(X)
+            self.generator.reset(X)
             for i in range(X.shape[0]):
                 node_index = 0
                 while self._left[node_index] != -1:
                     threshold = self._thresholds[node_index]
-                    feature = self._features[node_index]
-                    feature_value = self.feature_engineer.persistent_feature_value(
-                        feature, X, i
+                    attribute = self._attributes[node_index]
+                    attribute_value = self.generator.persistent_value(
+                        attribute, X, i
                     )
-                    if feature_value <= threshold:
+                    if attribute_value <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
@@ -675,20 +684,20 @@ cdef class Tree:
         cdef Py_ssize_t[:, :] out = np.zeros((X.shape[0], self.node_count), dtype=np.intp)
         cdef Py_ssize_t node_index
         cdef Py_ssize_t i
-        cdef Feature *feature
-        cdef double threshold, feature_value
+        cdef Attribute *attribute
+        cdef double threshold, attribute_value
         with nogil:
-            self.feature_engineer.reset(X)
+            self.generator.reset(X)
             for i in range(X.shape[0]):
                 node_index = 0
                 while self._left[node_index] != -1:
                     out[i, node_index] = 1
                     threshold = self._thresholds[node_index]
-                    feature = self._features[node_index]
-                    feature_value = self.feature_engineer.persistent_feature_value(
-                        feature, X, i
+                    attribute = self._attributes[node_index]
+                    attribute_value = self.generator.persistent_value(
+                        attribute, X, i
                     )
-                    if feature_value <= threshold:
+                    if attribute_value <= threshold:
                         node_index = self._left[node_index]
                     else:
                         node_index = self._right[node_index]
@@ -721,7 +730,7 @@ cdef class Tree:
         self._left[node_id] = -1
         self._right[node_id] = -1
         self._impurity[node_id] = -1
-        self._features[node_id] = NULL
+        self._attributes[node_id] = NULL
         self._node_count += 1
         return node_id
 
@@ -739,7 +748,7 @@ cdef class Tree:
         bint is_left,
         Py_ssize_t n_node_samples,
         double n_weighted_node_samples,
-        Feature *feature,
+        Attribute *attribute,
         double threshold,
         double impurity,
     ) noexcept nogil:
@@ -752,7 +761,7 @@ cdef class Tree:
         self._n_node_samples[node_id] = n_node_samples
         self._n_weighted_node_samples[node_id] = n_weighted_node_samples
         self._thresholds[node_id] = threshold
-        self._features[node_id] = feature
+        self._attributes[node_id] = attribute
         if parent != -1:
             if is_left:
                 self._left[parent] = node_id
@@ -765,7 +774,7 @@ cdef class Tree:
     cdef Py_ssize_t _increase_capacity(self) noexcept nogil:
         cdef Py_ssize_t new_capacity = self._node_count * 2
         cdef Py_ssize_t ret
-        ret = safe_realloc(<void**> &self._features, sizeof(Feature*) * new_capacity)
+        ret = safe_realloc(<void**> &self._attributes, sizeof(Attribute*) * new_capacity)
         if ret == -1:
             return -1
 
@@ -826,10 +835,10 @@ cdef class TreeBuilder:
     # temporary buffer of samples from 0, ..., n_samples
     cdef Py_ssize_t *samples_buffer
 
-    # temporary buffer for feature computations
-    cdef double *feature_buffer
+    # temporary buffer for attribute computations
+    cdef double *attribute_buffer
 
-    cdef TreeFeatureEngineer feature_engineer
+    cdef TreeAttributeGenerator generator
     cdef Criterion criterion
     cdef Tree tree
     cdef uint32_t random_seed
@@ -838,7 +847,7 @@ cdef class TreeBuilder:
         self,
         TSArray X,
         const double[:] sample_weights,
-        TreeFeatureEngineer feature_engineer,
+        TreeAttributeGenerator generator,
         Criterion criterion,
         Tree tree,
         object random_state,
@@ -854,7 +863,7 @@ cdef class TreeBuilder:
         self.random_seed = random_state.randint(0, RAND_R_MAX)
 
         self.X = X
-        self.feature_engineer = feature_engineer
+        self.generator = generator
         self.criterion = criterion
         self.tree = tree
 
@@ -862,11 +871,11 @@ cdef class TreeBuilder:
         self.n_samples = self.X.shape[0]
         self.samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.n_samples)
         self.samples_buffer = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * self.n_samples)
-        self.feature_buffer = <double*> malloc(sizeof(double) * self.n_samples)
+        self.attribute_buffer = <double*> malloc(sizeof(double) * self.n_samples)
 
         if (
             self.samples == NULL or
-            self.feature_buffer == NULL or
+            self.attribute_buffer == NULL or
             self.samples_buffer == NULL
         ):
             raise MemoryError()
@@ -889,7 +898,7 @@ cdef class TreeBuilder:
     def __dealloc__(self):
         free(self.samples)
         free(self.samples_buffer)
-        free(self.feature_buffer)
+        free(self.attribute_buffer)
 
     @property
     def tree_(self):
@@ -899,7 +908,7 @@ cdef class TreeBuilder:
         cdef Py_ssize_t root_node_id
         cdef Py_ssize_t max_depth = 0
         with nogil:
-            self.feature_engineer.reset(self.X)
+            self.generator.reset(self.X)
             root_node_id = self._build_tree(
                 0,
                 self.n_samples,
@@ -930,7 +939,7 @@ cdef class TreeBuilder:
         Py_ssize_t start,
         Py_ssize_t end,
         SplitPoint sp,
-        Feature *persistent_feature,
+        Attribute *persistent,
         Py_ssize_t parent,
         bint is_left,
     ) noexcept nogil:
@@ -940,7 +949,7 @@ cdef class TreeBuilder:
             is_left,
             end - start,
             self.criterion.weighted_n_total,
-            persistent_feature,
+            persistent,
             sp.threshold,
             sp.impurity_improvement,
         )
@@ -1000,7 +1009,7 @@ cdef class TreeBuilder:
 
         cdef SplitPoint split = self._split(start, end, depth, impurity)
 
-        cdef Feature *persistent_feature
+        cdef Attribute *persistent
         cdef Py_ssize_t current_node_id
         cdef Py_ssize_t err
         is_leaf = (
@@ -1009,17 +1018,17 @@ cdef class TreeBuilder:
             or split.impurity_improvement <= self.min_impurity_decrease
         )
         if not is_leaf:
-            # The persistent feature is freed by the Tree
-            persistent_feature = <Feature*> malloc(sizeof(Feature))
-            err = self.feature_engineer.init_persistent_feature(
-                self.X, &split.feature, persistent_feature
+            # The persistent attribute is freed by the Tree
+            persistent = <Attribute*> malloc(sizeof(Attribute))
+            err = self.generator.init_persistent(
+                self.X, &split.attribute, persistent
             )
-            self.feature_engineer.free_transient_feature(&split.feature)
+            self.generator.free_transient(&split.attribute)
             if err == -1:
                 return -1
 
             current_node_id = self.new_branch_node(
-                start, end, split, persistent_feature, parent, is_left
+                start, end, split, persistent, parent, is_left
             )
             self._build_tree(
                 start,
@@ -1055,13 +1064,13 @@ cdef class TreeBuilder:
         cdef double current_threshold
         cdef double current_impurity
         cdef double best_impurity
-        cdef Feature current_feature
+        cdef Attribute current_attribute
 
         n_samples = end - start
 
         best_impurity = -INFINITY
 
-        current_feature.feature = NULL
+        current_attribute.attribute = NULL
         current_impurity = -INFINITY
         current_threshold = NAN
         current_split_point = 0
@@ -1069,32 +1078,32 @@ cdef class TreeBuilder:
         cdef SplitPoint best
         best.threshold = NAN
         best.split_point = 0
-        best.feature.feature = NULL
+        best.attribute.attribute = NULL
 
-        for i in range(self.feature_engineer.get_n_features(self.X, depth)):
-            self.feature_engineer.next_feature(
+        for i in range(self.generator.get_n_attributess(self.X, depth)):
+            self.generator.next_attribute(
                 i, 
                 self.X, 
                 self.samples + start, 
                 n_samples, 
-                &current_feature, 
+                &current_attribute, 
                 &self.random_seed
             )
             
-            self.feature_engineer.transient_feature_values(
-                &current_feature,
+            self.generator.transient_values(
+                &current_attribute,
                 self.X,
                 self.samples + start,
                 end - start,
-                self.feature_buffer + start,
+                self.attribute_buffer + start,
             )
-            argsort(self.feature_buffer + start, self.samples + start, n_samples)
+            argsort(self.attribute_buffer + start, self.samples + start, n_samples)
 
-            # All feature values are constant
-            if self.feature_buffer[end - 1] <= self.feature_buffer[start] + FEATURE_THRESHOLD:
+            # All attribute values are constant
+            if self.attribute_buffer[end - 1] <= self.attribute_buffer[start] + ATTRIBUTE_THRESHOLD:
                 continue
 
-            self._partition_feature_buffer(
+            self._partition_attribute_buffer(
                 start, end, &current_split_point, &current_threshold, &current_impurity
             )
             if current_impurity > best_impurity:
@@ -1108,12 +1117,12 @@ cdef class TreeBuilder:
 
                 best.split_point = current_split_point
                 best.threshold = current_threshold
-                if best.feature.feature != NULL:
-                    self.feature_engineer.free_transient_feature(&best.feature)
+                if best.attribute.attribute != NULL:
+                    self.generator.free_transient(&best.attribute)
 
-                best.feature = current_feature
+                best.attribute = current_attribute
             else:
-                self.feature_engineer.free_transient_feature(&current_feature)
+                self.generator.free_transient(&current_attribute)
 
         # restore the best order to `samples`
         memcpy(
@@ -1133,7 +1142,7 @@ cdef class TreeBuilder:
         )
         return best
 
-    cdef void _partition_feature_buffer(
+    cdef void _partition_attribute_buffer(
         self,
         Py_ssize_t start,
         Py_ssize_t end,
@@ -1154,10 +1163,10 @@ cdef class TreeBuilder:
         pos = start
         i = start
         while i < end:
-            # Ignore split points with almost equal feature value
+            # Ignore split points with almost equal attribute value
             while i + 1 < end and (
-                self.feature_buffer[i + 1]
-                <= self.feature_buffer[i] + FEATURE_THRESHOLD
+                self.attribute_buffer[i + 1]
+                <= self.attribute_buffer[i] + ATTRIBUTE_THRESHOLD
             ):
                 i += 1
 
@@ -1170,20 +1179,20 @@ cdef class TreeBuilder:
                 if impurity > best_impurity[0]:
                     best_impurity[0] = impurity
                     best_threshold[0] = (
-                        self.feature_buffer[i - 1] / 2.0 + self.feature_buffer[i] / 2.0
+                        self.attribute_buffer[i - 1] / 2.0 + self.attribute_buffer[i] / 2.0
                     )
                     best_split_point[0] = pos
 
                     if (
-                        best_threshold[0] == self.feature_buffer[i]
+                        best_threshold[0] == self.attribute_buffer[i]
                         or best_threshold[0] == INFINITY
                         or best_threshold[0] == -INFINITY
                     ):
-                        best_threshold[0] = self.feature_buffer[i - 1]
+                        best_threshold[0] = self.attribute_buffer[i - 1]
 
 cdef class ExtraTreeBuilder(TreeBuilder):
 
-    cdef void _partition_feature_buffer(
+    cdef void _partition_attribute_buffer(
         self,
         Py_ssize_t start,
         Py_ssize_t end,
@@ -1191,16 +1200,16 @@ cdef class ExtraTreeBuilder(TreeBuilder):
         double *threshold,
         double *impurity,
     ) noexcept nogil:
-        cdef double min_feature = self.feature_buffer[start + 1]
-        cdef double max_feature = self.feature_buffer[end - 1]
+        cdef double min_attribute = self.attribute_buffer[start + 1]
+        cdef double max_attribute = self.attribute_buffer[end - 1]
         cdef double rand_threshold = rand_uniform(
-            min_feature, max_feature, &self.random_seed
+            min_attribute, max_attribute, &self.random_seed
         )
         cdef Py_ssize_t i
 
         split_point[0] = start
         for i in range(start + 1, end - 1):
-            if self.feature_buffer[i] <= rand_threshold:
+            if self.attribute_buffer[i] <= rand_threshold:
                 split_point[0] = i
             else:
                 break

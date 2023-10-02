@@ -16,7 +16,7 @@ from numpy cimport uint32_t
 from ..utils cimport TSArray
 from ..utils._misc cimport to_ndarray_int
 from ..utils._rand cimport rand_int, rand_normal, rand_uniform
-from ._feature cimport Feature, FeatureEngineer
+from ._attr_gen cimport Attribute, AttributeGenerator
 
 
 cdef struct Rocket:
@@ -129,7 +129,7 @@ cdef class ShapeletKernelSampler(KernelSampler):
         mean[0] /= length
 
 
-cdef class RocketFeatureEngineer(FeatureEngineer):
+cdef class RocketAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_kernels
     cdef KernelSampler weight_sampler
     cdef double padding_prob
@@ -173,19 +173,19 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
     def __dealloc__(self):
         free(self.kernel_size)
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return self.n_kernels
 
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_features(X) * 2
+        return self.get_n_attributess(X) * 2
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
         self,
-        Py_ssize_t feature_id,
+        Py_ssize_t attribute_id,
         TSArray X, 
         Py_ssize_t *samples, 
         Py_ssize_t n_samples,
-        Feature *transient,
+        Attribute *transient,
         uint32_t *seed
     ) noexcept nogil:
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
@@ -221,42 +221,42 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         else:
             transient.dim = 0
 
-        transient.feature = rocket
+        transient.attribute = rocket
         return 0
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
-        return self.free_persistent_feature(feature)
+    cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
+        return self.free_persistent(attribute)
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
+    cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
         cdef Rocket *rocket
-        if feature.feature != NULL:
-            rocket = <Rocket*> feature.feature
+        if attribute.attribute != NULL:
+            rocket = <Rocket*> attribute.attribute
             if rocket.weight != NULL:
                 free(rocket.weight)
-            free(feature.feature)
-            feature.feature = NULL
+            free(attribute.attribute)
+            attribute.attribute = NULL
         return 0
 
-    # NOTE: We move ownership of `transient.feature` to `persistent.feature`.
-    cdef Py_ssize_t init_persistent_feature(
+    # NOTE: We move ownership of `transient.attribute` to `persistent.attribute`.
+    cdef Py_ssize_t init_persistent(
         self, 
         TSArray X,
-        Feature *transient, 
-        Feature *persistent
+        Attribute *transient, 
+        Attribute *persistent
     ) noexcept nogil:
         persistent.dim = transient.dim
-        persistent.feature = transient.feature
-        transient.feature = NULL
+        persistent.attribute = transient.attribute
+        transient.attribute = NULL
         return 0
 
-    cdef double transient_feature_value(
+    cdef double transient_value(
         self,
-        Feature *feature,
+        Attribute *attribute,
         TSArray X,
         Py_ssize_t sample
     ) noexcept nogil:
         cdef double mean_val, max_val
-        cdef Rocket* rocket = <Rocket*> feature.feature
+        cdef Rocket* rocket = <Rocket*> attribute.attribute
         
         # TODO: (1.3) use utils._cconv.convolution_1d
         apply_convolution(
@@ -265,7 +265,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             rocket.bias,
             rocket.weight,
             rocket.length,
-            &X[sample, feature.dim, 0],
+            &X[sample, attribute.dim, 0],
             X.shape[2],
             &mean_val,
             &max_val,
@@ -275,63 +275,63 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         else:
             return max_val
 
-    cdef double persistent_feature_value(
+    cdef double persistent_value(
         self,
-        Feature *feature,
+        Attribute *attribute,
         TSArray X,
         Py_ssize_t sample
     ) noexcept nogil:
-        return self.transient_feature_value(feature, X, sample)
+        return self.transient_value(attribute, X, sample)
 
-    cdef Py_ssize_t transient_feature_fill(
+    cdef Py_ssize_t transient_fill(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
-        Py_ssize_t feature_id,
+        Py_ssize_t attribute_id,
     ) noexcept nogil:
         cdef double mean_val, max_val
-        cdef Rocket* rocket = <Rocket*> feature.feature
+        cdef Rocket* rocket = <Rocket*> attribute.attribute
         apply_convolution(
             rocket.dilation,
             rocket.padding,
             rocket.bias,
             rocket.weight,
             rocket.length,
-            &X[sample, feature.dim, 0],
+            &X[sample, attribute.dim, 0],
             X.shape[2],
             &mean_val,
             &max_val,
         )
-        cdef Py_ssize_t feature_offset = feature_id * 2
-        out[out_sample, feature_offset] = mean_val
-        out[out_sample, feature_offset + 1] = max_val
+        cdef Py_ssize_t attribute_offset = attribute_id * 2
+        out[out_sample, attribute_offset] = mean_val
+        out[out_sample, attribute_offset + 1] = max_val
         return 0
 
-    cdef Py_ssize_t persistent_feature_fill(
+    cdef Py_ssize_t persistent_fill(
         self, 
-        Feature *feature, 
+        Attribute *attribute, 
         TSArray X, 
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
-        Py_ssize_t out_feature,
+        Py_ssize_t out_attribute,
     ) noexcept nogil:
-        return self.transient_feature_fill(
-            feature, X, sample, out, out_sample, out_feature
+        return self.transient_fill(
+            attribute, X, sample, out, out_sample, out_attribute
         )
 
-    cdef object persistent_feature_to_object(self, Feature *feature):
+    cdef object persistent_to_object(self, Attribute *attribute):
         cdef Py_ssize_t j
-        cdef Rocket *rocket = <Rocket*> feature.feature
+        cdef Rocket *rocket = <Rocket*> attribute.attribute
 
         weights = np.empty(rocket.length, dtype=float)
         for j in range(rocket.length):
             weights[j] = rocket.weight[j]
 
-        return feature.dim, (
+        return attribute.dim, (
             rocket.length,
             rocket.dilation,
             rocket.padding,
@@ -340,7 +340,7 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
             rocket.return_mean
         )
 
-    cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
+    cdef Py_ssize_t persistent_from_object(self, object object, Attribute *attribute):
         dim, (length, dilation, padding, weight, bias, return_mean) = object
 
         cdef Rocket *rocket = <Rocket*> malloc(sizeof(Rocket))
@@ -355,8 +355,8 @@ cdef class RocketFeatureEngineer(FeatureEngineer):
         for i in range(length):
             rocket.weight[i] = weight[i]
 
-        feature.feature = rocket
-        feature.dim = dim
+        attribute.attribute = rocket
+        attribute.dim = dim
         return 0
 
 # TODO(1.3): Remove

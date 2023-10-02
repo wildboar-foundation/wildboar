@@ -274,7 +274,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             Criterion(y, self.n_classes_),
             Tree(metrics, self.n_classes_),
             random_state,
-            n_features=self.n_pivot,
+            n_attributes=self.n_pivot,
             max_depth=max_depth,
             min_impurity_decrease=self.min_impurity_decrease,
             min_samples_split=self.min_samples_split,

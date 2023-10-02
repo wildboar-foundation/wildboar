@@ -19,7 +19,7 @@ from ..utils._rand cimport RAND_R_MAX, RandomSampler, rand_int
 
 from ..distance import _METRICS
 
-from ._feature cimport Feature, FeatureEngineer
+from ._attr_gen cimport Attribute, AttributeGenerator
 
 
 cdef struct TransientPivot:
@@ -31,7 +31,7 @@ cdef struct PersitentPivot:
     Py_ssize_t length
     Py_ssize_t metric
 
-cdef class PivotFeatureEngineer(FeatureEngineer):
+cdef class PivotAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_pivots
     cdef RandomSampler sampler
     cdef MetricList metrics
@@ -51,50 +51,50 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
             self.metrics.reset(i, X, X)
         return 0
 
-    cdef Py_ssize_t get_n_features(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return self.n_pivots
 
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_features(X)
+        return self.get_n_attributess(X)
 
-    cdef Py_ssize_t next_feature(
+    cdef Py_ssize_t next_attribute(
             self,
-            Py_ssize_t feature_id,
+            Py_ssize_t attribute_id,
             TSArray X,
             Py_ssize_t *samples,
             Py_ssize_t n_samples,
-            Feature *transient,
+            Attribute *transient,
             uint32_t *seed,
     ) noexcept nogil:
         cdef TransientPivot *pivot = <TransientPivot*> malloc(sizeof(TransientPivot))
         pivot.sample = samples[rand_int(0, n_samples, seed)]
         pivot.metric = self.sampler.rand_int(seed)
         transient.dim = rand_int(0, X.shape[1], seed)
-        transient.feature = pivot
+        transient.attribute = pivot
         return 0
 
-    cdef Py_ssize_t free_transient_feature(self, Feature *feature) noexcept nogil:
-        if feature.feature != NULL:
-            free(feature.feature)
-            feature.feature = NULL
+    cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
+        if attribute.attribute != NULL:
+            free(attribute.attribute)
+            attribute.attribute = NULL
         return 0
 
-    cdef Py_ssize_t free_persistent_feature(self, Feature *feature) noexcept nogil:
+    cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
         cdef PersitentPivot *pivot
-        if feature.feature != NULL:
-            pivot = <PersitentPivot*> feature.feature
+        if attribute.attribute != NULL:
+            pivot = <PersitentPivot*> attribute.attribute
             free(pivot.data)
-            free(feature.feature)
-            feature.feature = NULL
+            free(attribute.attribute)
+            attribute.attribute = NULL
         return 0
 
-    cdef Py_ssize_t init_persistent_feature(
+    cdef Py_ssize_t init_persistent(
             self,
             TSArray X,
-            Feature *transient,
-            Feature *persistent
+            Attribute *transient,
+            Attribute *persistent
     ) noexcept nogil:
-        cdef TransientPivot *pivot = <TransientPivot*> transient.feature
+        cdef TransientPivot *pivot = <TransientPivot*> transient.attribute
         cdef PersitentPivot *persistent_pivot = <PersitentPivot*> malloc(sizeof(PersitentPivot))
         
         persistent_pivot.data = <double*> malloc(sizeof(double) * X.shape[2])
@@ -107,64 +107,64 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
         )
         
         persistent.dim = transient.dim
-        persistent.feature = persistent_pivot
+        persistent.attribute = persistent_pivot
         return 0
 
-    cdef double transient_feature_value(
+    cdef double transient_value(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample
     ) noexcept nogil:
-        cdef TransientPivot* pivot = <TransientPivot*>feature.feature
+        cdef TransientPivot* pivot = <TransientPivot*>attribute.attribute
         return self.metrics.distance(
-            pivot.metric, X, sample, X, pivot.sample, feature.dim
+            pivot.metric, X, sample, X, pivot.sample, attribute.dim
         )
 
-    cdef double persistent_feature_value(
+    cdef double persistent_value(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample
     ) noexcept nogil:
-        cdef PersitentPivot* pivot = <PersitentPivot*> feature.feature
+        cdef PersitentPivot* pivot = <PersitentPivot*> attribute.attribute
         return self.metrics._distance(
             pivot.metric,
-            &X[sample, feature.dim, 0],
+            &X[sample, attribute.dim, 0],
             X.shape[2],
             pivot.data,
             X.shape[2],
         )
 
-    cdef Py_ssize_t transient_feature_fill(
+    cdef Py_ssize_t transient_fill(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample,
             double[:, :] out,
             Py_ssize_t out_sample,
-            Py_ssize_t out_feature,
+            Py_ssize_t out_attribute,
     ) noexcept nogil:
-        out[out_sample, out_feature] = self.transient_feature_value(feature, X, sample)
+        out[out_sample, out_attribute] = self.transient_value(attribute, X, sample)
         return 0
 
-    cdef Py_ssize_t persistent_feature_fill(
+    cdef Py_ssize_t persistent_fill(
             self,
-            Feature *feature,
+            Attribute *attribute,
             TSArray X,
             Py_ssize_t sample,
             double[:, :] out,
             Py_ssize_t out_sample,
-            Py_ssize_t out_feature,
+            Py_ssize_t out_attribute,
     ) noexcept nogil:
-        out[out_sample, out_feature] = self.persistent_feature_value(feature, X, sample)
+        out[out_sample, out_attribute] = self.persistent_value(attribute, X, sample)
         return 0
 
-    cdef object persistent_feature_to_object(self, Feature *feature):
-        cdef PersitentPivot *pivot = <PersitentPivot*> feature.feature
-        return feature.dim, (pivot.metric, to_ndarray_double(pivot.data, pivot.length))
+    cdef object persistent_to_object(self, Attribute *attribute):
+        cdef PersitentPivot *pivot = <PersitentPivot*> attribute.attribute
+        return attribute.dim, (pivot.metric, to_ndarray_double(pivot.data, pivot.length))
 
-    cdef Py_ssize_t persistent_feature_from_object(self, object object, Feature *feature):
+    cdef Py_ssize_t persistent_from_object(self, object object, Attribute *attribute):
         dim, (metric, arr) = object
         cdef PersitentPivot *pivot = <PersitentPivot*> malloc(sizeof(PersitentPivot))
         cdef double *data = <double*> malloc(sizeof(double) * arr.size)
@@ -175,6 +175,6 @@ cdef class PivotFeatureEngineer(FeatureEngineer):
         pivot.length = arr.size
         pivot.metric = metric
 
-        feature.dim = dim
-        feature.feature = pivot
+        attribute.dim = dim
+        attribute.attribute = pivot
         return 0
