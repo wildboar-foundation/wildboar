@@ -157,15 +157,8 @@ def counterfactuals(
     if method_args is None:
         method_args = {}
 
-    # TODO: (1.2) Remove "infer"
     if isinstance(method, str):
-        if method == "infer" or method == "best":
-            if method == "infer":
-                warnings.warn(
-                    "'infer' is deprecated and should be changed "
-                    "to 'best' (default). 'infer' will be disabled in 1.2.",
-                    FutureWarning,
-                )
+        if method == "best":
             Explainer = _best_counterfactional(estimator)
         else:
             Explainer = _COUNTERFACTUALS.get(method)
