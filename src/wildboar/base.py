@@ -6,7 +6,6 @@ import warnings
 
 import numpy as np
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
-from sklearn.utils import deprecated
 from sklearn.utils.validation import _check_y, check_is_fitted
 
 from . import __version__
