@@ -305,13 +305,6 @@ class CounterfactualMixin:
 
     _estimator_type = "counterfactual"
 
-    @deprecated(
-        "transform(x, y) has been deprecated in 1.1 and will be removed in 1.2. "
-        "Use explain(x, y) instead."
-    )
-    def transform(self, x, y):
-        return self.explain(x, y)
-
     def score(self, x, y):
         """Score the counterfactual explainer in terms of closeness of fit.
 
