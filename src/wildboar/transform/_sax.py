@@ -132,7 +132,7 @@ class SAX(TransformerMixin, BaseEstimator):
     n_intervals : str, optional
         The number of intervals to use for the transform.
 
-        - if "log", the number of intervals is `log2(n_timestep)`.
+        - if "log2", the number of intervals is `log2(n_timestep)`.
         - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
         - if int, the number of intervals is `n_intervals`.
         - if float, the number of intervals is `n_intervals * n_timestep`, with
@@ -160,7 +160,7 @@ class SAX(TransformerMixin, BaseEstimator):
         "n_intervals": [
             Interval(numbers.Integral, 1, None, closed="left"),
             Interval(numbers.Real, 0, 1, closed="right"),
-            StrOptions({"log", "sqrt", "log2"}, deprecated={"log"}),
+            StrOptions({"sqrt", "log2"}),
         ],
         "window": [None, Interval(numbers.Integral, 1, None, closed="left")],
         "n_bins": [Interval(numbers.Integral, 1, None, closed="left")],
