@@ -74,11 +74,10 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
 
     Notes
     -----
-    The implementation does not implement the first order descrete dirivaties
-    described by Dempster et. al. (2023).
-
-    If this is desired, one can use native scikit-learn functionalities and
-    the :class:`transform.DiffTransform`:
+    The implementation does not implement the first order descrete differences
+    described by Dempster et. al. (2023). If this is desired, one can use
+    native scikit-learn functionalities and the
+    :class:`~wildboar.transform.DiffTransform`:
 
     >>> from sklearn.pipeline import make_pipeline, make_union
     >>> from wildboar.transform import DiffTransform, HydraTransform
@@ -101,7 +100,7 @@ class HydraTransform(HydraMixin, BaseFeatureEngineerTransform):
     >>> from wildboar.datasets import load_gun_point
     >>> from wildboar.transform import HydraTransform
     >>> X, y = load_gun_point()
-    >>> t = HydraTransform(n_groups=3, n_kernels=4, random_state=1)
+    >>> t = HydraTransform(n_groups=8, n_kernels=4, random_state=1)
     >>> t.fit_transform(X)
     """
 
