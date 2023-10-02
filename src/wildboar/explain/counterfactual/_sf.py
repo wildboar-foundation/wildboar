@@ -136,22 +136,48 @@ _AGGREGATION = {
 
 
 class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator):
-    """Counterfactual explanations for shapelet forest classifiers.
+    """
+    Counterfactual explanations for shapelet forest classifiers.
+
+    Parameters
+    ----------
+    cost : {"euclidean", "cosine", "manhattan"} or callable, optional
+        The cost function to determine the goodness of counterfactual.
+    aggregation : callable, optional
+        The aggregation function for the cost of multivariate counterfactuals.
+    epsilon : float, optional
+        Control the degree of change from the decision threshold.
+    batch_size : float, optional
+        Batch size when evaluating the cost and predictions of
+        counterfactual candidates. The default setting is to evaluate
+        all counterfactual samples.
+
+        .. versionchanged :: 1.1
+            The default value changed to 0.1
+    max_paths : float, optional
+        Sample a fraction of the positive prediction paths.
+
+        .. versionadded :: 1.1
+            Add support for subsampling prediction paths.
+    verbose : bool, optional
+        Print information to stdout during execution.
+    random_state : RandomState or int, optional
+        Pseudo-random number for consistency between different runs.
 
     Attributes
     ----------
     paths_ : dict
         A dictionary of prediction paths per label
 
-    Notes
-    -----
-    This implementation only supports the reversible algorithm
-    described by Karlsson (2020)
-
     Warnings
     --------
     Only shapelet forests fit with the Euclidean distance is supported i.e.,
     ``metric="euclidean"``
+
+    Notes
+    -----
+    This implementation only supports the reversible algorithm
+    described by Karlsson (2020)
 
     References
     ----------
@@ -185,33 +211,6 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         verbose=False,
         random_state=None,
     ):
-        """Construct a new shapelet forest counterfactual.
-
-        Parameters
-        ----------
-        cost : {"euclidean", "cosine", "manhattan"} or callable, optional
-            The cost function to determine the goodness of counterfactual
-        aggregation : callable, optional
-            The aggregation function for the cost of multivariate counterfactuals.
-        epsilon : float, optional
-            Control the degree of change from the decision threshold
-        batch_size : float, optional
-            Batch size when evaluating the cost and predictions of
-            counterfactual candidates. The default setting is to evaluate
-            all counterfactual samples.
-
-            .. versionchanged :: 1.1
-                The default value changed to 0.1
-        max_paths : float, optional
-            Sample a fraction of the positive prediction paths.
-
-            .. versionadded :: 1.1
-                Add support for subsampling prediction paths.
-        verbose : boolean, optional
-            Print information to stdout during execution.
-        random_state : RandomState or int, optional
-            Pseudo-random number for consistency between different runs
-        """
         self.cost = cost
         self.aggregation = aggregation
         self.epsilon = epsilon
