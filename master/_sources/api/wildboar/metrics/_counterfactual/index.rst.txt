@@ -20,12 +20,13 @@ Functions
    wildboar.metrics._counterfactual.compactness_score
    wildboar.metrics._counterfactual.plausability_score
    wildboar.metrics._counterfactual.proximity_score
+   wildboar.metrics._counterfactual.redudancy_score
    wildboar.metrics._counterfactual.relative_proximity_score
    wildboar.metrics._counterfactual.validity_score
 
 
 
-.. py:function:: compactness_score(x_true, x_counterfactuals, *, window=None, n_bins=None, atol=1e-08, average=True)
+.. py:function:: compactness_score(x_factual, x_counterfactual, *, window=None, n_bins=None, atol=1e-08, average=True)
 
    
    Compute compactness score.
@@ -36,10 +37,10 @@ Functions
 
    :Parameters:
 
-       **x_true** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
+       **x_factual** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
            The true samples.
 
-       **x_counterfactuals** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
+       **x_counterfactual** : array-like of shape (n_samples, n_timesteps)             or (n_samples, n_dims, n_timeteps)
            The counterfactual samples.
 
        **window** : int, optional
@@ -48,7 +49,7 @@ Functions
        **n_bins** : int, optional
            If set, evaluate the set overlap of SAX transformed series.
 
-       **atol** : float,
+       **atol** : float, optional
            The absolute tolerance.
 
        **average** : bool, optional
@@ -66,6 +67,10 @@ Functions
 
 
 
+   .. rubric:: Notes
+
+   The samples in `x_counterfactual` and `x_factual` should be aligned such
+   that the i:th counterfacutal sample is derived from the i:th factual sample.
 
    .. rubric:: References
 
@@ -83,7 +88,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: plausability_score(X_plausible, X_counterfactuals, *, y_plausible=None, y_counterfactual=None, estimator=None, method='accuracy', average=True)
+.. py:function:: plausability_score(x_plausible, x_counterfactuals, *, y_plausible=None, y_counterfactual=None, estimator=None, method='accuracy', average=True)
 
    
    Compute plausibility score.
@@ -91,11 +96,11 @@ Functions
 
    :Parameters:
 
-       **X_plausible** : array-like of shape (n_samples, n_timesteps)
-           The plausible time series, typically the training or testing samples.
+       **x_plausible** : array-like of shape (n_samples, n_timesteps)
+           The plausible samples, typically the training or testing samples.
 
-       **X_counterfactuals** : array-like of shape (m_samples, n_timesteps)
-           The generated counterfactuals.
+       **x_counterfactuals** : array-like of shape (m_samples, n_timesteps)
+           The counterfactual samples.
 
        **y_plausible** : array-like of shape (n_samples, ), optional
            The labels of the plausible samples.
@@ -103,8 +108,11 @@ Functions
        **y_counterfactual** : array-like of shape (m_samples, ), optional
            The desired label of the counterfactuals.
 
-       **estimator** : Estimator, optional
-           The outlier estimator.
+       **estimator** : estimator, optional
+           The outlier estimator, must implement `fit` and `predict`. If None,
+           we use LocalOutlierFactor.
+           
+           - if score="mean", the estimator must also implement `decision_function`.
 
        **method** : {'score', 'accuracy'}, optional
            The score function.
@@ -148,7 +156,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: proximity_score(x_true, x_counterfactuals, metric='normalized_euclidean', metric_params=None)
+.. py:function:: proximity_score(x_factual, x_counterfactual, metric='normalized_euclidean', metric_params=None)
 
    
    Compute proximity score.
@@ -157,10 +165,10 @@ Functions
 
    :Parameters:
 
-       **x_true** : array-like of shape (n_samples, n_timestep)
+       **x_factual** : array-like of shape (n_samples, n_timestep)
            The true samples.
 
-       **x_counterfactuals** : array-like of shape (n_samples, n_timestep)
+       **x_counterfactual** : array-like of shape (n_samples, n_timestep)
            The counterfactual samples.
 
        **metric** : str or callable, optional
@@ -186,6 +194,10 @@ Functions
 
 
 
+   .. rubric:: Notes
+
+   The samples in `x_counterfactual` and `x_factual` should be aligned such
+   that the i:th counterfacutal sample is derived from the i:th factual sample.
 
    .. rubric:: References
 
@@ -206,7 +218,66 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: relative_proximity_score(X_native, X_test, X_counterfactual, *, y_native=None, y_counterfactual=None, metric='euclidean', metric_params=None, average=True)
+.. py:function:: redudancy_score(estimator, x_factual, x_counterfactual, y_counterfactual, *, n_intervals='sqrt', window=None, average=True)
+
+   
+   Compute the redudancy score.
+
+   Redundancy is measure of how much impact non-overlapping intervals has
+   in the construction of the counterfactuals.
+
+   :Parameters:
+
+       **estimator** : Estimator
+           The estimator counterfactuals are computed for.
+
+       **x_factual** : array-like of shape (n_samples, n_timestep)
+           The factual samples, i.e., samples for which counterfactuals
+           are computed.
+
+       **x_counterfactual** : array-like of shape (n_samples, n_timestep)
+           The counterfactual samples.
+
+       **y_counterfactual** : array-like of shape (n_samples, )
+           The desired counterfactual label.
+
+       **n_intervals** : {"sqrt", "log2"}, int or float, optional
+           The number of intervals.
+
+       **window** : int, optional
+           The size of an interval. If set, `n_intervals` is ignored.
+
+       **average** : bool, optional
+           Return the average redundancy over all intervals.
+
+   :Returns:
+
+       ndarray of shape (n_intervals, ) or float
+           The redundancy of each interval, expressed as the fraction
+           of samples that have the same label if the interval is replaced
+           with the corresponding interval of the factual sample. If `average`
+           is True, return a single float.
+
+
+
+
+
+
+
+
+   .. rubric:: Notes
+
+   The samples in `x_counterfactual` and `x_factual` should be aligned such
+   that the i:th counterfacutal sample is derived from the i:th factual sample.
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: relative_proximity_score(x_native, x_factual, x_counterfactual, *, y_native=None, y_counterfactual=None, metric='euclidean', metric_params=None, average=True)
 
    
    Compute relative proximity score.
@@ -217,20 +288,23 @@ Functions
 
    :Parameters:
 
-       **X_native** : array-like of shape (n_natives, n_timesteps)
+       **x_native** : array-like of shape (n_natives, n_timesteps)
            The native counterfactual candidates. If y_counterfactual is None, the full
-           array is considered as possible native counterfactuals.
+           array is considered as possible native counterfactuals. Typically, native
+           counterfactual candidates correspond to samples which are labeled as the
+           desired counterfactual label.
 
-       **X_test** : array-like of shape (n_counterfactuals, n_timesteps)
-           The test samples.
+       **x_factual** : array-like of shape (n_counterfactuals, n_timesteps)
+           The factual samples, i.e., the samples for which the counterfactuals
+           where computed.
 
-       **X_counterfactual** : array-like of shape (n_counterfactuals, n_timesteps)
+       **x_counterfactual** : array-like of shape (n_counterfactuals, n_timesteps)
            The counterfactual samples.
 
        **y_native** : array-like of shape (n_natives, ), optional
            The label of the native counterfactual candidates.
 
-       **y_counterfactual** : array-like of shape (n_counterfactuals, )
+       **y_counterfactual** : array-like of shape (n_counterfactuals, ), optional
            The desired counterfactual label.
 
        **metric** : str or callable, optional
@@ -260,6 +334,10 @@ Functions
 
 
 
+   .. rubric:: Notes
+
+   The samples in `x_counterfactual` and `x_factual` should be aligned such
+   that the i:th counterfacutal sample is derived from the i:th factual sample.
 
    .. rubric:: References
 
@@ -277,7 +355,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: validity_score(y_pred, y_counterfactual, sample_weight=None)
+.. py:function:: validity_score(y_predicted, y_counterfactual, sample_weight=None)
 
    
    Compute validity score.
@@ -286,8 +364,8 @@ Functions
 
    :Parameters:
 
-       **y_pred** : array-like of shape (n_samples, )
-           The desired label.
+       **y_predicted** : array-like of shape (n_samples, )
+           The predicted label.
 
        **y_counterfactual** : array-like of shape (n_samples, )
            The predicted label.
