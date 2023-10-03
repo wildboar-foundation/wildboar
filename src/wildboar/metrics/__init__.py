@@ -4,6 +4,7 @@ from ._counterfactual import (
     compactness_score,
     plausability_score,
     proximity_score,
+    redudancy_score,
     relative_proximity_score,
     validity_score,
 )
@@ -14,4 +15,5 @@ __all__ = [
     "compactness_score",
     "validity_score",
     "plausability_score",
+    "redudancy_score",
 ]
