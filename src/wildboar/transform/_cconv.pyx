@@ -7,7 +7,12 @@ import numpy as np
 from libc.math cimport floor
 from libc.stdlib cimport labs
 
+from ..utils cimport TSArray
 
+# TODO: Consider a fast code-path for:
+#   - dilation = 1
+#   - stride = 1
+#   - padding = 0
 cdef void convolution_1d(
     Py_ssize_t stride,
     Py_ssize_t dilation,
@@ -58,6 +63,11 @@ cdef void convolution_1d(
         ((x_len + 2 * padding) - (k_len - 1) * dilation + 1) / stride + 1
 
     """
+    # Fast-path for the simple case.
+    if padding == 0 and stride == 1 and dilation == 1:
+        _convolution_1d_fast(bias, x, x_len, kernel, k_len, out)
+        return
+
     cdef Py_ssize_t input_size = x_len + 2 * padding
     cdef Py_ssize_t kernel_size = (k_len - 1) * dilation + 1
     cdef Py_ssize_t output_size = <Py_ssize_t> floor((input_size - kernel_size) / stride) + 1
@@ -163,23 +173,44 @@ cdef void convolution_1d(
         out[i] = inner_prod
 
 
-def conv1d(array, kernel, dilation=1, padding=0, stride=1):
-    kernel_size = (kernel.shape[0] - 1) * dilation + 1
-    input_size = array.shape[0] + 2 * padding
-    cdef double[:] out = np.empty(int(np.floor((input_size - kernel_size) / stride) + 1))
-    cdef double[:] k = kernel
-    cdef double[:] a = array
-    convolution_1d(
-        stride,
-        dilation,
-        padding,
-        0.0,
-        &k[0],
-        kernel.shape[0],
-        &a[0],
-        array.shape[0],
-        &out[0],
-    )
-    return out.base
+cdef void _convolution_1d_fast(
+    double bias, 
+    double *x,
+    Py_ssize_t x_len, 
+    double *kernel, 
+    Py_ssize_t k_len, 
+    double *out
+) noexcept nogil:
+    cdef Py_ssize_t output_size = x_len - k_len + 1
+    cdef Py_ssize_t i, j
+    cdef double inner_prod
+    for i in range(x_len - k_len + 1):
+        inner_prod = bias
+        for j in range(k_len):
+            inner_prod += x[i + j] * kernel[j]
+        out[i] = inner_prod
+            
 
-
+def conv1d(
+    TSArray X,
+    double[::1] kernel,
+    double bias,
+    Py_ssize_t dilation,
+    Py_ssize_t padding,
+    Py_ssize_t stride,
+    double[:, ::1] out,
+):
+    cdef Py_ssize_t i
+    with nogil:
+        for i in range(X.shape[0]):
+            convolution_1d(
+                stride,
+                dilation,
+                padding,
+                bias,
+                &kernel[0],
+                kernel.shape[0],
+                &X[i, 0, 0],
+                X.shape[2],
+                &out[i, 0],
+            )

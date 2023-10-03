@@ -2,6 +2,7 @@
 # License: BSD 3 clause
 """Transform raw time series to tabular representations."""
 
+from ._conv import convolve
 from ._diff import DiffTransform
 from ._hydra import HydraTransform
 from ._interval import FeatureTransform, IntervalTransform
@@ -17,6 +18,7 @@ from ._sax import (
 from ._shapelet import RandomShapeletTransform
 
 __all__ = [
+    "convolve",
     "symbolic_aggregate_approximation",
     "piecewice_aggregate_approximation",
     "RandomShapeletTransform",

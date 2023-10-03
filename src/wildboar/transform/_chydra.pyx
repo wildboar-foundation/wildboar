@@ -13,10 +13,10 @@ from libc.string cimport memset
 from numpy cimport uint32_t
 
 from ._attr_gen cimport Attribute, AttributeGenerator
+from ._cconv cimport convolution_1d
 
 from ..utils cimport TSArray
 from ..utils._rand cimport rand_normal
-from ..utils._cconv cimport convolution_1d
 
 # Hydra group
 cdef struct Hydra:
@@ -136,13 +136,11 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
         return self.n_groups
 
     # Each timeseries is represented by:
-    #   n_groups * n_kernels * max_exponent * 2 (soft_max, hard_min) * 2 (X, diff(X))
+    #   n_groups * n_kernels * max_exponent * 2 (soft_max, hard_min)
     # attributes.
-    #
-    # TODO: implement support for diff(X)
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
         cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.kernel_size)
-        return self.get_n_attributess(X) * max_exponent * self.n_kernels * 2 * 1 # soft_max and hard_min and (TODO) X and diff(X)
+        return self.get_n_attributess(X) * max_exponent * self.n_kernels * 2 * 1 
 
     cdef Py_ssize_t next_attribute(
         self,
