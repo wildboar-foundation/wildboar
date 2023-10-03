@@ -51,6 +51,7 @@ Attributes
 
 .. autoapisummary::
 
+   wildboar.__version__
    wildboar.eos
 
 
@@ -64,6 +65,11 @@ Attributes
    :returns: boolean indicator array
    :rtype: ndarray
 
+
+.. py:data:: __version__
+   :type: str
+
+   
 
 .. py:data:: eos
 
