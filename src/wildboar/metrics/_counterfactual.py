@@ -341,7 +341,7 @@ def compactness_score(
                     x_counterfactuals, window=window
                 )
                 x_true = piecewice_aggregate_approximation(x_true, window=window)
-                return np.mean(np.isclose(x_counterfactuals, x_true, rtol=0, atol=atol))
+                return np.isclose(x_counterfactuals, x_true, rtol=0, atol=atol)
 
     else:
 
