@@ -89,7 +89,7 @@ Classes
 
       :Returns:
 
-          BaseFeatureEngineerTransform
+          BaseAttributeTransform
               This object.
 
 
@@ -313,7 +313,7 @@ Classes
    
    Mixin for interval based estimators.
 
-   It provides an implementation for the `_get_feature_engineer` method
+   It provides an implementation for the `_get_generator` method
    which supports interval based transformation.
 
    The implementing class must have the following properties:
@@ -467,7 +467,7 @@ Classes
 
       :Returns:
 
-          BaseFeatureEngineerTransform
+          BaseAttributeTransform
               This object.
 
 

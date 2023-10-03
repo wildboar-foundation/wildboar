@@ -28,7 +28,7 @@ Classes
    
    Mixin for ROCKET based estimators.
 
-   The class provides an implementation for the `_get_feature_engineer` method
+   The class provides an implementation for the `_get_generator` method
    with support for rocket convolution.
 
    The implementing class must have the following properties:
@@ -195,7 +195,7 @@ Classes
 
       :Returns:
 
-          BaseFeatureEngineerTransform
+          BaseAttributeTransform
               This object.
 
 

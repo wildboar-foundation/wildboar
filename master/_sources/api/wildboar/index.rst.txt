@@ -74,6 +74,14 @@ Functions
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   wildboar.__version__
+
+
 .. py:function:: iseos(x)
 
    
@@ -104,4 +112,5 @@ Functions
 
    ..
        !! processed by numpydoc !!
+
 

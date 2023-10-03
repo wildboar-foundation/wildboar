@@ -16,12 +16,12 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.transform._base.BaseFeatureEngineerTransform
+   wildboar.transform._base.BaseAttributeTransform
 
 
 
 
-.. py:class:: BaseFeatureEngineerTransform(*, random_state=None, n_jobs=None)
+.. py:class:: BaseAttributeTransform(*, random_state=None, n_jobs=None)
 
 
 
@@ -83,7 +83,7 @@ Classes
 
       :Returns:
 
-          BaseFeatureEngineerTransform
+          BaseAttributeTransform
               This object.
 
 

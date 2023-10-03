@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.tree" href="../tree/index.html" /><link rel="prev" title="wildboar.model_selection" href="../model_selection/index.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>wildboar.transform - Wildboar 1.1.1.dev148 documentation</title>
+        <title>wildboar.transform - Wildboar 1.1.1.dev156 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev148 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev156 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -361,10 +361,13 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.piecewice_aggregate_approximation" title="wildboar.transform.piecewice_aggregate_approximation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">piecewice_aggregate_approximation</span></code></a>(x, *[, n_intervals, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.convolve" title="wildboar.transform.convolve"><code class="xref py py-obj docutils literal notranslate"><span class="pre">convolve</span></code></a>(X, kernel[, bias, dilation, stride, padding])</p></td>
+<td><p>Apply 1D convolution over a time series.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.piecewice_aggregate_approximation" title="wildboar.transform.piecewice_aggregate_approximation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">piecewice_aggregate_approximation</span></code></a>(x, *[, n_intervals, ...])</p></td>
 <td><p>Peicewise aggregate approximation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.transform.symbolic_aggregate_approximation" title="wildboar.transform.symbolic_aggregate_approximation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symbolic_aggregate_approximation</span></code></a>(x, *[, n_intervals, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.transform.symbolic_aggregate_approximation" title="wildboar.transform.symbolic_aggregate_approximation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">symbolic_aggregate_approximation</span></code></a>(x, *[, n_intervals, ...])</p></td>
 <td><p>Symbolic aggregate approximation.</p></td>
 </tr>
 </tbody>
@@ -545,7 +548,7 @@ is a numpy array.</p></li>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>BaseFeatureEngineerTransform</dt><dd><p>This object.</p>
+<dt>BaseAttributeTransform</dt><dd><p>This object.</p>
 </dd>
 </dl>
 </dd>
@@ -687,7 +690,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.HydraTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">HydraTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_hydra.py#L32-L129"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.HydraTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">HydraTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_kernels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_hydra.py#L32-L128"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.HydraTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>A Dictionary based method using convolutional kernels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -731,10 +734,10 @@ the random number generator.</p></li>
 </dl>
 </div>
 <p class="rubric">Notes</p>
-<p>The implementation does not implement the first order descrete dirivaties
-described by Dempster et. al. (2023).</p>
-<p>If this is desired, one can use native scikit-learn functionalities and
-the <code class="xref py py-class docutils literal notranslate"><span class="pre">transform.DiffTransform</span></code>:</p>
+<p>The implementation does not implement the first order descrete differences
+described by Dempster et. al. (2023). If this is desired, one can use
+native scikit-learn functionalities and the
+<a class="reference internal" href="#wildboar.transform.DiffTransform" title="wildboar.transform.DiffTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffTransform</span></code></a>:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span><span class="p">,</span> <span class="n">make_union</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">DiffTransform</span><span class="p">,</span> <span class="n">HydraTransform</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dempster_hydra</span> <span class="o">=</span> <span class="n">make_union</span><span class="p">(</span>
@@ -756,7 +759,7 @@ time series classification. Data Mining and Knowledge Discovery</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_gun_point</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">HydraTransform</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_gun_point</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">HydraTransform</span><span class="p">(</span><span class="n">n_groups</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">n_kernels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">HydraTransform</span><span class="p">(</span><span class="n">n_groups</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">n_kernels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -783,7 +786,7 @@ time series classification. Data Mining and Knowledge Discovery</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>BaseFeatureEngineerTransform</dt><dd><p>This object.</p>
+<dt>BaseAttributeTransform</dt><dd><p>This object.</p>
 </dd>
 </dl>
 </dd>
@@ -1020,7 +1023,7 @@ mean and the standard deviation.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>BaseFeatureEngineerTransform</dt><dd><p>This object.</p>
+<dt>BaseAttributeTransform</dt><dd><p>This object.</p>
 </dd>
 </dl>
 </dd>
@@ -1356,7 +1359,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.transform.PAA">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">PAA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_sax.py#L231-L296"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">PAA</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_sax.py#L231-L299"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.PAA" title="Permalink to this definition">#</a></dt>
 <dd><p>Peicewise aggregate approximation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1540,7 +1543,7 @@ metric configurations are sampled with equal probability.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>BaseFeatureEngineerTransform</dt><dd><p>This object.</p>
+<dt>BaseAttributeTransform</dt><dd><p>This object.</p>
 </dd>
 </dl>
 </dd>
@@ -1936,7 +1939,7 @@ set set between 0 and 1 or ERP distance with g between 0 and 1.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>BaseFeatureEngineerTransform</dt><dd><p>This object.</p>
+<dt>BaseAttributeTransform</dt><dd><p>This object.</p>
 </dd>
 </dl>
 </dd>
@@ -2185,7 +2188,7 @@ Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>BaseFeatureEngineerTransform</dt><dd><p>This object.</p>
+<dt>BaseAttributeTransform</dt><dd><p>This object.</p>
 </dd>
 </dl>
 </dd>
@@ -2334,7 +2337,7 @@ possible to update each component of a nested object.</p>
 <dd class="field-odd"><dl>
 <dt><strong>n_intervals</strong><span class="classifier">str, optional</span></dt><dd><p>The number of intervals to use for the transform.</p>
 <ul class="simple">
-<li><p>if “log”, the number of intervals is <cite>log2(n_timestep)</cite>.</p></li>
+<li><p>if “log2”, the number of intervals is <cite>log2(n_timestep)</cite>.</p></li>
 <li><p>if “sqrt”, the number of intervals is <cite>sqrt(n_timestep)</cite>.</p></li>
 <li><p>if int, the number of intervals is <cite>n_intervals</cite>.</p></li>
 <li><dl class="simple">
@@ -2482,8 +2485,44 @@ possible to update each component of a nested object.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="wildboar.transform.convolve">
+<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">convolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_conv.py#L9-L68"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.convolve" title="Permalink to this definition">#</a></dt>
+<dd><p>Apply 1D convolution over a time series.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_timestep)</span></dt><dd><p>The input.</p>
+</dd>
+<dt><strong>kernel</strong><span class="classifier">array-like of shape (kernel_size, )</span></dt><dd><p>The kernel.</p>
+</dd>
+<dt><strong>bias</strong><span class="classifier">float, optional</span></dt><dd><p>The bias.</p>
+</dd>
+<dt><strong>dilation</strong><span class="classifier">int, optional</span></dt><dd><p>The spacing between kernel elements.</p>
+</dd>
+<dt><strong>stride</strong><span class="classifier">int, optional</span></dt><dd><p>The stride of the convolving kernel.</p>
+</dd>
+<dt><strong>padding</strong><span class="classifier">int, optional</span></dt><dd><p>Implicit padding on both sides of the input time series.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl>
+<dt>ndarray of shape (n_samples, output_size)</dt><dd><p>The result of the convolution, where output_size is given by::</p>
+<dl class="simple">
+<dt>floor(</dt><dd><p>((X.shape[1] + 2 * padding) - (kernel.shape[0] - 1 * dilation + 1)) / stride
++ 1</p>
+</dd>
+</dl>
+<p>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="wildboar.transform.piecewice_aggregate_approximation">
-<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">piecewice_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_sax.py#L343-L369"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.piecewice_aggregate_approximation" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">piecewice_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_sax.py#L346-L372"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.piecewice_aggregate_approximation" title="Permalink to this definition">#</a></dt>
 <dd><p>Peicewise aggregate approximation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2518,7 +2557,7 @@ effect.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.transform.symbolic_aggregate_approximation">
-<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">symbolic_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_sax.py#L299-L340"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.symbolic_aggregate_approximation" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.transform.</span></span><span class="sig-name descname"><span class="pre">symbolic_aggregate_approximation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_intervals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sqrt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">binning</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/transform/_sax.py#L302-L343"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.transform.symbolic_aggregate_approximation" title="Permalink to this definition">#</a></dt>
 <dd><p>Symbolic aggregate approximation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -2721,6 +2760,7 @@ distributed bins or <code class="docutils literal notranslate"><span class="pre"
 <li><a class="reference internal" href="#wildboar.transform.SAX.set_params"><code class="docutils literal notranslate"><span class="pre">SAX.set_params</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#wildboar.transform.convolve"><code class="docutils literal notranslate"><span class="pre">convolve</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform.piecewice_aggregate_approximation"><code class="docutils literal notranslate"><span class="pre">piecewice_aggregate_approximation</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.transform.symbolic_aggregate_approximation"><code class="docutils literal notranslate"><span class="pre">symbolic_aggregate_approximation</span></code></a></li>
 </ul>
