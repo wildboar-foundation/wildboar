@@ -12,3 +12,27 @@ Module Contents
 
    
 
+.. py:data:: VERSION_TUPLE
+
+   
+
+.. py:data:: version
+   :type: str
+
+   
+
+.. py:data:: __version__
+   :type: str
+
+   
+
+.. py:data:: __version_tuple__
+   :type: VERSION_TUPLE
+
+   
+
+.. py:data:: version_tuple
+   :type: VERSION_TUPLE
+
+   
+

@@ -28,3 +28,11 @@ Submodules
    version/index.rst
 
 
+Package Contents
+----------------
+
+.. py:data:: __version__
+   :type: str
+
+   
+
