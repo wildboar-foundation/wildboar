@@ -1,10 +1,10 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 import pytest
-
 from wildboar.transform import (
     PAA,
     SAX,
+    HydraTransform,
     IntervalTransform,
     MatrixProfileTransform,
     PivotTransform,
@@ -28,6 +28,7 @@ from wildboar.utils.estimator_checks import check_estimator
         (PivotTransform(), ["metric_factories"]),
         (SAX(), []),
         (PAA(), []),
+        (HydraTransform(), []),
     ],
 )
 def test_estimator_checks(estimator, skip):
