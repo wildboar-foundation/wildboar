@@ -48,6 +48,14 @@ Submodules
 Package Contents
 ----------------
 
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.distance.KNeighbourClassifier
+
+
 
 Functions
 ---------
@@ -63,6 +71,282 @@ Functions
    wildboar.distance.pairwise_subsequence_distance
    wildboar.distance.subsequence_match
 
+
+
+.. py:class:: KNeighbourClassifier(n_neighbours=5, *, metric='euclidean', metric_params=None)
+
+
+
+
+   
+   Classifier implementing k-nearest neighbours
+
+
+   :Parameters:
+
+       **n_neighbours** : int, optional
+           The number of neighbours.
+
+       **metric** : str, optional
+           The distance metric.
+
+       **metric_params** : dict, optional
+           Optional parameters to the distance metric.
+           
+           Read more about the metrics and their parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+
+
+
+
+
+
+
+
+
+
+
+   :Attributes:
+
+       **classes_** : ndarray of shapel (n_classes, )
+           Known class labels.
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit(x, y)
+
+      
+      Fit the classifier to the training data.
+
+
+      :Parameters:
+
+          **x** : univariate time-series or multivaraite time-series
+              The input samples.
+
+          **y** : array-like of shape (n_samples, )
+              The input labels.
+
+      :Returns:
+
+          KNeighbourClassifier
+              This instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(x)
+
+      
+      Compute the class label for the samples in x.
+
+
+      :Parameters:
+
+          **x** : univariate time-series or multivariate time-series
+              The input samples.
+
+      :Returns:
+
+          ndarray of shape (n_samples, )
+              The class label for each sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict_proba(x)
+
+      
+      Compute probability estimates for the samples in x.
+
+
+      :Parameters:
+
+          **x** : univariate time-series or multivariate time-series
+              The input samples.
+
+      :Returns:
+
+          ndarray of shape (n_samples, len(self.classes_))
+              The probability of each class for each sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(X, y, sample_weight=None)
+
+      
+      Return the mean accuracy on the given test data and labels.
+
+      In multi-label classification, this is the subset accuracy
+      which is a harsh metric since you require for each sample that
+      each label set be correctly predicted.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Test samples.
+
+          **y** : array-like of shape (n_samples,) or (n_samples, n_outputs)
+              True labels for `X`.
+
+          **sample_weight** : array-like of shape (n_samples,), default=None
+              Sample weights.
+
+      :Returns:
+
+          **score** : float
+              Mean accuracy of ``self.predict(X)`` w.r.t. `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
 
 
 .. py:function:: matrix_profile(x, y=None, *, window=5, dim=0, exclude=None, n_jobs=-1, return_index=False)

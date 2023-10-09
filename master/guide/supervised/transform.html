@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Unsupervised learning" href="../unsupervised.html" /><link rel="prev" title="Ensemble estimators" href="ensemble.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>Transform-based estimators - Wildboar 1.1.1.dev159 documentation</title>
+        <title>Transform-based estimators - Wildboar 1.1.1.dev164 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.1.dev159 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.1.dev164 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -314,7 +314,9 @@
 <a class="reference internal" href="../../api/wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketRegressor</span></code></a> uses a random convolutional embedding to
 represent time series and fit a ridge regression model to the representation.
 For benchmark tasks, this transformation and estimator configuration often give
-state-of-the-art predictive performance.</p>
+state-of-the-art predictive performance. <a class="reference internal" href="../../api/wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier" title="wildboar.linear_model.HydraClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.HydraClassifier</span></code></a>
+uses a similar convolutional transformation, but instead computes features
+based on groups of kernels.</p>
 </section>
 
         </article>

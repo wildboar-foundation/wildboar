@@ -273,6 +273,14 @@ examples.
 ..
     !! processed by numpydoc !!
 
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.distance.KNeighbourClassifier`
+    - Classifier implementing k-nearest neighbours
+
 
 .. list-table:: Functions
   :header-rows: 0
@@ -295,6 +303,9 @@ examples.
     - Minimum subsequence distance between subsequences and time series.
   * - :py:obj:`~wildboar.distance.subsequence_match`
     - Find matching subsequnces.
+
+
+
 
 
 

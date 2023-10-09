@@ -107,7 +107,7 @@ Classes
            using a single core and a value of `-1` means using all cores.
            Positive integers mean the exact number of cores.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If `int`, `random_state` is the seed used by the
@@ -520,7 +520,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: BaggingRegressor(estimator, n_estimators=100, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
+.. py:class:: BaggingRegressor(estimator=None, n_estimators=100, *, max_samples=1.0, bootstrap=True, oob_score=False, warm_start=False, n_jobs=None, random_state=None, verbose=0, base_estimator='deprecated')
 
 
 
@@ -1162,7 +1162,7 @@ Classes
            <list_of_subsequence_metrics>`__.
 
        **criterion** : {"entropy", "gini"}, optional
-           The criterion used to evaluate the utility of a split
+           The criterion used to evaluate the utility of a split.
 
        **oob_score** : bool, optional
            Use out-of-bag samples to estimate generalization performance. Requires
@@ -1179,17 +1179,17 @@ Classes
        **class_weight** : dict or "balanced", optional
            Weights associated with the labels
            
-           - if `dict`, weights on the form `{label: weight}`
+           - if `dict`, weights on the form `{label: weight}`.
            - if "balanced" each class weight inversely proportional to
-             the class frequency
-           - if :class:`None`, each class has equal weight
+             the class frequency.
+           - if :class:`None`, each class has equal weight.
 
        **n_jobs** : int, optional
            The number of jobs to run in parallel. A value of `None` means
            using a single core and a value of `-1` means using all cores.
            Positive integers mean the exact number of cores.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If `int`, `random_state` is the seed used by the
@@ -1680,7 +1680,7 @@ Classes
            using a single core and a value of `-1` means using all cores.
            Positive integers mean the exact number of cores.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If int, `random_state` is the seed used by the
@@ -2787,7 +2787,7 @@ Classes
            Read more about the parameters in the `User guide
            <list_of_subsequence_metrics>`__.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If `int`, `random_state` is the seed used by the
@@ -3559,7 +3559,7 @@ Classes
                frequency.
            - if None, each class has equal weight.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            - If `int`, `random_state` is the seed used by the random number generator
            - If `RandomState` instance, `random_state` is the random number generator
            - If `None`, the random number generator is the `RandomState` instance used
@@ -4458,7 +4458,7 @@ Classes
        **n_jobs** : int, optional
            The number of processor cores used for fitting the ensemble.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If `int`, `random_state` is the seed used by the
@@ -4848,7 +4848,7 @@ Classes
            <list_of_subsequence_metrics>`__.
 
        **criterion** : {"entropy", "gini"}, optional
-           The criterion used to evaluate the utility of a split
+           The criterion used to evaluate the utility of a split.
 
        **oob_score** : bool, optional
            Use out-of-bag samples to estimate generalization performance. Requires
@@ -4875,7 +4875,7 @@ Classes
            using a single core and a value of `-1` means using all cores.
            Positive integers mean the exact number of cores.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If `int`, `random_state` is the seed used by the
@@ -5382,7 +5382,7 @@ Classes
        **sparse_output** : bool, optional
            Return a sparse CSR-matrix.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If `int`, `random_state` is the seed used by the
@@ -5732,9 +5732,7 @@ Classes
 
        **alpha** : float, optional
            Dynamically decrease the number of sampled shapelets at each node
-           according to the current depth, i.e.:
-           
-           ::
+           according to the current depth, i.e.:::
                w = 1 - exp(-abs(alpha) * depth)
            
            - if `alpha < 0`, the number of sampled shapelets decrease from
@@ -5791,7 +5789,7 @@ Classes
        **n_jobs** : int, optional
            The number of processor cores used for fitting the ensemble.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            Controls the random resampling of the original dataset.
            
            - If `int`, `random_state` is the seed used by the
