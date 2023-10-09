@@ -18,7 +18,7 @@ from libc.string cimport memcpy
 from ..utils cimport TSArray
 from ..utils._misc cimport realloc_array
 from ..utils._stats cimport fast_mean_std
-from ._distance cimport (
+from ._cdistance cimport (
     Metric,
     ScaledSubsequenceMetric,
     Subsequence,

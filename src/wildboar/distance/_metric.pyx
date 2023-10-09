@@ -15,7 +15,7 @@ from libc.stdlib cimport free, malloc
 from ..utils cimport TSArray
 from ..utils._misc cimport realloc_array
 from ..utils._stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_variance
-from ._distance cimport (
+from ._cdistance cimport (
     EPSILON,
     Metric,
     ScaledSubsequenceMetric,

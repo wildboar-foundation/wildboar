@@ -1,4 +1,4 @@
-from .distance._distance cimport (
+from .distance._cdistance cimport (
     Metric,
     MetricList,
     SubsequenceMetric,

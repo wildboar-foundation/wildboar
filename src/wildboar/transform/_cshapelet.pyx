@@ -11,7 +11,7 @@ import numpy as np
 from libc.stdlib cimport free, malloc
 from numpy cimport uint32_t
 
-from ..distance._distance cimport (
+from ..distance._cdistance cimport (
     Subsequence,
     SubsequenceMetric,
     SubsequenceMetricList,

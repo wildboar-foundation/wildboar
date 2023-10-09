@@ -9,7 +9,7 @@ from sklearn.utils._param_validation import Interval, StrOptions
 
 from wildboar.utils.validation import check_option
 
-from ..distance import _METRICS
+from ..distance._distance import _METRICS
 from ..distance._multi_metric import make_metrics
 from ..tree._cptree import (
     EntropyCriterion,

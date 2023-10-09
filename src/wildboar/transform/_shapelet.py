@@ -7,7 +7,7 @@ import numbers
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ..distance import _SUBSEQUENCE_METRICS
+from ..distance._distance import _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
 from ._base import BaseAttributeTransform
 from ._cshapelet import (

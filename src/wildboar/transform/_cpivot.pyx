@@ -12,12 +12,12 @@ from libc.stdlib cimport free, malloc
 from libc.string cimport memcpy
 from numpy cimport uint32_t
 
-from ..distance._distance cimport MetricList
+from ..distance._cdistance cimport MetricList
 from ..utils cimport TSArray
 from ..utils._misc cimport to_ndarray_double
 from ..utils._rand cimport RAND_R_MAX, RandomSampler, rand_int
 
-from ..distance import _METRICS
+from ..distance._distance import _METRICS
 
 from ._attr_gen cimport Attribute, AttributeGenerator
 

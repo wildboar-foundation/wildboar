@@ -4,17 +4,15 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_equal
-
 from wildboar.datasets import load_gun_point, load_two_lead_ecg
 from wildboar.distance import (
-    _METRICS,
-    _SUBSEQUENCE_METRICS,
     paired_distance,
     paired_subsequence_distance,
     pairwise_distance,
     pairwise_subsequence_distance,
     subsequence_match,
 )
+from wildboar.distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 
 _EXPECTED_PAIRWISE_DISTANCE = {
     "lcss": {

@@ -41,7 +41,6 @@ class BaseAttributeTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta)
     ----------
     embedding_ : Embedding
         The underlying embedding.
-
     """
 
     _parameter_constraints: dict = {

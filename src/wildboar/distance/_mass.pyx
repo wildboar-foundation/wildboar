@@ -21,7 +21,7 @@ from ..utils._stats cimport (
     inc_stats_remove,
     inc_stats_variance,
 )
-from ._distance cimport (
+from ._cdistance cimport (
     Metric,
     ScaledSubsequenceMetric,
     Subsequence,

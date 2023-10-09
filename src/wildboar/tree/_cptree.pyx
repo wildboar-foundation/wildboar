@@ -14,7 +14,7 @@ from libc.stdlib cimport calloc, free, malloc
 from libc.string cimport memcpy, memset
 from numpy cimport uint32_t
 
-from ..distance._distance cimport MetricList
+from ..distance._cdistance cimport MetricList
 from ..utils cimport TSArray
 from ..utils._misc cimport argsort, safe_realloc
 from ..utils._rand cimport (

@@ -224,7 +224,7 @@ class BaggingClassifier(BaseBagging, SklearnBaggingClassifier):
         The number of jobs to run in parallel. A value of `None` means
         using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
@@ -363,7 +363,7 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
-        n_shapelets="warn",
+        n_shapelets="log2",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         metric="euclidean",
@@ -465,7 +465,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         Read more about the parameters in the `User guide
         <list_of_subsequence_metrics>`__.
     criterion : {"entropy", "gini"}, optional
-        The criterion used to evaluate the utility of a split
+        The criterion used to evaluate the utility of a split.
     oob_score : bool, optional
         Use out-of-bag samples to estimate generalization performance. Requires
         `bootstrap=True`.
@@ -486,7 +486,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         The number of jobs to run in parallel. A value of `None` means
         using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
@@ -535,7 +535,6 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         n_jobs=None,
         random_state=None,
     ):
-        """Construct a shapelet forest classifier."""
         super().__init__(
             estimator=ShapeletTreeClassifier(),
             estimator_params=(
@@ -622,7 +621,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         Read more about the parameters in the `User guide
         <list_of_subsequence_metrics>`__.
     criterion : {"entropy", "gini"}, optional
-        The criterion used to evaluate the utility of a split
+        The criterion used to evaluate the utility of a split.
     oob_score : bool, optional
         Use out-of-bag samples to estimate generalization performance. Requires
         `bootstrap=True`.
@@ -635,15 +634,15 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
     class_weight : dict or "balanced", optional
         Weights associated with the labels
 
-        - if `dict`, weights on the form `{label: weight}`
+        - if `dict`, weights on the form `{label: weight}`.
         - if "balanced" each class weight inversely proportional to
-          the class frequency
-        - if :class:`None`, each class has equal weight
+          the class frequency.
+        - if :class:`None`, each class has equal weight.
     n_jobs : int, optional
         The number of jobs to run in parallel. A value of `None` means
         using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
@@ -691,7 +690,6 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
         n_jobs=None,
         random_state=None,
     ):
-        """Construct a extra shapelet trees classifier."""
         super().__init__(
             estimator=ExtraShapeletTreeClassifier(),
             estimator_params=(
@@ -781,7 +779,7 @@ class BaggingRegressor(BaseBagging, SklearnBaggingRegressor):
 
     def __init__(
         self,
-        estimator,
+        estimator=None,
         n_estimators=100,
         *,
         max_samples=1.0,
@@ -949,9 +947,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         *n_timestep*.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node
-        according to the current depth, i.e.:
-
-        ::
+        according to the current depth, i.e.:::
             w = 1 - exp(-abs(alpha) * depth)
 
         - if `alpha < 0`, the number of sampled shapelets decrease from
@@ -1000,7 +996,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         whole new ensemble.
     n_jobs : int, optional
         The number of processor cores used for fitting the ensemble.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
@@ -1145,7 +1141,7 @@ class ExtraShapeletTreesRegressor(BaseShapeletForestRegressor):
         The number of jobs to run in parallel. A value of `None` means
         using a single core and a value of `-1` means using all cores.
         Positive integers mean the exact number of cores.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If int, `random_state` is the seed used by the
@@ -1296,7 +1292,7 @@ class ShapeletForestEmbedding(BaseShapeletForestRegressor):
         Positive integers mean the exact number of cores.
     sparse_output : bool, optional
         Return a sparse CSR-matrix.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
@@ -1454,7 +1450,7 @@ class IsolationShapeletForest(OutlierMixin, ForestMixin, BaseBagging):
 
         Read more about the parameters in the `User guide
         <list_of_subsequence_metrics>`__.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
@@ -1754,7 +1750,7 @@ class RocketForestRegressor(BaseForestRegressor):
         whole new ensemble.
     n_jobs : int, optional
         The number of processor cores used for fitting the ensemble.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         Controls the random resampling of the original dataset.
 
         - If `int`, `random_state` is the seed used by the
@@ -2183,12 +2179,11 @@ class ProximityForestClassifier(BaseForestClassifier):
         - if "balanced" each class weight inversely proportional to the class
             frequency.
         - if None, each class has equal weight.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
         - If `None`, the random number generator is the `RandomState` instance used
             by `np.random`.
-
     
     References
     ----------

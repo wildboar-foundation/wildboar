@@ -5,7 +5,7 @@ from collections import defaultdict
 import numpy as np
 
 from ..utils.validation import check_option
-from . import _METRICS, _SUBSEQUENCE_METRICS
+from ._distance import _METRICS, _SUBSEQUENCE_METRICS
 
 
 def parse_metric_spec(kwargs):

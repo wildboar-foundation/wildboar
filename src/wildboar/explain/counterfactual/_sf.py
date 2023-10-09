@@ -11,7 +11,11 @@ from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted
 
 from ...base import BaseEstimator, CounterfactualMixin, ExplainerMixin
-from ...distance import _METRICS, paired_distance, pairwise_subsequence_distance
+from ...distance._distance import (
+    _METRICS,
+    paired_distance,
+    pairwise_subsequence_distance,
+)
 from ...ensemble._ensemble import BaseShapeletForestClassifier
 
 

@@ -8,7 +8,7 @@ from sklearn.utils import check_random_state
 from sklearn.utils._param_validation import Interval, StrOptions
 
 from ..base import BaseEstimator
-from ..distance import _METRICS
+from ..distance._distance import _METRICS
 from ..distance._multi_metric import make_metrics
 from ..utils._rand import RandomSampler
 from ..utils.validation import check_option
