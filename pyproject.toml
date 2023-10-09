@@ -85,7 +85,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 select = ["E", "F", "N", "PL", "I" ] 
-ignore = ["PLR2004", "N803", "N806"]
+ignore = ["PLR2004", "N803", "N806", "F841"]
 
 [tool.ruff.per-file-ignores]
 "docs/conf.py" = ["E", "F", "D", "N", "PL", "RUF", "I001"]
