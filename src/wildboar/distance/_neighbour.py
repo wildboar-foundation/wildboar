@@ -58,7 +58,7 @@ class KNeighbourClassifier(ClassifierMixin, BaseEstimator):
             This instance.
         """
         self._validate_params()
-        self._validate_data(x, y, allow_3d=True)
+        x, y = self._validate_data(x, y, allow_3d=True)
         self._fit_X = x.copy()  # Align naming with sklearn
         self._y = y.copy()
         self.classes_ = np.unique(y)
@@ -78,7 +78,7 @@ class KNeighbourClassifier(ClassifierMixin, BaseEstimator):
         ndarray of shape (n_samples, len(self.classes_))
             The probability of each class for each sample.
         """
-        self._validate_data(x, allow_3d=True, reset=False)
+        x = self._validate_data(x, allow_3d=True, reset=False)
         dists = pairwise_distance(
             x,
             self._fit_X,
