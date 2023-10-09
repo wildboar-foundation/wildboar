@@ -110,3 +110,164 @@ class KNeighbourClassifier(ClassifierMixin, BaseEstimator):
             The class label for each sample.
         """
         return np.take(self.classes_, np.argmax(self.predict_proba(x), axis=1))
+
+
+class _KMeansCluster:
+    def __init__(self, init, metric, metric_params, random_state):
+        self.metric = metric
+        self.metric_params = metric_params
+        self.centroids_ = init
+        self.random_state = random_state
+
+    def cost(self, x):
+        if not hasattr(self, "_assigned") or self._assigned is None:
+            raise ValueError("`assign` must be called before `cost`")
+
+        return (
+            paired_distance(
+                x,
+                self.centroids_[self._assigned],
+                dim="mean",
+                metric=self.metric,
+                metric_params=self.metric_params,
+            ).sum()
+            / x.shape[0]
+        )
+
+    def assign(self, x):
+        self._assigned = pairwise_distance(
+            x,
+            self.centroids_,
+            dim="mean",
+            metric=self.metric,
+            metric_params=self.metric_params,
+        ).argmin(axis=1)
+
+        for c in range(self.centroids_.shape[0]):
+            cluster = x[self._assigned == c]
+            if cluster.shape[0] == 0:
+                rnd = self.random_state.randint(x.shape[0])
+                self._assigned[rnd] = c
+                self.centroids_[c] = x[rnd]  # FIXME!
+            elif cluster.shape[0] == 1:
+                self.centroids_[c] = cluster
+            else:
+                self.centroids_[c] = self._update_centroid(cluster, self.centroids_[c])
+
+
+class _EuclideanCluster(_KMeansCluster):
+    def __init__(self, centroids, random_state):
+        super().__init__(centroids, "euclidean", None, random_state)
+
+    def _update_centroid(self, group, _centroid):
+        return group.mean(axis=0)
+
+
+class _DtwCluster(_KMeansCluster):
+    def __init__(self, centroids, r, random_state):
+        super().__init__(centroids, "dtw", {"r": r}, random_state)
+        self.r = r
+
+    def _update_centroid(self, group, current_center):
+        return dtw_average(
+            group,
+            r=self.r,
+            init=current_center,
+            method="mm",
+            random_state=self.random_state.randint(np.iinfo(np.int32).max),
+        )
+
+
+class _WDtwCluster(_KMeansCluster):
+    def __init__(self, centroids, r, g, random_state):
+        super().__init__(centroids, "wdtw", {"r": r, "g": g}, random_state)
+        self.r = r
+        self.g = g
+
+    def _update_centroid(self, group, current_center):
+        return dtw_average(
+            group,
+            r=self.r,
+            g=self.g,
+            init=current_center,
+            method="ssg",
+            random_state=self.random_state.randint(np.iinfo(np.int32).max),
+        )
+
+
+class KMeans(ClusterMixin, BaseEstimator):
+    _parameter_constraints: dict = {
+        "n_clusters": [Interval(numbers.Integral, 2, None, closed="left")],
+        "metric": [StrOptions({"euclidean", "dtw"})],
+        "r": [Interval(numbers.Real, 0, 1, closed="both")],
+        "g": [None, Interval(numbers.Real, 0, None, closed="neither")],
+        "init": [StrOptions({"random"})],
+        "n_init": [
+            StrOptions({"auto"}),
+            Interval(numbers.Integral, 1, None, closed="left"),
+        ],
+        "max_iter": [Interval(numbers.Integral, 1, None, closed="left")],
+        "tol": [float],
+        "verbose": [int],
+        "random_state": ["random_state", None],
+    }
+
+    def __init__(
+        self,
+        n_clusters=8,
+        *,
+        metric="euclidean",
+        r=1.0,
+        g=None,
+        init="random",
+        n_init="auto",
+        max_iter=300,
+        tol=1e-4,
+        verbose=0,
+        random_state=None,
+    ):
+        self.metric = metric
+        self.r = r
+        self.g = g
+        self.n_clusters = n_clusters
+        self.init = init
+        self.n_init = n_init
+        self.max_iter = max_iter
+        self.tol = tol
+        self.verbose = verbose
+        self.random_state = random_state
+
+    def fit(self, x, y=None, sample_weight=None):
+        self._validate_params()
+        x = self._validate_data(x, allow_3d=False)
+        random_state = check_random_state(self.random_state)
+        centroids = x[random_state.randint(x.shape[0], size=self.n_clusters)]
+
+        if self.metric == "euclidean":
+            cluster = _EuclideanCluster(centroids, random_state=random_state)
+        elif self.metric == "dtw":
+            if self.g is None:
+                cluster = _DtwCluster(centroids, r=self.r, random_state=random_state)
+            else:
+                cluster = _WDtwCluster(
+                    centroids, r=self.r, g=self.g, random_state=random_state
+                )
+
+        prev_cost = np.inf
+        cost = -np.inf
+        iter = 0
+        while iter < self.max_iter and not np.isclose(cost, prev_cost, atol=self.tol):
+            cluster.assign(x)
+            prev_cost, cost = cost, cluster.cost(x)
+            iter += 1
+
+            if self.verbose > 0:
+                print(f"Iteration {iter}, {cost} (prev_cost = {prev_cost})")
+
+        self.n_iter_ = iter
+        self.cluster_centers_ = cluster.centroids_
+        self.labels_ = cluster._assigned
+        return self
+
+    def predict(self, x):
+        pass

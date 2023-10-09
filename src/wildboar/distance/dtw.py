@@ -394,7 +394,11 @@ def dtw_mapping(x=None, y=None, *, alignment=None, r=1, return_index=False):
         alignment = dtw_alignment(x, y, r=r)
     else:
         alignment = check_array(
-            alignment, force_all_finite=False, order=None, input_name="alignment"
+            alignment,
+            force_all_finite=False,
+            order=None,
+            allow_eos=True,  # FIXME!
+            input_name="alignment",
         )
 
     indicator = np.zeros(alignment.shape, dtype=bool)
