@@ -22,12 +22,15 @@ Version 1.2.0
 New and changed models
 ----------------------
 
-Wildboar 1.2 introduces two new models.
+Wildboar 1.2 introduces several new models.
 
 - :class:`transform.HydraTransform`: a new convolution based dictionary
   transformation method as described by Dempster et al., (2023).
 - :class:`linear_model.HydraClassifier`: a new convolution based dictionary
   classifier as described by Dempster et al., (2023).
+- :class:`distance.KNeighboursClassifier` the traditional k-neighbours classifier
+  using wildboar native distance metrics, including the full suite of optimized
+  elastic metrics.
 
 Changelog
 ---------
