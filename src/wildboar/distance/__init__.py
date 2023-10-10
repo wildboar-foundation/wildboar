@@ -13,9 +13,6 @@ examples.
 # License: BSD 3 clause
 
 from ._distance import (
-    _METRICS,  # noqa: F401
-    _SUBSEQUENCE_METRICS,  # noqa: F401
-    mean_paired_distance,  # Deprecated
     paired_distance,
     paired_subsequence_distance,
     paired_subsequence_match,
@@ -24,7 +21,7 @@ from ._distance import (
     subsequence_match,
 )
 from ._matrix_profile import matrix_profile
-from ._neighbour import KNeighbourClassifier
+from ._neighbour import KMeans, KNeighbourClassifier
 
 __all__ = [
     "pairwise_subsequence_distance",
@@ -35,5 +32,5 @@ __all__ = [
     "paired_distance",
     "matrix_profile",
     "KNeighbourClassifier",
-    "mean_paired_distance",  # Deprecated
+    "KMeans",
 ]

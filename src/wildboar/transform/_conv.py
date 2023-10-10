@@ -30,10 +30,11 @@ def convolve(X, kernel, bias=0.0, *, dilation=1, stride=1, padding=0):
     ndarray of shape (n_samples, output_size)
         The result of the convolution, where output_size is given by:::
 
-        floor(
-            ((X.shape[1] + 2 * padding) - (kernel.shape[0] - 1 * dilation + 1)) / stride
-            + 1
-        ).
+            floor(
+                ((X.shape[1] + 2 * padding) - (kernel.shape[0] - 1 * dilation + 1)) / stride
+                + 1
+            ).
+
     """
     if not isinstance(dilation, numbers.Integral) or dilation < 1:
         raise ValueError("dilation must be a strictly positive integer.")

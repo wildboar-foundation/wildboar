@@ -16,8 +16,8 @@ from sklearn.utils.validation import check_is_fitted, check_random_state, check_
 
 from ..base import BaseEstimator, ExplainerMixin
 from ..distance import pairwise_subsequence_distance
-from ..transform import SAX, RandomShapeletTransform
-from ..transform._shapelet import ShapeletMixin
+from ..transform._sax import SAX
+from ..transform._shapelet import RandomShapeletTransform, ShapeletMixin
 from ..utils.validation import check_array, check_option
 
 try:

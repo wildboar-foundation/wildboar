@@ -17,7 +17,7 @@ from sklearn.utils import check_random_state, check_scalar
 from sklearn.utils.validation import _check_sample_weight, _is_arraylike
 
 from ..utils.validation import check_array
-from . import pairwise_distance
+from ._distance import pairwise_distance
 from ._elastic import _dtw_alignment, _dtw_envelop, _dtw_lb_keogh
 
 __all__ = [

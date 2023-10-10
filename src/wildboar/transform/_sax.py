@@ -17,7 +17,7 @@ from sklearn.utils.validation import check_scalar
 from wildboar.utils.validation import check_array, check_option
 
 from ..base import BaseEstimator
-from . import IntervalTransform
+from ._interval import IntervalTransform
 
 
 def _percentiles(n_bins):

@@ -9,7 +9,7 @@ from sklearn.neighbors import LocalOutlierFactor
 from ..distance import paired_distance, pairwise_distance
 from ..explain._importance import _intervals
 from ..explain.counterfactual import proximity
-from ..transform import (
+from ..transform._sax import (
     piecewice_aggregate_approximation,
     symbolic_aggregate_approximation,
 )

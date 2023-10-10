@@ -7,48 +7,98 @@ from sklearn.utils.validation import _is_arraylike, check_scalar
 
 from ..utils import _safe_jagged_array
 from ..utils.validation import _check_ts_array, check_array, check_option, check_type
-from . import _cdistance, _elastic, _mass, _metric
+from ._cdistance import (
+    _paired_distance,
+    _paired_subsequence_distance,
+    _paired_subsequence_match,
+    _pairwise_distance,
+    _pairwise_subsequence_distance,
+    _singleton_pairwise_distance,
+    _subsequence_match,
+)
+from ._elastic import (
+    DerivativeDtwMetric,
+    DerivativeDtwSubsequenceMetric,
+    DtwMetric,
+    DtwSubsequenceMetric,
+    EdrMetric,
+    EdrSubsequenceMetric,
+    ErpMetric,
+    ErpSubsequenceMetric,
+    LcssMetric,
+    LcssSubsequenceMetric,
+    MsmMetric,
+    MsmSubsequenceMetric,
+    ScaledDtwSubsequenceMetric,
+    TweMetric,
+    TweSubsequenceMetric,
+    WeightedDerivativeDtwMetric,
+    WeightedDerivativeDtwSubsequenceMetric,
+    WeightedDtwMetric,
+    WeightedDtwSubsequenceMetric,
+    WeightedLcssMetric,
+)
+from ._mass import ScaledMassSubsequenceMetric
+
+# from . import _cdistance, _elastic, _mass, _metric
+from ._metric import (
+    AngularMetric,
+    AngularSubsequenceMetric,
+    ChebyshevMetric,
+    ChebyshevSubsequenceMetric,
+    CosineMetric,
+    CosineSubsequenceMetric,
+    EuclideanMetric,
+    EuclideanSubsequenceMetric,
+    ManhattanMetric,
+    ManhattanSubsequenceMetric,
+    MinkowskiMetric,
+    MinkowskiSubsequenceMetric,
+    NormalizedEuclideanMetric,
+    NormalizedEuclideanSubsequenceMetric,
+    ScaledEuclideanSubsequenceMetric,
+)
 
 _SUBSEQUENCE_METRICS = {
-    "euclidean": _metric.EuclideanSubsequenceMetric,
-    "normalized_euclidean": _metric.NormalizedEuclideanSubsequenceMetric,
-    "scaled_euclidean": _metric.ScaledEuclideanSubsequenceMetric,
-    "dtw": _elastic.DtwSubsequenceMetric,
-    "wdtw": _elastic.WeightedDtwSubsequenceMetric,
-    "ddtw": _elastic.DerivativeDtwSubsequenceMetric,
-    "wddtw": _elastic.WeightedDerivativeDtwSubsequenceMetric,
-    "scaled_dtw": _elastic.ScaledDtwSubsequenceMetric,
-    "lcss": _elastic.LcssSubsequenceMetric,
-    "edr": _elastic.EdrSubsequenceMetric,
-    "twe": _elastic.TweSubsequenceMetric,
-    "msm": _elastic.MsmSubsequenceMetric,
-    "erp": _elastic.ErpSubsequenceMetric,
-    "mass": _mass.ScaledMassSubsequenceMetric,
-    "manhattan": _metric.ManhattanSubsequenceMetric,
-    "minkowski": _metric.MinkowskiSubsequenceMetric,
-    "chebyshev": _metric.ChebyshevSubsequenceMetric,
-    "cosine": _metric.CosineSubsequenceMetric,
-    "angular": _metric.AngularSubsequenceMetric,
+    "euclidean": EuclideanSubsequenceMetric,
+    "normalized_euclidean": NormalizedEuclideanSubsequenceMetric,
+    "scaled_euclidean": ScaledEuclideanSubsequenceMetric,
+    "dtw": DtwSubsequenceMetric,
+    "wdtw": WeightedDtwSubsequenceMetric,
+    "ddtw": DerivativeDtwSubsequenceMetric,
+    "wddtw": WeightedDerivativeDtwSubsequenceMetric,
+    "scaled_dtw": ScaledDtwSubsequenceMetric,
+    "lcss": LcssSubsequenceMetric,
+    "edr": EdrSubsequenceMetric,
+    "twe": TweSubsequenceMetric,
+    "msm": MsmSubsequenceMetric,
+    "erp": ErpSubsequenceMetric,
+    "mass": ScaledMassSubsequenceMetric,
+    "manhattan": ManhattanSubsequenceMetric,
+    "minkowski": MinkowskiSubsequenceMetric,
+    "chebyshev": ChebyshevSubsequenceMetric,
+    "cosine": CosineSubsequenceMetric,
+    "angular": AngularSubsequenceMetric,
 }
 
 _METRICS = {
-    "euclidean": _metric.EuclideanMetric,
-    "normalized_euclidean": _metric.NormalizedEuclideanMetric,
-    "dtw": _elastic.DtwMetric,
-    "ddtw": _elastic.DerivativeDtwMetric,
-    "wdtw": _elastic.WeightedDtwMetric,
-    "wddtw": _elastic.WeightedDerivativeDtwMetric,
-    "lcss": _elastic.LcssMetric,
-    "wlcss": _elastic.WeightedLcssMetric,
-    "erp": _elastic.ErpMetric,
-    "edr": _elastic.EdrMetric,
-    "msm": _elastic.MsmMetric,
-    "twe": _elastic.TweMetric,
-    "manhattan": _metric.ManhattanMetric,
-    "minkowski": _metric.MinkowskiMetric,
-    "chebyshev": _metric.ChebyshevMetric,
-    "cosine": _metric.CosineMetric,
-    "angular": _metric.AngularMetric,
+    "euclidean": EuclideanMetric,
+    "normalized_euclidean": NormalizedEuclideanMetric,
+    "dtw": DtwMetric,
+    "ddtw": DerivativeDtwMetric,
+    "wdtw": WeightedDtwMetric,
+    "wddtw": WeightedDerivativeDtwMetric,
+    "lcss": LcssMetric,
+    "wlcss": WeightedLcssMetric,
+    "erp": ErpMetric,
+    "edr": EdrMetric,
+    "msm": MsmMetric,
+    "twe": TweMetric,
+    "manhattan": ManhattanMetric,
+    "minkowski": MinkowskiMetric,
+    "chebyshev": ChebyshevMetric,
+    "cosine": CosineMetric,
+    "angular": AngularMetric,
 }
 
 _THRESHOLD = {
@@ -213,7 +263,7 @@ def pairwise_subsequence_distance(
 
     Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params or {}
-    min_dist, min_ind = _cdistance._pairwise_subsequence_distance(
+    min_dist, min_ind = _pairwise_subsequence_distance(
         y,
         _check_ts_array(x),
         dim,
@@ -301,7 +351,7 @@ def paired_subsequence_distance(
         )
 
     metric_params = metric_params if metric_params is not None else {}
-    min_dist, min_ind = _cdistance._paired_subsequence_distance(
+    min_dist, min_ind = _paired_subsequence_distance(
         y, _check_ts_array(x), dim, Metric(**metric_params)
     )
     if return_index:
@@ -455,7 +505,7 @@ def subsequence_match(  # noqa: PLR0912
         )
         exclude = math.ceil(y.size * exclude)
 
-    indicies, distances = _cdistance._subsequence_match(
+    indicies, distances = _subsequence_match(
         y,
         _check_ts_array(x),
         threshold,
@@ -606,7 +656,7 @@ def paired_subsequence_match(  # noqa: PLR0912
     else:
         max_dist = None
 
-    indicies, distances = _cdistance._paired_subsequence_match(
+    indicies, distances = _paired_subsequence_match(
         y,
         _check_ts_array(x),
         threshold,
@@ -714,10 +764,7 @@ def paired_distance(  # noqa: PLR0912
     x_ = _check_ts_array(x)
     y_ = _check_ts_array(y)
     if dim in ["mean", "full"]:
-        distances = [
-            _cdistance._paired_distance(x_, y_, d, metric, n_jobs)
-            for d in range(n_dims)
-        ]
+        distances = [_paired_distance(x_, y_, d, metric, n_jobs) for d in range(n_dims)]
 
         if dim == "mean":
             distances = np.mean(distances, axis=0)
@@ -725,7 +772,7 @@ def paired_distance(  # noqa: PLR0912
             distances = np.stack(distances, axis=0)
 
     elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
-        distances = _cdistance._paired_distance(x_, y_, dim, metric, n_jobs)
+        distances = _paired_distance(x_, y_, dim, metric, n_jobs)
     else:
         raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
@@ -816,7 +863,7 @@ def pairwise_distance(  # noqa: PLR
 
         if dim in ["mean", "full"]:
             distances = [
-                _cdistance._singleton_pairwise_distance(x_, d, metric, n_jobs)
+                _singleton_pairwise_distance(x_, d, metric, n_jobs)
                 for d in range(n_dims)
             ]
 
@@ -826,7 +873,7 @@ def pairwise_distance(  # noqa: PLR
                 distances = np.stack(distances, axis=0)
 
         elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
-            distances = _cdistance._singleton_pairwise_distance(x_, dim, metric, n_jobs)
+            distances = _singleton_pairwise_distance(x_, dim, metric, n_jobs)
         else:
             raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
@@ -867,8 +914,7 @@ def pairwise_distance(  # noqa: PLR
 
         if dim in ["mean", "full"]:
             distances = [
-                _cdistance._pairwise_distance(x_, y_, d, metric, n_jobs)
-                for d in range(n_dims)
+                _pairwise_distance(x_, y_, d, metric, n_jobs) for d in range(n_dims)
             ]
 
             if dim == "mean":
@@ -877,7 +923,7 @@ def pairwise_distance(  # noqa: PLR
                 distances = np.stack(distances, axis=0)
 
         elif isinstance(dim, numbers.Integral) and 0 <= dim < n_dims:
-            distances = _cdistance._pairwise_distance(x_, y_, dim, metric, n_jobs)
+            distances = _pairwise_distance(x_, y_, dim, metric, n_jobs)
         else:
             raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 

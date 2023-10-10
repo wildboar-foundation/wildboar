@@ -4,6 +4,7 @@
 import numbers
 
 import numpy as np
+from sklearn.utils.multiclass import type_of_target
 from sklearn.utils.validation import (
     _check_estimator_name,
     _check_y,
@@ -13,6 +14,29 @@ from sklearn.utils.validation import (
 from sklearn.utils.validation import check_array as sklearn_check_array
 
 from .variable_len import is_end_of_series, is_variable_length
+
+
+def check_classification_targets(y):
+    """
+    Ensure that a classification target is either binary of multiclass.
+
+    Parameters
+    ----------
+    y : array-like
+        The target.
+
+    Raises
+    ------
+    ValueError
+        If the type of target is not binary of multiclass
+    """
+    y_type = type_of_target(y, input_name="y")
+    if y_type not in ["binary", "multiclass"]:
+        raise ValueError(
+            f"Unknown label type: {y_type}. Maybe you are trying to fit a "
+            "classifier, which expects discrete classes on a "
+            "regression target with continuous values."
+        )
 
 
 # noqa: H0002
