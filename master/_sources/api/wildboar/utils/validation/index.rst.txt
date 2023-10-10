@@ -19,6 +19,7 @@ Functions
 
    wildboar.utils.validation.check_X_y
    wildboar.utils.validation.check_array
+   wildboar.utils.validation.check_classification_targets
    wildboar.utils.validation.check_option
    wildboar.utils.validation.check_type
 
@@ -204,6 +205,37 @@ Functions
 
 
 
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: check_classification_targets(y)
+
+   
+   Ensure that a classification target is either binary of multiclass.
+
+
+   :Parameters:
+
+       **y** : array-like
+           The target.
+
+
+
+
+
+   :Raises:
+
+       ValueError
+           If the type of target is not binary of multiclass
 
 
 

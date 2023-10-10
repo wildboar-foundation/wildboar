@@ -278,8 +278,10 @@ examples.
   :widths: auto
   :class: autosummary
 
+  * - :py:obj:`~wildboar.distance.KMeans`
+    - KMeans clustering with support for DTW and weighted DTW.
   * - :py:obj:`~wildboar.distance.KNeighbourClassifier`
-    - Classifier implementing k-nearest neighbours
+    - Classifier implementing k-nearest neighbours.
 
 
 .. list-table:: Functions
@@ -289,8 +291,6 @@ examples.
 
   * - :py:obj:`~wildboar.distance.matrix_profile`
     - Compute the matrix profile.
-  * - :py:obj:`~wildboar.distance.mean_paired_distance`
-    - 
   * - :py:obj:`~wildboar.distance.paired_distance`
     - Compute the distance between the i:th time series.
   * - :py:obj:`~wildboar.distance.paired_subsequence_distance`

@@ -31,6 +31,8 @@ Wildboar 1.2 introduces several new models.
 - :class:`distance.KNeighboursClassifier` the traditional k-neighbours classifier
   using wildboar native distance metrics, including the full suite of optimized
   elastic metrics.
+- :class:`distance.KMeans` the traditional k-means clustering algorithm. Compared to
+  scikit-learn, this implementation supports `dtw` and `wdtw`.
 
 Changelog
 ---------
