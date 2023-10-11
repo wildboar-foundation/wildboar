@@ -60,7 +60,7 @@ where = ["src"]
 requires = [
     "setuptools>=61.0",
     "wheel",
-    "cython>=0.29.24",
+    "cython>=3.0.0",
     "setuptools_scm[toml]>=6.2",
 
     # use oldest-supported-numpy which provides the oldest numpy version with
