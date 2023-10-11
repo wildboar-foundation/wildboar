@@ -21,7 +21,7 @@ from ._distance import (
     subsequence_match,
 )
 from ._matrix_profile import matrix_profile
-from ._neighbour import KMeans, KNeighbourClassifier
+from ._neighbour import KMeans, KMedoids, KNeighbourClassifier
 
 __all__ = [
     "pairwise_subsequence_distance",
@@ -33,4 +33,5 @@ __all__ = [
     "matrix_profile",
     "KNeighbourClassifier",
     "KMeans",
+    "KMedoids",
 ]

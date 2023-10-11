@@ -28,11 +28,13 @@ Wildboar 1.2 introduces several new models.
   transformation method as described by Dempster et al., (2023).
 - :class:`linear_model.HydraClassifier`: a new convolution based dictionary
   classifier as described by Dempster et al., (2023).
-- :class:`distance.KNeighboursClassifier` the traditional k-neighbours classifier
+- :class:`distance.KNeighboursClassifier`: the traditional k-neighbours classifier
   using wildboar native distance metrics, including the full suite of optimized
   elastic metrics.
-- :class:`distance.KMeans` the traditional k-means clustering algorithm. Compared to
+- :class:`distance.KMeans`: the traditional k-means clustering algorithm. Compared to
   scikit-learn, this implementation supports `dtw` and `wdtw`.
+- :class:`distance.KMedoids`: the traditional k-medoids clustering algorithm with
+  support for all elastic metrics.
 
 Changelog
 ---------

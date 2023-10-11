@@ -37,6 +37,7 @@ It is currently maintained by Isak Samsten
 |                                                                 | `HydraClassifier`              |                               |                                |            | `MatrixProfileTransform`     |                           |
 |                                                                 | `KNeighboursClassifier`        |                               |                                |            | `HydraTransform`             |                           |
 |                                                                 |                                |                               |                                |            | `KMeans` with (W)DTW support |                           |
+|                                                                 |                                |                               |                                |            | `KMedoids`                   |                           |
 
 See the [documentation](https://wildboar.dev/master/) for examples.
 

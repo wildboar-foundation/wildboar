@@ -1,14 +1,17 @@
 import math
 import numbers
+import warnings
 
 import numpy as np
 from sklearn.base import ClassifierMixin, ClusterMixin, TransformerMixin
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.utils._param_validation import Interval, StrOptions
 from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ..base import BaseEstimator
 from ..utils.validation import check_classification_targets
-from ._distance import paired_distance, pairwise_distance
+from ._cneighbours import _pam_build, _pam_optimal_swap
+from ._distance import _METRICS, paired_distance, pairwise_distance
 from .dtw import dtw_average
 
 
@@ -412,4 +415,310 @@ class KMeans(ClusterMixin, TransformerMixin, BaseEstimator):  # noqa: I0012
             dim="mean",
             metric=metric,
             metric_params=metric_params,
+        )
+
+
+class _KMedoidsCluster:
+    def __init__(self, dist, cluster_idx):
+        self._dist = dist
+        self._cluster_idx = cluster_idx
+        self._prev_cluster_idx = cluster_idx.copy()
+
+    def assign(self):
+        self._prev_cluster_idx[:] = self._cluster_idx
+        self.labels_ = self._dist[self._cluster_idx].argmin(axis=0)
+
+    def cost(self):
+        self.cost_ = (
+            np.take(self._dist, self._cluster_idx[self.labels_]).sum()
+            / self._dist.shape[0]
+        )  # np.sum(self._prev_cluster_idx != self._cluster_idx)
+
+    def update(self):
+        pass
+
+
+class _FastKMedoidsCluster(_KMedoidsCluster):
+    def update(self):
+        for idx in range(self._cluster_idx.shape[0]):
+            cluster_idx = np.where(self.labels_ == idx)[0]
+            if cluster_idx.shape[0] == 0:
+                print(f"empty cluster {idx}")
+                continue
+
+            cost = self._dist[cluster_idx, cluster_idx.reshape(-1, 1)].sum(axis=1)
+            min_idx = cost.argmin()
+            min_cost = cost[min_idx]
+            curr_cost = cost[(cluster_idx == self._cluster_idx[idx]).argmax()]
+            if min_cost < curr_cost:
+                self._cluster_idx[idx] = cluster_idx[min_idx]
+
+
+class _PamKMedoidsCluster(_KMedoidsCluster):
+    def __init__(self, dist, cluster_idx):
+        super().__init__(dist, cluster_idx)
+        self._djs, self._ejs = np.sort(self._dist[self._cluster_idx], axis=0)[[0, 1]]
+
+    def update(self):
+        not_cluster_idx = np.delete(np.arange(self._dist.shape[0]), self._cluster_idx)
+        optimal_swap = _pam_optimal_swap(
+            self._dist,
+            self._cluster_idx,
+            not_cluster_idx,
+            self._djs,
+            self._ejs,
+            self._cluster_idx.shape[0],
+        )
+
+        if optimal_swap is not None:
+            i, j, _ = optimal_swap
+            self._cluster_idx[self._cluster_idx == i] = j
+            self._djs, self._ejs = np.sort(self._dist[self._cluster_idx], axis=0)[
+                [0, 1]
+            ]
+
+
+_KMEDOID_CLUSTER_ALGORITHMS = {"pam": _PamKMedoidsCluster, "fast": _FastKMedoidsCluster}
+
+
+class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
+    """
+    KMedoid algorithm.
+
+    Parameters
+    ----------
+    n_clusters : int, optional
+        The number of clusters.
+    metric : str, optional
+        The metric.
+    metric_params : dict, optional
+        The metric parameters. Read more about the metrics and their parameters
+        in the :ref:`User guide <list_of_metrics>`.
+    init : {"auto", "random", "min"}, optional
+        Cluster initialization. If "random", randomly initialize `n_clusters`,
+        if "min" select the samples with the smallest distance to the other samples.
+    n_init : "auto" or int, optional
+        Number times the algorithm is re-initialized with new centroids.
+    algorithm : {"fast", "pam"}, optional
+        The algorithm for updating cluster assignments. If "pam", use the
+        Partitioning Around Medoids algorithm.
+    max_iter : int, optional
+        The maximum number of iterations for a single run of the algorithm.
+    tol : float, optional
+        Relative tolerance to declare convergence of two consecutive iterations.
+    verbose : int, optional
+        Print diagnostic messages during convergence.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. A value of `None` means using
+        a single core and a value of `-1` means using all cores. Positive
+        integers mean the exact number of cores.
+    random_state : RandomState or int, optional
+        Determines random number generation for centroid initialization and
+        barycentering when fitting with `metric="dtw"`.
+
+    Attributes
+    ----------
+    n_iter_ : int
+        The number of iterations before convergence.
+    cluster_centers_ : ndarray of shape (n_clusters, n_timestep)
+        The cluster centers.
+    labels_ : ndarray of shape (n_samples, )
+        The cluster assignment.
+    """
+
+    _parameter_constraints: dict = {
+        "n_clusters": [Interval(numbers.Integral, 1, None, closed="left")],
+        "metric": [StrOptions(_METRICS.keys())],
+        "metric_params": [None, dict],
+        "init": [StrOptions({"random", "auto", "min"})],
+        "n_init": [
+            StrOptions({"auto"}),
+            Interval(numbers.Integral, 1, None, closed="left"),
+        ],
+        "algorithm": [StrOptions({"fast", "pam"})],
+        "max_iter": [Interval(numbers.Integral, 1, None, closed="left")],
+        "tol": [Interval(numbers.Real, 0, None, closed="left")],
+        "verbose": [numbers.Integral],
+        "n_jobs": [None, numbers.Integral],
+        "random_state": ["random_state", None],
+    }
+
+    def __init__(
+        self,
+        n_clusters=8,
+        metric="euclidean",
+        metric_params=None,
+        init="random",
+        n_init="auto",
+        algorithm="fast",
+        max_iter=30,
+        tol=1e-4,
+        verbose=0,
+        n_jobs=None,
+        random_state=None,
+    ):
+        self.n_clusters = n_clusters
+        self.metric = metric
+        self.metric_params = metric_params
+        self.init = init
+        self.n_init = n_init
+        self.algorithm = algorithm
+        self.max_iter = max_iter
+        self.tol = tol
+        self.verbose = verbose
+        self.n_jobs = n_jobs
+        self.random_state = random_state
+
+    def fit(self, x, y=None):
+        """
+        Compute the kmedoids-clustering.
+
+        Parameters
+        ----------
+        x : univariate time-series
+            The input samples.
+        y : Ignored, optional
+            Not used.
+
+        Returns
+        -------
+        object
+            Fitted estimator.
+        """
+        x = self._validate_data(x, allow_3d=True)
+        self._validate_params()
+
+        if self.n_init == "auto":
+            if self.init == "auto":
+                n_init = 1
+            else:
+                n_init = 10
+        else:
+            n_init = self.n_init
+
+        # initial medoids are deterministic
+        if n_init > 1 and self.init != "random":
+            n_init = 1
+
+        max_iter = self.max_iter
+        if self.algorithm == "pam" and self.n_clusters == 1 and self.max_iter != 0:
+            warnings.warn("n_clusters must be larger than 1 if max_iter larger than 0")
+            max_iter = 0
+
+        random_state = check_random_state(self.random_state)
+        dist = pairwise_distance(
+            x,
+            dim="mean",
+            metric=self.metric,
+            metric_params=self.metric_params,
+            n_jobs=self.n_jobs,
+        )
+        best_iter = 0
+        best_cost = np.inf
+        best_clusterer = None
+        best_reassign = None
+
+        # TODO: Add sampling
+        for i in range(n_init):
+            if self.verbose:
+                print(f"Running initialization {i}/{n_init}")
+
+            iter, clusterer, reassign = self._fit_one_init(
+                dist, random_state=random_state, max_iter=max_iter
+            )
+
+            if clusterer.cost_ < best_cost:
+                best_cost = clusterer.cost_
+                best_clusterer = clusterer
+                best_iter = iter
+                best_reassign = reassign
+
+        if best_reassign:
+            clusterer.assign()
+
+        self.inertia_ = best_clusterer.cost_
+        self.cluster_centers_ = x[best_clusterer._cluster_idx]
+        self.n_iter_ = best_iter
+        self.labels_ = best_clusterer.labels_
+        return self
+
+    def _fit_one_init(self, dist, *, max_iter, random_state):
+        centers = self._init_centers(dist, self.n_clusters, random_state=random_state)
+        clusterer = _KMEDOID_CLUSTER_ALGORITHMS[self.algorithm](dist, centers)
+        clusterer.assign()
+        reassign = False
+        prev_cost = np.inf
+        for iter in range(max_iter):
+            clusterer.update()
+            clusterer.cost()
+
+            if self.verbose:
+                print(
+                    f"Iteration {iter}/{self.max_iter}: current_cost={clusterer.cost_}"
+                )
+
+            if math.isclose(clusterer.cost_, prev_cost, rel_tol=self.tol):
+                reassign = True
+                break
+
+            prev_cost = clusterer.cost_
+            clusterer.assign()
+
+        if iter + 1 == self.max_iter:
+            warnings.warn(
+                "Maximum number of iterations reached before convergence. "
+                "Consider increasing max_iter to improve the fit",
+                ConvergenceWarning,
+            )
+
+        return iter, clusterer, reassign
+
+    def _init_centers(self, dist, n_clusters, random_state):
+        if self.init == "random":
+            return random_state.choice(dist.shape[0], n_clusters, replace=False)
+        elif self.init == "min" or (self.algorithm == "fast" and self.init == "auto"):
+            return np.argpartition(dist.sum(axis=1), n_clusters)[:n_clusters]
+        elif self.init == "auto":
+            return _pam_build(dist, n_clusters)
+        else:
+            raise ValueError(f"Unsupported init, got {self.init}")
+
+    def predict(self, x):
+        """
+        Predict the closest cluster for each sample.
+
+        Parameters
+        ----------
+        x : univariate time-series
+            The input samples.
+
+        Returns
+        -------
+        ndarray of shape (n_samples, )
+            Index of the cluster each sample belongs to.
+        """
+        return self.transform(x).argmin(axis=1)
+
+    def transform(self, x):
+        """
+        Transform the input to a cluster distance space.
+
+        Parameters
+        ----------
+        x : univariate time-series
+            The input samples.
+
+        Returns
+        -------
+        ndarray of shape (n_samples, n_clusters)
+            The distance between each sample and each cluster.
+        """
+        check_is_fitted(self)
+        x = self._validate_data(x, allow_3d=True, reset=False)
+        return pairwise_distance(
+            x,
+            self.cluster_centers_,
+            dim="mean",
+            metric=self.metric,
+            metric_params=self.metric_params,
         )
