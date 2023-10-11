@@ -47,13 +47,13 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         self.std_x = NULL
         self.x_buffer = NULL
         self.y_buffer = NULL
-    
+
     def __dealloc__(self):
         self.__free()
 
     def __reduce__(self):
         return self.__class__, ()
-    
+
     cdef void __free(self) noexcept nogil:
         if self.mean_x != NULL:
             free(self.mean_x)
@@ -72,7 +72,7 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
             self.y_buffer = NULL
 
     cdef int reset(self, TSArray X) noexcept nogil:
-        self.__free() 
+        self.__free()
         cdef Py_ssize_t n_timestep = X.shape[2]
         self.x_buffer = <complex*> malloc(sizeof(complex) * n_timestep)
         self.y_buffer = <complex*> malloc(sizeof(complex) * n_timestep)
@@ -221,8 +221,6 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
                 indicies[0][j] = i
                 j += 1
         return j
-        
-
 
 cdef void _mass_distance(
     const double *x,
@@ -231,11 +229,11 @@ cdef void _mass_distance(
     Py_ssize_t y_length,
     double mean,
     double std,
-    double *mean_x,    # length x_length - y_length + 1
-    double *std_x,     # length x_length - y_length + 1
-    complex *y_buffer, # length x_length
-    complex *x_buffer, # length x_length
-    double *dist,      # length x_length - y_length + 1
+    double *mean_x,     # length x_length - y_length + 1
+    double *std_x,      # length x_length - y_length + 1
+    complex *y_buffer,  # length x_length
+    complex *x_buffer,  # length x_length
+    double *dist,       # length x_length - y_length + 1
 ) noexcept nogil:
     cdef Py_ssize_t i
     cdef double z

@@ -16,10 +16,10 @@ from ..utils cimport TSArray
 
 
 cdef extern from "Python.h":
-  cdef void* PyList_GET_ITEM(list, Py_ssize_t index) nogil
+    cdef void* PyList_GET_ITEM(list, Py_ssize_t index) nogil
 
 cdef class List:
-    
+
     def __init__(self, list py_list):
         self.py_list = py_list
         self.size = len(py_list)
@@ -28,14 +28,20 @@ cdef class List:
         return PyList_GET_ITEM(self.py_list, i)
 
 
-cdef inline void argsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) noexcept nogil:
+cdef inline void argsort(
+    double_or_int *values, Py_ssize_t *samples, Py_ssize_t n
+) noexcept nogil:
     if n == 0:
         return
     cdef Py_ssize_t maxd = 2 * <Py_ssize_t> log2(n)
     introsort(values, samples, n, maxd)
 
-cdef inline void swap(double_or_int *values, Py_ssize_t *samples,
-                      Py_ssize_t i, Py_ssize_t j) noexcept nogil:
+cdef inline void swap(
+    double_or_int *values,
+    Py_ssize_t *samples,
+    Py_ssize_t i,
+    Py_ssize_t j
+) noexcept nogil:
     values[i], values[j] = values[j], values[i]
     samples[i], samples[j] = samples[j], samples[i]
 
@@ -59,9 +65,9 @@ cdef inline double_or_int median3(double_or_int *values, Py_ssize_t n) noexcept 
         return b
 
 cdef void introsort(
-    double_or_int *values, 
+    double_or_int *values,
     Py_ssize_t *samples,
-    Py_ssize_t n, 
+    Py_ssize_t n,
     Py_ssize_t maxd
 ) noexcept nogil:
     cdef double_or_int pivot, value
@@ -112,7 +118,9 @@ cdef inline void sift_down(double_or_int *values, Py_ssize_t *samples,
             swap(values, samples, root, maxind)
             root = maxind
 
-cdef void heapsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) noexcept nogil:
+cdef void heapsort(
+    double_or_int *values, Py_ssize_t *samples, Py_ssize_t n
+) noexcept nogil:
     cdef Py_ssize_t start, end
 
     start = (n - 2) / 2
@@ -129,7 +137,9 @@ cdef void heapsort(double_or_int *values, Py_ssize_t *samples, Py_ssize_t n) noe
         sift_down(values, samples, 0, end)
         end = end - 1
 
-cdef int realloc_array(void** ptr, Py_ssize_t old_size, Py_ssize_t ptr_size, Py_ssize_t *capacity)  except -1 nogil:
+cdef int realloc_array(
+    void** ptr, Py_ssize_t old_size, Py_ssize_t ptr_size, Py_ssize_t *capacity
+)  except -1 nogil:
     cdef void *tmp = ptr[0]
     if old_size >= capacity[0]:
         capacity[0] = old_size * 2

@@ -24,7 +24,6 @@ cdef class RandomSampler:
 
             vose_rand_init(&self.vr, len(weights))
             vose_rand_precompute(&self.vr, &weights[0])
-        
 
     def __reduce__(self):
         weights = np.asarray(self.weights) if self.weights is not None else None
@@ -75,7 +74,7 @@ cdef void vose_rand_precompute(VoseRand *vr, const double *p) noexcept nogil:
             L[nL] = i
             nL += 1
 
-    while nS > 0 and nL > 0: 
+    while nS > 0 and nL > 0:
         nS -= 1
         a = S[nS]
         nL -= 1
@@ -108,7 +107,7 @@ cdef Py_ssize_t vose_rand_int(VoseRand *vr, uint32_t *seed) noexcept nogil:
     cdef double r2 = rand_uniform(0, 1, seed)
     cdef Py_ssize_t i = <Py_ssize_t> (vr.n * r1)
     if r2 < vr.prob[i]:
-        return i 
+        return i
     else:
         return vr.alias[i]
 
@@ -127,7 +126,6 @@ cdef inline uint32_t rand_r(uint32_t *seed) noexcept nogil:
     return seed[0] % (<uint32_t> RAND_R_MAX + 1)
 
 
-
 cdef int rand_int(int min_val, int max_val, uint32_t *seed) noexcept nogil:
     """Returns a pseudo-random number in the range [`min_val` `max_val`["""
     if min_val == max_val:
@@ -136,7 +134,9 @@ cdef int rand_int(int min_val, int max_val, uint32_t *seed) noexcept nogil:
         return min_val + rand_r(seed) % (max_val - min_val)
 
 
-cdef double rand_uniform(double low, double high, uint32_t *random_state) noexcept nogil:
+cdef double rand_uniform(
+    double low, double high, uint32_t *random_state
+) noexcept nogil:
     """Generate a random double in the range [`low` `high`[."""
     return ((high - low) * <double> rand_r(random_state) / <double> RAND_R_MAX) + low
 

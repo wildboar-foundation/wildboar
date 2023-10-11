@@ -41,7 +41,7 @@ cdef class TreeAttributeGenerator:
 
     def __init__(self, AttributeGenerator generator):
         self.generator = generator
-    
+
     def __reduce__(self):
         return self.__class__, (self.generator, )
 
@@ -54,8 +54,8 @@ cdef class TreeAttributeGenerator:
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
-        TSArray X, 
-        Py_ssize_t *samples, 
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Attribute *transient,
         uint32_t *seed
@@ -65,13 +65,13 @@ cdef class TreeAttributeGenerator:
         )
 
     cdef Py_ssize_t init_persistent(
-        self, 
+        self,
         TSArray X,
-        Attribute *transient, 
+        Attribute *transient,
         Attribute *persistent
     ) noexcept nogil:
         return self.generator.init_persistent(X, transient, persistent)
-    
+
     cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
         return self.generator.free_transient(attribute)
 
@@ -93,24 +93,24 @@ cdef class TreeAttributeGenerator:
         Py_ssize_t sample
     ) noexcept nogil:
         return self.generator.persistent_value(attribute, X, sample)
-    
+
     cdef void transient_values(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
-        Py_ssize_t *samples, 
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil:
         self.generator.transient_values(
             attribute, X, samples, n_samples, values
         )
-    
+
     cdef void persistent_values(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
-        Py_ssize_t *samples, 
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil:
@@ -141,7 +141,7 @@ cdef class DynamicTreeAttributeGenerator(TreeAttributeGenerator):
         cdef double weight = 1.0 - exp(-fabs(self.alpha) * depth)
         if self.alpha < 0:
             weight = 1 - weight
-        
+
         return <Py_ssize_t> max(1, ceil(n_attributes * weight))
 
 
@@ -597,7 +597,7 @@ cdef class Tree:
         import warnings
         warnings.warn(
             "`feature` has been renamed to `attribute` in 1.2 and will be removed in 1.4",
-            DeprecationWarning, 
+            DeprecationWarning,
         )
         return self.attribute
 
@@ -973,21 +973,16 @@ cdef class TreeBuilder:
         ----------
         start : int
             The start position in samples
-            
         end : int
             The end position in samples
-            
         depth : int (out)
             The current recusion depth
-            
         parent : int
             The index of the parent node
-            
         is_left : bool
             True if current node is left
-            
         max_depth : int (out)
-            The max depth reached in the tree        
+            The max depth reached in the tree
         """
         if depth > max_depth[0]:
             max_depth[0] = depth
@@ -1051,10 +1046,10 @@ cdef class TreeBuilder:
             return self.new_leaf_node(start, end, parent, is_left)
 
     cdef SplitPoint _split(
-        self, 
-        Py_ssize_t start, 
-        Py_ssize_t end, 
-        Py_ssize_t depth, 
+        self,
+        Py_ssize_t start,
+        Py_ssize_t end,
+        Py_ssize_t depth,
         double parent_impurity
     ) noexcept nogil:
         cdef Py_ssize_t i, n_samples
@@ -1080,14 +1075,14 @@ cdef class TreeBuilder:
 
         for i in range(self.generator.get_n_attributess(self.X, depth)):
             self.generator.next_attribute(
-                i, 
-                self.X, 
-                self.samples + start, 
-                n_samples, 
-                &current_attribute, 
+                i,
+                self.X,
+                self.samples + start,
+                n_samples,
+                &current_attribute,
                 &self.random_seed
             )
-            
+
             self.generator.transient_values(
                 &current_attribute,
                 self.X,

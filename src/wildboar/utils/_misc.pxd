@@ -14,9 +14,13 @@ ctypedef fused double_or_int:
     Py_ssize_t
     double
 
-cdef void argsort(double_or_int *values, Py_ssize_t *order, Py_ssize_t length) noexcept nogil
+cdef void argsort(
+    double_or_int *values, Py_ssize_t *order, Py_ssize_t length
+) noexcept nogil
 
-cdef int realloc_array(void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap) except -1 nogil
+cdef int realloc_array(
+    void** a, Py_ssize_t p, Py_ssize_t size, Py_ssize_t *cap
+) except -1 nogil
 
 cdef int safe_realloc(void** ptr, Py_ssize_t new_size) except -1 nogil
 

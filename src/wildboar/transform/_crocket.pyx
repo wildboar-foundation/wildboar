@@ -182,8 +182,8 @@ cdef class RocketAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
-        TSArray X, 
-        Py_ssize_t *samples, 
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Attribute *transient,
         uint32_t *seed
@@ -239,9 +239,9 @@ cdef class RocketAttributeGenerator(AttributeGenerator):
 
     # NOTE: We move ownership of `transient.attribute` to `persistent.attribute`.
     cdef Py_ssize_t init_persistent(
-        self, 
+        self,
         TSArray X,
-        Attribute *transient, 
+        Attribute *transient,
         Attribute *persistent
     ) noexcept nogil:
         persistent.dim = transient.dim
@@ -257,7 +257,7 @@ cdef class RocketAttributeGenerator(AttributeGenerator):
     ) noexcept nogil:
         cdef double mean_val, max_val
         cdef Rocket* rocket = <Rocket*> attribute.attribute
-        
+
         # TODO: (1.3) use utils._cconv.convolution_1d
         apply_convolution(
             rocket.dilation,
@@ -284,9 +284,9 @@ cdef class RocketAttributeGenerator(AttributeGenerator):
         return self.transient_value(attribute, X, sample)
 
     cdef Py_ssize_t transient_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -311,9 +311,9 @@ cdef class RocketAttributeGenerator(AttributeGenerator):
         return 0
 
     cdef Py_ssize_t persistent_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -350,7 +350,7 @@ cdef class RocketAttributeGenerator(AttributeGenerator):
         rocket.bias = bias
         rocket.weight = <double*> malloc(sizeof(double) * length)
         rocket.return_mean = return_mean
-        
+
         cdef Py_ssize_t i
         for i in range(length):
             rocket.weight[i] = weight[i]

@@ -90,7 +90,7 @@ cdef void _matrix_profile_stmp(
     inc_stats_init(&stats)
     for i in range(window - 1):
         inc_stats_add(&stats, 1.0, y[i])
-    
+
     for i in range(profile_length):
         mp[i] = INFINITY
         mpi[i] = -1
@@ -99,7 +99,7 @@ cdef void _matrix_profile_stmp(
         inc_stats_add(&stats, 1.0, y[i + window - 1])
         std = sqrt(inc_stats_variance(&stats))
         _mass_distance(
-            x, 
+            x,
             x_length,
             y + i,
             window,
@@ -122,8 +122,8 @@ def _paired_matrix_profile(
     TSArray X,
     TSArray Y,
     Py_ssize_t w,
-    Py_ssize_t dim, 
-    Py_ssize_t exclude, 
+    Py_ssize_t dim,
+    Py_ssize_t exclude,
     n_jobs,
 ):
     cdef Py_ssize_t profile_length = Y.shape[2] - w + 1
@@ -133,10 +133,10 @@ def _paired_matrix_profile(
     cdef double *dist_buffer = <double*> malloc(sizeof(double) * X.shape[2])
     cdef complex *x_buffer = <complex*> malloc(sizeof(complex) * X.shape[2])
     cdef complex *y_buffer = <complex*> malloc(sizeof(complex) * X.shape[2])
-    
+
     cdef double[:, :] mp = np.empty((X.shape[0], profile_length), dtype=np.double)
     cdef Py_ssize_t[:, :] mpi = np.empty((X.shape[0], profile_length), dtype=np.intp)
-    
+
     with nogil:
         for i in range(X.shape[0]):
             _matrix_profile_stmp(
@@ -146,7 +146,7 @@ def _paired_matrix_profile(
                 Y.shape[2],
                 w,
                 exclude,
-                mean_x, 
+                mean_x,
                 std_x,
                 x_buffer,
                 y_buffer,

@@ -78,7 +78,7 @@ cdef inline Py_ssize_t _max_exponent(
 
     return max_exponent
 
-  
+
 cdef class HydraAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_kernels
     cdef Py_ssize_t kernel_size
@@ -108,7 +108,7 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
         self.max_values = NULL
 
     def __dealloc__(self):
-        self._free() 
+        self._free()
 
     cdef void _free(self) noexcept nogil:
         if self.conv_values != NULL:
@@ -131,7 +131,7 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
         self.conv_values = <double*> malloc(sizeof(double) * X.shape[2] * self.n_kernels)
         self.max_values = <double*> malloc(sizeof(double) * self.n_kernels)
         self.min_values = <double*> malloc(sizeof(double) * self.n_kernels)
-   
+
     cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return self.n_groups
 
@@ -140,13 +140,13 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
     # attributes.
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
         cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.kernel_size)
-        return self.get_n_attributess(X) * max_exponent * self.n_kernels * 2 * 1 
+        return self.get_n_attributess(X) * max_exponent * self.n_kernels * 2 * 1
 
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
-        TSArray X, 
-        Py_ssize_t *samples, 
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Attribute *transient,
         uint32_t *seed
@@ -157,24 +157,24 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
         cdef double sum_abs
         cdef double *kernels = <double*> malloc(sizeof(double) * self.kernel_size * self.n_kernels)
         cdef double *kernel
-        
+
         # Randomly sample and rescale n_kernels Hydra (2023), D (fit, Line 4)
         for i in range(self.n_kernels):
             kernel = kernels + i * self.kernel_size
-            self.kernel_sampler.sample(kernel, self.kernel_size, &mean, &sum_abs, seed) 
+            self.kernel_sampler.sample(kernel, self.kernel_size, &mean, &sum_abs, seed)
 
             # Hydra (2023), D (fit, Line 6)
             for j in range(self.kernel_size):
                 kernel[j] = (kernel[j] - mean) / sum_abs
-       
+
         hydra.kernel_size = self.kernel_size
         hydra.n_kernels = self.n_kernels
         hydra.kernels = kernels
 
         transient.dim = 0
         transient.attribute = hydra
-        return 0 
-   
+        return 0
+
     # Restore a Hydra group from a numpy array
     cdef Py_ssize_t persistent_from_object(self, object obj, Attribute *attribute):
         dim, array = obj
@@ -183,7 +183,7 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
         # We will assume that array.shape[0] == hydra.n_kernels * hydra.kernel_size
         hydra.kernels = <double*> malloc(sizeof(double) * array.shape[0])
         cdef Py_ssize_t i
-        
+
         # TODO: This can potentially be done without GIL.
         for i in range(array.shape[0]):
             hydra.kernels[i] = array[i]
@@ -203,14 +203,14 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
                 free(hydra.kernels)
             free(attribute.attribute)
             attribute.attribute = NULL
-        return 0 
+        return 0
 
-    # NOTE: We move ownership of the attribute here to a persistent attribute, which will
-    # be freed by `free_persistent`.
+    # NOTE: We move ownership of the attribute here to a persistent attribute,
+    # which will be freed by `free_persistent`.
     cdef Py_ssize_t init_persistent(
-        self, 
+        self,
         TSArray X,
-        Attribute *transient, 
+        Attribute *transient,
         Attribute *persistent
     ) noexcept nogil:
         persistent.dim = transient.dim
@@ -231,7 +231,7 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
     cdef double transient_value(
         self, Attribute *attribute, TSArray X, Py_ssize_t sample
     ) noexcept nogil:
-       return 0 # TODO
+        return 0  # TODO
 
     cdef double persistent_value(
         self, Attribute *attribute, TSArray X, Py_ssize_t sample
@@ -239,9 +239,9 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
         return self.transient_value(attribute, X, sample)
 
     cdef Py_ssize_t transient_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -291,18 +291,18 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
                 find_min_max(
                     i,
                     X.shape[2],
-                    self.conv_values, 
+                    self.conv_values,
                     self.n_kernels,
-                    &min_index, 
-                    &min_value, 
-                    &max_index, 
+                    &min_index,
+                    &min_value,
+                    &max_index,
                     &max_value
                 )
 
                 # NOTE: min_index and max_index are bounded by self.n_kernels
                 self.min_values[min_index] += 1
                 self.max_values[max_index] += max_value
-           
+
             # We allocate each attribute to an array with the following layout,
             # self.n_kernels * self.max_exponent * 2:
             #
@@ -318,16 +318,16 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
             # Here we move the pointer to first kernel of the d:th dilation
             # making sure that we account for the fact that each kernel
             # is descrived by two attributes.
-            kernel_attribute_offset = attribute_offset + exponent * self.n_kernels * 2 
+            kernel_attribute_offset = attribute_offset + exponent * self.n_kernels * 2
             for i in range(self.n_kernels):
                 # NOTE: *2 is the number of attributes (min/max)
                 out[out_sample, kernel_attribute_offset + i * 2] = self.min_values[i]
                 out[out_sample, kernel_attribute_offset + i * 2 + 1] = self.max_values[i]
-            
+
     cdef Py_ssize_t persistent_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -341,7 +341,7 @@ cdef void find_min_max(
     Py_ssize_t offset,
     Py_ssize_t stride,
     double* values,
-    Py_ssize_t length, 
+    Py_ssize_t length,
     Py_ssize_t *min_index,
     double *min_value,
     Py_ssize_t *max_index,

@@ -30,8 +30,8 @@ cdef class MetricList(List):
         return (<Metric> self.get(metric)).reset(X, Y)
 
     cdef double distance(
-        self, 
-        Py_ssize_t metric, 
+        self,
+        Py_ssize_t metric,
         TSArray X,
         Py_ssize_t x_index,
         TSArray Y,
@@ -72,7 +72,7 @@ cdef class SubsequenceMetricList(List):
 
     cdef int init_persistent(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         TSArray X,
         SubsequenceView* v,
         Subsequence* s,
@@ -87,22 +87,22 @@ cdef class SubsequenceMetricList(List):
 
     cdef int from_array(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         Subsequence *s,
         object obj,
     ):
         return (<SubsequenceMetric> self.get(metric)).from_array(s, obj)
 
     cdef object to_array(
-        self, 
-        Py_ssize_t metric, 
+        self,
+        Py_ssize_t metric,
         Subsequence *s
     ):
         return (<SubsequenceMetric> self.get(metric)).to_array(s)
 
     cdef double transient_distance(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         SubsequenceView *v,
         TSArray X,
         Py_ssize_t index,
@@ -112,10 +112,9 @@ cdef class SubsequenceMetricList(List):
             v, X, index, return_index
         )
 
-
     cdef double persistent_distance(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         Subsequence *s,
         TSArray X,
         Py_ssize_t index,
@@ -127,7 +126,7 @@ cdef class SubsequenceMetricList(List):
 
     cdef Py_ssize_t transient_matches(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         SubsequenceView *v,
         TSArray X,
         Py_ssize_t index,
@@ -141,7 +140,7 @@ cdef class SubsequenceMetricList(List):
 
     cdef Py_ssize_t persistent_matches(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         Subsequence *s,
         TSArray X,
         Py_ssize_t index,
@@ -154,7 +153,9 @@ cdef class SubsequenceMetricList(List):
         )
 
 
-cdef int _ts_view_update_statistics(SubsequenceView *v, const double* sample) noexcept nogil:
+cdef int _ts_view_update_statistics(
+    SubsequenceView *v, const double* sample
+) noexcept nogil:
     """Update the mean and standard deviation of a shapelet info struct """
     cdef double ex = 0
     cdef double ex2 = 0
@@ -239,7 +240,7 @@ cdef class SubsequenceMetric:
         cdef Py_ssize_t i
         for i in range(v.length):
             v.data[i] = arr[i]
-        return 0 
+        return 0
 
     cdef object to_array(self, Subsequence *s):
         cdef Py_ssize_t j
@@ -459,10 +460,10 @@ cdef class _PairwiseSubsequenceDistance:
     cdef SubsequenceMetric metric
 
     def __cinit__(
-        self, 
+        self,
         double[:, :] distances,
         Py_ssize_t[:, :] min_indices,
-        TSArray X, 
+        TSArray X,
         SubsequenceMetric metric
     ):
         self.X = X
@@ -483,7 +484,7 @@ cdef class _PairwiseSubsequenceDistance:
     cdef void set_shapelets(self, list shapelets, Py_ssize_t dim):
         cdef Py_ssize_t i
         self.n_shapelets = len(shapelets)
-        self.shapelets = <Subsequence**> malloc(sizeof(Subsequence*) * self. n_shapelets)
+        self.shapelets = <Subsequence**> malloc(sizeof(Subsequence*) * self.n_shapelets)
         cdef Subsequence *s
         for i in range(self.n_shapelets):
             s = <Subsequence*> malloc(sizeof(Subsequence))
@@ -512,9 +513,9 @@ cdef class _PairwiseSubsequenceDistance:
 
 
 def _pairwise_subsequence_distance(
-    list shapelets, 
-    TSArray x, 
-    int dim, 
+    list shapelets,
+    TSArray x,
+    int dim,
     SubsequenceMetric metric,
     n_jobs,
 ):
@@ -527,7 +528,7 @@ def _pairwise_subsequence_distance(
         x,
         metric,
     )
-    metric.reset(x) # TODO: Move to _PairwiseSubsequenceDistance
+    metric.reset(x)  # TODO: Move to _PairwiseSubsequenceDistance
     subsequence_distance.set_shapelets(shapelets, dim)
     run_in_parallel(subsequence_distance, n_jobs=n_jobs, require="sharedmem")
     return distances, min_indicies
@@ -567,7 +568,7 @@ def _subsequence_match(
     n_jobs,
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
-    cdef double *distances 
+    cdef double *distances
     cdef Py_ssize_t *indicies
     cdef Py_ssize_t i, n_matches
 
@@ -603,7 +604,7 @@ def _paired_subsequence_match(
     n_jobs,
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
-    cdef double *distances 
+    cdef double *distances
     cdef Py_ssize_t *indicies
     cdef Py_ssize_t i, n_matches
 
@@ -657,9 +658,9 @@ def _pairwise_distance(
 
 
 def _singleton_pairwise_distance(
-    TSArray x, 
-    Py_ssize_t dim, 
-    Metric metric, 
+    TSArray x,
+    Py_ssize_t dim,
+    Metric metric,
     n_jobs
 ):
     cdef Py_ssize_t n_samples = x.shape[0]

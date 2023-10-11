@@ -27,12 +27,16 @@ cdef struct Interval:
 
 
 cdef class Summarizer:
-    cdef void summarize_all(self, const double *x, Py_ssize_t length, double *out) noexcept nogil:
+    cdef void summarize_all(
+        self, const double *x, Py_ssize_t length, double *out
+    ) noexcept nogil:
         cdef Py_ssize_t i
         for i in range(self.n_outputs()):
             out[i] = self.summarize(i, x, length)
 
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
+    cdef double summarize(
+        self, Py_ssize_t i, const double *x, Py_ssize_t length
+    ) noexcept nogil:
         pass
 
     cdef void reset(self, TSArray X) noexcept nogil:
@@ -43,15 +47,19 @@ cdef class Summarizer:
 
 
 cdef class MeanSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
+    cdef double summarize(
+        self, Py_ssize_t i, const double *x, Py_ssize_t length
+    ) noexcept nogil:
         return _stats.mean(x, length)
-        
+
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 1
 
 
 cdef class VarianceSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
+    cdef double summarize(
+        self, Py_ssize_t i, const double *x, Py_ssize_t length
+    ) noexcept nogil:
         return _stats.variance(x, length)
 
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
@@ -59,7 +67,9 @@ cdef class VarianceSummarizer(Summarizer):
 
 
 cdef class SlopeSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
+    cdef double summarize(
+        self, Py_ssize_t i, const double *x, Py_ssize_t length
+    ) noexcept nogil:
         return _stats.slope(x, length)
 
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
@@ -67,7 +77,9 @@ cdef class SlopeSummarizer(Summarizer):
 
 
 cdef class MeanVarianceSlopeSummarizer(Summarizer):
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
+    cdef double summarize(
+        self, Py_ssize_t i, const double *x, Py_ssize_t length
+    ) noexcept nogil:
         if i == 0:
             return _stats.mean(x, length)
         elif i == 1:
@@ -92,8 +104,8 @@ cdef class Catch22Summarizer(Summarizer):
     def __cinit__(self):
         self.bin_count = <int*>malloc(sizeof(int) * 10)
         self.bin_edges = <double*>malloc(sizeof(double) * 11)
-        self.ac = NULL 
-        self.welch_f = NULL 
+        self.ac = NULL
+        self.welch_f = NULL
         self.welch_s = NULL
         self.window = NULL
         if self.bin_count == NULL or self.bin_edges == NULL:
@@ -111,13 +123,13 @@ cdef class Catch22Summarizer(Summarizer):
 
         if self.window != NULL:
             free(self.window)
-        
+
         cdef Py_ssize_t n_timestep = X.shape[2]
         cdef Py_ssize_t welch_length = _stats.next_power_of_2(n_timestep)
         self.ac = <double*> malloc(sizeof(double) * n_timestep)
-        self.window = <double*> malloc(sizeof(double)* n_timestep);
-        self.welch_f = <double*> malloc(sizeof(double) * welch_length )
-        self.welch_s = <double*> malloc(sizeof(double) * welch_length )
+        self.window = <double*> malloc(sizeof(double)* n_timestep)
+        self.welch_f = <double*> malloc(sizeof(double) * welch_length)
+        self.welch_s = <double*> malloc(sizeof(double) * welch_length)
 
         if (
             self.ac == NULL or
@@ -147,22 +159,24 @@ cdef class Catch22Summarizer(Summarizer):
             free(self.window)
 
     def __reduce__(self):
-        return self.__class__, ( )
+        return self.__class__, ()
 
     # This is ugly
-    cdef double summarize(self, Py_ssize_t i, const double *x, Py_ssize_t length) noexcept nogil:
+    cdef double summarize(
+        self, Py_ssize_t i, const double *x, Py_ssize_t length
+    ) noexcept nogil:
         cdef Py_ssize_t welch_length = -1
         cdef int n_welch = -1
-        
-        if i == 15 or i == 20:    
+
+        if i == 15 or i == 20:
             n_welch = _stats.welch(
-                x, 
-                length, 
-                _stats.next_power_of_2(length), 
-                1.0, 
-                self.window, 
-                length, 
-                self.welch_s, 
+                x,
+                length,
+                _stats.next_power_of_2(length),
+                1.0,
+                self.window,
+                length,
+                self.welch_s,
                 self.welch_f
             )
         if i == 2 or i == 3 or i == 8 or i == 10 or i == 12:
@@ -199,7 +213,9 @@ cdef class Catch22Summarizer(Summarizer):
         elif i == 14:
             return _catch22.outlier_include_np_mdrmd(x, length, -1, 0.01)
         elif i == 15:
-            return _catch22.summaries_welch_rect(x, length, 1, self.welch_s, self.welch_f, n_welch)
+            return _catch22.summaries_welch_rect(
+                x, length, 1, self.welch_s, self.welch_f, n_welch
+            )
         elif i == 16:
             return _catch22.below_diff_stretch(x, length)
         elif i == 17:
@@ -209,12 +225,13 @@ cdef class Catch22Summarizer(Summarizer):
         elif i == 19:
             return _catch22.fluct_anal_2_50_1_logi_prop_r1(x, length, 2, 1)
         elif i == 20:
-            return _catch22.summaries_welch_rect(x, length, 0, self.welch_s, self.welch_f, n_welch)
+            return _catch22.summaries_welch_rect(
+                x, length, 0, self.welch_s, self.welch_f, n_welch
+            )
         elif i == 21:
             return _catch22.local_mean_std(x, length, 3)
         else:
             return NAN
-
 
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 22
@@ -251,7 +268,9 @@ cdef class PyFuncSummarizer(Summarizer):
                 value = self.func[i](self.x_buffer[0:length])
             out[i] = value
 
-    cdef double summarize(self, Py_ssize_t m, const double *x, Py_ssize_t length) noexcept nogil:
+    cdef double summarize(
+        self, Py_ssize_t m, const double *x, Py_ssize_t length
+    ) noexcept nogil:
         cdef double value
         cdef Py_ssize_t i
         with gil:
@@ -376,7 +395,7 @@ cdef class IntervalAttributeGenerator(AttributeGenerator):
         self.summarizer.summarize_all(
             &X[sample, attribute.dim, interval.start],
             interval.length,
-            &out[out_sample, out_attribute * n_summarizers], # TODO: non-contig
+            &out[out_sample, out_attribute * n_summarizers],  # TODO: non-contig
         )
         return 0
 
@@ -421,7 +440,9 @@ cdef class RandomFixedIntervalAttributeGenerator(IntervalAttributeGenerator):
             Py_ssize_t n_random_interval
     ):
         self.n_random_interval = n_random_interval
-        self.random_attribute_id = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * n_intervals)
+        self.random_attribute_id = <Py_ssize_t*> malloc(
+            sizeof(Py_ssize_t) * n_intervals
+        )
         cdef Py_ssize_t i
         for i in range(n_intervals):
             self.random_attribute_id[i] = i
@@ -455,7 +476,11 @@ cdef class RandomFixedIntervalAttributeGenerator(IntervalAttributeGenerator):
         )
 
     def __reduce__(self):
-        return self.__class__, (self.n_intervals, self.summarizer, self.n_random_interval)
+        return self.__class__, (
+            self.n_intervals,
+            self.summarizer,
+            self.n_random_interval
+        )
 
 
 cdef class RandomIntervalAttributeGenerator(IntervalAttributeGenerator):

@@ -408,39 +408,39 @@ cdef double scaled_dtw_subsequence_distance(
                 std = 1.0
             lb_kim = constant_lower_bound(
                 S,
-                s_mean, 
-                s_std, 
+                s_mean,
+                s_std,
                 X_buffer + j,
-                mean, 
-                std, 
-                s_length, 
+                mean,
+                std,
+                s_length,
                 min_dist,
             )
 
             if lb_kim < min_dist:
                 lb_k = cumulative_bound(
                     X_buffer + j,
-                    s_length, 
-                    mean, 
-                    std, 
-                    s_mean, 
-                    s_std, 
+                    s_length,
+                    mean,
+                    std,
+                    s_mean,
+                    s_std,
                     s_lower,
                     s_upper,
-                    cb_1, 
+                    cb_1,
                     min_dist,
                 )
                 if lb_k < min_dist:
                     lb_k2 = cumulative_bound(
                         S,
-                        s_length, 
-                        s_mean, 
-                        s_std, 
-                        mean, 
-                        std, 
-                        t_lower + I, 
-                        t_upper + I, 
-                        cb_2, 
+                        s_length,
+                        s_mean,
+                        s_std,
+                        mean,
+                        std,
+                        t_lower + I,
+                        t_upper + I,
+                        cb_2,
                         min_dist,
                     )
 
@@ -454,16 +454,16 @@ cdef double scaled_dtw_subsequence_distance(
                             for k in range(s_length - 2, -1, -1):
                                 cb[k] = cb[k + 1] + cb_2[k]
                         dist = inner_scaled_dtw_subsequence_distance(
-                            S, 
-                            s_length, 
+                            S,
+                            s_length,
                             s_mean,
-                            s_std, 
-                            X_buffer + j, 
-                            mean, 
-                            std, 
-                            r, 
+                            s_std,
+                            X_buffer + j,
+                            mean,
+                            std,
+                            r,
                             cb,
-                            cost, 
+                            cost,
                             cost_prev,
                             min_dist,
                         )
@@ -549,39 +549,39 @@ cdef Py_ssize_t scaled_dtw_matches(
                 std = 1.0
             lb_kim = constant_lower_bound(
                 S,
-                s_mean, 
-                s_std, 
+                s_mean,
+                s_std,
                 X_buffer + j,
-                mean, 
-                std, 
-                s_length, 
+                mean,
+                std,
+                s_length,
                 threshold,
             )
 
             if lb_kim < threshold:
                 lb_k = cumulative_bound(
                     X_buffer + j,
-                    s_length, 
-                    mean, 
-                    std, 
-                    s_mean, 
-                    s_std, 
+                    s_length,
+                    mean,
+                    std,
+                    s_mean,
+                    s_std,
                     s_lower,
                     s_upper,
-                    cb_1, 
+                    cb_1,
                     threshold,
                 )
                 if lb_k < threshold:
                     lb_k2 = cumulative_bound(
                         S,
-                        s_length, 
-                        s_mean, 
-                        s_std, 
-                        mean, 
-                        std, 
-                        t_lower + I, 
-                        t_upper + I, 
-                        cb_2, 
+                        s_length,
+                        s_mean,
+                        s_std,
+                        mean,
+                        std,
+                        t_lower + I,
+                        t_upper + I,
+                        cb_2,
                         threshold,
                     )
 
@@ -595,24 +595,31 @@ cdef Py_ssize_t scaled_dtw_matches(
                             for k in range(s_length - 2, -1, -1):
                                 cb[k] = cb[k + 1] + cb_2[k]
                         dist = inner_scaled_dtw_subsequence_distance(
-                            S, 
-                            s_length, 
+                            S,
+                            s_length,
                             s_mean,
-                            s_std, 
-                            X_buffer + j, 
-                            mean, 
-                            std, 
-                            r, 
+                            s_std,
+                            X_buffer + j,
+                            mean,
+                            std,
+                            r,
                             cb,
-                            cost, 
+                            cost,
                             cost_prev,
                             threshold,
                         )
 
                         if dist <= threshold:
                             tmp_capacity = capacity
-                            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
-                            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
+                            realloc_array(
+                                <void**> matches,
+                                n_matches,
+                                sizeof(Py_ssize_t),
+                                &tmp_capacity
+                            )
+                            realloc_array(
+                                <void**> distances, n_matches, sizeof(double), &capacity
+                            )
                             matches[0][n_matches] = (i + 1) - s_length
                             distances[0][n_matches] = sqrt(dist)
                             n_matches += 1
@@ -642,12 +649,12 @@ cdef double dtw_subsequence_distance(
     for i in range(t_length - s_length + 1):
         dist = dtw_distance(
             S,
-            s_length, 
+            s_length,
             T + i,
             s_length,
-            r, 
-            cost, 
-            cost_prev, 
+            r,
+            cost,
+            cost_prev,
             weight_vector,
         )
         if dist < min_dist:
@@ -684,18 +691,20 @@ cdef Py_ssize_t dtw_subsequence_matches(
     for i in range(t_length - s_length + 1):
         dist = dtw_distance(
             S,
-            s_length, 
+            s_length,
             T + i,
             s_length,
-            r, 
-            cost, 
-            cost_prev, 
+            r,
+            cost,
+            cost_prev,
             weight_vector,
         )
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = sqrt(dist)
@@ -705,7 +714,7 @@ cdef Py_ssize_t dtw_subsequence_matches(
 
 
 cdef double ddtw_subsequence_distance(
-    const double *S, # Assumed to be derivative
+    const double *S,  # Assumed to be derivative
     Py_ssize_t s_length,
     const double *T,
     Py_ssize_t t_length,
@@ -727,12 +736,12 @@ cdef double ddtw_subsequence_distance(
         average_slope(T + i, s_length, T_buffer)
         dist = dtw_distance(
             S,
-            s_length - 2, 
+            s_length - 2,
             T_buffer,
             s_length - 2,
-            r, 
-            cost, 
-            cost_prev, 
+            r,
+            cost,
+            cost_prev,
             weight_vector,
         )
         if dist < min_dist:
@@ -775,18 +784,20 @@ cdef Py_ssize_t ddtw_subsequence_matches(
         average_slope(T + i, s_length, T_buffer)
         dist = dtw_distance(
             S,
-            s_length - 2, 
+            s_length - 2,
             T_buffer,
             s_length - 2,
-            r, 
-            cost, 
-            cost_prev, 
+            r,
+            cost,
+            cost_prev,
             weight_vector,
         )
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = sqrt(dist)
@@ -818,7 +829,7 @@ cdef double dtw_distance(
     v = X[0] - Y[0]
     if weight_vector != NULL:
         w = weight_vector[0]
-    
+
     cost_prev[0] = v * v * w
     for i in range(1, min(y_length, max(0, y_length - x_length) + r)):
         v = X[0] - Y[i]
@@ -858,10 +869,10 @@ cdef double dtw_distance(
 
 
 def _dtw_alignment(
-    const double[:] X, 
-    const double[:] Y, 
-    Py_ssize_t r, 
-    const double[:] weights, 
+    const double[:] X,
+    const double[:] Y,
+    Py_ssize_t r,
+    const double[:] weights,
     double[:, :] out = None
 ):
     if not 0 < r <= max(X.shape[0], Y.shape[0]):
@@ -882,7 +893,7 @@ def _dtw_alignment(
 
     if weights is not None:
         w = weights[0]
-    
+
     out[0, 0] = v * v * w
     for i in range(1, min(X.shape[0], r + 1)):
         v = X[i] - Y[0]
@@ -941,7 +952,9 @@ def _dtw_envelop(const double[::1] x, Py_ssize_t r):
     return lower.base, upper.base
 
 
-def _dtw_lb_keogh(const double[::1] x, double[::1] lower, double[::1] upper, Py_ssize_t r):
+def _dtw_lb_keogh(
+    const double[::1] x, double[::1] lower, double[::1] upper, Py_ssize_t r
+):
     if not 0 < r <= x.shape[0]:
         raise ValueError("invalid r")
 
@@ -950,12 +963,12 @@ def _dtw_lb_keogh(const double[::1] x, double[::1] lower, double[::1] upper, Py_
     cdef double[:] cb = np.empty(length, dtype=float)
     cdef double min_dist
     min_dist = cumulative_bound(
-        &x[0], 
-        length, 
-        0, 
-        1, 
-        0, 
-        1, 
+        &x[0],
+        length,
+        0,
+        1,
+        0,
+        1,
         &lower[0],
         &upper[0],
         &cb[0],
@@ -983,7 +996,7 @@ cdef double lcss_distance(
     cdef double v
     cdef double x, y, z
     cdef double w = 1.0
-  
+
     for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
         cost_prev[i] = 0
 
@@ -1044,10 +1057,10 @@ cdef double lcss_subsequence_distance(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             epsilon,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
             weight_vector,
         )
 
@@ -1088,16 +1101,18 @@ cdef Py_ssize_t lcss_subsequence_matches(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             epsilon,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
             weight_vector,
         )
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = dist
@@ -1130,7 +1145,7 @@ cdef double erp_distance(
         v = fabs(X[i] - g)
         gX[i] = v
         gx_sum += v
-    
+
     for i in range(y_length):
         v = fabs(Y[i] - g)
         gY[i] = v
@@ -1156,10 +1171,10 @@ cdef double erp_distance(
             else:
                 if i == 0:
                     # top-left is 0
-                    y = 0 
+                    y = 0
                 else:
                     # left column
-                    y = gx_sum 
+                    y = gx_sum
 
                 z = gx_sum
 
@@ -1197,12 +1212,12 @@ cdef double erp_subsequence_distance(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             g,
             gX,
             gY,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
         )
 
         if dist < min_dist:
@@ -1243,17 +1258,19 @@ cdef Py_ssize_t erp_subsequence_matches(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             g,
             gX,
             gY,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
         )
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = dist
@@ -1280,7 +1297,7 @@ cdef double edr_distance(
     cdef double v
     cdef double x, y, z
     cdef double w = 1.0
-  
+
     for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
         cost_prev[i] = 0
 
@@ -1338,10 +1355,10 @@ cdef double edr_subsequence_distance(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             epsilon,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
             weight_vector,
         )
 
@@ -1382,16 +1399,18 @@ cdef Py_ssize_t edr_subsequence_matches(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             epsilon,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
             weight_vector,
         )
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = dist
@@ -1406,8 +1425,8 @@ cdef inline double _msm_cost(float x, float y, float z, float c) noexcept nogil:
     else:
         return c + min(fabs(x - y), fabs(x - z))
 
-# Stefan, A., Athitsos, V., & Das, G. (2013). 
-#   The Move-Split-Merge Metric for Time Series. 
+# Stefan, A., Athitsos, V., & Das, G. (2013).
+#   The Move-Split-Merge Metric for Time Series.
 #   IEEE Transactions on Knowledge and Data Engineering, 25(6), 1425-1438.
 cdef double msm_distance(
     const double *X,
@@ -1447,7 +1466,7 @@ cdef double msm_distance(
         for j in range(j_start, j_stop):
             cost[j] = min(
                 cost_prev[j - 1] + fabs(X[i] - Y[j]),
-                cost_prev[j] + _msm_cost(X[i], X[i - 1], Y[j], c),    
+                cost_prev[j] + _msm_cost(X[i], X[i - 1], Y[j], c),
                 cost[j - 1] + _msm_cost(Y[j], X[i], Y[j - 1], c),
             )
 
@@ -1481,9 +1500,9 @@ cdef double msm_subsequence_distance(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             c,
-            cost, 
+            cost,
             cost_prev,
             cost_y,
         )
@@ -1525,16 +1544,18 @@ cdef Py_ssize_t msm_subsequence_matches(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             c,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
             cost_y,
         )
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = dist
@@ -1594,7 +1615,7 @@ cdef double twe_distance(
             else:
                 x = X[i - 1]
                 y = X[i]
-                
+
             del_x = up + fabs(x - y) + penalty
 
             if j == 0:
@@ -1605,12 +1626,12 @@ cdef double twe_distance(
                 y = Y[j]
 
             del_y = left + fabs(x - y) + penalty
-            
+
             if i == 0:
                 x = 0
             else:
                 x = X[i - 1]
-            
+
             if j == 0:
                 y = 0
             else:
@@ -1618,7 +1639,7 @@ cdef double twe_distance(
 
             match = (
                 up_left
-                + fabs(X[i] - Y[j]) 
+                + fabs(X[i] - Y[j])
                 + fabs(x - y)
                 + stiffness * 2 * labs(i - j)
             )
@@ -1656,11 +1677,11 @@ cdef double twe_subsequence_distance(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             penalty,
             stiffness,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
         )
 
         if dist < min_dist:
@@ -1701,16 +1722,18 @@ cdef Py_ssize_t twe_subsequence_matches(
             s_length,
             T + i,
             s_length,
-            r, 
+            r,
             penalty,
             stiffness,
-            cost, 
-            cost_prev, 
+            cost,
+            cost_prev,
         )
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = dist
@@ -1768,7 +1791,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         if self.X_buffer != NULL:
             free(self.X_buffer)
             self.X_buffer = NULL
-        if self.lower != NULL:            
+        if self.lower != NULL:
             free(self.lower)
             self.lower = NULL
         if self.upper != NULL:
@@ -1789,7 +1812,7 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         if self.cb_2 != NULL:
             free(self.cb_2)
             self.cb_2 = NULL
-        
+
         deque_destroy(&self.dl)
         deque_destroy(&self.du)
 
@@ -1905,7 +1928,6 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         )
 
         return distance
-
 
     cdef Py_ssize_t transient_matches(
         self,
@@ -2096,11 +2118,10 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
     cdef double *cost_prev
     cdef double r
 
-
     def __init__(self, double r=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
-    
+
     def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
@@ -2140,7 +2161,7 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         return dtw_subsequence_distance(
-            s, 
+            s,
             s_len,
             x,
             x_len,
@@ -2183,7 +2204,7 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
 
     cdef double g
     cdef double *weights
-    
+
     def __init__(self, r=1.0, g=0.05):
         super().__init__(r=r)
         check_scalar(g, "g", float, min_val=0.0)
@@ -2215,7 +2236,7 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
             self.weights = NULL
 
     def __reduce__(self):
-        return self.__class__, (self.r, self.g )
+        return self.__class__, (self.r, self.g)
 
     cdef double _distance(
         self,
@@ -2229,7 +2250,7 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         return dtw_subsequence_distance(
-            s, 
+            s,
             s_len,
             x,
             x_len,
@@ -2306,7 +2327,7 @@ cdef class DerivativeDtwSubsequenceMetric(DtwSubsequenceMetric):
     ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_distance(
-            self.S_buffer, 
+            self.S_buffer,
             s_len,
             x,
             x_len,
@@ -2351,7 +2372,7 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
 
     cdef double g
     cdef double *weights
-    
+
     def __init__(self, r=1.0, g=0.05):
         super().__init__(r=r)
         check_scalar(g, "g", float, min_val=0.0)
@@ -2384,7 +2405,7 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
             self.weights = NULL
 
     def __reduce__(self):
-        return self.__class__, (self.r, self.g )
+        return self.__class__, (self.r, self.g)
 
     cdef double _distance(
         self,
@@ -2399,7 +2420,7 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
     ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_distance(
-            self.S_buffer, 
+            self.S_buffer,
             s_len,
             x,
             x_len,
@@ -2447,7 +2468,7 @@ cdef class LcssSubsequenceMetric(SubsequenceMetric):
     cdef double *cost_prev
     cdef double r
     cdef double epsilon
-    
+
     def __init__(self, double r=1.0, double epsilon=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(epsilon, "epsilon", float, min_val=0, include_boundaries="neither")
@@ -2492,7 +2513,7 @@ cdef class LcssSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         return lcss_subsequence_distance(
-            s, 
+            s,
             s_len,
             x,
             x_len,
@@ -2539,12 +2560,14 @@ cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
     cdef double *cost_prev
     cdef double r
     cdef double epsilon
-    
+
     def __init__(self, double r=1.0, double epsilon=NAN):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        
+
         if not isnan(epsilon):
-            check_scalar(epsilon, "epsilon", float, min_val=0, include_boundaries="neither")
+            check_scalar(
+                epsilon, "epsilon", float, min_val=0, include_boundaries="neither"
+            )
 
         self.r = r
         self.epsilon = epsilon
@@ -2592,7 +2615,7 @@ cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
             epsilon = self.epsilon
 
         return edr_subsequence_distance(
-            s, 
+            s,
             s_len,
             x,
             x_len,
@@ -2649,7 +2672,9 @@ cdef class TweSubsequenceMetric(SubsequenceMetric):
     def __init__(self, double r=1.0, double penalty=1.0, double stiffness=0.001):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(penalty, "penalty", float, min_val=0.0)
-        check_scalar(stiffness, "stiffness", float, min_val=0.0, include_boundaries="neither")
+        check_scalar(
+            stiffness, "stiffness", float, min_val=0.0, include_boundaries="neither"
+        )
         self.r = r
         self.penalty = penalty
         self.stiffness = stiffness
@@ -2692,7 +2717,7 @@ cdef class TweSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         return twe_subsequence_distance(
-            s, 
+            s,
             s_len,
             x,
             x_len,
@@ -2742,7 +2767,7 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
     cdef double *cost_y
     cdef double r
     cdef double c
-    
+
     def __init__(self, double r=1.0, double c=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(c, "c", float, min_val=0)
@@ -2768,7 +2793,7 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
         if self.cost_prev != NULL:
             free(self.cost_prev)
             self.cost_prev = NULL
-        
+
         if self.cost_y != NULL:
             free(self.cost_y)
             self.cost_y = NULL
@@ -2793,7 +2818,7 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         return msm_subsequence_distance(
-            s, 
+            s,
             s_len,
             x,
             x_len,
@@ -2842,7 +2867,7 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
     cdef double *gY
     cdef double r
     cdef double g
-    
+
     def __init__(self, double r=1.0, double g=0.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(g, "g", float, min_val=0)
@@ -2869,7 +2894,7 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
         if self.cost_prev != NULL:
             free(self.cost_prev)
             self.cost_prev = NULL
-        
+
         if self.gX != NULL:
             free(self.gX)
             self.gX = NULL
@@ -2884,7 +2909,12 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
         self.cost_prev = <double*> malloc(sizeof(double) * X.shape[2])
         self.gX = <double*> malloc(sizeof(double) * X.shape[2])
         self.gY = <double*> malloc(sizeof(double) * X.shape[2])
-        if self.cost == NULL or self.cost_prev == NULL or self.gX == NULL or self.gY == NULL:
+        if (
+            self.cost == NULL or
+            self.cost_prev == NULL or
+            self.gX == NULL or
+            self.gY == NULL
+        ):
             return -1
 
     cdef double _distance(
@@ -2899,7 +2929,7 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         return erp_subsequence_distance(
-            s, 
+            s,
             s_len,
             x,
             x_len,
@@ -2948,7 +2978,7 @@ cdef class DtwMetric(Metric):
     cdef double *cost_prev
     cdef Py_ssize_t warp_width
     cdef double r
-    
+
     def __init__(self, double r=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         self.r = r
@@ -3039,7 +3069,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
         if min(X.shape[2], Y.shape[2]) < 3:
             return 0
 
-        self.d_x = <double*> malloc(sizeof(double) * X.shape[2] - 2) # TODO: shape <= 2?
+        self.d_x = <double*> malloc(sizeof(double) * X.shape[2] - 2)
         self.d_y = <double*> malloc(sizeof(double) * Y.shape[2] - 2)
 
         if self.d_x == NULL or self.d_y == NULL:
@@ -3140,7 +3170,7 @@ cdef class WeightedDerivativeDtwMetric(DtwMetric):
         self.weights = NULL
         self.d_x = NULL
         self.d_y = NULL
-    
+
     def __reduce__(self):
         return self.__class__, (self.r, self.g)
 
@@ -3209,13 +3239,13 @@ cdef class LcssMetric(Metric):
     cdef Py_ssize_t warp_width
     cdef double r
     cdef double epsilon
-    
+
     def __init__(self, double r=1.0, double epsilon=1.0, threshold=NAN):
         # TODO(1.4): remove deprecated
         if not isnan(threshold):
             warnings.warn(
-                "The parameter threshold has been renamed to epsilon in 1.2 and will be "
-                "removed in 1.4.",
+                "The parameter threshold has been renamed to epsilon in 1.2 "
+                "and will be removed in 1.4.",
                 DeprecationWarning
             )
             epsilon = threshold
@@ -3341,7 +3371,7 @@ cdef class ErpMetric(Metric):
     cdef Py_ssize_t warp_width
     cdef double r
     cdef double g
-    
+
     def __init__(self, double r=1.0, double g=0.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(g, "g", float, min_val=0)
@@ -3373,7 +3403,7 @@ cdef class ErpMetric(Metric):
 
         if self.gY != NULL:
             free(self.gY)
-            self.gY = NULL    
+            self.gY = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
@@ -3421,21 +3451,23 @@ cdef class EdrMetric(Metric):
     cdef Py_ssize_t warp_width
     cdef double r
     cdef double epsilon
-    
+
     def __init__(self, double r=1.0, double epsilon=NAN, double threshold=NAN):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
-        
+
         # TODO(1.4): remove deprecated
         if not isnan(threshold):
             warnings.warn(
-                "The parameter threshold has been renamed to epsilon in 1.2 and will be "
-                "removed in 1.4.",
+                "The parameter threshold has been renamed to epsilon in 1.2 "
+                "and will be removed in 1.4.",
                 DeprecationWarning
             )
             epsilon = threshold
 
         if not isnan(epsilon):
-            check_scalar(epsilon, "epsilon", float, min_val=0, include_boundaries="neither")
+            check_scalar(
+                epsilon, "epsilon", float, min_val=0, include_boundaries="neither"
+            )
 
         self.r = r
         self.epsilon = epsilon
@@ -3477,7 +3509,7 @@ cdef class EdrMetric(Metric):
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
         self.std_x = <double*> malloc(sizeof(double) * X.shape[0])
         self.std_y = <double*> malloc(sizeof(double) * X.shape[0])
-        
+
         cdef double mean, std
         cdef Py_ssize_t i
         if isnan(self.epsilon):
@@ -3555,7 +3587,7 @@ cdef class MsmMetric(Metric):
     cdef Py_ssize_t warp_width
     cdef double r
     cdef double c
-    
+
     def __init__(self, double r=1.0, double c=1.0):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(c, "c", float, min_val=0)
@@ -3626,16 +3658,18 @@ cdef class TweMetric(Metric):
     cdef double r
     cdef double penalty
     cdef double stiffness
-    
+
     def __init__(
-        self, 
-        double r=1.0, 
-        double penalty=1.0, 
-        double stiffness=0.001, 
+        self,
+        double r=1.0,
+        double penalty=1.0,
+        double stiffness=0.001,
     ):
         check_scalar(r, "r", float, min_val=0.0, max_val=1.0)
         check_scalar(penalty, "penalty", float, min_val=0.0)
-        check_scalar(stiffness, "stiffness", float, min_val=0.0, include_boundaries="neither")
+        check_scalar(
+            stiffness, "stiffness", float, min_val=0.0, include_boundaries="neither"
+        )
         self.r = r
         self.penalty = penalty
         self.stiffness = stiffness

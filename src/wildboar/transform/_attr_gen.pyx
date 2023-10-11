@@ -28,8 +28,8 @@ cdef class AttributeGenerator:
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
-        TSArray X, 
-        Py_ssize_t *samples, 
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Attribute *transient,
         uint32_t *seed,
@@ -43,9 +43,9 @@ cdef class AttributeGenerator:
         return -1
 
     cdef Py_ssize_t init_persistent(
-        self, 
+        self,
         TSArray X,
-        Attribute *transient, 
+        Attribute *transient,
         Attribute *persistent
     ) noexcept nogil:
         return 0
@@ -67,9 +67,9 @@ cdef class AttributeGenerator:
         return NAN
 
     cdef Py_ssize_t transient_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -78,9 +78,9 @@ cdef class AttributeGenerator:
         return -1
 
     cdef Py_ssize_t persistent_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -95,22 +95,22 @@ cdef class AttributeGenerator:
         return 0
 
     cdef void transient_values(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
-        Py_ssize_t *samples, 
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil:
         cdef Py_ssize_t i
         for i in range(n_samples):
             values[i] = self.transient_value(attribute, X, samples[i])
-    
+
     cdef void persistent_values(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
-        Py_ssize_t *samples, 
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil:

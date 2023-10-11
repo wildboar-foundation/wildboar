@@ -30,6 +30,7 @@ def clone_embedding(AttributeGenerator generator, attributes):
         embedding.set_attribute(i, attribute)
     return embedding
 
+
 def _partition_attributes(n_jobs, n_attributes, generator):
     n_jobs = min(effective_n_jobs(n_jobs), n_attributes)
 
@@ -48,7 +49,7 @@ def _partition_attributes(n_jobs, n_attributes, generator):
         attribute_offsets.append(current_offset)
         batch_sizes.append(current_batch_size)
         current_offset += current_batch_size
-    
+
     return n_jobs, generators, attribute_offsets, batch_sizes
 
 
@@ -144,7 +145,7 @@ cdef class AttributeEmbedding:
 
     def __reduce__(self):
         return clone_embedding, (
-            self.generator, 
+            self.generator,
             self.attributes,
         )
 
@@ -174,7 +175,7 @@ cdef class AttributeEmbedding:
     @property
     def n_attributes(self):
         return self._n_attributes
-    
+
     @property
     def features(self):
         import warnings
@@ -187,7 +188,7 @@ cdef class AttributeEmbedding:
     @property
     def attributes(self):
         return [
-            self.generator.persistent_to_object(self._attributes[i]) 
+            self.generator.persistent_to_object(self._attributes[i])
             for i in range(self._n_attributes)
         ]
 
@@ -195,6 +196,7 @@ cdef class AttributeEmbedding:
         if not isinstance(item, int) or 0 > item > self._n_attributes:
             raise ValueError()
         return self.generator.persistent_to_object(self._attributes[item])
+
 
 def fit(AttributeGenerator generator, TSArray X, object random_state):
     cdef Py_ssize_t i
@@ -206,11 +208,11 @@ def fit(AttributeGenerator generator, TSArray X, object random_state):
         generator, generator.get_n_attributess(X),
     )
     cdef uint32_t seed = random_state.randint(0, RAND_R_MAX)
-    
+
     with nogil:
         for i in range(X.shape[0]):
             samples[i] = i
-        
+
         for i in range(generator.get_n_attributess(X)):
             persistent = <Attribute*> malloc(sizeof(Attribute))
             generator.next_attribute(
@@ -228,6 +230,7 @@ def fit(AttributeGenerator generator, TSArray X, object random_state):
             embedding.set_attribute(i, persistent)
 
     return embedding
+
 
 def transform(AttributeEmbedding embedding, TSArray X, n_jobs=None):
     cdef AttributeGenerator generator = embedding.generator
@@ -247,8 +250,9 @@ def transform(AttributeEmbedding embedding, TSArray X, n_jobs=None):
         )
         for jobid in range(n_jobs)
     )
-    
+
     return out.base
+
 
 def fit_transform(AttributeGenerator generator, TSArray X, random_state, n_jobs=None):
     cdef Py_ssize_t n_outputs = generator.get_n_outputs(X)

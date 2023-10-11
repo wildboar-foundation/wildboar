@@ -7,7 +7,7 @@ dynamic = ["version", "readme"]
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
 dependencies = [
-  "numpy>=1.19.2; platform_python_implementation == 'PyPy'", 
+  "numpy>=1.19.2; platform_python_implementation == 'PyPy'",
   "numpy>=1.17.3; platform_python_implementation != 'PyPy'",
   "scipy>=1.5.0",
   "scikit-learn>=1.2"
@@ -83,7 +83,7 @@ build-backend = "setuptools.build_meta"
 
 
 [tool.ruff]
-select = ["E", "F", "N", "PL", "I" ] 
+select = ["E", "F", "N", "PL", "I" ]
 ignore = ["PLR2004", "N803", "N806", "F841"]
 
 [tool.ruff.per-file-ignores]
@@ -96,6 +96,10 @@ max-args = 15 # We use many keyword arguments for estimators
 [tool.ruff.pydocstyle]
 convention = "numpy"
 ignore-decorators = ["typing.overload", "numpy.deprecate", "sklearn.utils.deprecated"]
+
+[tool.cython-lint]
+max-line-length = 88
+ignore = ['E741']
 
 [tool.black]
 include = '\.pyi?$'

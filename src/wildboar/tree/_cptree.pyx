@@ -36,12 +36,12 @@ cdef struct Pivot:
 
 
 cdef struct Split:
-    Py_ssize_t* split_point # n_split
-    Py_ssize_t *pivot # n_split + 1
+    Py_ssize_t* split_point  # n_split
+    Py_ssize_t *pivot  # n_split + 1
     Py_ssize_t metric
     Py_ssize_t n_split
     double impurity_improvement
-    double *child_impurity # n_split + 1
+    double *child_impurity  # n_split + 1
 
 
 cdef void free_split(Split *split) noexcept nogil:
@@ -128,14 +128,14 @@ cdef class Tree:
         self.metrics = MetricList(metrics)
 
     def __reduce__(self):
-       return _make_tree, (
-           self.metrics.py_list,
-           self._n_labels,
-           self._max_depth,
-           self.branch,
-           self.pivot,
-           self.value,
-       )
+        return _make_tree, (
+            self.metrics.py_list,
+            self._n_labels,
+            self._max_depth,
+            self.branch,
+            self.pivot,
+            self.value,
+        )
 
     cdef Py_ssize_t add_branch_node(
         self,
@@ -543,7 +543,7 @@ cdef class TreeBuilder:
     cdef Py_ssize_t min_samples_leaf
     cdef double min_impurity_decrease
 
-    cdef Py_ssize_t n_samples # no samples with non-zero weight
+    cdef Py_ssize_t n_samples  # no samples with non-zero weight
     cdef double n_weighted_samples
 
     cdef Py_ssize_t *samples

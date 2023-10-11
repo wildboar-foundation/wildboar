@@ -40,7 +40,6 @@ cdef class PivotAttributeGenerator(AttributeGenerator):
         self.n_pivots = n_pivots
         self.metrics = MetricList(metrics)
         self.sampler = sampler
-        
 
     def __reduce__(self):
         return self.__class__, (self.n_pivots, self.metrics.py_list, self.sampler)
@@ -95,17 +94,19 @@ cdef class PivotAttributeGenerator(AttributeGenerator):
             Attribute *persistent
     ) noexcept nogil:
         cdef TransientPivot *pivot = <TransientPivot*> transient.attribute
-        cdef PersitentPivot *persistent_pivot = <PersitentPivot*> malloc(sizeof(PersitentPivot))
-        
+        cdef PersitentPivot *persistent_pivot = <PersitentPivot*> malloc(
+            sizeof(PersitentPivot)
+        )
+
         persistent_pivot.data = <double*> malloc(sizeof(double) * X.shape[2])
         persistent_pivot.metric = pivot.metric
         persistent_pivot.length = X.shape[2]
         memcpy(
-            persistent_pivot.data, 
-            &X[pivot.sample, transient.dim, 0], 
+            persistent_pivot.data,
+            &X[pivot.sample, transient.dim, 0],
             sizeof(double) * X.shape[2]
         )
-        
+
         persistent.dim = transient.dim
         persistent.attribute = persistent_pivot
         return 0
@@ -162,7 +163,9 @@ cdef class PivotAttributeGenerator(AttributeGenerator):
 
     cdef object persistent_to_object(self, Attribute *attribute):
         cdef PersitentPivot *pivot = <PersitentPivot*> attribute.attribute
-        return attribute.dim, (pivot.metric, to_ndarray_double(pivot.data, pivot.length))
+        return attribute.dim, (
+            pivot.metric, to_ndarray_double(pivot.data, pivot.length)
+        )
 
     cdef Py_ssize_t persistent_from_object(self, object object, Attribute *attribute):
         dim, (metric, arr) = object

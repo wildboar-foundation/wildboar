@@ -4,9 +4,11 @@
 # Fast swap step and build step in PAM algorithm for k_medoid.
 # Author: Timothée Mathieu
 # License: 3-clause BSD
-# Adapted from: https://github.com/scikit-learn-contrib/scikit-learn-extra/blob/main/sklearn_extra/cluster/_k_medoids_helper.pyx#L72
+# Adapted from: https://github.com/scikit-learn-contrib/scikit-learn-extra
+# /blob/main/sklearn_extra/cluster/_k_medoids_helper.pyx#L72
 
 import numpy as np
+
 
 def _pam_optimal_swap(
     double[:, :] D,
@@ -42,18 +44,18 @@ def _pam_optimal_swap(
                 not_second_best_medoid = D[id_h, id_j] >= Ejs[id_j]
 
                 if cluster_i_bool & second_best_medoid:
-                    cost_change +=  D[id_j, id_h] - Djs[id_j]
+                    cost_change += D[id_j, id_h] - Djs[id_j]
                 elif cluster_i_bool & not_second_best_medoid:
-                    cost_change +=  Ejs[id_j] - Djs[id_j]
+                    cost_change += Ejs[id_j] - Djs[id_j]
                 elif not_cluster_i_bool & (D[id_j, id_h] < Djs[id_j]):
-                    cost_change +=  D[id_j, id_h] - Djs[id_j]
+                    cost_change += D[id_j, id_h] - Djs[id_j]
 
             # same for i
             second_best_medoid = D[id_h, id_i] < Ejs[id_i]
             if  second_best_medoid:
-                cost_change +=  D[id_i, id_h]
+                cost_change += D[id_i, id_h]
             else:
-                cost_change +=  Ejs[id_i]
+                cost_change += Ejs[id_i]
 
             if cost_change < best_cost_change[2]:
                 best_cost_change = (id_i, id_h, cost_change)
@@ -73,14 +75,14 @@ def _pam_build(double[:, :] D, Py_ssize_t n_clusters):
     cdef Py_ssize_t[:] not_medoid_idxs = np.arange(sample_size, dtype=int)
     cdef Py_ssize_t i, j,  id_i, id_j
 
-    medoid_idxs[0] = np.argmin(np.sum(D,axis=0))
+    medoid_idxs[0] = np.argmin(np.sum(D, axis=0))
     not_medoid_idxs = np.delete(not_medoid_idxs, medoid_idxs[0])
 
     cdef Py_ssize_t n_medoids_current = 1
 
     cdef double[:] Dj = D[medoid_idxs[0]].copy()
     cdef double cost_change
-    cdef (Py_ssize_t, Py_ssize_t) new_medoid = (0,0)
+    cdef (Py_ssize_t, Py_ssize_t) new_medoid = (0, 0)
     cdef double cost_change_max
 
     for _ in range(n_clusters -1):
@@ -98,11 +100,9 @@ def _pam_build(double[:, :] D, Py_ssize_t n_clusters):
                 cost_change_max = cost_change
                 new_medoid = (id_i, i)
 
-
         medoid_idxs[n_medoids_current] = new_medoid[0]
-        n_medoids_current +=  1
+        n_medoids_current += 1
         not_medoid_idxs = np.delete(not_medoid_idxs, new_medoid[1])
-
 
         for id_j in range(sample_size):
             Dj[id_j] = min(Dj[id_j], D[id_j, new_medoid[0]])

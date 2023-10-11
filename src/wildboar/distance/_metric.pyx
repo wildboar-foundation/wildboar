@@ -97,13 +97,13 @@ cdef class NormalizedEuclideanSubsequenceMetric(SubsequenceMetric):
 
 cdef class ScaledEuclideanSubsequenceMetric(ScaledSubsequenceMetric):
     cdef double *X_buffer
-    
+
     def __init__(self):
         pass
 
     def __cinit__(self):
         self.X_buffer = NULL
-    
+
     def __dealloc__(self):
         if self.X_buffer != NULL:
             free(self.X_buffer)
@@ -111,7 +111,7 @@ cdef class ScaledEuclideanSubsequenceMetric(ScaledSubsequenceMetric):
 
     def __reduce__(self):
         return self.__class__, ()
-    
+
     cdef int reset(self, TSArray X) noexcept nogil:
         if self.X_buffer != NULL:
             free(self.X_buffer)
@@ -347,10 +347,10 @@ cdef class CosineSubsequenceMetric(SubsequenceMetric):
         cdef Py_ssize_t n_matches = cosine_similarity_matches(
             s, s_len, x, x_len, 1 - threshold, distances, indicies
         )
-        
+
         for i in range(n_matches):
             distances[0][i] = 1 - distances[0][i]
-        
+
         return n_matches
 
 
@@ -398,7 +398,7 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
             s, s_len, x, x_len, cos(threshold * M_PI), distances, indicies
         )
         cdef double cosine
-        
+
         for i in range(n_matches):
             cosine = distances[0][i]
             if cosine > 1:
@@ -407,7 +407,7 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
                 distances[0][i] = 1
             else:
                 distances[0][i] = acos(cosine) / M_PI
-        
+
         return n_matches
 
 
@@ -564,14 +564,14 @@ cdef double scaled_euclidean_distance(
             else:
                 std = 1.0
             dist = inner_scaled_euclidean_distance(
-                s_length, 
-                s_mean, 
+                s_length,
+                s_mean,
                 s_std,
-                j, 
+                j,
                 mean,
-                std, 
-                S, 
-                X_buffer, 
+                std,
+                S,
+                X_buffer,
                 min_dist,
             )
 
@@ -646,8 +646,8 @@ cdef double euclidean_distance(
 
     return sqrt(min_dist)
 
-# PTDS (https://stats.stackexchange.com/users/68112/ptds), 
-#   Definition of normalized Euclidean distance, URL (version: 2021-09-27): 
+# PTDS (https://stats.stackexchange.com/users/68112/ptds),
+#   Definition of normalized Euclidean distance, URL (version: 2021-09-27):
 #   https://stats.stackexchange.com/q/498753
 cdef double normalized_euclidean_distance(
     const double *S,
@@ -670,7 +670,7 @@ cdef double normalized_euclidean_distance(
             inc_stats_add(&S_stats, 1.0, s)
             inc_stats_add(&T_stats, 1.0, t)
             inc_stats_add(&ST_stats, 1.0, s - t)
-        
+
         dist = inc_stats_variance(&S_stats) + inc_stats_variance(&T_stats)
         if dist > 0:
             dist = inc_stats_variance(&ST_stats) / dist
@@ -712,14 +712,16 @@ cdef Py_ssize_t normalized_euclidean_distance_matches(
             inc_stats_add(&S_stats, 1.0, s)
             inc_stats_add(&T_stats, 1.0, t)
             inc_stats_add(&ST_stats, 1.0, s - t)
-        
+
         dist = inc_stats_variance(&S_stats) + inc_stats_variance(&T_stats)
         if dist > 0:
             dist = sqrt(0.5 * inc_stats_variance(&ST_stats) / dist)
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = dist
@@ -760,7 +762,9 @@ cdef Py_ssize_t euclidean_distance_matches(
             dist += x * x
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = sqrt(dist)
@@ -821,12 +825,12 @@ cdef Py_ssize_t scaled_euclidean_distance_matches(
                 std = 1.0
             dist = inner_scaled_euclidean_distance(
                 s_length,
-                s_mean, 
-                s_std, 
-                j, 
-                mean, 
-                std, 
-                S, 
+                s_mean,
+                s_std,
+                j,
+                mean,
+                std,
+                S,
                 X_buffer,
                 threshold,
             )
@@ -909,7 +913,9 @@ cdef Py_ssize_t manhattan_distance_matches(
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = dist
@@ -979,7 +985,9 @@ cdef Py_ssize_t minkowski_distance_matches(
 
         if dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = pow(dist, 1.0 / p)
@@ -1003,7 +1011,7 @@ cdef double chebyshev_distance(
     cdef Py_ssize_t j
     cdef double x
     for i in range(t_length - s_length + 1):
-        max_dist = -INFINITY        
+        max_dist = -INFINITY
         for j in range(s_length):
             if max_dist >= min_dist:
                 break
@@ -1051,7 +1059,9 @@ cdef Py_ssize_t chebyshev_distance_matches(
 
         if max_dist <= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = max_dist
@@ -1088,7 +1098,7 @@ cdef double cosine_similarity(
             sim = 0
         else:
             sim = prod / sim
-        
+
         if sim > max_sim:
             max_sim = sim
             if index != NULL:
@@ -1129,7 +1139,9 @@ cdef Py_ssize_t cosine_similarity_matches(
         sim = prod / (sqrt(s_norm) * sqrt(t_norm))
         if sim >= threshold:
             tmp_capacity = capacity
-            realloc_array(<void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
             realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
             matches[0][n_matches] = i
             distances[0][n_matches] = sim

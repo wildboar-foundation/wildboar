@@ -58,9 +58,9 @@ cdef class ShapeletAttributeGenerator(AttributeGenerator):
             free(attribute.attribute)
 
     cdef Py_ssize_t init_persistent(
-        self, 
+        self,
         TSArray X,
-        Attribute *transient, 
+        Attribute *transient,
         Attribute *persistent
     ) noexcept nogil:
         cdef SubsequenceView *v = <SubsequenceView*> transient.attribute
@@ -91,9 +91,9 @@ cdef class ShapeletAttributeGenerator(AttributeGenerator):
         )
 
     cdef Py_ssize_t transient_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -105,9 +105,9 @@ cdef class ShapeletAttributeGenerator(AttributeGenerator):
         return 0
 
     cdef Py_ssize_t persistent_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -145,15 +145,15 @@ cdef class RandomShapeletAttributeGenerator(ShapeletAttributeGenerator):
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
-        TSArray X, 
-        Py_ssize_t *samples, 
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Attribute *transient,
         uint32_t *random_seed
     ) noexcept nogil:
         if attribute_id >= self.n_shapelets:
             return -1
-        
+
         cdef Py_ssize_t shapelet_length
         cdef Py_ssize_t shapelet_start
         cdef Py_ssize_t shapelet_index
@@ -200,11 +200,11 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
     cdef const double[::1] weights
 
     def __init__(
-        self, 
-        Py_ssize_t min_shapelet_size, 
+        self,
+        Py_ssize_t min_shapelet_size,
         Py_ssize_t max_shapelet_size,
         list metrics,
-        const double[::1] weights=None,    
+        const double[::1] weights=None,
     ):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
@@ -216,7 +216,7 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
             self.weighted = True
         else:
             self.weighted = False
-    
+
     def __dealloc__(self):
         if self.weighted:
             vose_rand_free(&self.vr)
@@ -243,14 +243,16 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
             free(attribute.attribute)
 
     cdef Py_ssize_t init_persistent(
-        self, 
+        self,
         TSArray X,
-        Attribute *transient, 
+        Attribute *transient,
         Attribute *persistent
     ) noexcept nogil:
-        cdef MetricSubsequenceView *msv = <MetricSubsequenceView*> transient.attribute 
-        cdef MetricSubsequence *ms = <MetricSubsequence*> malloc(sizeof(MetricSubsequence))
-        
+        cdef MetricSubsequenceView *msv = <MetricSubsequenceView*> transient.attribute
+        cdef MetricSubsequence *ms = <MetricSubsequence*> malloc(
+            sizeof(MetricSubsequence)
+        )
+
         self.metrics.init_persistent(msv.metric, X, &msv.view, &ms.subsequence)
         ms.metric = msv.metric
 
@@ -261,7 +263,7 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
     cdef double transient_value(
         self, Attribute *attribute, TSArray X, Py_ssize_t sample
     ) noexcept nogil:
-        cdef MetricSubsequenceView *msv = <MetricSubsequenceView*> attribute.attribute 
+        cdef MetricSubsequenceView *msv = <MetricSubsequenceView*> attribute.attribute
         return self.metrics.transient_distance(
             msv.metric, &msv.view, X, sample, NULL
         )
@@ -275,9 +277,9 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
         )
 
     cdef Py_ssize_t transient_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -287,9 +289,9 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
         return 0
 
     cdef Py_ssize_t persistent_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -300,10 +302,14 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
 
     cdef object persistent_to_object(self, Attribute *attribute):
         cdef MetricSubsequence *ms = <MetricSubsequence*> attribute.attribute
-        return attribute.dim, (ms.metric, self.metrics.to_array(ms.metric, &ms.subsequence))
+        return attribute.dim, (
+            ms.metric, self.metrics.to_array(ms.metric, &ms.subsequence)
+        )
 
     cdef Py_ssize_t persistent_from_object(self, object object, Attribute *attribute):
-        cdef MetricSubsequence *ms = <MetricSubsequence*> malloc(sizeof(MetricSubsequence))
+        cdef MetricSubsequence *ms = <MetricSubsequence*> malloc(
+            sizeof(MetricSubsequence)
+        )
         dim, (metric, obj) = object
         self.metrics.from_array(metric, &ms.subsequence, obj)
         attribute.dim = dim
@@ -311,27 +317,28 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
         return 0
 
 
-cdef class RandomMultiMetricShapeletAttributeGenerator(MultiMetricShapeletAttributeGenerator):
-
+cdef class RandomMultiMetricShapeletAttributeGenerator(
+    MultiMetricShapeletAttributeGenerator
+):
     cdef Py_ssize_t n_shapelets
 
     def __init__(
-        self, 
+        self,
         Py_ssize_t n_shapelets,
-        Py_ssize_t min_shapelet_size, 
+        Py_ssize_t min_shapelet_size,
         Py_ssize_t max_shapelet_size,
         list metrics,
-        const double[::1] weights=None,    
+        const double[::1] weights=None,
     ):
         super().__init__(min_shapelet_size, max_shapelet_size, metrics, weights)
         self.n_shapelets = n_shapelets
 
     def __reduce__(self):
         return self.__class__, (
-            self.n_shapelets, 
-            self.min_shapelet_size, 
-            self.max_shapelet_size, 
-            self.metrics.py_list, 
+            self.n_shapelets,
+            self.min_shapelet_size,
+            self.max_shapelet_size,
+            self.metrics.py_list,
             np.asarray(self.weights)
         )
 
@@ -341,15 +348,15 @@ cdef class RandomMultiMetricShapeletAttributeGenerator(MultiMetricShapeletAttrib
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
-        TSArray X, 
-        Py_ssize_t *samples, 
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Attribute *transient,
         uint32_t *seed
     ) noexcept nogil:
         if attribute_id >= self.n_shapelets:
             return -1
-        
+
         cdef Py_ssize_t shapelet_length
         cdef Py_ssize_t shapelet_start
         cdef Py_ssize_t shapelet_index

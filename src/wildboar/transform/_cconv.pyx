@@ -169,16 +169,16 @@ cdef void convolution_1d(
             # of the dilated kernel so we take the mod to scale it back
             # to the original, non-dilated, array.
             inner_prod += x[input_offset + j] * kernel[((j + kernel_offset) // dilation)]
-            
+
         out[i] = inner_prod
 
 
 cdef void _convolution_1d_fast(
-    double bias, 
+    double bias,
     double *x,
-    Py_ssize_t x_len, 
-    double *kernel, 
-    Py_ssize_t k_len, 
+    Py_ssize_t x_len,
+    double *kernel,
+    Py_ssize_t k_len,
     double *out
 ) noexcept nogil:
     cdef Py_ssize_t output_size = x_len - k_len + 1

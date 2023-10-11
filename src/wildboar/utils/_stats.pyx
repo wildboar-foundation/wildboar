@@ -85,18 +85,18 @@ cdef double inc_stats_variance(IncStats *self, bint sample=False) noexcept nogil
     else:
         n_samples = self.n_samples
     if n_samples <= 1:
-        return 0 
+        return 0
     else:
         var = self.sum_square / n_samples
         if var < EPSILON:
-             var = 0.0
+            var = 0.0
         return var
 
 cdef void cumulative_mean_std(
     const double *x,
-    Py_ssize_t x_length, 
-    Py_ssize_t y_length, 
-    double *x_mean, 
+    Py_ssize_t x_length,
+    Py_ssize_t y_length,
+    double *x_mean,
     double *x_std
 ) noexcept nogil:
     cdef Py_ssize_t i
@@ -107,7 +107,7 @@ cdef void cumulative_mean_std(
         if i >= y_length - 1:
             x_mean[i - (y_length - 1)] = stats.mean
             std = sqrt(inc_stats_variance(&stats))
-            x_std[i - (y_length - 1)] = std 
+            x_std[i - (y_length - 1)] = std
             inc_stats_remove(&stats, 1.0, x[i - (y_length - 1)])
 
 cdef double mean(const double *x, Py_ssize_t length) noexcept nogil:
@@ -149,7 +149,9 @@ cdef double slope(const double *x, Py_ssize_t length) noexcept nogil:
     x_mean /= length
     return (mean_diff - y_mean * x_mean) / (mean_y_sqr - y_mean ** 2)
 
-cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) noexcept nogil:
+cdef double find_min(
+    const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL
+) noexcept nogil:
     cdef double min_val = INFINITY
     cdef Py_ssize_t i
 
@@ -161,7 +163,9 @@ cdef double find_min(const double *x, Py_ssize_t n, Py_ssize_t *min_index=NULL) 
 
     return min_val
 
-cdef double covariance(const double *x, const double *y, Py_ssize_t length) noexcept nogil:
+cdef double covariance(
+    const double *x, const double *y, Py_ssize_t length
+) noexcept nogil:
     cdef:
         double sum_x = 0.0
         double sum_y = 0.0
@@ -186,8 +190,9 @@ cdef double covariance(const double *x, const double *y, Py_ssize_t length) noex
     return sum_xy / k
 
 
-
-cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex *fft) noexcept nogil:
+cdef void _auto_correlation(
+    const double *x, Py_ssize_t n, double *out, complex *fft
+) noexcept nogil:
     cdef double avg = mean(x, n)
     cdef Py_ssize_t fft_length = n * 2 - 1
     cdef Py_ssize_t i
@@ -204,7 +209,7 @@ cdef void _auto_correlation(const double *x, Py_ssize_t n, double *out, complex 
     cdef complex first = fft[0]
     if first == 0j:
         first = 1j
-    
+
     for i in range(n):
         out[i] = (fft[i] / first).real
 
@@ -221,20 +226,20 @@ cdef Py_ssize_t next_power_of_2(Py_ssize_t n) noexcept nogil:
     return n << 1
 
 cdef int welch(
-    const double *x, 
-    Py_ssize_t size, 
-    int NFFT, 
-    double Fs, 
-    double *window, 
+    const double *x,
+    Py_ssize_t size,
+    int NFFT,
+    double Fs,
+    double *window,
     int windowWidth,
-    double *Pxx, 
+    double *Pxx,
     double *f,
 ) noexcept nogil:
     cdef double dt = 1.0 / Fs
     cdef double df = 1.0 / next_power_of_2(windowWidth) / dt
     cdef double m = mean(x, size)
-    cdef int k = <int>floor(<double>size/(<double>windowWidth/2.0))-1;
-    
+    cdef int k = <int> floor(<double>size / (<double>windowWidth / 2.0)) - 1
+
     cdef int incx = 1
     cdef double w_norm = dnrm2(&windowWidth, window, &incx)
     cdef double KMU = k * w_norm * w_norm
@@ -260,7 +265,7 @@ cdef int welch(
         for j in range(NFFT):
             pi = abs(F[j])
             P[j] += pi * pi
-    
+
     cdef Py_ssize_t n_out = NFFT // 2 + 1
     for i in range(n_out):
         Pxx[i] = P[i] / KMU * dt
