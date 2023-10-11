@@ -23,7 +23,7 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.utils import check_random_state
 from sklearn.utils.validation import _is_arraylike, check_is_fitted
 
-from ..distance import pairwise_distance
+from ..distance import KMedoids, pairwise_distance
 from ..transform import IntervalTransform
 from ..utils import _soft_dependency_error
 from ..utils.validation import check_array, check_option, check_X_y
@@ -499,8 +499,6 @@ def emmott_outliers(  # noqa: PLR0912, PLR0915
     Notes
     -----
     - For multiclass datasets the Emmott labeler require the package `networkx`
-    - For dispersed outlier selection the Emmott labeler require the package
-      `scikit-learn-extra`
 
     The difficulty parameters 'simplest' and 'hardest' are not described by
     Emmott et.al. (2013)
@@ -753,23 +751,10 @@ def _variation_dispersed(x, n_outliers, random_state):
     -------
     array-like
         The indices of the medoids in the input dataset.
-
-    Raises
-    ------
-    ModuleNotFoundError
-        If the required module 'sklearn_extra.cluster' is not found.
     """
-
-    try:
-        from sklearn_extra.cluster import KMedoids
-
-        n_outliers = min(x.shape[0], n_outliers)
-        f = KMedoids(n_clusters=n_outliers, random_state=random_state).fit(x)
-        return f.medoid_indices_
-    except ModuleNotFoundError as e:
-        _soft_dependency_error(
-            e, package="scikit-learn-extra", context="variation='dispersed'"
-        )
+    n_outliers = min(x.shape[0], n_outliers)
+    f = KMedoids(n_clusters=n_outliers, random_state=random_state).fit(x)
+    return f.medoid_indices_
 
 
 def _variation_tight(x, n_outliers, random_state):

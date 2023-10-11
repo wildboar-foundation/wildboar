@@ -37,7 +37,6 @@ Repository = "https://github.com/wildboar-foundation/wildboar"
 [project.optional-dependencies]
 outliers = [
   "networkx",
-  "scikit-learn-extra"
 ]
 
 datasets = [

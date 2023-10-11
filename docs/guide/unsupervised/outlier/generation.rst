@@ -10,15 +10,12 @@ Outlier detection benchmarks
 
    The :mod:`datasets.outlier` module optionally requires the package `networkx
    <https://pypi.org/projects/networkx>`_ to generate outliers for multi-class
-   problems using :func:`~datasets.outlier.emmott_labeler` and
-   `scikit-learn-extra <https://pypi.org/projects/scikit-learn-extra>`_ to use
-   the options `varitaion="dispersed"` for
-   :func:`~datasets.outlier.emmott_labeler`. We can install the packages using
-   `pip`:
+   problems using :func:`~datasets.outlier.emmott_labeler`. We can
+   install the packages using `pip`:
 
    .. code-block:: shell
 
-      pip install networkx scikit-learn-extra
+      pip install networkx
 
 Wildboar is bundled with support for outlier detection. The primary focus is on
 detecting samples that deviate from what is expected, i.e., outlier samples, as
@@ -107,8 +104,7 @@ but we can request a dispersed collection of the most difficult samples:
 
 .. note::
    To generate outliers for multiclass problems, we must install the package
-   ``networkx``, and for :python:`variation="dispersed"` we must install the package
-   ``scikit-learn-extra``.
+   ``networkx``.
 
 .. ldimage:: /_static/fig/guide/unsupervised/outlier/emmott-hard.svg
    :align: center
