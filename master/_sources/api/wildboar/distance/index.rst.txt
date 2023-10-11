@@ -54,6 +54,7 @@ Classes
 .. autoapisummary::
 
    wildboar.distance.KMeans
+   wildboar.distance.KMedoids
    wildboar.distance.KNeighbourClassifier
 
 
@@ -144,6 +145,385 @@ Functions
 
       
       Compute the kmeans-clustering.
+
+
+      :Parameters:
+
+          **x** : univariate time-series
+              The input samples.
+
+          **y** : Ignored, optional
+              Not used.
+
+      :Returns:
+
+          object
+              Fitted estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_predict(X, y=None)
+
+      
+      Perform clustering on `X` and returns cluster labels.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input data.
+
+          **y** : Ignored
+              Not used, present for API consistency by convention.
+
+      :Returns:
+
+          **labels** : ndarray of shape (n_samples,), dtype=np.int64
+              Cluster labels.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: predict(x)
+
+      
+      Predict the closest cluster for each sample.
+
+
+      :Parameters:
+
+          **x** : univariate time-series
+              The input samples.
+
+      :Returns:
+
+          ndarray of shape (n_samples, )
+              Index of the cluster each sample belongs to.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `None`: Transform configuration is unchanged
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(x)
+
+      
+      Transform the input to a cluster distance space.
+
+
+      :Parameters:
+
+          **x** : univariate time-series
+              The input samples.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_clusters)
+              The distance between each sample and each cluster.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: KMedoids(n_clusters=8, metric='euclidean', metric_params=None, init='random', n_init='auto', algorithm='fast', max_iter=30, tol=0.0001, verbose=0, n_jobs=None, random_state=None)
+
+
+
+
+   
+   KMedoid algorithm.
+
+
+   :Parameters:
+
+       **n_clusters** : int, optional
+           The number of clusters.
+
+       **metric** : str, optional
+           The metric.
+
+       **metric_params** : dict, optional
+           The metric parameters. Read more about the metrics and their parameters
+           in the :ref:`User guide <list_of_metrics>`.
+
+       **init** : {"auto", "random", "min"}, optional
+           Cluster initialization. If "random", randomly initialize `n_clusters`,
+           if "min" select the samples with the smallest distance to the other samples.
+
+       **n_init** : "auto" or int, optional
+           Number times the algorithm is re-initialized with new centroids.
+
+       **algorithm** : {"fast", "pam"}, optional
+           The algorithm for updating cluster assignments. If "pam", use the
+           Partitioning Around Medoids algorithm.
+
+       **max_iter** : int, optional
+           The maximum number of iterations for a single run of the algorithm.
+
+       **tol** : float, optional
+           Relative tolerance to declare convergence of two consecutive iterations.
+
+       **verbose** : int, optional
+           Print diagnostic messages during convergence.
+
+       **n_jobs** : int, optional
+           The number of jobs to run in parallel. A value of `None` means using
+           a single core and a value of `-1` means using all cores. Positive
+           integers mean the exact number of cores.
+
+       **random_state** : RandomState or int, optional
+           Determines random number generation for centroid initialization and
+           barycentering when fitting with `metric="dtw"`.
+
+
+
+
+
+
+
+
+
+
+
+
+   :Attributes:
+
+       **n_iter_** : int
+           The number of iterations before convergence.
+
+       **cluster_centers_** : ndarray of shape (n_clusters, n_timestep)
+           The cluster centers.
+
+       **labels_** : ndarray of shape (n_samples, )
+           The cluster assignment.
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit(x, y=None)
+
+      
+      Compute the kmedoids-clustering.
 
 
       :Parameters:

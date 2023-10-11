@@ -280,6 +280,8 @@ examples.
 
   * - :py:obj:`~wildboar.distance.KMeans`
     - KMeans clustering with support for DTW and weighted DTW.
+  * - :py:obj:`~wildboar.distance.KMedoids`
+    - KMedoid algorithm.
   * - :py:obj:`~wildboar.distance.KNeighbourClassifier`
     - Classifier implementing k-nearest neighbours.
 
@@ -594,8 +596,13 @@ Evaluation metrics.
     - Compute the redudancy score.
   * - :py:obj:`~wildboar.metrics.relative_proximity_score`
     - Compute relative proximity score.
+  * - :py:obj:`~wildboar.metrics.silhouette_samples`
+    - Compute the Silhouette Coefficient of each samples.
+  * - :py:obj:`~wildboar.metrics.silhouette_score`
+    - Compute the mean Silhouette Coefficient of all samples.
   * - :py:obj:`~wildboar.metrics.validity_score`
     - Compute validity score.
+
 
 
 

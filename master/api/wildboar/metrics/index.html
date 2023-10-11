@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.model_selection" href="../model_selection/index.html" /><link rel="prev" title="wildboar.linear_model" href="../linear_model/index.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>wildboar.metrics - Wildboar 1.1.1.dev167 documentation</title>
+        <title>wildboar.metrics - Wildboar 1.1.1.dev168 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev167 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev168 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -333,6 +333,12 @@
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.metrics.relative_proximity_score" title="wildboar.metrics.relative_proximity_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">relative_proximity_score</span></code></a>(x_native, x_factual, ...[, ...])</p></td>
 <td><p>Compute relative proximity score.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.metrics.silhouette_samples" title="wildboar.metrics.silhouette_samples"><code class="xref py py-obj docutils literal notranslate"><span class="pre">silhouette_samples</span></code></a>(x, labels, *[, metric, metric_params])</p></td>
+<td><p>Compute the Silhouette Coefficient of each samples.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.metrics.silhouette_score" title="wildboar.metrics.silhouette_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">silhouette_score</span></code></a>(x, labels, *[, metric, ...])</p></td>
+<td><p>Compute the mean Silhouette Coefficient of all samples.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.metrics.validity_score" title="wildboar.metrics.validity_score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validity_score</span></code></a>(y_predicted, y_counterfactual[, ...])</p></td>
 <td><p>Compute validity score.</p></td>
@@ -570,6 +576,73 @@ Counterfactual Explanations. arXiv, 2101.09056v1.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="wildboar.metrics.silhouette_samples">
+<span class="sig-prename descclassname"><span class="pre">wildboar.metrics.</span></span><span class="sig-name descname"><span class="pre">silhouette_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/metrics.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics.silhouette_samples" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the Silhouette Coefficient of each samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series or multivariate time-series</span></dt><dd><p>The input time series.</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Predicted labels for each sample.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str or callable, optional</span></dt><dd><p>The metric to use when calculating distance between time series.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>The metric parameters. Read more about the metrics and their parameters
+in the <a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, )</dt><dd><p>Silhouette Coefficient for each samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is a convenient wrapper around <span class="xref std std-ref">sklearn.metric.silhouette_samples</span>
+using Wildboar native metrics.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="wildboar.metrics.silhouette_score">
+<span class="sig-prename descclassname"><span class="pre">wildboar.metrics.</span></span><span class="sig-name descname"><span class="pre">silhouette_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/metrics.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics.silhouette_score" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the mean Silhouette Coefficient of all samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series or multivariate time-series</span></dt><dd><p>The input time series.</p>
+</dd>
+<dt><strong>labels</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Predicted labels for each sample.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str or callable, optional</span></dt><dd><p>The metric to use when calculating distance between time series.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>The metric parameters. Read more about the metrics and their parameters
+in the <a class="reference internal" href="../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>sample_size</strong><span class="classifier">int, optional</span></dt><dd><p>The size of the sample to use when computing the Silhouette Coefficient
+on a random subset of the data.
+If <code class="docutils literal notranslate"><span class="pre">sample_size</span> <span class="pre">is</span> <span class="pre">None</span></code>, no sampling is used.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><p>Determines random number generation for selecting a subset of samples.
+Used when <code class="docutils literal notranslate"><span class="pre">sample_size</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">None</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>Mean Silhouette Coefficient for all samples.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is a convenient wrapper around <span class="xref std std-ref">sklearn.metric.silhouette_score</span>
+using Wildboar native metrics.</p>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="wildboar.metrics.validity_score">
 <span class="sig-prename descclassname"><span class="pre">wildboar.metrics.</span></span><span class="sig-name descname"><span class="pre">validity_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_predicted</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_counterfactual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/metrics/_counterfactual.py#L373-L402"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.metrics.validity_score" title="Permalink to this definition">#</a></dt>
 <dd><p>Compute validity score.</p>
@@ -669,6 +742,8 @@ Knowledge and Information Systems, 62(5), 1671-1700.</p>
 <li><a class="reference internal" href="#wildboar.metrics.proximity_score"><code class="docutils literal notranslate"><span class="pre">proximity_score</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.metrics.redudancy_score"><code class="docutils literal notranslate"><span class="pre">redudancy_score</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.metrics.relative_proximity_score"><code class="docutils literal notranslate"><span class="pre">relative_proximity_score</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.metrics.silhouette_samples"><code class="docutils literal notranslate"><span class="pre">silhouette_samples</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.metrics.silhouette_score"><code class="docutils literal notranslate"><span class="pre">silhouette_score</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.metrics.validity_score"><code class="docutils literal notranslate"><span class="pre">validity_score</span></code></a></li>
 </ul>
 </li>
