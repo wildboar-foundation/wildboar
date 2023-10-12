@@ -892,7 +892,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
                     sharey=True,
                 )
 
-            weights = self._distance_weight(distances, 0.25)
+            weights = self._distance_weight(distances, kernel_scale)
             for i in range(len(labels)):
                 for j in range(k):
                     plot_time_domain(
