@@ -2,10 +2,14 @@
 # License: BSD 3 clause
 """Utilities for preprocessing time series."""
 
+import numbers
 from functools import partial
 
 import numpy as np
+from sklearn.base import OneToOneFeatureMixin, TransformerMixin
+from sklearn.utils._param_validation import Interval
 
+from ..base import BaseEstimator
 from ..transform._sax import piecewice_aggregate_approximation
 from ..utils.validation import check_array, check_option
 from ..utils.variable_len import is_end_of_series
@@ -145,3 +149,49 @@ _PREPROCESS = {
     "downsample-25": partial(piecewice_aggregate_approximation, n_intervals=0.25),
     "downsample-50": partial(piecewice_aggregate_approximation, n_intervals=0.5),
 }
+
+
+class SparseScaler(OneToOneFeatureMixin, TransformerMixin, BaseEstimator):
+    """
+    Scale attributes.
+
+    The attributes are scaled by:::
+
+        sqrt(x) - mean(sqrt(x), axis=0) / std(sqrt(x), axis=0) + epsilon
+
+    where `epsilon` is given by ``mean(sqrt(x) == 0, axis=0) ** exp``
+
+    Parameters
+    ----------
+    mask_zero : bool, optional
+        Keep zero values at zero.
+    exp : float, optional
+        The exponent of the feature sparcity.
+    """
+
+    _parameter_constraints: dict = {
+        "mask_zero": [bool],
+        "exp": Interval(numbers.Real, 0, None, closed="left"),
+    }
+
+    def __init__(self, mask_zero=True, exp=4):
+        self.exp = exp
+        self.mask_zero = mask_zero
+
+    def fit(self, x, y=None):
+        x = np.sqrt(self._validate_data(x, allow_3d=False).clip(min=0))
+
+        self.mu_ = x.mean(axis=0)
+        self.sigma_ = x.std(axis=0) + (x == 0).mean() ** self.exp + 1e-8
+        return self
+
+    def transform(self, x):
+        x = np.sqrt(self._validate_data(x, allow_3d=False).clip(min=0))
+
+        x = x - self.mu_
+        if self.mask_zero:
+            x *= x != 0
+
+        x /= self.sigma_
+
+        return x
