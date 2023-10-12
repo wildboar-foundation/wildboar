@@ -390,7 +390,7 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         plot_time_domain(x, y=y, n_samples=n_samples, ax=ax)
         mappable = ScalarMappable(cmap=cmap, norm=norm)
         if fig is not None:
-            fig.colorbar(mappable)
+            fig.colorbar(mappable, ax=ax)
             return ax
         else:
             return ax, mappable
@@ -669,7 +669,7 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
         ax.set_ylim([np.min(x) - np.std(x), np.max(x) + np.std(x)])
         mappable = ScalarMappable(cmap=cmap, norm=norm)
         if fig is not None:
-            fig.colorbar(mappable)
+            fig.colorbar(mappable, ax=ax)
             return ax
         else:
             return ax, mappable
@@ -863,7 +863,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             mappable = ax.pcolormesh(explanation[order[:k]], cmap="coolwarm")
             ax.set_yticks(np.arange(k) + 0.5, order[:k])
             if fig is not None:
-                fig.colorbar(mappable)
+                fig.colorbar(mappable, ax=ax)
                 return ax
             else:
                 return ax, mappable
