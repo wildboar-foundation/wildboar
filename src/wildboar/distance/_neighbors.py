@@ -529,7 +529,7 @@ class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
 
     _parameter_constraints: dict = {
         "n_clusters": [Interval(numbers.Integral, 1, None, closed="left")],
-        "metric": [StrOptions(_METRICS.keys())],
+        "metric": [StrOptions(_METRICS.keys() | {"precomputed"})],
         "metric_params": [None, dict],
         "init": [StrOptions({"random", "auto", "min"})],
         "n_init": [
@@ -607,13 +607,17 @@ class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
             max_iter = 0
 
         random_state = check_random_state(self.random_state)
-        dist = pairwise_distance(
-            x,
-            dim="mean",
-            metric=self.metric,
-            metric_params=self.metric_params,
-            n_jobs=self.n_jobs,
-        )
+        if self.metric == "precomputed":
+            dist = x
+        else:
+            dist = pairwise_distance(
+                x,
+                dim="mean",
+                metric=self.metric,
+                metric_params=self.metric_params,
+                n_jobs=self.n_jobs,
+            )
+
         best_iter = 0
         best_cost = np.inf
         best_clusterer = None
@@ -637,8 +641,12 @@ class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
         if best_reassign:
             clusterer.assign()
 
+        if self.metric == "precomputed":
+            self.cluster_centers_ = None
+        else:
+            self.cluster_centers_ = x[best_clusterer._cluster_idx]
+
         self.inertia_ = best_clusterer.cost_
-        self.cluster_centers_ = x[best_clusterer._cluster_idx]
         self.medoid_indices_ = best_clusterer._cluster_idx
         self.n_iter_ = best_iter
         self.labels_ = best_clusterer.labels_
@@ -717,10 +725,13 @@ class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
         """
         check_is_fitted(self)
         x = self._validate_data(x, allow_3d=True, reset=False)
-        return pairwise_distance(
-            x,
-            self.cluster_centers_,
-            dim="mean",
-            metric=self.metric,
-            metric_params=self.metric_params,
-        )
+        if self.metric == "precomputed":
+            return x[:, self.medoid_indices_]
+        else:
+            return pairwise_distance(
+                x,
+                self.cluster_centers_,
+                dim="mean",
+                metric=self.metric,
+                metric_params=self.metric_params,
+            )
