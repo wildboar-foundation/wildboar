@@ -834,9 +834,9 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         self, X=None, y=None, k=None, scoring=None, kernel_scale=0.25, ax=None
     ):
         if X is None:
-            plot_importances(
+            return plot_importances(
                 self.importances_, ax=ax, labels=range(len(self.components_))
-            )
+            )            
 
         if isinstance(self.importances_, dict):
             importances = check_option(self.importances_, scoring, "scoring")
@@ -916,7 +916,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
                 ax[0, i].set_title("Label=%r" % labels[i])
 
             mappable = ScalarMappable(norm=norm, cmap=cmap)
-            if ax is not None:
+            if fig is not None:
                 fig.colorbar(mappable, orientation="horizontal", ax=ax[-1, :])
                 return ax
             else:
