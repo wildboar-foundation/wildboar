@@ -282,8 +282,8 @@ examples.
     - KMeans clustering with support for DTW and weighted DTW.
   * - :py:obj:`~wildboar.distance.KMedoids`
     - KMedoid algorithm.
-  * - :py:obj:`~wildboar.distance.KNeighbourClassifier`
-    - Classifier implementing k-nearest neighbours.
+  * - :py:obj:`~wildboar.distance.KNeighborsClassifier`
+    - Classifier implementing k-nearest neighbors.
 
 
 .. list-table:: Functions

@@ -55,7 +55,7 @@ Classes
 
    wildboar.distance.KMeans
    wildboar.distance.KMedoids
-   wildboar.distance.KNeighbourClassifier
+   wildboar.distance.KNeighborsClassifier
 
 
 
@@ -514,6 +514,9 @@ Functions
        **cluster_centers_** : ndarray of shape (n_clusters, n_timestep)
            The cluster centers.
 
+       **medoid_indices_** : ndarray of shape (n_clusters, )
+           The index of the medoid in the input samples.
+
        **labels_** : ndarray of shape (n_samples, )
            The cluster assignment.
 
@@ -824,19 +827,19 @@ Functions
           !! processed by numpydoc !!
 
 
-.. py:class:: KNeighbourClassifier(n_neighbours=5, *, metric='euclidean', metric_params=None)
+.. py:class:: KNeighborsClassifier(n_neighbors=5, *, metric='euclidean', metric_params=None)
 
 
 
 
    
-   Classifier implementing k-nearest neighbours.
+   Classifier implementing k-nearest neighbors.
 
 
    :Parameters:
 
-       **n_neighbours** : int, optional
-           The number of neighbours.
+       **n_neighbors** : int, optional
+           The number of neighbors.
 
        **metric** : str, optional
            The distance metric.
@@ -882,7 +885,7 @@ Functions
 
       :Returns:
 
-          KNeighbourClassifier
+          KNeighborClassifier
               This instance.
 
 

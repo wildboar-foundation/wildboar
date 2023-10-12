@@ -200,8 +200,6 @@ Functions
    .. rubric:: Notes
 
    - For multiclass datasets the Emmott labeler require the package `networkx`
-   - For dispersed outlier selection the Emmott labeler require the package
-     `scikit-learn-extra`
 
    The difficulty parameters 'simplest' and 'hardest' are not described by
    Emmott et.al. (2013)
