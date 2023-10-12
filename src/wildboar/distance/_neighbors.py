@@ -10,12 +10,12 @@ from sklearn.utils.validation import check_is_fitted, check_random_state
 
 from ..base import BaseEstimator
 from ..utils.validation import check_classification_targets
-from ._cneighbours import _pam_build, _pam_optimal_swap
+from ._cneighbors import _pam_build, _pam_optimal_swap
 from ._distance import _METRICS, paired_distance, pairwise_distance
 from .dtw import dtw_average
 
 
-class KNeighbourClassifier(ClassifierMixin, BaseEstimator):
+class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
     """
     Classifier implementing k-nearest neighbours.
 
