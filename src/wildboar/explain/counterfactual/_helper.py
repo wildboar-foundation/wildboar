@@ -2,10 +2,10 @@ import warnings
 
 import numpy as np
 from sklearn.base import clone
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier as Sklearn_KNeighborsClassifier
 from sklearn.utils.validation import check_is_fitted
 
-from ...distance import paired_distance
+from ...distance import KNeighborsClassifier, paired_distance
 from ...ensemble import ExtraShapeletTreesClassifier, ShapeletForestClassifier
 from ...utils.validation import check_array
 from ._nn import KNeighborsCounterfactual
@@ -79,10 +79,7 @@ def _best_counterfactional(estimator):
         and estimator.metric == "euclidean"
     ):
         return ShapeletForestCounterfactual
-    elif isinstance(estimator, KNeighborsClassifier) and (
-        estimator.metric == "euclidean"
-        or (estimator.metric == "minkowski" and estimator.p == 2)
-    ):
+    elif isinstance(estimator, (Sklearn_KNeighborsClassifier, KNeighborsClassifier)):
         return KNeighborsCounterfactual
     else:
         return PrototypeCounterfactual

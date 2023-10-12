@@ -106,6 +106,18 @@ Changelog
 
   .. grid-item-card::
 
+     :mod:`wildboar.explain.counterfactual`
+     ^^^
+
+     - |Feature| Add support for KNeighborsClassifiers fitted with any metric
+       in `explain.counterfactual.KNeighborsCounterfactual`. We allow for using
+       different methods for finding the counterfactuals for `n_neighbors > 1`
+       by setting `method='mean'` or `method='medoid'`. We have also improved
+       the way in which cluster centroids are selected, resulting in a more
+       robust counterfactuals.
+
+  .. grid-item-card::
+
      :mod:`wildboar.linear_model`
      ^^^
 

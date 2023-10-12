@@ -39,8 +39,8 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
 
     _parameter_constraints: dict = {
         "n_neighbors": [Interval(numbers.Integral, 1, None, closed="left")],
-        "metric": [str],
-        "metric_params": [str, None],
+        "metric": [StrOptions(_METRICS.keys())],
+        "metric_params": [dict, None],
     }
 
     def __init__(self, n_neighbors=5, *, metric="euclidean", metric_params=None):
@@ -617,7 +617,6 @@ class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
                 metric_params=self.metric_params,
                 n_jobs=self.n_jobs,
             )
-
         best_iter = 0
         best_cost = np.inf
         best_clusterer = None

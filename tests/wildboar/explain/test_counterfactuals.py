@@ -2,13 +2,12 @@
 # License: BSD 3 clause
 
 import numpy as np
-import sklearn
 import pytest
+import sklearn
 from numpy.testing import assert_almost_equal
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
 from sklearn.neighbors import KNeighborsClassifier
-
 from wildboar.base import is_counterfactual
 from wildboar.datasets import load_dataset
 from wildboar.ensemble import ShapeletForestClassifier
@@ -71,9 +70,7 @@ def test_is_counterfactual(estimator):
         # output here.
         pytest.param(
             KNeighborsClassifier(n_neighbors=5, metric="euclidean"),
-            np.array([2.307078907707276, 9.355327387515722])
-            if sklearn.__version__ < "1.3.0"
-            else np.array([2.307078907707276, 11.05428542]),
+            np.array([2.307078907707276, 8.83732116566978]),
         ),
         pytest.param(
             KNeighborsClassifier(n_neighbors=1, metric="euclidean"),
