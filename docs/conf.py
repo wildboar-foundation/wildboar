@@ -40,6 +40,7 @@ extensions = [
     "autoapi.extension",
     "lightdarkimg",
     "matplotlib.sphinxext.plot_directive",
+    "nbsphinx",
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.linkcode",

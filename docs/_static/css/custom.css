@@ -21,3 +21,8 @@ table.autosummary .caption-text {
 table.autosummary a.headerlink {
   display: none;
 }
+
+.nbinput .prompt,
+.nboutput .prompt {
+    display: none;
+}
