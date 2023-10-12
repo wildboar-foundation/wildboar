@@ -68,8 +68,7 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
         x, y = self._validate_data(x, y, allow_3d=True)
         check_classification_targets(y)
         self._fit_X = x.copy()  # Align naming with sklearn
-        self._y = y.copy()
-        self.classes_ = np.unique(y)
+        self.classes_, self._y = np.unique(y, return_inverse=True)
         return self
 
     def predict_proba(self, x):
@@ -100,8 +99,8 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
         ]
 
         probs = np.empty((x.shape[0], len(self.classes_)), dtype=float)
-        for i, c in enumerate(self.classes_):
-            probs[:, i] = np.sum(preds == c, axis=1) / self.n_neighbors
+        for i in range(len(self.classes_)):
+            probs[:, i] = np.sum(preds == i, axis=1) / self.n_neighbors
         return probs
 
     def predict(self, x):
