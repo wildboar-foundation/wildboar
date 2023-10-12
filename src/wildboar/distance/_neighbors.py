@@ -17,12 +17,12 @@ from .dtw import dtw_average
 
 class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
     """
-    Classifier implementing k-nearest neighbours.
+    Classifier implementing k-nearest neighbors.
 
     Parameters
     ----------
-    n_neighbours : int, optional
-        The number of neighbours.
+    n_neighbors : int, optional
+        The number of neighbors.
     metric : str, optional
         The distance metric.
     metric_params : dict, optional
@@ -38,13 +38,13 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
     """
 
     _parameter_constraints: dict = {
-        "n_neighbours": [Interval(numbers.Integral, 1, None, closed="left")],
+        "n_neighbors": [Interval(numbers.Integral, 1, None, closed="left")],
         "metric": [str],
         "metric_params": [str, None],
     }
 
-    def __init__(self, n_neighbours=5, *, metric="euclidean", metric_params=None):
-        self.n_neighbours = n_neighbours
+    def __init__(self, n_neighbors=5, *, metric="euclidean", metric_params=None):
+        self.n_neighbors = n_neighbors
         self.metric = metric
         self.metric_params = metric_params
 
@@ -61,7 +61,7 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
 
         Returns
         -------
-        KNeighbourClassifier
+        KNeighborClassifier
             This instance.
         """
         self._validate_params()
@@ -96,12 +96,12 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
             metric_params=self.metric_params,
         )
         preds = self._y[
-            np.argpartition(dists, self.n_neighbours, axis=1)[:, : self.n_neighbours]
+            np.argpartition(dists, self.n_neighbors, axis=1)[:, : self.n_neighbors]
         ]
 
         probs = np.empty((x.shape[0], len(self.classes_)), dtype=float)
         for i, c in enumerate(self.classes_):
-            probs[:, i] = np.sum(preds == c, axis=1) / self.n_neighbours
+            probs[:, i] = np.sum(preds == c, axis=1) / self.n_neighbors
         return probs
 
     def predict(self, x):

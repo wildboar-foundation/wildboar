@@ -35,7 +35,7 @@ It is currently maintained by Isak Samsten
 |                                                                 | `ProximityTreeClassifier`      |                               |                                | ERP        | `SAX`                        |                           |
 |                                                                 | `ProximityForestClassifier`    |                               |                                | EDR        | `PAA`                        |                           |
 |                                                                 | `HydraClassifier`              |                               |                                |            | `MatrixProfileTransform`     |                           |
-|                                                                 | `KNeighboursClassifier`        |                               |                                |            | `HydraTransform`             |                           |
+|                                                                 | `KNeighborsClassifier`         |                               |                                |            | `HydraTransform`             |                           |
 |                                                                 |                                |                               |                                |            | `KMeans` with (W)DTW support |                           |
 |                                                                 |                                |                               |                                |            | `KMedoids`                   |                           |
 

@@ -28,7 +28,7 @@ Wildboar 1.2 introduces several new models.
   transformation method as described by Dempster et al., (2023).
 - :class:`linear_model.HydraClassifier`: a new convolution based dictionary
   classifier as described by Dempster et al., (2023).
-- :class:`distance.KNeighboursClassifier`: the traditional k-neighbours classifier
+- :class:`distance.KNeighborsClassifier`: the traditional k-neighbors classifier
   using wildboar native distance metrics, including the full suite of optimized
   elastic metrics.
 - :class:`distance.KMeans`: the traditional k-means clustering algorithm. Compared to
@@ -41,8 +41,8 @@ Changelog
 
 .. grid:: 1
 
-  .. grid-item-card:: 
-    
+  .. grid-item-card::
+
      :mod:`wildboar.distance`
      ^^^
 
@@ -74,26 +74,26 @@ Changelog
 
      - |API| Rename EDR ``threshold`` parameter to ``epsilon``. We will remove ``threshold`` in 1.4.
 
-     - |API| Rename :class:`_distance.DistanceMeasure` to ``Metric`` and 
-       :class:`_distance.SubsequenceDistanceMeasure` to ``SubsequenceMetric``. The change 
+     - |API| Rename :class:`_distance.DistanceMeasure` to ``Metric`` and
+       :class:`_distance.SubsequenceDistanceMeasure` to ``SubsequenceMetric``. The change
        only affect code that ``cimport`` modules.
 
-  .. grid-item-card:: 
-    
+  .. grid-item-card::
+
      :mod:`wildboar.ensemble`
      ^^^
-     
+
      - |Feature| Add support for multiple metrics in :class:`ensemble.ShapeletForestClassifier`,
        :class:`ensemble.ShapeletForestRegressor`. All estimators with a ``metric`` parameter
        and which implements the ``ShapeletMixin`` is affected by this change.
 
-     - |API| Rename the constructor parameter ``base_estimator`` to ``estimator`` in 
+     - |API| Rename the constructor parameter ``base_estimator`` to ``estimator`` in
        :class:`ensemble.BaggingClassifier` and :class:`ensemble.BaggingRegressor`.
        ``base_estimator`` is deprecated in 1.2 and will be removed in 1.4. Original
        change in scikit-learn.
 
      - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
-       This change affect :class:`tree.RocketForestClassifier` and :class:`tree.RocketForestRegressor`. 
+       This change affect :class:`tree.RocketForestClassifier` and :class:`tree.RocketForestRegressor`.
 
      - |Fix| Fix a bug where ``sampling`` was incorrectly set for :class:`ensemble.RocketForestClassifier`
        and :class:`ensemble.RocketForestRegressor`.
@@ -104,16 +104,16 @@ Changelog
      - |API| Drop support for ``criterion="mse"`` in :class:`ensemble.ShapeletForestRegressor`
        and :class:`ensemble.ExtraShapeletTreesRegressor`.
 
-  .. grid-item-card:: 
-    
+  .. grid-item-card::
+
      :mod:`wildboar.linear_model`
      ^^^
-     
+
      - |API| Undeprecate the ``normalize`` parameter from :class:`linear_model.RocketClassifier` and
        :class:`linear_model.RocketRegressor`.
 
-  .. grid-item-card:: 
-    
+  .. grid-item-card::
+
      :mod:`wildboar.transform`
      ^^^
 
@@ -129,11 +129,11 @@ Changelog
      - |API| Change the tuple argument for ``kernel_size`` to two new parameters ``min_size`` and ``max_size``.
        This change affect :class:`transform.RocketTransform`.
 
-  .. grid-item-card:: 
-    
+  .. grid-item-card::
+
      :mod:`wildboar.tree`
      ^^^
-     
+
      - |Feature| Add support for multiple metrics in :class:`tree.ShapeletTreeClassifier`,
        :class:`tree.ShapeletTreeRegressor`. All estimators with a ``metric`` parameter
        and which implements the ``ShapeletMixin`` is affected by this change.
