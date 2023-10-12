@@ -13,6 +13,12 @@ Dependencies
 
 Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 1.1+.
 
+Version 1.1.3
+=============
+
+Version 1.1.3 is yet another small maintenance release that adds support for
+Python 3.12.
+
 Version 1.1.2
 =============
 
