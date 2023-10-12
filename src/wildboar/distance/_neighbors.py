@@ -522,6 +522,8 @@ class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
         The number of iterations before convergence.
     cluster_centers_ : ndarray of shape (n_clusters, n_timestep)
         The cluster centers.
+    medoid_indices_ : ndarray of shape (n_clusters, )
+        The index of the medoid in the input samples.
     labels_ : ndarray of shape (n_samples, )
         The cluster assignment.
     """
@@ -638,6 +640,7 @@ class KMedoids(ClusterMixin, TransformerMixin, BaseEstimator):
 
         self.inertia_ = best_clusterer.cost_
         self.cluster_centers_ = x[best_clusterer._cluster_idx]
+        self.medoid_indices_ = best_clusterer._cluster_idx
         self.n_iter_ = best_iter
         self.labels_ = best_clusterer.labels_
         return self
