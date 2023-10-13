@@ -21,7 +21,7 @@ Classes
 
 
 
-.. py:class:: KNeighborsCounterfactual(random_state=None)
+.. py:class:: KNeighborsCounterfactual(method='auto', random_state=None)
 
 
 
@@ -30,6 +30,22 @@ Classes
    Fit a counterfactual explainer to a k-nearest neighbors classifier.
 
 
+   :Parameters:
+
+       **method** : {"auto", "mean", "medoid"}, optional
+           The method for generating counterfactuals. If 'auto', counterfactuals
+           are generated using k-means if possible and k-medoids otherwise. If
+           'mean', counterfactuals are always generated using k-means, which fails
+           if the estimator is fitted with a metric other than 'euclidean', 'dtw'
+           or 'wdtw. If 'medoid', counterfactuals are generated using k-medoids.
+           
+           .. versionadded:: 1.2
+
+       **random_state** : int or RandomState, optional
+           - If `int`, `random_state` is the seed used by the random number generator.
+           - If `RandomState` instance, `random_state` is the random number generator.
+           - If `None`, the random number generator is the `RandomState` instance used
+             by `np.random`.
 
 
 

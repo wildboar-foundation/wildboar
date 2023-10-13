@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../../../genindex.html" /><link rel="search" title="Search" href="../../../../../search.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>wildboar.explain.counterfactual._nn - Wildboar 1.1.1.dev181 documentation</title>
+        <title>wildboar.explain.counterfactual._nn - Wildboar 1.1.1.dev185 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../../index.html"><div class="brand">Wildboar 1.1.1.dev181 documentation</div></a>
+      <a href="../../../../../index.html"><div class="brand">Wildboar 1.1.1.dev185 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -330,8 +330,30 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._nn.KNeighborsCounterfactual">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._nn.</span></span><span class="sig-name descname"><span class="pre">KNeighborsCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L12-L107"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._nn.</span></span><span class="sig-name descname"><span class="pre">KNeighborsCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_nn.py#L149-L272"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._nn.KNeighborsCounterfactual" title="Permalink to this definition">#</a></dt>
 <dd><p>Fit a counterfactual explainer to a k-nearest neighbors classifier.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>method</strong><span class="classifier">{“auto”, “mean”, “medoid”}, optional</span></dt><dd><p>The method for generating counterfactuals. If ‘auto’, counterfactuals
+are generated using k-means if possible and k-medoids otherwise. If
+‘mean’, counterfactuals are always generated using k-means, which fails
+if the estimator is fitted with a metric other than ‘euclidean’, ‘dtw’
+or ‘wdtw. If ‘medoid’, counterfactuals are generated using k-medoids.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.2.</span></p>
+</div>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState, optional</span></dt><dd><ul class="simple">
+<li><p>If <cite>int</cite>, <cite>random_state</cite> is the seed used by the random number generator.</p></li>
+<li><p>If <cite>RandomState</cite> instance, <cite>random_state</cite> is the random number generator.</p></li>
+<li><p>If <cite>None</cite>, the random number generator is the <cite>RandomState</cite> instance used
+by <cite>np.random</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">References</p>
 <dl class="simple">
 <dt>Karlsson, I., Rebane, J., Papapetrou, P., &amp; Gionis, A. (2020).</dt><dd><p>Locally and globally explainable time series tweaking.
