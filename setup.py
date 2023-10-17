@@ -18,12 +18,9 @@ BUILD_ARGS = {
     },
     "optimized": {
         "extra_compile_args": [
-            "-O3",
+            "-O4",
             "-march=native",
-            "-msse",
-            "-msse2",
             "-mfma",
-            "-mfpmath=sse",
         ],
         "extra_link_args": [],
         "libraries": [],
@@ -61,6 +58,7 @@ if __name__ == "__main__":
     from Cython.Build import cythonize
 
     build_type = os.getenv("WILDBOAR_BUILD", "default")
+    build_nthreads = int(os.getenv("WILDBOAR_BUILD_NTHREADS", "1"))
     build_args = BUILD_ARGS.get(build_type)
 
     if build_args is None:
@@ -111,7 +109,7 @@ if __name__ == "__main__":
     setup(
         ext_modules=cythonize(
             ext_modules,
-            nthreads=4,
+            nthreads=build_nthreads,
             annotate=build_type == "debug",
         )
     )
