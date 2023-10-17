@@ -25,31 +25,33 @@ from ...distance.dtw import (
 
 
 class TargetEvaluator(abc.ABC):
-    """Evaluate if a sample is a counterfactual."""
+    """
+    Evaluate if a sample is a counterfactual.
+
+    Parameters
+    ----------
+    estimator : object
+        The estimator.
+    """
 
     def __init__(self, estimator):
-        """Construct a new evaluator.
-
-        Parameters
-        ----------
-        estimator : object
-            The estimator
-        """
         self.estimator = estimator
 
     def is_counterfactual(self, x, y):
-        """Return true if x is a counterfactual of label y.
+        """
+        Return true if x is a counterfactual of label y.
 
         Parameters
         ----------
         x : ndarray of shape (n_timestep,)
-            The counterfactual sample
+            The counterfactual sample.
         y : object
-            The counterfactual label
+            The counterfactual label.
 
         Returns
         -------
-        bool : true if counterfactual
+        bool
+            Return true if counterfactual valid.
         """
         return self._is_counterfactual(x.reshape(1, -1), y)
 
@@ -66,18 +68,18 @@ class PredictEvaluator(TargetEvaluator):
 
 
 class ProbabilityEvaluator(TargetEvaluator):
-    """Evaluate the probability threshold."""
+    """
+    Evaluate the probability threshold.
+
+    Parameters
+    ----------
+    estimator : object
+        The estimator.
+    probability : float, optional
+        The minimum probability of the predicted label.
+    """
 
     def __init__(self, estimator, probability=0.5):
-        """Construct a new evaluator.
-
-        Parameters
-        ----------
-        estimator : object
-            The estimator
-        probability : float
-            The minimum probability of the predicted label
-        """
         super().__init__(estimator)
         self.probability = probability
 
@@ -92,33 +94,36 @@ class ProbabilityEvaluator(TargetEvaluator):
 
 
 class PrototypeSampler(abc.ABC):
-    def __init__(self, x, y, prototype_indices, metric_transform):
-        """Sample and refine counterfactuals.
+    """
+    Sample and refine counterfactuals.
 
-        Parameters
-        ----------
-        x : ndarray of shape (n_samples, n_timestep)
-            The data samples labeled as y
-        y : object
-            The label of the samples in x
-        n_prototypes : int
-            The number of prototypes in the initial sample
-        metric_transform : MetricTransform
-            The metric transformer.
-        random_state : RandomState
-            The random number generator.
-        """
+    Parameters
+    ----------
+    x : ndarray of shape (n_samples, n_timestep)
+        The data samples labeled as y.
+    y : object
+        The label of the samples in x.
+    """
+
+    def __init__(self, x, y, prototype_indices, metric_transform):
         self.x = x
         self.y = y
         self.metric_transform = metric_transform
         self.prototype_indices = prototype_indices
 
     def _get_random_index(self, random_state):
-        """Return a random index in the initial prototype sample.
+        """
+        Return a random index in the initial prototype sample.
+
+        Parameters
+        ----------
+        random_state : RandomState
+            The random state.
 
         Returns
         -------
-        int : an index
+        int
+            The index.
         """
         return self.prototype_indices[
             random_state.randint(self.prototype_indices.shape[0])
@@ -126,49 +131,56 @@ class PrototypeSampler(abc.ABC):
 
     @abc.abstractmethod
     def sample(self, o, random_state):
-        """Sample an example.
+        """
+        Sample an example.
 
         Parameters
         ----------
         o : ndarray of shape (n_timestep,)
-            The current counterfactual sample
+            The current counterfactual sample.
+        random_state : RandomState
+            The random state.
 
         Returns
         -------
-        prototype : ndarray of shape (n_timestep,)
-            A prototype of the counterfactual label
+        ndarray of shape (n_timestep,)
+            A prototype of the counterfactual label.
         """
         pass
 
     def move(self, o, p):
-        """Move the current counterfactual toward the prototype.
+        """
+        Move the current counterfactual toward the prototype.
 
         Parameters
         ----------
         o : ndarray of shape (n_timestep,)
-            The current counterfactual sample
+            The current counterfactual sample.
         p : ndarray of shape (n_timestep,)
-            The prototype of the counterfactual label
+            The prototype of the counterfactual label.
 
         Returns
         -------
-        new_counterfactual : ndarray of shape (n_timestep,)
-            The new counterfactual moved towards the prototype
+        ndarray of shape (n_timestep,)
+            The new counterfactual moved towards the prototype.
         """
         return self.metric_transform.move(o, p)
 
     def sample_move(self, o, random_state):
-        """Sampla a prototype and move the counterfactual towards the prototype.
+        """
+        Sampla a prototype and move the counterfactual towards the prototype.
 
         Parameters
         ----------
         o : ndarray of shape (n_timestep,)
-            The current counterfactual sample
+            The current counterfactual sample.
+        random_state : RandomState
+            The random state.
 
         Returns
         -------
-        new_counterfactual : ndarray of shape (n_timestep,)
-            The new counterfactual moved towards the prototype
+        ndarray of shape (n_timestep,)
+            The new counterfactual moved towards the prototype.
         """
         p = self.sample(o, random_state)
         return self.move(o, p)
@@ -230,7 +242,20 @@ class KNearestPrototypeSampler(PrototypeSampler):
 
 
 class ShapeletPrototypeSampler(PrototypeSampler):
-    """Sample shapelet prototypes."""
+    """
+    Sample shapelet prototypes.
+
+    Parameters
+    ----------
+    x : ndarray of shape (n_samples, n_timestep)
+        The data samples
+    y : object
+        The label of the samples in x
+    min_shapelet_size : float
+        The minimum shapelet size
+    max_shapelet_size : float
+            The maximum shapelet size
+    """
 
     def __init__(
         self,
@@ -241,29 +266,13 @@ class ShapeletPrototypeSampler(PrototypeSampler):
         min_shapelet_size=0,
         max_shapelet_size=1,
     ):
-        """Sample shapelet.
-
-        Parameters
-        ----------
-        x : ndarray of shape (n_samples, n_timestep)
-            The data samples
-        y : object
-            The label of the samples in x
-        metric_transform : MetricTransform
-            The metric transformer.
-        random_state : RandomState
-            The random number generator.
-        min_shapelet_size : float
-            The minimum shapelet size
-        max_shapelet_size : float
-            The maximum shapelet size
-        """
         super().__init__(x, y, prototype_indicies, metric_transform)
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
     def sample_shapelet(self, p, random_state):
-        """Sample a shapelet from x.
+        """
+        Sample a shapelet from x.
 
         Parameters
         ----------
