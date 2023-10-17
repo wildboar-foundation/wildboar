@@ -9,11 +9,12 @@
 
 import numpy as np
 
-from libc.math cimport NAN, sqrt
+from libc.math cimport NAN, sqrt, INFINITY
 from libc.stdlib cimport free, malloc
 from numpy cimport float64_t, intp_t, ndarray
 
 from ..utils cimport _stats
+from ..utils._misc cimport Heap
 
 from copy import deepcopy
 
@@ -425,6 +426,37 @@ cdef class Metric:
     ) noexcept nogil:
         return NAN
 
+    # Default implementation. Delegates to _lbdistance.
+    cdef MetricState lbdistance(
+        self,
+        TSArray x,
+        Py_ssize_t x_index,
+        TSArray y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+        double *distance,
+    ) noexcept nogil:
+        return self._lbdistance(
+           &x[x_index, dim, 0],
+           x.shape[2],
+           &y[y_index, dim, 0],
+           y.shape[2],
+           distance,
+        )
+
+    # Default implementation. Delegates to _distance,
+    # without lower bounding.
+    cdef MetricState _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *distance,
+    ) noexcept nogil:
+        distance[0] = self._distance(x, x_len, y, y_len)
+        return MetricState.VALID
+
     @property
     def is_elastic(self):
         return False
@@ -632,29 +664,108 @@ def _paired_subsequence_match(
     return indicies_list, distances_list
 
 
+cdef class _PairwiseDistanceBatch:
+    cdef TSArray x
+    cdef TSArray y
+    cdef Py_ssize_t dim
+    cdef Metric metric
+
+    cdef double[:, :] distances
+
+    def __init__(
+        self,
+        TSArray x,
+        TSArray y,
+        Py_ssize_t dim,
+        Metric metric,
+        double[:, :] distances
+    ):
+        self.x = x
+        self.y = y
+        self.dim = dim
+        self.metric = metric
+        self.distances = distances
+
+    @property
+    def n_work(self):
+        return self.x.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef Metric metric = deepcopy(self.metric)
+        cdef Py_ssize_t i, j
+        cdef Py_ssize_t y_samples = self.y.shape[0]
+
+        with nogil:
+            metric.reset(self.x, self.y)
+            for i in range(offset, offset + batch_size):
+                for j in range(y_samples):
+                    self.distances[i, j] = metric.distance(
+                        self.x, i, self.y, j, self.dim
+                    )
+
+
 def _pairwise_distance(
-    TSArray y,
     TSArray x,
+    TSArray y,
     Py_ssize_t dim,
     Metric metric,
     n_jobs,
 ):
-    cdef:
-        Py_ssize_t y_samples = y.shape[0]
-        Py_ssize_t x_samples = x.shape[0]
 
-    cdef double[:, :] out = np.empty((y_samples, x_samples), dtype=float)
-    cdef Py_ssize_t i, j
-    cdef double dist
-
-    with nogil:
-        metric.reset(y, x)
-        for i in range(y_samples):
-            for j in range(x_samples):
-                dist = metric.distance(y, i, x, j, dim)
-                out[i, j] = dist
+    cdef double[:, :] out = np.empty((x.shape[0], y.shape[0]), dtype=float)
+    run_in_parallel(
+        _PairwiseDistanceBatch(
+            x,
+            y,
+            dim,
+            metric,
+            out,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem",
+    )
 
     return out.base
+
+
+cdef class _SingletonPairwiseDistanceBatch:
+    cdef TSArray x
+    cdef Py_ssize_t dim
+    cdef Metric metric
+
+    cdef double[:, :] distances
+
+    def __init__(
+        self,
+        TSArray x,
+        Py_ssize_t dim,
+        Metric metric,
+        double[:, :] distances
+    ):
+        self.x = x
+        self.dim = dim
+        self.metric = metric
+        self.distances = distances
+
+    @property
+    def n_work(self):
+        return self.x.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef Metric metric = deepcopy(self.metric)
+        cdef Py_ssize_t i, j
+        cdef Py_ssize_t n_samples = self.x.shape[0]
+        cdef double dist
+
+        with nogil:
+            metric.reset(self.x, self.x)
+            for i in range(offset, offset + batch_size):
+                for j in range(i + 1, n_samples):
+                    dist = metric.distance(
+                        self.x, i, self.x, j, self.dim
+                    )
+                    self.distances[i, j] = dist
+                    self.distances[j, i] = dist
 
 
 def _singleton_pairwise_distance(
@@ -665,18 +776,144 @@ def _singleton_pairwise_distance(
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
     cdef double[:, :] out = np.zeros((n_samples, n_samples), dtype=float)
-    cdef Py_ssize_t i, j
-    cdef double dist
 
-    with nogil:
-        metric.reset(x, x)
-        for i in range(n_samples):
-            for j in range(i + 1, n_samples):
-                dist = metric.distance(x, i, x, j, dim)
-                out[i, j] = dist
-                out[j, i] = dist
-
+    run_in_parallel(
+        _SingletonPairwiseDistanceBatch(
+            x,
+            dim,
+            metric,
+            out,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem",
+    )
     return out.base
+
+
+cdef class _ArgMinBatch:
+    cdef double[:, :] distances
+    cdef Py_ssize_t[:, :] indices
+
+    cdef TSArray x
+    cdef TSArray y
+    cdef Metric metric
+    cdef Py_ssize_t dim
+
+    def __init__(
+        self,
+        TSArray x,
+        TSArray y,
+        Metric metric,
+        Py_ssize_t dim,
+        double[:, :] distances,
+        Py_ssize_t[:, :] indices
+    ):
+        self.x = x
+        self.y = y
+        self.metric = metric
+        self.dim = dim
+        self.distances = distances
+        self.indices = indices
+
+    @property
+    def n_work(self):
+        return self.x.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef MetricState state
+        cdef double distance
+        cdef Py_ssize_t i, j
+
+        cdef Py_ssize_t k = self.distances.shape[1]
+        cdef Py_ssize_t y_samples = self.y.shape[0]
+        cdef Heap heap = Heap(k)
+        cdef Metric metric = deepcopy(self.metric)
+
+        with nogil:
+            metric.reset(self.x, self.y)
+            for i in range(offset, offset + batch_size):
+                distance = INFINITY
+                heap.reset()
+
+                for j in range(y_samples):
+                    state = metric.lbdistance(self.x, i, self.y, j, self.dim, &distance)
+                    if state == MetricState.VALID:
+                        heap.push(j, distance)
+
+                        if heap.isfull():
+                            distance = heap.max().value
+                        else:
+                            distance = INFINITY
+
+                for j in range(k):
+                    self.indices[i, j] = heap.get(j).index
+                    self.distances[i, j] = heap.get(j).value
+
+
+def _argmin_distance(
+    TSArray x,
+    TSArray y,
+    Py_ssize_t dim,
+    Metric metric,
+    Py_ssize_t k,
+    n_jobs
+):
+
+    cdef Py_ssize_t x_samples = x.shape[0]
+    cdef Py_ssize_t y_samples = y.shape[0]
+
+    cdef Py_ssize_t[:, :] indices = np.zeros((x_samples, k), dtype=int)
+    cdef double[:, :] values = np.zeros((x_samples, k), dtype=float)
+
+    run_in_parallel(
+        _ArgMinBatch(
+            x,
+            y,
+            metric,
+            dim,
+            values,
+            indices,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem"
+    )
+
+    return indices.base, values.base
+
+
+cdef class _PairedDistanceBatch:
+    cdef TSArray x
+    cdef TSArray y
+    cdef Py_ssize_t dim
+    cdef Metric metric
+
+    cdef double[:] distances
+
+    def __init__(
+        self,
+        TSArray x,
+        TSArray y,
+        Py_ssize_t dim,
+        Metric metric,
+        double[:] distances
+    ):
+        self.x = x
+        self.y = y
+        self.dim = dim
+        self.metric = metric
+        self.distances = distances
+
+    @property
+    def n_work(self):
+        return self.x.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef Metric metric = deepcopy(self.metric)
+        cdef Py_ssize_t i
+        with nogil:
+            metric.reset(self.x, self.y)
+            for i in range(offset, offset + batch_size):
+                self.distances[i] = metric.distance(self.x, i, self.y, i, self.dim)
 
 
 def _paired_distance(
@@ -686,14 +923,17 @@ def _paired_distance(
     Metric metric,
     n_jobs,
 ):
-    cdef Py_ssize_t n_samples = y.shape[0]
-    cdef double[:] out = np.empty(n_samples, dtype=np.double)
-    cdef Py_ssize_t i
-
-    with nogil:
-        metric.reset(y, x)
-        for i in range(n_samples):
-            dist = metric.distance(y, i, x, i, dim)
-            out[i] = dist
+    cdef double[:] out = np.empty(y.shape[0], dtype=float)
+    run_in_parallel(
+        _PairedDistanceBatch(
+            x,
+            y,
+            dim,
+            metric,
+            out,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem",
+    )
 
     return out.base

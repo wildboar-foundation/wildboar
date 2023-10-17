@@ -3,12 +3,36 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+cdef struct HeapElement:
+    double value
+    Py_ssize_t index
+
+cdef class Heap:
+
+    cdef HeapElement* heap
+    cdef HeapElement min_value
+    cdef Py_ssize_t n_elements
+    cdef Py_ssize_t max_elements
+
+    cdef void push(self, Py_ssize_t index, double value) noexcept nogil
+
+    cdef HeapElement max(self) noexcept nogil
+
+    cdef HeapElement min(self) noexcept nogil
+
+    cdef bint isempty(self) noexcept nogil
+
+    cdef bint isfull(self) noexcept nogil
+
+    cdef void reset(self) noexcept nogil
+
+    cdef HeapElement get(self, Py_ssize_t i) noexcept nogil
+
 cdef class List:
     cdef list py_list
     cdef readonly Py_ssize_t size
 
     cdef void* get(self, Py_ssize_t i) noexcept nogil
-
 
 ctypedef fused double_or_int:
     Py_ssize_t

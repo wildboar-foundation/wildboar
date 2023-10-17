@@ -19,6 +19,7 @@ cdef double euclidean_distance(
     Py_ssize_t s_length,
     const double *T,
     Py_ssize_t t_length,
+    double min_dist,
     Py_ssize_t *index,
 ) noexcept nogil
 
@@ -72,3 +73,4 @@ cdef double cosine_similarity(
     Py_ssize_t t_length,
     Py_ssize_t *index,
 ) nogil
+

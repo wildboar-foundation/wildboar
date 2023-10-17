@@ -3,11 +3,17 @@ import numbers
 import warnings
 
 import numpy as np
+from sklearn.utils._param_validation import (
+    Interval,
+    StrOptions,
+    validate_params,
+)
 from sklearn.utils.validation import _is_arraylike, check_scalar
 
 from ..utils import _safe_jagged_array
 from ..utils.validation import _check_ts_array, check_array, check_option, check_type
 from ._cdistance import (
+    _argmin_distance,
     _paired_distance,
     _paired_subsequence_distance,
     _paired_subsequence_match,
@@ -928,3 +934,118 @@ def pairwise_distance(  # noqa: PLR
             raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
         return _format_return(distances, y.ndim, x.ndim)
+
+
+@validate_params(
+    {
+        "x": ["array-like"],
+        "y": [None, "array-like"],
+        "k": [Interval(numbers.Integral, 1, None, closed="left")],
+        "metric": [StrOptions(_METRICS.keys())],
+        "metric_params": [None, dict],
+        "return_distance": [bool],
+        "sorted": [bool],
+        "n_jobs": [numbers.Integral, None],
+    },
+    prefer_skip_nested_validation=True,
+)
+def argmin_distance(
+    x,
+    y=None,
+    *,
+    dim=0,
+    k=1,
+    metric="euclidean",
+    metric_params=None,
+    sorted=False,
+    return_distance=False,
+    n_jobs=None,
+):
+    """
+    Find the indicies of the samples with the lowest distance in `Y`.
+
+    Parameters
+    ----------
+    x : univariate time-series or multivariate time-series
+        The needle.
+    y : univariate time-series or multivariate time-series, optional
+        The haystack.
+    dim : int, optional
+        The dimension where the distance is computed.
+    k : int, optional
+        The number of closest samples.
+    metric : str, optional
+        The distance metric
+
+        See ``_METRICS.keys()`` for a list of supported metrics.
+    metric_params : dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
+    sorted : bool, optional
+        Sort the indicies from smallest to largest distance.
+    return_distance : bool, optional
+        Return the distance for the `k` samples.
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    Returns
+    -------
+    indices : ndarray of shape (n_samples, k)
+        The indices of the samples in `Y` with the smallest distance.
+    distance : ndarray of shape (n_samples, k), optional
+        The distance of the samples in `Y` with the smallest distance.
+
+    Examples
+    --------
+    >>> from wildoar.distance import argmin_distance
+    >>> X = np.array([[1, 2, 3, 4], [10, 1, 2, 3]])
+    >>> Y = np.array([[1, 2, 11, 2], [2, 4, 6, 7], [10, 11, 2, 3]])
+    >>> argmin_distance(X, Y, k=2, return_distance=True)
+    (array([[0, 1],
+            [1, 2]]),
+     array([[ 8.24621125,  4.79583152],
+            [10.24695077, 10.        ]]))
+    """
+    metric_params = metric_params if metric_params is not None else {}
+    metric = _METRICS[metric](**metric_params)
+
+    x = check_array(
+        x, allow_3d=True, ensure_2d=False, ensure_ts_array=True, dtype=float
+    )
+    if y is None:
+        y = x
+    else:
+        y = check_array(
+            y, allow_3d=True, ensure_2d=False, ensure_ts_array=True, dtype=float
+        )
+
+    if x.ndim not in (1, y.ndim):
+        raise ValueError(
+            f"x ({x.ndim}d-array) and y ({y.ndim}d-array) are not compatible."
+        )
+
+    if x.shape[-1] != y.shape[-1] and not metric.is_elastic:
+        raise ValueError(
+            "Illegal n_timestep (%d != %d) for non-elastic distance measure."
+            % (x.shape[-1], y.shape[-1])
+        )
+
+    n_dims = x.shape[1] if x.ndim == 3 else 1
+    k = min(k, y.shape[0])
+    if 0 <= dim < 1:
+        indices, distances = _argmin_distance(x, y, dim, metric, k, n_jobs)
+
+        if sorted:
+            sort = np.argsort(distances, axis=1)
+            indices = np.take_along_axis(indices, sort, axis=1)
+            if return_distance:
+                distances = np.take_along_axis(distances, sort, axis=1)
+
+        if return_distance:
+            return indices, distances
+        else:
+            return indices
+    else:
+        raise ValueError(f"The parameter dim must be dim ({dim}) < n_dims ({n_dims})")

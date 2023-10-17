@@ -13,6 +13,7 @@ examples.
 # License: BSD 3 clause
 
 from ._distance import (
+    argmin_distance,
     paired_distance,
     paired_subsequence_distance,
     paired_subsequence_match,
@@ -24,6 +25,7 @@ from ._matrix_profile import matrix_profile
 from ._neighbors import KMeans, KMedoids, KNeighborsClassifier
 
 __all__ = [
+    "argmin_distance",
     "pairwise_subsequence_distance",
     "paired_subsequence_distance",
     "subsequence_match",

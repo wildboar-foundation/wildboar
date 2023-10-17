@@ -9,10 +9,107 @@
 
 import numpy as np
 
-from libc.math cimport M_PI, cos, log, log2, sin, sqrt
-from libc.stdlib cimport realloc
+from libc.math cimport M_PI, cos, log, log2, sin, sqrt, INFINITY
+from libc.stdlib cimport realloc, malloc, free
+from libc.string cimport memset
 
 from ..utils cimport TSArray
+
+cdef void _heap_shift_down(
+    HeapElement *heap, Py_ssize_t startpos, Py_ssize_t pos
+) noexcept nogil:
+    cdef HeapElement newelement = heap[pos]
+    cdef Py_ssize_t parentpos
+    while pos > startpos:
+        parentpos = (pos - 1) >> 1  # // 2
+        if newelement.value > heap[parentpos].value:
+            heap[pos] = heap[parentpos]
+            pos = parentpos
+            continue
+        break
+
+    heap[pos] = newelement
+
+cdef void _heap_shift_up(
+    HeapElement *heap, Py_ssize_t pos, Py_ssize_t endpos
+) noexcept nogil:
+    cdef Py_ssize_t startpos = pos
+    cdef HeapElement newelement = heap[pos]
+    cdef Py_ssize_t childpos = 2 * pos + 1
+    cdef Py_ssize_t rightpos
+    while childpos < endpos:
+        rightpos = childpos + 1
+        if rightpos < endpos and heap[childpos].value < heap[rightpos].value:
+            childpos = rightpos
+
+        heap[pos] = heap[childpos]
+        pos = childpos
+        childpos = 2 * pos + 1
+
+    heap[pos] = newelement
+    _heap_shift_down(heap, startpos, pos)
+
+# A Heap implementation that retains the `k` smallest elements.
+# The first element of the heap is the largest of the `k` smallest
+# elements and can be retreived in O(1) time. We maintain a separate
+# datastructure for the minimum value so that can also be retreived
+# in constant time.
+#
+# `_min` returns the smallest value among k smallest elements.
+# `_max` returns the largest value among the top k elements.
+#
+# The data structure efficently act as a proxy for `argpartition` in numpy.
+cdef class Heap:
+
+    def __cinit__(self, Py_ssize_t max_elements):
+        self.heap = <HeapElement*> malloc(sizeof(HeapElement) * max_elements)
+        self.n_elements = 0
+        self.max_elements = max_elements
+        self.min_value.value = INFINITY
+
+    def __dealloc__(self):
+        if self.heap != NULL:
+            free(self.heap)
+            self.heap = NULL
+
+    cdef void push(self, Py_ssize_t index, double value) noexcept nogil:
+        cdef HeapElement element
+        element.index = index
+        element.value = value
+
+        if self.n_elements == 0:
+            self.heap[0] = element
+            self.min_value = element
+            self.n_elements += 1
+        else:
+            if self.n_elements < self.max_elements:
+                self.heap[self.n_elements] = element
+                self.n_elements += 1
+                _heap_shift_down(self.heap, 0, self.n_elements - 1)
+            elif self.heap[0].value > element.value:
+                self.heap[0] = element
+                _heap_shift_up(self.heap, 0, self.max_elements)
+
+            if element.value < self.min_value.value:
+                self.min_value = element
+
+    cdef HeapElement max(self) noexcept nogil:
+        return self.heap[0]
+
+    cdef HeapElement min(self) noexcept nogil:
+        return self.min_value
+
+    cdef HeapElement get(self, Py_ssize_t i) noexcept nogil:
+        return self.heap[i]
+
+    cdef void reset(self) noexcept nogil:
+        self.n_elements = 0
+
+    cdef bint isempty(self) noexcept nogil:
+        return self.n_elements == 0
+
+    cdef bint isfull(self) noexcept nogil:
+        return self.n_elements == self.max_elements
 
 
 cdef extern from "Python.h":

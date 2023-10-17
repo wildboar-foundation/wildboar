@@ -15,8 +15,8 @@ cdef class MetricList(List):
     cdef int reset(self, Py_ssize_t metric, TSArray X, TSArray Y) noexcept nogil
 
     cdef double distance(
-        self, 
-        Py_ssize_t metric, 
+        self,
+        Py_ssize_t metric,
         TSArray X,
         Py_ssize_t x_index,
         TSArray Y,
@@ -50,7 +50,7 @@ cdef class SubsequenceMetricList(List):
 
     cdef int init_persistent(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         TSArray X,
         SubsequenceView* v,
         Subsequence* s,
@@ -62,20 +62,20 @@ cdef class SubsequenceMetricList(List):
 
     cdef int from_array(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         Subsequence *s,
         object obj,
     )
 
     cdef object to_array(
-        self, 
-        Py_ssize_t metric, 
+        self,
+        Py_ssize_t metric,
         Subsequence *s
     )
 
     cdef double transient_distance(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         SubsequenceView *v,
         TSArray X,
         Py_ssize_t index,
@@ -84,7 +84,7 @@ cdef class SubsequenceMetricList(List):
 
     cdef double persistent_distance(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         Subsequence *s,
         TSArray X,
         Py_ssize_t index,
@@ -93,7 +93,7 @@ cdef class SubsequenceMetricList(List):
 
     cdef Py_ssize_t transient_matches(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         SubsequenceView *v,
         TSArray X,
         Py_ssize_t index,
@@ -104,7 +104,7 @@ cdef class SubsequenceMetricList(List):
 
     cdef Py_ssize_t persistent_matches(
         self,
-        Py_ssize_t metric, 
+        Py_ssize_t metric,
         Subsequence *s,
         TSArray X,
         Py_ssize_t index,
@@ -166,7 +166,7 @@ cdef class SubsequenceMetric:
     )
 
     cdef object to_array(
-        self, 
+        self,
         Subsequence *s
     )
 
@@ -236,6 +236,9 @@ cdef class SubsequenceMetric:
 cdef class ScaledSubsequenceMetric(SubsequenceMetric):
     pass
 
+cdef enum MetricState:
+    PRUNED = 1
+    VALID = 2
 
 cdef class Metric:
 
@@ -256,4 +259,33 @@ cdef class Metric:
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len
+    ) noexcept nogil
+
+    # Compute the distance between X[i] and Y[j].
+    # If possible, the computation should be aborted if
+    # the distance >= lower_bound. To disable the upper bound
+    # one can pass INFINITY.
+    #
+    # `lower_bound` has the initial best-so-far distance on entry.
+    #  - If distance < lower_bound, `lower_bound` is the actual distance on
+    #    exit and MetricState.VALID is returned.
+    #  - Otherwise, `lower_bound` is unchanged and the return value is
+    #    MetricState.PRUNED
+    cdef MetricState lbdistance(
+        self,
+        TSArray X,
+        Py_ssize_t x_index,
+        TSArray Y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+        double *lower_bound,
+    ) noexcept nogil
+
+    cdef MetricState _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *lower_bound,
     ) noexcept nogil

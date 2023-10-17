@@ -18,6 +18,7 @@ from ..utils._stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_v
 from ._cdistance cimport (
     EPSILON,
     Metric,
+    MetricState,
     ScaledSubsequenceMetric,
     Subsequence,
     SubsequenceMetric,
@@ -40,7 +41,7 @@ cdef class EuclideanSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
-        return euclidean_distance(s, s_len, x, x_len, return_index)
+        return euclidean_distance(s, s_len, x, x_len, INFINITY, return_index)
 
     cdef Py_ssize_t _matches(
         self,
@@ -422,7 +423,24 @@ cdef class EuclideanMetric(Metric):
         const double *y,
         Py_ssize_t y_len
     ) noexcept nogil:
-        return euclidean_distance(x, x_len, y, y_len, NULL)
+        return euclidean_distance(x, x_len, y, y_len, INFINITY, NULL)
+
+    cdef MetricState _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *distance,
+    ) noexcept nogil:
+        cdef double dist = euclidean_distance(
+            x, x_len, y, y_len, distance[0] * distance[0], NULL
+        )
+        if dist < distance[0]:
+            distance[0] = dist
+            return MetricState.VALID
+        else:
+            return MetricState.PRUNED
 
 
 cdef class NormalizedEuclideanMetric(Metric):
@@ -621,10 +639,10 @@ cdef double euclidean_distance(
     Py_ssize_t s_length,
     const double *T,
     Py_ssize_t t_length,
+    double min_dist,
     Py_ssize_t *index,
 ) noexcept nogil:
     cdef double dist = 0
-    cdef double min_dist = INFINITY
 
     cdef Py_ssize_t i
     cdef Py_ssize_t j
