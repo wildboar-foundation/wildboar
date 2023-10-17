@@ -11,7 +11,7 @@ from sklearn.utils.validation import check_is_fitted, check_random_state
 from ..base import BaseEstimator
 from ..utils.validation import check_classification_targets
 from ._cneighbors import _pam_build, _pam_optimal_swap
-from ._distance import _METRICS, paired_distance, pairwise_distance
+from ._distance import _METRICS, argmin_distance, paired_distance, pairwise_distance
 from .dtw import dtw_average
 
 
@@ -30,6 +30,8 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
 
         Read more about the metrics and their parameters in the
         :ref:`User guide <list_of_metrics>`.
+    n_jobs : int, optional
+        The number of parallel jobs.
 
     Attributes
     ----------
@@ -41,12 +43,21 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
         "n_neighbors": [Interval(numbers.Integral, 1, None, closed="left")],
         "metric": [StrOptions(_METRICS.keys())],
         "metric_params": [dict, None],
+        "n_jobs": [numbers.Integral, None],
     }
 
-    def __init__(self, n_neighbors=5, *, metric="euclidean", metric_params=None):
+    def __init__(
+        self,
+        n_neighbors=5,
+        *,
+        metric="euclidean",
+        metric_params=None,
+        n_jobs=None,
+    ):
         self.n_neighbors = n_neighbors
         self.metric = metric
         self.metric_params = metric_params
+        self.n_jobs = n_jobs
 
     def fit(self, x, y):
         """
@@ -87,17 +98,36 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
         """
         check_is_fitted(self)
         x = self._validate_data(x, allow_3d=True, reset=False)
-        dists = pairwise_distance(
-            x,
-            self._fit_X,
-            dim="mean",
-            metric=self.metric,
-            metric_params=self.metric_params,
-        )
-        preds = self._y[
-            np.argpartition(dists, self.n_neighbors, axis=1)[:, : self.n_neighbors]
-        ]
 
+        # Treat a multivariate time series with a single dimension as a
+        # univariate time series to ensure that we use the fast path.
+        if x.ndim == 3 and x.shape[1] == 1:
+            x = x.reshape(x.shape[0], -1)
+
+        if x.ndim == 3:
+            dists = pairwise_distance(
+                x,
+                self._fit_X,
+                dim="mean",
+                metric=self.metric,
+                metric_params=self.metric_params,
+                n_jobs=self.n_jobs,
+            )
+
+            closest = np.argpartition(dists, self.n_neighbors, axis=1)[
+                :, : self.n_neighbors
+            ]
+        else:
+            closest = argmin_distance(
+                x,
+                self._fit_X,
+                metric=self.metric,
+                metric_params=self.metric_params,
+                k=self.n_neighbors,
+                n_jobs=self.n_jobs,
+            )
+
+        preds = self._y[closest]
         probs = np.empty((x.shape[0], len(self.classes_)), dtype=float)
         for i in range(len(self.classes_)):
             probs[:, i] = np.sum(preds == i, axis=1) / self.n_neighbors
