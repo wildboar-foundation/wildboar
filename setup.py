@@ -12,7 +12,7 @@ BUILD_ARGS = {
         "libraries": [],
     },
     "debug": {
-        "extra_compile_args": ["-O0", "-glldb"],
+        "extra_compile_args": ["-O0"],
         "extra_link_args": [],
         "libraries": [],
     },
@@ -108,4 +108,10 @@ if __name__ == "__main__":
         for name, options in extensions.items()
     ]
 
-    setup(ext_modules=cythonize(ext_modules))
+    setup(
+        ext_modules=cythonize(
+            ext_modules,
+            nthreads=4,
+            annotate=build_type == "debug",
+        )
+    )
