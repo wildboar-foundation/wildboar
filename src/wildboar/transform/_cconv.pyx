@@ -55,11 +55,11 @@ cdef void convolution_1d(
     This code performs no bounds checks. Ensure that the following invariants hold:
 
     The dilated kernel size must be smaller than the padded sample:::
-    
+
         (k_len - 1) * dilation - 1 <= x_len + 2 * padding
 
     The output buffer must be allocated with enough memory:::
-    
+
         ((x_len + 2 * padding) - (k_len - 1) * dilation + 1) / stride + 1
 
     """
@@ -82,7 +82,7 @@ cdef void convolution_1d(
 
     for i in range(output_size):
         padding_offset = padding - i * stride
-        
+
         # this part of the code ensures that the iterators responsible
         # for selecting the correct values in `kernel` and `x` start
         # at the correct location. the main idea is to always start
@@ -95,9 +95,9 @@ cdef void convolution_1d(
         #  x = [1, 2, 3, 4, 5, 6]
         #  p = 2
         #  x_p = [0, 0, 1, 2, 3, 4, 5, 6, 0, 0]
-        # 
+        #
         #  first convoluton (i = 0):
-        #          
+        #
         #          / start the kernel index here, since p - 1 * s % d == 0,
         #          | that is: 2 % 2 == 0
         #          |
@@ -106,16 +106,16 @@ cdef void convolution_1d(
         # x_p  0 0 1 2 3 4 5 6 0 0 (result: 7)
         #      |   |
         #      |   \ start the input index here, which is given by
-        #      |     kernel_offset - padding_offset, that is 2 - 2 = 0            
+        #      |     kernel_offset - padding_offset, that is 2 - 2 = 0
         #      |
         #      \ padding_offset is 2, so we are at the first padded value,
         #        but we can ignore this part since the pad is all zeros
         #        so we move head of the kernel iterator to first non-dilated
         #        value, which is located at imaginary kernel index 2, which also
         #        happens to be at the start of the input.
-        # 
+        #
         #  second convolution
-        # 
+        #
         #
         #            / since 1 % 2 != 0, we move the start of the kernel to the
         #            | the first non-dilated value, which is given by
@@ -127,7 +127,7 @@ cdef void convolution_1d(
         #        | |
         #        | \ we move the input iterator the the index where the
         #        |   first non dilated value is, kernel_offset (2) - padding_offset (1)
-        #        \ 
+        #        \
         #         padding_offset = 1, so we are at the second padded value.
         #
         #  third convolution
@@ -140,19 +140,19 @@ cdef void convolution_1d(
         # x_p  0 0 1 2 3 4 5 6 0 0 (result: 14)
         #          |
         #          \ we should start x at the current (strided) index.
-        # 
+        #
         # we continue iterating, until we have visited all start locations
         # but stopping the convolution at the end of the input array.
         if padding_offset > 0:
             if padding_offset % dilation == 0:
                 kernel_offset = padding_offset
             else:
-                kernel_offset = padding_offset + dilation - (padding_offset % dilation) 
+                kernel_offset = padding_offset + dilation - (padding_offset % dilation)
             input_offset = kernel_offset - padding_offset
         else:
             kernel_offset = 0
             input_offset = labs(padding_offset)
-            
+
         # the iteration should be performed up until but not including the
         # padding. so, the last value we should convolve over is either the
         # last value of the input, or a value before that located where the
@@ -175,7 +175,7 @@ cdef void convolution_1d(
 
 cdef void _convolution_1d_fast(
     double bias,
-    double *x,
+    const double *x,
     Py_ssize_t x_len,
     double *kernel,
     Py_ssize_t k_len,
@@ -189,7 +189,7 @@ cdef void _convolution_1d_fast(
         for j in range(k_len):
             inner_prod += x[i + j] * kernel[j]
         out[i] = inner_prod
-            
+
 
 def conv1d(
     TSArray X,
