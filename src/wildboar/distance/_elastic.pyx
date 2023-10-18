@@ -656,6 +656,7 @@ cdef double dtw_subsequence_distance(
             cost,
             cost_prev,
             weight_vector,
+            min_dist,
         )
         if dist < min_dist:
             if index != NULL:
@@ -698,6 +699,7 @@ cdef Py_ssize_t dtw_subsequence_matches(
             cost,
             cost_prev,
             weight_vector,
+            threshold,
         )
 
         if dist <= threshold:
@@ -743,6 +745,7 @@ cdef double ddtw_subsequence_distance(
             cost,
             cost_prev,
             weight_vector,
+            min_dist,
         )
         if dist < min_dist:
             if index != NULL:
@@ -791,6 +794,7 @@ cdef Py_ssize_t ddtw_subsequence_matches(
             cost,
             cost_prev,
             weight_vector,
+            threshold,
         )
 
         if dist <= threshold:
@@ -815,6 +819,7 @@ cdef double dtw_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
+    double min_dist,
 ) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -825,6 +830,7 @@ cdef double dtw_distance(
     cdef double z
     cdef double v
     cdef double w = 1.0
+    cdef double min_cost
 
     v = X[0] - Y[0]
     if weight_vector != NULL:
@@ -846,6 +852,8 @@ cdef double dtw_distance(
         j_stop = min(y_length, i + max(0, y_length - x_length) + r)
         if j_start > 0:
             cost[j_start - 1] = INFINITY
+
+        min_cost = INFINITY
         for j in range(j_start, j_stop):
             x = cost_prev[j]
             if j > 0:
@@ -860,6 +868,13 @@ cdef double dtw_distance(
                 w = weight_vector[labs(i - j)]
 
             cost[j] = min(min(x, y), z) + v * v * w
+
+            if cost[j] < min_cost:
+                min_cost = cost[j]
+
+
+        if min_cost >= min_dist:
+            return INFINITY
 
         if j_stop < y_length:
             cost[j_stop] = INFINITY
@@ -3025,9 +3040,37 @@ cdef class DtwMetric(Metric):
             self.cost,
             self.cost_prev,
             NULL,
+            INFINITY,
         )
 
         return sqrt(dist)
+
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *lower_bound
+    ) noexcept nogil:
+        cdef double dist = dtw_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.cost,
+            self.cost_prev,
+            NULL,
+            lower_bound[0] * lower_bound[0],
+        )
+
+        dist = sqrt(dist)
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
 
     @property
     def is_elastic(self):
@@ -3098,6 +3141,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
             self.cost,
             self.cost_prev,
             NULL,
+            INFINITY,
         )
 
         return sqrt(dist)
@@ -3150,6 +3194,7 @@ cdef class WeightedDtwMetric(DtwMetric):
             self.cost,
             self.cost_prev,
             self.weights,
+            INFINITY,
         )
 
         return sqrt(dist)
@@ -3228,6 +3273,7 @@ cdef class WeightedDerivativeDtwMetric(DtwMetric):
             self.cost,
             self.cost_prev,
             self.weights,
+            INFINITY,
         )
 
         return sqrt(dist)
