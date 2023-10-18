@@ -18,7 +18,6 @@ from ..utils._stats cimport IncStats, inc_stats_add, inc_stats_init, inc_stats_v
 from ._cdistance cimport (
     EPSILON,
     Metric,
-    MetricState,
     ScaledSubsequenceMetric,
     Subsequence,
     SubsequenceMetric,
@@ -259,7 +258,7 @@ cdef class MinkowskiSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
-        return minkowski_distance(self.p, s, s_len, x, x_len, return_index)
+        return minkowski_distance(self.p, s, s_len, x, x_len, INFINITY, return_index)
 
     cdef Py_ssize_t _matches(
         self,
@@ -425,7 +424,7 @@ cdef class EuclideanMetric(Metric):
     ) noexcept nogil:
         return euclidean_distance(x, x_len, y, y_len, INFINITY, NULL)
 
-    cdef MetricState _lbdistance(
+    cdef bint _lbdistance(
         self,
         const double *x,
         Py_ssize_t x_len,
@@ -438,9 +437,9 @@ cdef class EuclideanMetric(Metric):
         )
         if dist < distance[0]:
             distance[0] = dist
-            return MetricState.VALID
+            return True
         else:
-            return MetricState.PRUNED
+            return False
 
 
 cdef class NormalizedEuclideanMetric(Metric):
@@ -487,7 +486,25 @@ cdef class MinkowskiMetric(Metric):
         const double *y,
         Py_ssize_t y_len
     ) noexcept nogil:
-        return minkowski_distance(self.p, x, x_len, y, y_len, NULL)
+        return minkowski_distance(self.p, x, x_len, y, y_len, INFINITY, NULL)
+
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *distance,
+    ) noexcept nogil:
+        cdef double dist = minkowski_distance(
+            self.p, x, x_len, y, y_len, pow(distance[0], self.p), NULL
+        )
+
+        if dist < distance[0]:
+            distance[0] = dist
+            return True
+        else:
+            return False
 
 
 cdef class ChebyshevMetric(Metric):
@@ -947,11 +964,10 @@ cdef double minkowski_distance(
     Py_ssize_t s_length,
     const double *T,
     Py_ssize_t t_length,
+    double min_dist,
     Py_ssize_t *index,
 ) noexcept nogil:
     cdef double dist = 0
-    cdef double min_dist = INFINITY
-
     cdef Py_ssize_t i
     cdef Py_ssize_t j
     cdef double x

@@ -236,9 +236,6 @@ cdef class SubsequenceMetric:
 cdef class ScaledSubsequenceMetric(SubsequenceMetric):
     pass
 
-cdef enum MetricState:
-    PRUNED = 1
-    VALID = 2
 
 cdef class Metric:
 
@@ -268,10 +265,10 @@ cdef class Metric:
     #
     # `lower_bound` has the initial best-so-far distance on entry.
     #  - If distance < lower_bound, `lower_bound` is the actual distance on
-    #    exit and MetricState.VALID is returned.
+    #    exit and True is returned.
     #  - Otherwise, `lower_bound` is unchanged and the return value is
-    #    MetricState.PRUNED
-    cdef MetricState lbdistance(
+    #    False
+    cdef bint lbdistance(
         self,
         TSArray X,
         Py_ssize_t x_index,
@@ -281,7 +278,7 @@ cdef class Metric:
         double *lower_bound,
     ) noexcept nogil
 
-    cdef MetricState _lbdistance(
+    cdef bint _lbdistance(
         self,
         const double *x,
         Py_ssize_t x_len,

@@ -65,7 +65,6 @@ cdef class Heap:
         self.heap = <HeapElement*> malloc(sizeof(HeapElement) * max_elements)
         self.n_elements = 0
         self.max_elements = max_elements
-        self.min_value.value = INFINITY
 
     def __dealloc__(self):
         if self.heap != NULL:
@@ -79,7 +78,6 @@ cdef class Heap:
 
         if self.n_elements == 0:
             self.heap[0] = element
-            self.min_value = element
             self.n_elements += 1
         else:
             if self.n_elements < self.max_elements:
@@ -90,16 +88,13 @@ cdef class Heap:
                 self.heap[0] = element
                 _heap_shift_up(self.heap, 0, self.max_elements)
 
-            if element.value < self.min_value.value:
-                self.min_value = element
-
-    cdef HeapElement max(self) noexcept nogil:
+    cdef HeapElement maxelement(self) noexcept nogil:
         return self.heap[0]
 
-    cdef HeapElement min(self) noexcept nogil:
-        return self.min_value
+    cdef double maxvalue(self) noexcept nogil:
+        return self.heap[0].value
 
-    cdef HeapElement get(self, Py_ssize_t i) noexcept nogil:
+    cdef HeapElement getelement(self, Py_ssize_t i) noexcept nogil:
         return self.heap[i]
 
     cdef void reset(self) noexcept nogil:

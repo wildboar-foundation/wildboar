@@ -14,7 +14,7 @@ from libc.stdlib cimport free, malloc
 from numpy cimport float64_t, intp_t, ndarray
 
 from ..utils cimport _stats
-from ..utils._misc cimport Heap
+from ..utils._misc cimport Heap, HeapElement
 
 from copy import deepcopy
 
@@ -427,7 +427,7 @@ cdef class Metric:
         return NAN
 
     # Default implementation. Delegates to _lbdistance.
-    cdef MetricState lbdistance(
+    cdef bint lbdistance(
         self,
         TSArray x,
         Py_ssize_t x_index,
@@ -446,7 +446,7 @@ cdef class Metric:
 
     # Default implementation. Delegates to _distance,
     # without lower bounding.
-    cdef MetricState _lbdistance(
+    cdef bint _lbdistance(
         self,
         const double *x,
         Py_ssize_t x_len,
@@ -455,7 +455,7 @@ cdef class Metric:
         double *distance,
     ) noexcept nogil:
         distance[0] = self._distance(x, x_len, y, y_len)
-        return MetricState.VALID
+        return True
 
     @property
     def is_elastic(self):
@@ -820,13 +820,13 @@ cdef class _ArgMinBatch:
         return self.x.shape[0]
 
     def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
-        cdef MetricState state
         cdef double distance
         cdef Py_ssize_t i, j
 
         cdef Py_ssize_t k = self.distances.shape[1]
         cdef Py_ssize_t y_samples = self.y.shape[0]
         cdef Heap heap = Heap(k)
+        cdef HeapElement e
         cdef Metric metric = deepcopy(self.metric)
 
         with nogil:
@@ -836,18 +836,18 @@ cdef class _ArgMinBatch:
                 heap.reset()
 
                 for j in range(y_samples):
-                    state = metric.lbdistance(self.x, i, self.y, j, self.dim, &distance)
-                    if state == MetricState.VALID:
+                    if metric.lbdistance(self.x, i, self.y, j, self.dim, &distance):
                         heap.push(j, distance)
 
                         if heap.isfull():
-                            distance = heap.max().value
+                            distance = heap.maxvalue()
                         else:
                             distance = INFINITY
 
                 for j in range(k):
-                    self.indices[i, j] = heap.get(j).index
-                    self.distances[i, j] = heap.get(j).value
+                    e = heap.getelement(j)
+                    self.indices[i, j] = e.index
+                    self.distances[i, j] = e.value
 
 
 def _argmin_distance(

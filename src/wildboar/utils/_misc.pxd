@@ -10,15 +10,14 @@ cdef struct HeapElement:
 cdef class Heap:
 
     cdef HeapElement* heap
-    cdef HeapElement min_value
     cdef Py_ssize_t n_elements
     cdef Py_ssize_t max_elements
 
     cdef void push(self, Py_ssize_t index, double value) noexcept nogil
 
-    cdef HeapElement max(self) noexcept nogil
+    cdef HeapElement maxelement(self) noexcept nogil
 
-    cdef HeapElement min(self) noexcept nogil
+    cdef double maxvalue(self) noexcept nogil
 
     cdef bint isempty(self) noexcept nogil
 
@@ -26,7 +25,7 @@ cdef class Heap:
 
     cdef void reset(self) noexcept nogil
 
-    cdef HeapElement get(self, Py_ssize_t i) noexcept nogil
+    cdef HeapElement getelement(self, Py_ssize_t i) noexcept nogil
 
 cdef class List:
     cdef list py_list
