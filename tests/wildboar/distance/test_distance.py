@@ -6,6 +6,7 @@ import pytest
 from numpy.testing import assert_almost_equal, assert_equal
 from wildboar.datasets import load_gun_point, load_two_lead_ecg
 from wildboar.distance import (
+    argmin_distance,
     paired_distance,
     paired_subsequence_distance,
     pairwise_distance,
@@ -1458,3 +1459,24 @@ def test_pairwise_distance_dim_mean():
     )
     actual = pairwise_distance(x, y, dim="mean", metric="euclidean")
     assert_almost_equal(actual, expected)
+
+
+@pytest.mark.parametrize("metric", list(_METRICS.keys()))
+@pytest.mark.parametrize("k", [1, 3, 7])
+def test_argmin_equals_pairwise_distance_argpartition(metric, k):
+    print(metric)
+    X, y = load_two_lead_ecg()
+    X, Y = X[:10], X[300:350]
+    ind_argmin, min_dist_argmin = argmin_distance(
+        X, Y, metric=metric, k=k, return_distance=True
+    )
+    ind_argmin = np.sort(ind_argmin, axis=1)
+
+    dist = pairwise_distance(X, Y, metric=metric)
+    ind_pairwise = np.argpartition(dist, k, axis=1)[:, :k]
+    # ind_pairwise = np.sort(ind_pairwise, axis=1)
+    # assert_equal(ind_pairwise, ind_argmin)
+    assert_almost_equal(
+        np.sort(np.take_along_axis(dist, ind_pairwise, axis=1), axis=1),
+        np.sort(min_dist_argmin, axis=1),
+    )
