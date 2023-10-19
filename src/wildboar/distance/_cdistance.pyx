@@ -11,7 +11,7 @@ import numpy as np
 
 from libc.math cimport NAN, sqrt, INFINITY
 from libc.stdlib cimport free, malloc
-from numpy cimport float64_t, intp_t, ndarray
+from numpy cimport float64_t, intp_t, ndarray, double_t
 
 from ..utils cimport _stats
 from ..utils._misc cimport Heap, HeapElement
@@ -472,7 +472,7 @@ cdef ndarray[intp_t] _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches)
         return None
 
 
-cdef ndarray[intp_t] _new_distance_array(double *distances, Py_ssize_t n_matches):
+cdef ndarray[double_t] _new_distance_array(double *distances, Py_ssize_t n_matches):
     if n_matches > 0:
         dist_array = np.empty(n_matches, dtype=np.double)
         for i in range(n_matches):
