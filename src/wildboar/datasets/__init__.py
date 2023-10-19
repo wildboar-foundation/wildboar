@@ -846,11 +846,11 @@ _REPOSITORIES = RepositoryCollection()
 
 # Install the default 'wildboar' repository
 def _get_dataset_version():
-    from pkg_resources import parse_version
+    from packaging import version
 
     from .. import __version__
 
-    v = parse_version(__version__)
+    v = version.parse(__version__)
     if v.is_prerelease:
         return "master"
     else:

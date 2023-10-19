@@ -12,7 +12,7 @@ import zipfile
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from pkg_resources import parse_version
+from packaging.version import parse as parse_version
 
 from .. import EOS
 from .. import __version__ as wildboar_version
