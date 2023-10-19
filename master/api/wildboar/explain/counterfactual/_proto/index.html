@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../../../genindex.html" /><link rel="search" title="Search" href="../../../../../search.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>wildboar.explain.counterfactual._proto - Wildboar 1.1.1.dev185 documentation</title>
+        <title>wildboar.explain.counterfactual._proto - Wildboar 1.1.1.dev200 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../../index.html"><div class="brand">Wildboar 1.1.1.dev185 documentation</div></a>
+      <a href="../../../../../index.html"><div class="brand">Wildboar 1.1.1.dev200 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -347,7 +347,7 @@
 <td><p>Model agnostic approach for constructing counterfactual explanations.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual._proto.PrototypeSampler" title="wildboar.explain.counterfactual._proto.PrototypeSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PrototypeSampler</span></code></a></p></td>
-<td><p>Helper class that provides a standard way to create an ABC using</p></td>
+<td><p>Sample and refine counterfactuals.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler" title="wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletPrototypeSampler</span></code></a></p></td>
 <td><p>Sample shapelet prototypes.</p></td>
@@ -366,11 +366,11 @@
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">DynamicTimeWarpTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L411-L433"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">DynamicTimeWarpTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L420-L442"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform a sample by moving it closer using the dtw alignment matrix.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L418-L430"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L427-L439"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the sample o towards p.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -393,11 +393,11 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.EuclideanTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">EuclideanTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L404-L408"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.EuclideanTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">EuclideanTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L413-L417"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.EuclideanTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform a sample by moving it closer in euclidean space.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.EuclideanTransform.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L407-L408"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.EuclideanTransform.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L416-L417"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.EuclideanTransform.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the sample o towards p.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -420,24 +420,24 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestPrototypeSampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">KNearestPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indicies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L184-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">KNearestPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indicies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L196-L241"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample a prototype among the samples closest to the current counterfactual.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L143-L158"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L151-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the current counterfactual toward the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
 </dd>
-<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label</p>
+<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -446,7 +446,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.nearest_index">
-<span class="sig-name descname"><span class="pre">nearest_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L211-L226"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.nearest_index" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">nearest_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L223-L238"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.nearest_index" title="Permalink to this definition">#</a></dt>
 <dd><p>Return the index of the closest sample.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -465,18 +465,20 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.sample">
-<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L228-L229"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L240-L241"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample an example.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>prototype</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>A prototype of the counterfactual label</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>A prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
@@ -485,18 +487,20 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.sample_move">
-<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L160-L174"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L169-L186"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
 <dd><p>Sampla a prototype and move the counterfactual towards the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -507,26 +511,26 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">KNearestShapeletPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indicies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L334-L368"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">KNearestShapeletPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indicies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L343-L377"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler" title="Permalink to this definition">#</a></dt>
 <dd><p>Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler.</p>
 <p>The prototype samples are sampled among the nearest neighbors of the
 counterfactual.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L367-L368"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L376-L377"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the current counterfactual toward the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
 </dd>
-<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label</p>
+<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -535,18 +539,20 @@ counterfactual.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.sample">
-<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L363-L365"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L372-L374"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample an example.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>prototype</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>A prototype of the counterfactual label</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>A prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
@@ -555,18 +561,20 @@ counterfactual.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.sample_move">
-<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L160-L174"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L169-L186"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
 <dd><p>Sampla a prototype and move the counterfactual towards the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -577,11 +585,11 @@ counterfactual.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.MetricTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">MetricTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L371-L401"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.MetricTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">MetricTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L380-L410"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.MetricTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>Move a time series towards a prototype.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.MetricTransform.move">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L386-L401"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.MetricTransform.move" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L395-L410"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.MetricTransform.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the sample o towards p.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -604,24 +612,25 @@ counterfactual.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PredictEvaluator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">PredictEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L61-L65"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PredictEvaluator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">PredictEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L63-L67"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PredictEvaluator" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluate if a counterfactual is predicted as y.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PredictEvaluator.is_counterfactual">
-<span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L40-L54"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PredictEvaluator.is_counterfactual" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L40-L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PredictEvaluator.is_counterfactual" title="Permalink to this definition">#</a></dt>
 <dd><p>Return true if x is a counterfactual of label y.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The counterfactual sample</p>
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The counterfactual sample.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The counterfactual label</p>
+<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The counterfactual label.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>bool</strong><span class="classifier">true if counterfactual</span></dt><dd></dd>
+<dt>bool</dt><dd><p>Return true if counterfactual valid.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -631,24 +640,35 @@ counterfactual.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.ProbabilityEvaluator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">ProbabilityEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L68-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ProbabilityEvaluator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">ProbabilityEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L70-L93"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ProbabilityEvaluator" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluate the probability threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>estimator</strong><span class="classifier">object</span></dt><dd><p>The estimator.</p>
+</dd>
+<dt><strong>probability</strong><span class="classifier">float, optional</span></dt><dd><p>The minimum probability of the predicted label.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.ProbabilityEvaluator.is_counterfactual">
-<span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L40-L54"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ProbabilityEvaluator.is_counterfactual" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L40-L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ProbabilityEvaluator.is_counterfactual" title="Permalink to this definition">#</a></dt>
 <dd><p>Return true if x is a counterfactual of label y.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The counterfactual sample</p>
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The counterfactual sample.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The counterfactual label</p>
+<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The counterfactual label.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>bool</strong><span class="classifier">true if counterfactual</span></dt><dd></dd>
+<dt>bool</dt><dd><p>Return true if counterfactual valid.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -658,7 +678,7 @@ counterfactual.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PrototypeCounterfactual">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">PrototypeCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_prototypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'predict'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L459-L676"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeCounterfactual" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">PrototypeCounterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_prototypes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'predict'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sample'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L468-L685"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeCounterfactual" title="Permalink to this definition">#</a></dt>
 <dd><p>Model agnostic approach for constructing counterfactual explanations.</p>
 <p class="rubric">References</p>
 <dl class="simple">
@@ -807,25 +827,34 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PrototypeSampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">PrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L94-L174"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler" title="Permalink to this definition">#</a></dt>
-<dd><p>Helper class that provides a standard way to create an ABC using
-inheritance.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">PrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L96-L186"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler" title="Permalink to this definition">#</a></dt>
+<dd><p>Sample and refine counterfactuals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_samples, n_timestep)</span></dt><dd><p>The data samples labeled as y.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The label of the samples in x.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PrototypeSampler.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L143-L158"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L151-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the current counterfactual toward the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
 </dd>
-<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label</p>
+<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -834,18 +863,20 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PrototypeSampler.sample">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L127-L141"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L132-L149"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample an example.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>prototype</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>A prototype of the counterfactual label</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>A prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
@@ -854,18 +885,20 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.PrototypeSampler.sample_move">
-<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L160-L174"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L169-L186"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.PrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
 <dd><p>Sampla a prototype and move the counterfactual towards the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -876,11 +909,25 @@ inheritance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">ShapeletPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indicies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L232-L331"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">ShapeletPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indicies</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_shapelet_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L244-L340"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample shapelet prototypes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_samples, n_timestep)</span></dt><dd><p>The data samples</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The label of the samples in x</p>
+</dd>
+<dt><strong>min_shapelet_size</strong><span class="classifier">float</span></dt><dd><p>The minimum shapelet size</p>
+</dd>
+<dt><strong>max_shapelet_size</strong><span class="classifier">float</span></dt><dd><p>The maximum shapelet size</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L292-L331"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L301-L340"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the best matching shapelet towards the shapelet prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -902,18 +949,20 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample">
-<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L287-L290"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L296-L299"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample an example.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>prototype</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>A prototype of the counterfactual label</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>A prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
@@ -922,18 +971,20 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample_move">
-<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L160-L174"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L169-L186"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
 <dd><p>Sampla a prototype and move the counterfactual towards the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -942,7 +993,7 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample_shapelet">
-<span class="sig-name descname"><span class="pre">sample_shapelet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L265-L285"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample_shapelet" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_shapelet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L273-L294"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler.sample_shapelet" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample a shapelet from x.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -964,24 +1015,33 @@ inheritance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.TargetEvaluator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">TargetEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L27-L58"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.TargetEvaluator" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">TargetEvaluator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L27-L60"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.TargetEvaluator" title="Permalink to this definition">#</a></dt>
 <dd><p>Evaluate if a sample is a counterfactual.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>estimator</strong><span class="classifier">object</span></dt><dd><p>The estimator.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.TargetEvaluator.is_counterfactual">
-<span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L40-L54"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.TargetEvaluator.is_counterfactual" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L40-L56"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.TargetEvaluator.is_counterfactual" title="Permalink to this definition">#</a></dt>
 <dd><p>Return true if x is a counterfactual of label y.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The counterfactual sample</p>
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The counterfactual sample.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The counterfactual label</p>
+<dt><strong>y</strong><span class="classifier">object</span></dt><dd><p>The counterfactual label.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>bool</strong><span class="classifier">true if counterfactual</span></dt><dd></dd>
+<dt>bool</dt><dd><p>Return true if counterfactual valid.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -991,24 +1051,24 @@ inheritance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.UniformPrototypeSampler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">UniformPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L177-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">UniformPrototypeSampler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prototype_indices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_transform</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L189-L193"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample a prototype uniformly at random from the initial prototype sample.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.UniformPrototypeSampler.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L143-L158"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L151-L167"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the current counterfactual toward the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
 </dd>
-<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label</p>
+<dt><strong>p</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -1017,18 +1077,20 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.UniformPrototypeSampler.sample">
-<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L180-L181"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L192-L193"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler.sample" title="Permalink to this definition">#</a></dt>
 <dd><p>Sample an example.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>prototype</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>A prototype of the counterfactual label</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>A prototype of the counterfactual label.</p>
 </dd>
 </dl>
 </dd>
@@ -1037,18 +1099,20 @@ inheritance.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.UniformPrototypeSampler.sample_move">
-<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L160-L174"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">sample_move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L169-L186"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.UniformPrototypeSampler.sample_move" title="Permalink to this definition">#</a></dt>
 <dd><p>Sampla a prototype and move the counterfactual towards the prototype.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample</p>
+<dt><strong>o</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The current counterfactual sample.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState</span></dt><dd><p>The random state.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>new_counterfactual</strong><span class="classifier">ndarray of shape (n_timestep,)</span></dt><dd><p>The new counterfactual moved towards the prototype</p>
+<dt>ndarray of shape (n_timestep,)</dt><dd><p>The new counterfactual moved towards the prototype.</p>
 </dd>
 </dl>
 </dd>
@@ -1059,11 +1123,11 @@ inheritance.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">WeightedDynamicTimeWarpTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L436-L442"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.explain.counterfactual._proto.</span></span><span class="sig-name descname"><span class="pre">WeightedDynamicTimeWarpTransform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L445-L451"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform" title="Permalink to this definition">#</a></dt>
 <dd><p>Transform a sample by moving it closer using the dtw alignment matrix.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform.move">
-<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L418-L430"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform.move" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/explain/counterfactual/_proto.py#L427-L439"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform.move" title="Permalink to this definition">#</a></dt>
 <dd><p>Move the sample o towards p.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

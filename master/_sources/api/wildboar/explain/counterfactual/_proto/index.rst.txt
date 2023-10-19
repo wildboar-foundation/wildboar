@@ -187,15 +187,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
 
           **p** : ndarray of shape (n_timestep,)
-              The prototype of the counterfactual label
+              The prototype of the counterfactual label.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -252,12 +252,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **prototype** : ndarray of shape (n_timestep,)
-              A prototype of the counterfactual label
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
 
 
 
@@ -283,12 +286,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -342,15 +348,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
 
           **p** : ndarray of shape (n_timestep,)
-              The prototype of the counterfactual label
+              The prototype of the counterfactual label.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -376,12 +382,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **prototype** : ndarray of shape (n_timestep,)
-              A prototype of the counterfactual label
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
 
 
 
@@ -407,12 +416,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -525,15 +537,15 @@ Classes
       :Parameters:
 
           **x** : ndarray of shape (n_timestep,)
-              The counterfactual sample
+              The counterfactual sample.
 
           **y** : object
-              The counterfactual label
+              The counterfactual label.
 
       :Returns:
 
-          **bool** : true if counterfactual
-              ..
+          bool
+              Return true if counterfactual valid.
 
 
 
@@ -560,6 +572,13 @@ Classes
    Evaluate the probability threshold.
 
 
+   :Parameters:
+
+       **estimator** : object
+           The estimator.
+
+       **probability** : float, optional
+           The minimum probability of the predicted label.
 
 
 
@@ -585,15 +604,15 @@ Classes
       :Parameters:
 
           **x** : ndarray of shape (n_timestep,)
-              The counterfactual sample
+              The counterfactual sample.
 
           **y** : object
-              The counterfactual label
+              The counterfactual label.
 
       :Returns:
 
-          **bool** : true if counterfactual
-              ..
+          bool
+              Return true if counterfactual valid.
 
 
 
@@ -862,10 +881,16 @@ Classes
 
 
    
-   Helper class that provides a standard way to create an ABC using
-   inheritance.
+   Sample and refine counterfactuals.
 
 
+   :Parameters:
+
+       **x** : ndarray of shape (n_samples, n_timestep)
+           The data samples labeled as y.
+
+       **y** : object
+           The label of the samples in x.
 
 
 
@@ -891,15 +916,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
 
           **p** : ndarray of shape (n_timestep,)
-              The prototype of the counterfactual label
+              The prototype of the counterfactual label.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -926,12 +951,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **prototype** : ndarray of shape (n_timestep,)
-              A prototype of the counterfactual label
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
 
 
 
@@ -957,12 +985,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -989,6 +1020,19 @@ Classes
    Sample shapelet prototypes.
 
 
+   :Parameters:
+
+       **x** : ndarray of shape (n_samples, n_timestep)
+           The data samples
+
+       **y** : object
+           The label of the samples in x
+
+       **min_shapelet_size** : float
+           The minimum shapelet size
+
+       **max_shapelet_size** : float
+           The maximum shapelet size
 
 
 
@@ -1048,12 +1092,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **prototype** : ndarray of shape (n_timestep,)
-              A prototype of the counterfactual label
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
 
 
 
@@ -1079,12 +1126,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -1142,6 +1192,10 @@ Classes
    Evaluate if a sample is a counterfactual.
 
 
+   :Parameters:
+
+       **estimator** : object
+           The estimator.
 
 
 
@@ -1167,15 +1221,15 @@ Classes
       :Parameters:
 
           **x** : ndarray of shape (n_timestep,)
-              The counterfactual sample
+              The counterfactual sample.
 
           **y** : object
-              The counterfactual label
+              The counterfactual label.
 
       :Returns:
 
-          **bool** : true if counterfactual
-              ..
+          bool
+              Return true if counterfactual valid.
 
 
 
@@ -1227,15 +1281,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
 
           **p** : ndarray of shape (n_timestep,)
-              The prototype of the counterfactual label
+              The prototype of the counterfactual label.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 
@@ -1261,12 +1315,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **prototype** : ndarray of shape (n_timestep,)
-              A prototype of the counterfactual label
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
 
 
 
@@ -1292,12 +1349,15 @@ Classes
       :Parameters:
 
           **o** : ndarray of shape (n_timestep,)
-              The current counterfactual sample
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
 
       :Returns:
 
-          **new_counterfactual** : ndarray of shape (n_timestep,)
-              The new counterfactual moved towards the prototype
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
 
 
 

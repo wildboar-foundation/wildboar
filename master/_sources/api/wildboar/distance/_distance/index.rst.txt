@@ -17,6 +17,7 @@ Functions
 
 .. autoapisummary::
 
+   wildboar.distance._distance.argmin_distance
    wildboar.distance._distance.paired_distance
    wildboar.distance._distance.paired_subsequence_distance
    wildboar.distance._distance.paired_subsequence_match
@@ -25,6 +26,79 @@ Functions
    wildboar.distance._distance.subsequence_match
 
 
+
+.. py:function:: argmin_distance(x, y=None, *, dim=0, k=1, metric='euclidean', metric_params=None, sorted=False, return_distance=False, n_jobs=None)
+
+   
+   Find the indicies of the samples with the lowest distance in `Y`.
+
+
+   :Parameters:
+
+       **x** : univariate time-series or multivariate time-series
+           The needle.
+
+       **y** : univariate time-series or multivariate time-series, optional
+           The haystack.
+
+       **dim** : int, optional
+           The dimension where the distance is computed.
+
+       **k** : int, optional
+           The number of closest samples.
+
+       **metric** : str, optional
+           The distance metric
+           
+           See ``_METRICS.keys()`` for a list of supported metrics.
+
+       **metric_params** : dict, optional
+           Parameters to the metric.
+           
+           Read more about the parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+       **sorted** : bool, optional
+           Sort the indicies from smallest to largest distance.
+
+       **return_distance** : bool, optional
+           Return the distance for the `k` samples.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
+
+   :Returns:
+
+       **indices** : ndarray of shape (n_samples, k)
+           The indices of the samples in `Y` with the smallest distance.
+
+       **distance** : ndarray of shape (n_samples, k), optional
+           The distance of the samples in `Y` with the smallest distance.
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Examples
+
+   >>> from wildoar.distance import argmin_distance
+   >>> X = np.array([[1, 2, 3, 4], [10, 1, 2, 3]])
+   >>> Y = np.array([[1, 2, 11, 2], [2, 4, 6, 7], [10, 11, 2, 3]])
+   >>> argmin_distance(X, Y, k=2, return_distance=True)
+   (array([[0, 1],
+           [1, 2]]),
+    array([[ 8.24621125,  4.79583152],
+           [10.24695077, 10.        ]]))
+
+
+
+   ..
+       !! processed by numpydoc !!
 
 .. py:function:: paired_distance(x, y, *, dim='warn', metric='euclidean', metric_params=None, n_jobs=None)
 

@@ -776,7 +776,7 @@ Classes
           !! processed by numpydoc !!
 
 
-.. py:class:: KNeighborsClassifier(n_neighbors=5, *, metric='euclidean', metric_params=None)
+.. py:class:: KNeighborsClassifier(n_neighbors=5, *, metric='euclidean', metric_params=None, n_jobs=None)
 
 
 
@@ -798,6 +798,9 @@ Classes
            
            Read more about the metrics and their parameters in the
            :ref:`User guide <list_of_metrics>`.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
 
 
 

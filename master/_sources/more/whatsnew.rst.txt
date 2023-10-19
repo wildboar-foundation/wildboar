@@ -52,6 +52,14 @@ Changelog
        all dimensions are returned. The default value for ``dim`` will change to "mean"
        in 1.3. For 3darrays, we issue a deprecation warning for the current default value.
 
+     - |Feature| A new function :func:`distance.argmin_distance` which takes as
+       input two arrays `X` and `Y` and finds, for each sample in `X`, the
+       indices of the `k` samples in `Y` with the smallest distance to the i:th sample
+       in `X`.
+
+     - |Feature| Enables support for ``n_jobs`` in :func:`distance.pairwise_distance`,
+       :func:`distance.paired_distance`.
+
      - |Feature| Add support for LCSS subsequence distance.
 
      - |Feature| Add support for EDR subsequence distance.

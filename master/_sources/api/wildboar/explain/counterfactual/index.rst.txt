@@ -841,35 +841,38 @@ Functions
    :Parameters:
 
        **estimator** : object
-           The estimator used to compute the counterfactual example
+           The estimator used to compute the counterfactual example.
 
        **x** : array-like of shape (n_samples, n_timestep)
-           The data samples to fit counterfactuals to
+           The data samples to fit counterfactuals to.
 
        **y** : array-like broadcast to shape (n_samples,)
-           The desired label of the counterfactual
+           The desired label of the counterfactual.
+
+       **train_x** : array-like of shape (n_samples, n_timestep), optional
+           Training samples if required by the explainer.
+
+       **train_y** : array-like of shape (n_samples, ), optional
+           Training labels if required by the explainer.
 
        **method** : str or BaseCounterfactual, optional
            The method to generate counterfactual explanations
            
-           - if 'best', infer the most appropriate counterfactual explanation method
-             based on the estimator
+           - if 'best', infer the most appropriate counterfactual explanation
+             method based on the estimator.
            
-             .. versionchanged :: 1.1.0
+           .. versionchanged:: 1.1.0
+           
            - if str, select counterfactual explainer from named collection. See
              ``_COUNTERFACTUALS.keys()`` for a list of valid values.
-           - if, BaseCounterfactual use the supplied counterfactual
+           - if, BaseCounterfactual use the supplied counterfactual.
 
        **scoring** : str, callable, list or dict, optional
            The scoring function to determine the similarity between the counterfactual
-           sample and the original sample
+           sample and the original sample.
            
            .. deprecated:: 1.1
                ``scoring`` was renamed to ``proximity`` in 1.1 and will be removed in 1.2.
-
-       **proximity** : str, callable, list or dict, optional
-           The scoring function to determine the similarity between the counterfactual
-           sample and the original sample
 
        **valid_scoring** : bool, optional
            Only compute score for successful counterfactuals.
@@ -877,13 +880,17 @@ Functions
            .. deprecated:: 1.1
                ``valid_scoring`` will be removed in 1.2.
 
+       **proximity** : str, callable, list or dict, optional
+           The scoring function to determine the similarity between the counterfactual
+           sample and the original sample.
+
        **random_state** : RandomState or int, optional
-           The pseudo random number generator to ensure stable result
+           The pseudo random number generator to ensure stable result.
 
        **method_args** : dict, optional
            Optional arguments to the counterfactual explainer.
            
-           .. versionadded :: 1.1.0
+           .. versionadded:: 1.1.0
 
    :Returns:
 
@@ -891,10 +898,10 @@ Functions
            The counterfactual example.
 
        **valid** : ndarray of shape (n_samples,)
-           Indicator matrix for valid counterfactuals
+           Indicator matrix for valid counterfactuals.
 
        **score** : ndarray of shape (n_samples,) or dict, optional
-           Return score of the counterfactual transform, if ``scoring`` is not None
+           Return score of the counterfactual transform, if ``scoring`` is not None.
 
 
 
@@ -920,17 +927,17 @@ Functions
    :Parameters:
 
        **x_true** : array-like of shape (n_samples, n_timestep)
-           The true samples
+           The true samples.
 
        **x_counterfactuals** : array-like of shape (n_samples, n_timestep)
-           The counterfactual samples
+           The counterfactual samples.
 
        **metric** : str or callable, optional
            The distance metric
            
            See ``_METRICS.keys()`` for a list of supported metrics.
 
-       **metric_params: dict, optional**
+       **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the
@@ -938,8 +945,8 @@ Functions
 
    :Returns:
 
-       **score** : ndarray
-           The scores
+       ndarray
+           The scores.
 
 
 
