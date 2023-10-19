@@ -3554,7 +3554,7 @@ cdef class EdrMetric(Metric):
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
         self.std_x = <double*> malloc(sizeof(double) * X.shape[0])
-        self.std_y = <double*> malloc(sizeof(double) * X.shape[0])
+        self.std_y = <double*> malloc(sizeof(double) * Y.shape[0])
 
         cdef double mean, std
         cdef Py_ssize_t i
