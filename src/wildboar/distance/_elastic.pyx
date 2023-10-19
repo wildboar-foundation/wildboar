@@ -3511,19 +3511,24 @@ cdef class EdrMetric(Metric):
         self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
-        self.std_x = <double*> malloc(sizeof(double) * X.shape[0])
-        self.std_y = <double*> malloc(sizeof(double) * Y.shape[0])
+
+        # Store standard deviation for all samples and all dimensions:
+        # [x[0,0], x[0,1] ... x[0, m], x[1,0], x[1,1], ... x[d, m]]
+        self.std_x = <double*> malloc(sizeof(double) * X.shape[0] * X.shape[1])
+        self.std_y = <double*> malloc(sizeof(double) * Y.shape[0] * Y.shape[1])
 
         cdef double mean, std
-        cdef Py_ssize_t i
+        cdef Py_ssize_t i, d
         if isnan(self.epsilon):
             for i in range(X.shape[0]):
-                fast_mean_std(&X[i, 0, 0], X.shape[2], &mean, &std)
-                self.std_x[i] = std
+                for d in range(X.shape[1]):
+                    fast_mean_std(&X[i, d, 0], X.shape[2], &mean, &std)
+                    self.std_x[d * X.shape[0] + i] = std
 
             for i in range(Y.shape[0]):
-                fast_mean_std(&Y[i, 0, 0], Y.shape[2], &mean, &std)
-                self.std_y[i] = std
+                for d in range(Y.shape[1]):
+                    fast_mean_std(&Y[i, d, 0], Y.shape[2], &mean, &std)
+                    self.std_y[d * Y.shape[0] + i] = std
 
     cdef double distance(
         self,
@@ -3534,7 +3539,10 @@ cdef class EdrMetric(Metric):
         Py_ssize_t dim,
     ) noexcept nogil:
         if isnan(self.epsilon):
-            epsilon = max(self.std_x[x_index], self.std_y[y_index]) / 4.0
+            epsilon = max(
+                self.std_x[dim * X.shape[0] + x_index],
+                self.std_y[dim * Y.shape[0] + y_index],
+            ) / 4.0
         else:
             epsilon = self.epsilon
 
