@@ -174,14 +174,25 @@ class _KMeansCluster:
         )
 
     def assign(self, x):
-        self.distance_ = pairwise_distance(
-            x,
-            self.centroids_,
-            dim="mean",
-            metric=self.metric,
-            metric_params=self.metric_params,
-        )
-        self.assigned_ = self.distance_.argmin(axis=1)
+        if x.ndim == 2:
+            self.assigned_, self.distance_ = argmin_distance(
+                x,
+                self.centroids_,
+                k=1,
+                metric=self.metric,
+                metric_params=self.metric_params,
+                return_distance=True,
+            )
+            self.assigned_ = np.ravel(self.assigned_)
+        else:
+            self.distance_ = pairwise_distance(
+                x,
+                self.centroids_,
+                dim="mean",
+                metric=self.metric,
+                metric_params=self.metric_params,
+            )
+            self.assigned_ = self.distance_.argmin(axis=1)
 
     def update(self, x):
         for c in range(self.centroids_.shape[0]):
@@ -472,7 +483,6 @@ class _FastKMedoidsCluster(_KMedoidsCluster):
         for idx in range(self._cluster_idx.shape[0]):
             cluster_idx = np.where(self.labels_ == idx)[0]
             if cluster_idx.shape[0] == 0:
-                print(f"empty cluster {idx}")
                 continue
 
             cost = self._dist[cluster_idx, cluster_idx.reshape(-1, 1)].sum(axis=1)
