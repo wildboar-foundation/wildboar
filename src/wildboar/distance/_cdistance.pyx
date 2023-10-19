@@ -862,7 +862,7 @@ def _argmin_distance(
     cdef Py_ssize_t x_samples = x.shape[0]
     cdef Py_ssize_t y_samples = y.shape[0]
 
-    cdef Py_ssize_t[:, :] indices = np.zeros((x_samples, k), dtype=int)
+    cdef Py_ssize_t[:, :] indices = np.zeros((x_samples, k), dtype=np.intp)
     cdef double[:, :] values = np.zeros((x_samples, k), dtype=float)
 
     run_in_parallel(
