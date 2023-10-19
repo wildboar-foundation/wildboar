@@ -2991,6 +2991,7 @@ cdef class DtwMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
+    cdef double *weights
     cdef Py_ssize_t warp_width
     cdef double r
 
@@ -3001,6 +3002,7 @@ cdef class DtwMetric(Metric):
     def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
+        self.weights = NULL
 
     def __reduce__(self):
         return self.__class__, (self.r, )
@@ -3016,6 +3018,10 @@ cdef class DtwMetric(Metric):
         if self.cost_prev != NULL:
             free(self.cost_prev)
             self.cost_prev = NULL
+
+        if self.weights != NULL:
+            free(self.weights)
+            self.weights = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
@@ -3039,7 +3045,7 @@ cdef class DtwMetric(Metric):
             self.warp_width,
             self.cost,
             self.cost_prev,
-            NULL,
+            self.weights,
             INFINITY,
         )
 
@@ -3061,7 +3067,7 @@ cdef class DtwMetric(Metric):
             self.warp_width,
             self.cost,
             self.cost_prev,
-            NULL,
+            self.weights,
             lower_bound[0] * lower_bound[0],
         )
 
@@ -3140,34 +3146,56 @@ cdef class DerivativeDtwMetric(DtwMetric):
             self.warp_width,
             self.cost,
             self.cost_prev,
-            NULL,
+            self.weights,
             INFINITY,
         )
 
         return sqrt(dist)
 
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *lower_bound
+    ) noexcept nogil:
+        if min(x_len, y_len) < 3:
+            return 0
+
+        average_slope(x, x_len, self.d_x)
+        average_slope(y, y_len, self.d_y)
+
+        cdef double dist = dtw_distance(
+            self.d_x,
+            x_len - 2,
+            self.d_y,
+            y_len - 2,
+            self.warp_width,
+            self.cost,
+            self.cost_prev,
+            self.weights,
+            lower_bound[0] * lower_bound[0],
+        )
+
+        dist = sqrt(dist)
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
 
 cdef class WeightedDtwMetric(DtwMetric):
 
     cdef double g
-    cdef double *weights
 
     def __init__(self, double r=1.0, double g=0.05):
         super().__init__(r=r)
         check_scalar(g, "g", float, min_val=0.0)
         self.g = g
 
-    def __cinit__(self, *args, **kwargs):
-        self.weights = NULL
-
     def __reduce__(self):
         return self.__class__, (self.r, self.g)
-
-    cdef void __free(self) noexcept nogil:
-        DtwMetric.__free(self)
-        if self.weights != NULL:
-            free(self.weights)
-            self.weights = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         DtwMetric.reset(self, X, Y)
@@ -3178,66 +3206,20 @@ cdef class WeightedDtwMetric(DtwMetric):
         for i in range(n_timestep):
             self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
 
-    cdef double _distance(
-        self,
-        const double *x,
-        Py_ssize_t x_len,
-        const double *y,
-        Py_ssize_t y_len,
-    ) noexcept nogil:
-        cdef double dist = dtw_distance(
-            x,
-            x_len,
-            y,
-            y_len,
-            self.warp_width,
-            self.cost,
-            self.cost_prev,
-            self.weights,
-            INFINITY,
-        )
 
-        return sqrt(dist)
+cdef class WeightedDerivativeDtwMetric(DerivativeDtwMetric):
 
-
-cdef class WeightedDerivativeDtwMetric(DtwMetric):
-
-    cdef double *d_x
-    cdef double *d_y
-    cdef double *weights
     cdef double g
 
     def __init__(self, double r=1.0, double g=0.05):
         super().__init__(r=r)
         self.g = g
 
-    def __cinit__(self, *args, **kwargs):
-        self.weights = NULL
-        self.d_x = NULL
-        self.d_y = NULL
-
     def __reduce__(self):
         return self.__class__, (self.r, self.g)
 
-    cdef void __free(self) noexcept nogil:
-        DtwMetric.__free(self)
-        if self.d_x != NULL:
-            free(self.d_x)
-            self.d_x = NULL
-
-        if self.d_y != NULL:
-            free(self.d_y)
-            self.d_y = NULL
-
-        if self.weights != NULL:
-            free(self.weights)
-            self.weights = NULL
-
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
-        DtwMetric.reset(self, X, Y)
-        if min(X.shape[2], Y.shape[2]) < 3:
-            return 0
-
+        DerivativeDtwMetric.reset(self, X, Y)
         cdef Py_ssize_t i
         cdef Py_ssize_t n_timestep = max(X.shape[2] - 2, Y.shape[2] - 2)
 
@@ -3253,30 +3235,6 @@ cdef class WeightedDerivativeDtwMetric(DtwMetric):
 
         return 0
 
-    cdef double _distance(
-        self,
-        const double *x,
-        Py_ssize_t x_len,
-        const double *y,
-        Py_ssize_t y_len,
-    ) noexcept nogil:
-        if min(x_len, y_len) < 3:
-            return 0
-        average_slope(x, x_len, self.d_x)
-        average_slope(y, y_len, self.d_y)
-        cdef double dist = dtw_distance(
-            self.d_x,
-            x_len - 2,
-            self.d_y,
-            y_len - 2,
-            self.warp_width,
-            self.cost,
-            self.cost_prev,
-            self.weights,
-            INFINITY,
-        )
-
-        return sqrt(dist)
 
 cdef class LcssMetric(Metric):
 
