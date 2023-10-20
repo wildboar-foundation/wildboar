@@ -299,6 +299,13 @@ Elastic and non-elastic metrics
 
   * -
     - :octicon:`check`
+    - Amercing dynamic time warping [#adtw]_
+    - `"dtw"`
+    - `{"r": float, "p": float}`
+    - Window `r` in `[0, 1]`. Penalty `p`. Larger more penalty for warping.
+
+  * -
+    - :octicon:`check`
     - Dynamic time warping
     - `"dtw"`
     - `{"r": float}`
@@ -324,6 +331,11 @@ Elastic and non-elastic metrics
     - `"wddtw"`
     - `{"r": float, "g": float}`
     - Window `r` in `[0, 1]`. Phase difference penalty `g`, default `0.05`.
+
+.. [#adtw]
+    Matthieu Herrmann, Geoffrey I. Webb: Amercing: An intuitive and
+    effective constraint for dynamic time warping, Pattern Recognition,
+    Volume 137, 2023.
 
 .. [#lcss]
     Hirschberg, D. (1977). Algorithms for the longest common subsequence
