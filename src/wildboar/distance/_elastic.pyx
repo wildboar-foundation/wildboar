@@ -1303,6 +1303,7 @@ cdef double edr_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
+    double min_dist,
 ) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -1311,6 +1312,7 @@ cdef double edr_distance(
     cdef double v
     cdef double x, y, z
     cdef double w = 1.0
+    cdef double min_cost
 
     for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
         cost_prev[i] = 0
@@ -1324,6 +1326,7 @@ cdef double edr_distance(
         if j_start > 0:
             cost[j_start - 1] = 0
 
+        min_cost = INFINITY
         for j in range(j_start, j_stop):
             x = cost_prev[j]
             if j > 0:
@@ -1338,6 +1341,12 @@ cdef double edr_distance(
                 w = weight_vector[labs(i - j)]
 
             cost[j] = min(y + (0 if v < epsilon else 1), x + 1, z + 1)
+
+            if cost[j] < min_cost:
+                min_cost = cost[j]
+
+        if min_cost >= min_dist:
+            return INFINITY
 
         if j_stop < y_length:
             cost[j_stop] = 0
@@ -1374,6 +1383,7 @@ cdef double edr_subsequence_distance(
             cost,
             cost_prev,
             weight_vector,
+            min_dist * max(s_length, t_length),
         )
 
         if dist < min_dist:
@@ -1418,6 +1428,7 @@ cdef Py_ssize_t edr_subsequence_matches(
             cost,
             cost_prev,
             weight_vector,
+            threshold * max(s_length, t_length),
         )
 
         if dist <= threshold:
@@ -1681,7 +1692,6 @@ cdef double twe_distance(
 
         if j_stop < y_length:
             cost[j_stop] = 0
-
 
         cost, cost_prev = cost_prev, cost
 
@@ -3577,6 +3587,7 @@ cdef class EdrMetric(Metric):
             self.cost,
             self.cost_prev,
             NULL,
+            INFINITY,
         )
 
     cdef double _distance(
@@ -3604,7 +3615,79 @@ cdef class EdrMetric(Metric):
             self.cost,
             self.cost_prev,
             NULL,
+            INFINITY,
         )
+
+    cdef bint lbdistance(
+        self,
+        TSArray X,
+        Py_ssize_t x_index,
+        TSArray Y,
+        Py_ssize_t y_index,
+        Py_ssize_t dim,
+        double *lower_bound,
+    ) noexcept nogil:
+        if isnan(self.epsilon):
+            epsilon = max(
+                self.std_x[dim * X.shape[0] + x_index],
+                self.std_y[dim * Y.shape[0] + y_index],
+            ) / 4.0
+        else:
+            epsilon = self.epsilon
+
+        cdef double dist = edr_distance(
+            &X[x_index, dim, 0],
+            X.shape[2],
+            &Y[y_index, dim, 0],
+            Y.shape[2],
+            self.warp_width,
+            epsilon,
+            self.cost,
+            self.cost_prev,
+            NULL,
+            lower_bound[0] * max(X.shape[2], Y.shape[2]),
+        )
+
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
+
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *lower_bound
+    ) noexcept nogil:
+        cdef double mean, std_x, std_y, epsilon
+        if isnan(self.epsilon):
+            fast_mean_std(x, x_len, &mean, &std_x)
+            fast_mean_std(y, y_len, &mean, &std_y)
+            epsilon = max(std_x, std_y) / 4.0
+        else:
+            epsilon = self.epsilon
+
+        cdef double dist = edr_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            epsilon,
+            self.cost,
+            self.cost_prev,
+            NULL,
+            lower_bound[0] * max(x_len, y_len),
+        )
+
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
 
     @property
     def is_elastic(self):
@@ -3705,6 +3788,7 @@ cdef class MsmMetric(Metric):
             return True
         else:
             return False
+
     @property
     def is_elastic(self):
         return True
@@ -3806,6 +3890,7 @@ cdef class TweMetric(Metric):
             return True
         else:
             return False
+
     @property
     def is_elastic(self):
         return True

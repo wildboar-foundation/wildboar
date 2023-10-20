@@ -120,6 +120,7 @@ cdef double edr_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
+    double min_dist,
 ) noexcept nogil
 
 cdef double msm_distance(
