@@ -60,6 +60,8 @@ Changelog
      - |Feature| Enables support for ``n_jobs`` in :func:`distance.pairwise_distance`,
        :func:`distance.paired_distance`.
 
+     - |Feature| Add support for Amercing Dynamic Time Warping (subsequence)  distance.
+
      - |Feature| Add support for LCSS subsequence distance.
 
      - |Feature| Add support for EDR subsequence distance.

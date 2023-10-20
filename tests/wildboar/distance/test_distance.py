@@ -330,6 +330,18 @@ _EXPECTED_SUBSEQUENCE_MATCH = {
             )
         }
     },
+    "adtw": {
+        None: {
+            1.5: (
+                [[17, 18, 19], None, [24, 25, 26]],
+                [
+                    [1.2761004350294538, 0.700903155292442, 1.174620125782524],
+                    None,
+                    [1.2007104190288438, 0.6133007904431927, 1.4627049842644184],
+                ],
+            )
+        }
+    },
     "dtw": {
         None: {
             1.0: (
@@ -937,6 +949,7 @@ def test_elastic_pairwise_subsequence_distance(
         ("edr", None, 0.25),
         ("msm", None, 10),
         ("twe", None, 10),
+        ("adtw", None, 1.5),
         ("dtw", None, 1.0),
         ("ddtw", None, 0.5),
         ("wdtw", None, 0.3),

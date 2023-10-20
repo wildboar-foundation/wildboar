@@ -85,6 +85,18 @@ cdef double dtw_distance(
     double min_dist,
 ) noexcept nogil
 
+cdef double adtw_distance(
+    const double *X,
+    Py_ssize_t x_length,
+    const double *Y,
+    Py_ssize_t y_length,
+    Py_ssize_t r,
+    double *cost,
+    double *cost_prev,
+    double penalty,
+    double min_dist,
+) noexcept nogil
+
 cdef double lcss_distance(
     const double *X,
     Py_ssize_t x_length,

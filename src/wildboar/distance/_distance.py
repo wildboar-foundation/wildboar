@@ -23,6 +23,8 @@ from ._cdistance import (
     _subsequence_match,
 )
 from ._elastic import (
+    AmercingDtwMetric,
+    AmercingDtwSubsequenceMetric,
     DerivativeDtwMetric,
     DerivativeDtwSubsequenceMetric,
     DtwMetric,
@@ -69,6 +71,7 @@ _SUBSEQUENCE_METRICS = {
     "euclidean": EuclideanSubsequenceMetric,
     "normalized_euclidean": NormalizedEuclideanSubsequenceMetric,
     "scaled_euclidean": ScaledEuclideanSubsequenceMetric,
+    "adtw": AmercingDtwSubsequenceMetric,
     "dtw": DtwSubsequenceMetric,
     "wdtw": WeightedDtwSubsequenceMetric,
     "ddtw": DerivativeDtwSubsequenceMetric,
@@ -90,6 +93,7 @@ _SUBSEQUENCE_METRICS = {
 _METRICS = {
     "euclidean": EuclideanMetric,
     "normalized_euclidean": NormalizedEuclideanMetric,
+    "adtw": AmercingDtwMetric,
     "dtw": DtwMetric,
     "ddtw": DerivativeDtwMetric,
     "wdtw": WeightedDtwMetric,

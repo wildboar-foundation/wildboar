@@ -715,6 +715,90 @@ cdef Py_ssize_t dtw_subsequence_matches(
     return n_matches
 
 
+cdef double adtw_subsequence_distance(
+    const double *S,
+    Py_ssize_t s_length,
+    const double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double *cost,
+    double *cost_prev,
+    double penalty,
+    Py_ssize_t *index,
+) noexcept nogil:
+    cdef double dist = 0
+    cdef double min_dist = INFINITY
+
+    cdef Py_ssize_t i
+    for i in range(t_length - s_length + 1):
+        dist = adtw_distance(
+            S,
+            s_length,
+            T + i,
+            s_length,
+            r,
+            cost,
+            cost_prev,
+            penalty,
+            min_dist,
+        )
+        if dist < min_dist:
+            if index != NULL:
+                index[0] = i
+            min_dist = dist
+
+    return sqrt(min_dist)
+
+
+cdef Py_ssize_t adtw_subsequence_matches(
+    const double *S,
+    Py_ssize_t s_length,
+    const double *T,
+    Py_ssize_t t_length,
+    Py_ssize_t r,
+    double *cost,
+    double *cost_prev,
+    double penalty,
+    double threshold,
+    double **distances,
+    Py_ssize_t **matches
+) noexcept nogil:
+    cdef double dist = 0
+    cdef Py_ssize_t capacity = 1
+    cdef Py_ssize_t tmp_capacity
+    threshold = threshold * threshold
+    cdef Py_ssize_t i
+    cdef Py_ssize_t n_matches = 0
+
+    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
+    distances[0] = <double*> malloc(sizeof(double) * capacity)
+
+    for i in range(t_length - s_length + 1):
+        dist = adtw_distance(
+            S,
+            s_length,
+            T + i,
+            s_length,
+            r,
+            cost,
+            cost_prev,
+            penalty,
+            threshold,
+        )
+
+        if dist <= threshold:
+            tmp_capacity = capacity
+            realloc_array(
+                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
+            )
+            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
+            matches[0][n_matches] = i
+            distances[0][n_matches] = sqrt(dist)
+            n_matches += 1
+
+    return n_matches
+
+
 cdef double ddtw_subsequence_distance(
     const double *S,  # Assumed to be derivative
     Py_ssize_t s_length,
@@ -868,6 +952,69 @@ cdef double dtw_distance(
                 w = weight_vector[labs(i - j)]
 
             cost[j] = min(min(x, y), z) + v * v * w
+
+            if cost[j] < min_cost:
+                min_cost = cost[j]
+
+        if min_cost >= min_dist:
+            return INFINITY
+
+        if j_stop < y_length:
+            cost[j_stop] = INFINITY
+
+        cost, cost_prev = cost_prev, cost
+    return cost_prev[y_length - 1]
+
+cdef double adtw_distance(
+    const double *X,
+    Py_ssize_t x_length,
+    const double *Y,
+    Py_ssize_t y_length,
+    Py_ssize_t r,
+    double *cost,
+    double *cost_prev,
+    double penalty,
+    double min_dist,
+) noexcept nogil:
+    cdef Py_ssize_t i
+    cdef Py_ssize_t j
+    cdef Py_ssize_t j_start
+    cdef Py_ssize_t j_stop
+    cdef double x
+    cdef double y
+    cdef double z
+    cdef double v
+    cdef double min_cost
+    cdef Py_ssize_t max_len = max(0, y_length - x_length) + r
+    cdef Py_ssize_t min_len = max(0, x_length - y_length)
+    v = X[0] - Y[0]
+
+    cost_prev[0] = v * v
+    for i in range(1, min(y_length, max_len)):
+        v = X[0] - Y[i]
+        cost_prev[i] = cost_prev[i - 1] + v * v
+
+    if max_len < y_length:
+        cost_prev[max_len] = INFINITY
+
+    for i in range(1, x_length):
+        j_start = max(0, i - min_len - r + 1)
+        j_stop = min(y_length, i + max_len)
+        if j_start > 0:
+            cost[j_start - 1] = INFINITY
+
+        min_cost = INFINITY
+        for j in range(j_start, j_stop):
+            x = cost_prev[j] + penalty
+            if j > 0:
+                y = cost[j - 1] + penalty
+                z = cost_prev[j - 1]
+            else:
+                y = INFINITY
+                z = INFINITY
+
+            v = X[i] - Y[j]
+            cost[j] = min(min(x, y), z) + v * v
 
             if cost[j] < min_cost:
                 min_cost = cost[j]
@@ -2272,6 +2419,67 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
         )
 
 
+cdef class AmercingDtwSubsequenceMetric(DtwSubsequenceMetric):
+    cdef double p
+
+    def __init__(self, double r=1.0, double p=1.0):
+        super().__init__(r=r)
+        self.p = p
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.p)
+
+    cdef double _distance(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        Py_ssize_t *return_index=NULL,
+    ) noexcept nogil:
+        return adtw_subsequence_distance(
+            s,
+            s_len,
+            x,
+            x_len,
+            _compute_r(s_len, self.r),
+            self.cost,
+            self.cost_prev,
+            self.p,
+            return_index,
+        )
+
+    cdef Py_ssize_t _matches(
+        self,
+        double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        double *x,
+        Py_ssize_t x_len,
+        double threshold,
+        double **distances,
+        Py_ssize_t **indicies,
+    ) noexcept nogil:
+        return adtw_subsequence_matches(
+            s,
+            s_len,
+            x,
+            x_len,
+            _compute_r(s_len, self.r),
+            self.cost,
+            self.cost_prev,
+            self.p,
+            threshold,
+            distances,
+            indicies,
+        )
+
+
 cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
 
     cdef double g
@@ -3264,6 +3472,66 @@ cdef class WeightedDtwMetric(DtwMetric):
             self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
 
 
+cdef class AmercingDtwMetric(DtwMetric):
+    cdef double p
+
+    def __init__(self, double r=1.0, double p=1.0):
+        super().__init__(r=r)
+        check_scalar(p, "p", float)
+        self.p = p
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.p)
+
+    cdef double _distance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len
+    ) noexcept nogil:
+        cdef double dist = adtw_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.cost,
+            self.cost_prev,
+            self.p,
+            INFINITY,
+        )
+
+        return sqrt(dist)
+
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *lower_bound
+    ) noexcept nogil:
+        cdef double dist = adtw_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.cost,
+            self.cost_prev,
+            self.p,
+            lower_bound[0] * lower_bound[0],
+        )
+
+        dist = sqrt(dist)
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
+
+
 cdef class WeightedDerivativeDtwMetric(DerivativeDtwMetric):
 
     cdef double g
@@ -3529,6 +3797,7 @@ cdef class ErpMetric(Metric):
             return True
         else:
             return False
+
     @property
     def is_elastic(self):
         return True
