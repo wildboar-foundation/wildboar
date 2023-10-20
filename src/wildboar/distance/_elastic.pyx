@@ -872,7 +872,6 @@ cdef double dtw_distance(
             if cost[j] < min_cost:
                 min_cost = cost[j]
 
-
         if min_cost >= min_dist:
             return INFINITY
 
@@ -1589,6 +1588,7 @@ cdef double twe_distance(
     double stiffness,
     double *cost,
     double *cost_prev,
+    double min_dist,
 ) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -1596,6 +1596,7 @@ cdef double twe_distance(
     cdef Py_ssize_t j_stop
     cdef double v, x, y, del_x, del_y, match
     cdef double up_left, left, up
+    cdef double min_cost
 
     for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
         cost_prev[i] = INFINITY
@@ -1612,6 +1613,7 @@ cdef double twe_distance(
         if j_start > 0:
             cost[j_start - 1] = 0
 
+        min_cost = INFINITY
         for j in range(j_start, j_stop):
             up = cost_prev[j]
             if j == 0:
@@ -1661,8 +1663,15 @@ cdef double twe_distance(
 
             cost[j] = min(del_x, del_y, match)
 
+            if cost[j] < min_cost:
+                min_cost = cost[j]
+
+        if min_cost >= min_dist:
+            return INFINITY
+
         if j_stop < y_length:
             cost[j_stop] = 0
+
 
         cost, cost_prev = cost_prev, cost
 
@@ -1697,6 +1706,7 @@ cdef double twe_subsequence_distance(
             stiffness,
             cost,
             cost_prev,
+            min_dist,
         )
 
         if dist < min_dist:
@@ -1742,6 +1752,7 @@ cdef Py_ssize_t twe_subsequence_matches(
             stiffness,
             cost,
             cost_prev,
+            threshold,
         )
 
         if dist <= threshold:
@@ -3729,8 +3740,35 @@ cdef class TweMetric(Metric):
             self.stiffness,
             self.cost,
             self.cost_prev,
+            INFINITY,
         )
 
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *lower_bound
+    ) noexcept nogil:
+        cdef double dist = twe_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.penalty,
+            self.stiffness,
+            self.cost,
+            self.cost_prev,
+            lower_bound[0],
+        )
+
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
     @property
     def is_elastic(self):
         return True

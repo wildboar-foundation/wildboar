@@ -144,5 +144,5 @@ cdef double twe_distance(
     double stiffness,
     double *cost,
     double *cost_prev,
+    double min_dist,
 ) nogil
-
