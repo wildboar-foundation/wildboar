@@ -1146,6 +1146,7 @@ cdef double erp_distance(
     double *gY,
     double *cost,
     double *cost_prev,
+    double min_dist,
 ) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -1154,6 +1155,7 @@ cdef double erp_distance(
     cdef double v, x, y, z
     cdef double gx_sum = 0
     cdef double gy_sum = 0
+    cdef double min_cost
 
     for i in range(x_length):
         v = fabs(X[i] - g)
@@ -1177,6 +1179,7 @@ cdef double erp_distance(
         if j_start > 0:
             cost[j_start - 1] = 0
 
+        min_cost = INFINITY
         for j in range(j_start, j_stop):
             x = cost_prev[j]
             if j > 0:
@@ -1194,6 +1197,12 @@ cdef double erp_distance(
 
             v = fabs(X[i] - Y[j])
             cost[j] = min(y + v, min(x + gX[i], z + gY[j]))
+
+            if cost[j] < min_cost:
+                min_cost = cost[j]
+
+        if min_cost >= min_dist:
+            return INFINITY
 
         if j_stop < y_length:
             cost[j_stop] = 0
@@ -1232,6 +1241,7 @@ cdef double erp_subsequence_distance(
             gY,
             cost,
             cost_prev,
+            min_dist,
         )
 
         if dist < min_dist:
@@ -1278,6 +1288,7 @@ cdef Py_ssize_t erp_subsequence_matches(
             gY,
             cost,
             cost_prev,
+            threshold,
         )
 
         if dist <= threshold:
@@ -3467,10 +3478,38 @@ cdef class ErpMetric(Metric):
             self.gY,
             self.cost,
             self.cost_prev,
+            INFINITY,
         )
 
         return dist
 
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *lower_bound
+    ) noexcept nogil:
+        cdef double dist = erp_distance(
+            x,
+            x_len,
+            y,
+            y_len,
+            self.warp_width,
+            self.g,
+            self.gX,
+            self.gY,
+            self.cost,
+            self.cost_prev,
+            lower_bound[0],
+        )
+
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
     @property
     def is_elastic(self):
         return True

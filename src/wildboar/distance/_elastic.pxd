@@ -108,6 +108,7 @@ cdef double erp_distance(
     double *gY,
     double *cost,
     double *cost_prev,
+    double min_dist,
 ) noexcept nogil
 
 cdef double edr_distance(
