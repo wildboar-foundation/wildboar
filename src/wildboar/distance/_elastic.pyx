@@ -11,7 +11,7 @@ import warnings
 
 import numpy as np
 
-from libc.math cimport INFINITY, NAN, exp, fabs, floor, isnan, sqrt
+from libc.math cimport INFINITY, NAN, exp, fabs, floor, isnan, sqrt, isinf
 from libc.stdlib cimport free, labs, malloc
 from libc.string cimport memcpy
 
@@ -1002,6 +1002,7 @@ cdef double lcss_distance(
     double *cost,
     double *cost_prev,
     double *weight_vector,
+    double min_dist,
 ) noexcept nogil:
     cdef Py_ssize_t i
     cdef Py_ssize_t j
@@ -1010,6 +1011,7 @@ cdef double lcss_distance(
     cdef double v
     cdef double x, y, z
     cdef double w = 1.0
+    cdef double min_cost
 
     for i in range(0, min(y_length, max(0, y_length - x_length) + r)):
         cost_prev[i] = 0
@@ -1023,6 +1025,7 @@ cdef double lcss_distance(
         if j_start > 0:
             cost[j_start - 1] = 0
 
+        min_cost = INFINITY
         for j in range(j_start, j_stop):
             x = cost_prev[j]
             if j > 0:
@@ -1040,6 +1043,12 @@ cdef double lcss_distance(
                 cost[j] = w + y
             else:
                 cost[j] = max(z, x)
+
+            if cost[j] < min_cost:
+                min_cost = cost[j]
+
+        if min_cost >= min_dist:
+            return INFINITY
 
         if j_stop < y_length:
             cost[j_stop] = 0
@@ -1076,6 +1085,9 @@ cdef double lcss_subsequence_distance(
             cost,
             cost_prev,
             weight_vector,
+            min(s_length, t_length) - min_dist * min(s_length, t_length)
+            if isinf(min_dist) == 0
+            else min_dist,
         )
 
         if dist < min_dist:
@@ -1120,6 +1132,9 @@ cdef Py_ssize_t lcss_subsequence_matches(
             cost,
             cost_prev,
             weight_vector,
+            min(s_length, t_length) - threshold * min(s_length, t_length)
+            if isinf(threshold) == 0  # Ensure that passing inf as threshold works.
+            else threshold,
         )
 
         if dist <= threshold:
@@ -3282,6 +3297,7 @@ cdef class LcssMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
+    cdef double *weights
     cdef Py_ssize_t warp_width
     cdef double r
     cdef double epsilon
@@ -3304,6 +3320,7 @@ cdef class LcssMetric(Metric):
     def __cinit__(self, *args, **kwargs):
         self.cost = NULL
         self.cost_prev = NULL
+        self.weights = NULL
 
     def __reduce__(self):
         return self.__class__, (self.r, self.epsilon)
@@ -3319,6 +3336,10 @@ cdef class LcssMetric(Metric):
         if self.cost_prev != NULL:
             free(self.cost_prev)
             self.cost_prev = NULL
+
+        if self.weights != NULL:
+            free(self.weights)
+            self.weights = NULL
 
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
@@ -3343,54 +3364,19 @@ cdef class LcssMetric(Metric):
             self.epsilon,
             self.cost,
             self.cost_prev,
-            NULL,
+            self.weights,
+            INFINITY,
         )
 
         return dist
 
-    @property
-    def is_elastic(self):
-        return True
-
-
-cdef class WeightedLcssMetric(LcssMetric):
-
-    cdef double g
-    cdef double *weights
-
-    def __init__(self, double r=1.0, epsilon=1.0, double g=0.05, double threshold=NAN):
-        super().__init__(r=r, epsilon=epsilon, threshold=threshold)
-        check_scalar(g, "g", float, min_val=0.0)
-        self.g = g
-        self.epsilon = epsilon
-
-    def __cinit__(self, *args, **kwargs):
-        self.weights = NULL
-
-    def __reduce__(self):
-        return self.__class__, (self.r, self.epsilon, self.g)
-
-    cdef void __free(self) noexcept nogil:
-        LcssMetric.__free(self)
-        if self.weights != NULL:
-            free(self.weights)
-            self.weights = NULL
-
-    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
-        LcssMetric.reset(self, X, Y)
-        cdef Py_ssize_t i
-        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
-
-        self.weights = <double*> malloc(sizeof(double) * n_timestep)
-        for i in range(n_timestep):
-            self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
-
-    cdef double _distance(
+    cdef bint _lbdistance(
         self,
         const double *x,
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
+        double *lower_bound
     ) noexcept nogil:
         cdef double dist = lcss_distance(
             x,
@@ -3402,9 +3388,42 @@ cdef class WeightedLcssMetric(LcssMetric):
             self.cost,
             self.cost_prev,
             self.weights,
+            min(x_len, y_len) - lower_bound[0] * min(x_len, y_len)
+            if isinf(lower_bound[0]) == 0
+            else INFINITY,
         )
 
-        return dist
+        if dist < lower_bound[0]:
+            lower_bound[0] = dist
+            return True
+        else:
+            return False
+
+    @property
+    def is_elastic(self):
+        return True
+
+
+cdef class WeightedLcssMetric(LcssMetric):
+
+    cdef double g
+
+    def __init__(self, double r=1.0, epsilon=1.0, double g=0.05, double threshold=NAN):
+        super().__init__(r=r, epsilon=epsilon, threshold=threshold)
+        check_scalar(g, "g", float, min_val=0.0)
+        self.g = g
+
+    def __reduce__(self):
+        return self.__class__, (self.r, self.epsilon, self.g)
+
+    cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
+        LcssMetric.reset(self, X, Y)
+        cdef Py_ssize_t i
+        cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
+
+        self.weights = <double*> malloc(sizeof(double) * n_timestep)
+        for i in range(n_timestep):
+            self.weights[i] = 1.0 / (1.0 + exp(-self.g * (i - n_timestep / 2.0)))
 
 
 cdef class ErpMetric(Metric):
