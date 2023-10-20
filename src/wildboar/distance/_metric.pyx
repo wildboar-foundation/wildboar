@@ -218,7 +218,7 @@ cdef class ManhattanSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
-        return manhattan_distance(s, s_len, x, x_len, return_index)
+        return manhattan_distance(s, s_len, x, x_len, INFINITY, return_index)
 
     cdef Py_ssize_t _matches(
         self,
@@ -467,8 +467,24 @@ cdef class ManhattanMetric(Metric):
         const double *y,
         Py_ssize_t y_len
     ) noexcept nogil:
-        return manhattan_distance(x, x_len, y, y_len, NULL)
+        return manhattan_distance(x, x_len, y, y_len, INFINITY, NULL)
 
+    cdef bint _lbdistance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+        double *distance,
+    ) noexcept nogil:
+        cdef double dist = manhattan_distance(
+            x, x_len, y, y_len, distance[0], NULL
+        )
+        if dist < distance[0]:
+            distance[0] = dist
+            return True
+        else:
+            return False
 
 cdef class MinkowskiMetric(Metric):
     cdef double p
@@ -911,10 +927,10 @@ cdef double manhattan_distance(
     Py_ssize_t s_length,
     const double *T,
     Py_ssize_t t_length,
+    double min_dist,
     Py_ssize_t *index,
 ) noexcept nogil:
     cdef double dist = 0
-    cdef double min_dist = INFINITY
 
     cdef Py_ssize_t i
     cdef Py_ssize_t j
