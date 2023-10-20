@@ -132,6 +132,7 @@ cdef double msm_distance(
     double *cost,
     double *cost_prev,
     double *cost_y,
+    double min_dist,
 ) noexcept nogil
 
 cdef double twe_distance(
