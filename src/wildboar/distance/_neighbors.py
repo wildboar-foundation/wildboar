@@ -93,7 +93,7 @@ class KNeighborsClassifier(ClassifierMixin, BaseEstimator):
 
         Returns
         -------
-        ndarray of shape (n_samples, len(self.classes\_))
+        ndarray of shape (n_samples, len(self.classes_))
             The probability of each class for each sample.
         """
         check_is_fitted(self)
