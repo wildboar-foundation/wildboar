@@ -19,7 +19,8 @@ def matrix_profile(  # noqa: PLR0912
     n_jobs=-1,
     return_index=False,
 ):
-    """Compute the matrix profile.
+    """
+    Compute the matrix profile.
 
     - If only ``x`` is given, compute the similarity self-join of every subsequence in
       ``x`` of size ``window`` to its nearest neighbor in `x` excluding trivial matches
@@ -32,34 +33,34 @@ def matrix_profile(  # noqa: PLR0912
     ----------
     x : array-like of shape (n_timestep, ), (n_samples, xn_timestep) or \
         (n_samples, n_dim, xn_timestep)
-        The first time series
+        The first time series.
     y : array-like of shape (n_timestep, ), (n_samples, yn_timestep) or \
         (n_samples, n_dim, yn_timestep), optional
         The optional second time series. y is broadcast to the shape of x if possible.
     window : int or float, optional
         The subsequence size, by default 5
 
-        - if float, a fraction of `y.shape[-1]`
-        - if int, the exact subsequence size
+        - if float, a fraction of `y.shape[-1]`.
+        - if int, the exact subsequence size.
     dim : int, optional
-        The dim to compute the matrix profile for, by default 0
+        The dim to compute the matrix profile for, by default 0.
     exclude : int or float, optional
         The size of the exclusion zone. The default exclusion zone is  0.2 for
         similarity self-join and 0.0 for similarity join.
 
-        - if float, expressed as a fraction of the windows size
-        - if int, exact size (0 >= exclude < window)
+        - if float, expressed as a fraction of the windows size.
+        - if int, exact size (0 >= exclude < window).
     n_jobs : int, optional
-        The number of jobs to use when computing the
+        The number of jobs to use when computing the profile.
     return_index : bool, optional
-        Return the matrix profile index
+        Return the matrix profile index.
 
     Returns
     -------
     mp : ndarray of shape (profile_size, ) or (n_samples, profile_size)
-        The matrix profile
+        The matrix profile.
     mpi : ndarray of shape (profile_size, ) or (n_samples, profile_size), optional
-        The matrix profile index
+        The matrix profile index.
 
     Notes
     -----
@@ -84,7 +85,7 @@ def matrix_profile(  # noqa: PLR0912
 
         if x.ndim != y.ndim:
             raise ValueError("Both x and y must have the same dimensionality")
-        if x.shape[0] != y.shape[0]:
+        if x.ndim != 1 and x.shape[0] != y.shape[0]:
             raise ValueError("Both x and y must have the same number of samples")
         if x.ndim > 2 and x.shape[1] != y.shape[1]:
             raise ValueError("Both x and y must have the same number of dimensions")
