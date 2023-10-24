@@ -268,7 +268,7 @@ cdef class Metric:
     #    exit and True is returned.
     #  - Otherwise, `lower_bound` is unchanged and the return value is
     #    False
-    cdef bint lbdistance(
+    cdef bint eadistance(
         self,
         TSArray X,
         Py_ssize_t x_index,
@@ -278,11 +278,11 @@ cdef class Metric:
         double *lower_bound,
     ) noexcept nogil
 
-    cdef bint _lbdistance(
+    cdef bint _eadistance(
         self,
         const double *x,
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-        double *lower_bound,
+        double *upper_bound,
     ) noexcept nogil

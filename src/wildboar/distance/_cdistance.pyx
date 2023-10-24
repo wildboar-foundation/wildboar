@@ -426,8 +426,8 @@ cdef class Metric:
     ) noexcept nogil:
         return NAN
 
-    # Default implementation. Delegates to _lbdistance.
-    cdef bint lbdistance(
+    # Default implementation. Delegates to _eadistance.
+    cdef bint eadistance(
         self,
         TSArray x,
         Py_ssize_t x_index,
@@ -436,7 +436,7 @@ cdef class Metric:
         Py_ssize_t dim,
         double *distance,
     ) noexcept nogil:
-        return self._lbdistance(
+        return self._eadistance(
            &x[x_index, dim, 0],
            x.shape[2],
            &y[y_index, dim, 0],
@@ -445,8 +445,8 @@ cdef class Metric:
         )
 
     # Default implementation. Delegates to _distance,
-    # without lower bounding.
-    cdef bint _lbdistance(
+    # without early abandoning.
+    cdef bint _eadistance(
         self,
         const double *x,
         Py_ssize_t x_len,
@@ -836,7 +836,7 @@ cdef class _ArgMinBatch:
                 heap.reset()
 
                 for j in range(y_samples):
-                    if metric.lbdistance(self.x, i, self.y, j, self.dim, &distance):
+                    if metric.eadistance(self.x, i, self.y, j, self.dim, &distance):
                         heap.push(j, distance)
 
                         if heap.isfull():

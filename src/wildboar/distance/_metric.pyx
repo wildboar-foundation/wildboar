@@ -424,19 +424,19 @@ cdef class EuclideanMetric(Metric):
     ) noexcept nogil:
         return euclidean_distance(x, x_len, y, y_len, INFINITY, NULL)
 
-    cdef bint _lbdistance(
+    cdef bint _eadistance(
         self,
         const double *x,
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-        double *distance,
+        double *min_dist,
     ) noexcept nogil:
         cdef double dist = euclidean_distance(
-            x, x_len, y, y_len, distance[0] * distance[0], NULL
+            x, x_len, y, y_len, min_dist[0] * min_dist[0], NULL
         )
-        if dist < distance[0]:
-            distance[0] = dist
+        if dist < min_dist[0]:
+            min_dist[0] = dist
             return True
         else:
             return False
@@ -469,19 +469,19 @@ cdef class ManhattanMetric(Metric):
     ) noexcept nogil:
         return manhattan_distance(x, x_len, y, y_len, INFINITY, NULL)
 
-    cdef bint _lbdistance(
+    cdef bint _eadistance(
         self,
         const double *x,
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-        double *distance,
+        double *min_dist,
     ) noexcept nogil:
         cdef double dist = manhattan_distance(
-            x, x_len, y, y_len, distance[0], NULL
+            x, x_len, y, y_len, min_dist[0], NULL
         )
-        if dist < distance[0]:
-            distance[0] = dist
+        if dist < min_dist[0]:
+            min_dist[0] = dist
             return True
         else:
             return False
@@ -504,20 +504,20 @@ cdef class MinkowskiMetric(Metric):
     ) noexcept nogil:
         return minkowski_distance(self.p, x, x_len, y, y_len, INFINITY, NULL)
 
-    cdef bint _lbdistance(
+    cdef bint _eadistance(
         self,
         const double *x,
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-        double *distance,
+        double *min_dist,
     ) noexcept nogil:
         cdef double dist = minkowski_distance(
-            self.p, x, x_len, y, y_len, pow(distance[0], self.p), NULL
+            self.p, x, x_len, y, y_len, pow(min_dist[0], self.p), NULL
         )
 
-        if dist < distance[0]:
-            distance[0] = dist
+        if dist < min_dist[0]:
+            min_dist[0] = dist
             return True
         else:
             return False
@@ -537,19 +537,19 @@ cdef class ChebyshevMetric(Metric):
     ) noexcept nogil:
         return chebyshev_distance(x, x_len, y, y_len, INFINITY, NULL)
 
-    cdef bint _lbdistance(
+    cdef bint _eadistance(
         self,
         const double *x,
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-        double *distance,
+        double *min_dist,
     ) noexcept nogil:
         cdef double dist = chebyshev_distance(
-            x, x_len, y, y_len, distance[0], NULL
+            x, x_len, y, y_len, min_dist[0], NULL
         )
-        if dist < distance[0]:
-            distance[0] = dist
+        if dist < min_dist[0]:
+            min_dist[0] = dist
             return True
         else:
             return False
