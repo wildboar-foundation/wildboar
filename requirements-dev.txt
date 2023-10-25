@@ -8,4 +8,3 @@ cython>=3.0.2
 setuptools_scm[toml]>=6.2
 setuptools>=48.0
 wheel
-pytest-codspeed
