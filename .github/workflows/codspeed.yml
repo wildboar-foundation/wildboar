@@ -28,7 +28,9 @@ jobs:
         run: pip install -r requirements-dev.txt
 
       - name: Install pytest-codspeed
-        run: pip install pytest-codspeed
+        run: |
+          pip uninstall pytest-benchmark
+          pip install pytest-codspeed
 
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v1
