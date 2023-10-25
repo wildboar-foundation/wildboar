@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="wildboar.base" href="../api/wildboar/base/index.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>What’s new - Wildboar 1.1.1.dev223 documentation</title>
+        <title>What’s new - Wildboar 1.1.1.dev224 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev223 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev224 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -367,9 +367,13 @@ in 1.3. For 3darrays, we issue a deprecation warning for the current default val
 input two arrays <cite>X</cite> and <cite>Y</cite> and finds, for each sample in <cite>X</cite>, the
 indices of the <cite>k</cite> samples in <cite>Y</cite> with the smallest distance to the i:th sample
 in <cite>X</cite>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> A new function <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.distance_profile" title="wildboar.distance.distance_profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.distance_profile</span></code></a> which takes a
+subsequence <cite>Y</cite> and a (collection) of time series <cite>X</cite> and returns the
+distance from <cite>Y</cite> to all subsequences of the same length of the i:th
+sample in <cite>X</cite>.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Enables support for <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> in <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.pairwise_distance</span></code></a>,
 <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.paired_distance</span></code></a>.</p></li>
-<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for Amercing Dynamic Time Warping (subsequence)  distance.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for Amercing Dynamic Time Warping (subsequence) distance.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for LCSS subsequence distance.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for EDR subsequence distance.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for TWE subsequence distance.</p></li>
@@ -385,6 +389,9 @@ threshold was set.</p></li>
 <li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Rename <code class="xref py py-class docutils literal notranslate"><span class="pre">_distance.DistanceMeasure</span></code> to <code class="docutils literal notranslate"><span class="pre">Metric</span></code> and
 <code class="xref py py-class docutils literal notranslate"><span class="pre">_distance.SubsequenceDistanceMeasure</span></code> to <code class="docutils literal notranslate"><span class="pre">SubsequenceMetric</span></code>. The change
 only affect code that <code class="docutils literal notranslate"><span class="pre">cimport</span></code> modules.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The default value of <cite>threshold</cite> in
+<a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.subsequence_match</span></code></a> has changed to “auto”. The old value
+“best” has been deprecated and will be removed in 1.3.</p></li>
 </ul>
 </div>
 </div>

@@ -293,6 +293,8 @@ examples.
 
   * - :py:obj:`~wildboar.distance.argmin_distance`
     - Find the indicies of the samples with the lowest distance in `Y`.
+  * - :py:obj:`~wildboar.distance.distance_profile`
+    - Compute the distance profile.
   * - :py:obj:`~wildboar.distance.matrix_profile`
     - Compute the matrix profile.
   * - :py:obj:`~wildboar.distance.paired_distance`

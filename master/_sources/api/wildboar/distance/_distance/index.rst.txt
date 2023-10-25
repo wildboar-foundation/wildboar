@@ -341,19 +341,11 @@ Functions
 
    :Returns:
 
-       **indicies** : ndarray
-           The start index of matching subsequences. Return depends on input:
-           
-           - if x.ndim > 1, return an ndarray of shape (n_samples, )
-           - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
-           
-           For each sample, the ndarray contains the .
+       **indicies** : ndarray of shape (n_samples, )
+           The start index of matching subsequences.
 
-       **distance** : ndarray, optional
-           The distances of matching subsequences. Return depends on input:
-           
-           - if x.ndim > 1, return an ndarray of shape (n_samples, )
-           - if x.ndim == 1, return ndarray of shape (n_matches, ) or None.
+       **distance** : ndarray of shape (n_samples, ), optional
+           The distances of matching subsequences.
 
 
 
@@ -521,7 +513,7 @@ Functions
        **x** : ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
            The input data
 
-       **threshold** : str, float or callable, optional
+       **threshold** : {"auto"}, float or callable, optional
            The distance threshold used to consider a subsequence matching. If no threshold
            is selected, `max_matches` defaults to 10.
            
@@ -564,19 +556,11 @@ Functions
 
    :Returns:
 
-       **indicies** : ndarray
-           The start index of matching subsequences. Return depends on input:
-           
-           - if x.ndim > 1, return an ndarray of shape (n_samples, )
-           - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
-           
-           For each sample, the ndarray contains the .
+       **indicies** : ndarray of shape (n_samples, )
+           The start index of matching subsequences.
 
-       **distance** : ndarray, optional
-           The distances of matching subsequences. Return depends on input:
-           
-           - if x.ndim > 1, return an ndarray of shape (n_samples, )
-           - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+       **distance** : ndarray of shape (n_samples, ), optional
+           The distances of matching subsequences.
 
 
 

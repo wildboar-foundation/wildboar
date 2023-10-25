@@ -57,10 +57,15 @@ Changelog
        indices of the `k` samples in `Y` with the smallest distance to the i:th sample
        in `X`.
 
+     - |Feature| A new function :func:`distance.distance_profile` which takes a
+       subsequence `Y` and a (collection) of time series `X` and returns the
+       distance from `Y` to all subsequences of the same length of the i:th
+       sample in `X`.
+
      - |Feature| Enables support for ``n_jobs`` in :func:`distance.pairwise_distance`,
        :func:`distance.paired_distance`.
 
-     - |Feature| Add support for Amercing Dynamic Time Warping (subsequence)  distance.
+     - |Feature| Add support for Amercing Dynamic Time Warping (subsequence) distance.
 
      - |Feature| Add support for LCSS subsequence distance.
 
@@ -87,6 +92,10 @@ Changelog
      - |API| Rename :class:`_distance.DistanceMeasure` to ``Metric`` and
        :class:`_distance.SubsequenceDistanceMeasure` to ``SubsequenceMetric``. The change
        only affect code that ``cimport`` modules.
+
+     - |API| The default value of `threshold` in
+       :func:`distance.subsequence_match` has changed to "auto". The old value
+       "best" has been deprecated and will be removed in 1.3.
 
   .. grid-item-card::
 
