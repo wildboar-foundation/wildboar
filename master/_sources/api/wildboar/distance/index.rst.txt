@@ -1013,7 +1013,7 @@ Functions
 
       :Returns:
 
-          ndarray of shape (n_samples, len(self.classes\_))
+          ndarray of shape (n_samples, len(self.classes_))
               The probability of each class for each sample.
 
 
@@ -1195,7 +1195,7 @@ Functions
    :Parameters:
 
        **x** : array-like of shape (n_timestep, ), (n_samples, xn_timestep) or         (n_samples, n_dim, xn_timestep)
-           The first time series
+           The first time series.
 
        **y** : array-like of shape (n_timestep, ), (n_samples, yn_timestep) or         (n_samples, n_dim, yn_timestep), optional
            The optional second time series. y is broadcast to the shape of x if possible.
@@ -1203,32 +1203,32 @@ Functions
        **window** : int or float, optional
            The subsequence size, by default 5
            
-           - if float, a fraction of `y.shape[-1]`
-           - if int, the exact subsequence size
+           - if float, a fraction of `y.shape[-1]`.
+           - if int, the exact subsequence size.
 
        **dim** : int, optional
-           The dim to compute the matrix profile for, by default 0
+           The dim to compute the matrix profile for, by default 0.
 
        **exclude** : int or float, optional
            The size of the exclusion zone. The default exclusion zone is  0.2 for
            similarity self-join and 0.0 for similarity join.
            
-           - if float, expressed as a fraction of the windows size
-           - if int, exact size (0 >= exclude < window)
+           - if float, expressed as a fraction of the windows size.
+           - if int, exact size (0 >= exclude < window).
 
        **n_jobs** : int, optional
-           The number of jobs to use when computing the
+           The number of jobs to use when computing the profile.
 
        **return_index** : bool, optional
-           Return the matrix profile index
+           Return the matrix profile index.
 
    :Returns:
 
        **mp** : ndarray of shape (profile_size, ) or (n_samples, profile_size)
-           The matrix profile
+           The matrix profile.
 
        **mpi** : ndarray of shape (profile_size, ) or (n_samples, profile_size), optional
-           The matrix profile index
+           The matrix profile index.
 
 
 
