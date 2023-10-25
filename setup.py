@@ -7,23 +7,47 @@ from setuptools.extension import Extension
 
 BUILD_ARGS = {
     "default": {
-        "extra_compile_args": ["-O3"],
-        "extra_link_args": [],
-        "libraries": [],
+        "posix": {
+            "extra_compile_args": ["-O3"],
+            "extra_link_args": [],
+            "libraries": [],
+        },
+        "nt": {
+            "extra_compile_args": ["/O2"],
+            "extra_link_args": [],
+            "libraries": [],
+        },
     },
     "debug": {
-        "extra_compile_args": ["-O0"],
-        "extra_link_args": [],
-        "libraries": [],
+        "posix": {
+            "extra_compile_args": ["-O0", "-g"],
+            "extra_link_args": [],
+            "libraries": [],
+        },
+        "nt": {
+            "extra_compile_args": ["/Od"],
+            "extra_link_args": [],
+            "libraries": [],
+        },
     },
-    "optimized": {
-        "extra_compile_args": [
-            "-O4",
-            "-march=native",
-            "-mfma",
-        ],
-        "extra_link_args": [],
-        "libraries": [],
+    "optimize": {
+        "posix": {
+            "extra_compile_args": [
+                "-O3",
+                "-march=native",
+                "-ffast-math",
+            ],
+            "extra_link_args": [],
+            "libraries": [],
+        },
+        "nt": {
+            "extra_compile_args": [
+                "/Ox",
+                "/fp:fast",
+            ],
+            "extra_link_args": [],
+            "libraries": [],
+        },
     },
 }
 
@@ -59,10 +83,10 @@ if __name__ == "__main__":
 
     build_type = os.getenv("WILDBOAR_BUILD", "default")
     build_nthreads = int(os.getenv("WILDBOAR_BUILD_NTHREADS", "1"))
-    build_args = BUILD_ARGS.get(build_type)
+    build_args = BUILD_ARGS.get(build_type, {}).get(os.name, None)
 
     if build_args is None:
-        raise RuntimeError("%s is not a valid build type" % build_type)
+        raise RuntimeError(f"{build_type} is not a valid build type")
 
     external_extra_compile_args = os.getenv("WILDBOAR_EXTRA_COMPILE_ARGS")
     if external_extra_compile_args is not None:
