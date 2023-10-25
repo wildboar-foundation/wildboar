@@ -832,6 +832,16 @@ def test_pairwise_distance_benchmark(benchmark, metric, X):
     benchmark(pairwise_distance, x, y, metric=metric)
 
 
+@pytest.mark.parametrize("metric", list(_METRICS.keys()))
+@pytest.mark.parametrize("k", [1, 3, 5])
+def test_argmin_distance_benchmark(benchmark, metric, k):
+    X, y = load_two_lead_ecg()
+    x = X[:100].copy()
+    y = X[100:400].copy()
+
+    benchmark(argmin_distance, x, y, metric=metric)
+
+
 @pytest.mark.parametrize("metric", list(_SUBSEQUENCE_METRICS.keys()))
 def test_pairwise_subsequence_distance_benchmark(benchmark, metric, X):
     X, y = load_two_lead_ecg()

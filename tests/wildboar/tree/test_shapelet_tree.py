@@ -2241,3 +2241,20 @@ def test_extra_tree_regressor():
     assert_almost_equal(f.tree_.threshold[0], 2.3858733725835246)
     assert_almost_equal(f.tree_.threshold[6], 7.163849443826518)
     assert (f.predict(x) == y.astype(float)).sum() == 182
+
+
+@pytest.mark.parametrize(
+    "clf", [ShapeletTreeClassifier(), ExtraShapeletTreeRegressor()]
+)
+@pytest.mark.parametrize(
+    "metric", ["euclidean", "scaled_euclidean", "scaled_dtw", "dtw"]
+)
+def test_shapelet_tree_benchmark(benchmark, clf, metric):
+    X, y = load_gun_point()
+    clf.set_params(metric=metric)
+
+    def f(X, y):
+        clf.fit(X, y)
+        return clf.score(X, y)
+
+    benchmark(f, X, y)
