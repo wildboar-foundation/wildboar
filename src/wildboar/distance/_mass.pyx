@@ -222,6 +222,62 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
                 j += 1
         return j
 
+    cdef void transient_profile(
+        self,
+        SubsequenceView *s,
+        TSArray x,
+        Py_ssize_t i,
+        double *dp,
+    ) noexcept nogil:
+        cumulative_mean_std(
+            &x[i, s.dim, 0],
+            x.shape[2],
+            s.length,
+            self.mean_x,
+            self.std_x,
+        )
+        _mass_distance(
+            &x[i, s.dim, 0],
+            x.shape[2],
+            &x[s.index, s.dim, s.start],
+            s.length,
+            s.mean,
+            s.std,
+            self.mean_x,
+            self.std_x,
+            self.x_buffer,
+            self.y_buffer,
+            dp,
+        )
+
+    cdef void persistent_profile(
+        self,
+        Subsequence *s,
+        TSArray x,
+        Py_ssize_t i,
+        double *dp,
+    ) noexcept nogil:
+        cumulative_mean_std(
+            &x[i, s.dim, 0],
+            x.shape[2],
+            s.length,
+            self.mean_x,
+            self.std_x,
+        )
+        _mass_distance(
+            &x[i, s.dim, 0],
+            x.shape[2],
+            s.data,
+            s.length,
+            s.mean,
+            s.std,
+            self.mean_x,
+            self.std_x,
+            self.x_buffer,
+            self.y_buffer,
+            dp,
+        )
+
 cdef void _mass_distance(
     const double *x,
     Py_ssize_t x_length,

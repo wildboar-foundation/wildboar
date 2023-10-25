@@ -7,6 +7,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+cimport numpy as np
 import numpy as np
 
 from libc.math cimport NAN, sqrt, INFINITY
@@ -331,6 +332,66 @@ cdef class SubsequenceMetric:
             distances,
             indicies,
         )
+
+    cdef void transient_profile(
+        self,
+        SubsequenceView *s,
+        TSArray x,
+        Py_ssize_t i,
+        double *dp,
+    ) noexcept nogil:
+        self._distance_profile(
+            &x[s.index, s.dim, s.start],
+            s.length,
+            s.mean,
+            s.std,
+            s.extra,
+            &x[i, s.dim, 0],
+            x.shape[2],
+            dp,
+        )
+
+    cdef void persistent_profile(
+        self,
+        Subsequence *s,
+        TSArray x,
+        Py_ssize_t i,
+        double *dp,
+    ) noexcept nogil:
+        self._distance_profile(
+            s.data,
+            s.length,
+            s.mean,
+            s.std,
+            s.extra,
+            &x[i, s.dim, 0],
+            x.shape[2],
+            dp,
+        )
+
+    cdef void _distance_profile(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        double *dp,
+    ) noexcept nogil:
+        cdef Py_ssize_t i
+        for i in range(x_len - s_len + 1):
+            dp[i] = self._distance(
+                s,
+                s_len,
+                s_mean,
+                s_std,
+                s_extra,
+                x + i,
+                s_len,
+                NULL,
+            )
 
     cdef double _distance(
         self,
@@ -895,7 +956,7 @@ cdef class _PairedDistanceBatch:
         TSArray y,
         Py_ssize_t dim,
         Metric metric,
-        double[:] distances
+        double[:] distances,
     ):
         self.x = x
         self.y = y
@@ -936,4 +997,79 @@ def _paired_distance(
         require="sharedmem",
     )
 
+    return out.base
+
+
+cdef class _SubsequenceDistanceProfile:
+    cdef Subsequence *subsequence
+    cdef Py_ssize_t n_subsequences
+    cdef double[:, :] distance_profile
+    cdef TSArray x
+    cdef Py_ssize_t dim
+    cdef SubsequenceMetric metric
+
+    def __cinit__(
+        self,
+        np.ndarray y,
+        TSArray x,
+        Py_ssize_t dim,
+        SubsequenceMetric metric,
+        double[:, :] distance_profile,
+    ):
+        self.distance_profile = distance_profile
+        self.x = x
+        self.metric = metric
+        self.dim = dim
+        self.subsequence = <Subsequence*> malloc(sizeof(Subsequence))
+        self.metric.reset(x)
+        self.metric.from_array(self.subsequence, (self.dim, y))
+
+    def __dealloc__(self):
+        if self.subsequence != NULL:
+            self.metric.free_persistent(self.subsequence)
+            free(self.subsequence)
+            self.subsequence = NULL
+
+    @property
+    def n_work(self):
+        return self.x.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        # offset is either in subsequences or x.shape[0] depending on which is larger
+        cdef Py_ssize_t i, j
+        cdef SubsequenceMetric metric = deepcopy(self.metric)
+
+        with nogil:
+            metric.reset(self.x)
+            for i in range(offset, offset + batch_size):
+                metric.persistent_profile(
+                    self.subsequence,
+                    self.x,
+                    i,
+                    &self.distance_profile[i, 0],
+                )
+
+
+def _subsequence_distance_profile(
+    np.ndarray y,
+    TSArray x,
+    Py_ssize_t dim,
+    SubsequenceMetric metric,
+    n_jobs=None
+):
+    cdef double[:, :] out = np.empty(
+        (x.shape[0], x.shape[2] - y.shape[0] + 1), dtype=float
+    )
+
+    run_in_parallel(
+        _SubsequenceDistanceProfile(
+            y,
+            x,
+            dim,
+            metric,
+            out,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem",
+    )
     return out.base

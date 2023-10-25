@@ -7,7 +7,7 @@ from numpy cimport float64_t, ndarray
 from ..utils cimport TSArray
 from ..utils._misc cimport List
 
-
+# Threshold for when standard deviation is considered to be zero.
 cdef double EPSILON = 1e-13
 
 cdef class MetricList(List):
@@ -204,6 +204,34 @@ cdef class SubsequenceMetric:
         double threshold,
         double **distances,
         Py_ssize_t **indicies,
+    ) noexcept nogil
+
+    cdef void transient_profile(
+        self,
+        SubsequenceView *s,
+        TSArray x,
+        Py_ssize_t i,
+        double *dp,
+    ) noexcept nogil
+
+    cdef void persistent_profile(
+        self,
+        Subsequence *s,
+        TSArray x,
+        Py_ssize_t i,
+        double *dp,
+    ) noexcept nogil
+
+    cdef void _distance_profile(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        double *dp,
     ) noexcept nogil
 
     cdef double _distance(

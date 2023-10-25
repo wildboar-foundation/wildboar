@@ -20,6 +20,7 @@ from ._cdistance import (
     _pairwise_distance,
     _pairwise_subsequence_distance,
     _singleton_pairwise_distance,
+    _subsequence_distance_profile,
     _subsequence_match,
 )
 from ._elastic import (
@@ -1053,3 +1054,72 @@ def argmin_distance(
             return indices
     else:
         raise ValueError(f"The parameter dim must be dim ({dim}) < n_dims ({n_dims})")
+
+
+def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=None):
+    """
+    Compute the distance profile.
+
+    The distance profile of shape `(n_samples, n_timestep - yn_timestep + 1)`
+    corresponds to the distance of the subsequence y for every time point
+    in x.
+
+    Parameters
+    ----------
+    y : array-like of shape (yn_timestep, )
+        The subsequence.
+    x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
+    or (n_samples, n_dims, n_timestep)
+        The input data.
+    dim : int, optional
+        The dim to search for shapelets.
+    metric : str or callable, optional
+        The distance metric
+
+        See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
+    metric_params : dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
+    n_jobs : int, optional
+        The number of parallel jobs to run.
+
+    Returns
+    -------
+    ndarray of shape (n_samples, n_timestep - yn_timestep + 1) or\
+            (n_timestep - yn_timestep + 1, )
+        The distance between every subsequence in `x` to `y`.
+
+    Examples
+    --------
+    >>> from wildboar.datasets import load_dataset
+    >>> from wildboar.distance import distance_profile
+    >>> X, _ = load_dataset("ECG200")
+    >>> distance_profile(X[0], X[1:].reshape(-1))
+    array([14.00120332, 14.41943788, 14.81597243, ...,  4.75219094,
+           5.72681005,  6.70155561])
+    """
+    y = _validate_subsequence(y)
+    if len(y) > 1:
+        raise ValueError("A single subsequence expected, got %d" % len(y))
+
+    y = y[0]
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
+
+    if y.shape[0] > x.shape[-1]:
+        raise ValueError(
+            "Invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
+        )
+
+    Metric = _SUBSEQUENCE_METRICS[metric]
+    metric_params = metric_params if metric_params is not None else {}
+
+    dp = _subsequence_distance_profile(
+        y, _check_ts_array(x), dim, Metric(**metric_params), n_jobs
+    )
+
+    if dp.shape[0] == 1:
+        return dp[0]
+    else:
+        return dp

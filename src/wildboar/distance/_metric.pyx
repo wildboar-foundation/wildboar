@@ -202,6 +202,46 @@ cdef class ScaledEuclideanSubsequenceMetric(ScaledSubsequenceMetric):
             indicies,
         )
 
+    cdef void transient_profile(
+        self,
+        SubsequenceView *s,
+        TSArray X,
+        Py_ssize_t index,
+        double *dp,
+    ) noexcept nogil:
+        cdef Py_ssize_t i
+        for i in range(X.shape[2] - s.length + 1):
+            dp[i] = scaled_euclidean_distance(
+                &X[s.index, s.dim, s.start],
+                s.length,
+                s.mean,
+                s.std if s.std != 0.0 else 1.0,
+                &X[index, s.dim, i],
+                s.length,
+                self.X_buffer,
+                NULL,
+            )
+
+    cdef void persistent_profile(
+        self,
+        Subsequence *s,
+        TSArray X,
+        Py_ssize_t index,
+        double *dp,
+    ) noexcept nogil:
+        cdef Py_ssize_t i
+        for i in range(X.shape[2] - s.length + 1):
+            dp[i] = scaled_euclidean_distance(
+                s.data,
+                s.length,
+                s.mean,
+                s.std if s.std != 0.0 else 1.0,
+                &X[index, s.dim, i],
+                s.length,
+                self.X_buffer,
+                NULL,
+            )
+
 
 cdef class ManhattanSubsequenceMetric(SubsequenceMetric):
     def __init__(self):
