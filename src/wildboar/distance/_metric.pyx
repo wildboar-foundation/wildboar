@@ -52,8 +52,8 @@ cdef class EuclideanSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return euclidean_distance_matches(
             s, s_len, x, x_len, threshold, distances, indicies,
@@ -87,8 +87,8 @@ cdef class NormalizedEuclideanSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return normalized_euclidean_distance_matches(
             s, s_len, x, x_len, threshold, distances, indicies,
@@ -122,125 +122,172 @@ cdef class ScaledEuclideanSubsequenceMetric(ScaledSubsequenceMetric):
 
         return 0
 
-    cdef double transient_distance(
+    cdef double _distance(
         self,
-        SubsequenceView *s,
-        TSArray X,
-        Py_ssize_t index,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         return scaled_euclidean_distance(
-            &X[s.index, s.dim, s.start],
-            s.length,
-            s.mean,
-            s.std if s.std != 0.0 else 1.0,
-            &X[index, s.dim, 0],
-            X.shape[2],
+            s,
+            s_len,
+            s_mean,
+            s_std,
+            x,
+            x_len,
             self.X_buffer,
             return_index,
         )
 
-    cdef double persistent_distance(
+    cdef Py_ssize_t _matches(
         self,
-        Subsequence *s,
-        TSArray X,
-        Py_ssize_t index,
-        Py_ssize_t *return_index=NULL,
-    ) noexcept nogil:
-        return scaled_euclidean_distance(
-            s.data,
-            s.length,
-            s.mean,
-            s.std if s.std != 0.0 else 1.0,
-            &X[index, s.dim, 0],
-            X.shape[2],
-            self.X_buffer,
-            return_index,
-        )
-
-    cdef Py_ssize_t transient_matches(
-        self,
-        SubsequenceView *v,
-        TSArray X,
-        Py_ssize_t index,
+        double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        double *x,
+        Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return scaled_euclidean_distance_matches(
-            &X[v.index, v.dim, v.start],
-            v.length,
-            v.mean,
-            v.std if v.std != 0.0 else 1.0,
-            &X[index, v.dim, 0],
-            X.shape[2],
+            s,
+            s_len,
+            s_mean,
+            s_std,
+            x,
+            x_len,
             self.X_buffer,
             threshold,
             distances,
-            indicies,
+            indicies
         )
 
-    cdef Py_ssize_t persistent_matches(
-        self,
-        Subsequence *s,
-        TSArray X,
-        Py_ssize_t index,
-        double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
-    ) noexcept nogil:
-        return scaled_euclidean_distance_matches(
-            s.data,
-            s.length,
-            s.mean,
-            s.std if s.std != 0.0 else 1.0,
-            &X[index, s.dim, 0],
-            X.shape[2],
-            self.X_buffer,
-            threshold,
-            distances,
-            indicies,
-        )
+    # cdef double transient_distance(
+    #     self,
+    #     SubsequenceView *s,
+    #     TSArray X,
+    #     Py_ssize_t index,
+    #     Py_ssize_t *return_index=NULL,
+    # ) noexcept nogil:
+    #     return self._distance(
+    #         &X[s.index, s.dim, s.start],
+    #         s.length,
+    #         s.mean,
+    #         s.std if s.std != 0.0 else 1.0,
+    #         &X[index, s.dim, 0],
+    #         X.shape[2],
+    #         return_index,
+    #     )
 
-    cdef void transient_profile(
-        self,
-        SubsequenceView *s,
-        TSArray X,
-        Py_ssize_t index,
-        double *dp,
-    ) noexcept nogil:
-        cdef Py_ssize_t i
-        for i in range(X.shape[2] - s.length + 1):
-            dp[i] = scaled_euclidean_distance(
-                &X[s.index, s.dim, s.start],
-                s.length,
-                s.mean,
-                s.std if s.std != 0.0 else 1.0,
-                &X[index, s.dim, i],
-                s.length,
-                self.X_buffer,
-                NULL,
-            )
+    # cdef double persistent_distance(
+    #     self,
+    #     Subsequence *s,
+    #     TSArray X,
+    #     Py_ssize_t index,
+    #     Py_ssize_t *return_index=NULL,
+    # ) noexcept nogil:
+    #     return scaled_euclidean_distance(
+    #         s.data,
+    #         s.length,
+    #         s.mean,
+    #         s.std if s.std != 0.0 else 1.0,
+    #         &X[index, s.dim, 0],
+    #         X.shape[2],
+    #         self.X_buffer,
+    #         return_index,
+    #     )
 
-    cdef void persistent_profile(
-        self,
-        Subsequence *s,
-        TSArray X,
-        Py_ssize_t index,
-        double *dp,
-    ) noexcept nogil:
-        cdef Py_ssize_t i
-        for i in range(X.shape[2] - s.length + 1):
-            dp[i] = scaled_euclidean_distance(
-                s.data,
-                s.length,
-                s.mean,
-                s.std if s.std != 0.0 else 1.0,
-                &X[index, s.dim, i],
-                s.length,
-                self.X_buffer,
-                NULL,
-            )
+    # cdef Py_ssize_t transient_matches(
+    #     self,
+    #     SubsequenceView *v,
+    #     TSArray X,
+    #     Py_ssize_t index,
+    #     double threshold,
+    #     double *distances,
+    #     Py_ssize_t *indicies,
+    # ) noexcept nogil:
+    #     return scaled_euclidean_distance_matches(
+    #         &X[v.index, v.dim, v.start],
+    #         v.length,
+    #         v.mean,
+    #         v.std if v.std != 0.0 else 1.0,
+    #         &X[index, v.dim, 0],
+    #         X.shape[2],
+    #         self.X_buffer,
+    #         threshold,
+    #         distances,
+    #         indicies,
+    #     )
+
+    # cdef Py_ssize_t persistent_matches(
+    #     self,
+    #     Subsequence *s,
+    #     TSArray X,
+    #     Py_ssize_t index,
+    #     double threshold,
+    #     double *distances,
+    #     Py_ssize_t *indicies,
+    # ) noexcept nogil:
+    #     return scaled_euclidean_distance_matches(
+    #         s.data,
+    #         s.length,
+    #         s.mean,
+    #         s.std if s.std != 0.0 else 1.0,
+    #         &X[index, s.dim, 0],
+    #         X.shape[2],
+    #         self.X_buffer,
+    #         threshold,
+    #         distances,
+    #         indicies,
+    #     )
+
+    # cdef void transient_profile(
+    #     self,
+    #     SubsequenceView *s,
+    #     TSArray X,
+    #     Py_ssize_t index,
+    #     double *dp,
+    # ) noexcept nogil:
+    #     scaled_euclidean_distance_matches(
+    #         &X[v.index, v.dim, v.start],
+    #         v.length,
+    #         v.mean,
+    #         v.std if v.std != 0.0 else 1.0,
+    #         &X[index, v.dim, 0],
+    #         X.shape[2],
+    #         self.X_buffer,
+    #         INFINITY,
+    #         distances,
+    #         NULL,
+    #     )
+
+    # cdef void persistent_profile(
+    #     self,
+    #     Subsequence *s,
+    #     TSArray X,
+    #     Py_ssize_t index,
+    #     double *dp,
+    # ) noexcept nogil:
+    #     scaled_euclidean_distance_matches(
+    #         s.data,
+    #         s.length,
+    #         s.mean,
+    #         s.std if s.std != 0.0 else 1.0,
+    #         &X[index, s.dim, 0],
+    #         X.shape[2],
+    #         self.X_buffer,
+    #         INFINITY,
+    #         dp,
+    #         NULL,
+    #     )
 
 
 cdef class ManhattanSubsequenceMetric(SubsequenceMetric):
@@ -270,8 +317,8 @@ cdef class ManhattanSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return manhattan_distance_matches(
             s, s_len, x, x_len, threshold, distances, indicies
@@ -310,8 +357,8 @@ cdef class MinkowskiSubsequenceMetric(SubsequenceMetric):
         const double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return minkowski_distance_matches(
             self.p, s, s_len, x, x_len, threshold, distances, indicies
@@ -345,8 +392,8 @@ cdef class ChebyshevSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return chebyshev_distance_matches(
             s, s_len, x, x_len, threshold, distances, indicies
@@ -380,8 +427,8 @@ cdef class CosineSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t n_matches = cosine_similarity_matches(
@@ -389,7 +436,7 @@ cdef class CosineSubsequenceMetric(SubsequenceMetric):
         )
 
         for i in range(n_matches):
-            distances[0][i] = 1 - distances[0][i]
+            distances[i] = 1 - distances[i]
 
         return n_matches
 
@@ -430,8 +477,8 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         cdef Py_ssize_t i
         cdef Py_ssize_t n_matches = cosine_similarity_matches(
@@ -440,13 +487,13 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
         cdef double cosine
 
         for i in range(n_matches):
-            cosine = distances[0][i]
+            cosine = distances[i]
             if cosine > 1:
-                distances[0][i] = 0
+                distances[i] = 0
             elif cosine < -1:
-                distances[0][i] = 1
+                distances[i] = 1
             else:
-                distances[0][i] = acos(cosine) / M_PI
+                distances[i] = acos(cosine) / M_PI
 
         return n_matches
 
@@ -797,8 +844,8 @@ cdef Py_ssize_t normalized_euclidean_distance_matches(
     const double *T,
     Py_ssize_t t_length,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) except -1 nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -808,8 +855,6 @@ cdef Py_ssize_t normalized_euclidean_distance_matches(
     cdef IncStats S_stats, T_stats, ST_stats
     cdef Py_ssize_t n_matches = 0
 
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
     for i in range(t_length - s_length + 1):
         inc_stats_init(&S_stats)
         inc_stats_init(&T_stats)
@@ -826,13 +871,9 @@ cdef Py_ssize_t normalized_euclidean_distance_matches(
             dist = sqrt(0.5 * inc_stats_variance(&ST_stats) / dist)
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = dist
             n_matches += 1
 
     return n_matches
@@ -844,8 +885,8 @@ cdef Py_ssize_t euclidean_distance_matches(
     const double *T,
     Py_ssize_t t_length,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) except -1 nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -854,9 +895,6 @@ cdef Py_ssize_t euclidean_distance_matches(
     cdef Py_ssize_t j
     cdef double x
     cdef Py_ssize_t n_matches = 0
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     threshold = threshold * threshold
     for i in range(t_length - s_length + 1):
@@ -869,13 +907,9 @@ cdef Py_ssize_t euclidean_distance_matches(
             x -= S[j]
             dist += x * x
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = sqrt(dist)
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = sqrt(dist)
             n_matches += 1
 
     return n_matches
@@ -890,8 +924,8 @@ cdef Py_ssize_t scaled_euclidean_distance_matches(
    Py_ssize_t t_length,
    double *X_buffer,
    double threshold,
-   double** distances,
-   Py_ssize_t** matches,
+   double *distances,
+   Py_ssize_t *matches,
 ) noexcept nogil:
     cdef double current_value = 0
     cdef double mean = 0
@@ -909,12 +943,8 @@ cdef Py_ssize_t scaled_euclidean_distance_matches(
     cdef Py_ssize_t tmp_capacity
     cdef Py_ssize_t n_matches = 0
 
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
     n_matches = 0
-
     threshold = threshold * threshold
-
     for i in range(t_length):
         current_value = T[i]
         ex += current_value
@@ -944,15 +974,10 @@ cdef Py_ssize_t scaled_euclidean_distance_matches(
             )
 
             if dist <= threshold:
-                tmp_capacity = capacity
-                realloc_array(
-                    <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity)
-                realloc_array(
-                    <void**> distances, n_matches, sizeof(double), &capacity)
+                if matches != NULL:
+                    matches[n_matches] = (i + 1) - s_length
 
-                matches[0][n_matches] = (i + 1) - s_length
-                distances[0][n_matches] = sqrt(dist)
-
+                distances[n_matches] = sqrt(dist)
                 n_matches += 1
 
             current_value = X_buffer[j]
@@ -997,8 +1022,8 @@ cdef Py_ssize_t manhattan_distance_matches(
     const double *T,
     Py_ssize_t t_length,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -1007,9 +1032,6 @@ cdef Py_ssize_t manhattan_distance_matches(
     cdef Py_ssize_t j
     cdef double x
     cdef Py_ssize_t n_matches = 0
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(t_length - s_length + 1):
         dist = 0
@@ -1020,13 +1042,9 @@ cdef Py_ssize_t manhattan_distance_matches(
             dist += fabs(T[i + j] - S[j])
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = dist
             n_matches += 1
 
     return n_matches
@@ -1067,8 +1085,8 @@ cdef Py_ssize_t minkowski_distance_matches(
     const double *T,
     Py_ssize_t t_length,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -1077,9 +1095,6 @@ cdef Py_ssize_t minkowski_distance_matches(
     cdef Py_ssize_t j
     cdef double x
     cdef Py_ssize_t n_matches = 0
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     threshold = pow(threshold, p)
     for i in range(t_length - s_length + 1):
@@ -1091,13 +1106,9 @@ cdef Py_ssize_t minkowski_distance_matches(
             dist += pow(fabs(T[i + j] - S[j]), p)
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = pow(dist, 1.0 / p)
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = pow(dist, 1.0 / p)
             n_matches += 1
 
     return n_matches
@@ -1140,8 +1151,8 @@ cdef Py_ssize_t chebyshev_distance_matches(
     const double *T,
     Py_ssize_t t_length,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) noexcept nogil:
     cdef double c = 0
     cdef double max_dist
@@ -1151,9 +1162,6 @@ cdef Py_ssize_t chebyshev_distance_matches(
     cdef Py_ssize_t j
     cdef double x
     cdef Py_ssize_t n_matches = 0
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(t_length - s_length + 1):
         max_dist = -INFINITY
@@ -1165,13 +1173,9 @@ cdef Py_ssize_t chebyshev_distance_matches(
             max_dist = c if c > max_dist else max_dist
 
         if max_dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = max_dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = max_dist
             n_matches += 1
 
     return n_matches
@@ -1220,8 +1224,8 @@ cdef Py_ssize_t cosine_similarity_matches(
     const double *T,
     Py_ssize_t t_length,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) noexcept nogil:
     cdef double prod = 0, sim, s_norm, t_norm
     cdef Py_ssize_t capacity = 1
@@ -1230,9 +1234,6 @@ cdef Py_ssize_t cosine_similarity_matches(
     cdef Py_ssize_t j
     cdef double x
     cdef Py_ssize_t n_matches = 0
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(t_length - s_length + 1):
         prod = 0
@@ -1245,13 +1246,9 @@ cdef Py_ssize_t cosine_similarity_matches(
 
         sim = prod / (sqrt(s_norm) * sqrt(t_norm))
         if sim >= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = sim
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = sim
             n_matches += 1
 
     return n_matches

@@ -133,8 +133,8 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indices,
+        double *distances,
+        Py_ssize_t *indices,
     ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).transient_matches(
             v, X, index, threshold, distances, indices
@@ -147,8 +147,8 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indices,
+        double *distances,
+        Py_ssize_t *indices,
     ) noexcept nogil:
         return (<SubsequenceMetric> self.get(metric)).persistent_matches(
             s, X, index, threshold, distances, indices
@@ -264,7 +264,7 @@ cdef class SubsequenceMetric:
             &X[v.index, v.dim, v.start],
             v.length,
             v.mean,
-            v.std,
+            v.std if v.std != 0 else 1.0,
             v.extra,
             &X[index, v.dim, 0],
             X.shape[2],
@@ -282,7 +282,7 @@ cdef class SubsequenceMetric:
             v.data,
             v.length,
             v.mean,
-            v.std,
+            v.std if v.std != 0 else 1.0,
             v.extra,
             &X[index, v.dim, 0],
             X.shape[2],
@@ -295,14 +295,14 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return self._matches(
             &X[v.index, v.dim, v.start],
             v.length,
             v.mean,
-            v.std,
+            v.std if v.std != 0 else 1.0,
             v.extra,
             &X[index, v.dim, 0],
             X.shape[2],
@@ -317,14 +317,14 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return self._matches(
             s.data,
             s.length,
             s.mean,
-            s.std,
+            s.std if s.std != 0 else 1.0,
             s.extra,
             &X[index, s.dim, 0],
             X.shape[2],
@@ -344,7 +344,7 @@ cdef class SubsequenceMetric:
             &x[s.index, s.dim, s.start],
             s.length,
             s.mean,
-            s.std,
+            s.std if s.std != 0 else 1.0,
             s.extra,
             &x[i, s.dim, 0],
             x.shape[2],
@@ -362,7 +362,7 @@ cdef class SubsequenceMetric:
             s.data,
             s.length,
             s.mean,
-            s.std,
+            s.std if s.std != 0 else 1.0,
             s.extra,
             &x[i, s.dim, 0],
             x.shape[2],
@@ -380,16 +380,16 @@ cdef class SubsequenceMetric:
         Py_ssize_t x_len,
         double *dp,
     ) noexcept nogil:
-        cdef Py_ssize_t i
-        for i in range(x_len - s_len + 1):
-            dp[i] = self._distance(
+        self._matches(
                 s,
                 s_len,
                 s_mean,
                 s_std,
                 s_extra,
-                x + i,
-                s_len,
+                x,
+                x_len,
+                INFINITY,
+                dp,
                 NULL,
             )
 
@@ -416,10 +416,10 @@ cdef class SubsequenceMetric:
         const double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
-        return -1
+        return 0
 
 
 cdef class ScaledSubsequenceMetric(SubsequenceMetric):
@@ -661,8 +661,8 @@ def _subsequence_match(
     n_jobs,
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
-    cdef double *distances
-    cdef Py_ssize_t *indicies
+    cdef double *distances = <double*> malloc(sizeof(double) * x.shape[2])
+    cdef Py_ssize_t *indicies = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * x.shape[2])
     cdef Py_ssize_t i, n_matches
 
     cdef list distances_list = []
@@ -671,19 +671,23 @@ def _subsequence_match(
     cdef Subsequence subsequence
     metric.reset(x)
     metric.from_array(&subsequence, (dim, y))
-    for i in range(x.shape[0]):
-        n_matches = metric.persistent_matches(
-            &subsequence,
-            x,
-            i,
-            threshold,
-            &distances,
-            &indicies,
-        )
-        indicies_list.append(_new_match_array(indicies, n_matches))
-        distances_list.append(_new_distance_array(distances, n_matches))
-        free(distances)
-        free(indicies)
+    with nogil:
+        for i in range(x.shape[0]):
+            n_matches = metric.persistent_matches(
+                &subsequence,
+                x,
+                i,
+                threshold,
+                distances,
+                indicies,
+            )
+            with gil:
+                indicies_list.append(_new_match_array(indicies, n_matches))
+                distances_list.append(_new_distance_array(distances, n_matches))
+
+    free(distances)
+    free(indicies)
+
     metric.free_persistent(&subsequence)
     return indicies_list, distances_list
 
@@ -697,8 +701,8 @@ def _paired_subsequence_match(
     n_jobs,
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
-    cdef double *distances
-    cdef Py_ssize_t *indicies
+    cdef double *distances = <double*> malloc(sizeof(double) * x.shape[2])
+    cdef Py_ssize_t *indices = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * x.shape[2])
     cdef Py_ssize_t i, n_matches
 
     cdef list distances_list = []
@@ -713,14 +717,16 @@ def _paired_subsequence_match(
             x,
             i,
             threshold,
-            &distances,
-            &indicies,
+            distances,
+            indices,
         )
-        indicies_list.append(_new_match_array(indicies, n_matches))
+
+        indicies_list.append(_new_match_array(indices, n_matches))
         distances_list.append(_new_distance_array(distances, n_matches))
-        free(distances)
-        free(indicies)
         metric.free_persistent(&subsequence)
+
+    free(distances)
+    free(indices)
 
     return indicies_list, distances_list
 
@@ -1057,7 +1063,7 @@ def _subsequence_distance_profile(
     SubsequenceMetric metric,
     n_jobs=None
 ):
-    cdef double[:, :] out = np.empty(
+    cdef double[:, :] out = np.ones(
         (x.shape[0], x.shape[2] - y.shape[0] + 1), dtype=float
     )
 

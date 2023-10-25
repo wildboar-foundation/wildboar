@@ -500,8 +500,8 @@ cdef Py_ssize_t scaled_dtw_matches(
     double *cb_1,
     double *cb_2,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) noexcept nogil:
     cdef double current_value = 0
     cdef double mean = 0
@@ -522,13 +522,8 @@ cdef Py_ssize_t scaled_dtw_matches(
     cdef Py_ssize_t I
     cdef Py_ssize_t buffer_pos
 
-    cdef Py_ssize_t capacity = 1
-    cdef Py_ssize_t tmp_capacity
     threshold = threshold * threshold
     cdef Py_ssize_t n_matches = 0
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(t_length):
         current_value = T[i]
@@ -611,18 +606,9 @@ cdef Py_ssize_t scaled_dtw_matches(
                         )
 
                         if dist <= threshold:
-                            tmp_capacity = capacity
-                            realloc_array(
-                                <void**> matches,
-                                n_matches,
-                                sizeof(Py_ssize_t),
-                                &tmp_capacity
-                            )
-                            realloc_array(
-                                <void**> distances, n_matches, sizeof(double), &capacity
-                            )
-                            matches[0][n_matches] = (i + 1) - s_length
-                            distances[0][n_matches] = sqrt(dist)
+                            if matches != NULL:
+                                matches[n_matches] = (i + 1) - s_length
+                            distances[n_matches] = sqrt(dist)
                             n_matches += 1
 
             current_value = X_buffer[j]
@@ -678,8 +664,8 @@ cdef Py_ssize_t dtw_subsequence_matches(
     double *cost_prev,
     double *weight_vector,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -688,9 +674,6 @@ cdef Py_ssize_t dtw_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(length):
         dist = dtw_distance(
@@ -706,13 +689,9 @@ cdef Py_ssize_t dtw_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = sqrt(dist)
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = sqrt(dist)
             n_matches += 1
 
     return n_matches
@@ -764,8 +743,8 @@ cdef Py_ssize_t adtw_subsequence_matches(
     double *cost_prev,
     double penalty,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -774,9 +753,6 @@ cdef Py_ssize_t adtw_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(length):
         dist = adtw_distance(
@@ -792,13 +768,9 @@ cdef Py_ssize_t adtw_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = sqrt(dist)
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = sqrt(dist)
             n_matches += 1
 
     return n_matches
@@ -856,8 +828,8 @@ cdef Py_ssize_t ddtw_subsequence_matches(
     double *weight_vector,
     double *T_buffer,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -866,10 +838,7 @@ cdef Py_ssize_t ddtw_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
-    # Calling code expects the above to be allocated even if n_matches == 0
     if s_length < 3:
         return 0
 
@@ -888,13 +857,9 @@ cdef Py_ssize_t ddtw_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = sqrt(dist)
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = sqrt(dist)
             n_matches += 1
 
     return n_matches
@@ -1268,8 +1233,8 @@ cdef Py_ssize_t lcss_subsequence_matches(
     double *cost_prev,
     double *weight_vector,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -1277,9 +1242,6 @@ cdef Py_ssize_t lcss_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(length):
         dist = lcss_distance(
@@ -1298,13 +1260,9 @@ cdef Py_ssize_t lcss_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = dist
             n_matches += 1
 
     return n_matches
@@ -1440,8 +1398,8 @@ cdef Py_ssize_t erp_subsequence_matches(
     double *cost,
     double *cost_prev,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -1449,9 +1407,6 @@ cdef Py_ssize_t erp_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(length):
         dist = erp_distance(
@@ -1469,13 +1424,9 @@ cdef Py_ssize_t erp_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = dist
             n_matches += 1
 
     return n_matches
@@ -1594,8 +1545,8 @@ cdef Py_ssize_t edr_subsequence_matches(
     double *cost_prev,
     double *weight_vector,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -1603,9 +1554,6 @@ cdef Py_ssize_t edr_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(length):
         dist = edr_distance(
@@ -1622,13 +1570,9 @@ cdef Py_ssize_t edr_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = dist
             n_matches += 1
 
     return n_matches
@@ -1751,8 +1695,8 @@ cdef Py_ssize_t msm_subsequence_matches(
     double *cost_prev,
     double *cost_y,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -1760,9 +1704,6 @@ cdef Py_ssize_t msm_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(length):
         dist = msm_distance(
@@ -1779,13 +1720,9 @@ cdef Py_ssize_t msm_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = dist
             n_matches += 1
 
     return n_matches
@@ -1942,8 +1879,8 @@ cdef Py_ssize_t twe_subsequence_matches(
     double *cost_prev,
     double *weight_vector,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches
+    double *distances,
+    Py_ssize_t *matches
 ) noexcept nogil:
     cdef double dist = 0
     cdef Py_ssize_t capacity = 1
@@ -1951,9 +1888,6 @@ cdef Py_ssize_t twe_subsequence_matches(
     cdef Py_ssize_t i
     cdef Py_ssize_t n_matches = 0
     cdef Py_ssize_t length = t_length - s_length + 1
-
-    matches[0] = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * capacity)
-    distances[0] = <double*> malloc(sizeof(double) * capacity)
 
     for i in range(length):
         dist = twe_distance(
@@ -1970,13 +1904,9 @@ cdef Py_ssize_t twe_subsequence_matches(
         )
 
         if dist <= threshold:
-            tmp_capacity = capacity
-            realloc_array(
-                <void**> matches, n_matches, sizeof(Py_ssize_t), &tmp_capacity
-            )
-            realloc_array(<void**> distances, n_matches, sizeof(double), &capacity)
-            matches[0][n_matches] = i
-            distances[0][n_matches] = dist
+            if matches != NULL:
+                matches[n_matches] = i
+            distances[n_matches] = dist
             n_matches += 1
 
     return n_matches
@@ -2086,18 +2016,22 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         deque_init(&self.dl, 2 * _compute_warp_width(n_timestep, self.r) + 2)
         deque_init(&self.du, 2 * _compute_warp_width(n_timestep, self.r) + 2)
 
-    cdef double transient_distance(
+    cdef double _distance(
         self,
-        SubsequenceView *s,
-        TSArray X,
-        Py_ssize_t index,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
-        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
-        cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
+        cdef Py_ssize_t warp_width = _compute_warp_width(s_len, self.r)
+        cdef DtwExtra *dtw_extra = <DtwExtra*> s_extra
         find_min_max(
-            &X[index, s.dim, 0],
-            X.shape[2],
+            x,
+            x_len,
             warp_width,
             self.lower,
             self.upper,
@@ -2106,12 +2040,12 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         )
 
         return scaled_dtw_subsequence_distance(
-            &X[s.index, s.dim, s.start],
-            s.length,
-            s.mean,
-            s.std if s.std != 0.0 else 1.0,
-            &X[index, s.dim, 0],
-            X.shape[2],
+            s,
+            s_len,
+            s_mean,
+            s_std,
+            x,
+            x_len,
             warp_width,
             self.X_buffer,
             self.cost,
@@ -2126,63 +2060,24 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
             return_index,
         )
 
-    cdef double persistent_distance(
+    cdef Py_ssize_t _matches(
         self,
-        Subsequence *s,
-        TSArray X,
-        Py_ssize_t index,
-        Py_ssize_t *return_index=NULL,
-    ) noexcept nogil:
-        cdef DtwExtra *extra = <DtwExtra*> s.extra
-        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
-
-        find_min_max(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            warp_width,
-            self.lower,
-            self.upper,
-            &self.dl,
-            &self.du,
-        )
-
-        cdef double distance = scaled_dtw_subsequence_distance(
-            s.data,
-            s.length,
-            s.mean,
-            s.std if s.std != 0.0 else 1.0,
-            &X[index, s.dim, 0],
-            X.shape[2],
-            warp_width,
-            self.X_buffer,
-            self.cost,
-            self.cost_prev,
-            extra[0].lower,
-            extra[0].upper,
-            self.lower,
-            self.upper,
-            self.cb,
-            self.cb_1,
-            self.cb_2,
-            return_index,
-        )
-
-        return distance
-
-    cdef Py_ssize_t transient_matches(
-        self,
-        SubsequenceView *s,
-        TSArray X,
-        Py_ssize_t index,
+        double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        double *x,
+        Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
-        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
-        cdef DtwExtra *dtw_extra = <DtwExtra*> s.extra
+        cdef Py_ssize_t warp_width = _compute_warp_width(s_len, self.r)
+        cdef DtwExtra *dtw_extra = <DtwExtra*> s_extra
         find_min_max(
-            &X[index, s.dim, 0],
-            X.shape[2],
+            x,
+            x_len,
             warp_width,
             self.lower,
             self.upper,
@@ -2191,65 +2086,18 @@ cdef class ScaledDtwSubsequenceMetric(ScaledSubsequenceMetric):
         )
 
         return scaled_dtw_matches(
-            &X[s.index, s.dim, s.start],
-            s.length,
-            s.mean,
-            s.std if s.std != 0.0 else 1.0,
-            &X[index, s.dim, 0],
-            X.shape[2],
+            s,
+            s_len,
+            s_mean,
+            s_std,
+            x,
+            x_len,
             warp_width,
             self.X_buffer,
             self.cost,
             self.cost_prev,
             dtw_extra[0].lower,
             dtw_extra[0].upper,
-            self.lower,
-            self.upper,
-            self.cb,
-            self.cb_1,
-            self.cb_2,
-            threshold,
-            distances,
-            indicies,
-        )
-
-    cdef Py_ssize_t persistent_matches(
-        self,
-        Subsequence *s,
-        TSArray X,
-        Py_ssize_t index,
-        double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
-    ) noexcept nogil:
-        cdef double *s_lower
-        cdef double *s_upper
-        cdef DtwExtra *extra = <DtwExtra*> s.extra
-        cdef Py_ssize_t warp_width = _compute_warp_width(s.length, self.r)
-
-        find_min_max(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            warp_width,
-            self.lower,
-            self.upper,
-            &self.dl,
-            &self.du,
-        )
-
-        return scaled_dtw_matches(
-            s.data,
-            s.length,
-            s.mean,
-            s.std if s.std != 0.0 else 1.0,
-            &X[index, s.dim, 0],
-            X.shape[2],
-            warp_width,
-            self.X_buffer,
-            self.cost,
-            self.cost_prev,
-            extra.lower,
-            extra.upper,
             self.lower,
             self.upper,
             self.cb,
@@ -2422,8 +2270,8 @@ cdef class DtwSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return dtw_subsequence_matches(
             s,
@@ -2483,8 +2331,8 @@ cdef class AmercingDtwSubsequenceMetric(DtwSubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return adtw_subsequence_matches(
             s,
@@ -2572,8 +2420,8 @@ cdef class WeightedDtwSubsequenceMetric(DtwSubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return dtw_subsequence_matches(
             s,
@@ -2650,8 +2498,8 @@ cdef class DerivativeDtwSubsequenceMetric(DtwSubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_matches(
@@ -2743,8 +2591,8 @@ cdef class WeightedDerivativeDtwSubsequenceMetric(DerivativeDtwSubsequenceMetric
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         average_slope(s, s_len, self.S_buffer)
         return ddtw_subsequence_matches(
@@ -2836,8 +2684,8 @@ cdef class LcssSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return lcss_subsequence_matches(
             s,
@@ -2938,8 +2786,8 @@ cdef class EdrSubsequenceMetric(ScaledSubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         if isnan(self.epsilon):
             epsilon = s_std / 4.0
@@ -3041,8 +2889,8 @@ cdef class TweSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return twe_subsequence_matches(
             s,
@@ -3141,8 +2989,8 @@ cdef class MsmSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return msm_subsequence_matches(
             s,
@@ -3253,8 +3101,8 @@ cdef class ErpSubsequenceMetric(SubsequenceMetric):
         double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
         return erp_subsequence_matches(
             s,

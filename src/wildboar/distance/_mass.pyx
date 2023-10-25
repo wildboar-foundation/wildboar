@@ -149,11 +149,9 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
-        distances[0] = <double*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
-        indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         cumulative_mean_std(
             &X[index, s.dim, 0],
             X.shape[2],
@@ -172,13 +170,13 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
             self.std_x,
             self.x_buffer,
             self.y_buffer,
-            distances[0],
+            distances,
         )
         cdef Py_ssize_t i, j
         j = 0
         for i in range(X.shape[2] - s.length + 1):
-            if distances[0][i] <= threshold:
-                distances[0][j] = distances[0][i]
+            if distances[i] <= threshold:
+                distances[j] = distances[i]
                 j += 1
         return j
 
@@ -188,11 +186,9 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil:
-        distances[0] = <double*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
-        indicies[0] = <Py_ssize_t*> malloc(sizeof(double) * X.shape[2] - s.length + 1)
         cumulative_mean_std(
             &X[index, s.dim, 0],
             X.shape[2],
@@ -211,14 +207,14 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
             self.std_x,
             self.x_buffer,
             self.y_buffer,
-            distances[0],
+            distances,
         )
         cdef Py_ssize_t i, j
         j = 0
         for i in range(X.shape[2] - s.length + 1):
-            if distances[0][i] <= threshold:
-                distances[0][j] = distances[0][i]
-                indicies[0][j] = i
+            if distances[i] <= threshold:
+                distances[j] = distances[i]
+                indicies[j] = i
                 j += 1
         return j
 

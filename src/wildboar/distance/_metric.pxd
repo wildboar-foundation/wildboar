@@ -46,8 +46,8 @@ cdef Py_ssize_t manhattan_distance_matches(
     const double *T,
     Py_ssize_t t_length,
     double threshold,
-    double **distances,
-    Py_ssize_t **matches,
+    double *distances,
+    Py_ssize_t *matches,
 ) noexcept nogil
 
 cdef double minkowski_distance(

@@ -112,9 +112,15 @@ _METRICS = {
     "angular": AngularMetric,
 }
 
-_THRESHOLD = {
-    "best": lambda x: max(np.mean(x) - 2.0 * np.std(x), np.min(x)),
-}
+
+def _std_below_mean(s):
+    def f(x):
+        return max(np.mean(x) - s * np.std(x), np.min(x))
+
+    return f
+
+
+_THRESHOLD = {"auto": _std_below_mean(2.0)}
 
 
 def _validate_subsequence(y):
@@ -406,7 +412,7 @@ def subsequence_match(  # noqa: PLR0912
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
         The input data
-    threshold : str, float or callable, optional
+    threshold : {"auto"}, float or callable, optional
         The distance threshold used to consider a subsequence matching. If no threshold
         is selected, `max_matches` defaults to 10.
 
@@ -442,18 +448,10 @@ def subsequence_match(  # noqa: PLR0912
 
     Returns
     -------
-    indicies : ndarray
-        The start index of matching subsequences. Return depends on input:
-
-        - if x.ndim > 1, return an ndarray of shape (n_samples, )
-        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
-
-        For each sample, the ndarray contains the .
-    distance : ndarray, optional
-        The distances of matching subsequences. Return depends on input:
-
-        - if x.ndim > 1, return an ndarray of shape (n_samples, )
-        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
+    indicies : ndarray of shape (n_samples, )
+        The start index of matching subsequences.
+    distance : ndarray of shape (n_samples, ), optional
+        The distances of matching subsequences.
     """
     y = _validate_subsequence(y)
     if len(y) > 1:
@@ -490,6 +488,15 @@ def subsequence_match(  # noqa: PLR0912
 
         threshold = np.inf
     elif isinstance(threshold, str):
+        # TODO(1.3)
+        if threshold == "best":
+            warnings.warn(
+                "threshold 'best' has been renamed to 'auto' in 1.2 "
+                "and will be removed in 1.3.",
+                UserWarning,
+            )
+            threshold = "auto"
+
         threshold_fn = check_option(_THRESHOLD, threshold, "threshold")
 
         def max_dist(d):
@@ -516,7 +523,7 @@ def subsequence_match(  # noqa: PLR0912
         )
         exclude = math.ceil(y.size * exclude)
 
-    indicies, distances = _subsequence_match(
+    indices, distances = _subsequence_match(
         y,
         _check_ts_array(x),
         threshold,
@@ -526,21 +533,26 @@ def subsequence_match(  # noqa: PLR0912
     )
 
     if max_dist is not None:
-        indicies, distances = _filter_by_max_dist(indicies, distances, max_dist)
+        indices, distances = _filter_by_max_dist(indices, distances, max_dist)
 
     if exclude:
-        indicies, distances = _exclude_trivial_matches(indicies, distances, exclude)
+        indices, distances = _exclude_trivial_matches(indices, distances, exclude)
 
     if max_matches:
-        indicies, distances = _filter_by_max_matches(indicies, distances, max_matches)
+        indices, distances = _filter_by_max_matches(indices, distances, max_matches)
+
+    indices = _format_return(_safe_jagged_array(indices), len(y), x.ndim)
+    if indices.size == 1:
+        indices = indices.reshape(1)
 
     if return_distance:
-        return (
-            _format_return(_safe_jagged_array(indicies), 1, x.ndim),
-            _format_return(_safe_jagged_array(distances), 1, x.ndim),
-        )
+        distances = _format_return(_safe_jagged_array(distances), len(y), x.ndim)
+        if distances.size == 1:
+            distances = distances.reshape(1)
+
+        return indices, distances
     else:
-        return _format_return(_safe_jagged_array(indicies), 1, x.ndim)
+        return indices
 
 
 def paired_subsequence_match(  # noqa: PLR0912
@@ -606,18 +618,10 @@ def paired_subsequence_match(  # noqa: PLR0912
 
     Returns
     -------
-    indicies : ndarray
-        The start index of matching subsequences. Return depends on input:
-
-        - if x.ndim > 1, return an ndarray of shape (n_samples, )
-        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None
-
-        For each sample, the ndarray contains the .
-    distance : ndarray, optional
-        The distances of matching subsequences. Return depends on input:
-
-        - if x.ndim > 1, return an ndarray of shape (n_samples, )
-        - if x.ndim == 1, return ndarray of shape (n_matches, ) or None.
+    indicies : ndarray of shape (n_samples, )
+        The start index of matching subsequences.
+    distance : ndarray of shape (n_samples, ), optional
+        The distances of matching subsequences.
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, dtype=np.double)
@@ -667,7 +671,7 @@ def paired_subsequence_match(  # noqa: PLR0912
     else:
         max_dist = None
 
-    indicies, distances = _paired_subsequence_match(
+    indices, distances = _paired_subsequence_match(
         y,
         _check_ts_array(x),
         threshold,
@@ -677,18 +681,23 @@ def paired_subsequence_match(  # noqa: PLR0912
     )
 
     if max_dist is not None:
-        indicies, distances = _filter_by_max_dist(indicies, distances, max_dist)
+        indices, distances = _filter_by_max_dist(indices, distances, max_dist)
 
     if max_matches:
-        indicies, distances = _filter_by_max_matches(indicies, distances, max_matches)
+        indices, distances = _filter_by_max_matches(indices, distances, max_matches)
+
+    indices = _format_return(_safe_jagged_array(indices), len(y), x.ndim)
+    if indices.size == 1:
+        indices = indices.reshape(1)
 
     if return_distance:
-        return (
-            _format_return(_safe_jagged_array(indicies), len(y), x.ndim),
-            _format_return(_safe_jagged_array(distances), len(y), x.ndim),
-        )
+        distances = _format_return(_safe_jagged_array(distances), len(y), x.ndim)
+        if distances.size == 1:
+            distances = distances.reshape(1)
+
+        return indices, distances
     else:
-        return _format_return(_safe_jagged_array(indicies), len(y), x.ndim)
+        return indices
 
 
 def paired_distance(  # noqa: PLR0912

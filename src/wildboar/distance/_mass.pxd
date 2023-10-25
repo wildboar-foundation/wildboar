@@ -10,9 +10,10 @@ cdef void _mass_distance(
     Py_ssize_t y_length,
     double mean,
     double std,
-    double *mean_x,    
-    double *std_x,     
-    complex *y_buffer, 
-    complex *x_buffer, 
-    double *dist,      
+    double *mean_x,
+    double *std_x,
+    complex *y_buffer,
+    complex *x_buffer,
+    double *dist,
 ) nogil
+

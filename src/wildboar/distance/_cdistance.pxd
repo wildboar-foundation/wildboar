@@ -98,8 +98,8 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indices,
+        double *distances,
+        Py_ssize_t *indices,
     ) noexcept nogil
 
     cdef Py_ssize_t persistent_matches(
@@ -109,8 +109,8 @@ cdef class SubsequenceMetricList(List):
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indices,
+        double *distances,
+        Py_ssize_t *indices,
     ) noexcept nogil
 
 
@@ -192,8 +192,8 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil
 
     cdef Py_ssize_t persistent_matches(
@@ -202,8 +202,8 @@ cdef class SubsequenceMetric:
         TSArray X,
         Py_ssize_t index,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil
 
     cdef void transient_profile(
@@ -256,8 +256,8 @@ cdef class SubsequenceMetric:
         const double *x,
         Py_ssize_t x_len,
         double threshold,
-        double **distances,
-        Py_ssize_t **indicies,
+        double *distances,
+        Py_ssize_t *indicies,
     ) noexcept nogil
 
 
