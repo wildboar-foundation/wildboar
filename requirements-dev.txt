@@ -1,5 +1,4 @@
 pytest
-pytest-benchmark
 requests
 networkx
 pre-commit
@@ -9,4 +8,5 @@ cython>=3.0.2
 setuptools_scm[toml]>=6.2
 setuptools>=48.0
 wheel
+pytest-codspeed
 git+https://github.com/isaksamsten/numpydoc-lint.git
