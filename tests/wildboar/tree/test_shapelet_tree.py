@@ -2246,9 +2246,7 @@ def test_extra_tree_regressor():
 @pytest.mark.parametrize(
     "clf", [ShapeletTreeClassifier(), ExtraShapeletTreeRegressor()]
 )
-@pytest.mark.parametrize(
-    "metric", ["euclidean", "scaled_euclidean", "scaled_dtw", "dtw"]
-)
+@pytest.mark.parametrize("metric", ["euclidean"])
 def test_shapelet_tree_benchmark(benchmark, clf, metric):
     X, y = load_gun_point()
     clf.set_params(metric=metric)

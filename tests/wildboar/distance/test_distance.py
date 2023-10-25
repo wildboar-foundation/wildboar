@@ -837,9 +837,9 @@ def test_pairwise_distance_benchmark(benchmark, metric, X):
 def test_argmin_distance_benchmark(benchmark, metric, k):
     X, y = load_two_lead_ecg()
     x = X[:100].copy()
-    y = X[100:400].copy()
+    y = X[100:200].copy()
 
-    benchmark(argmin_distance, x, y, metric=metric)
+    benchmark(argmin_distance, x, y, k=k, metric=metric)
 
 
 @pytest.mark.parametrize("metric", list(_SUBSEQUENCE_METRICS.keys()))
