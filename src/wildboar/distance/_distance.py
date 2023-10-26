@@ -448,10 +448,14 @@ def subsequence_match(  # noqa: PLR0912
 
     Returns
     -------
-    indicies : ndarray of shape (n_samples, )
-        The start index of matching subsequences.
+    indicies : ndarray of shape (n_samples, ) or (n_matches, )
+        The start index of matching subsequences. Returns a single array of
+        n_matches if x.ndim == 1. If no matches are found for a sample, the
+        array element is None.
     distance : ndarray of shape (n_samples, ), optional
-        The distances of matching subsequences.
+        The distances of matching subsequences. Returns a single array of
+        n_matches if x.ndim == 1. If no matches are found for a sample, the
+        array element is None.
     """
     y = _validate_subsequence(y)
     if len(y) > 1:
@@ -543,12 +547,12 @@ def subsequence_match(  # noqa: PLR0912
 
     indices = _format_return(_safe_jagged_array(indices), len(y), x.ndim)
     if indices.size == 1:
-        indices = indices.reshape(1)
+        indices = indices.item()
 
     if return_distance:
         distances = _format_return(_safe_jagged_array(distances), len(y), x.ndim)
         if distances.size == 1:
-            distances = distances.reshape(1)
+            distances = distances.item()
 
         return indices, distances
     else:

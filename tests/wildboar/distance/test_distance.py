@@ -1004,6 +1004,22 @@ def test_subsequence_match(
             assert_almost_equal(actual_dist, desired_dist)
 
 
+def test_subsequence_match_single():
+    x = np.array([1, 2, 3, 4])
+    y = np.array([1, 2, 3, 3, 3, 3, 1, 2, 3, 4])
+    ind = subsequence_match(x, y, threshold=2)
+    assert_equal(ind, [0, 1, 6])
+
+
+def test_subsequence_match_multiple():
+    x = np.array([1, 2, 3, 4])
+    y = np.array([[1, 2, 3, 3, 3, 3, 1, 2, 3, 4], [10, 2, 3, 3, 3, 3, 1, 2, 3, 4]])
+    ind = subsequence_match(x, y, threshold=2)
+    desired = np.array([np.array([0, 1, 6]), np.array([1, 6])], dtype=object)
+    assert_equal(ind[0], desired[0])
+    assert_equal(ind[1], desired[1])
+
+
 @pytest.mark.parametrize(
     "r, expected",
     [
