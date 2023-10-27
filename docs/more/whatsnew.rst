@@ -35,6 +35,8 @@ Wildboar 1.2 introduces several new models.
   scikit-learn, this implementation supports `dtw` and `wdtw`.
 - :class:`distance.KMedoids`: the traditional k-medoids clustering algorithm with
   support for all elastic metrics.
+- :class:`ensemble.ElasticEnsembleClassifier`: the elastic ensemble classifier as
+  described by Lines and Bagnall (2015).
 
 Changelog
 ---------

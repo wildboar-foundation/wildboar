@@ -3,6 +3,7 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 
+from ._elastic import ElasticEnsembleClassifier
 from ._ensemble import (
     BaggingClassifier,
     BaggingRegressor,
@@ -37,4 +38,5 @@ __all__ = [
     "IntervalForestRegressor",
     "PivotForestClassifier",
     "ProximityForestClassifier",
+    "ElasticEnsembleClassifier",
 ]

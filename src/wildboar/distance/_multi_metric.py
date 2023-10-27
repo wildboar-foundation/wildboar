@@ -24,6 +24,9 @@ def parse_metric_spec(kwargs):
 
 
 def make_parameter_grid(metric_spec, default_n=10):
+    if metric_spec is None:
+        return [{}]
+
     specs = parse_metric_spec(metric_spec)
     params = []
     grids = []
@@ -70,6 +73,8 @@ def _make_metrics(metric_specs, factory):
     weights = []
     base_weight = 1.0 / len(metric_specs)
 
+    if isinstance(metric_specs, dict):
+        metric_specs = metric_specs.items()
     for metric_name, metric_spec in metric_specs:
         metric_spec = {} if metric_spec is None else metric_spec
         current_metrics = factory(metric_name, **metric_spec)

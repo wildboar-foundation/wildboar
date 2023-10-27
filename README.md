@@ -36,7 +36,7 @@ It is currently maintained by Isak Samsten
 |                                                                 | `ProximityForestClassifier`    |                               |                                | EDR        | `PAA`                        |                           |
 |                                                                 | `HydraClassifier`              |                               |                                |            | `MatrixProfileTransform`     |                           |
 |                                                                 | `KNeighborsClassifier`         |                               |                                |            | `HydraTransform`             |                           |
-|                                                                 |                                |                               |                                |            | `KMeans` with (W)DTW support |                           |
+|                                                                 | `ElasticEnsembleClassifier`    |                               |                                |            | `KMeans` with (W)DTW support |                           |
 |                                                                 |                                |                               |                                |            | `KMedoids`                   |                           |
 
 See the [documentation](https://wildboar.dev/master/) for examples.
