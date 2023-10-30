@@ -11,7 +11,7 @@ from wildboar.utils cimport TSArray
 cdef struct Attribute:
     Py_ssize_t dim       # the dimension of the attribute -1 for undefined
     void* attribute        # the attribute value
-    
+
 
 cdef class AttributeGenerator:
 
@@ -25,8 +25,8 @@ cdef class AttributeGenerator:
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
-        TSArray X, 
-        Py_ssize_t *samples, 
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         Attribute *transient,
         uint32_t *seed
@@ -38,12 +38,12 @@ cdef class AttributeGenerator:
     #       If is unsafe to use `transient.attribute` after `init_persistent`
     #       has been called.
     cdef Py_ssize_t init_persistent(
-        self, 
+        self,
         TSArray X,
-        Attribute *transient, 
+        Attribute *transient,
         Attribute *persistent
     ) noexcept nogil
-    
+
     cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil
 
     cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil
@@ -57,9 +57,9 @@ cdef class AttributeGenerator:
     ) noexcept nogil
 
     cdef Py_ssize_t transient_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
@@ -75,31 +75,31 @@ cdef class AttributeGenerator:
     ) noexcept nogil
 
     cdef Py_ssize_t persistent_fill(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
+        self,
+        Attribute *attribute,
+        TSArray X,
         Py_ssize_t sample,
         double[:, :] out,
         Py_ssize_t out_sample,
         Py_ssize_t out_attribute,
     ) noexcept nogil
-    
+
     # Calculate the attribute value for all samples using the transient featuer
     cdef void transient_values(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
-        Py_ssize_t *samples, 
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil
-    
+
     # Calculate the attribute value for all samples using the persistent attribute
     cdef void persistent_values(
-        self, 
-        Attribute *attribute, 
-        TSArray X, 
-        Py_ssize_t *samples, 
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t *samples,
         Py_ssize_t n_samples,
         double* values
     ) noexcept nogil

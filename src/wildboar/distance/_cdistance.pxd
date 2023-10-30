@@ -314,3 +314,34 @@ cdef class Metric:
         Py_ssize_t y_len,
         double *upper_bound,
     ) noexcept nogil
+
+
+cdef Py_ssize_t dilated_distance_profile(
+    Py_ssize_t stride,
+    Py_ssize_t dilation,
+    Py_ssize_t padding,
+    double *kernel,
+    Py_ssize_t k_len,
+    const double* x,
+    Py_ssize_t x_len,
+    Metric metric,
+    double *x_buffer,
+    double *k_buffer,
+    double ea,
+    double* out,
+) noexcept nogil
+
+cdef Py_ssize_t scaled_dilated_distance_profile(
+    Py_ssize_t stride,
+    Py_ssize_t dilation,
+    Py_ssize_t padding,
+    double *kernel,
+    Py_ssize_t k_len,
+    const double* x,
+    Py_ssize_t x_len,
+    Metric metric,
+    double *x_buffer,
+    double *k_buffer,
+    double ea,
+    double* out,
+) noexcept nogil

@@ -4,6 +4,7 @@ import pytest
 from wildboar.transform import (
     PAA,
     SAX,
+    DilatedShapeletTransform,
     HydraTransform,
     IntervalTransform,
     MatrixProfileTransform,
@@ -29,6 +30,7 @@ from wildboar.utils.estimator_checks import check_estimator
         (SAX(), []),
         (PAA(), []),
         (HydraTransform(), []),
+        (DilatedShapeletTransform(), []),
     ],
 )
 def test_estimator_checks(estimator, skip):

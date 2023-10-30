@@ -7,10 +7,11 @@ import numbers
 import numpy as np
 from sklearn.utils._param_validation import Interval, StrOptions
 
-from ..distance._distance import _SUBSEQUENCE_METRICS
+from ..distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
 from ._base import BaseAttributeTransform
 from ._cshapelet import (
+    DilatedShapeletAttributeGenerator,
     RandomMultiMetricShapeletAttributeGenerator,
     RandomShapeletAttributeGenerator,
 )
@@ -94,6 +95,157 @@ class ShapeletMixin:
             )
 
 
+class DilatedShapeletMixin:
+    _parameter_constraints = {
+        "n_shapelets": [Interval(numbers.Integral, 1, None, closed="left")],
+        "metric_params": [dict, None],
+        "metric": [StrOptions(_METRICS.keys())],
+        "min_shapelet_size": [None, Interval(numbers.Real, 0, 1, closed="both")],
+        "max_shapelet_size": [None, Interval(numbers.Real, 0, 1, closed="both")],
+        "shapelet_size": [None, "array-like"],
+        "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
+        "lower": [Interval(numbers.Real, 0, 1, closed="both")],
+        "upper": [Interval(numbers.Real, 0, 1, closed="both")],
+    }
+
+    def _get_generator(self, n_samples):
+        metric_params = self.metric_params if self.metric_params is not None else {}
+        Metric = _METRICS[self.metric]
+
+        if self.min_shapelet_size is not None or self.max_shapelet_size:
+            if self.shapelet_size is not None:
+                raise ValueError(
+                    "Both shapelet_size and min_shapelet_size or max_shapelet_size "
+                    "cannot be set at the same time"
+                )
+
+            min_shapelet_size = (
+                self.min_shapelet_size if self.min_shapelet_size is not None else 0
+            )
+            max_shapelet_size = (
+                self.max_shapelet_size if self.max_shapelet_size is not None else 1
+            )
+            if min_shapelet_size > max_shapelet_size:
+                raise ValueError(
+                    "max_shapelet_size must be larger than min_shapelet_size"
+                )
+
+            min_shapelet_size = int(self.n_timesteps_in_ * min_shapelet_size)
+            max_shapelet_size = int(self.n_timesteps_in_ * max_shapelet_size)
+            if min_shapelet_size < 2:
+                min_shapelet_size = 2
+            if max_shapelet_size < 3:
+                max_shapelet_size = 3
+            shapelet_size = np.arange(min_shapelet_size, max_shapelet_size)
+        elif self.shapelet_size is None:
+            shapelet_size = np.array([7, 9, 11])
+        else:
+            shapelet_size = np.array(self.shapelet_size)
+            if shapelet_size.min() < 2:
+                raise ValueError("The minimum shapelet size is 2")
+
+        if self.lower > self.upper:
+            raise ValueError("Lower can't be larger than upper")
+
+        return DilatedShapeletAttributeGenerator(
+            Metric(**metric_params),
+            self.n_shapelets,
+            shapelet_size,
+            self.normalize_prob,
+            self.lower,
+            self.upper,
+        )
+
+
+class DilatedShapeletTransform(DilatedShapeletMixin, BaseAttributeTransform):
+    """
+    Dilated shapelet transform.
+
+    Transform time series to a representation consisting of three
+    values per shapelet: minimum dilated distance, the index of
+    the timestep that minimizes the distance and number of subsequences
+    that are below a distance threshold.
+
+    Parameters
+    ----------
+    n_shapelets : int, optional
+        The number of dilated shapelets.
+    metric : str or callable, optional
+        The distance metric
+
+        See ``_METRICS.keys()`` for a list of supported metrics.
+    metric_params : dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
+    normalize_prob : float, optional
+        The probability of standardizing a shapelet with zero mean and unit
+        standard deviation.
+    min_shapelet_size : float, optional
+        The minimum shapelet size. If None, use the discrete sizes
+        in `shapelet_size`.
+    max_shapelet_size : float, optional
+        The maximum shapelet size. If None, use the discrete sizes
+        in `shapelet_size`.
+    shapelet_size : array-like, optional
+        The size of shapelets.
+    lower : float, optional
+        The lower percentile to draw distance thresholds above.
+    upper : float, optional
+        The upper percentile to draw distance thresholds below.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    References
+    ----------
+    Antoine Guillaume, Christel Vrain, Elloumi Wael
+        Random Dilated Shapelet Transform: A New Approach for Time Series Shapelets
+        Pattern Recognition and Artificial Intelligence, 2022
+    """
+
+    _parameter_constraints = {
+        **DilatedShapeletMixin._parameter_constraints,
+        **BaseAttributeTransform._parameter_constraints,
+    }
+
+    def __init__(
+        self,
+        n_shapelets=1000,
+        *,
+        metric="euclidean",
+        metric_params=None,
+        normalize_prob=0.5,
+        min_shapelet_size=None,
+        max_shapelet_size=None,
+        shapelet_size=None,
+        lower=0.05,
+        upper=0.1,
+        random_state=None,
+        n_jobs=None,
+    ):
+        super().__init__(random_state=random_state, n_jobs=n_jobs)
+        self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
+        self.shapelet_size = shapelet_size
+        self.metric = metric
+        self.metric_params = metric_params
+        self.normalize_prob = normalize_prob
+        self.lower = lower
+        self.upper = upper
+
+
 class RandomShapeletTransform(ShapeletMixin, BaseAttributeTransform):
     """
     Random shapelet tranform.
@@ -130,7 +282,7 @@ class RandomShapeletTransform(ShapeletMixin, BaseAttributeTransform):
     n_jobs : int, optional
         The number of jobs to run in parallel. None means 1 and -1 means using all
         processors.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
         - If `None`, the random number generator is the `RandomState` instance used

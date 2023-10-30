@@ -7,7 +7,7 @@ from sklearn.utils._param_validation import StrOptions
 from ..transform._interval import IntervalMixin
 from ..transform._pivot import PivotMixin
 from ..transform._rocket import RocketMixin
-from ..transform._shapelet import ShapeletMixin
+from ..transform._shapelet import DilatedShapeletMixin, ShapeletMixin
 from ..tree._ctree import (
     DynamicTreeAttributeGenerator,
     EntropyCriterion,
@@ -1045,3 +1045,50 @@ class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
         self.random_state = random_state
         self.criterion = criterion
         self.class_weight = class_weight
+
+
+class DilatedShapeletTreeClassifier(DilatedShapeletMixin, BaseFeatureTreeClassifier):
+    _parameter_constraints: dict = {
+        **BaseFeatureTreeClassifier._parameter_constraints,
+        **DilatedShapeletMixin._parameter_constraints,
+        "random_state": ["random_state"],
+    }
+
+    def __init__(
+        self,
+        n_shapelets=1000,
+        *,
+        metric="euclidean",
+        metric_params=None,
+        shapelet_size=None,
+        min_shapelet_size=None,
+        max_shapelet_size=None,
+        normalize_prob=0.8,
+        lower=0.05,
+        upper=0.1,
+        max_depth=None,
+        min_samples_split=2,
+        min_samples_leaf=1,
+        min_impurity_decrease=0.0,
+        criterion="entropy",
+        class_weight=None,
+        random_state=None,
+    ):
+        super().__init__(
+            max_depth=max_depth,
+            min_samples_split=min_samples_split,
+            min_samples_leaf=min_samples_leaf,
+            min_impurity_decrease=min_impurity_decrease,
+        )
+        self.n_shapelets = n_shapelets
+        self.metric = metric
+        self.metric_params = metric_params
+        self.shapelet_size = shapelet_size
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
+        self.normalize_prob = normalize_prob
+        self.lower = lower
+        self.upper = upper
+        self.criterion = criterion
+        self.class_weight = class_weight
+        self.random_state = random_state

@@ -15,7 +15,7 @@ from ._sax import (
     piecewice_aggregate_approximation,
     symbolic_aggregate_approximation,
 )
-from ._shapelet import RandomShapeletTransform
+from ._shapelet import DilatedShapeletTransform, RandomShapeletTransform
 
 __all__ = [
     "convolve",
@@ -27,6 +27,7 @@ __all__ = [
     "PivotTransform",
     "ProximityTransform",
     "FeatureTransform",
+    "DilatedShapeletTransform",
     "SAX",
     "PAA",
     "MatrixProfileTransform",

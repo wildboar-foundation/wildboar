@@ -37,6 +37,10 @@ Wildboar 1.2 introduces several new models.
   support for all elastic metrics.
 - :class:`ensemble.ElasticEnsembleClassifier`: the elastic ensemble classifier as
   described by Lines and Bagnall (2015).
+- :class:`transform.DilatedShapeletTransform`: a new shapelet based transform
+  as described by Guillaume et al., (2022).
+- :class:`linear_model.DilatedShapeletClassifier`: a new shapelet based classifier
+  as described by Guillaume et al., (2022).
 
 Changelog
 ---------

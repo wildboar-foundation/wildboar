@@ -10,8 +10,8 @@
 cimport numpy as np
 import numpy as np
 
-from libc.math cimport NAN, sqrt, INFINITY
-from libc.stdlib cimport free, malloc
+from libc.math cimport NAN, sqrt, floor, INFINITY
+from libc.stdlib cimport free, malloc, labs
 from numpy cimport float64_t, intp_t, ndarray, double_t
 
 from ..utils cimport _stats
@@ -521,6 +521,137 @@ cdef class Metric:
     @property
     def is_elastic(self):
         return False
+
+
+cdef Py_ssize_t dilated_distance_profile(
+    Py_ssize_t stride,
+    Py_ssize_t dilation,
+    Py_ssize_t padding,
+    double *kernel,
+    Py_ssize_t k_len,
+    const double* x,
+    Py_ssize_t x_len,
+    Metric metric,
+    double *x_buffer,
+    double *k_buffer,
+    double ea,
+    double* out,
+) noexcept nogil:
+    cdef Py_ssize_t input_size = x_len + 2 * padding
+    cdef Py_ssize_t kernel_size = (k_len - 1) * dilation + 1
+    cdef Py_ssize_t output_size = <Py_ssize_t> floor((input_size - kernel_size) / stride) + 1
+
+    cdef Py_ssize_t j  # the index in the kernel and input array
+    cdef Py_ssize_t i  # the index of the output array
+    cdef Py_ssize_t k  # buffer index
+    cdef Py_ssize_t padding_offset
+    cdef Py_ssize_t input_offset
+    cdef Py_ssize_t kernel_offset
+    cdef Py_ssize_t convolution_size
+    cdef double tmp_dist
+    cdef Py_ssize_t dp_size = 0
+
+    for i in range(output_size):
+        padding_offset = padding - i * stride
+        if padding_offset > 0:
+            if padding_offset % dilation == 0:
+                kernel_offset = padding_offset
+            else:
+                kernel_offset = padding_offset + dilation - (padding_offset % dilation)
+            input_offset = kernel_offset - padding_offset
+        else:
+            kernel_offset = 0
+            input_offset = labs(padding_offset)
+
+        convolution_size = (
+            min(x_len, input_offset + kernel_size - max(0, padding_offset))
+            - input_offset
+        )
+        k = 0
+        for j from 0 <= j < convolution_size by dilation:
+            x_buffer[k] = x[input_offset + j]
+            k_buffer[k] = kernel[((j + kernel_offset) // dilation)]
+            k += 1
+
+        tmp_dist = ea
+        if metric._eadistance(x_buffer, k, k_buffer, k, &tmp_dist):
+            out[dp_size] = tmp_dist
+            dp_size += 1
+
+    return dp_size
+
+
+cdef Py_ssize_t scaled_dilated_distance_profile(
+    Py_ssize_t stride,
+    Py_ssize_t dilation,
+    Py_ssize_t padding,
+    double *kernel,
+    Py_ssize_t k_len,
+    const double* x,
+    Py_ssize_t x_len,
+    Metric metric,
+    double *x_buffer,
+    double *k_buffer,
+    double ea,
+    double* out,
+) noexcept nogil:
+    cdef Py_ssize_t input_size = x_len + 2 * padding
+    cdef Py_ssize_t kernel_size = (k_len - 1) * dilation + 1
+    cdef Py_ssize_t output_size = <Py_ssize_t> floor((input_size - kernel_size) / stride) + 1
+
+    cdef Py_ssize_t j  # the index in the kernel and input array
+    cdef Py_ssize_t i  # the index of the output array
+    cdef Py_ssize_t k  # buffer index
+    cdef Py_ssize_t padding_offset
+    cdef Py_ssize_t input_offset
+    cdef Py_ssize_t kernel_offset
+    cdef Py_ssize_t convolution_size
+    cdef double tmp_dist
+    cdef double mean, std
+    cdef Py_ssize_t dp_size = 0
+
+    for i in range(output_size):
+        padding_offset = padding - i * stride
+        if padding_offset > 0:
+            if padding_offset % dilation == 0:
+                kernel_offset = padding_offset
+            else:
+                kernel_offset = padding_offset + dilation - (padding_offset % dilation)
+            input_offset = kernel_offset - padding_offset
+        else:
+            kernel_offset = 0
+            input_offset = labs(padding_offset)
+
+        convolution_size = (
+            min(x_len, input_offset + kernel_size - max(0, padding_offset))
+            - input_offset
+        )
+        k = 0
+        mean = 0
+        std = 0
+        for j from 0 <= j < convolution_size by dilation:
+            x_buffer[k] = x[input_offset + j]
+            k_buffer[k] = kernel[((j + kernel_offset) // dilation)]
+            mean += x_buffer[k]
+            std += x_buffer[k] * x_buffer[k]
+            k += 1
+
+        mean = mean / k_len
+        std = std / k_len - mean * mean
+        if std > EPSILON:
+            std = sqrt(std)
+        else:
+            std = 1
+
+        for j in range(k):
+            x_buffer[j] = (x_buffer[j] - mean) / std
+
+        tmp_dist = ea
+        if metric._eadistance(x_buffer, k, k_buffer, k, &tmp_dist):
+            out[dp_size] = tmp_dist
+            dp_size += 1
+
+    return dp_size
 
 
 cdef ndarray[intp_t] _new_match_array(Py_ssize_t *matches, Py_ssize_t n_matches):

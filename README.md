@@ -34,10 +34,11 @@ It is currently maintained by Isak Samsten
 |                                                                 | `IntervalForestClassifier`     | `IntervalForestRegressor`     |                                | LCSS       | Motif discovery              |                           |
 |                                                                 | `ProximityTreeClassifier`      |                               |                                | ERP        | `SAX`                        |                           |
 |                                                                 | `ProximityForestClassifier`    |                               |                                | EDR        | `PAA`                        |                           |
-|                                                                 | `HydraClassifier`              |                               |                                |            | `MatrixProfileTransform`     |                           |
+|                                                                 | `HydraClassifier`              |                               |                                | ADTW       | `MatrixProfileTransform`     |                           |
 |                                                                 | `KNeighborsClassifier`         |                               |                                |            | `HydraTransform`             |                           |
 |                                                                 | `ElasticEnsembleClassifier`    |                               |                                |            | `KMeans` with (W)DTW support |                           |
-|                                                                 |                                |                               |                                |            | `KMedoids`                   |                           |
+|                                                                 | `DilatedShapeletClassifier`    |                               |                                |            | `KMedoids`                   |                           |
+|                                                                 |                                |                               |                                |            | `DilatedShapeletTransform`   |                           |
 
 See the [documentation](https://wildboar.dev/master/) for examples.
 
