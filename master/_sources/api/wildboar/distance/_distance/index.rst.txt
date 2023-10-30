@@ -556,11 +556,15 @@ Functions
 
    :Returns:
 
-       **indicies** : ndarray of shape (n_samples, )
-           The start index of matching subsequences.
+       **indicies** : ndarray of shape (n_samples, ) or (n_matches, )
+           The start index of matching subsequences. Returns a single array of
+           n_matches if x.ndim == 1. If no matches are found for a sample, the
+           array element is None.
 
        **distance** : ndarray of shape (n_samples, ), optional
-           The distances of matching subsequences.
+           The distances of matching subsequences. Returns a single array of
+           n_matches if x.ndim == 1. If no matches are found for a sample, the
+           array element is None.
 
 
 

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="wildboar.explain" href="../explain/index.html" /><link rel="prev" title="wildboar.distance.dtw" href="../distance/dtw/index.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>wildboar.ensemble - Wildboar 1.1.1.dev224 documentation</title>
+        <title>wildboar.ensemble - Wildboar 1.1.1.dev227 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev224 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Wildboar 1.1.1.dev227 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -332,40 +332,43 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.BaseBagging" title="wildboar.ensemble.BaseBagging"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseBagging</span></code></a></p></td>
 <td><p>Base estimator for Wildboar ensemble estimators.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.ExtraShapeletTreesClassifier" title="wildboar.ensemble.ExtraShapeletTreesClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreesClassifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier" title="wildboar.ensemble.ElasticEnsembleClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier</span></code></a></p></td>
+<td><p>Ensemble of <a class="reference internal" href="../distance/index.html#wildboar.distance.KNeighborsClassifier" title="wildboar.distance.KNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.distance.KNeighborsClassifier</span></code></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.ExtraShapeletTreesClassifier" title="wildboar.ensemble.ExtraShapeletTreesClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreesClassifier</span></code></a></p></td>
 <td><p>An ensemble of extremely random shapelet trees.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.ExtraShapeletTreesRegressor" title="wildboar.ensemble.ExtraShapeletTreesRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreesRegressor</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.ExtraShapeletTreesRegressor" title="wildboar.ensemble.ExtraShapeletTreesRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtraShapeletTreesRegressor</span></code></a></p></td>
 <td><p>An ensemble of extremely random shapelet tree regressors.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.IntervalForestClassifier" title="wildboar.ensemble.IntervalForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalForestClassifier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.IntervalForestClassifier" title="wildboar.ensemble.IntervalForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalForestClassifier</span></code></a></p></td>
 <td><p>An ensemble of interval tree classifiers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.IntervalForestRegressor" title="wildboar.ensemble.IntervalForestRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalForestRegressor</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.IntervalForestRegressor" title="wildboar.ensemble.IntervalForestRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalForestRegressor</span></code></a></p></td>
 <td><p>An ensemble of interval tree regressors.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest" title="wildboar.ensemble.IsolationShapeletForest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IsolationShapeletForest</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.IsolationShapeletForest" title="wildboar.ensemble.IsolationShapeletForest"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IsolationShapeletForest</span></code></a></p></td>
 <td><p>An isolation shapelet forest.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.PivotForestClassifier" title="wildboar.ensemble.PivotForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PivotForestClassifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.PivotForestClassifier" title="wildboar.ensemble.PivotForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PivotForestClassifier</span></code></a></p></td>
 <td><p>An ensemble of interval tree classifiers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.ProximityForestClassifier" title="wildboar.ensemble.ProximityForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProximityForestClassifier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.ProximityForestClassifier" title="wildboar.ensemble.ProximityForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ProximityForestClassifier</span></code></a></p></td>
 <td><p>A forest of proximity trees.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.RocketForestClassifier" title="wildboar.ensemble.RocketForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketForestClassifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.RocketForestClassifier" title="wildboar.ensemble.RocketForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketForestClassifier</span></code></a></p></td>
 <td><p>An ensemble of rocket tree classifiers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.RocketForestRegressor" title="wildboar.ensemble.RocketForestRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketForestRegressor</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.RocketForestRegressor" title="wildboar.ensemble.RocketForestRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketForestRegressor</span></code></a></p></td>
 <td><p>An ensemble of rocket tree regressors.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.ShapeletForestClassifier" title="wildboar.ensemble.ShapeletForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.ShapeletForestClassifier" title="wildboar.ensemble.ShapeletForestClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletForestClassifier</span></code></a></p></td>
 <td><p>An ensemble of random shapelet tree classifiers.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.ShapeletForestEmbedding" title="wildboar.ensemble.ShapeletForestEmbedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletForestEmbedding</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.ShapeletForestEmbedding" title="wildboar.ensemble.ShapeletForestEmbedding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletForestEmbedding</span></code></a></p></td>
 <td><p>An ensemble of random shapelet trees.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.ensemble.ShapeletForestRegressor" title="wildboar.ensemble.ShapeletForestRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletForestRegressor</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.ensemble.ShapeletForestRegressor" title="wildboar.ensemble.ShapeletForestRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletForestRegressor</span></code></a></p></td>
 <td><p>An ensemble of random shapelet tree regressors.</p></td>
 </tr>
 </tbody>
@@ -993,6 +996,210 @@ contained subobjects that are estimators.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.ensemble.BaseBagging.set_params">
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.BaseBagging.set_params" title="Permalink to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.ensemble.</span></span><span class="sig-name descname"><span class="pre">ElasticEnsembleClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble/_elastic.py#L62-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier" title="Permalink to this definition">#</a></dt>
+<dd><p>Ensemble of <a class="reference internal" href="../distance/index.html#wildboar.distance.KNeighborsClassifier" title="wildboar.distance.KNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.distance.KNeighborsClassifier</span></code></a>.</p>
+<p>Each classifier is fitted with an optimized parameter grid
+over metric parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_neighbors</strong><span class="classifier">int, optional</span></dt><dd><p>The number of neighbors.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">{“auto”, “elastic”, “non_elastic”, “all”} or dict, optional</span></dt><dd><p>The metric specification.</p>
+<ul class="simple">
+<li><p>if “auto” or “elastic”, fit one classifier for each elastic distance
+as described by Lines and Bagnall (2015). We use a slightly smaller
+parameter grid.</p></li>
+<li><p>if “non_elastic”, fit one classifier for each non-elastic distance
+measure.</p></li>
+<li><p>if “all”, fit one classifier for the metrics in both “elastic” and
+“non_elastic”.</p></li>
+<li><p>if dict, a custom metric specification.</p></li>
+</ul>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of paralell jobs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>Jason Lines and Anthony Bagnall,</dt><dd><p>Time Series Classification with Ensembles of Elastic Distance Measures,
+Data Mining and Knowledge Discovery, 29(3), 2015.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_gun_point</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ElasticEnsembleClassifier</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_gun_point</span><span class="p">(</span><span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span> <span class="o">=</span> <span class="n">ElasticEnsembleClassifier</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">metric</span><span class="o">=</span><span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;dtw&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;min_r&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;max_r&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+<span class="gp">... </span>        <span class="s2">&quot;ddtw&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;min_r&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s2">&quot;max_r&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">},</span>
+<span class="gp">... </span>    <span class="p">},</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="go">ElasticEnsembleClassifier(metric={&#39;ddtw&#39;: {&#39;max_r&#39;: 0.3, &#39;min_r&#39;: 0.1},</span>
+<span class="go">                                  &#39;dtw&#39;: {&#39;max_r&#39;: 0.3, &#39;min_r&#39;: 0.1}})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="go">0.9866666666666667</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier.fit" title="Permalink to this definition">#</a></dt>
+<dd><p>Fit the estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps) or (n_samples, n_dim, n_timesteps)</span></dt><dd><p>The input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, )</span></dt><dd><p>The input labels.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>This estimator.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier.get_metadata_routing" title="Permalink to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.3)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier.get_params" title="Permalink to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble/_elastic.py#L202-L217"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier.predict" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute the class label for the samples in x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps) or (n_samples, n_dim, n_timesteps)</span></dt><dd><p>The input samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, )</dt><dd><p>The class label for each sample.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier.predict_proba">
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble/_elastic.py#L179-L200"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier.predict_proba" title="Permalink to this definition">#</a></dt>
+<dd><p>Compute probability estimates for the samples in x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">array-like of shape (n_samples, n_timesteps) or (n_samples, n_dim, n_timesteps)</span></dt><dd><p>The input time series.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_classes)</dt><dd><p>The probabilities.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier.score" title="Permalink to this definition">#</a></dt>
+<dd><p>Return the mean accuracy on the given test data and labels.</p>
+<p>In multi-label classification, this is the subset accuracy
+which is a harsh metric since you require for each sample that
+each label set be correctly predicted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Test samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs)</span></dt><dd><p>True labels for <cite>X</cite>.</p>
+</dd>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,), default=None</span></dt><dd><p>Sample weights.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>Mean accuracy of <code class="docutils literal notranslate"><span class="pre">self.predict(X)</span></code> w.r.t. <cite>y</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.ensemble.ElasticEnsembleClassifier.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/ensemble.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.ensemble.ElasticEnsembleClassifier.set_params" title="Permalink to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
@@ -4340,6 +4547,16 @@ possible to update each component of a nested object.</p>
 <li><a class="reference internal" href="#wildboar.ensemble.BaseBagging.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">BaseBagging.get_metadata_routing</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.BaseBagging.get_params"><code class="docutils literal notranslate"><span class="pre">BaseBagging.get_params</span></code></a></li>
 <li><a class="reference internal" href="#wildboar.ensemble.BaseBagging.set_params"><code class="docutils literal notranslate"><span class="pre">BaseBagging.set_params</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier.fit"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier.fit</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier.get_metadata_routing</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier.get_params"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier.get_params</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier.predict"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier.predict</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier.predict_proba"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier.predict_proba</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier.score"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier.score</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.ensemble.ElasticEnsembleClassifier.set_params"><code class="docutils literal notranslate"><span class="pre">ElasticEnsembleClassifier.set_params</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#wildboar.ensemble.ExtraShapeletTreesClassifier"><code class="docutils literal notranslate"><span class="pre">ExtraShapeletTreesClassifier</span></code></a><ul>
