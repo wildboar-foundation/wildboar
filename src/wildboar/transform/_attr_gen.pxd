@@ -18,10 +18,13 @@ cdef class AttributeGenerator:
     # Reset the (allocated) attributes of the
     cdef int reset(self, TSArray X) noexcept nogil
 
+    # Safe to call without calling reset first
     cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil
 
+    # Safe to call without calling reset first
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil
 
+    # Requires `reset`
     cdef Py_ssize_t next_attribute(
         self,
         Py_ssize_t attribute_id,
@@ -37,6 +40,7 @@ cdef class AttributeGenerator:
     # NOTE: We permit moving of ownership of `transient.attribute`.
     #       If is unsafe to use `transient.attribute` after `init_persistent`
     #       has been called.
+    # Requires: `reset`
     cdef Py_ssize_t init_persistent(
         self,
         TSArray X,

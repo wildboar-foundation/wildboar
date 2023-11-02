@@ -11,6 +11,7 @@ cimport numpy as np
 
 from libc.stdlib cimport free, malloc
 from libc.math cimport INFINITY, floor, log2, pow
+from libc.string cimport memset
 from numpy cimport uint32_t
 
 from ..distance._cdistance cimport (
@@ -444,6 +445,7 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
         self.x_buffer = NULL
         self.k_buffer = NULL
         self.arg_buffer = NULL
+        self.dist_buffer = NULL
 
         cdef Py_ssize_t i
         for i in range(self.n_shapelet_length):
@@ -460,10 +462,13 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
         )
 
     def __dealloc__(self):
+        self._free()
         if self.shapelet_length != NULL:
             free(self.shapelet_length)
             self.shapelet_length = NULL
 
+
+    cdef void _free(self) noexcept nogil:
         if self.x_buffer != NULL:
             free(self.x_buffer)
             self.x_buffer = NULL
@@ -481,18 +486,7 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
             self.arg_buffer = NULL
 
     cdef int reset(self, TSArray X) noexcept nogil:
-        if self.x_buffer != NULL:
-            free(self.x_buffer)
-
-        if self.k_buffer != NULL:
-            free(self.k_buffer)
-
-        if self.dist_buffer != NULL:
-            free(self.dist_buffer)
-
-        if self.arg_buffer != NULL:
-            free(self.arg_buffer)
-
+        self._free()
         self.x_buffer = <double*> malloc(sizeof(double) * X.shape[2] + 1)
         self.k_buffer = <double*> malloc(sizeof(double) * X.shape[2] + 1)
         self.dist_buffer = <double*> malloc(sizeof(double) * X.shape[2] + 1)
@@ -572,11 +566,10 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
             shapelet, &X[index, dim, 0], X.shape[2], False
         )
 
-        for i in range(n_distances):
-            self.arg_buffer[i] = i
-
-        # if n_distances > 1:
-        argsort(self.dist_buffer, self.arg_buffer, n_distances)
+        if n_distances > 1:
+            for i in range(n_distances):
+                self.arg_buffer[i] = i
+            argsort(self.dist_buffer, self.arg_buffer, n_distances)
 
         cdef Py_ssize_t lower = <Py_ssize_t> floor(n_distances * self.lower_bound)
         cdef Py_ssize_t upper = <Py_ssize_t> floor(n_distances * self.upper_bound)
@@ -770,3 +763,477 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
                 shapelet.threshold if early_abandon else INFINITY,
                 self.dist_buffer,
             )
+
+
+cdef inline Py_ssize_t _max_exponent(
+    Py_ssize_t n_timestep, Py_ssize_t kernel_size
+) noexcept nogil:
+    cdef Py_ssize_t max_exponent = <Py_ssize_t> floor(
+        log2((n_timestep - 1) / <double> (kernel_size - 1))
+    )
+    if max_exponent < 0:
+        max_exponent = 0
+    max_exponent += 1
+
+    return max_exponent
+
+
+cdef struct Cdist:
+    bint is_norm
+
+    # size: max_exponent * n_shapelets
+    double *thresholds
+
+    # size: shapelet_size * n_shapelets
+    double *data
+
+
+cdef class CompetingDialatedShapeletAttributeGenerator(AttributeGenerator):
+    cdef Py_ssize_t n_shapelets
+    cdef Py_ssize_t shapelet_size
+    cdef Py_ssize_t n_groups
+    cdef double normalize_prob
+    cdef double lower
+    cdef double upper
+
+    cdef Py_ssize_t max_exponent_
+
+    cdef Metric metric
+
+    # Temporary buffer to store dilated distance
+    cdef double *dist_buffer
+    cdef Py_ssize_t *arg_buffer
+
+    cdef double *x_buffer
+    cdef double *s_buffer
+
+    # Temporary buffer to store kernel values
+    cdef double *max_values
+    cdef double *min_values
+    cdef double *min_so_values
+    cdef double *max_so_values
+
+    # random values and incremental indices to draw random samples from
+    cdef double *rnd_value
+    cdef Py_ssize_t *rnd_index
+
+    def __cinit__(
+        self,
+        Py_ssize_t n_groups,
+        Py_ssize_t n_shapelets,
+        Py_ssize_t shapelet_size,
+        double normalize_prob,
+        double lower,
+        double upper,
+        Metric metric,
+    ):
+        self.n_groups = n_groups
+        self.n_shapelets = n_shapelets
+        self.shapelet_size = shapelet_size
+        self.normalize_prob = normalize_prob
+        self.lower = lower
+        self.upper = upper
+        self.metric = metric
+
+        self.rnd_index = NULL
+        self.rnd_value = NULL
+        self.dist_buffer = NULL
+        self.arg_buffer = NULL
+        self.x_buffer = NULL
+        self.s_buffer = NULL
+        self.max_values = NULL
+        self.min_values = NULL
+        self.min_so_values = NULL
+        self.max_so_values = NULL
+
+    def __reduce__(self):
+        return self.__class__, (
+            self.n_groups,
+            self.n_shapelets,
+            self.shapelet_size,
+            self.normalize_prob,
+            self.lower,
+            self.upper,
+            self.metric,
+        )
+
+    def __dealloc__(self):
+        self._free()
+
+    cdef void _free(self) noexcept nogil:
+        if self.arg_buffer != NULL:
+            free(self.arg_buffer)
+            self.arg_buffer = NULL
+        if self.dist_buffer != NULL:
+            free(self.dist_buffer)
+            self.dist_buffer = NULL
+        if self.x_buffer != NULL:
+            free(self.x_buffer)
+            self.x_buffer = NULL
+        if self.s_buffer != NULL:
+            free(self.s_buffer)
+            self.s_buffer = NULL
+        if self.min_values != NULL:
+            free(self.min_values)
+            self.min_values = NULL
+        if self.max_values != NULL:
+            free(self.max_values)
+            self.max_values = NULL
+        if self.min_so_values != NULL:
+            free(self.min_so_values)
+            self.min_so_values = NULL
+        if self.max_so_values != NULL:
+            free(self.max_so_values)
+            self.max_so_values = NULL
+        if self.rnd_index != NULL:
+            free(self.rnd_index)
+            self.rnd_index = NULL
+        if self.rnd_value != NULL:
+            free(self.rnd_value)
+            self.rnd_value = NULL
+
+    cdef int reset(self, TSArray X) noexcept nogil:
+        self._free()
+        self.dist_buffer = <double*> malloc(sizeof(double) * (X.shape[2] + 1) * self.n_shapelets)
+        self.arg_buffer = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * X.shape[2] + 1)
+        self.x_buffer = <double*> malloc(sizeof(double) * self.shapelet_size)
+        self.s_buffer = <double*> malloc(sizeof(double) * self.shapelet_size)
+        self.min_values = <double*> malloc(sizeof(double) * self.n_shapelets)
+        self.max_values = <double*> malloc(sizeof(double) * self.n_shapelets)
+        self.min_so_values = <double*> malloc(sizeof(double) * self.n_shapelets)
+        self.max_so_values = <double*> malloc(sizeof(double) * self.n_shapelets)
+        self.rnd_value = <double*> malloc(sizeof(double) * X.shape[0])
+        self.rnd_index = <Py_ssize_t*> malloc(sizeof(double) * X.shape[0])
+        self.max_exponent_ = _max_exponent(X.shape[2], self.shapelet_size)
+
+        self.metric.reset(X, X)
+        return 0
+
+    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+        return self.n_groups
+
+    # n_shapelets * max_exponent * n_shapelets * 4 features per time series.
+    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
+        cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.shapelet_size)
+        return self.get_n_attributess(X) * max_exponent * self.n_shapelets * 3
+
+    cdef Py_ssize_t _get_distance_profile(
+        self,
+        Py_ssize_t dilation,
+        Py_ssize_t padding,
+        const double *s,
+        Py_ssize_t s_len,
+        const double *x,
+        Py_ssize_t x_len,
+        bint is_norm,
+        double *dist_buffer,
+    ) noexcept nogil:
+        if is_norm:
+            return scaled_dilated_distance_profile(
+                1,
+                dilation,
+                padding,
+                s,
+                s_len,
+                x,
+                x_len,
+                self.metric,
+                self.x_buffer,
+                self.s_buffer,
+                INFINITY,
+                dist_buffer,
+            )
+        else:
+            return dilated_distance_profile(
+                1,
+                dilation,
+                padding,
+                s,
+                s_len,
+                x,
+                x_len,
+                self.metric,
+                self.x_buffer,
+                self.s_buffer,
+                INFINITY,
+                dist_buffer,
+            )
+
+    cdef Py_ssize_t next_attribute(
+        self,
+        Py_ssize_t attribute_id,
+        TSArray X,
+        Py_ssize_t *samples,
+        Py_ssize_t n_samples,
+        Attribute *transient,
+        uint32_t *seed
+    ) noexcept nogil:
+        cdef Cdist *cdist = <Cdist*> malloc(sizeof(Cdist))
+        cdef Py_ssize_t i, j, k, m, n
+        cdef Py_ssize_t dim, start, dilation, dilated_size, padding, n_distances
+        cdef Py_ssize_t lower, upper
+        cdef double mean, std
+
+        for i in range(X.shape[0]):
+            self.rnd_value[i] = rand_uniform(0, 1, seed)
+            self.rnd_index[i] = i
+
+        argsort(self.rnd_value, self.rnd_index, X.shape[0])
+
+        # shapelet[0, 0], ..., shapelet[n_shapelets, max_exponent]
+        cdef double *data = <double*> malloc(
+            sizeof(double) * self.n_shapelets * self.max_exponent_ * self.shapelet_size
+        )
+        cdef double *thresholds = <double*> malloc(
+            sizeof(double) * self.max_exponent_ * self.n_shapelets
+        )
+        cdef double *shapelet
+        cdef double *x
+
+        if X.shape[1] > 1:
+            dim = rand_int(0, X.shape[1], seed)
+        else:
+            dim = 0
+
+        cdist.is_norm = rand_uniform(0, 1, seed) < self.normalize_prob
+
+        for i in range(self.n_shapelets):
+            j = self.rnd_index[i % X.shape[0]]
+            for k in range(self.max_exponent_):
+                shapelet = (
+                    data
+                    + i * self.shapelet_size * self.max_exponent_
+                    + k * self.shapelet_size
+                )
+
+                dilation = <Py_ssize_t> pow(2, k)
+                dilated_size = (self.shapelet_size - 1) * dilation + 1
+                start = rand_int(0, X.shape[2] - dilated_size, seed)
+                padding = dilated_size // 2
+
+                x = &X[j, dim, start]
+                n = 0
+                for m from 0 <= m < dilated_size by dilation:
+                    shapelet[n] = x[m]
+                    n += 1
+
+                if cdist.is_norm:
+                    fast_mean_std(shapelet, self.shapelet_size, &mean, &std)
+                    if std == 0.0:
+                        std = 1.0
+
+                    for m in range(self.shapelet_size):
+                        shapelet[m] = (shapelet[m] - mean) / std
+
+                n_distances = self._get_distance_profile(
+                    dilation,
+                    padding,
+                    shapelet,
+                    self.shapelet_size,
+                    &X[j, dim, 0],
+                    X.shape[2],
+                    cdist.is_norm,
+                    self.dist_buffer,
+                )
+
+                if n_distances > 1:
+                    for m in range(n_distances):
+                        self.arg_buffer[m] = m
+                    argsort(self.dist_buffer, self.arg_buffer, n_distances)
+
+                lower = <Py_ssize_t> floor(n_distances * self.lower)
+                upper = <Py_ssize_t> floor(n_distances * self.upper)
+
+                thresholds[i * self.max_exponent_ + k] = self.dist_buffer[
+                    rand_int(lower, upper, seed)
+                ]
+
+        cdist.thresholds = thresholds
+        cdist.data = data
+
+        transient.dim = dim
+        transient.attribute = cdist
+        return 0
+
+    # NOTE: We move ownership of `transient.attribute` to `persistent.attribute`.
+    cdef Py_ssize_t init_persistent(
+        self,
+        TSArray X,
+        Attribute *transient,
+        Attribute *persistent
+    ) noexcept nogil:
+        persistent.dim = transient.dim
+        persistent.attribute = transient.attribute
+        transient.attribute = NULL  # No need to free it
+        return 0
+
+    cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
+        cdef Cdist *cdist
+        if attribute.attribute != NULL:
+            cdist = <Cdist*> attribute.attribute
+            if cdist.data != NULL:
+                free(cdist.data)
+            if cdist.thresholds != NULL:
+                free(cdist.thresholds)
+
+            free(attribute.attribute)
+            attribute.attribute = NULL
+        return 0
+
+    cdef Py_ssize_t free_transient(self, Attribute *attribute) noexcept nogil:
+        return self.free_persistent(attribute)
+
+    cdef object persistent_to_object(self, Attribute *attribute):
+        cdef Py_ssize_t i
+        cdef Cdist *cdist = <Cdist*> attribute.attribute
+
+        data = np.empty(
+            self.shapelet_size * self.max_exponent_ * self.n_shapelets, dtype=float
+        )
+        thresholds = np.empty(self.max_exponent_ * self.n_shapelets, dtype=float)
+
+        for i in range(data.shape[0]):
+            data[i] = cdist.data[i]
+
+        for i in range(thresholds.shape[0]):
+            thresholds[i] = cdist.thresholds[i]
+
+        return attribute.dim, (
+            cdist.is_norm,
+            data,
+            thresholds,
+        )
+
+    cdef Py_ssize_t persistent_from_object(self, object obj, Attribute *attribute):
+        dim, (is_norm, data, thresholds) = obj
+        cdef Cdist *cdist = <Cdist*> malloc(sizeof(Cdist))
+
+        cdist.data = <double*> malloc(sizeof(double) * data.shape[0])
+        cdist.thresholds = <double*> malloc(sizeof(double) * thresholds.shape[0])
+        cdef Py_ssize_t i
+
+        for i in range(data.shape[0]):
+            cdist.data[i] = data[i]
+
+        for i in range(thresholds.shape[0]):
+            cdist.thresholds[i] = thresholds[i]
+
+        attribute.attribute = cdist
+        attribute.dim = dim
+        return 0
+
+    cdef Py_ssize_t transient_fill(
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t sample,
+        double[:, :] out,
+        Py_ssize_t out_sample,
+        Py_ssize_t attribute_id,
+    ) noexcept nogil:
+        cdef Py_ssize_t i, exponent, padding, dilation
+        cdef double min_value, max_value
+        cdef Py_ssize_t min_index, max_index
+
+        cdef Cdist *cdist = <Cdist*> attribute.attribute
+        cdef double *shapelet
+
+        # Place the pointer inside correct attribute group, as given by attribute_id
+        cdef Py_ssize_t shapelet_attribute_offset
+        cdef Py_ssize_t attribute_offset = (
+            attribute_id * self.n_shapelets * self.max_exponent_ * 3
+        )
+
+        for exponent in range(self.max_exponent_):
+            dilation = <Py_ssize_t> pow(2, exponent)
+            padding = <Py_ssize_t> ((self.shapelet_size - 1) * dilation) // 2
+
+            for i in range(self.n_shapelets):
+                shapelet = (
+                    cdist.data
+                    + i * self.shapelet_size * self.max_exponent_
+                    + exponent * self.shapelet_size
+                )
+                self._get_distance_profile(
+                    dilation,
+                    padding,
+                    shapelet,
+                    self.shapelet_size,
+                    &X[sample, attribute.dim, 0],
+                    X.shape[2],
+                    cdist.is_norm,
+                    self.dist_buffer + i * X.shape[2],
+                )
+
+            memset(self.min_values, 0, sizeof(double) * self.n_shapelets)
+            memset(self.max_values, 0, sizeof(double) * self.n_shapelets)
+            memset(self.min_so_values, 0, sizeof(double) * self.n_shapelets)
+
+            for i in range(X.shape[2]):
+                self._compute_attributes(
+                    i,
+                    X.shape[2],
+                    exponent,
+                    self.dist_buffer,
+                    cdist.thresholds,
+                    &min_index,
+                    &min_value,
+                    &max_index,
+                    &max_value,
+                    self.min_so_values,
+                )
+
+                self.max_values[max_index] += 1
+                self.min_values[min_index] += min_value
+
+
+            shapelet_attribute_offset = attribute_offset + exponent * self.n_shapelets * 3
+            for i in range(self.n_shapelets):
+                out[out_sample, shapelet_attribute_offset + i * 3 + 0] = self.min_values[i]
+                out[out_sample, shapelet_attribute_offset + i * 3 + 1] = self.max_values[i]
+                out[out_sample, shapelet_attribute_offset + i * 3 + 2] = self.min_so_values[i]
+
+    cdef Py_ssize_t persistent_fill(
+        self,
+        Attribute *attribute,
+        TSArray X,
+        Py_ssize_t sample,
+        double[:, :] out,
+        Py_ssize_t out_sample,
+        Py_ssize_t out_attribute,
+    ) noexcept nogil:
+        return self.transient_fill(
+            attribute, X, sample, out, out_sample, out_attribute
+        )
+
+    cdef void _compute_attributes(
+        self,
+        Py_ssize_t offset,
+        Py_ssize_t stride,
+        Py_ssize_t exponent,
+        double *values,
+        double *thresholds,
+        Py_ssize_t *min_index,
+        double *min_value,
+        Py_ssize_t *max_index,
+        double *max_value,
+        double *min_so_values,
+    ) noexcept nogil:
+        cdef Py_ssize_t i
+        cdef double value
+        min_value[0] = INFINITY
+        max_value[0] = -INFINITY
+        for i in range(self.n_shapelets):
+            value = values[offset + i * stride]
+            if value < min_value[0]:
+                min_value[0] = value
+                min_index[0] = i
+            if value < thresholds[i * self.max_exponent_ + exponent]:
+                min_so_values[i] += 1
+            if value > max_value[0]:
+                max_value[0] = value
+                max_index[0] = i
+
+
+
+

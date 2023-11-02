@@ -11,6 +11,7 @@ from ..distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
 from ._base import BaseAttributeTransform
 from ._cshapelet import (
+    CompetingDialatedShapeletAttributeGenerator,
     DilatedShapeletAttributeGenerator,
     RandomMultiMetricShapeletAttributeGenerator,
     RandomShapeletAttributeGenerator,
@@ -155,6 +156,73 @@ class DilatedShapeletMixin:
             self.lower,
             self.upper,
         )
+
+
+class CompetingDialatedShapeletMixin:
+    _parameter_constraints = {
+        "n_groups": [Interval(numbers.Integral, 1, None, closed="left")],
+        "n_shapelets": [Interval(numbers.Integral, 1, None, closed="left")],
+        "metric_params": [dict, None],
+        "metric": [StrOptions(_METRICS.keys())],
+        "shapelet_size": [Interval(numbers.Integral, 2, None, closed="left")],
+        "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
+        "lower": [Interval(numbers.Real, 0, 1, closed="both")],
+        "upper": [Interval(numbers.Real, 0, 1, closed="both")],
+    }
+
+    def _get_generator(self, n_samples):
+        Metric = _METRICS[self.metric]
+        metric_params = self.metric_params if self.metric_params is not None else {}
+        print(
+            self.n_groups,
+            self.n_shapelets,
+            self.shapelet_size,
+            self.normalize_prob,
+            self.lower,
+            self.upper,
+        )
+        return CompetingDialatedShapeletAttributeGenerator(
+            self.n_groups,
+            self.n_shapelets,
+            self.shapelet_size,
+            self.normalize_prob,
+            self.lower,
+            self.upper,
+            Metric(**metric_params),
+        )
+
+
+class CompetingDialatedShapeletTransform(
+    CompetingDialatedShapeletMixin, BaseAttributeTransform
+):
+    _parameter_constraints = {
+        **CompetingDialatedShapeletMixin._parameter_constraints,
+        **BaseAttributeTransform._parameter_constraints,
+    }
+
+    def __init__(
+        self,
+        n_groups=64,
+        n_shapelets=8,
+        *,
+        metric="euclidean",
+        metric_params=None,
+        normalize_prob=0.8,
+        shapelet_size=11,
+        lower=0.05,
+        upper=0.1,
+        random_state=None,
+        n_jobs=None,
+    ):
+        super().__init__(n_jobs=n_jobs, random_state=random_state)
+        self.n_groups = n_groups
+        self.n_shapelets = n_shapelets
+        self.metric = metric
+        self.metric_params = metric_params
+        self.normalize_prob = normalize_prob
+        self.shapelet_size = shapelet_size
+        self.lower = lower
+        self.upper = upper
 
 
 class DilatedShapeletTransform(DilatedShapeletMixin, BaseAttributeTransform):
