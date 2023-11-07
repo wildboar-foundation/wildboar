@@ -116,6 +116,7 @@ class DilatedShapeletMixin:
         "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
         "lower": [Interval(numbers.Real, 0, 1, closed="both")],
         "upper": [Interval(numbers.Real, 0, 1, closed="both")],
+        "ignore_y": ["boolean"],
     }
 
     def _get_generator(self, x, y):
@@ -159,7 +160,7 @@ class DilatedShapeletMixin:
         if self.lower > self.upper:
             raise ValueError("Lower can't be larger than upper")
 
-        if y is not None:
+        if y is not None and (not hasattr(self, "ignore_y") or not self.ignore_y):
             _, y, samples_per_label = np.unique(
                 np.array(y), return_inverse=True, return_counts=True
             )
@@ -192,12 +193,13 @@ class CompetingDilatedShapeletMixin:
         "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
         "lower": [Interval(numbers.Real, 0, 1, closed="both")],
         "upper": [Interval(numbers.Real, 0, 1, closed="both")],
+        "ignore_y": ["boolean"],
     }
 
     def _get_generator(self, x, y):
         Metric = _METRICS[self.metric]
         metric_params = self.metric_params if self.metric_params is not None else {}
-        if y is not None:
+        if y is not None and (not hasattr(self, "ignore_y") or not self.ignore_y):
             _, y, samples_per_label = np.unique(
                 np.array(y), return_inverse=True, return_counts=True
             )
@@ -251,6 +253,9 @@ class CompetingDilatedShapeletTransform(
         The lower percentile to draw distance thresholds above.
     upper : float, optional
         The upper percentile to draw distance thresholds below.
+    ignore_y : bool, optional
+        Ignore `y` and use the same sample which a shapelet is sampled from to
+        estimate the distance threshold.
     random_state : int or RandomState, optional
         Controls the random sampling of kernels.
 
@@ -281,6 +286,7 @@ class CompetingDilatedShapeletTransform(
         shapelet_size=11,
         lower=0.05,
         upper=0.1,
+        ignore_y=False,
         random_state=None,
         n_jobs=None,
     ):
@@ -293,6 +299,7 @@ class CompetingDilatedShapeletTransform(
         self.shapelet_size = shapelet_size
         self.lower = lower
         self.upper = upper
+        self.ignore_y = ignore_y
 
 
 class DilatedShapeletTransform(DilatedShapeletMixin, BaseAttributeTransform):
@@ -327,11 +334,14 @@ class DilatedShapeletTransform(DilatedShapeletMixin, BaseAttributeTransform):
         The maximum shapelet size. If None, use the discrete sizes
         in `shapelet_size`.
     shapelet_size : array-like, optional
-        The size of shapelets.
+        The size of shapelets, by default [7, 9, 11].
     lower : float, optional
         The lower percentile to draw distance thresholds above.
     upper : float, optional
         The upper percentile to draw distance thresholds below.
+    ignore_y : bool, optional
+        Ignore `y` and use the same sample which a shapelet is sampled from to
+        estimate the distance threshold.
     random_state : int or RandomState, optional
         Controls the random sampling of kernels.
 
@@ -369,6 +379,7 @@ class DilatedShapeletTransform(DilatedShapeletMixin, BaseAttributeTransform):
         shapelet_size=None,
         lower=0.05,
         upper=0.1,
+        ignore_y=False,
         random_state=None,
         n_jobs=None,
     ):
@@ -382,6 +393,7 @@ class DilatedShapeletTransform(DilatedShapeletMixin, BaseAttributeTransform):
         self.normalize_prob = normalize_prob
         self.lower = lower
         self.upper = upper
+        self.ignore_y = ignore_y
 
 
 class RandomShapeletTransform(ShapeletMixin, BaseAttributeTransform):
