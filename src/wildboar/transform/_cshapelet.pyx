@@ -424,6 +424,10 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
     cdef double* dist_buffer
     cdef Py_ssize_t *arg_buffer
 
+    cdef const Py_ssize_t[:] labels
+    cdef const Py_ssize_t[:] samples
+    cdef const Py_ssize_t[:] samples_per_label
+
     def __cinit__(
         self,
         Metric metric,
@@ -432,6 +436,9 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
         double norm_prob,
         double lower_bound,
         double upper_bound,
+        const Py_ssize_t[:] labels,   # must be the output of np.unique(return_indices=True)
+        const Py_ssize_t[:] samples,  # must be np.argsort(labels)
+        const Py_ssize_t[:] samples_per_label,  # must be the output of np.unique(return_count=True)
     ):
         self.metric = metric
         self.n_shapelets = n_shapelets
@@ -447,6 +454,10 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
         self.arg_buffer = NULL
         self.dist_buffer = NULL
 
+        self.labels = labels
+        self.samples = samples
+        self.samples_per_label = samples_per_label
+
         cdef Py_ssize_t i
         for i in range(self.n_shapelet_length):
             self.shapelet_length[i] = shapelet_length[i]
@@ -459,6 +470,9 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
             self.norm_prob,
             self.lower_bound,
             self.upper_bound,
+            self.labels.base if self.labels is not None else None,
+            self.samples.base if self.samples is not None else None,
+            self.samples_per_label.base if self.samples_per_label is not None else None,
         )
 
     def __dealloc__(self):
@@ -559,8 +573,6 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
                 shapelet.data[j] = 0
             j += 1
 
-
-        # TODO: Draw a another sample for computing the threshold.
         if shapelet.is_norm:
             fast_mean_std(shapelet.data, shapelet.length, &mean, &std)
             if std == 0:
@@ -568,6 +580,9 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
 
             for i in range(shapelet.length):
                 shapelet.data[i] = (shapelet.data[i] - mean) / std
+
+        if self.samples is not None:
+            index = self._sample_other_same_label(index, seed)
 
         cdef Py_ssize_t n_distances = self._get_distance_profile(
             shapelet, &X[index, dim, 0], X.shape[2], False
@@ -732,6 +747,21 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
         Py_ssize_t sample
     ) noexcept nogil:
         return self.transient_value(attribute, X, sample)
+
+    # Guarded by if self.samples is not None
+    cdef Py_ssize_t _sample_other_same_label(
+        self, Py_ssize_t sample, uint32_t *seed
+    ) noexcept nogil:
+        cdef Py_ssize_t label = self.labels[sample]
+        cdef Py_ssize_t label_start = 0
+        cdef Py_ssize_t label_end = 0
+        cdef Py_ssize_t i
+        for i in range(label):
+            label_start += self.samples_per_label[i]
+            label_end += self.samples_per_label[i]
+
+        label_end += self.samples_per_label[label]
+        return self.samples[rand_int(label_start, label_end, seed)]
 
     cdef Py_ssize_t _get_distance_profile(
         self,

@@ -159,6 +159,16 @@ class DilatedShapeletMixin:
         if self.lower > self.upper:
             raise ValueError("Lower can't be larger than upper")
 
+        if y is not None:
+            _, y, samples_per_label = np.unique(
+                np.array(y), return_inverse=True, return_counts=True
+            )
+            samples = np.argsort(y)
+        else:
+            samples = None
+            samples_per_label = None
+            y = None
+
         return DilatedShapeletAttributeGenerator(
             Metric(**metric_params),
             self.n_shapelets,
@@ -166,6 +176,9 @@ class DilatedShapeletMixin:
             self.normalize_prob,
             self.lower,
             self.upper,
+            y,
+            samples,
+            samples_per_label,
         )
 
 
