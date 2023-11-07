@@ -588,10 +588,9 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
             shapelet, &X[index, dim, 0], X.shape[2], False
         )
 
-        if n_distances > 1:
-            for i in range(n_distances):
-                self.arg_buffer[i] = i
-            argsort(self.dist_buffer, self.arg_buffer, n_distances)
+        for i in range(n_distances):
+            self.arg_buffer[i] = i
+        argsort(self.dist_buffer, self.arg_buffer, n_distances)
 
         cdef Py_ssize_t lower = <Py_ssize_t> floor(n_distances * self.lower_bound)
         cdef Py_ssize_t upper = <Py_ssize_t> floor(n_distances * self.upper_bound)
@@ -606,11 +605,11 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
         return self.free_persistent(attribute)
 
     cdef Py_ssize_t free_persistent(self, Attribute *attribute) noexcept nogil:
-        cdef DilatedShapelet *rocket
+        cdef DilatedShapelet *shapelet
         if attribute.attribute != NULL:
-            rocket = <DilatedShapelet*> attribute.attribute
-            if rocket.data != NULL:
-                free(rocket.data)
+            shapelet = <DilatedShapelet*> attribute.attribute
+            if shapelet.data != NULL:
+                free(shapelet.data)
             free(attribute.attribute)
             attribute.attribute = NULL
         return 0
@@ -1095,10 +1094,9 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
                     self.dist_buffer,
                 )
 
-                if n_distances > 1:
-                    for m in range(n_distances):
-                        self.arg_buffer[m] = m
-                    argsort(self.dist_buffer, self.arg_buffer, n_distances)
+                for m in range(n_distances):
+                    self.arg_buffer[m] = m
+                argsort(self.dist_buffer, self.arg_buffer, n_distances)
 
                 lower = <Py_ssize_t> floor(n_distances * self.lower)
                 upper = <Py_ssize_t> floor(n_distances * self.upper)
