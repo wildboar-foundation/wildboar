@@ -3126,7 +3126,6 @@ cdef class DtwMetric(Metric):
     cdef double *cost
     cdef double *cost_prev
     cdef double *weights
-    cdef Py_ssize_t warp_width
     cdef double r
 
     def __init__(self, double r=1.0):
@@ -3160,7 +3159,6 @@ cdef class DtwMetric(Metric):
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
-        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
@@ -3176,7 +3174,7 @@ cdef class DtwMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.cost,
             self.cost_prev,
             self.weights,
@@ -3198,7 +3196,7 @@ cdef class DtwMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.cost,
             self.cost_prev,
             self.weights,
@@ -3277,7 +3275,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
             x_len - 2,
             self.d_y,
             y_len - 2,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.cost,
             self.cost_prev,
             self.weights,
@@ -3305,7 +3303,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
             x_len - 2,
             self.d_y,
             y_len - 2,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.cost,
             self.cost_prev,
             self.weights,
@@ -3364,7 +3362,7 @@ cdef class AmercingDtwMetric(DtwMetric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.cost,
             self.cost_prev,
             self.p,
@@ -3386,7 +3384,7 @@ cdef class AmercingDtwMetric(DtwMetric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.cost,
             self.cost_prev,
             self.p,
@@ -3435,7 +3433,6 @@ cdef class LcssMetric(Metric):
     cdef double *cost
     cdef double *cost_prev
     cdef double *weights
-    cdef Py_ssize_t warp_width
     cdef double r
     cdef double epsilon
 
@@ -3481,7 +3478,6 @@ cdef class LcssMetric(Metric):
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
-        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
@@ -3497,7 +3493,7 @@ cdef class LcssMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.epsilon,
             self.cost,
             self.cost_prev,
@@ -3520,7 +3516,7 @@ cdef class LcssMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.epsilon,
             self.cost,
             self.cost_prev,
@@ -3570,7 +3566,6 @@ cdef class ErpMetric(Metric):
     cdef double *gX
     cdef double *gY
 
-    cdef Py_ssize_t warp_width
     cdef double r
     cdef double g
 
@@ -3610,7 +3605,6 @@ cdef class ErpMetric(Metric):
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
-        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
         self.gX = <double*> malloc(sizeof(double) * X.shape[2])
@@ -3628,7 +3622,7 @@ cdef class ErpMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.g,
             self.gX,
             self.gY,
@@ -3652,7 +3646,7 @@ cdef class ErpMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.g,
             self.gX,
             self.gY,
@@ -3679,7 +3673,6 @@ cdef class EdrMetric(Metric):
     cdef double *std_x
     cdef double *std_y
 
-    cdef Py_ssize_t warp_width
     cdef double r
     cdef double epsilon
 
@@ -3735,7 +3728,6 @@ cdef class EdrMetric(Metric):
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
-        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
@@ -3778,7 +3770,7 @@ cdef class EdrMetric(Metric):
             X.shape[2],
             &Y[y_index, dim, 0],
             Y.shape[2],
-            self.warp_width,
+            _compute_r(max(X.shape[2], Y.shape[2]), self.r),
             epsilon,
             self.cost,
             self.cost_prev,
@@ -3806,7 +3798,7 @@ cdef class EdrMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             epsilon,
             self.cost,
             self.cost_prev,
@@ -3836,7 +3828,7 @@ cdef class EdrMetric(Metric):
             X.shape[2],
             &Y[y_index, dim, 0],
             Y.shape[2],
-            self.warp_width,
+            _compute_r(max(X.shape[2], X.shape[2]), self.r),
             epsilon,
             self.cost,
             self.cost_prev,
@@ -3871,7 +3863,7 @@ cdef class EdrMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             epsilon,
             self.cost,
             self.cost_prev,
@@ -3896,7 +3888,6 @@ cdef class MsmMetric(Metric):
     cdef double *cost_prev
     cdef double *cost_y
 
-    cdef Py_ssize_t warp_width
     cdef double r
     cdef double c
 
@@ -3933,7 +3924,6 @@ cdef class MsmMetric(Metric):
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
-        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_y = <double*> malloc(sizeof(double) * X.shape[2])
@@ -3950,7 +3940,7 @@ cdef class MsmMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.c,
             self.cost,
             self.cost_prev,
@@ -3971,7 +3961,7 @@ cdef class MsmMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.c,
             self.cost,
             self.cost_prev,
@@ -3994,7 +3984,6 @@ cdef class TweMetric(Metric):
 
     cdef double *cost
     cdef double *cost_prev
-    cdef Py_ssize_t warp_width
     cdef double r
     cdef double penalty
     cdef double stiffness
@@ -4036,7 +4025,6 @@ cdef class TweMetric(Metric):
     cdef int reset(self, TSArray X, TSArray Y) noexcept nogil:
         self.__free()
         cdef Py_ssize_t n_timestep = max(X.shape[2], Y.shape[2])
-        self.warp_width = <Py_ssize_t> max(floor(n_timestep * self.r), 1)
         self.cost = <double*> malloc(sizeof(double) * n_timestep)
         self.cost_prev = <double*> malloc(sizeof(double) * n_timestep)
 
@@ -4052,7 +4040,7 @@ cdef class TweMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.penalty,
             self.stiffness,
             self.cost,
@@ -4073,7 +4061,7 @@ cdef class TweMetric(Metric):
             x_len,
             y,
             y_len,
-            self.warp_width,
+            _compute_r(max(x_len, y_len), self.r),
             self.penalty,
             self.stiffness,
             self.cost,
