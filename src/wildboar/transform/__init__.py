@@ -3,7 +3,7 @@
 """Transform raw time series to tabular representations."""
 
 from ._conv import convolve
-from ._diff import DiffTransform
+from ._diff import DerivativeTransform, DiffTransform
 from ._hydra import HydraTransform
 from ._interval import FeatureTransform, IntervalTransform
 from ._matrix_profile import MatrixProfileTransform
@@ -37,5 +37,6 @@ __all__ = [
     "MatrixProfileTransform",
     "HydraTransform",
     "DiffTransform",
+    "DerivativeTransform",
     "CompetingDilatedShapeletTransform",
 ]
