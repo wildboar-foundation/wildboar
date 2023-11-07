@@ -146,7 +146,7 @@ def plot_time_domain(
         legend.set_zorder(100)
         ax.add_artist(legend)
 
-    ax.set_xlim([0, x.shape[-1] - 1])
+    ax.set_xlim([1, x.shape[-1] - 1])
     ax.set_ylim([np.min(x) - np.std(x), np.max(x) + np.std(x)])
 
     return ax
@@ -223,7 +223,7 @@ def plot_frequency_domain(
     )
 
     n_freqs = int(x.shape[-1] // 2)
-    x_freq = np.abs(np.fft.fft(x, axis=1)[:, 1 : n_freqs + 1]) / n_freqs
+    x_freq = np.abs(np.fft.fft(x, axis=1)[:, 1 : n_freqs + 1])  # / n_freqs
     x_axis = np.arange(1, n_freqs + 1)
     max_freq = np.max(x_freq)
     if frequency:
@@ -266,12 +266,12 @@ def plot_frequency_domain(
 
         ax.add_artist(legend)
 
-    ticks = ax.get_xticks().astype(int)[: len(x_axis)]
-    ticks[0] = 1
-    ax.set_xticks(ticks)
-    x_label = np.fft.fftfreq(x.shape[-1], d=sample_spacing)[ticks]
-    ax.set_xticklabels("%.2f" % lab for lab in x_label)
+    # ticks = ax.get_xticks().astype(int)[: len(x_axis)]
+    # ticks[0] = 1
+    # ax.set_xticks(ticks)
+    # x_label = np.fft.fftfreq(x.shape[-1], d=sample_spacing)[ticks]
+    # ax.set_xticklabels("%.2f" % lab for lab in x_label)
     ax.set_xlim([0.5, n_freqs + 0.5])
-    ax.set_ylim(0, max_freq)
+    ax.set_ylim(0, max_freq + np.std(x_freq))
 
     return ax
