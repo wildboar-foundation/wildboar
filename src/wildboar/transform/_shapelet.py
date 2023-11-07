@@ -11,7 +11,7 @@ from ..distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
 from ._base import BaseAttributeTransform
 from ._cshapelet import (
-    CompetingDialatedShapeletAttributeGenerator,
+    CompetingDilatedShapeletAttributeGenerator,
     DilatedShapeletAttributeGenerator,
     RandomMultiMetricShapeletAttributeGenerator,
     RandomShapeletAttributeGenerator,
@@ -40,7 +40,7 @@ class ShapeletMixin:
         ],
     }
 
-    def _get_generator(self, n_samples):
+    def _get_generator(self, x, y):
         if self.min_shapelet_size > self.max_shapelet_size:
             raise ValueError(
                 f"The min_shapelet_size parameter of {type(self).__qualname__} "
@@ -96,6 +96,15 @@ class ShapeletMixin:
             )
 
 
+def _odd_shapelet_size(shapelet_size, n_timesteps):
+    if shapelet_size == 1:
+        shapelet_size = 3
+
+    if shapelet_size % 2 == 0:
+        shapelet_size += 1
+    return shapelet_size
+
+
 class DilatedShapeletMixin:
     _parameter_constraints = {
         "n_shapelets": [Interval(numbers.Integral, 1, None, closed="left")],
@@ -109,7 +118,7 @@ class DilatedShapeletMixin:
         "upper": [Interval(numbers.Real, 0, 1, closed="both")],
     }
 
-    def _get_generator(self, n_samples):
+    def _get_generator(self, x, y):
         metric_params = self.metric_params if self.metric_params is not None else {}
         Metric = _METRICS[self.metric]
 
@@ -137,13 +146,15 @@ class DilatedShapeletMixin:
                 min_shapelet_size = 2
             if max_shapelet_size < 3:
                 max_shapelet_size = 3
-            shapelet_size = np.arange(min_shapelet_size, max_shapelet_size)
+            shapelet_size = range(min_shapelet_size, max_shapelet_size)
         elif self.shapelet_size is None:
-            shapelet_size = np.array([7, 9, 11])
+            shapelet_size = [7, 9, 11]
         else:
-            shapelet_size = np.array(self.shapelet_size)
-            if shapelet_size.min() < 2:
-                raise ValueError("The minimum shapelet size is 2")
+            shapelet_size = self.shapelet_size
+
+        shapelet_size = np.array(
+            [_odd_shapelet_size(size, x.shape[-1]) for size in shapelet_size]
+        )
 
         if self.lower > self.upper:
             raise ValueError("Lower can't be larger than upper")
@@ -158,45 +169,50 @@ class DilatedShapeletMixin:
         )
 
 
-class CompetingDialatedShapeletMixin:
+class CompetingDilatedShapeletMixin:
     _parameter_constraints = {
         "n_groups": [Interval(numbers.Integral, 1, None, closed="left")],
         "n_shapelets": [Interval(numbers.Integral, 1, None, closed="left")],
         "metric_params": [dict, None],
         "metric": [StrOptions(_METRICS.keys())],
-        "shapelet_size": [Interval(numbers.Integral, 2, None, closed="left")],
+        "shapelet_size": [Interval(numbers.Integral, 3, None, closed="left")],
         "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
         "lower": [Interval(numbers.Real, 0, 1, closed="both")],
         "upper": [Interval(numbers.Real, 0, 1, closed="both")],
     }
 
-    def _get_generator(self, n_samples):
+    def _get_generator(self, x, y):
         Metric = _METRICS[self.metric]
         metric_params = self.metric_params if self.metric_params is not None else {}
-        print(
+        if y is not None:
+            _, y, samples_per_label = np.unique(
+                np.array(y), return_inverse=True, return_counts=True
+            )
+            samples = np.argsort(y)
+        else:
+            samples = None
+            samples_per_label = None
+            y = None
+
+        return CompetingDilatedShapeletAttributeGenerator(
             self.n_groups,
             self.n_shapelets,
-            self.shapelet_size,
-            self.normalize_prob,
-            self.lower,
-            self.upper,
-        )
-        return CompetingDialatedShapeletAttributeGenerator(
-            self.n_groups,
-            self.n_shapelets,
-            self.shapelet_size,
+            _odd_shapelet_size(self.shapelet_size, x.shape[-1]),
             self.normalize_prob,
             self.lower,
             self.upper,
             Metric(**metric_params),
+            y,
+            samples,
+            samples_per_label,
         )
 
 
-class CompetingDialatedShapeletTransform(
-    CompetingDialatedShapeletMixin, BaseAttributeTransform
+class CompetingDilatedShapeletTransform(
+    CompetingDilatedShapeletMixin, BaseAttributeTransform
 ):
     _parameter_constraints = {
-        **CompetingDialatedShapeletMixin._parameter_constraints,
+        **CompetingDilatedShapeletMixin._parameter_constraints,
         **BaseAttributeTransform._parameter_constraints,
     }
 

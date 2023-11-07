@@ -30,7 +30,7 @@ class FeatureTreeMixin:
         return TreeAttributeGenerator(generator)
 
     def _fit(self, x, y, sample_weights, max_depth, random_state):
-        generator = self._wrap_generator(self._get_generator(self.n_timesteps_in_))
+        generator = self._wrap_generator(self._get_generator(x, y))
         tree_builder = self._get_tree_builder(
             x,
             y,

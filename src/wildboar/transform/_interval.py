@@ -71,7 +71,7 @@ class IntervalMixin:
         "summarizer": [StrOptions(_SUMMARIZER.keys()), list],
     }
 
-    def _get_generator(self, n_samples):  # noqa: PLR0912
+    def _get_generator(self, x, y):  # noqa: PLR0912
         if isinstance(self.summarizer, list):
             if not all(callable(func) for func in self.summarizer):
                 raise ValueError(

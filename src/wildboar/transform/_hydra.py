@@ -19,7 +19,7 @@ class HydraMixin:
         "sampling_params": [dict, None],
     }
 
-    def _get_generator(self, n_samples):
+    def _get_generator(self, x, y):
         sampling_params = {} if self.sampling_params is None else self.sampling_params
         return HydraAttributeGenerator(
             self.n_groups,

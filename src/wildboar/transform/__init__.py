@@ -15,7 +15,11 @@ from ._sax import (
     piecewice_aggregate_approximation,
     symbolic_aggregate_approximation,
 )
-from ._shapelet import DilatedShapeletTransform, RandomShapeletTransform
+from ._shapelet import (
+    CompetingDilatedShapeletTransform,
+    DilatedShapeletTransform,
+    RandomShapeletTransform,
+)
 
 __all__ = [
     "convolve",
@@ -33,4 +37,5 @@ __all__ = [
     "MatrixProfileTransform",
     "HydraTransform",
     "DiffTransform",
+    "CompetingDilatedShapeletTransform",
 ]

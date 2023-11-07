@@ -64,7 +64,7 @@ class RocketMixin:
         "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
     }
 
-    def _get_generator(self, n_samples):
+    def _get_generator(self, x, y):
         if self.min_size is not None or self.max_size is not None:
             if self.kernel_size is not None:
                 raise ValueError(

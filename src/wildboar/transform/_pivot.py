@@ -30,7 +30,7 @@ class PivotMixin:
         "metric_sample": [StrOptions({"uniform", "weighted"}), None],
     }
 
-    def _get_generator(self, n_samples):
+    def _get_generator(self, x, y):
         if isinstance(self.metric, str) and self.metric == "auto":
             metric_specs = [
                 ("euclidean", None),

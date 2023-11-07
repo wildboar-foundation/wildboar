@@ -20,9 +20,6 @@ from ..utils._rand cimport rand_normal
 
 # Hydra group
 cdef struct Hydra:
-    Py_ssize_t kernel_size
-    Py_ssize_t n_kernels
-
     # size: kernel_size * n_kernels
     double *kernels
 
@@ -167,8 +164,6 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
             for j in range(self.kernel_size):
                 kernel[j] = (kernel[j] - mean) / sum_abs
 
-        hydra.kernel_size = self.kernel_size
-        hydra.n_kernels = self.n_kernels
         hydra.kernels = kernels
 
         transient.dim = 0
@@ -221,7 +216,7 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
     cdef object persistent_to_object(self, Attribute *attribute):
         cdef Py_ssize_t i
         cdef Hydra *hydra = <Hydra*> attribute.attribute
-        cdef n = hydra.n_kernels * hydra.kernel_size
+        cdef n = self.n_kernels * self.kernel_size
         data = np.empty(n, dtype=float)
         for i in range(n):
             data[i] = hydra.kernels[i]

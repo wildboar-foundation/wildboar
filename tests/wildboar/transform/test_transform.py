@@ -1,9 +1,11 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
 import pytest
+from sklearn.utils.estimator_checks import check_estimators_pickle
 from wildboar.transform import (
     PAA,
     SAX,
+    CompetingDilatedShapeletTransform,
     DilatedShapeletTransform,
     HydraTransform,
     IntervalTransform,
@@ -31,6 +33,7 @@ from wildboar.utils.estimator_checks import check_estimator
         (PAA(), []),
         (HydraTransform(), []),
         (DilatedShapeletTransform(), []),
+        (CompetingDilatedShapeletTransform(), []),
     ],
 )
 def test_estimator_checks(estimator, skip):

@@ -72,7 +72,7 @@ class BaseAttributeTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta)
         self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
         self.embedding_ = fit(
-            self._get_generator(x.shape[0]),
+            self._get_generator(x, y),
             _check_ts_array(x),
             check_random_state(self.random_state),
         )
@@ -117,7 +117,7 @@ class BaseAttributeTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta)
         self._validate_params()
         x = self._validate_data(x, allow_3d=True, dtype=np.double)
         embedding, x_out = fit_transform(
-            self._get_generator(x.shape[0]),
+            self._get_generator(x, y),
             _check_ts_array(x),
             check_random_state(self.random_state),
             self.n_jobs,
@@ -126,5 +126,5 @@ class BaseAttributeTransform(TransformerMixin, BaseEstimator, metaclass=ABCMeta)
         return x_out
 
     @abstractmethod
-    def _get_generator(self, n_samples):
+    def _get_generator(self, x, y):
         pass
