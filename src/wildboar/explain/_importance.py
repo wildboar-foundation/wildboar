@@ -25,7 +25,7 @@ try:
     from matplotlib.cm import ScalarMappable, get_cmap
     from matplotlib.pylab import subplots
 
-    from ..utils.plot import MidpointNormalize, plot_time_domain
+    from ..utils.plot import MidpointNormalize, plot_frequency_domain, plot_time_domain
 except ModuleNotFoundError as e:
     from ..utils import DependencyMissing
 
@@ -351,8 +351,11 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
 
         order = np.argsort(importances)[: -(k + 1) : -1]
         norm = MidpointNormalize(
-            vmin=importances[order[-1]],
-            vmax=importances[order[0]],
+            # vmin=importances[order[-1]],
+            # vmax=importances[order[0]],
+            # midpoint=0.0,
+            vmin=0.0,
+            vmax=1.0,
             midpoint=0.0,
         )
         cmap = get_cmap("coolwarm")
@@ -388,6 +391,95 @@ class IntervalImportance(ExplainerMixin, PermuteImportance):
         ax.tick_params(axis="x", labelrotation=-70)
 
         plot_time_domain(x, y=y, n_samples=n_samples, ax=ax)
+        mappable = ScalarMappable(cmap=cmap, norm=norm)
+        if fig is not None:
+            fig.colorbar(mappable, ax=ax)
+            return ax
+        else:
+            return ax, mappable
+
+
+class FrequencyImportance(ExplainerMixin, PermuteImportance):
+    def __init__(self, window=1, scoring=None, n_repeat=1, random_state=None):
+        super().__init__(scoring=scoring, n_repeat=n_repeat, random_state=random_state)
+        self.window = window
+
+    # TODO: Ensure it has access to X to compute things in terms of it
+    def _yield_components(self):
+        n_timesteps = self.n_timesteps_in_ // 2
+        n_intervals = n_timesteps
+        if self.window > n_timesteps:
+            raise ValueError(
+                f"The window parameter of {type(self).__name__} must be "
+                "<= n_timesteps_in_"
+            )
+
+        if n_timesteps % 2 != 0:
+            n_timesteps -= 1
+
+        n_intervals = n_timesteps // self.window
+        for i in range(n_intervals):
+            length = n_timesteps // n_intervals
+            start = 1 + i * length + min(i % n_intervals, n_timesteps % n_intervals)
+            if i % n_intervals < n_timesteps % n_intervals:
+                length += 1
+            yield start, start + length
+
+    def _permute_component(self, X, component, random_state):
+        start, end = component
+        X_fft = np.fft.rfft(X, axis=1)
+        random_state.shuffle(X_fft[:, start:end])
+        return np.fft.irfft(X_fft, X.shape[-1], axis=1)
+
+    def fit(self, estimator, x, y, sample_weight=None):
+        # self._validate_params()
+        estimator = self._validate_estimator(estimator)
+        x, y = self._validate_data(x, y, reset=False, allow_3d=False)
+        random_state = check_random_state(self.random_state)
+        self._fit(estimator, x, y, random_state, sample_weight=sample_weight)
+        return self
+
+    def plot(self, x=None, y=None, ax=None):
+        check_is_fitted(self)
+
+        importances = self.importances_.mean
+        if x is None:
+            return plot_importances(
+                importances,
+                ax=ax,
+                labels=["(%d, %d)" % (start, end) for start, end in self.components_],
+            )
+
+        if ax is None:
+            fig, ax = subplots()
+        else:
+            fig = None
+
+        order = np.argsort(importances)[::-1]
+        norm = MidpointNormalize(
+            vmin=0,  # importances[order[-1]],
+            vmax=1,  # importances[order[0]],
+            midpoint=0.0,
+        )
+        cmap = get_cmap("coolwarm")
+
+        for o in order:
+            start, end = self.components_[o]
+            ax.axvspan(
+                start - 0.5,
+                end - 0.5,
+                0,
+                1,
+                alpha=0.2,
+                color=cmap(norm(importances[o])),
+                zorder=1,
+            )
+
+        xticks = [start for start, _ in self.components_]
+        xticks.append(self.components_[-1][1])
+        ax.set_xticks(xticks)
+        ax.tick_params(axis="x", labelrotation=-70)
+        plot_frequency_domain(x, y, ax=ax)
         mappable = ScalarMappable(cmap=cmap, norm=norm)
         if fig is not None:
             fig.colorbar(mappable, ax=ax)
@@ -621,7 +713,10 @@ class AmplitudeImportance(ExplainerMixin, PermuteImportance):
 
         order = np.argsort(importances)[: -(k + 1) : -1]
         norm = MidpointNormalize(
-            vmin=importances[order[-1]], vmax=importances[order[0]], midpoint=0.0
+            # vmin=importances[order[-1]], vmax=importances[order[0]], midpoint=0.0
+            vmin=0,
+            vmax=1,
+            midpoint=0.0,
         )
         thresholds = self.sax_.binning_.get_thresholds()
         cmap = get_cmap("coolwarm")
@@ -799,7 +894,11 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             return_index=True,
         )
 
-        weights = self._distance_weight(distances, kernel_scale)
+        weights = (
+            self._distance_weight(distances, kernel_scale)
+            if kernel_scale is not None
+            else np.broadcast_to(1, shape=(X.shape[0], len(self.components_)))
+        )
         importances = self.importances_.mean
 
         if y is None:
@@ -836,7 +935,7 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
         if X is None:
             return plot_importances(
                 self.importances_, ax=ax, labels=range(len(self.components_))
-            )            
+            )
 
         if isinstance(self.importances_, dict):
             importances = check_option(self.importances_, scoring, "scoring")
@@ -878,7 +977,10 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
             )
             cmap = get_cmap("coolwarm")
             norm = MidpointNormalize(
-                vmin=importances[:k].min(), vmax=importances[:k].max(), midpoint=0
+                # vmin=importances[:k].min(), vmax=importances[:k].max(), midpoint=0
+                vmin=0.0,
+                vmax=1.0,
+                midpoint=0.0,
             )
             labels, inv, lbl_count = np.unique(
                 y, return_inverse=True, return_counts=True
@@ -892,7 +994,11 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
                     sharey=True,
                 )
 
-            weights = self._distance_weight(distances, kernel_scale)
+            weights = (
+                self._distance_weight(distances, kernel_scale)
+                if kernel_scale is not None
+                else np.broadcast_to(1, shape=(X.shape[0], len(self.components_)))
+            )
             for i in range(len(labels)):
                 for j in range(k):
                     plot_time_domain(
@@ -914,6 +1020,9 @@ class ShapeletImportance(ExplainerMixin, PermuteImportance):
 
             for i in range(len(labels)):
                 ax[0, i].set_title("Label=%r" % labels[i])
+
+            for i in range(k):
+                ax[i, 0].set_ylabel(order[i])
 
             mappable = ScalarMappable(norm=norm, cmap=cmap)
             if fig is not None:
