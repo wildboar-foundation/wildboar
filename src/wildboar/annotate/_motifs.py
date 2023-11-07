@@ -6,7 +6,8 @@ import numbers
 import numpy as np
 from sklearn.utils import check_scalar
 
-from ..distance import _THRESHOLD, matrix_profile, subsequence_match
+from ..distance._distance import _THRESHOLD, subsequence_match
+from ..distance._matrix_profile import matrix_profile
 from ..utils.decorators import singleton
 from ..utils.validation import check_array, check_option, check_type
 
@@ -18,7 +19,7 @@ def motifs(  # noqa: PLR0912, PLR0915
     *,
     window="auto",
     exclude=0.2,
-    max_distance="best",
+    max_distance="auto",
     max_neighbours=10,
     min_neighbours=1,
     max_motif=1,
