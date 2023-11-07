@@ -224,6 +224,47 @@ class CompetingDilatedShapeletMixin:
 class CompetingDilatedShapeletTransform(
     CompetingDilatedShapeletMixin, BaseAttributeTransform
 ):
+    """
+    A dictionary based method using dilated competing shapelets.
+
+    Parameters
+    ----------
+    n_groups : int, optional
+        The number of groups of dilated shapelets.
+    n_shapelets : int, optional
+        The number of dilated shapelets per group.
+    metric : str or callable, optional
+        The distance metric
+
+        See ``_METRICS.keys()`` for a list of supported metrics.
+    metric_params : dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
+    normalize_prob : float, optional
+        The probability of standardizing a shapelet with zero mean and unit
+        standard deviation.
+    shapelet_size : int, optional
+        The length of the dilated shapelet.
+    lower : float, optional
+        The lower percentile to draw distance thresholds above.
+    upper : float, optional
+        The upper percentile to draw distance thresholds below.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
+    n_jobs : int, optional
+        The number of parallel jobs.
+    """
+
     _parameter_constraints = {
         **CompetingDilatedShapeletMixin._parameter_constraints,
         **BaseAttributeTransform._parameter_constraints,
