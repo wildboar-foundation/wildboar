@@ -8,7 +8,7 @@ from setuptools.extension import Extension
 BUILD_ARGS = {
     "default": {
         "posix": {
-            "extra_compile_args": ["-O3"],
+            "extra_compile_args": ["-O2"],
             "extra_link_args": [],
             "libraries": [],
         },
