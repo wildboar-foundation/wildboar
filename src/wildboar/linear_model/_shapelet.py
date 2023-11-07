@@ -193,7 +193,7 @@ class DilatedShapeletClassifier(TransformRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
-        normalize=False,
+        normalize=True,
         random_state=None,
         n_jobs=None,
     ):
@@ -314,7 +314,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
-        normalize=False,
+        normalize=True,
         random_state=None,
         n_jobs=None,
     ):
