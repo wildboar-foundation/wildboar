@@ -113,7 +113,7 @@ class TransformRidgeClassifierCV(BaseTransformClassifier):
 
     def _build_pipeline(self):
         pipeline = super()._build_pipeline()
-        if self.normalize:
+        if self.normalize is not False:
             pipeline.insert(1, ("normalize", StandardScaler()))
 
         return pipeline

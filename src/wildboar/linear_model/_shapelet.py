@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.pipeline import make_pipeline, make_union
 from sklearn.utils import _is_arraylike_not_scalar, check_random_state
 
+from ..datasets.preprocess import SparseScaler
 from ..transform import (
     CompetingDilatedShapeletTransform,
     DiffTransform,
@@ -281,8 +282,10 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
         Determines the cross-validation splitting strategy.
     class_weight : dict or 'balanced', optional
         Weights associated with classes in the form `{class_label: weight}`.
-    normalize : bool, optional
-        Standardize before fitting.
+    normalize : "sparse" or bool, optional
+        Standardize before fitting. By default use
+        :class:`datasets.preprocess.SparseScaler` to standardize the attributes. Set
+        to `False` to disable or `True` to use `StandardScaler`.
     random_state : int or RandomState, optional
         Controls the random sampling of kernels.
 
@@ -314,7 +317,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
-        normalize=True,
+        normalize="sparse",
         random_state=None,
         n_jobs=None,
     ):
@@ -337,6 +340,13 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
         self.lower = lower
         self.upper = upper
         self.order = order
+
+    def _build_pipeline(self):
+        pipeline = super()._build_pipeline()
+        if self.normalize == "sparse":
+            pipeline[1] = ("normalize", SparseScaler())
+
+        return pipeline
 
     def _get_transform(self, random_state):
         random_state = check_random_state(random_state)
