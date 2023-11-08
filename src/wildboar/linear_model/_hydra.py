@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.pipeline import make_pipeline, make_union
 from sklearn.utils import check_random_state
 
+from ..datasets.preprocess import SparseScaler
 from ..transform import DiffTransform, HydraTransform
 from ._transform import TransformRidgeClassifierCV
 
@@ -43,7 +44,9 @@ class HydraClassifier(TransformRidgeClassifierCV):
     class_weight : dict or 'balanced', optional
         Weights associated with classes in the form `{class_label: weight}`.
     normalize : bool, optional
-        Standardize before fitting.
+        Standardize before fitting. By default use
+        :class:`datasets.preprocess.SparseScaler` to standardize the attributes. Set
+        to `False` to disable or `True` to use `StandardScaler`.
     n_jobs : int, optional
         The number of jobs to run in parallel. A value of `None` means using
         a single core and a value of `-1` means using all cores. Positive
@@ -80,7 +83,7 @@ class HydraClassifier(TransformRidgeClassifierCV):
         scoring=None,
         cv=None,
         class_weight=None,
-        normalize=True,
+        normalize="sparse",
         n_jobs=None,
         random_state=None,
     ):
@@ -100,6 +103,13 @@ class HydraClassifier(TransformRidgeClassifierCV):
         self.sampling = sampling
         self.sampling_params = sampling_params
         self.order = order
+
+    def _build_pipeline(self):
+        pipeline = super()._build_pipeline()
+        if self.normalize == "sparse":
+            pipeline[1] = ("normalize", SparseScaler())
+
+        return pipeline
 
     def _get_transform(self, random_state):
         if self.order is not None and self.order > 0 and self.n_groups > 1:
