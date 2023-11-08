@@ -1079,7 +1079,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
                         shapelet[m] = (shapelet[m] - mean) / std
 
                 if self.samples is not None:
-                    x = &X[self._sample_other_same_label(j, seed), dim, start]
+                    x = &X[self._sample_other_same_label(j, seed), dim, 0]
                 else:
                     x = &X[j, dim, 0]
 
@@ -1212,7 +1212,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
                     + i * self.shapelet_size * self.max_exponent_
                     + exponent * self.shapelet_size
                 )
-                max_index = self._get_distance_profile(
+                self._get_distance_profile(
                     dilation,
                     padding,
                     shapelet,
