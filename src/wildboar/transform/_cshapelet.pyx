@@ -851,7 +851,6 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
 
     # random values and incremental indices to draw random samples from
     cdef double *rnd_value
-    cdef Py_ssize_t *rnd_index
 
     cdef const Py_ssize_t[:] labels
     cdef const Py_ssize_t[:] samples
@@ -878,7 +877,6 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         self.upper = upper
         self.metric = metric
 
-        self.rnd_index = NULL
         self.rnd_value = NULL
         self.dist_buffer = NULL
         self.arg_buffer = NULL
@@ -934,9 +932,6 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         if self.max_so_values != NULL:
             free(self.max_so_values)
             self.max_so_values = NULL
-        if self.rnd_index != NULL:
-            free(self.rnd_index)
-            self.rnd_index = NULL
         if self.rnd_value != NULL:
             free(self.rnd_value)
             self.rnd_value = NULL
@@ -954,7 +949,6 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         self.min_so_values = <double*> malloc(sizeof(double) * self.n_shapelets)
         self.max_so_values = <double*> malloc(sizeof(double) * self.n_shapelets)
         self.rnd_value = <double*> malloc(sizeof(double) * X.shape[0])
-        self.rnd_index = <Py_ssize_t*> malloc(sizeof(double) * X.shape[0])
         self.max_exponent_ = _max_exponent(X.shape[2], self.shapelet_size)
 
         self.metric.reset(X, X)
@@ -1025,11 +1019,10 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         cdef Py_ssize_t lower, upper
         cdef double mean, std
 
-        for i in range(X.shape[0]):
+        for i in range(n_samples):
             self.rnd_value[i] = rand_uniform(0, 1, seed)
-            self.rnd_index[i] = i
 
-        argsort(self.rnd_value, self.rnd_index, X.shape[0])
+        argsort(self.rnd_value, samples, n_samples)
 
         # shapelet[0, 0], ..., shapelet[n_shapelets, max_exponent]
         cdef double *data = <double*> malloc(
@@ -1048,9 +1041,10 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
 
         cdist.is_norm = rand_uniform(0, 1, seed) < self.normalize_prob
 
+        # Draw samples per shapelet/dilation pair not per shapelet.
         for i in range(self.n_shapelets):
-            j = self.rnd_index[i % X.shape[0]]
             for k in range(self.max_exponent_):
+                j = samples[(i + k) % n_samples]
                 shapelet = (
                     data
                     + i * self.shapelet_size * self.max_exponent_
@@ -1305,7 +1299,3 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
             if value > max_value[0]:
                 max_value[0] = value
                 max_index[0] = i
-
-
-
-

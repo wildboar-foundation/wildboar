@@ -256,8 +256,8 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
     normalize_prob : float, optional
         The probability of standardizing a shapelet with zero mean and unit
         standard deviation.
-    shapelet_size : int, optional
-        The length of the dilated shapelet.
+    shapelet_size : int or array-like, optional
+        The length of the dilated shapelet. If list, use multiple shapelet sizes.
     lower : float, optional
         The lower percentile to draw distance thresholds above.
     upper : float, optional
@@ -355,7 +355,6 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
             metric=self.metric,
             metric_params=self.metric_params,
             normalize_prob=self.normalize_prob,
-            shapelet_size=self.shapelet_size,
             lower=self.lower,
             upper=self.upper,
             n_jobs=self.n_jobs,
@@ -366,45 +365,80 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
             and self.order > 0
             and self.n_groups > 1
         ):
-            return make_union(
-                CompetingDilatedShapeletTransform(
-                    n_groups=self.n_groups // 2,
-                    random_state=random_state.randint(np.iinfo(np.int32).max),
-                    **params,
-                ),
-                make_pipeline(
-                    DiffTransform(order=self.order),
+            if not _is_arraylike_not_scalar(self.shapelet_size):
+                shapelet_size = [self.shapelet_size]
+            else:
+                shapelet_size = self.shapelet_size
+
+            n_groups = self.n_groups // 2 // len(shapelet_size)
+            if n_groups < 2:
+                raise ValueError(
+                    "unsupported shapelet_size, n_groups // 2 // len(shapelet_size) "
+                    "must be larger than 1."
+                )
+            extra = self.n_groups % len(shapelet_size)
+
+            union = []
+            for i, size in enumerate(shapelet_size):
+                ng = n_groups
+                if i < extra:
+                    ng += 1
+
+                union.append(
                     CompetingDilatedShapeletTransform(
-                        n_groups=self.n_groups // 2,
+                        n_groups=ng,
+                        shapelet_size=size,
                         random_state=random_state.randint(np.iinfo(np.int32).max),
                         **params,
                     ),
-                ),
-            )
-        elif self.order is not None and _is_arraylike_not_scalar(self.order):
-            transformers = [
-                CompetingDilatedShapeletTransform(
-                    n_groups=self.n_groups,
-                    random_state=random_state.randint(np.iinfo(np.int32).max),
-                    **params,
                 )
-            ]
-            for i in self.order:
-                if not (isinstance(i, numbers.Integral) and i > 0):
-                    raise ValueError(f"order {i} is not supported")
-
-                transformers.append(
+                union.append(
                     make_pipeline(
-                        DiffTransform(order=i),
+                        DiffTransform(order=self.order),
                         CompetingDilatedShapeletTransform(
-                            n_groups=self.n_groups,
+                            n_groups=ng,
+                            shapelet_size=size,
                             random_state=random_state.randint(np.iinfo(np.int32).max),
                             **params,
                         ),
-                    )
+                    ),
                 )
-            return make_union(*transformers)
+            return make_union(*union)
         else:
-            return CompetingDilatedShapeletTransform(
-                n_groups=self.n_groups, random_state=random_state, **params
-            )
+            if not _is_arraylike_not_scalar(self.shapelet_size):
+                shapelet_size = [self.shapelet_size]
+            else:
+                shapelet_size = self.shapelet_size
+
+            if len(shapelet_size) == 1:
+                return CompetingDilatedShapeletTransform(
+                    n_groups=self.n_groups,
+                    shapelet_size=shapelet_size[0],
+                    random_state=random_state,
+                    **params,
+                )
+            else:
+                n_groups = self.n_groups // len(shapelet_size)
+                if n_groups < 1:
+                    raise ValueError(
+                        "unsupported shapelet_size, n_groups // len(shapelet_size) "
+                        "must be larger than 0."
+                    )
+
+                extra = self.n_groups % len(self.shapelet_size)
+                union = []
+                for i, size in enumerate(shapelet_size):
+                    ng = n_groups
+                    if i < extra:
+                        ng += 1
+
+                    union.append(
+                        CompetingDilatedShapeletTransform(
+                            n_groups=ng,
+                            shapelet_size=size,
+                            random_state=random_state.randint(np.iinfo(np.int32).max),
+                            **params,
+                        )
+                    )
+
+                return make_union(*union)
