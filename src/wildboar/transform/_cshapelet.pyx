@@ -816,6 +816,7 @@ cdef inline Py_ssize_t _max_exponent(
 
 cdef struct Cdist:
     bint is_norm
+    Py_ssize_t max_exponent
 
     # size: max_exponent * n_shapelets
     double *thresholds
@@ -831,8 +832,6 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
     cdef double normalize_prob
     cdef double lower
     cdef double upper
-
-    cdef Py_ssize_t max_exponent_
 
     cdef Metric metric
 
@@ -949,7 +948,6 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         self.min_so_values = <double*> malloc(sizeof(double) * self.n_shapelets)
         self.max_so_values = <double*> malloc(sizeof(double) * self.n_shapelets)
         self.rnd_value = <double*> malloc(sizeof(double) * X.shape[0])
-        self.max_exponent_ = _max_exponent(X.shape[2], self.shapelet_size)
 
         self.metric.reset(X, X)
         return 0
@@ -1018,6 +1016,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         cdef Py_ssize_t dim, start, dilation, dilated_size, padding, n_distances
         cdef Py_ssize_t lower, upper
         cdef double mean, std
+        cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.shapelet_size)
 
         for i in range(n_samples):
             self.rnd_value[i] = rand_uniform(0, 1, seed)
@@ -1026,10 +1025,10 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
 
         # shapelet[0, 0], ..., shapelet[n_shapelets, max_exponent]
         cdef double *data = <double*> malloc(
-            sizeof(double) * self.n_shapelets * self.max_exponent_ * self.shapelet_size
+            sizeof(double) * self.n_shapelets * max_exponent * self.shapelet_size
         )
         cdef double *thresholds = <double*> malloc(
-            sizeof(double) * self.max_exponent_ * self.n_shapelets
+            sizeof(double) * max_exponent * self.n_shapelets
         )
         cdef double *shapelet
         cdef double *x
@@ -1040,14 +1039,15 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
             dim = 0
 
         cdist.is_norm = rand_uniform(0, 1, seed) < self.normalize_prob
+        cdist.max_exponent = max_exponent
 
         # Draw samples per shapelet/dilation pair not per shapelet.
         for i in range(self.n_shapelets):
-            for k in range(self.max_exponent_):
+            for k in range(max_exponent):
                 j = samples[(i + k) % n_samples]
                 shapelet = (
                     data
-                    + i * self.shapelet_size * self.max_exponent_
+                    + i * self.shapelet_size * max_exponent
                     + k * self.shapelet_size
                 )
 
@@ -1095,7 +1095,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
                 lower = <Py_ssize_t> floor(n_distances * self.lower)
                 upper = <Py_ssize_t> floor(n_distances * self.upper)
 
-                thresholds[i * self.max_exponent_ + k] = self.dist_buffer[
+                thresholds[i * max_exponent + k] = self.dist_buffer[
                     rand_int(lower, upper, seed)
                 ]
 
@@ -1139,9 +1139,9 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         cdef Cdist *cdist = <Cdist*> attribute.attribute
 
         data = np.empty(
-            self.shapelet_size * self.max_exponent_ * self.n_shapelets, dtype=float
+            self.shapelet_size * cdist.max_exponent * self.n_shapelets, dtype=float
         )
-        thresholds = np.empty(self.max_exponent_ * self.n_shapelets, dtype=float)
+        thresholds = np.empty(cdist.max_exponent * self.n_shapelets, dtype=float)
 
         for i in range(data.shape[0]):
             data[i] = cdist.data[i]
@@ -1151,15 +1151,17 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
 
         return attribute.dim, (
             cdist.is_norm,
+            cdist.max_exponent,
             data,
             thresholds,
         )
 
     cdef Py_ssize_t persistent_from_object(self, object obj, Attribute *attribute):
-        dim, (is_norm, data, thresholds) = obj
+        dim, (is_norm, max_exponent, data, thresholds) = obj
         cdef Cdist *cdist = <Cdist*> malloc(sizeof(Cdist))
 
         cdist.is_norm = is_norm
+        cdist.max_exponent = max_exponent
         cdist.data = <double*> malloc(sizeof(double) * data.shape[0])
         cdist.thresholds = <double*> malloc(sizeof(double) * thresholds.shape[0])
         cdef Py_ssize_t i
@@ -1193,17 +1195,17 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         # Place the pointer inside correct attribute group, as given by attribute_id
         cdef Py_ssize_t shapelet_attribute_offset
         cdef Py_ssize_t attribute_offset = (
-            attribute_id * self.n_shapelets * self.max_exponent_ * 3
+            attribute_id * self.n_shapelets * cdist.max_exponent * 3
         )
 
-        for exponent in range(self.max_exponent_):
+        for exponent in range(cdist.max_exponent):
             dilation = <Py_ssize_t> pow(2, exponent)
             padding = <Py_ssize_t> ((self.shapelet_size - 1) * dilation) // 2
 
             for i in range(self.n_shapelets):
                 shapelet = (
                     cdist.data
-                    + i * self.shapelet_size * self.max_exponent_
+                    + i * self.shapelet_size * cdist.max_exponent
                     + exponent * self.shapelet_size
                 )
                 self._get_distance_profile(
@@ -1226,6 +1228,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
                     i,
                     X.shape[2],
                     exponent,
+                    cdist.max_exponent,
                     self.dist_buffer,
                     cdist.thresholds,
                     &min_index,
@@ -1277,6 +1280,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         Py_ssize_t offset,
         Py_ssize_t stride,
         Py_ssize_t exponent,
+        Py_ssize_t max_exponent,
         double *values,
         double *thresholds,
         Py_ssize_t *min_index,
@@ -1294,7 +1298,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
             if value < min_value[0]:
                 min_value[0] = value
                 min_index[0] = i
-            if value < thresholds[i * self.max_exponent_ + exponent]:
+            if value < thresholds[i * max_exponent + exponent]:
                 min_so_values[i] += 1
             if value > max_value[0]:
                 max_value[0] = value

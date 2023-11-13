@@ -3,6 +3,7 @@
 import numbers
 
 import numpy as np
+from joblib import effective_n_jobs
 from sklearn.pipeline import make_pipeline, make_union
 from sklearn.utils import _is_arraylike_not_scalar, check_random_state
 
@@ -359,6 +360,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
             upper=self.upper,
             n_jobs=self.n_jobs,
         )
+        n_jobs = effective_n_jobs(self.n_jobs)
 
         if (
             isinstance(self.order, numbers.Integral)
@@ -403,7 +405,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
                         ),
                     ),
                 )
-            return make_union(*union)
+            return make_union(*union, n_jobs=max(1, n_jobs // n_groups))
         else:
             if not _is_arraylike_not_scalar(self.shapelet_size):
                 shapelet_size = [self.shapelet_size]
@@ -441,4 +443,4 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
                         )
                     )
 
-                return make_union(*union)
+                return make_union(*union, n_jobs=max(1, n_jobs // n_groups))
