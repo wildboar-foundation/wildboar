@@ -14,6 +14,7 @@ from ..utils import _safe_jagged_array
 from ..utils.validation import _check_ts_array, check_array, check_option, check_type
 from ._cdistance import (
     _argmin_distance,
+    _argmin_subsequence_distance,
     _paired_distance,
     _paired_subsequence_distance,
     _paired_subsequence_match,
@@ -1136,3 +1137,115 @@ def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=N
         return dp[0]
     else:
         return dp
+
+
+def argmin_subsequence_distance(
+    y,
+    x,
+    *,
+    dim=0,
+    k=1,
+    metric="euclidean",
+    metric_params=None,
+    return_distance=False,
+    n_jobs=None,
+):
+    """
+    Compute the k:th closest subsequences.
+
+    For the i:th shapelet and the i:th sample return the index and, optionally,
+    the distance of the `k` closest matches.
+
+    Parameters
+    ----------
+    y : array-like of shape (n_samples, m_timestep) or list of 1d-arrays
+        The subsequences.
+    x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+        The samples.
+    dim : int, optional
+        The dimension in x to find subsequences in.
+    k : int, optional
+        The of closest subsequences to find.
+    metric : str, optional
+        The metric.
+
+        See ``_METRICS.keys()`` for a list of supported metrics.
+    metric_params : dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_metrics>`.
+    return_distance : bool, optional
+        Return the distance for the `k` closest subsequences.
+    n_jobs : int, optional
+       The number of parallel jobs.
+
+    Returns
+    -------
+    indices : ndarray of shape (n_samples, k)
+        The indices of the `k` closest subsequences.
+    distance : ndarray of shape (n_samples, k), optional
+        The distance of the `k` closest subsequences.
+
+    Notes
+    -----
+    As opposed to other functions computing the distance between subsequences,
+    this function does not use the subsequence metrics defined in
+    `_SUBSEQUENCE_METRICS`. For performance, it instead uses the metrics in
+    `_METRICS`. As such, "scaled_euclidean" and "scaled_dtw" is not availiable.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from wildboar.datasets import load_dataset
+    >>> from wildboar.distance import argmin_subsequence_distance
+    >>> s = np.lib.stride_tricks.sliding_window_view(X[0], window_shape=10)
+    >>> x = np.broadcast_to(X[0], shape=(s.shape[0], X.shape[1]))
+    >>> argmin_subsequence_distance(s, x, k=4)
+    """
+    if isinstance(y, np.ndarray) and y.dtype == float:
+        y = check_array(y, allow_3d=False, ensure_ts_array=True)
+        y_len = np.broadcast_to(y.shape[2], y.shape[0]).astype(np.intp)
+    else:
+        # we assume y is a list of ndarrays
+        y_len = np.empty(len(y), dtype=np.intp)
+        for i, shapelet in enumerate(y):
+            if shapelet.ndim > 1:
+                raise ValueError("shapelet must be 1d-array")
+
+            y_len[i] = shapelet.shape[0]
+
+        y_tmp = np.empty((len(y), 1, np.max(y_len)), dtype=float)
+        for i, shapelet in enumerate(y):
+            y_tmp[i, 0, : shapelet.shape[0]] = shapelet
+
+        y = y_tmp
+
+    x = check_array(x, allow_3d=True, ensure_ts_array=True)
+
+    if not y.shape[2] <= x.shape[2]:
+        raise ValueError("the longest shapelet must be shorter than samples")
+
+    if y.shape[0] != x.shape[0]:
+        raise ValueError("both arrays must have the same number of samples")
+
+    if not k <= (x.shape[2] - y.shape[2] + 1):
+        raise ValueError("k must be less x.shape[-1] - y.shape[-1] + 1")
+
+    Metric = _METRICS[metric]
+    metric_params = metric_params if metric_params is not None else {}
+
+    indices, distances = _argmin_subsequence_distance(
+        y,
+        y_len,
+        x,
+        dim,
+        Metric(**metric_params),
+        k,
+        n_jobs,
+    )
+
+    if return_distance:
+        return indices, distances
+    else:
+        return indices

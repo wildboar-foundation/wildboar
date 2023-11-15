@@ -9,7 +9,7 @@
 
 cimport scipy.linalg.cython_blas as blas
 cimport scipy.linalg.cython_lapack as lapack
-from libc.math cimport INFINITY, M_PI, acos, cos, fabs, pow, sqrt
+from libc.math cimport INFINITY, M_PI, acos, cos, fabs, pow, sqrt, isinf
 from libc.stdlib cimport free, malloc
 
 from ..utils cimport TSArray
@@ -481,8 +481,9 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t *indicies,
     ) noexcept nogil:
         cdef Py_ssize_t i
+        threshold = cos(threshold * M_PI) if not isinf(threshold) else -INFINITY
         cdef Py_ssize_t n_matches = cosine_similarity_matches(
-            s, s_len, x, x_len, cos(threshold * M_PI), distances, indicies
+            s, s_len, x, x_len, threshold, distances, indicies
         )
         cdef double cosine
 

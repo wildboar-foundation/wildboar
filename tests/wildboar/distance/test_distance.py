@@ -7,6 +7,8 @@ from numpy.testing import assert_almost_equal, assert_equal
 from wildboar.datasets import load_gun_point, load_two_lead_ecg
 from wildboar.distance import (
     argmin_distance,
+    argmin_subsequence_distance,
+    distance_profile,
     paired_distance,
     paired_subsequence_distance,
     pairwise_distance,
@@ -1503,7 +1505,6 @@ def test_pairwise_distance_dim_mean():
 @pytest.mark.parametrize("metric", list(_METRICS.keys()))
 @pytest.mark.parametrize("k", [1, 3, 7])
 def test_argmin_equals_pairwise_distance_argpartition(metric, k):
-    print(metric)
     X, y = load_two_lead_ecg()
     X, Y = X[:10], X[300:350]
     ind_argmin, min_dist_argmin = argmin_distance(
@@ -1519,3 +1520,31 @@ def test_argmin_equals_pairwise_distance_argpartition(metric, k):
         np.sort(np.take_along_axis(dist, ind_pairwise, axis=1), axis=1),
         np.sort(min_dist_argmin, axis=1),
     )
+
+
+@pytest.mark.parametrize("metric", list(_METRICS.keys() & _SUBSEQUENCE_METRICS.keys()))
+@pytest.mark.parametrize("k", [1, 3, 7])
+def test_argmin_subsequence_distance(metric, k):
+    X, y = load_two_lead_ecg()
+    S = np.lib.stride_tricks.sliding_window_view(X[0], window_shape=10)
+    X = np.broadcast_to(X[0], shape=(S.shape[0], X.shape[1]))
+
+    metric_params = None
+    if metric == "edr":
+        metric_params = {"epsilon": 0.1}
+
+    argmin_ind, argmin_dist = argmin_subsequence_distance(
+        S,
+        X,
+        metric=metric,
+        metric_params=metric_params,
+        k=k,
+        return_distance=True,
+    )
+
+    for i in range(10):
+        dp_dist = distance_profile(
+            S[i], X[i], metric=metric, metric_params=metric_params
+        )
+        dp_ind = np.argpartition(dp_dist, k)[:k]
+        assert_almost_equal(np.sort(dp_dist[dp_ind]), np.sort(argmin_dist[i]))

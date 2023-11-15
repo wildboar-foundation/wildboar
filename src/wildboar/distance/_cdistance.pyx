@@ -1079,6 +1079,108 @@ def _argmin_distance(
     return indices.base, values.base
 
 
+cdef class _ArgminSubsequenceDistance:
+
+    cdef double[:, :] distances
+    cdef Py_ssize_t[:, :] indices
+
+    cdef TSArray s
+    cdef Py_ssize_t[:] s_len
+    cdef TSArray t
+    cdef Metric metric
+    cdef Py_ssize_t dim
+
+    def __cinit__(
+        self,
+        TSArray s,
+        Py_ssize_t[:] s_len,
+        TSArray t,
+        Py_ssize_t dim,
+        Metric metric,
+        double[:, :] distances,
+        Py_ssize_t[:, :] indices,
+    ):
+        self.s = s
+        self.s_len = s_len
+        self.t = t
+        self.dim = dim
+        self.metric = metric
+        self.distances = distances
+        self.indices = indices
+
+    @property
+    def n_work(self):
+        return self.t.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef double distance
+        cdef Py_ssize_t i, j
+
+        cdef Py_ssize_t k = self.distances.shape[1]
+        cdef Heap heap = Heap(k)
+        cdef HeapElement e
+        cdef Metric metric = deepcopy(self.metric)
+        print(job_id)
+
+        with nogil:
+            metric.reset(self.t, self.s)
+            for i in range(offset, offset + batch_size):
+                distance = INFINITY
+                heap.reset()
+
+                for j in range(self.t.shape[2] - self.s_len[i] + 1):
+                    if (
+                        metric._eadistance(
+                            &self.s[i, self.dim, 0],
+                            self.s_len[i],
+                            &self.t[i, self.dim, j],
+                            self.s_len[i],
+                            &distance)
+                    ):
+                        heap.push(j, distance)
+
+                    if heap.isfull():
+                        distance = heap.maxvalue()
+                    else:
+                        distance = INFINITY
+
+                for j in range(k):
+                    e = heap.getelement(j)
+                    self.indices[i, j] = e.index
+                    self.distances[i, j] = e.value
+
+
+def _argmin_subsequence_distance(
+    TSArray s,
+    Py_ssize_t[:] s_len,
+    TSArray x,
+    Py_ssize_t dim,
+    Metric metric,
+    Py_ssize_t k,
+    n_jobs
+):
+    cdef Py_ssize_t n_samples = x.shape[0]
+    assert s.shape[0] == n_samples
+
+    cdef Py_ssize_t[:, :] indices = np.empty((n_samples, k), dtype=np.intp)
+    cdef double[:, :] values = np.empty((n_samples, k), dtype=float)
+    run_in_parallel(
+        _ArgminSubsequenceDistance(
+            s,
+            s_len,
+            x,
+            dim,
+            metric,
+            values,
+            indices,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem",
+    )
+
+    return indices.base, values.base
+
+
 cdef class _PairedDistanceBatch:
     cdef TSArray x
     cdef TSArray y

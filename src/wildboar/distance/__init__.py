@@ -14,6 +14,7 @@ examples.
 
 from ._distance import (
     argmin_distance,
+    argmin_subsequence_distance,
     distance_profile,
     paired_distance,
     paired_subsequence_distance,
@@ -28,6 +29,7 @@ from ._neighbors import KMeans, KMedoids, KNeighborsClassifier
 
 __all__ = [
     "argmin_distance",
+    "argmin_subsequence_distance",
     "distance_profile",
     "pairwise_subsequence_distance",
     "paired_subsequence_distance",
