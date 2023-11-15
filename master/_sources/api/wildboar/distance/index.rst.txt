@@ -1384,13 +1384,13 @@ Functions
        **metric** : str, optional
            The metric.
            
-           See ``_METRICS.keys()`` for a list of supported metrics.
+           See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
 
        **metric_params** : dict, optional
            Parameters to the metric.
            
            Read more about the parameters in the
-           :ref:`User guide <list_of_metrics>`.
+           :ref:`User guide <list_of_subsequence_metrics>`.
 
        **return_distance** : bool, optional
            Return the distance for the `k` closest subsequences.
