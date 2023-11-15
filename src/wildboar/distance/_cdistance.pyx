@@ -1120,7 +1120,6 @@ cdef class _ArgminSubsequenceDistance:
         cdef Heap heap = Heap(k)
         cdef HeapElement e
         cdef Metric metric = deepcopy(self.metric)
-        print(job_id)
 
         with nogil:
             metric.reset(self.t, self.s)
