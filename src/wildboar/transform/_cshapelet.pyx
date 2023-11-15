@@ -1290,15 +1290,17 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         double *min_so_values,
     ) noexcept nogil:
         cdef Py_ssize_t i
-        cdef double value
+        cdef double value, threshold
         min_value[0] = INFINITY
         max_value[0] = -INFINITY
         for i in range(self.n_shapelets):
             value = values[offset + i * stride]
+            threshold = thresholds[i * max_exponent + exponent]
+
             if value < min_value[0]:
                 min_value[0] = value
                 min_index[0] = i
-            if value < thresholds[i * max_exponent + exponent]:
+            if value < threshold:
                 min_so_values[i] += 1
             if value > max_value[0]:
                 max_value[0] = value

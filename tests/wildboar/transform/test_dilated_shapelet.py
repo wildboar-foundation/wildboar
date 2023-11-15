@@ -77,7 +77,7 @@ def test_competing_dilated_shapelet_unsupervised_transform():
           9.        ,   5.63377047,   8.        ,  10.
     ]])
     # fmt: on
-    np.testing.assert_almost_equal(f.transform(X[:1]), expected)
+    np.testing.assert_almost_equal(f.transform(X[:1])[0], expected[0])
 
 
 def test_competing_dilated_shapelet_supervised_transform():
@@ -116,4 +116,4 @@ def test_competing_dilated_shapelet_supervised_transform():
     ]])
     # fmt: on
     actual = f.transform(X[:1])
-    np.testing.assert_almost_equal(actual, expected)
+    np.testing.assert_almost_equal(actual[0], expected[0])
