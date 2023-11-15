@@ -58,6 +58,10 @@ Changelog
        all dimensions are returned. The default value for ``dim`` will change to "mean"
        in 1.3. For 3darrays, we issue a deprecation warning for the current default value.
 
+     - |Enhancement| Add support for standardizing all subsequence metrics. Prefix
+       the name of the metric with ``"scaled\_"`` to use the standardized metric, e.g.,
+       `"scaled_euclidean"` or `"scaled_msm"`.
+
      - |Feature| A new function :func:`distance.argmin_distance` which takes as
        input two arrays `X` and `Y` and finds, for each sample in `X`, the
        indices of the `k` samples in `Y` with the smallest distance to the i:th sample

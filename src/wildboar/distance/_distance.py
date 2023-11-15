@@ -13,6 +13,7 @@ from sklearn.utils.validation import _is_arraylike, check_scalar
 from ..utils import _safe_jagged_array
 from ..utils.validation import _check_ts_array, check_array, check_option, check_type
 from ._cdistance import (
+    ScaledSubsequenceMetricWrap,
     _argmin_distance,
     _argmin_subsequence_distance,
     _paired_distance,
@@ -69,27 +70,49 @@ from ._metric import (
     ScaledEuclideanSubsequenceMetric,
 )
 
+
+def _subsequence_metric_wrap(Metric):
+    def f(**metric_params):
+        return ScaledSubsequenceMetricWrap(Metric(**metric_params))
+
+    return f
+
+
 _SUBSEQUENCE_METRICS = {
     "euclidean": EuclideanSubsequenceMetric,
-    "normalized_euclidean": NormalizedEuclideanSubsequenceMetric,
     "scaled_euclidean": ScaledEuclideanSubsequenceMetric,
+    "normalized_euclidean": NormalizedEuclideanSubsequenceMetric,
     "adtw": AmercingDtwSubsequenceMetric,
-    "dtw": DtwSubsequenceMetric,
+    "scaled_adtw": _subsequence_metric_wrap(AmercingDtwMetric),
     "wdtw": WeightedDtwSubsequenceMetric,
+    "scaled_wdtw": _subsequence_metric_wrap(WeightedDtwMetric),
     "ddtw": DerivativeDtwSubsequenceMetric,
+    "scaled_ddtw": _subsequence_metric_wrap(DerivativeDtwMetric),
     "wddtw": WeightedDerivativeDtwSubsequenceMetric,
+    "scaled_wddtw": _subsequence_metric_wrap(WeightedDerivativeDtwMetric),
+    "dtw": DtwSubsequenceMetric,
     "scaled_dtw": ScaledDtwSubsequenceMetric,
     "lcss": LcssSubsequenceMetric,
+    "scaled_lcss": _subsequence_metric_wrap(LcssMetric),
     "edr": EdrSubsequenceMetric,
+    "scaled_edr": _subsequence_metric_wrap(EdrMetric),
     "twe": TweSubsequenceMetric,
+    "scaled_twe": _subsequence_metric_wrap(TweMetric),
     "msm": MsmSubsequenceMetric,
+    "scaled_msm": _subsequence_metric_wrap(MsmMetric),
     "erp": ErpSubsequenceMetric,
+    "scaled_erp": _subsequence_metric_wrap(ErpMetric),
     "mass": ScaledMassSubsequenceMetric,
     "manhattan": ManhattanSubsequenceMetric,
+    "scaled_manhattan": _subsequence_metric_wrap(ManhattanMetric),
     "minkowski": MinkowskiSubsequenceMetric,
+    "scaled_minkowski": _subsequence_metric_wrap(MinkowskiMetric),
     "chebyshev": ChebyshevSubsequenceMetric,
+    "scaled_chebyshev": _subsequence_metric_wrap(ChebyshevMetric),
     "cosine": CosineSubsequenceMetric,
+    "scaled_cosine": _subsequence_metric_wrap(CosineMetric),
     "angular": AngularSubsequenceMetric,
+    "scaled_angular": _subsequence_metric_wrap(AngularMetric),
 }
 
 _METRICS = {
@@ -1169,12 +1192,12 @@ def argmin_subsequence_distance(
     metric : str, optional
         The metric.
 
-        See ``_METRICS.keys()`` for a list of supported metrics.
+        See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
     metric_params : dict, optional
         Parameters to the metric.
 
         Read more about the parameters in the
-        :ref:`User guide <list_of_metrics>`.
+        :ref:`User guide <list_of_subsequence_metrics>`.
     return_distance : bool, optional
         Return the distance for the `k` closest subsequences.
     n_jobs : int, optional
@@ -1232,6 +1255,10 @@ def argmin_subsequence_distance(
     if not k <= (x.shape[2] - y.shape[2] + 1):
         raise ValueError("k must be less x.shape[-1] - y.shape[-1] + 1")
 
+    scaled = metric.startswith("scaled_")
+    if scaled:
+        metric = metric[7:]
+
     Metric = _METRICS[metric]
     metric_params = metric_params if metric_params is not None else {}
 
@@ -1242,7 +1269,8 @@ def argmin_subsequence_distance(
         dim,
         Metric(**metric_params),
         k,
-        n_jobs,
+        scaled=bool(scaled),
+        n_jobs=n_jobs,
     )
 
     if return_distance:

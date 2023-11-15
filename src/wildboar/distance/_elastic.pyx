@@ -3303,7 +3303,7 @@ cdef class DerivativeDtwMetric(DtwMetric):
             x_len - 2,
             self.d_y,
             y_len - 2,
-            _compute_r(min(x_len, y_len), self.r),
+            _compute_r(min(x_len - 2, y_len - 2), self.r),
             self.cost,
             self.cost_prev,
             self.weights,

@@ -21,6 +21,15 @@ from copy import deepcopy
 
 from ..utils cimport TSArray
 from ..utils._misc cimport List
+from ..utils._stats cimport (
+    fast_mean_std,
+    IncStats,
+    inc_stats_init,
+    inc_stats_add,
+    inc_stats_remove,
+    inc_stats_mean,
+    inc_stats_variance,
+)
 
 from ..utils._parallel import run_in_parallel
 from ..utils.validation import check_array
@@ -456,6 +465,154 @@ cdef class ScaledSubsequenceMetric(SubsequenceMetric):
         if v.std <= EPSILON:
             v.std = 0.0
         return 0
+
+
+cdef class ScaledSubsequenceMetricWrap(ScaledSubsequenceMetric):
+    cdef Metric wrap
+    cdef double *x_buffer
+    cdef double *s_buffer
+
+    def __cinit__(self, Metric wrap):
+        self.wrap = wrap
+        self.x_buffer = NULL
+        self.s_buffer = NULL
+
+    def __reduce__(self):
+        return self.__class__, (self.wrap, )
+
+    def __dealloc__(self):
+        free(self.x_buffer)
+        free(self.s_buffer)
+
+    cdef int reset(self, TSArray X) noexcept nogil:
+        if self.x_buffer != NULL:
+            free(self.x_buffer)
+        if self.s_buffer != NULL:
+            free(self.s_buffer)
+
+        self.x_buffer = <double*> malloc(sizeof(double) * X.shape[2])
+        self.s_buffer = <double*> malloc(sizeof(double) * X.shape[2])
+        return self.wrap.reset(X, X)
+
+    cdef double _distance(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        Py_ssize_t *return_index=NULL,
+    ) noexcept nogil:
+        cdef double mean, std
+        cdef double min_dist = INFINITY
+        cdef Py_ssize_t i, j
+
+        cdef IncStats stats
+        inc_stats_init(&stats)
+
+        for i in range(s_len - 1):
+            self.s_buffer[i] = (s[i] - s_mean) / s_std
+            inc_stats_add(&stats, 1.0, x[i])
+
+        self.s_buffer[s_len - 1] = (s[s_len - 1] - s_mean) / s_std
+
+        for i in range(x_len - s_len + 1):
+            # add the last value
+            inc_stats_add(
+                &stats, 1.0, x[i + s_len - 1]
+            )
+            std = inc_stats_variance(&stats)
+            if std == 0.0:
+                std = 1.0
+            else:
+                std = sqrt(std)
+
+            mean = stats.mean
+            for j in range(s_len):
+                self.x_buffer[j] = (x[i + j] - mean) / std
+
+            # remove the first value from the mean/std
+            inc_stats_remove(&stats, 1.0, x[i])
+
+            if (
+                self.wrap._eadistance(
+                    self.s_buffer,
+                    s_len,
+                    self.x_buffer,
+                    s_len,
+                    &min_dist,
+                )
+            ):
+                if return_index != NULL:
+                    return_index[0] = i
+
+        return min_dist
+
+    # TODO: requires figuring out how to manipulate the threshold...
+    cdef Py_ssize_t _matches(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        double threshold,
+        double *distances,
+        Py_ssize_t *indicies,
+    ) noexcept nogil:
+        cdef double mean, std
+        cdef double tmp_dist
+        cdef Py_ssize_t i, j, n
+
+        cdef IncStats stats
+        inc_stats_init(&stats)
+
+        for i in range(s_len - 1):
+            self.s_buffer[i] = (s[i] - s_mean) / s_std
+            inc_stats_add(&stats, 1.0, x[i])
+
+        self.s_buffer[s_len - 1] = (s[s_len - 1] - s_mean) / s_std
+
+        n = 0
+        for i in range(x_len - s_len + 1):
+            # add the last value
+            inc_stats_add(
+                &stats, 1.0, x[i + s_len - 1]
+            )
+            std = inc_stats_variance(&stats)
+            if std == 0.0:
+                std = 1.0
+            else:
+                std = sqrt(std)
+
+            mean = stats.mean
+            for j in range(s_len):
+                self.x_buffer[j] = (x[i + j] - mean) / std
+
+            # remove the first value from the mean/std
+            inc_stats_remove(&stats, 1.0, x[i])
+
+            tmp_dist = threshold
+            if (
+                self.wrap._eadistance(
+                    self.s_buffer,
+                    s_len,
+                    self.x_buffer,
+                    s_len,
+                    &tmp_dist,
+                )
+            ):
+                if indicies != NULL:
+                    indicies[n] = i
+
+                distances[n] = tmp_dist
+                n += 1
+
+        return n
 
 
 cdef class Metric:
@@ -1149,6 +1306,120 @@ cdef class _ArgminSubsequenceDistance:
                     self.distances[i, j] = e.value
 
 
+cdef class _ScaledArgminSubsequenceDistance:
+
+    cdef double[:, :] distances
+    cdef Py_ssize_t[:, :] indices
+
+    cdef TSArray s
+    cdef Py_ssize_t[:] s_len
+    cdef TSArray t
+    cdef Metric metric
+    cdef Py_ssize_t dim
+
+    cdef double *s_buffer
+    cdef double *t_buffer
+
+    def __cinit__(
+        self,
+        TSArray s,
+        Py_ssize_t[:] s_len,
+        TSArray t,
+        Py_ssize_t dim,
+        Metric metric,
+        double[:, :] distances,
+        Py_ssize_t[:, :] indices,
+    ):
+        self.s = s
+        self.s_len = s_len
+        self.t = t
+        self.dim = dim
+        self.metric = metric
+        self.distances = distances
+        self.indices = indices
+        self.s_buffer = <double*> malloc(sizeof(double) * s.shape[2])
+        self.t_buffer = <double*> malloc(sizeof(double) * s.shape[2])
+
+    def __dealloc__(self):
+        free(self.s_buffer)
+        free(self.t_buffer)
+
+    @property
+    def n_work(self):
+        return self.t.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef double distance
+        cdef Py_ssize_t i, j, n
+        cdef Py_ssize_t s_len
+        cdef Py_ssize_t n_timestep = self.t.shape[2]
+        cdef Py_ssize_t k = self.distances.shape[1]
+
+        cdef Heap heap = Heap(k)
+        cdef HeapElement e
+        cdef Metric metric = deepcopy(self.metric)
+
+        cdef double mean, std
+        cdef IncStats stats
+        with nogil:
+            metric.reset(self.t, self.s)
+            for i in range(offset, offset + batch_size):
+                s_len = self.s_len[i]
+
+                distance = INFINITY
+                heap.reset()
+                inc_stats_init(&stats)
+
+                fast_mean_std(&self.s[i, self.dim, 0], s_len, &mean, &std)
+                if std == 0.0:
+                    std = 1.0
+
+                for n in range(s_len - 1):
+                    self.s_buffer[n] = (self.s[i, self.dim, n] - mean) / std
+                    inc_stats_add(&stats, 1.0, self.t[i, self.dim, n])
+
+                self.s_buffer[s_len - 1] = (
+                    self.s[i, self.dim, s_len - 1] - mean
+                ) / std
+
+                for j in range(n_timestep - s_len + 1):
+                    # add the last value
+                    inc_stats_add(
+                        &stats, 1.0, self.t[i, self.dim, j + s_len - 1]
+                    )
+                    std = inc_stats_variance(&stats)
+                    if std == 0.0:
+                        std = 1.0
+                    else:
+                        std = sqrt(std)
+
+                    mean = stats.mean
+                    for n in range(s_len):
+                        self.t_buffer[n] = (self.t[i, self.dim, j + n] - mean) / std
+
+                    # remove the first value from the mean/std
+                    inc_stats_remove(&stats, 1.0, self.t[i, self.dim, j])
+
+                    if (
+                        metric._eadistance(
+                            self.s_buffer,
+                            s_len,
+                            self.t_buffer,
+                            s_len,
+                            &distance)
+                    ):
+                        heap.push(j, distance)
+
+                    if heap.isfull():
+                        distance = heap.maxvalue()
+                    else:
+                        distance = INFINITY
+
+                for j in range(k):
+                    e = heap.getelement(j)
+                    self.indices[i, j] = e.index
+                    self.distances[i, j] = e.value
+
 def _argmin_subsequence_distance(
     TSArray s,
     Py_ssize_t[:] s_len,
@@ -1156,15 +1427,22 @@ def _argmin_subsequence_distance(
     Py_ssize_t dim,
     Metric metric,
     Py_ssize_t k,
-    n_jobs
+    bint scaled=False,
+    n_jobs=None,
 ):
     cdef Py_ssize_t n_samples = x.shape[0]
     assert s.shape[0] == n_samples
 
     cdef Py_ssize_t[:, :] indices = np.empty((n_samples, k), dtype=np.intp)
     cdef double[:, :] values = np.empty((n_samples, k), dtype=float)
+
+    if scaled:
+        Method = _ScaledArgminSubsequenceDistance
+    else:
+        Method = _ArgminSubsequenceDistance
+
     run_in_parallel(
-        _ArgminSubsequenceDistance(
+        Method(
             s,
             s_len,
             x,

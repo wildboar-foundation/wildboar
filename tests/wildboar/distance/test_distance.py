@@ -1522,7 +1522,7 @@ def test_argmin_equals_pairwise_distance_argpartition(metric, k):
     )
 
 
-@pytest.mark.parametrize("metric", list(_METRICS.keys() & _SUBSEQUENCE_METRICS.keys()))
+@pytest.mark.parametrize("metric", sorted(_SUBSEQUENCE_METRICS.keys() - {"mass"}))
 @pytest.mark.parametrize("k", [1, 3, 7])
 def test_argmin_subsequence_distance(metric, k):
     X, y = load_two_lead_ecg()
@@ -1530,7 +1530,7 @@ def test_argmin_subsequence_distance(metric, k):
     X = np.broadcast_to(X[0], shape=(S.shape[0], X.shape[1]))
 
     metric_params = None
-    if metric == "edr":
+    if metric in ("scaled_edr", "edr"):
         metric_params = {"epsilon": 0.1}
 
     argmin_ind, argmin_dist = argmin_subsequence_distance(
