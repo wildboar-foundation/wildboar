@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
 
     <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>wildboar - Wildboar 1.1.1.dev227 documentation</title>
+        <title>wildboar - Wildboar 1.1.1.dev250 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev227 documentation</div></a>
+      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev250 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -538,6 +538,9 @@ examples.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier" title="wildboar.distance.KNeighborsClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code></a></p></td>
 <td><p>Classifier implementing k-nearest neighbors.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.MDS" title="wildboar.distance.MDS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MDS</span></code></a></p></td>
+<td><p>Multidimensional scaling.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -548,28 +551,31 @@ examples.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.argmin_distance" title="wildboar.distance.argmin_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">argmin_distance</span></code></a></p></td>
 <td><p>Find the indicies of the samples with the lowest distance in <cite>Y</cite>.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.distance_profile" title="wildboar.distance.distance_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_profile</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.argmin_subsequence_distance" title="wildboar.distance.argmin_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">argmin_subsequence_distance</span></code></a></p></td>
+<td><p>Compute the k:th closest subsequences.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.distance_profile" title="wildboar.distance.distance_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_profile</span></code></a></p></td>
 <td><p>Compute the distance profile.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matrix_profile</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.matrix_profile" title="wildboar.distance.matrix_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">matrix_profile</span></code></a></p></td>
 <td><p>Compute the matrix profile.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_distance</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_distance</span></code></a></p></td>
 <td><p>Compute the distance between the i:th time series.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a></p></td>
 <td><p>Minimum subsequence distance between the i:th subsequence and time series.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.paired_subsequence_match" title="wildboar.distance.paired_subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_match</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.paired_subsequence_match" title="wildboar.distance.paired_subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">paired_subsequence_match</span></code></a></p></td>
 <td><p>Find matching subsequnces.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a></p></td>
 <td><p>Compute the distance between subsequences and time series.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a></p></td>
 <td><p>Minimum subsequence distance between subsequences and time series.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequence_match</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/distance/index.html#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subsequence_match</span></code></a></p></td>
 <td><p>Find matching subsequnces.</p></td>
 </tr>
 </tbody>
@@ -691,10 +697,13 @@ computing DTW alignments and distances.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/explain/index.html#wildboar.explain.AmplitudeImportance" title="wildboar.explain.AmplitudeImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AmplitudeImportance</span></code></a></p></td>
 <td><p>Compute the importance of equi-probable amplitude intervals.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/explain/index.html#wildboar.explain.IntervalImportance" title="wildboar.explain.IntervalImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalImportance</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/explain/index.html#wildboar.explain.FrequencyImportance" title="wildboar.explain.FrequencyImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FrequencyImportance</span></code></a></p></td>
+<td><p>Mixin class for all explainers in wildboar.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/explain/index.html#wildboar.explain.IntervalImportance" title="wildboar.explain.IntervalImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IntervalImportance</span></code></a></p></td>
 <td><p>Interval importance for time series.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/explain/index.html#wildboar.explain.ShapeletImportance" title="wildboar.explain.ShapeletImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletImportance</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/explain/index.html#wildboar.explain.ShapeletImportance" title="wildboar.explain.ShapeletImportance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ShapeletImportance</span></code></a></p></td>
 <td><p>Compute the importance of shapelets.</p></td>
 </tr>
 </tbody>
@@ -753,22 +762,25 @@ methods for generating counterfactual explanations.</p>
 <table class="autosummary docutils align-default" id="id17">
 <caption><span class="caption-text">Classes</span><a class="headerlink" href="#id17" title="Permalink to this table">#</a></caption>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier" title="wildboar.linear_model.DilatedShapeletClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DilatedShapeletClassifier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.CompetingDilatedShapeletClassifier" title="wildboar.linear_model.CompetingDilatedShapeletClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompetingDilatedShapeletClassifier</span></code></a></p></td>
+<td><p>A dictionary based method using dilated competing shapelets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier" title="wildboar.linear_model.DilatedShapeletClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DilatedShapeletClassifier</span></code></a></p></td>
 <td><p>A classifier that uses random dilated shapelets.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier" title="wildboar.linear_model.HydraClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HydraClassifier</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier" title="wildboar.linear_model.HydraClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HydraClassifier</span></code></a></p></td>
 <td><p>A Dictionary based method using convolutional kernels.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletClassifier" title="wildboar.linear_model.RandomShapeletClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletClassifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletClassifier" title="wildboar.linear_model.RandomShapeletClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletClassifier</span></code></a></p></td>
 <td><p>A classifier that uses random shapelets.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletRegressor" title="wildboar.linear_model.RandomShapeletRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletRegressor</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RandomShapeletRegressor" title="wildboar.linear_model.RandomShapeletRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RandomShapeletRegressor</span></code></a></p></td>
 <td><p>A regressor that uses random shapelets.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketClassifier</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketClassifier</span></code></a></p></td>
 <td><p>Implements the ROCKET classifier.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketRegressor</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RocketRegressor</span></code></a></p></td>
 <td><p>Implements the ROCKET regressor.</p></td>
 </tr>
 </tbody>
@@ -841,6 +853,12 @@ methods for generating counterfactual explanations.</p>
 <table class="autosummary docutils align-default" id="id21">
 <caption><span class="caption-text">Classes</span><a class="headerlink" href="#id21" title="Permalink to this table">#</a></caption>
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="wildboar/transform/index.html#wildboar.transform.CompetingDilatedShapeletTransform" title="wildboar.transform.CompetingDilatedShapeletTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CompetingDilatedShapeletTransform</span></code></a></p></td>
+<td><p>A dictionary based method using dilated competing shapelets.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="wildboar/transform/index.html#wildboar.transform.DerivativeTransform" title="wildboar.transform.DerivativeTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DerivativeTransform</span></code></a></p></td>
+<td><p>Mixin class for all transformers in scikit-learn.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="wildboar/transform/index.html#wildboar.transform.DiffTransform" title="wildboar.transform.DiffTransform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiffTransform</span></code></a></p></td>
 <td><p>Mixin class for all transformers in scikit-learn.</p></td>
 </tr>

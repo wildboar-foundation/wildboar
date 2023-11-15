@@ -68,6 +68,10 @@ Changelog
        distance from `Y` to all subsequences of the same length of the i:th
        sample in `X`.
 
+     - |Feature| A new function :func:`distance.argmin_subsequence_distance` which
+       takes two paired arrays of subsequences and samples and finds the `k` smallest
+       matching positions for each sample/subsequence pair.
+
      - |Feature| Enables support for ``n_jobs`` in :func:`distance.pairwise_distance`,
        :func:`distance.paired_distance`.
 

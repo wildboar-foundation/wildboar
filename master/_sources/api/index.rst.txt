@@ -284,6 +284,8 @@ examples.
     - KMedoid algorithm.
   * - :py:obj:`~wildboar.distance.KNeighborsClassifier`
     - Classifier implementing k-nearest neighbors.
+  * - :py:obj:`~wildboar.distance.MDS`
+    - Multidimensional scaling.
 
 
 .. list-table:: Functions
@@ -293,6 +295,8 @@ examples.
 
   * - :py:obj:`~wildboar.distance.argmin_distance`
     - Find the indicies of the samples with the lowest distance in `Y`.
+  * - :py:obj:`~wildboar.distance.argmin_subsequence_distance`
+    - Compute the k:th closest subsequences.
   * - :py:obj:`~wildboar.distance.distance_profile`
     - Compute the distance profile.
   * - :py:obj:`~wildboar.distance.matrix_profile`
@@ -309,6 +313,7 @@ examples.
     - Minimum subsequence distance between subsequences and time series.
   * - :py:obj:`~wildboar.distance.subsequence_match`
     - Find matching subsequnces.
+
 
 
 
@@ -450,6 +455,8 @@ Explanation methods for classifiers and regressors.
 
   * - :py:obj:`~wildboar.explain.AmplitudeImportance`
     - Compute the importance of equi-probable amplitude intervals.
+  * - :py:obj:`~wildboar.explain.FrequencyImportance`
+    - Mixin class for all explainers in wildboar.
   * - :py:obj:`~wildboar.explain.IntervalImportance`
     - Interval importance for time series.
   * - :py:obj:`~wildboar.explain.ShapeletImportance`
@@ -547,6 +554,8 @@ Linear methods for both classification and regression.
   :widths: auto
   :class: autosummary
 
+  * - :py:obj:`~wildboar.linear_model.CompetingDilatedShapeletClassifier`
+    - A dictionary based method using dilated competing shapelets.
   * - :py:obj:`~wildboar.linear_model.DilatedShapeletClassifier`
     - A classifier that uses random dilated shapelets.
   * - :py:obj:`~wildboar.linear_model.HydraClassifier`
@@ -686,6 +695,10 @@ Transform raw time series to tabular representations.
   :widths: auto
   :class: autosummary
 
+  * - :py:obj:`~wildboar.transform.CompetingDilatedShapeletTransform`
+    - A dictionary based method using dilated competing shapelets.
+  * - :py:obj:`~wildboar.transform.DerivativeTransform`
+    - Mixin class for all transformers in scikit-learn.
   * - :py:obj:`~wildboar.transform.DiffTransform`
     - Mixin class for all transformers in scikit-learn.
   * - :py:obj:`~wildboar.transform.DilatedShapeletTransform`

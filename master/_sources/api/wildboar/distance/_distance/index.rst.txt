@@ -18,6 +18,7 @@ Functions
 .. autoapisummary::
 
    wildboar.distance._distance.argmin_distance
+   wildboar.distance._distance.argmin_subsequence_distance
    wildboar.distance._distance.distance_profile
    wildboar.distance._distance.paired_distance
    wildboar.distance._distance.paired_subsequence_distance
@@ -95,6 +96,82 @@ Functions
            [1, 2]]),
     array([[ 8.24621125,  4.79583152],
            [10.24695077, 10.        ]]))
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: argmin_subsequence_distance(y, x, *, dim=0, k=1, metric='euclidean', metric_params=None, return_distance=False, n_jobs=None)
+
+   
+   Compute the k:th closest subsequences.
+
+   For the i:th shapelet and the i:th sample return the index and, optionally,
+   the distance of the `k` closest matches.
+
+   :Parameters:
+
+       **y** : array-like of shape (n_samples, m_timestep) or list of 1d-arrays
+           The subsequences.
+
+       **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
+           The samples.
+
+       **dim** : int, optional
+           The dimension in x to find subsequences in.
+
+       **k** : int, optional
+           The of closest subsequences to find.
+
+       **metric** : str, optional
+           The metric.
+           
+           See ``_METRICS.keys()`` for a list of supported metrics.
+
+       **metric_params** : dict, optional
+           Parameters to the metric.
+           
+           Read more about the parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+       **return_distance** : bool, optional
+           Return the distance for the `k` closest subsequences.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
+
+   :Returns:
+
+       **indices** : ndarray of shape (n_samples, k)
+           The indices of the `k` closest subsequences.
+
+       **distance** : ndarray of shape (n_samples, k), optional
+           The distance of the `k` closest subsequences.
+
+
+
+
+
+
+
+
+   .. rubric:: Notes
+
+   As opposed to other functions computing the distance between subsequences,
+   this function does not use the subsequence metrics defined in
+   `_SUBSEQUENCE_METRICS`. For performance, it instead uses the metrics in
+   `_METRICS`. As such, "scaled_euclidean" and "scaled_dtw" is not availiable.
+
+
+   .. rubric:: Examples
+
+   >>> import numpy as np
+   >>> from wildboar.datasets import load_dataset
+   >>> from wildboar.distance import argmin_subsequence_distance
+   >>> s = np.lib.stride_tricks.sliding_window_view(X[0], window_shape=10)
+   >>> x = np.broadcast_to(X[0], shape=(s.shape[0], X.shape[1]))
+   >>> argmin_subsequence_distance(s, x, k=4)
 
 
 
