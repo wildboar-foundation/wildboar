@@ -306,13 +306,13 @@ Functions
        **y** : list or ndarray of shape (n_samples, m_timestep)
            Input time series.
            
-           - if list, a list of array-like of shape (m_timestep, )
+           - if list, a list of array-like of shape (m_timestep, ).
 
        **x** : ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
-           The input data
+           The input data.
 
        **dim** : int, optional
-           The dim to search for shapelets
+           The dim to search for shapelets.
 
        **metric** : str or callable, optional
            The distance metric
@@ -330,17 +330,17 @@ Functions
              matches, the first match is returned.
 
        **n_jobs** : int, optional
-           The number of parallel jobs to run. Ignored
+           The number of parallel jobs to run.
 
    :Returns:
 
        **dist** : float, ndarray
            An array of shape (n_samples, ) with the minumum distance between the i:th
-           subsequence and the i:th sample
+           subsequence and the i:th sample.
 
        **indices** : int, ndarray, optional
            An array of shape (n_samples, ) with the index of the best matching position
-           of the i:th subsequence and the i:th sample
+           of the i:th subsequence and the i:th sample.
 
 
 
@@ -509,13 +509,13 @@ Functions
        **y** : list or ndarray of shape (n_subsequences, n_timestep)
            Input time series.
            
-           - if list, a list of array-like of shape (n_timestep, )
+           - if list, a list of array-like of shape (n_timestep, ).
 
        **x** : ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
-           The input data
+           The input data.
 
        **dim** : int, optional
-           The dim to search for subsequence
+           The dim to search for subsequence.
 
        **metric** : str or callable, optional
            The distance metric
@@ -531,6 +531,9 @@ Functions
        **return_index** : bool, optional
            - if True return the index of the best match. If there are many equally good
              matches, the first match is returned.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
 
    :Returns:
 
@@ -585,10 +588,10 @@ Functions
    :Parameters:
 
        **y** : array-like of shape (yn_timestep, )
-           The subsequence
+           The subsequence.
 
        **x** : ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
-           The input data
+           The input data.
 
        **threshold** : {"auto"}, float or callable, optional
            The distance threshold used to consider a subsequence matching. If no threshold
@@ -600,7 +603,7 @@ Functions
            - if str, return all matches according to the named threshold.
 
        **dim** : int, optional
-           The dim to search for shapelets
+           The dim to search for shapelets.
 
        **metric** : str or callable, optional
            The distance metric
@@ -626,10 +629,10 @@ Functions
            timesteps of another match with higher distance.
 
        **return_distance** : bool, optional
-           - if True, return the distance of the match
+           - if True, return the distance of the match.
 
        **n_jobs** : int, optional
-           The number of parallel jobs to run. Ignored
+           The number of parallel jobs to run.
 
    :Returns:
 
