@@ -247,19 +247,20 @@ def pairwise_subsequence_distance(
     return_index=False,
     n_jobs=None,
 ):
-    """Minimum subsequence distance between subsequences and time series.
+    """
+    Minimum subsequence distance between subsequences and time series.
 
     Parameters
     ----------
     y : list or ndarray of shape (n_subsequences, n_timestep)
         Input time series.
 
-        - if list, a list of array-like of shape (n_timestep, )
+        - if list, a list of array-like of shape (n_timestep, ).
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
-        The input data
+        The input data.
     dim : int, optional
-        The dim to search for subsequence
+        The dim to search for subsequence.
     metric : str or callable, optional
         The distance metric
 
@@ -272,6 +273,8 @@ def pairwise_subsequence_distance(
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
+    n_jobs : int, optional
+        The number of parallel jobs.
 
     Returns
     -------
@@ -292,7 +295,6 @@ def pairwise_subsequence_distance(
         - if len(y) == 1, return an array of shape (n_samples, ).
         - if x.ndim == 1, return an array of shape (n_subsequences, ).
         - if x.ndim == 1 and len(y) == 1, return scalar.
-
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
@@ -330,19 +332,20 @@ def paired_subsequence_distance(
     return_index=False,
     n_jobs=None,
 ):
-    """Minimum subsequence distance between the i:th subsequence and time series.
+    """
+    Minimum subsequence distance between the i:th subsequence and time series.
 
     Parameters
     ----------
     y : list or ndarray of shape (n_samples, m_timestep)
         Input time series.
 
-        - if list, a list of array-like of shape (m_timestep, )
+        - if list, a list of array-like of shape (m_timestep, ).
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
-        The input data
+        The input data.
     dim : int, optional
-        The dim to search for shapelets
+        The dim to search for shapelets.
     metric : str or callable, optional
         The distance metric
 
@@ -356,16 +359,16 @@ def paired_subsequence_distance(
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
     n_jobs : int, optional
-        The number of parallel jobs to run. Ignored
+        The number of parallel jobs to run.
 
     Returns
     -------
     dist : float, ndarray
         An array of shape (n_samples, ) with the minumum distance between the i:th
-        subsequence and the i:th sample
+        subsequence and the i:th sample.
     indices : int, ndarray, optional
         An array of shape (n_samples, ) with the index of the best matching position
-        of the i:th subsequence and the i:th sample
+        of the i:th subsequence and the i:th sample.
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
@@ -417,7 +420,8 @@ def subsequence_match(  # noqa: PLR0912
     return_distance=False,
     n_jobs=None,
 ):
-    """Find matching subsequnces.
+    """
+    Find matching subsequnces.
 
     Find the positions where the distance is less than the threshold between
     the subsequence and all time series.
@@ -432,10 +436,10 @@ def subsequence_match(  # noqa: PLR0912
     Parameters
     ----------
     y : array-like of shape (yn_timestep, )
-        The subsequence
+        The subsequence.
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
-        The input data
+        The input data.
     threshold : {"auto"}, float or callable, optional
         The distance threshold used to consider a subsequence matching. If no threshold
         is selected, `max_matches` defaults to 10.
@@ -445,7 +449,7 @@ def subsequence_match(  # noqa: PLR0912
           threshold function, given all distances to the subsequence
         - if str, return all matches according to the named threshold.
     dim : int, optional
-        The dim to search for shapelets
+        The dim to search for shapelets.
     metric : str or callable, optional
         The distance metric
 
@@ -466,9 +470,9 @@ def subsequence_match(  # noqa: PLR0912
         A match is considered trivial if a match with lower distance is within `exclude`
         timesteps of another match with higher distance.
     return_distance : bool, optional
-        - if True, return the distance of the match
+        - if True, return the distance of the match.
     n_jobs : int, optional
-        The number of parallel jobs to run. Ignored
+        The number of parallel jobs to run.
 
     Returns
     -------
@@ -595,7 +599,8 @@ def paired_subsequence_match(  # noqa: PLR0912
     return_distance=False,
     n_jobs=None,
 ):
-    """Find matching subsequnces.
+    """
+    Find matching subsequnces.
 
     Find the positions where the distance is less than the threshold between
     the i:th subsequences and time series.
@@ -613,7 +618,6 @@ def paired_subsequence_match(  # noqa: PLR0912
         Input time series.
 
         - if list, a list of array-like of shape (n_timestep, ) with length n_samples.
-
     x : ndarray of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
         The input data.
     threshold : float, optional
@@ -737,7 +741,8 @@ def paired_distance(  # noqa: PLR0912
     metric_params=None,
     n_jobs=None,
 ):
-    """Compute the distance between the i:th time series.
+    """
+    Compute the distance between the i:th time series.
 
     Parameters
     ----------
@@ -827,12 +832,6 @@ def paired_distance(  # noqa: PLR0912
     return _format_return(distances, y.ndim, x.ndim)
 
 
-@np.deprecate(new_name="paired_distance(dim='mean')")
-def mean_paired_distance(x, y, *, metric="euclidean", metric_params=None):
-    """ """
-    return paired_distance(x, y, dim="mean", metric=metric, metric_params=metric_params)
-
-
 def pairwise_distance(  # noqa: PLR
     x,
     y=None,
@@ -879,7 +878,6 @@ def pairwise_distance(  # noqa: PLR
         - if x.ndim > 1 and y.ndim > 1, array of shape (x_samples, y_samples).
         - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, ).
         - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, ).
-
     """
     Metric = check_option(_METRICS, metric, "metric")  # noqa: N806
     metric_params = metric_params if metric_params is not None else {}
@@ -1093,6 +1091,17 @@ def argmin_distance(
         raise ValueError(f"The parameter dim must be dim ({dim}) < n_dims ({n_dims})")
 
 
+@validate_params(
+    {
+        "y": ["array-like"],
+        "x": ["array-like"],
+        "dim": [Interval(numbers.Integral, 0, None, closed="left")],
+        "metric": [StrOptions(_SUBSEQUENCE_METRICS.keys())],
+        "metric_params": [None, dict],
+        "n_jobs": [numbers.Integral, None],
+    },
+    prefer_skip_nested_validation=True,
+)
 def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=None):
     """
     Compute the distance profile.
@@ -1162,6 +1171,19 @@ def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=N
         return dp
 
 
+@validate_params(
+    {
+        "y": ["array-like"],
+        "x": ["array-like"],
+        "dim": [Interval(numbers.Integral, 0, None, closed="left")],
+        "k": [Interval(numbers.Integral, 1, None, closed="left")],
+        "metric": [StrOptions(_SUBSEQUENCE_METRICS.keys() - {"mass"})],
+        "metric_params": [None, dict],
+        "return_distance": [bool],
+        "n_jobs": [numbers.Integral, None],
+    },
+    prefer_skip_nested_validation=True,
+)
 def argmin_subsequence_distance(
     y,
     x,

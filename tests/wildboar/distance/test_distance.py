@@ -1530,6 +1530,10 @@ def test_argmin_subsequence_distance(metric, k):
     X = np.broadcast_to(X[0], shape=(S.shape[0], X.shape[1]))
 
     metric_params = None
+
+    # The epsilon value by default is computed using the a quarter of the
+    # maximum standard deviation of both time series. For the subsequence metrics,
+    # its computed as a quarter of the subsequence standard deviation.
     if metric in ("scaled_edr", "edr"):
         metric_params = {"epsilon": 0.1}
 
