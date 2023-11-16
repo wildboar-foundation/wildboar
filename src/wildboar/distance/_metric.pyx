@@ -362,7 +362,7 @@ cdef class AngularSubsequenceMetric(SubsequenceMetric):
         Py_ssize_t *indicies,
     ) noexcept nogil:
         cdef Py_ssize_t i
-        threshold = cos(threshold * M_PI) if not isinf(threshold) else threshold
+        threshold = cos(threshold * M_PI) if not isinf(threshold) else -INFINITY
         cdef Py_ssize_t n_matches = cosine_similarity_matches(
             s, s_len, x, x_len, threshold, distances, indicies
         )
