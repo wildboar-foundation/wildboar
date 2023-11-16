@@ -1551,7 +1551,6 @@ cdef class _SubsequenceDistanceProfile:
         return self.x.shape[0]
 
     def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
-        # offset is either in subsequences or x.shape[0] depending on which is larger
         cdef Py_ssize_t i, j
         cdef SubsequenceMetric metric = deepcopy(self.metric)
 
