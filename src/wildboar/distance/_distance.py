@@ -87,8 +87,8 @@ def _callable_metric(f):
     return wrap
 
 
-def _callable_subsequence_metric(f, scaled=False):
-    if scaled:
+def _callable_subsequence_metric(f, scale=False):
+    if scale:
 
         def wrap(**metric_params):
             return ScaledSubsequenceMetricWrap(CallableMetric(f))
@@ -1414,11 +1414,11 @@ def argmin_subsequence_distance(
     if not k <= (x.shape[2] - y.shape[2] + 1):
         raise ValueError("k must be less x.shape[-1] - y.shape[-1] + 1")
 
-    scale = metric.startswith("scaled_") or scale
-    if metric.startswith("scaled_"):
+    scale = (isinstance(metric, str) and metric.startswith("scaled_")) or scale
+    if isinstance(metric, str) and metric.startswith("scaled_"):
         metric = metric[7:]
 
-    Metric = _METRICS[metric]
+    Metric = check_metric(metric)
     metric_params = metric_params if metric_params is not None else {}
 
     indices, distances = _argmin_subsequence_distance(

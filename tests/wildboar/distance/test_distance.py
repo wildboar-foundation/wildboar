@@ -17,6 +17,13 @@ from wildboar.distance import (
 )
 from wildboar.distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 
+
+def _test_metric(a, b):
+    import numpy as np
+
+    return np.linalg.norm(a - b)
+
+
 _EXPECTED_PAIRWISE_DISTANCE = {
     "lcss": {
         None: [
@@ -1502,7 +1509,7 @@ def test_pairwise_distance_dim_mean():
     assert_almost_equal(actual, expected)
 
 
-@pytest.mark.parametrize("metric", list(_METRICS.keys()))
+@pytest.mark.parametrize("metric", _METRICS.keys() | {_test_metric})
 @pytest.mark.parametrize("k", [1, 3, 7])
 def test_argmin_equals_pairwise_distance_argpartition(metric, k):
     X, y = load_two_lead_ecg()
@@ -1522,7 +1529,9 @@ def test_argmin_equals_pairwise_distance_argpartition(metric, k):
     )
 
 
-@pytest.mark.parametrize("metric", sorted(_SUBSEQUENCE_METRICS.keys() - {"mass"}))
+@pytest.mark.parametrize(
+    "metric", ((_SUBSEQUENCE_METRICS.keys() - {"mass"}) | {_test_metric})
+)
 @pytest.mark.parametrize("k", [1, 3, 7])
 def test_argmin_subsequence_distance(metric, k):
     X, y = load_two_lead_ecg()
