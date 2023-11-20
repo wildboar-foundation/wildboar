@@ -62,6 +62,12 @@ Changelog
        the name of the metric with ``"scaled\_"`` to use the standardized metric, e.g.,
        `"scaled_euclidean"` or `"scaled_msm"`.
 
+     - |Enhancement| Add support for callable metrics. To support standardizing,
+       we introduce new keyword parameter that pairs with the `"metric"` parameter called
+       `scale` that, if set to `True` scale all subsequences before applying the metric.
+       The effect of setting `scale=True` is the same as passing a scaled metric, e.g.,
+       "scaled_euclidean".
+
      - |Feature| A new function :func:`distance.argmin_distance` which takes as
        input two arrays `X` and `Y` and finds, for each sample in `X`, the
        indices of the `k` samples in `Y` with the smallest distance to the i:th sample

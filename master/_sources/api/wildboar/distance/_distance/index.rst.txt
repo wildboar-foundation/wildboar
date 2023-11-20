@@ -82,6 +82,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 
@@ -102,7 +106,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: argmin_subsequence_distance(y, x, *, dim=0, k=1, metric='euclidean', metric_params=None, return_distance=False, n_jobs=None)
+.. py:function:: argmin_subsequence_distance(y, x, *, dim=0, k=1, metric='euclidean', metric_params=None, scale=False, return_distance=False, n_jobs=None)
 
    
    Compute the k:th closest subsequences.
@@ -115,8 +119,9 @@ Functions
        **y** : array-like of shape (n_samples, m_timestep) or list of 1d-arrays
            The subsequences.
 
-       **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-           The samples.
+       **x** : array-like of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
+           The samples. If x.ndim == 1, it will be broadcast have the same number
+           of samples that y.
 
        **dim** : int, optional
            The dimension in x to find subsequences in.
@@ -134,6 +139,11 @@ Functions
            
            Read more about the parameters in the
            :ref:`User guide <list_of_subsequence_metrics>`.
+
+       **scale** : bool, optional
+           If True, scale the subsequences before distance computation.
+           
+           .. versionadded:: 1.3
 
        **return_distance** : bool, optional
            Return the distance for the `k` closest subsequences.
@@ -154,14 +164,12 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
-   .. rubric:: Notes
-
-   As opposed to other functions computing the distance between subsequences,
-   this function does not use the subsequence metrics defined in
-   `_SUBSEQUENCE_METRICS`. For performance, it instead uses the metrics in
-   `_METRICS`. As such, "scaled_euclidean" and "scaled_dtw" is not availiable.
 
 
    .. rubric:: Examples
@@ -178,7 +186,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: distance_profile(y, x, *, dim=0, metric='mass', metric_params=None, n_jobs=None)
+.. py:function:: distance_profile(y, x, *, dim=0, metric='mass', metric_params=None, scale=False, n_jobs=None)
 
    
    Compute the distance profile.
@@ -209,6 +217,11 @@ Functions
            Read more about the parameters in the
            :ref:`User guide <list_of_subsequence_metrics>`.
 
+       **scale** : bool, optional
+           If True, scale the subsequences before distance computation.
+           
+           .. versionadded:: 1.3
+
        **n_jobs** : int, optional
            The number of parallel jobs to run.
 
@@ -222,6 +235,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 
@@ -285,6 +302,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 
@@ -295,7 +316,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: paired_subsequence_distance(y, x, *, dim=0, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)
+.. py:function:: paired_subsequence_distance(y, x, *, dim=0, metric='euclidean', metric_params=None, scale=False, return_index=False, n_jobs=None)
 
    
    Minimum subsequence distance between the i:th subsequence and time series.
@@ -325,6 +346,11 @@ Functions
            Read more about the parameters in the
            :ref:`User guide <list_of_subsequence_metrics>`.
 
+       **scale** : bool, optional
+           If True, scale the subsequences before distance computation.
+           
+           .. versionadded:: 1.3
+
        **return_index** : bool, optional
            - if True return the index of the best match. If there are many equally good
              matches, the first match is returned.
@@ -347,6 +373,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 
@@ -357,7 +387,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: paired_subsequence_match(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, max_matches=None, return_distance=False, n_jobs=None)
+.. py:function:: paired_subsequence_match(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, scale=False, max_matches=None, return_distance=False, n_jobs=None)
 
    
    Find matching subsequnces.
@@ -400,6 +430,11 @@ Functions
            Read more about the parameters in the
            :ref:`User guide <list_of_subsequence_metrics>`.
 
+       **scale** : bool, optional
+           If True, scale the subsequences before distance computation.
+           
+           .. versionadded:: 1.3
+
        **max_matches** : int, optional
            Return the top `max_matches` matches below `threshold`.
            
@@ -429,6 +464,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 
@@ -488,6 +527,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 
@@ -498,7 +541,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: pairwise_subsequence_distance(y, x, *, dim=0, metric='euclidean', metric_params=None, return_index=False, n_jobs=None)
+.. py:function:: pairwise_subsequence_distance(y, x, *, dim=0, metric='euclidean', metric_params=None, scale=False, return_index=False, n_jobs=None)
 
    
    Minimum subsequence distance between subsequences and time series.
@@ -527,6 +570,11 @@ Functions
            
            Read more about the parameters in the
            :ref:`User guide <list_of_subsequence_metrics>`.
+
+       **scale** : bool, optional
+           If True, scale the subsequences before distance computation.
+           
+           .. versionadded:: 1.3
 
        **return_index** : bool, optional
            - if True return the index of the best match. If there are many equally good
@@ -560,6 +608,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 
@@ -570,7 +622,7 @@ Functions
    ..
        !! processed by numpydoc !!
 
-.. py:function:: subsequence_match(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, max_matches=None, exclude=None, return_distance=False, n_jobs=None)
+.. py:function:: subsequence_match(y, x, threshold=None, *, dim=0, metric='euclidean', metric_params=None, scale=False, max_matches=None, exclude=None, return_distance=False, n_jobs=None)
 
    
    Find matching subsequnces.
@@ -616,6 +668,11 @@ Functions
            Read more about the parameters in the
            :ref:`User guide <list_of_subsequence_metrics>`.
 
+       **scale** : bool, optional
+           If True, scale the subsequences before distance computation.
+           
+           .. versionadded:: 1.3
+
        **max_matches** : int, optional
            Return the top `max_matches` matches below `threshold`.
 
@@ -651,6 +708,10 @@ Functions
 
 
 
+   .. warning::
+
+       Passing a callable to the `metric` parameter has a significant performance
+       implication.
 
 
 

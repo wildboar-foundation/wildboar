@@ -297,6 +297,10 @@ examples.
     - Find the indicies of the samples with the lowest distance in `Y`.
   * - :py:obj:`~wildboar.distance.argmin_subsequence_distance`
     - Compute the k:th closest subsequences.
+  * - :py:obj:`~wildboar.distance.check_metric`
+    - 
+  * - :py:obj:`~wildboar.distance.check_subsequence_metric`
+    - 
   * - :py:obj:`~wildboar.distance.distance_profile`
     - Compute the distance profile.
   * - :py:obj:`~wildboar.distance.matrix_profile`
