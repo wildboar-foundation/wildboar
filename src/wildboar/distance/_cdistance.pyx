@@ -550,7 +550,6 @@ cdef class ScaledSubsequenceMetricWrap(ScaledSubsequenceMetric):
 
         return min_dist
 
-    # TODO: requires figuring out how to manipulate the threshold...
     cdef Py_ssize_t _matches(
         self,
         const double *s,
@@ -615,6 +614,83 @@ cdef class ScaledSubsequenceMetricWrap(ScaledSubsequenceMetric):
         return n
 
 
+cdef class SubsequenceMetricWrap(SubsequenceMetric):
+    cdef Metric wrap
+
+    def __cinit__(self, Metric wrap):
+        self.wrap = wrap
+
+    def __reduce__(self):
+        return self.__class__, (self.wrap, )
+
+    cdef int reset(self, TSArray X) noexcept nogil:
+        return self.wrap.reset(X, X)
+
+    cdef double _distance(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        Py_ssize_t *return_index=NULL,
+    ) noexcept nogil:
+        cdef double min_dist = INFINITY
+        cdef Py_ssize_t i, j
+
+        for i in range(x_len - s_len + 1):
+            if (
+                self.wrap._eadistance(
+                    s,
+                    s_len,
+                    x + i,
+                    s_len,
+                    &min_dist,
+                )
+            ):
+                if return_index != NULL:
+                    return_index[0] = i
+
+        return min_dist
+
+    cdef Py_ssize_t _matches(
+        self,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
+        double threshold,
+        double *distances,
+        Py_ssize_t *indicies,
+    ) noexcept nogil:
+        cdef double tmp_dist
+        cdef Py_ssize_t i, j, n
+
+        n = 0
+        for i in range(x_len - s_len + 1):
+            tmp_dist = threshold
+            if (
+                self.wrap._eadistance(
+                    s,
+                    s_len,
+                    x + i,
+                    s_len,
+                    &tmp_dist,
+                )
+            ):
+                if indicies != NULL:
+                    indicies[n] = i
+
+                distances[n] = tmp_dist
+                n += 1
+
+        return n
+
 cdef class Metric:
 
     cdef int reset(self, TSArray x, TSArray y) noexcept nogil:
@@ -670,14 +746,48 @@ cdef class Metric:
         Py_ssize_t x_len,
         const double *y,
         Py_ssize_t y_len,
-        double *distance,
+        double *min_dist,
     ) noexcept nogil:
-        distance[0] = self._distance(x, x_len, y, y_len)
-        return True
+        cdef double dist = self._distance(x, x_len, y, y_len)
+        if dist < min_dist[0]:
+            min_dist[0] = dist
+            return True
+        else:
+            return False
 
     @property
     def is_elastic(self):
         return False
+
+
+cdef class CallableMetric(Metric):
+
+    cdef object func
+
+    def __init__(self, func):
+        self.func = func
+
+    cdef double _distance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len
+    ) noexcept nogil:
+        cdef np.npy_intp x_shape[1]
+        cdef np.npy_intp y_shape[1]
+        x_shape[0] = <np.npy_intp> x_len
+        y_shape[0] = <np.npy_intp> y_len
+        with gil:
+            try:
+                return float(
+                    self.func(
+                        np.PyArray_SimpleNewFromData(1, x_shape, np.NPY_DOUBLE, x),
+                        np.PyArray_SimpleNewFromData(1, y_shape, np.NPY_DOUBLE, y),
+                    )
+                )
+            except:  # noqa: E722
+                return NAN
 
 
 cdef Py_ssize_t dilated_distance_profile(

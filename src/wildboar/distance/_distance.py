@@ -13,7 +13,9 @@ from sklearn.utils.validation import _is_arraylike, check_scalar
 from ..utils import _safe_jagged_array
 from ..utils.validation import _check_ts_array, check_array, check_option, check_type
 from ._cdistance import (
+    CallableMetric,
     ScaledSubsequenceMetricWrap,
+    SubsequenceMetricWrap,
     _argmin_distance,
     _argmin_subsequence_distance,
     _paired_distance,
@@ -78,6 +80,27 @@ def _subsequence_metric_wrap(Metric):
     return f
 
 
+def _callable_metric(f):
+    def wrap(**metric_params):
+        return CallableMetric(f)
+
+    return wrap
+
+
+def _callable_subsequence_metric(f, scaled=False):
+    if scaled:
+
+        def wrap(**metric_params):
+            return ScaledSubsequenceMetricWrap(CallableMetric(f))
+
+    else:
+
+        def wrap(**metric_params):
+            return SubsequenceMetricWrap(CallableMetric(f))
+
+    return wrap
+
+
 _SUBSEQUENCE_METRICS = {
     "euclidean": EuclideanSubsequenceMetric,
     "scaled_euclidean": ScaledEuclideanSubsequenceMetric,
@@ -135,6 +158,44 @@ _METRICS = {
     "cosine": CosineMetric,
     "angular": AngularMetric,
 }
+
+
+def _infer_scaled_metric(metric):
+    if metric.startswith("scaled_"):
+        return metric
+    else:
+        return "scaled_" + metric
+
+
+def check_metric(metric):
+    if callable(metric):
+        return _callable_metric(metric)
+    elif metric in _METRICS:
+        return _METRICS[metric]
+    else:
+        raise ValueError(
+            "unsupported metric {}, 'metric' must be callable or a str among {}".format(
+                metric, set(_METRICS.keys())
+            )
+        )
+
+
+def check_subsequence_metric(metric, scale=False):
+    if callable(metric):
+        return _callable_subsequence_metric(metric, scale=scale)
+    else:
+        if scale:
+            metric = _infer_scaled_metric(metric)
+
+        if metric in _SUBSEQUENCE_METRICS:
+            return _SUBSEQUENCE_METRICS[metric]
+        else:
+            raise ValueError(
+                (
+                    "unsupported metric '{}', 'metric' "
+                    "must be callable or a str among {}"
+                ).format(metric, set(_SUBSEQUENCE_METRICS.keys()))
+            )
 
 
 def _std_below_mean(s):
@@ -244,6 +305,7 @@ def pairwise_subsequence_distance(
     dim=0,
     metric="euclidean",
     metric_params=None,
+    scale=False,
     return_index=False,
     n_jobs=None,
 ):
@@ -270,6 +332,10 @@ def pairwise_subsequence_distance(
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
+    scale : bool, optional
+        If True, scale the subsequences before distance computation.
+
+        .. versionadded:: 1.3
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
@@ -295,6 +361,11 @@ def pairwise_subsequence_distance(
         - if len(y) == 1, return an array of shape (n_samples, ).
         - if x.ndim == 1, return an array of shape (n_subsequences, ).
         - if x.ndim == 1 and len(y) == 1, return scalar.
+
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=np.double)
@@ -304,7 +375,8 @@ def pairwise_subsequence_distance(
                 "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
+    Metric = check_subsequence_metric(metric, scale=scale)
+
     metric_params = metric_params or {}
     min_dist, min_ind = _pairwise_subsequence_distance(
         y,
@@ -329,6 +401,7 @@ def paired_subsequence_distance(
     dim=0,
     metric="euclidean",
     metric_params=None,
+    scale=False,
     return_index=False,
     n_jobs=None,
 ):
@@ -355,6 +428,10 @@ def paired_subsequence_distance(
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
+    scale : bool, optional
+        If True, scale the subsequences before distance computation.
+
+        .. versionadded:: 1.3
     return_index : bool, optional
         - if True return the index of the best match. If there are many equally good
           matches, the first match is returned.
@@ -369,6 +446,11 @@ def paired_subsequence_distance(
     indices : int, ndarray, optional
         An array of shape (n_samples, ) with the index of the best matching position
         of the i:th subsequence and the i:th sample.
+
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
@@ -383,9 +465,7 @@ def paired_subsequence_distance(
                 "Invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
-    if n_jobs is not None:
-        warnings.warn("n_jobs is not yet supported.", UserWarning)
+    Metric = check_subsequence_metric(metric, scale=scale)
 
     n_samples = x.shape[0] if x.ndim > 1 else 1
     if len(y) != n_samples:
@@ -407,7 +487,7 @@ def paired_subsequence_distance(
         return _format_return(min_dist, len(y), x.ndim)
 
 
-def subsequence_match(  # noqa: PLR0912
+def subsequence_match(  # noqa: PLR0912, PLR0915
     y,
     x,
     threshold=None,
@@ -415,6 +495,7 @@ def subsequence_match(  # noqa: PLR0912
     dim=0,
     metric="euclidean",
     metric_params=None,
+    scale=False,
     max_matches=None,
     exclude=None,
     return_distance=False,
@@ -459,6 +540,10 @@ def subsequence_match(  # noqa: PLR0912
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
+    scale : bool, optional
+        If True, scale the subsequences before distance computation.
+
+        .. versionadded:: 1.3
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
     exclude : float or int, optional
@@ -484,6 +569,11 @@ def subsequence_match(  # noqa: PLR0912
         The distances of matching subsequences. Returns a single array of
         n_matches if x.ndim == 1. If no matches are found for a sample, the
         array element is None.
+
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
     """
     y = _validate_subsequence(y)
     if len(y) > 1:
@@ -501,7 +591,7 @@ def subsequence_match(  # noqa: PLR0912
     if not 0 >= dim < n_dims:
         raise ValueError("The parameter dim must be 0 <= dim < n_dims")
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
+    Metric = check_subsequence_metric(metric, scale=scale)
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -595,6 +685,7 @@ def paired_subsequence_match(  # noqa: PLR0912
     dim=0,
     metric="euclidean",
     metric_params=None,
+    scale=False,
     max_matches=None,
     return_distance=False,
     n_jobs=None,
@@ -634,6 +725,10 @@ def paired_subsequence_match(  # noqa: PLR0912
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
+    scale : bool, optional
+        If True, scale the subsequences before distance computation.
+
+        .. versionadded:: 1.3
     max_matches : int, optional
         Return the top `max_matches` matches below `threshold`.
 
@@ -654,6 +749,11 @@ def paired_subsequence_match(  # noqa: PLR0912
         The start index of matching subsequences.
     distance : ndarray of shape (n_samples, ), optional
         The distances of matching subsequences.
+
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
     """
     y = _validate_subsequence(y)
     x = check_array(x, allow_3d=True, dtype=np.double)
@@ -670,7 +770,7 @@ def paired_subsequence_match(  # noqa: PLR0912
                 "invalid subsequnce shape (%d > %d)" % (s.shape[0], x.shape[-1])
             )
 
-    Metric = check_option(_SUBSEQUENCE_METRICS, metric, "metric")  # noqa: N806
+    Metric = check_subsequence_metric(metric, scale=scale)
     metric_params = metric_params if metric_params is not None else {}
 
     if n_jobs is not None:
@@ -772,6 +872,11 @@ def paired_distance(  # noqa: PLR0912
         - if x.ndim == 1, return scalar.
         - if dim='full', return ndarray of shape (n_dims, n_samples).
         - if x.ndim > 1, return an ndarray of shape (n_samples, ).
+
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
     """
     x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float)
     y = check_array(y, allow_3d=True, ensure_2d=False, dtype=float)
@@ -790,7 +895,8 @@ def paired_distance(  # noqa: PLR0912
     if n_jobs is not None:
         warnings.warn("n_jobs is not yet supported.", UserWarning)
 
-    Metric = check_option(_METRICS, metric, "metric")  # noqa: N806
+    Metric = check_metric(metric)
+
     metric_params = metric_params if metric_params is not None else {}
     metric = Metric(**metric_params)
     if x.shape[x.ndim - 1] != x.shape[x.ndim - 1] and not metric.is_elastic:
@@ -832,7 +938,7 @@ def paired_distance(  # noqa: PLR0912
     return _format_return(distances, y.ndim, x.ndim)
 
 
-def pairwise_distance(  # noqa: PLR
+def pairwise_distance(  # noqa: PLR0912, PLR0915
     x,
     y=None,
     *,
@@ -878,8 +984,13 @@ def pairwise_distance(  # noqa: PLR
         - if x.ndim > 1 and y.ndim > 1, array of shape (x_samples, y_samples).
         - if x.ndim == 1 and y.ndim > 1, array of shape (y_samples, ).
         - if y.ndim == 1 and x.ndim > 1, array of shape (x_samples, ).
+
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
     """
-    Metric = check_option(_METRICS, metric, "metric")  # noqa: N806
+    Metric = check_metric(metric)
     metric_params = metric_params if metric_params is not None else {}
     metric = Metric(**metric_params)
 
@@ -981,7 +1092,7 @@ def pairwise_distance(  # noqa: PLR
         "x": ["array-like"],
         "y": [None, "array-like"],
         "k": [Interval(numbers.Integral, 1, None, closed="left")],
-        "metric": [StrOptions(_METRICS.keys())],
+        "metric": [callable, StrOptions(_METRICS.keys())],
         "metric_params": [None, dict],
         "return_distance": [bool],
         "sorted": [bool],
@@ -1037,6 +1148,11 @@ def argmin_distance(
     distance : ndarray of shape (n_samples, k), optional
         The distance of the samples in `Y` with the smallest distance.
 
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
+
     Examples
     --------
     >>> from wildoar.distance import argmin_distance
@@ -1049,7 +1165,7 @@ def argmin_distance(
             [10.24695077, 10.        ]]))
     """
     metric_params = metric_params if metric_params is not None else {}
-    metric = _METRICS[metric](**metric_params)
+    metric = check_metric(metric)(**metric_params)
 
     x = check_array(
         x, allow_3d=True, ensure_2d=False, ensure_ts_array=True, dtype=float
@@ -1096,13 +1212,16 @@ def argmin_distance(
         "y": ["array-like"],
         "x": ["array-like"],
         "dim": [Interval(numbers.Integral, 0, None, closed="left")],
-        "metric": [StrOptions(_SUBSEQUENCE_METRICS.keys())],
+        "metric": [callable, StrOptions(_SUBSEQUENCE_METRICS.keys())],
         "metric_params": [None, dict],
+        "scale": [None, bool],
         "n_jobs": [numbers.Integral, None],
     },
     prefer_skip_nested_validation=True,
 )
-def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=None):
+def distance_profile(
+    y, x, *, dim=0, metric="mass", metric_params=None, scale=False, n_jobs=None
+):
     """
     Compute the distance profile.
 
@@ -1128,6 +1247,10 @@ def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=N
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
+    scale : bool, optional
+        If True, scale the subsequences before distance computation.
+
+        .. versionadded:: 1.3
     n_jobs : int, optional
         The number of parallel jobs to run.
 
@@ -1136,6 +1259,11 @@ def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=N
     ndarray of shape (n_samples, n_timestep - yn_timestep + 1) or\
             (n_timestep - yn_timestep + 1, )
         The distance between every subsequence in `x` to `y`.
+
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
 
     Examples
     --------
@@ -1158,7 +1286,7 @@ def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=N
             "Invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
         )
 
-    Metric = _SUBSEQUENCE_METRICS[metric]
+    Metric = check_subsequence_metric(metric, scale=scale)
     metric_params = metric_params if metric_params is not None else {}
 
     dp = _subsequence_distance_profile(
@@ -1177,8 +1305,9 @@ def distance_profile(y, x, *, dim=0, metric="mass", metric_params=None, n_jobs=N
         "x": ["array-like"],
         "dim": [Interval(numbers.Integral, 0, None, closed="left")],
         "k": [Interval(numbers.Integral, 1, None, closed="left")],
-        "metric": [StrOptions(_SUBSEQUENCE_METRICS.keys() - {"mass"})],
+        "metric": [callable, StrOptions(_SUBSEQUENCE_METRICS.keys() - {"mass"})],
         "metric_params": [None, dict],
+        "scale": [None, bool],
         "return_distance": [bool],
         "n_jobs": [numbers.Integral, None],
     },
@@ -1192,6 +1321,7 @@ def argmin_subsequence_distance(
     k=1,
     metric="euclidean",
     metric_params=None,
+    scale=False,
     return_distance=False,
     n_jobs=None,
 ):
@@ -1205,8 +1335,10 @@ def argmin_subsequence_distance(
     ----------
     y : array-like of shape (n_samples, m_timestep) or list of 1d-arrays
         The subsequences.
-    x : array-like of shape (n_samples, n_timestep) or (n_samples, n_dims, n_timestep)
-        The samples.
+    x : array-like of shape (n_timestep, ), (n_samples, n_timestep)\
+    or (n_samples, n_dims, n_timestep)
+        The samples. If x.ndim == 1, it will be broadcast have the same number
+        of samples that y.
     dim : int, optional
         The dimension in x to find subsequences in.
     k : int, optional
@@ -1220,6 +1352,10 @@ def argmin_subsequence_distance(
 
         Read more about the parameters in the
         :ref:`User guide <list_of_subsequence_metrics>`.
+    scale : bool, optional
+        If True, scale the subsequences before distance computation.
+
+        .. versionadded:: 1.3
     return_distance : bool, optional
         Return the distance for the `k` closest subsequences.
     n_jobs : int, optional
@@ -1232,12 +1368,10 @@ def argmin_subsequence_distance(
     distance : ndarray of shape (n_samples, k), optional
         The distance of the `k` closest subsequences.
 
-    Notes
-    -----
-    As opposed to other functions computing the distance between subsequences,
-    this function does not use the subsequence metrics defined in
-    `_SUBSEQUENCE_METRICS`. For performance, it instead uses the metrics in
-    `_METRICS`. As such, "scaled_euclidean" and "scaled_dtw" is not availiable.
+    Warnings
+    --------
+    Passing a callable to the `metric` parameter has a significant performance
+    implication.
 
     Examples
     --------
@@ -1266,6 +1400,9 @@ def argmin_subsequence_distance(
 
         y = y_tmp
 
+    if x.ndim == 1:
+        x = np.broadcast_to(x, shape=(y.shape[0], x.shape[0]))
+
     x = check_array(x, allow_3d=True, ensure_ts_array=True)
 
     if not y.shape[2] <= x.shape[2]:
@@ -1277,8 +1414,8 @@ def argmin_subsequence_distance(
     if not k <= (x.shape[2] - y.shape[2] + 1):
         raise ValueError("k must be less x.shape[-1] - y.shape[-1] + 1")
 
-    scaled = metric.startswith("scaled_")
-    if scaled:
+    scale = metric.startswith("scaled_") or scale
+    if metric.startswith("scaled_"):
         metric = metric[7:]
 
     Metric = _METRICS[metric]
@@ -1291,7 +1428,7 @@ def argmin_subsequence_distance(
         dim,
         Metric(**metric_params),
         k,
-        scaled=bool(scaled),
+        scaled=bool(scale),
         n_jobs=n_jobs,
     )
 
