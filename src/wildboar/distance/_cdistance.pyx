@@ -842,7 +842,7 @@ cdef Py_ssize_t dilated_distance_profile(
 
         tmp_dist = ea
         if metric._eadistance(x_buffer, k, k_buffer, k, &tmp_dist):
-            out[dp_size] = tmp_dist
+            out[dp_size] = tmp_dist / (<float>k / k_len)
             dp_size += 1
 
     return dp_size
@@ -915,7 +915,7 @@ cdef Py_ssize_t scaled_dilated_distance_profile(
 
         tmp_dist = ea
         if metric._eadistance(x_buffer, k, k_buffer, k, &tmp_dist):
-            out[dp_size] = tmp_dist
+            out[dp_size] = tmp_dist / (<float>k / k_len)
             dp_size += 1
 
     return dp_size
@@ -1697,4 +1697,122 @@ def _subsequence_distance_profile(
         n_jobs=n_jobs,
         require="sharedmem",
     )
+    return out.base
+
+
+cdef class _DilatedDistanceProfile:
+    cdef TSArray S
+    cdef TSArray X
+    cdef Py_ssize_t dim
+    cdef Metric metric
+    cdef Py_ssize_t dilation
+    cdef Py_ssize_t padding
+    cdef bint scaled,
+    cdef double[:, :] out
+    cdef double *x_buffer
+    cdef double *s_buffer
+
+    def __cinit__(
+        self,
+        TSArray S,
+        TSArray X,
+        Py_ssize_t shapelet_size,
+        Py_ssize_t dim,
+        Metric metric,
+        Py_ssize_t dilation,
+        Py_ssize_t padding,
+        bint scaled,
+        double[:, :] out,
+    ):
+        self.S = S
+        self.X = X
+        self.dim = dim
+        self.metric = metric
+        self.dilation = dilation
+        self.padding = padding
+        self.scaled = scaled
+        self.out = out
+        self.x_buffer = <double*> malloc(sizeof(double) * shapelet_size)
+        self.s_buffer = <double*> malloc(sizeof(double) * shapelet_size)
+
+    def __dealloc__(self):
+        free(self.x_buffer)
+        free(self.s_buffer)
+
+    @property
+    def n_work(self):
+        return self.X.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef Metric metric = deepcopy(self.metric)
+        cdef Py_ssize_t i
+
+        with nogil:
+            metric.reset(self.X, self.X)
+            if self.scaled:
+                for i in range(offset, offset + batch_size):
+                    scaled_dilated_distance_profile(
+                        1,
+                        self.dilation,
+                        self.padding,
+                        &self.S[i, self.dim, 0],
+                        self.S.shape[2],
+                        &self.X[i, self.dim, 0],
+                        self.X.shape[2],
+                        metric,
+                        self.x_buffer,
+                        self.s_buffer,
+                        INFINITY,
+                        &self.out[i, 0],
+                    )
+            else:
+                for i in range(offset, offset + batch_size):
+                    dilated_distance_profile(
+                        1,
+                        self.dilation,
+                        self.padding,
+                        &self.S[i, self.dim, 0],
+                        self.S.shape[2],
+                        &self.X[i, self.dim, 0],
+                        self.X.shape[2],
+                        metric,
+                        self.x_buffer,
+                        self.s_buffer,
+                        INFINITY,
+                        &self.out[i, 0],
+                    )
+
+
+def _dilated_distance_profile(
+    TSArray S,
+    TSArray X,
+    Py_ssize_t dim,
+    Metric metric,
+    Py_ssize_t dilation,
+    Py_ssize_t padding,
+    bint scaled,
+    n_jobs,
+):
+    cdef Py_ssize_t shapelet_size = (S.shape[2] - 1) * dilation + 1
+    cdef Py_ssize_t input_size = X.shape[2] + 2 * padding
+    cdef double[:, :] out = np.empty(
+        (X.shape[0], input_size - shapelet_size + 1), dtype=float
+    )
+
+    run_in_parallel(
+        _DilatedDistanceProfile(
+            S,
+            X,
+            shapelet_size,
+            dim,
+            metric,
+            dilation,
+            padding,
+            scaled,
+            out,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem",
+    )
+
     return out.base

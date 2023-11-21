@@ -18,6 +18,7 @@ from ._cdistance import (
     SubsequenceMetricWrap,
     _argmin_distance,
     _argmin_subsequence_distance,
+    _dilated_distance_profile,
     _paired_distance,
     _paired_subsequence_distance,
     _paired_subsequence_match,
@@ -1285,6 +1286,9 @@ def distance_profile(
         raise ValueError(
             "Invalid subsequnce shape (%d > %d)" % (y.shape[0], x.shape[-1])
         )
+    n_dims = x.shape[1] if x.ndim == 3 else 1
+    if dim >= n_dims:
+        raise ValueError(f"The parameter dim must be dim ({dim}) < n_dims ({n_dims})")
 
     Metric = check_subsequence_metric(metric, scale=scale)
     metric_params = metric_params if metric_params is not None else {}
@@ -1293,6 +1297,7 @@ def distance_profile(
         y, _check_ts_array(x), dim, Metric(**metric_params), n_jobs
     )
 
+    # TODO: fix the output
     if dp.shape[0] == 1:
         return dp[0]
     else:
@@ -1354,8 +1359,6 @@ def argmin_subsequence_distance(
         :ref:`User guide <list_of_subsequence_metrics>`.
     scale : bool, optional
         If True, scale the subsequences before distance computation.
-
-        .. versionadded:: 1.3
     return_distance : bool, optional
         Return the distance for the `k` closest subsequences.
     n_jobs : int, optional
@@ -1406,13 +1409,18 @@ def argmin_subsequence_distance(
     x = check_array(x, allow_3d=True, ensure_ts_array=True)
 
     if not y.shape[2] <= x.shape[2]:
-        raise ValueError("the longest shapelet must be shorter than samples")
+        raise ValueError("the longest subsequence must be shorter than samples.")
 
     if y.shape[0] != x.shape[0]:
-        raise ValueError("both arrays must have the same number of samples")
+        raise ValueError("both arrays must have the same number of samples.")
+
+    if dim >= x.shape[1]:
+        raise ValueError(
+            f"The parameter dim must be dim ({dim}) < n_dims ({x.shape[1]})"
+        )
 
     if not k <= (x.shape[2] - y.shape[2] + 1):
-        raise ValueError("k must be less x.shape[-1] - y.shape[-1] + 1")
+        raise ValueError("k must be less x.shape[-1] - y.shape[-1] + 1.")
 
     scale = (isinstance(metric, str) and metric.startswith("scaled_")) or scale
     if isinstance(metric, str) and metric.startswith("scaled_"):
@@ -1436,3 +1444,92 @@ def argmin_subsequence_distance(
         return indices, distances
     else:
         return indices
+
+
+def dilated_distance_profile(
+    y,
+    x,
+    *,
+    dilation=1,
+    padding=0,
+    dim=0,
+    metric="euclidean",
+    metric_params=None,
+    scale=False,
+    n_jobs=None,
+):
+    """
+    Compute the dilated distance profile.
+
+    The distance profile is computed between the paired subsequences
+    and samples in `y` and `x`, using the provided dilation and padding.
+
+    Parameters
+    ----------
+    y : array-like of shape (n_samples, m_timestep)
+        The subsequences.
+    x : array-like of shape (n_timestep, ) or (n_samples, n_timestep)
+        The samples. If `x.ndim` is 1, we will broadcast it to have the same
+        number of samples as `y`.
+    dilation : int, optional
+        The dilation, i.e., the spacing between points in the subsequences.
+    padding : int, optional
+        The amount of padding applied to the input time series.
+    dim : int, optional
+        The dimension in `x` for which the distance profile is computed.
+    metric : str, optional
+        The metric.
+
+        See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
+    metric_params : dict, optional
+        Parameters to the metric.
+
+        Read more about the parameters in the
+        :ref:`User guide <list_of_subsequence_metrics>`.
+    scale : bool, optional
+        If True, scale the subsequences before distance computation.
+    n_jobs : int, optional
+       The number of parallel jobs.
+
+    Returns
+    -------
+    ndarray of shape (n_samples, output_size)
+        The distance profile. The size of the output is given by:
+        `x.shape[-1] + 2 * padding - (y.shape[-1] - 1) * dilation + 1) + 1`.
+    """
+    y = check_array(y, dtype=float, ensure_2d=False, ensure_ts_array=True)
+    if x.ndim == 1:
+        x = np.broadcast_to(x, shape=(y.shape[0], x.shape[0]))
+
+    x = check_array(x, dtype=float, ensure_ts_array=True, allow_3d=True)
+    shapelet_size = (y.shape[2] - 1) * dilation + 1
+    input_size = x.shape[2] + 2 * padding
+
+    if shapelet_size > input_size:
+        raise ValueError("subsequence in y is larger than input in x")
+
+    if y.shape[0] != x.shape[0]:
+        raise ValueError("y and x must be paired")
+
+    if dim >= x.shape[1]:
+        raise ValueError(
+            f"The parameter dim must be dim ({dim}) < n_dims ({x.shape[1]})"
+        )
+
+    scale = (isinstance(metric, str) and metric.startswith("scaled_")) or scale
+    if isinstance(metric, str) and metric.startswith("scaled_"):
+        metric = metric[7:]
+
+    Metric = check_metric(metric)
+    metric_params = metric_params if metric_params is not None else {}
+
+    if scale:
+        std = np.std(y, axis=-1, keepdims=True)
+        mean = np.mean(y, axis=-1, keepdims=True)
+        std[std < 1e-13] = 1  # see EPSILON in _cdistance.pxd
+        y = (y - mean) / std
+
+    # TODO: fix the output
+    return _dilated_distance_profile(
+        y, x, dim, Metric(**metric_params), dilation, padding, scale, n_jobs
+    )
