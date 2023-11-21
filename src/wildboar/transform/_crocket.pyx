@@ -373,9 +373,6 @@ cdef void apply_convolution(
 ) noexcept nogil:
     cdef Py_ssize_t out_len, end
     cdef Py_ssize_t i, j, k
-    cdef double ppv
-    cdef double max
-    cdef double sum
 
     out_len = (x_length + 2 * padding) - ((length - 1) * dilation)
     end = (x_length + padding) - ((length - 1) * dilation)
