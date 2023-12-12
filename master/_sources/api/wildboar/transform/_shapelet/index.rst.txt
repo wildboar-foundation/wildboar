@@ -24,7 +24,7 @@ Classes
 
 
 
-.. py:class:: CompetingDilatedShapeletTransform(n_groups=64, n_shapelets=8, *, metric='euclidean', metric_params=None, normalize_prob=0.8, shapelet_size=11, lower=0.05, upper=0.1, ignore_y=False, random_state=None, n_jobs=None)
+.. py:class:: CompetingDilatedShapeletTransform(n_groups=64, n_shapelets=8, *, metric='euclidean', metric_params=None, normalize_prob=0.8, shapelet_size=11, lower=0.05, upper=0.1, soft_min=True, soft_max=False, soft_threshold=True, ignore_y=False, random_state=None, n_jobs=None)
 
 
 
