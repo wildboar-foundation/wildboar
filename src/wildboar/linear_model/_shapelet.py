@@ -313,6 +313,9 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
         lower=0.05,
         upper=0.1,
         order=1,
+        soft_min=True,
+        soft_max=False,
+        soft_threshold=True,
         alphas=(0.1, 1.0, 10.0),
         fit_intercept=True,
         scoring=None,
@@ -340,6 +343,9 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
         self.shapelet_size = shapelet_size
         self.lower = lower
         self.upper = upper
+        self.soft_min = soft_min
+        self.soft_max = soft_max
+        self.soft_threshold = soft_threshold
         self.order = order
 
     def _build_pipeline(self):
@@ -358,6 +364,9 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
             normalize_prob=self.normalize_prob,
             lower=self.lower,
             upper=self.upper,
+            soft_min=self.soft_min,
+            soft_max=self.soft_max,
+            soft_threshold=self.soft_threshold,
             n_jobs=self.n_jobs,
         )
         n_jobs = effective_n_jobs(self.n_jobs)

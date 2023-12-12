@@ -825,6 +825,124 @@ cdef struct Cdist:
     double *data
 
 
+cdef class CastorSummarizer:
+    cdef Py_ssize_t n_timestep
+    cdef Py_ssize_t n_shapelets
+    cdef bint soft_min, soft_max, soft_threshold
+    cdef double *min_values
+    cdef double *max_values
+    cdef double *min_so_values
+
+    def __cinit__(self, *args, **kwargs):
+        self.min_values = NULL
+        self.max_values = NULL
+        self.min_so_values = NULL
+
+    def __init__(self, soft_min=False, soft_max=True, soft_threshold=False):
+        self.soft_min = soft_min
+        self.soft_max = soft_max
+        self.soft_threshold = soft_threshold
+
+    def __reduce__(self):
+        return self.__class__, (self.soft_min, self.soft_max, self.soft_threshold)
+
+    def __dealloc__(self):
+        self._free()
+
+    cdef void _free(self) noexcept nogil:
+        if self.min_values != NULL:
+            free(self.min_values)
+            self.min_values = NULL
+        if self.max_values != NULL:
+            free(self.max_values)
+            self.max_values = NULL
+        if self.min_so_values != NULL:
+            free(self.min_so_values)
+            self.min_so_values = NULL
+
+    cdef int reset(self, Py_ssize_t n_timestep, Py_ssize_t n_shapelets) noexcept nogil:
+        self._free()
+        self.n_timestep = n_timestep
+        self.n_shapelets = n_shapelets
+        self.min_values = <double*> malloc(sizeof(double) * self.n_shapelets)
+        self.max_values = <double*> malloc(sizeof(double) * self.n_shapelets)
+        self.min_so_values = <double*> malloc(sizeof(double) * self.n_shapelets)
+
+    cdef void fill(
+        self,
+        Py_ssize_t attribute_offset,
+        Py_ssize_t exponent,
+        Cdist *cdist,
+        double *dist_buffer,
+        double[:] out,
+    ) noexcept nogil:
+        cdef Py_ssize_t i, min_index, max_index
+        cdef double min_value, max_value
+
+        memset(self.min_values, 0, sizeof(double) * self.n_shapelets)
+        memset(self.max_values, 0, sizeof(double) * self.n_shapelets)
+        memset(self.min_so_values, 0, sizeof(double) * self.n_shapelets)
+
+        for i in range(self.n_timestep):
+            self._compute_attributes(
+                i,
+                self.n_timestep,
+                exponent,
+                cdist.max_exponent,
+                dist_buffer,
+                cdist.thresholds,
+                &min_index,
+                &min_value,
+                &max_index,
+                &max_value,
+                self.min_so_values,
+            )
+
+            self.max_values[max_index] += max_value if self.soft_max else 1
+            self.min_values[min_index] += min_value if self.soft_min else 1
+            if (
+                not self.soft_threshold and
+                self.min_values[min_index] < cdist.thresholds[min_index * cdist.max_exponent + exponent]
+            ):
+                self.min_so_values[min_index] += 1
+
+        cdef Py_ssize_t shapelet_attribute_offset = attribute_offset + exponent * self.n_shapelets * 3
+        for i in range(self.n_shapelets):
+            out[shapelet_attribute_offset + i * 3 + 0] = self.min_values[i]
+            out[shapelet_attribute_offset + i * 3 + 1] = self.max_values[i]
+            out[shapelet_attribute_offset + i * 3 + 2] = self.min_so_values[i]
+
+    cdef void _compute_attributes(
+        self,
+        Py_ssize_t offset,
+        Py_ssize_t stride,
+        Py_ssize_t exponent,
+        Py_ssize_t max_exponent,
+        double *values,
+        double *thresholds,
+        Py_ssize_t *min_index,
+        double *min_value,
+        Py_ssize_t *max_index,
+        double *max_value,
+        double *min_so_values,
+    ) noexcept nogil:
+        cdef Py_ssize_t i
+        cdef double value, threshold
+        min_value[0] = INFINITY
+        max_value[0] = -INFINITY
+        for i in range(self.n_shapelets):
+            value = values[offset + i * stride]
+            threshold = thresholds[i * max_exponent + exponent]
+
+            if value < min_value[0]:
+                min_value[0] = value
+                min_index[0] = i
+            if value < threshold and self.soft_threshold:
+                min_so_values[i] += 1
+            if value > max_value[0]:
+                max_value[0] = value
+                max_index[0] = i
+
 cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_shapelets
     cdef Py_ssize_t shapelet_size
@@ -833,6 +951,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
     cdef double lower
     cdef double upper
 
+    cdef CastorSummarizer summarizer
     cdef Metric metric
 
     # Temporary buffer to store dilated distance
@@ -864,6 +983,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         double lower,
         double upper,
         Metric metric,
+        CastorSummarizer summarizer,
         const Py_ssize_t[:] labels,   # must be the output of np.unique(return_indices=True)
         const Py_ssize_t[:] samples,  # must be np.argsort(labels)
         const Py_ssize_t[:] samples_per_label,  # must be the output of np.unique(return_count=True)
@@ -875,6 +995,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         self.lower = lower
         self.upper = upper
         self.metric = metric
+        self.summarizer = summarizer
 
         self.rnd_value = NULL
         self.dist_buffer = NULL
@@ -898,6 +1019,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
             self.lower,
             self.upper,
             self.metric,
+            self.summarizer,
             self.labels.base if self.labels is not None else None,
             self.samples.base if self.samples is not None else None,
             self.samples_per_label.base if self.samples_per_label is not None else None,
@@ -950,6 +1072,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
         self.rnd_value = <double*> malloc(sizeof(double) * X.shape[0])
 
         self.metric.reset(X, X)
+        self.summarizer.reset(X.shape[2], self.n_shapelets)
         return 0
 
     cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
@@ -1219,33 +1342,7 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
                     self.dist_buffer + i * X.shape[2],
                 )
 
-            memset(self.min_values, 0, sizeof(double) * self.n_shapelets)
-            memset(self.max_values, 0, sizeof(double) * self.n_shapelets)
-            memset(self.min_so_values, 0, sizeof(double) * self.n_shapelets)
-
-            for i in range(X.shape[2]):
-                self._compute_attributes(
-                    i,
-                    X.shape[2],
-                    exponent,
-                    cdist.max_exponent,
-                    self.dist_buffer,
-                    cdist.thresholds,
-                    &min_index,
-                    &min_value,
-                    &max_index,
-                    &max_value,
-                    self.min_so_values,
-                )
-
-                self.max_values[max_index] += 1
-                self.min_values[min_index] += min_value
-
-            shapelet_attribute_offset = attribute_offset + exponent * self.n_shapelets * 3
-            for i in range(self.n_shapelets):
-                out[out_sample, shapelet_attribute_offset + i * 3 + 0] = self.min_values[i]
-                out[out_sample, shapelet_attribute_offset + i * 3 + 1] = self.max_values[i]
-                out[out_sample, shapelet_attribute_offset + i * 3 + 2] = self.min_so_values[i]
+            self.summarizer.fill(attribute_offset, exponent, cdist, self.dist_buffer, out[out_sample])
 
     cdef Py_ssize_t persistent_fill(
         self,

@@ -11,6 +11,7 @@ from ..distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
 from ._base import BaseAttributeTransform
 from ._cshapelet import (
+    CastorSummarizer,
     CompetingDilatedShapeletAttributeGenerator,
     DilatedShapeletAttributeGenerator,
     RandomMultiMetricShapeletAttributeGenerator,
@@ -193,6 +194,9 @@ class CompetingDilatedShapeletMixin:
         "normalize_prob": [Interval(numbers.Real, 0, 1, closed="both")],
         "lower": [Interval(numbers.Real, 0, 1, closed="both")],
         "upper": [Interval(numbers.Real, 0, 1, closed="both")],
+        "soft_min": [bool],
+        "soft_max": [bool],
+        "soft_threshold": [bool],
         "ignore_y": ["boolean"],
     }
 
@@ -217,6 +221,7 @@ class CompetingDilatedShapeletMixin:
             self.lower,
             self.upper,
             Metric(**metric_params),
+            CastorSummarizer(self.soft_min, self.soft_max, self.soft_threshold),
             y,
             samples,
             samples_per_label,
@@ -286,6 +291,9 @@ class CompetingDilatedShapeletTransform(
         shapelet_size=11,
         lower=0.05,
         upper=0.1,
+        soft_min=True,
+        soft_max=False,
+        soft_threshold=True,
         ignore_y=False,
         random_state=None,
         n_jobs=None,
@@ -299,6 +307,9 @@ class CompetingDilatedShapeletTransform(
         self.shapelet_size = shapelet_size
         self.lower = lower
         self.upper = upper
+        self.soft_min = soft_min
+        self.soft_max = soft_max
+        self.soft_threshold = soft_threshold
         self.ignore_y = ignore_y
 
 
