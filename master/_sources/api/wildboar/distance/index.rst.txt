@@ -69,7 +69,6 @@ Functions
    wildboar.distance.argmin_subsequence_distance
    wildboar.distance.check_metric
    wildboar.distance.check_subsequence_metric
-   wildboar.distance.dilated_distance_profile
    wildboar.distance.distance_profile
    wildboar.distance.matrix_profile
    wildboar.distance.paired_distance
@@ -1446,71 +1445,7 @@ Functions
 
 
 
-.. py:function:: dilated_distance_profile(y, x, *, dilation=1, padding=0, dim=0, metric='euclidean', metric_params=None, scale=False, n_jobs=None)
-
-   
-   Compute the dilated distance profile.
-
-   The distance profile is computed between the paired subsequences
-   and samples in `y` and `x`, using the provided dilation and padding.
-
-   :Parameters:
-
-       **y** : array-like of shape (n_samples, m_timestep)
-           The subsequences.
-
-       **x** : array-like of shape (n_timestep, ) or (n_samples, n_timestep)
-           The samples. If `x.ndim` is 1, we will broadcast it to have the same
-           number of samples as `y`.
-
-       **dilation** : int, optional
-           The dilation, i.e., the spacing between points in the subsequences.
-
-       **padding** : int, optional
-           The amount of padding applied to the input time series.
-
-       **dim** : int, optional
-           The dimension in `x` for which the distance profile is computed.
-
-       **metric** : str, optional
-           The metric.
-           
-           See ``_SUBSEQUENCE_METRICS.keys()`` for a list of supported metrics.
-
-       **metric_params** : dict, optional
-           Parameters to the metric.
-           
-           Read more about the parameters in the
-           :ref:`User guide <list_of_subsequence_metrics>`.
-
-       **scale** : bool, optional
-           If True, scale the subsequences before distance computation.
-
-       **n_jobs** : int, optional
-           The number of parallel jobs.
-
-   :Returns:
-
-       ndarray of shape (n_samples, output_size)
-           The distance profile. The size of the output is given by:
-           `x.shape[-1] + 2 * padding - (y.shape[-1] - 1) * dilation + 1) + 1`.
-
-
-
-
-
-
-
-
-
-
-
-
-
-   ..
-       !! processed by numpydoc !!
-
-.. py:function:: distance_profile(y, x, *, dim=0, metric='mass', metric_params=None, scale=False, n_jobs=None)
+.. py:function:: distance_profile(y, x, *, dilation=1, padding=0, dim=0, metric='mass', metric_params=None, scale=False, n_jobs=None)
 
    
    Compute the distance profile.
@@ -1522,10 +1457,18 @@ Functions
    :Parameters:
 
        **y** : array-like of shape (yn_timestep, )
-           The subsequence.
+           The subsequences.
 
        **x** : ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
-           The input data.
+           The samples. If `x.ndim` is 1, we will broadcast it to have the same
+           number of samples as `y`.
+
+       **dilation** : int, optional
+           The dilation, i.e., the spacing between points in the subsequences.
+
+       **padding** : int or {"same"}, optional
+           The amount of padding applied to the input time series. If "same", the output
+           size is the same as the input size.
 
        **dim** : int, optional
            The dim to search for shapelets.
@@ -1543,16 +1486,15 @@ Functions
 
        **scale** : bool, optional
            If True, scale the subsequences before distance computation.
-           
-           .. versionadded:: 1.3
 
        **n_jobs** : int, optional
            The number of parallel jobs to run.
 
    :Returns:
 
-       ndarray of shape (n_samples, n_timestep - yn_timestep + 1) or            (n_timestep - yn_timestep + 1, )
-           The distance between every subsequence in `x` to `y`.
+       ndarray of shape (n_samples, output_size)
+           The distance profile. `output_size` is given by:
+           `x.shape[-1] + 2 * padding - (y.shape[-1] - 1) * dilation + 1) + 1`.
 
 
 

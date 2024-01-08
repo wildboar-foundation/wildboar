@@ -1,22 +1,22 @@
 <!doctype html>
-<html class="no-js" lang="en" data-content_root="">
+<html class="no-js" lang="en" data-content_root="../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Elastic metrics" href="elastic.html" /><link rel="prev" title="Metrics" href="../metrics.html" />
 
-    <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>Distance - Wildboar 1.1.1.dev262 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>Distance - Wildboar 1.1.1.dev265 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/pygments-override.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=8aa3e762" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/pygments-override.css?v=9e853fe2" />
     
     
 
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">Wildboar 1.1.1.dev262 documentation</div></a>
+      <a href="../../index.html"><div class="brand">Wildboar 1.1.1.dev265 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -313,9 +313,9 @@
         </div>
         <article role="main">
           <section id="distance">
-<h1>Distance<a class="headerlink" href="#distance" title="Permalink to this heading">#</a></h1>
+<h1>Distance<a class="headerlink" href="#distance" title="Link to this heading">#</a></h1>
 <section id="pairwise-distance">
-<h2>Pairwise distance<a class="headerlink" href="#pairwise-distance" title="Permalink to this heading">#</a></h2>
+<h2>Pairwise distance<a class="headerlink" href="#pairwise-distance" title="Link to this heading">#</a></h2>
 <p>A typical workflow involves computing the distance between pairs of time series.
 In Wildboar, we accomplish this using the {func}`pairwise_distance`-function
 which computes the distance between each time series in <cite>X</cite> and optionally <cite>Y</cite>.
@@ -423,7 +423,7 @@ multivariate support</a>.</p>
 </dl>
 </section>
 <section id="paired-distance">
-<h2>Paired distance<a class="headerlink" href="#paired-distance" title="Permalink to this heading">#</a></h2>
+<h2>Paired distance<a class="headerlink" href="#paired-distance" title="Link to this heading">#</a></h2>
 <p>Sometimes we do not need to compute the distance between every sample, but
 instead the distance between _pairs_ of samples. For this purpose, we use the
 <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a>, which accepts two arrays <cite>X</cite> and <cite>Y</cite> with shapes
@@ -458,7 +458,7 @@ the output depends on that configuration:</p>
 </dl>
 </section>
 <section id="multivariate-support">
-<span id="id1"></span><h2>Multivariate support<a class="headerlink" href="#multivariate-support" title="Permalink to this heading">#</a></h2>
+<span id="id1"></span><h2>Multivariate support<a class="headerlink" href="#multivariate-support" title="Link to this heading">#</a></h2>
 <p>As described, both <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a> and <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a> support
 multivariate time series by computing the <em>“interdimensional” distance</em> between
 time series and (by default) reporting the <em>mean</em> (<cite>dim=”mean”</cite>). Optionally, we
@@ -512,7 +512,7 @@ distance between unwanted dimensions.</p>
 </section>
 </section>
 <section id="subsequence-search">
-<h1>Subsequence search<a class="headerlink" href="#subsequence-search" title="Permalink to this heading">#</a></h1>
+<h1>Subsequence search<a class="headerlink" href="#subsequence-search" title="Link to this heading">#</a></h1>
 <p>Wildboar can also identify the (minimum) <em>subsequence</em> distance, i.e.,
 <span class="math notranslate nohighlight">\(\min\limits_{t'\in t}(s, t')\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is a query and :math`t`
 is a time series, with <span class="math notranslate nohighlight">\(|s| \le |t|\)</span>. Wildboar support both
@@ -524,7 +524,7 @@ the paired and pairwise subsequence functions accept subsequences as <code class
 containing 1d-numpy arrays and 2d-numpy arrays with subsequences with the same
 timestep.</p>
 <section id="pairwise-subsequence-distance">
-<h2>Pairwise subsequence distance<a class="headerlink" href="#pairwise-subsequence-distance" title="Permalink to this heading">#</a></h2>
+<h2>Pairwise subsequence distance<a class="headerlink" href="#pairwise-subsequence-distance" title="Link to this heading">#</a></h2>
 <p>Pairwise subsequence distance requires two inputs, the subsequences <cite>Y</cite>
 (argument 1) and the time series <cite>X</cite> (argument 2):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_subsequence_distance</span>
@@ -619,7 +619,7 @@ at index <cite>28</cite> for both the first, third and last sample.</p>
 </section>
 </section>
 <section id="benchmark">
-<h1>Benchmark<a class="headerlink" href="#benchmark" title="Permalink to this heading">#</a></h1>
+<h1>Benchmark<a class="headerlink" href="#benchmark" title="Link to this heading">#</a></h1>
 <p>As part of the Wildboar test suite, we continuously investigate the performance
 of the estimators and, in particular since they are an integrate part of many
 tasks, the metrics. All Wildboar metrics, including subsequence and elastic
@@ -628,7 +628,7 @@ Inspecting the relative performance of the different metrics and their
 theoretical time and space-complexity, we can see that the elastic metrics are
 typically two to three orders of magnitudes slower than the non-elastic metrics.</p>
 <section id="metrics">
-<h2>Metrics<a class="headerlink" href="#metrics" title="Permalink to this heading">#</a></h2>
+<h2>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -773,7 +773,7 @@ typically two to three orders of magnitudes slower than the non-elastic metrics.
 </div>
 </section>
 <section id="subsequence-metrics">
-<h2>Subsequence metrics<a class="headerlink" href="#subsequence-metrics" title="Permalink to this heading">#</a></h2>
+<h2>Subsequence metrics<a class="headerlink" href="#subsequence-metrics" title="Link to this heading">#</a></h2>
 <div class="table-wrapper colwidths-given docutils container">
 <table class="docutils align-default">
 <colgroup>
@@ -931,7 +931,7 @@ typically two to three orders of magnitudes slower than the non-elastic metrics.
 </table>
 </div>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="lb" role="note">
+<aside class="footnote brackets" id="lb" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
 <p>Uses lower-bounding as described by Rakthanmanon, T., Campana, B.,
 Mueen, A., Batista, G., Westover, B., Zhu, Q., Zakaria, J. and Keogh, E.,
@@ -1024,15 +1024,15 @@ international conference on Knowledge discovery and data mining (pp.
     </aside>
   </div>
 </div>
-<script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/scripts/furo.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/tabs.js"></script>
-    <script src="../../_static/toggleprompt.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+<script src="../../_static/documentation_options.js?v=772e88e7"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/tabs.js?v=3ee01567"></script>
+    <script src="../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>

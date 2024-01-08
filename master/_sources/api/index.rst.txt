@@ -301,8 +301,6 @@ examples.
     - 
   * - :py:obj:`~wildboar.distance.check_subsequence_metric`
     - 
-  * - :py:obj:`~wildboar.distance.dilated_distance_profile`
-    - Compute the dilated distance profile.
   * - :py:obj:`~wildboar.distance.distance_profile`
     - Compute the distance profile.
   * - :py:obj:`~wildboar.distance.matrix_profile`
