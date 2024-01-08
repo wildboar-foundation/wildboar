@@ -5,8 +5,6 @@ from joblib import Parallel, delayed, effective_n_jobs
 
 
 def partition_n_jobs(n_jobs, n):
-    n_jobs = min(effective_n_jobs(n_jobs), n)
-
     batch_size = n // n_jobs
     overflow = n % n_jobs
     offsets = []
@@ -34,8 +32,12 @@ def run_in_parallel(work, n_jobs=-1, **parallel_args):
     n_jobs : int, optional
         Number of parallel jobs, by default -1
     """
-    n_jobs, offsets, batch_sizes = partition_n_jobs(n_jobs, work.n_work)
-    Parallel(n_jobs=n_jobs, **parallel_args)(
-        delayed(work)(jobid, offsets[jobid], batch_sizes[jobid])
-        for jobid in range(n_jobs)
-    )
+    n_jobs = min(effective_n_jobs(n_jobs), work.n_work)
+    if n_jobs == 1:
+        work(0, 0, work.n_work)
+    else:
+        n_jobs, offsets, batch_sizes = partition_n_jobs(n_jobs, work.n_work)
+        Parallel(n_jobs=n_jobs, **parallel_args)(
+            delayed(work)(jobid, offsets[jobid], batch_sizes[jobid])
+            for jobid in range(n_jobs)
+        )
