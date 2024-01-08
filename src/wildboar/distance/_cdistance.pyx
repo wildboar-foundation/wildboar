@@ -1626,17 +1626,16 @@ def _paired_distance(
     return out.base
 
 
-cdef class _SubsequenceDistanceProfile:
-    cdef Subsequence *subsequence
-    cdef Py_ssize_t n_subsequences
+cdef class _DistanceProfile:
     cdef double[:, :] distance_profile
     cdef TSArray x
+    cdef TSArray y
     cdef Py_ssize_t dim
     cdef SubsequenceMetric metric
 
     def __cinit__(
         self,
-        np.ndarray y,
+        TSArray y,
         TSArray x,
         Py_ssize_t dim,
         SubsequenceMetric metric,
@@ -1644,17 +1643,9 @@ cdef class _SubsequenceDistanceProfile:
     ):
         self.distance_profile = distance_profile
         self.x = x
+        self.y = y
         self.metric = metric
         self.dim = dim
-        self.subsequence = <Subsequence*> malloc(sizeof(Subsequence))
-        self.metric.reset(x)
-        self.metric.from_array(self.subsequence, (self.dim, y))
-
-    def __dealloc__(self):
-        if self.subsequence != NULL:
-            self.metric.free_persistent(self.subsequence)
-            free(self.subsequence)
-            self.subsequence = NULL
 
     @property
     def n_work(self):
@@ -1663,31 +1654,38 @@ cdef class _SubsequenceDistanceProfile:
     def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
         cdef Py_ssize_t i, j
         cdef SubsequenceMetric metric = deepcopy(self.metric)
+        cdef SubsequenceView view
 
         with nogil:
             metric.reset(self.x)
             for i in range(offset, offset + batch_size):
-                metric.persistent_profile(
-                    self.subsequence,
-                    self.x,
-                    i,
+                metric.init_transient(self.y, &view, i, 0, self.y.shape[2], 0)
+                metric._distance_profile(
+                    &self.y[i, 0, 0],
+                    self.y.shape[2],
+                    view.mean,
+                    view.std,
+                    view.extra,
+                    &self.x[i, 0, 0],
+                    self.x.shape[2],
                     &self.distance_profile[i, 0],
                 )
+                metric.free_transient(&view)
 
 
-def _subsequence_distance_profile(
-    np.ndarray y,
+def _distance_profile(
+    TSArray y,
     TSArray x,
     Py_ssize_t dim,
     SubsequenceMetric metric,
     n_jobs=None
 ):
     cdef double[:, :] out = np.ones(
-        (x.shape[0], x.shape[2] - y.shape[0] + 1), dtype=float
+        (x.shape[0], x.shape[2] - y.shape[2] + 1), dtype=float
     )
 
     run_in_parallel(
-        _SubsequenceDistanceProfile(
+        _DistanceProfile(
             y,
             x,
             dim,

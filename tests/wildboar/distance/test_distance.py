@@ -8,7 +8,6 @@ from wildboar.datasets import load_gun_point, load_two_lead_ecg
 from wildboar.distance import (
     argmin_distance,
     argmin_subsequence_distance,
-    dilated_distance_profile,
     distance_profile,
     paired_distance,
     paired_subsequence_distance,
@@ -1566,7 +1565,9 @@ def test_argmin_subsequence_distance(metric, k):
 
 def test_dilated_distance_profile():
     X, y = load_two_lead_ecg()
-    dp = dilated_distance_profile(X[0:2, 9:21], X[2:4], dilation=3, padding=4)
+    dp = distance_profile(
+        X[0:2, 9:21], X[2:4], dilation=3, padding=4, metric="euclidean"
+    )
     # fmt: off
     expected = np.array([[
         2.11436574, 2.24116065, 2.49773792, 3.27044544, 3.51998601,
