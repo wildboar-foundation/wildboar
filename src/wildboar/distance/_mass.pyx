@@ -81,27 +81,31 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
         self.dist_buffer = <double*> malloc(sizeof(double) * n_timestep)
         return 0
 
-    cdef double transient_distance(
+    cdef double _distance(
         self,
-        SubsequenceView *s,
-        TSArray X,
-        Py_ssize_t index,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
         Py_ssize_t *return_index=NULL,
     ) noexcept nogil:
         cumulative_mean_std(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            s.length,
+            x,
+            x_len,
+            s_len,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            &X[index, s.dim, s.start],
-            s.length,
-            s.mean,
-            s.std,
+            x,
+            x_len,
+            s,
+            s_len,
+            s_mean,
+            s_std,
             self.mean_x,
             self.std_x,
             self.x_buffer,
@@ -109,164 +113,77 @@ cdef class ScaledMassSubsequenceMetric(ScaledSubsequenceMetric):
             self.dist_buffer,
         )
         return find_min(
-            self.dist_buffer, X.shape[2] - s.length + 1, return_index
+            self.dist_buffer, x_len - s_len + 1, return_index
         )
 
-    cdef double persistent_distance(
+    cdef Py_ssize_t _matches(
         self,
-        Subsequence *s,
-        TSArray X,
-        Py_ssize_t index,
-        Py_ssize_t *return_index=NULL,
-    ) noexcept nogil:
-        cumulative_mean_std(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            s.length,
-            self.mean_x,
-            self.std_x,
-        )
-        _mass_distance(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            s.data,
-            s.length,
-            s.mean,
-            s.std,
-            self.mean_x,
-            self.std_x,
-            self.x_buffer,
-            self.y_buffer,
-            self.dist_buffer,
-        )
-        return find_min(
-            self.dist_buffer, X.shape[2] - s.length + 1, return_index
-        )
-
-    cdef Py_ssize_t transient_matches(
-        self,
-        SubsequenceView *s,
-        TSArray X,
-        Py_ssize_t index,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
         double threshold,
         double *distances,
         Py_ssize_t *indicies,
     ) noexcept nogil:
         cumulative_mean_std(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            s.length,
+            x,
+            x_len,
+            s_len,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            &X[index, s.dim, s.start],
-            s.length,
-            s.mean,
-            s.std,
+            x,
+            x_len,
+            s,
+            s_len,
+            s_mean,
+            s_std,
             self.mean_x,
             self.std_x,
             self.x_buffer,
             self.y_buffer,
             distances,
         )
-        cdef Py_ssize_t i, j
-        j = 0
-        for i in range(X.shape[2] - s.length + 1):
-            if distances[i] <= threshold:
-                distances[j] = distances[i]
-                j += 1
-        return j
 
-    cdef Py_ssize_t persistent_matches(
-        self,
-        Subsequence *s,
-        TSArray X,
-        Py_ssize_t index,
-        double threshold,
-        double *distances,
-        Py_ssize_t *indicies,
-    ) noexcept nogil:
-        cumulative_mean_std(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            s.length,
-            self.mean_x,
-            self.std_x,
-        )
-        _mass_distance(
-            &X[index, s.dim, 0],
-            X.shape[2],
-            s.data,
-            s.length,
-            s.mean,
-            s.std,
-            self.mean_x,
-            self.std_x,
-            self.x_buffer,
-            self.y_buffer,
-            distances,
-        )
         cdef Py_ssize_t i, j
         j = 0
-        for i in range(X.shape[2] - s.length + 1):
+        for i in range(x_len - s_len + 1):
             if distances[i] <= threshold:
                 distances[j] = distances[i]
                 indicies[j] = i
                 j += 1
         return j
 
-    cdef void transient_profile(
+    cdef void _distance_profile(
         self,
-        SubsequenceView *s,
-        TSArray x,
-        Py_ssize_t i,
+        const double *s,
+        Py_ssize_t s_len,
+        double s_mean,
+        double s_std,
+        void *s_extra,
+        const double *x,
+        Py_ssize_t x_len,
         double *dp,
     ) noexcept nogil:
         cumulative_mean_std(
-            &x[i, s.dim, 0],
-            x.shape[2],
-            s.length,
+            x,
+            x_len,
+            s_len,
             self.mean_x,
             self.std_x,
         )
         _mass_distance(
-            &x[i, s.dim, 0],
-            x.shape[2],
-            &x[s.index, s.dim, s.start],
-            s.length,
-            s.mean,
-            s.std,
-            self.mean_x,
-            self.std_x,
-            self.x_buffer,
-            self.y_buffer,
-            dp,
-        )
-
-    cdef void persistent_profile(
-        self,
-        Subsequence *s,
-        TSArray x,
-        Py_ssize_t i,
-        double *dp,
-    ) noexcept nogil:
-        cumulative_mean_std(
-            &x[i, s.dim, 0],
-            x.shape[2],
-            s.length,
-            self.mean_x,
-            self.std_x,
-        )
-        _mass_distance(
-            &x[i, s.dim, 0],
-            x.shape[2],
-            s.data,
-            s.length,
-            s.mean,
-            s.std,
+            x,
+            x_len,
+            s,
+            s_len,
+            s_mean,
+            s_std,
             self.mean_x,
             self.std_x,
             self.x_buffer,
