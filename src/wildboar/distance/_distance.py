@@ -1225,7 +1225,7 @@ def argmin_distance(
     },
     prefer_skip_nested_validation=True,
 )
-def distance_profile(
+def distance_profile(  # noqa: PLR0912
     y,
     x,
     *,
@@ -1240,17 +1240,17 @@ def distance_profile(
     """
     Compute the distance profile.
 
-    The distance profile of shape `(n_samples, n_timestep - yn_timestep + 1)`
-    corresponds to the distance of the subsequence y for every time point
-    in x.
+    The distance profile corresponds to the distance of the subsequences in y
+    for every time point of the samples in x.
 
     Parameters
     ----------
-    y : array-like of shape (yn_timestep, )
-        The subsequences.
+    y : array-like of shape (m_timestep, ) or (n_samples, m_timestep)
+        The subsequences. if `y.ndim` is 1, we will broacast `y` to have the
+        same number of samples as `x`.
     x : ndarray of shape (n_timestep, ), (n_samples, n_timestep)\
     or (n_samples, n_dims, n_timestep)
-        The samples. If `x.ndim` is 1, we will broadcast it to have the same
+        The samples. If `x.ndim` is 1, we will broadcast `x` to have the same
         number of samples as `y`.
     dilation : int, optional
         The dilation, i.e., the spacing between points in the subsequences.
@@ -1275,9 +1275,11 @@ def distance_profile(
 
     Returns
     -------
-    ndarray of shape (n_samples, output_size)
+    ndarray of shape (n_samples, output_size) or (output_size, )
         The distance profile. `output_size` is given by:
-        `x.shape[-1] + 2 * padding - (y.shape[-1] - 1) * dilation + 1) + 1`.
+        `n_timestep + 2 * padding - (n_timestep - 1) * dilation + 1) + 1`.
+        If both `x` and `y` contains a single subsequence and a single sample,
+        the output is squeezed.
 
     Warnings
     --------
@@ -1292,12 +1294,24 @@ def distance_profile(
     >>> distance_profile(X[0], X[1:].reshape(-1))
     array([14.00120332, 14.41943788, 14.81597243, ...,  4.75219094,
            5.72681005,  6.70155561])
+
+    >>> distance_profile(
+    ...     X[0, 0:9], X[1:5], metric="dtw", dilation=2, padding="same"
+    ... )[0, :10]
+    array([8.01881424, 7.15083281, 7.48856368, 6.83139294, 6.75595579,
+           6.30073636, 6.65346307, 6.27919601, 6.25666948, 6.0961576 ])
     """
-    y = check_array(y, dtype=float, ensure_2d=False, ensure_ts_array=True)
-    if x.ndim == 1:
+    y = check_array(y, dtype=float, ensure_2d=False).squeeze()
+    x = check_array(x, allow_3d=True, ensure_2d=False, dtype=float).squeeze()
+
+    if x.ndim == 1 and y.ndim != 1:
         x = np.broadcast_to(x, shape=(y.shape[0], x.shape[0]))
 
-    x = check_array(x, allow_3d=True, dtype=float, ensure_ts_array=True)
+    if y.ndim == 1 and x.ndim != 1:
+        y = np.broadcast_to(y, shape=(x.shape[0], y.shape[0]))
+
+    x = _check_ts_array(x)
+    y = _check_ts_array(y)
 
     shapelet_size = (y.shape[2] - 1) * dilation + 1
     if padding == "same":
@@ -1310,10 +1324,10 @@ def distance_profile(
     input_size = x.shape[2] + 2 * padding
 
     if shapelet_size > input_size:
-        raise ValueError("subsequence in y is larger than input in x")
+        raise ValueError("subsequence in y is larger than input in x.")
 
     if y.shape[0] != x.shape[0]:
-        raise ValueError("y and x must be paired")
+        raise ValueError("y and x must have the same number of samples.")
 
     if dim >= x.shape[1]:
         raise ValueError(
@@ -1343,14 +1357,17 @@ def distance_profile(
             y = (y - mean) / std
 
         dp = _dilated_distance_profile(
-            y, x, dim, Metric(**metric_params), dilation, padding, scale, n_jobs
+            y,
+            x,
+            dim,
+            Metric(**metric_params),
+            dilation,
+            padding,
+            scale,
+            n_jobs,
         )
 
-    # TODO: fix the output
-    if dp.shape[0] == 1:
-        return dp[0]
-    else:
-        return dp
+    return np.squeeze(dp)
 
 
 @validate_params(
