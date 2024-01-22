@@ -16,7 +16,7 @@ from ._sax import (
     symbolic_aggregate_approximation,
 )
 from ._shapelet import (
-    CompetingDilatedShapeletTransform,
+    CastorTransform,
     DilatedShapeletTransform,
     RandomShapeletTransform,
 )
@@ -38,5 +38,5 @@ __all__ = [
     "HydraTransform",
     "DiffTransform",
     "DerivativeTransform",
-    "CompetingDilatedShapeletTransform",
+    "CastorTransform",
 ]

@@ -6,7 +6,7 @@
 from ._hydra import HydraClassifier
 from ._rocket import RocketClassifier, RocketRegressor
 from ._shapelet import (
-    CompetingDilatedShapeletClassifier,
+    CastorClassifier,
     DilatedShapeletClassifier,
     RandomShapeletClassifier,
     RandomShapeletRegressor,
@@ -19,5 +19,5 @@ __all__ = [
     "RandomShapeletClassifier",
     "RandomShapeletRegressor",
     "DilatedShapeletClassifier",
-    "CompetingDilatedShapeletClassifier",
+    "CastorClassifier",
 ]

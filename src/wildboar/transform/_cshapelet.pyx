@@ -838,7 +838,7 @@ cdef class CastorSummarizer:
         self.max_values = NULL
         self.min_so_values = NULL
 
-    def __init__(self, soft_min=False, soft_max=True, soft_threshold=False):
+    def __init__(self, soft_min=True, soft_max=False, soft_threshold=True):
         self.soft_min = soft_min
         self.soft_max = soft_max
         self.soft_threshold = soft_threshold
@@ -848,6 +848,9 @@ cdef class CastorSummarizer:
 
     def __dealloc__(self):
         self._free()
+
+    cdef Py_ssize_t get_n_features(self) noexcept nogil:
+        return 3
 
     cdef void _free(self) noexcept nogil:
         if self.min_values != NULL:
@@ -943,7 +946,7 @@ cdef class CastorSummarizer:
                 max_value[0] = value
                 max_index[0] = i
 
-cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
+cdef class CastorAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_shapelets
     cdef Py_ssize_t shapelet_size
     cdef Py_ssize_t n_groups
@@ -1081,7 +1084,9 @@ cdef class CompetingDilatedShapeletAttributeGenerator(AttributeGenerator):
     # n_shapelets * max_exponent * n_shapelets * 3 features per time series.
     cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
         cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.shapelet_size)
-        return self.get_n_attributess(X) * max_exponent * self.n_shapelets * 3
+        return (
+            self.get_n_attributess(X) * max_exponent * self.n_shapelets * self.summarizer.get_n_features()
+        )
 
     cdef Py_ssize_t _get_distance_profile(
         self,

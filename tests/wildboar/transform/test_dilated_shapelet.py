@@ -1,7 +1,7 @@
 import numpy as np
 from wildboar.datasets import load_gun_point
 from wildboar.transform import (
-    CompetingDilatedShapeletTransform,
+    CastorTransform,
     DilatedShapeletTransform,
 )
 
@@ -43,9 +43,7 @@ def test_dilated_shapelet_supervised_transform():
 
 def test_competing_dilated_shapelet_unsupervised_transform():
     X, y = load_gun_point()
-    f = CompetingDilatedShapeletTransform(
-        random_state=1, n_groups=1, normalize_prob=0.5
-    )
+    f = CastorTransform(random_state=1, n_groups=1, normalize_prob=0.5)
     f.fit(X)
 
     # fmt: off
@@ -77,9 +75,7 @@ def test_competing_dilated_shapelet_unsupervised_transform():
 
 def test_competing_dilated_shapelet_supervised_transform():
     X, y = load_gun_point()
-    f = CompetingDilatedShapeletTransform(
-        random_state=1, n_groups=1, normalize_prob=0.5
-    )
+    f = CastorTransform(random_state=1, n_groups=1, normalize_prob=0.5)
     f.fit(X, y)
 
     # fmt: off

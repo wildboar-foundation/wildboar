@@ -8,7 +8,7 @@ from ._transform import TransformRidgeClassifierCV, TransformRidgeCV
 class RocketClassifier(TransformRidgeClassifierCV):
     """Implements the ROCKET classifier."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_kernels=10000,
         *,
@@ -25,7 +25,7 @@ class RocketClassifier(TransformRidgeClassifierCV):
         class_weight=None,
         normalize=True,
         n_jobs=None,
-        random_state=None
+        random_state=None,
     ):
         super().__init__(
             alphas=alphas,
@@ -72,7 +72,7 @@ class RocketRegressor(TransformRidgeCV):
         cv=None,
         gcv_mode=None,
         n_jobs=None,
-        random_state=None
+        random_state=None,
     ):
         super().__init__(
             alphas=alphas,

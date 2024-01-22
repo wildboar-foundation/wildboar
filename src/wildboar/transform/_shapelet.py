@@ -11,8 +11,8 @@ from ..distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 from ..distance._multi_metric import make_subsequence_metrics
 from ._base import BaseAttributeTransform
 from ._cshapelet import (
+    CastorAttributeGenerator,
     CastorSummarizer,
-    CompetingDilatedShapeletAttributeGenerator,
     DilatedShapeletAttributeGenerator,
     RandomMultiMetricShapeletAttributeGenerator,
     RandomShapeletAttributeGenerator,
@@ -41,7 +41,7 @@ class ShapeletMixin:
         ],
     }
 
-    def _get_generator(self, x, y):
+    def _get_generator(self, x, y):  # noqa: PLR0912
         if self.min_shapelet_size > self.max_shapelet_size:
             raise ValueError(
                 f"The min_shapelet_size parameter of {type(self).__qualname__} "
@@ -184,7 +184,7 @@ class DilatedShapeletMixin:
         )
 
 
-class CompetingDilatedShapeletMixin:
+class CastorMixin:
     _parameter_constraints = {
         "n_groups": [Interval(numbers.Integral, 1, None, closed="left")],
         "n_shapelets": [Interval(numbers.Integral, 1, None, closed="left")],
@@ -213,7 +213,7 @@ class CompetingDilatedShapeletMixin:
             samples_per_label = None
             y = None
 
-        return CompetingDilatedShapeletAttributeGenerator(
+        return CastorAttributeGenerator(
             self.n_groups,
             self.n_shapelets,
             _odd_shapelet_size(self.shapelet_size, x.shape[-1]),
@@ -228,11 +228,9 @@ class CompetingDilatedShapeletMixin:
         )
 
 
-class CompetingDilatedShapeletTransform(
-    CompetingDilatedShapeletMixin, BaseAttributeTransform
-):
+class CastorTransform(CastorMixin, BaseAttributeTransform):
     """
-    A dictionary based method using dilated competing shapelets.
+    Competing Dialated Shapelet Transform.
 
     Parameters
     ----------
@@ -276,7 +274,7 @@ class CompetingDilatedShapeletTransform(
     """
 
     _parameter_constraints = {
-        **CompetingDilatedShapeletMixin._parameter_constraints,
+        **CastorMixin._parameter_constraints,
         **BaseAttributeTransform._parameter_constraints,
     }
 

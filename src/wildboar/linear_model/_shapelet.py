@@ -9,7 +9,7 @@ from sklearn.utils import _is_arraylike_not_scalar, check_random_state
 
 from ..datasets.preprocess import SparseScaler
 from ..transform import (
-    CompetingDilatedShapeletTransform,
+    CastorTransform,
     DiffTransform,
     DilatedShapeletTransform,
     RandomShapeletTransform,
@@ -235,7 +235,7 @@ class DilatedShapeletClassifier(TransformRidgeClassifierCV):
         )
 
 
-class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
+class CastorClassifier(TransformRidgeClassifierCV):
     """
     A dictionary based method using dilated competing shapelets.
 
@@ -355,7 +355,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
 
         return pipeline
 
-    def _get_transform(self, random_state):
+    def _get_transform(self, random_state):  # noqa: PLR0912
         random_state = check_random_state(random_state)
         params = dict(
             n_shapelets=self.n_shapelets,
@@ -396,7 +396,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
                     ng += 1
 
                 union.append(
-                    CompetingDilatedShapeletTransform(
+                    CastorTransform(
                         n_groups=ng,
                         shapelet_size=size,
                         random_state=random_state.randint(np.iinfo(np.int32).max),
@@ -406,7 +406,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
                 union.append(
                     make_pipeline(
                         DiffTransform(order=self.order),
-                        CompetingDilatedShapeletTransform(
+                        CastorTransform(
                             n_groups=ng,
                             shapelet_size=size,
                             random_state=random_state.randint(np.iinfo(np.int32).max),
@@ -422,7 +422,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
                 shapelet_size = self.shapelet_size
 
             if len(shapelet_size) == 1:
-                return CompetingDilatedShapeletTransform(
+                return CastorTransform(
                     n_groups=self.n_groups,
                     shapelet_size=shapelet_size[0],
                     random_state=random_state,
@@ -444,7 +444,7 @@ class CompetingDilatedShapeletClassifier(TransformRidgeClassifierCV):
                         ng += 1
 
                     union.append(
-                        CompetingDilatedShapeletTransform(
+                        CastorTransform(
                             n_groups=ng,
                             shapelet_size=size,
                             random_state=random_state.randint(np.iinfo(np.int32).max),

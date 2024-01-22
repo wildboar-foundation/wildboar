@@ -5,7 +5,7 @@ from sklearn.utils.estimator_checks import check_estimators_pickle
 from wildboar.transform import (
     PAA,
     SAX,
-    CompetingDilatedShapeletTransform,
+    CastorTransform,
     DilatedShapeletTransform,
     HydraTransform,
     IntervalTransform,
@@ -33,7 +33,7 @@ from wildboar.utils.estimator_checks import check_estimator
         (PAA(), []),
         (HydraTransform(), []),
         (DilatedShapeletTransform(), []),
-        (CompetingDilatedShapeletTransform(), []),
+        (CastorTransform(), []),
     ],
 )
 def test_estimator_checks(estimator, skip):
