@@ -1,0 +1,1124 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>wildboar.distance._neighbors - Wildboar 1.1.1.dev270 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/custom.css?v=8aa3e762" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/pygments-override.css?v=9e853fe2" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #ffffff;
+  --color-code-foreground: #24292f;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #0d1117;
+  --color-code-foreground: #C9D1D9;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #0d1117;
+  --color-code-foreground: #C9D1D9;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+
+
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev270 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="/1.2.X/index.html">
+    
+    <div class="sidebar-logo-container">
+        <img class="sidebar-logo only-light" src="../../../../_static/logo.png" alt="Light Logo" />
+        <img class="sidebar-logo only-dark" src="../../../../_static/logo.png" alt="Dark Logo" />
+    </div>
+    
+    <span class="sidebar-brand-text">Wildboar
+        <small>1.2</small></span>
+    
+</a><form class="sidebar-search-container" method="get" action="../../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../quickstart.html">Quickstart</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Quickstart</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart/install.html">Install wildboar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../quickstart/getting-started.html">Getting started</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../guide.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of User guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guide/basics.html">Time series</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../guide/datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Datasets</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/datasets/repositories.html">Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/datasets/preprocess.html">Pre-processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guide/annotate.html">Annotate</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../guide/metrics.html">Metrics</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Metrics</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/metrics/distance.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/metrics/distance.html#subsequence-search">Subsequence search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/metrics/distance.html#benchmark">Benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/metrics/elastic.html">Elastic metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../guide/supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Supervised learning</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/supervised/trees.html">Tree-based estimators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/supervised/ensemble.html">Ensemble estimators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../guide/supervised/transform.html">Transform-based estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../guide/unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Unsupervised learning</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../../guide/unsupervised/outlier.html">Outlier detection</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Outlier detection</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../guide/unsupervised/outlier/generation.html">Outlier detection benchmarks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../guide/glossary.html">Glossary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../examples/hydra.html">Convolution transforms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of wildboar.datasets</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of wildboar.distance</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of wildboar.explain</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of wildboar.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/variable_len/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.variable_len</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../more/whatsnew.html">What’s new</a></li>
+</ul>
+
+</div>
+<div class="sidebar-tree">
+  <ul>
+    <li class="toctree-l1 has-children">
+      <a class="reference internal" href="#">Versions</a>
+      <input
+        class="toctree-checkbox"
+        id="version-checkbox-1"
+        name="version-checkbox-1"
+        type="checkbox"
+      /><label for="version-checkbox-1"
+        ><i class="icon"
+          ><svg>
+            <use href="#svg-arrow-right"></use></svg></i
+      ></label>
+      <ul>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/master/index.html"
+            >main</a
+          >
+        </li>
+        <li class="toctree-l2">
+          <span class="reference internal">1.2</span>
+        </li>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/1.1.X/index.html"
+            >1.1</a
+          >
+        </li>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/1.0.X/index.html"
+            >1.0</a
+          >
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="module-wildboar.distance._neighbors">
+<span id="wildboar-distance-neighbors"></span><h1><a class="reference internal" href="#module-wildboar.distance._neighbors" title="wildboar.distance._neighbors"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance._neighbors</span></code></a><a class="headerlink" href="#module-wildboar.distance._neighbors" title="Link to this heading">#</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">#</a></h2>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">#</a></h2>
+<div class="table-wrapper autosummary longtable docutils container">
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance._neighbors.KMeans" title="wildboar.distance._neighbors.KMeans"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KMeans</span></code></a></p></td>
+<td><p>KMeans clustering with support for DTW and weighted DTW.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids" title="wildboar.distance._neighbors.KMedoids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KMedoids</span></code></a></p></td>
+<td><p>KMedoid algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier" title="wildboar.distance._neighbors.KNeighborsClassifier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code></a></p></td>
+<td><p>Classifier implementing k-nearest neighbors.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.distance._neighbors.</span></span><span class="sig-name descname"><span class="pre">KMeans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L250-L458"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans" title="Link to this definition">#</a></dt>
+<dd><p>KMeans clustering with support for DTW and weighted DTW.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_clusters</strong><span class="classifier">int, optional</span></dt><dd><p>The number of clusters.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">{“euclidean”, “dtw”}, optional</span></dt><dd><p>The metric.</p>
+</dd>
+<dt><strong>r</strong><span class="classifier">float, optional</span></dt><dd><p>The size of the warping window.</p>
+</dd>
+<dt><strong>g</strong><span class="classifier">float, optional</span></dt><dd><p>SoftDTW penalty. If None, traditional DTW is used.</p>
+</dd>
+<dt><strong>init</strong><span class="classifier">{“random”}, optional</span></dt><dd><p>Cluster initialization. If “random”, randomly initialize <cite>n_clusters</cite>.</p>
+</dd>
+<dt><strong>n_init</strong><span class="classifier">“auto” or int, optional</span></dt><dd><p>Number times the algorithm is re-initialized with new centroids.</p>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of iterations for a single run of the algorithm.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Relative tolerance to declare convergence of two consecutive iterations.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">int, optional</span></dt><dd><p>Print diagnostic messages during convergence.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState or int, optional</span></dt><dd><p>Determines random number generation for centroid initialization and
+barycentering when fitting with <cite>metric=”dtw”</cite>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_iter_</strong><span class="classifier">int</span></dt><dd><p>The number of iterations before convergence.</p>
+</dd>
+<dt><strong>cluster_centers_</strong><span class="classifier">ndarray of shape (n_clusters, n_timestep)</span></dt><dd><p>The cluster centers.</p>
+</dd>
+<dt><strong>labels_</strong><span class="classifier">ndarray of shape (n_samples, )</span></dt><dd><p>The cluster assignment.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L329-L373"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.fit" title="Link to this definition">#</a></dt>
+<dd><p>Compute the kmeans-clustering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Ignored, optional</span></dt><dd><p>Not used.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>Fitted estimator.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.fit_predict" title="Link to this definition">#</a></dt>
+<dd><p>Perform clustering on <cite>X</cite> and returns cluster labels.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input data.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Ignored</span></dt><dd><p>Not used, present for API consistency by convention.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Arguments to be passed to <code class="docutils literal notranslate"><span class="pre">fit</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">ndarray of shape (n_samples,), dtype=np.int64</span></dt><dd><p>Cluster labels.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L412-L426"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.predict" title="Link to this definition">#</a></dt>
+<dd><p>Predict the closest cluster for each sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, )</dt><dd><p>Index of the cluster each sample belongs to.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>See <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.4)"><span>Introducing the set_output API</span></a>
+for an example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMeans.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMeans.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input to a cluster distance space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_clusters)</dt><dd><p>The distance between each sample and each cluster.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.distance._neighbors.</span></span><span class="sig-name descname"><span class="pre">KMedoids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_clusters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fast'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L523-L776"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids" title="Link to this definition">#</a></dt>
+<dd><p>KMedoid algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_clusters</strong><span class="classifier">int, optional</span></dt><dd><p>The number of clusters.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The metric.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>The metric parameters. Read more about the metrics and their parameters
+in the <a class="reference internal" href="../../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>init</strong><span class="classifier">{“auto”, “random”, “min”}, optional</span></dt><dd><p>Cluster initialization. If “random”, randomly initialize <cite>n_clusters</cite>,
+if “min” select the samples with the smallest distance to the other samples.</p>
+</dd>
+<dt><strong>n_init</strong><span class="classifier">“auto” or int, optional</span></dt><dd><p>Number times the algorithm is re-initialized with new centroids.</p>
+</dd>
+<dt><strong>algorithm</strong><span class="classifier">{“fast”, “pam”}, optional</span></dt><dd><p>The algorithm for updating cluster assignments. If “pam”, use the
+Partitioning Around Medoids algorithm.</p>
+</dd>
+<dt><strong>max_iter</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum number of iterations for a single run of the algorithm.</p>
+</dd>
+<dt><strong>tol</strong><span class="classifier">float, optional</span></dt><dd><p>Relative tolerance to declare convergence of two consecutive iterations.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">int, optional</span></dt><dd><p>Print diagnostic messages during convergence.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of jobs to run in parallel. A value of <cite>None</cite> means using
+a single core and a value of <cite>-1</cite> means using all cores. Positive
+integers mean the exact number of cores.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">RandomState or int, optional</span></dt><dd><p>Determines random number generation for centroid initialization and
+barycentering when fitting with <cite>metric=”dtw”</cite>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>n_iter_</strong><span class="classifier">int</span></dt><dd><p>The number of iterations before convergence.</p>
+</dd>
+<dt><strong>cluster_centers_</strong><span class="classifier">ndarray of shape (n_clusters, n_timestep)</span></dt><dd><p>The cluster centers.</p>
+</dd>
+<dt><strong>medoid_indices_</strong><span class="classifier">ndarray of shape (n_clusters, )</span></dt><dd><p>The index of the medoid in the input samples.</p>
+</dd>
+<dt><strong>labels_</strong><span class="classifier">ndarray of shape (n_samples, )</span></dt><dd><p>The cluster assignment.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L613-L692"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.fit" title="Link to this definition">#</a></dt>
+<dd><p>Compute the kmedoids-clustering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Ignored, optional</span></dt><dd><p>Not used.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>object</dt><dd><p>Fitted estimator.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.fit_predict">
+<span class="sig-name descname"><span class="pre">fit_predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.fit_predict" title="Link to this definition">#</a></dt>
+<dd><p>Perform clustering on <cite>X</cite> and returns cluster labels.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input data.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">Ignored</span></dt><dd><p>Not used, present for API consistency by convention.</p>
+</dd>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Arguments to be passed to <code class="docutils literal notranslate"><span class="pre">fit</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4.</span></p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>labels</strong><span class="classifier">ndarray of shape (n_samples,), dtype=np.int64</span></dt><dd><p>Cluster labels.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.fit_transform">
+<span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.fit_transform" title="Link to this definition">#</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to <cite>X</cite> and <cite>y</cite> with optional parameters <cite>fit_params</cite>
+and returns a transformed version of <cite>X</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None</span></dt><dd><p>Target values (None for unsupervised transformations).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L735-L749"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.predict" title="Link to this definition">#</a></dt>
+<dd><p>Predict the closest cluster for each sample.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, )</dt><dd><p>Index of the cluster each sample belongs to.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.set_output">
+<span class="sig-name descname"><span class="pre">set_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.set_output" title="Link to this definition">#</a></dt>
+<dd><p>Set output container.</p>
+<p>See <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/miscellaneous/plot_set_output.html#sphx-glr-auto-examples-miscellaneous-plot-set-output-py" title="(in scikit-learn v1.4)"><span>Introducing the set_output API</span></a>
+for an example on how to use the API.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>transform</strong><span class="classifier">{“default”, “pandas”}, default=None</span></dt><dd><p>Configure output of <cite>transform</cite> and <cite>fit_transform</cite>.</p>
+<ul class="simple">
+<li><p><cite>“default”</cite>: Default output format of a transformer</p></li>
+<li><p><cite>“pandas”</cite>: DataFrame output</p></li>
+<li><p><cite>“polars”</cite>: Polars output</p></li>
+<li><p><cite>None</cite>: Transform configuration is unchanged</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.4: </span><cite>“polars”</cite> option was added.</p>
+</div>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KMedoids.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KMedoids.transform" title="Link to this definition">#</a></dt>
+<dd><p>Transform the input to a cluster distance space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, n_clusters)</dt><dd><p>The distance between each sample and each cluster.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.distance._neighbors.</span></span><span class="sig-name descname"><span class="pre">KNeighborsClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_neighbors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L18-L151"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier" title="Link to this definition">#</a></dt>
+<dd><p>Classifier implementing k-nearest neighbors.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_neighbors</strong><span class="classifier">int, optional</span></dt><dd><p>The number of neighbors.</p>
+</dd>
+<dt><strong>metric</strong><span class="classifier">str, optional</span></dt><dd><p>The distance metric.</p>
+</dd>
+<dt><strong>metric_params</strong><span class="classifier">dict, optional</span></dt><dd><p>Optional parameters to the distance metric.</p>
+<p>Read more about the metrics and their parameters in the
+<a class="reference internal" href="../../../../guide/metrics.html#list-of-metrics"><span class="std std-ref">User guide</span></a>.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>The number of parallel jobs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>classes_</strong><span class="classifier">ndarray of shapel (n_classes, )</span></dt><dd><p>Known class labels.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L62-L83"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier.fit" title="Link to this definition">#</a></dt>
+<dd><p>Fit the classifier to the training data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series or multivaraite time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples, )</span></dt><dd><p>The input labels.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KNeighborClassifier</dt><dd><p>This instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier.get_metadata_routing" title="Link to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier.get_params">
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier.get_params" title="Link to this definition">#</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L136-L151"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier.predict" title="Link to this definition">#</a></dt>
+<dd><p>Compute the class label for the samples in x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series or multivariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, )</dt><dd><p>The class label for each sample.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier.predict_proba">
+<span class="sig-name descname"><span class="pre">predict_proba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py#L85-L134"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier.predict_proba" title="Link to this definition">#</a></dt>
+<dd><p>Compute probability estimates for the samples in x.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x</strong><span class="classifier">univariate time-series or multivariate time-series</span></dt><dd><p>The input samples.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ndarray of shape (n_samples, len(<a href="#id1"><span class="problematic" id="id2">self.classes_</span></a>))</dt><dd><p>The probability of each class for each sample.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier.score" title="Link to this definition">#</a></dt>
+<dd><p>Return the mean accuracy on the given test data and labels.</p>
+<p>In multi-label classification, this is the subset accuracy
+which is a harsh metric since you require for each sample that
+each label set be correctly predicted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Test samples.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_outputs)</span></dt><dd><p>True labels for <cite>X</cite>.</p>
+</dd>
+<dt><strong>sample_weight</strong><span class="classifier">array-like of shape (n_samples,), default=None</span></dt><dd><p>Sample weights.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>score</strong><span class="classifier">float</span></dt><dd><p>Mean accuracy of <code class="docutils literal notranslate"><span class="pre">self.predict(X)</span></code> w.r.t. <cite>y</cite>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wildboar.distance._neighbors.KNeighborsClassifier.set_params">
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/1.2.X/src/wildboar/distance/_neighbors.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._neighbors.KNeighborsClassifier.set_params" title="Link to this definition">#</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
+possible to update each component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          
+          
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Isak Samsten
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance._neighbors</span></code></a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a></li>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans"><code class="docutils literal notranslate"><span class="pre">KMeans</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.fit"><code class="docutils literal notranslate"><span class="pre">KMeans.fit</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.fit_predict"><code class="docutils literal notranslate"><span class="pre">KMeans.fit_predict</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.fit_transform"><code class="docutils literal notranslate"><span class="pre">KMeans.fit_transform</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">KMeans.get_metadata_routing</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.get_params"><code class="docutils literal notranslate"><span class="pre">KMeans.get_params</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.predict"><code class="docutils literal notranslate"><span class="pre">KMeans.predict</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.set_output"><code class="docutils literal notranslate"><span class="pre">KMeans.set_output</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.set_params"><code class="docutils literal notranslate"><span class="pre">KMeans.set_params</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMeans.transform"><code class="docutils literal notranslate"><span class="pre">KMeans.transform</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids"><code class="docutils literal notranslate"><span class="pre">KMedoids</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.fit"><code class="docutils literal notranslate"><span class="pre">KMedoids.fit</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.fit_predict"><code class="docutils literal notranslate"><span class="pre">KMedoids.fit_predict</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.fit_transform"><code class="docutils literal notranslate"><span class="pre">KMedoids.fit_transform</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">KMedoids.get_metadata_routing</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.get_params"><code class="docutils literal notranslate"><span class="pre">KMedoids.get_params</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.predict"><code class="docutils literal notranslate"><span class="pre">KMedoids.predict</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.set_output"><code class="docutils literal notranslate"><span class="pre">KMedoids.set_output</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.set_params"><code class="docutils literal notranslate"><span class="pre">KMedoids.set_params</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KMedoids.transform"><code class="docutils literal notranslate"><span class="pre">KMedoids.transform</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier</span></code></a><ul>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier.fit"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier.fit</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier.get_metadata_routing</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier.get_params"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier.get_params</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier.predict"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier.predict</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier.predict_proba"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier.predict_proba</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier.score"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier.score</span></code></a></li>
+<li><a class="reference internal" href="#wildboar.distance._neighbors.KNeighborsClassifier.set_params"><code class="docutils literal notranslate"><span class="pre">KNeighborsClassifier.set_params</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div>
+<script src="../../../../_static/documentation_options.js?v=4be8c61d"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../../_static/tabs.js?v=3ee01567"></script>
+    <script src="../../../../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../../../../_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>

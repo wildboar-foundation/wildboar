@@ -1,0 +1,237 @@
+
+**********************************
+:py:mod:`wildboar.model_selection`
+**********************************
+
+.. py:module:: wildboar.model_selection
+
+.. autoapi-nested-parse::
+
+   
+   Methods for model selection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
+Package Contents
+----------------
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.model_selection.RepeatedOutlierSplit
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   wildboar.model_selection.outlier_train_test_split
+
+
+
+.. py:class:: RepeatedOutlierSplit(n_splits=None, *, test_size=0.2, n_outlier=0.05, shuffle=True, random_state=None)
+
+
+   
+   Repeated random outlier cross-validator.
+
+
+   :Parameters:
+
+       **n_splits** : int, optional
+           The maximum number of splits.
+           - if None, the number of splits is determined by the number of outliers
+           as, `total_n_outliers/(n_inliers * n_outliers)`
+           - if int, the number of splits is an upper-bound.
+
+       **test_size** : float, optional
+           The size of the test set.
+
+       **n_outlier** : float, optional
+           The fraction of outliers in the training and test sets.
+
+       **shuffle** : bool, optional
+           Shuffle the training indicies in each iteration.
+
+       **random_state** : int or RandomState, optional
+           The psudo-random number generator.
+
+
+
+
+
+
+
+
+
+   .. rubric:: Notes
+
+   Contrary to other cross-validation strategies, the random outlier
+   cross-validator does not ensure that all folds will be different.
+   Instead, the inlier samples are shuffled and new outlier samples
+   are inserted in the training and test sets repeatedly.
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: get_n_splits(X, y, groups=None)
+
+      
+      Return the number of splitting iterations in the cross-validator.
+
+
+      :Parameters:
+
+          **X** : object
+              The samples.
+
+          **y** : object
+              The labels.
+
+          **groups** : object, optional
+              Always ignored, exists for compatibility.
+
+      :Returns:
+
+          int
+              Returns the number of splitting iterations in the cross-validator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: split(x, y, groups=None)
+
+      
+      Return training and test indicies.
+
+
+      :Parameters:
+
+          **x** : object
+              Always ignored, exists for compatibility.
+
+          **y** : object
+              The labels.
+
+          **groups** : object, optional
+              Always ignored, exists for compatibility.
+
+
+      :Yields:
+
+          **train_idx, test_idx** : ndarray
+              The training and test indicies
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:function:: outlier_train_test_split(x, y, normal_class, test_size=0.2, anomalies_train_size=0.05, random_state=None)
+
+   
+   Outlier training and testing split from classification dataset.
+
+
+   :Parameters:
+
+       **x** : array-like of shape (n_samples, n_timestep) or (n_samples, n_dim, n_timestep)
+           Input data samples.
+
+       **y** : array-like of shape (n_samples,)
+           Input class label.
+
+       **normal_class** : int
+           Class label that should be considered as the normal class.
+
+       **test_size** : float, optional
+           Size of the test set.
+
+       **anomalies_train_size** : float, optional
+           Contamination of anomalies in the training dataset.
+
+       **random_state** : int or RandomState, optional
+           Psudo random state used for stable results.
+
+   :Returns:
+
+       **x_train** : array-like
+           Training samples.
+
+       **x_test** : array-like
+           Test samples.
+
+       **y_train** : array-like
+           Training labels (either 1 or -1, where 1 denotes normal and -1 anomalous).
+
+       **y_test** : array-like
+           Test labels (either 1 or -1, where 1 denotes normal and -1 anomalous).
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_two_lead_ecg
+   >>> x, y = load_two_lead_ecg()
+   >>> x_train, x_test, y_train, y_test = train_test_split(
+   ...     x, y, 1, test_size=0.2, anomalies_train_size=0.05
+   ... )
+
+
+
+   ..
+       !! processed by numpydoc !!
+

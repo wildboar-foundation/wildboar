@@ -1,0 +1,850 @@
+
+
+:py:mod:`wildboar`
+~~~~~~~~~~~~~~~~~~
+
+Wildboar - a library for temporal machine learning.
+
+Wildboar includes numerous temporal machine learning algorithms and seamlessly
+integrates them with `scikit-learn <https://scikit-learn.org>`__.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.iseos`
+    - Boolean indicator if a value is the end-of-sequence value.
+
+
+:py:mod:`wildboar.annotate`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Annotation of time series.
+
+See the :ref:`annotation section in the User Guide
+<guide-annotate>` for more details and examples.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.annotate.motifs`
+    - Find motifs.
+  * - :py:obj:`~wildboar.annotate.segment`
+    - Find change regimes in a time series.
+
+
+
+
+:py:mod:`wildboar.base`
+~~~~~~~~~~~~~~~~~~~~~~~
+Base classes for all estimators.
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.base.BaseEstimator`
+    - Base estimator for all Wildboar estimators.
+  * - :py:obj:`~wildboar.base.CounterfactualMixin`
+    - Mixin class for counterfactual explainer.
+  * - :py:obj:`~wildboar.base.ExplainerMixin`
+    - Mixin class for all explainers in wildboar.
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.base.is_counterfactual`
+    - Check if estimator is a counterfactual explainer.
+  * - :py:obj:`~wildboar.base.is_explainer`
+    - Check if estimator is an explainer.
+
+
+:py:mod:`wildboar.datasets`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dataset loading utilities.
+
+See the dataset section in the :ref:`User Guide <guide-datasets>` for
+more details and examples.
+
+
+
+
+
+
+
+
+
+
+
+
+.. rubric:: Examples
+
+>>> from wildboar.datasets import load_dataset
+>>> X, y = load_dataset("GunPoint")
+>>> X.shape
+(200, 60)
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.datasets.Bundle`
+    - Base class for handling dataset bundles.
+  * - :py:obj:`~wildboar.datasets.JSONRepository`
+    - A repository is a collection of bundles.
+  * - :py:obj:`~wildboar.datasets.NpBundle`
+    - Bundle of numpy binary files.
+  * - :py:obj:`~wildboar.datasets.Repository`
+    - A repository is a collection of bundles.
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.datasets.clear_cache`
+    - Clear the cache by deleting cached datasets.
+  * - :py:obj:`~wildboar.datasets.get_bundles`
+    - Get all bundles in the repository.
+  * - :py:obj:`~wildboar.datasets.get_repository`
+    - Get repository by name.
+  * - :py:obj:`~wildboar.datasets.install_repository`
+    - Install repository.
+  * - :py:obj:`~wildboar.datasets.list_bundles`
+    - Get a list of all bundle names in the specified repository.
+  * - :py:obj:`~wildboar.datasets.list_collections`
+    - List the collections of the repository.
+  * - :py:obj:`~wildboar.datasets.list_datasets`
+    - List the datasets in the repository.
+  * - :py:obj:`~wildboar.datasets.list_repositories`
+    - List the key of all installed repositories.
+  * - :py:obj:`~wildboar.datasets.load_dataset`
+    - Load a dataset from a repository.
+  * - :py:obj:`~wildboar.datasets.load_datasets`
+    - Load all datasets as a generator.
+  * - :py:obj:`~wildboar.datasets.load_gun_point`
+    - Load the GunPoint dataset.
+  * - :py:obj:`~wildboar.datasets.load_synthetic_control`
+    - Load the Synthetic_Control dataset.
+  * - :py:obj:`~wildboar.datasets.load_two_lead_ecg`
+    - Load the TwoLeadECG dataset.
+  * - :py:obj:`~wildboar.datasets.refresh_repositories`
+    - Refresh the installed repositories.
+  * - :py:obj:`~wildboar.datasets.set_cache_dir`
+    - Change the global cache directory.
+
+
+
+
+:py:mod:`wildboar.datasets.outlier`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Utilities for generating synthetic outlier datasets.
+
+See the :ref:`User Guide
+<guide-outlier-generation>` for more details and
+example uses.
+
+..
+    !! processed by numpydoc !!
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.datasets.outlier.density_outliers`
+    - Densitiy based outlier generation.
+  * - :py:obj:`~wildboar.datasets.outlier.emmott_outliers`
+    - Difficulty based outlier generation.
+  * - :py:obj:`~wildboar.datasets.outlier.kmeans_outliers`
+    - K-mean outlier generation.
+  * - :py:obj:`~wildboar.datasets.outlier.majority_outliers`
+    - Label the majority class as inliers.
+  * - :py:obj:`~wildboar.datasets.outlier.minority_outliers`
+    - Label (a fraction of) the minority class as the outlier.
+
+
+:py:mod:`wildboar.datasets.preprocess`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Utilities for preprocessing time series.
+
+..
+    !! processed by numpydoc !!
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.datasets.preprocess.maxabs_scale`
+    - Scale each time series by its maximum absolute value.
+  * - :py:obj:`~wildboar.datasets.preprocess.minmax_scale`
+    - Scale x along the time dimension.
+  * - :py:obj:`~wildboar.datasets.preprocess.named_preprocess`
+    - Get a named preprocessor.
+  * - :py:obj:`~wildboar.datasets.preprocess.standardize`
+    - Scale x along the time dimension.
+  * - :py:obj:`~wildboar.datasets.preprocess.truncate`
+    - Truncate x to the shortest sequence.
+
+
+:py:mod:`wildboar.distance`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fast distance computations.
+
+The :py:mod:`wildboar.distance` module includes functions for computing
+paired and pairwise distances between time series and between time series and
+subsequences.
+
+See the :ref:`User Guide <guide-metrics>` for more details and
+examples.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.distance.KMeans`
+    - KMeans clustering with support for DTW and weighted DTW.
+  * - :py:obj:`~wildboar.distance.KMedoids`
+    - KMedoid algorithm.
+  * - :py:obj:`~wildboar.distance.KNeighborsClassifier`
+    - Classifier implementing k-nearest neighbors.
+  * - :py:obj:`~wildboar.distance.MDS`
+    - Multidimensional scaling.
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.distance.argmin_distance`
+    - Find the indicies of the samples with the lowest distance in `Y`.
+  * - :py:obj:`~wildboar.distance.argmin_subsequence_distance`
+    - Compute the k:th closest subsequences.
+  * - :py:obj:`~wildboar.distance.check_metric`
+    - 
+  * - :py:obj:`~wildboar.distance.check_subsequence_metric`
+    - 
+  * - :py:obj:`~wildboar.distance.distance_profile`
+    - Compute the distance profile.
+  * - :py:obj:`~wildboar.distance.matrix_profile`
+    - Compute the matrix profile.
+  * - :py:obj:`~wildboar.distance.paired_distance`
+    - Compute the distance between the i:th time series.
+  * - :py:obj:`~wildboar.distance.paired_subsequence_distance`
+    - Minimum subsequence distance between the i:th subsequence and time series.
+  * - :py:obj:`~wildboar.distance.paired_subsequence_match`
+    - Find matching subsequnces.
+  * - :py:obj:`~wildboar.distance.pairwise_distance`
+    - Compute the distance between subsequences and time series.
+  * - :py:obj:`~wildboar.distance.pairwise_subsequence_distance`
+    - Minimum subsequence distance between subsequences and time series.
+  * - :py:obj:`~wildboar.distance.subsequence_match`
+    - Find matching subsequnces.
+
+
+
+
+
+
+
+:py:mod:`wildboar.distance.dtw`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+DTW alignment and distance computations.
+
+The :mod:`wildboar.distance.dtw` module implements several functions for
+computing DTW alignments and distances.
+
+..
+    !! processed by numpydoc !!
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.distance.dtw.ddtw_distance`
+    - Compute the derivative dynamic time warping distance.
+  * - :py:obj:`~wildboar.distance.dtw.dtw_alignment`
+    - Compute the Dynamic time warping alignment matrix.
+  * - :py:obj:`~wildboar.distance.dtw.dtw_average`
+    - Compute the DTW barycenter average (DBA).
+  * - :py:obj:`~wildboar.distance.dtw.dtw_distance`
+    - Compute the dynamic time warping distance.
+  * - :py:obj:`~wildboar.distance.dtw.dtw_envelop`
+    - Compute the envelop for LB_keogh.
+  * - :py:obj:`~wildboar.distance.dtw.dtw_lb_keogh`
+    - LB_keogh lower bound.
+  * - :py:obj:`~wildboar.distance.dtw.dtw_mapping`
+    - Optimal warping path between two series or from a given alignment matrix.
+  * - :py:obj:`~wildboar.distance.dtw.jeong_weight`
+    - Weighting described by Jeong et. al. (2011)[R4bf7d056babf-1]_.
+  * - :py:obj:`~wildboar.distance.dtw.wddtw_distance`
+    - Compute the weighted derivative dynamic time warping distance.
+  * - :py:obj:`~wildboar.distance.dtw.wdtw_alignment`
+    - Weighted dynamic time warping alignment.
+  * - :py:obj:`~wildboar.distance.dtw.wdtw_distance`
+    - Compute the weighted dynamic time warping distance.
+
+
+:py:mod:`wildboar.ensemble`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ensemble methods for classification, regression and outlier detection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.ensemble.BaggingClassifier`
+    - A bagging classifier.
+  * - :py:obj:`~wildboar.ensemble.BaggingRegressor`
+    - A bagging regressor.
+  * - :py:obj:`~wildboar.ensemble.BaseBagging`
+    - Base estimator for Wildboar ensemble estimators.
+  * - :py:obj:`~wildboar.ensemble.ElasticEnsembleClassifier`
+    - Ensemble of :class:`wildboar.distance.KNeighborsClassifier`.
+  * - :py:obj:`~wildboar.ensemble.ExtraShapeletTreesClassifier`
+    - An ensemble of extremely random shapelet trees.
+  * - :py:obj:`~wildboar.ensemble.ExtraShapeletTreesRegressor`
+    - An ensemble of extremely random shapelet tree regressors.
+  * - :py:obj:`~wildboar.ensemble.IntervalForestClassifier`
+    - An ensemble of interval tree classifiers.
+  * - :py:obj:`~wildboar.ensemble.IntervalForestRegressor`
+    - An ensemble of interval tree regressors.
+  * - :py:obj:`~wildboar.ensemble.IsolationShapeletForest`
+    - An isolation shapelet forest.
+  * - :py:obj:`~wildboar.ensemble.PivotForestClassifier`
+    - An ensemble of interval tree classifiers.
+  * - :py:obj:`~wildboar.ensemble.ProximityForestClassifier`
+    - A forest of proximity trees.
+  * - :py:obj:`~wildboar.ensemble.RocketForestClassifier`
+    - An ensemble of rocket tree classifiers.
+  * - :py:obj:`~wildboar.ensemble.RocketForestRegressor`
+    - An ensemble of rocket tree regressors.
+  * - :py:obj:`~wildboar.ensemble.ShapeletForestClassifier`
+    - An ensemble of random shapelet tree classifiers.
+  * - :py:obj:`~wildboar.ensemble.ShapeletForestEmbedding`
+    - An ensemble of random shapelet trees.
+  * - :py:obj:`~wildboar.ensemble.ShapeletForestRegressor`
+    - An ensemble of random shapelet tree regressors.
+
+
+
+
+
+:py:mod:`wildboar.explain`
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Explanation methods for classifiers and regressors.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.explain.AmplitudeImportance`
+    - Compute the importance of equi-probable amplitude intervals.
+  * - :py:obj:`~wildboar.explain.FrequencyImportance`
+    - Mixin class for all explainers in wildboar.
+  * - :py:obj:`~wildboar.explain.IntervalImportance`
+    - Interval importance for time series.
+  * - :py:obj:`~wildboar.explain.ShapeletImportance`
+    - Compute the importance of shapelets.
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.explain.plot_importances`
+    - Plot the importances as a boxplot.
+
+
+
+:py:mod:`wildboar.explain.counterfactual`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Counterfactual explanations.
+
+The :mod:`wildboar.explain.counterfactual` module includes numerous
+methods for generating counterfactual explanations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.explain.counterfactual.KNeighborsCounterfactual`
+    - Fit a counterfactual explainer to a k-nearest neighbors classifier.
+  * - :py:obj:`~wildboar.explain.counterfactual.PrototypeCounterfactual`
+    - Model agnostic approach for constructing counterfactual explanations.
+  * - :py:obj:`~wildboar.explain.counterfactual.ShapeletForestCounterfactual`
+    - Counterfactual explanations for shapelet forest classifiers.
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.explain.counterfactual.counterfactuals`
+    - Compute a single counterfactual example for each sample.
+  * - :py:obj:`~wildboar.explain.counterfactual.proximity`
+    - Compute the proximity of the counterfactuals.
+
+
+
+
+
+
+:py:mod:`wildboar.linear_model`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Linear methods for both classification and regression.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.linear_model.CastorClassifier`
+    - A dictionary based method using dilated competing shapelets.
+  * - :py:obj:`~wildboar.linear_model.DilatedShapeletClassifier`
+    - A classifier that uses random dilated shapelets.
+  * - :py:obj:`~wildboar.linear_model.HydraClassifier`
+    - A Dictionary based method using convolutional kernels.
+  * - :py:obj:`~wildboar.linear_model.RandomShapeletClassifier`
+    - A classifier that uses random shapelets.
+  * - :py:obj:`~wildboar.linear_model.RandomShapeletRegressor`
+    - A regressor that uses random shapelets.
+  * - :py:obj:`~wildboar.linear_model.RocketClassifier`
+    - Implements the ROCKET classifier.
+  * - :py:obj:`~wildboar.linear_model.RocketRegressor`
+    - Implements the ROCKET regressor.
+
+
+
+
+
+
+
+:py:mod:`wildboar.metrics`
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Evaluation metrics.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.metrics.compactness_score`
+    - Compute compactness score.
+  * - :py:obj:`~wildboar.metrics.plausability_score`
+    - Compute plausibility score.
+  * - :py:obj:`~wildboar.metrics.proximity_score`
+    - Compute proximity score.
+  * - :py:obj:`~wildboar.metrics.redudancy_score`
+    - Compute the redudancy score.
+  * - :py:obj:`~wildboar.metrics.relative_proximity_score`
+    - Compute relative proximity score.
+  * - :py:obj:`~wildboar.metrics.silhouette_samples`
+    - Compute the Silhouette Coefficient of each samples.
+  * - :py:obj:`~wildboar.metrics.silhouette_score`
+    - Compute the mean Silhouette Coefficient of all samples.
+  * - :py:obj:`~wildboar.metrics.validity_score`
+    - Compute validity score.
+
+
+
+
+:py:mod:`wildboar.model_selection`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Methods for model selection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.model_selection.RepeatedOutlierSplit`
+    - Repeated random outlier cross-validator.
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.model_selection.outlier_train_test_split`
+    - Outlier training and testing split from classification dataset.
+
+
+
+
+:py:mod:`wildboar.transform`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Transform raw time series to tabular representations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.transform.CastorTransform`
+    - Competing Dialated Shapelet Transform.
+  * - :py:obj:`~wildboar.transform.DerivativeTransform`
+    - Mixin class for all transformers in scikit-learn.
+  * - :py:obj:`~wildboar.transform.DiffTransform`
+    - Mixin class for all transformers in scikit-learn.
+  * - :py:obj:`~wildboar.transform.DilatedShapeletTransform`
+    - Dilated shapelet transform.
+  * - :py:obj:`~wildboar.transform.FeatureTransform`
+    - Transform a time series as a number of features.
+  * - :py:obj:`~wildboar.transform.HydraTransform`
+    - A Dictionary based method using convolutional kernels.
+  * - :py:obj:`~wildboar.transform.IntervalTransform`
+    - Embed a time series as a collection of features per interval.
+  * - :py:obj:`~wildboar.transform.MatrixProfileTransform`
+    - Matrix profile transform.
+  * - :py:obj:`~wildboar.transform.PAA`
+    - Peicewise aggregate approximation.
+  * - :py:obj:`~wildboar.transform.PivotTransform`
+    - A transform using pivot time series and sampled distance metrics.
+  * - :py:obj:`~wildboar.transform.ProximityTransform`
+    - Transform time series based on class conditional pivots.
+  * - :py:obj:`~wildboar.transform.RandomShapeletTransform`
+    - Random shapelet tranform.
+  * - :py:obj:`~wildboar.transform.RocketTransform`
+    - Transform a time series using random convolution features.
+  * - :py:obj:`~wildboar.transform.SAX`
+    - Symbolic aggregate approximation.
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.transform.convolve`
+    - Apply 1D convolution over a time series.
+  * - :py:obj:`~wildboar.transform.piecewice_aggregate_approximation`
+    - Peicewise aggregate approximation.
+  * - :py:obj:`~wildboar.transform.symbolic_aggregate_approximation`
+    - Symbolic aggregate approximation.
+
+
+
+
+
+
+
+
+
+
+
+
+:py:mod:`wildboar.tree`
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Tree-based estimators for classification and regression.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+.. list-table:: Classes
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.tree.ExtraShapeletTreeClassifier`
+    - An extra shapelet tree classifier.
+  * - :py:obj:`~wildboar.tree.ExtraShapeletTreeRegressor`
+    - An extra shapelet tree regressor.
+  * - :py:obj:`~wildboar.tree.IntervalTreeClassifier`
+    - An interval based tree classifier.
+  * - :py:obj:`~wildboar.tree.IntervalTreeRegressor`
+    - An interval based tree regressor.
+  * - :py:obj:`~wildboar.tree.PivotTreeClassifier`
+    - A tree classifier that uses pivot time series.
+  * - :py:obj:`~wildboar.tree.ProximityTreeClassifier`
+    - A classifier that uses a k-branching tree based on pivot-time series.
+  * - :py:obj:`~wildboar.tree.RocketTreeClassifier`
+    - A tree classifier that uses random convolutions as features.
+  * - :py:obj:`~wildboar.tree.RocketTreeRegressor`
+    - A tree regressor that uses random convolutions as features.
+  * - :py:obj:`~wildboar.tree.ShapeletTreeClassifier`
+    - A shapelet tree classifier.
+  * - :py:obj:`~wildboar.tree.ShapeletTreeRegressor`
+    - A shapelet tree regressor.
+
+
+
+
+
+
+:py:mod:`wildboar.utils`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Utility functions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+    !! processed by numpydoc !!
+
+
+.. list-table:: Functions
+  :header-rows: 0
+  :widths: auto
+  :class: autosummary
+
+  * - :py:obj:`~wildboar.utils.check_array`
+    - Input validation on time-series.
+  * - :py:obj:`~wildboar.utils.check_X_y`
+    - Check both X and y.
+
+
+
+
+
+
+
+
+

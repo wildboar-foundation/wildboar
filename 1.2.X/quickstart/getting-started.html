@@ -1,0 +1,610 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="User guide" href="../guide.html" /><link rel="prev" title="Install wildboar" href="install.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>Getting started - Wildboar 1.1.1.dev270 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=8aa3e762" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/pygments-override.css?v=9e853fe2" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #ffffff;
+  --color-code-foreground: #24292f;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #0d1117;
+  --color-code-foreground: #C9D1D9;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #0d1117;
+  --color-code-foreground: #C9D1D9;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+
+
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">Wildboar 1.1.1.dev270 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="/1.2.X/index.html">
+    
+    <div class="sidebar-logo-container">
+        <img class="sidebar-logo only-light" src="../_static/logo.png" alt="Light Logo" />
+        <img class="sidebar-logo only-dark" src="../_static/logo.png" alt="Dark Logo" />
+    </div>
+    
+    <span class="sidebar-brand-text">Wildboar
+        <small>1.2</small></span>
+    
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../quickstart.html">Quickstart</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Quickstart</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="install.html">Install wildboar</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Getting started</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../guide.html">User guide</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of User guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../guide/basics.html">Time series</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../guide/datasets.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of Datasets</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/datasets/repositories.html">Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/datasets/preprocess.html">Pre-processing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/annotate.html">Annotate</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../guide/metrics.html">Metrics</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of Metrics</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/metrics/distance.html">Distance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/metrics/distance.html#subsequence-search">Subsequence search</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/metrics/distance.html#benchmark">Benchmark</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/metrics/elastic.html">Elastic metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../guide/supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of Supervised learning</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../guide/supervised/trees.html">Tree-based estimators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/supervised/ensemble.html">Ensemble estimators</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../guide/supervised/transform.html">Transform-based estimators</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../guide/unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of Unsupervised learning</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../guide/unsupervised/outlier.html">Outlier detection</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of Outlier detection</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../guide/unsupervised/outlier/generation.html">Outlier detection benchmarks</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../guide/glossary.html">Glossary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/hydra.html">Convolution transforms</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/wildboar/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/annotate/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.annotate</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/wildboar/datasets/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of wildboar.datasets</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/wildboar/datasets/outlier/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.outlier</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/wildboar/datasets/preprocess/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets.preprocess</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/wildboar/distance/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of wildboar.distance</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/wildboar/distance/dtw/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance.dtw</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/ensemble/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/wildboar/explain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of wildboar.explain</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/wildboar/explain/counterfactual/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/linear_model/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/metrics/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.metrics</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/model_selection/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.model_selection</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/transform/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/tree/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/wildboar/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of wildboar.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/wildboar/utils/variable_len/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.utils.variable_len</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/wildboar/base/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.base</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../more/whatsnew.html">What’s new</a></li>
+</ul>
+
+</div>
+<div class="sidebar-tree">
+  <ul>
+    <li class="toctree-l1 has-children">
+      <a class="reference internal" href="#">Versions</a>
+      <input
+        class="toctree-checkbox"
+        id="version-checkbox-1"
+        name="version-checkbox-1"
+        type="checkbox"
+      /><label for="version-checkbox-1"
+        ><i class="icon"
+          ><svg>
+            <use href="#svg-arrow-right"></use></svg></i
+      ></label>
+      <ul>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/master/index.html"
+            >main</a
+          >
+        </li>
+        <li class="toctree-l2">
+          <span class="reference internal">1.2</span>
+        </li>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/1.1.X/index.html"
+            >1.1</a
+          >
+        </li>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/1.0.X/index.html"
+            >1.0</a
+          >
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div></div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="getting-started">
+<h1>Getting started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h1>
+<section id="machine-learning">
+<h2>Machine learning<a class="headerlink" href="#machine-learning" title="Link to this heading">#</a></h2>
+<p>Typically, the configuration of machine learning problems involves a collection
+of $n$ data samples with the objective of forecasting attributes of unfamiliar
+data. In the Wildboar framework, the focus is on machine learning problems
+where the data samples are in the form of series, such as time series or other
+types of data that are ordered chronologically or logically.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For solving general machine learning problems with Python, consider using
+<a class="reference external" href="https://scikit-learn.org">scikit-learn</a>.</p>
+</div>
+<p>Similar to general machine learning problems, temporal machine learning is
+concerned with problems that fall into different categories</p>
+<ul>
+<li><p>Supervised learning, in which the data series are labeled with additional
+information. The additional information can be either numerical or nominal</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>In classification the time series belong to one of two or more labels and
+the goal is to learn a function that can label unlabeled time series.</p></li>
+<li><p>In regression the time series are labeled with a numerical attribute and
+the task is to assign a new numerical value to an unlabeled time series.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="loading-an-example-dataset">
+<h2>Loading an example dataset<a class="headerlink" href="#loading-an-example-dataset" title="Link to this heading">#</a></h2>
+<p>In order to start the exploration of Wildboar and temporal machine learning,
+it is essential to acquire a set of data. Wildboar conveniently includes
+several conventional datasets sourced from the time series community, which are
+accessible in the UCR Time series repository.</p>
+<p>In the following example, we load the dataset <code class="docutils literal notranslate"><span class="pre">synthetic_control</span></code> and the
+<code class="docutils literal notranslate"><span class="pre">TwoLeadECG</span></code> datasets.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_synthetic_control</span><span class="p">,</span> <span class="n">load_two_lead_ecg</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_synthetic_control</span><span class="p">()</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">(</span><span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Preserving the original training and testing splits from the UCR repository can
+be achieved by disabling the <code class="docutils literal notranslate"><span class="pre">merge_train_test</span></code> option.</p>
+<p>A more robust and reliable method for splitting the datasets into training
+and testing partitions is to use the model selection functions provided by
+scikit-learn.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The datasets are Numpy <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> s with <code class="code highlight python docutils literal highlight-python"><span class="n">x</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">2</span></code> and
+<code class="code highlight python docutils literal highlight-python"><span class="n">y</span><span class="o">.</span><span class="n">ndim</span><span class="o">==</span><span class="mi">1</span></code>. We can get the number of samples and time points.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_timestep</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Wildboar also supports multivariate time series using <em>3d</em>-arrays, i.e., we can
+get the shape of the dataset by <code class="code highlight python docutils literal highlight-python"><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_dims</span><span class="p">,</span> <span class="n">n_timestep</span> <span class="o">=</span>
+<span class="n">x</span><span class="o">.</span><span class="n">shape</span></code>. Since operations are often performed over the temporal dimension, we
+opt for having that as the last dimension of the array. Since we prefer c-order
+arrays, this means that the data is contiguous in memory. A robust approach for
+getting the number of samples and number of time steps irrespective of univariate (<em>2d</em>)
+or multivariate (<em>3d</em>) time series is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">n_samples</span><span class="p">,</span> <span class="n">n_timestep</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<p>In the example, we use <code class="docutils literal notranslate"><span class="pre">load_two_lead_ecg</span></code> and <code class="docutils literal notranslate"><span class="pre">load_synthetic_control</span></code> to
+load the datasets. A more general approach is to use the
+<a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a>-function from the same modules.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;synthetic_control&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a> accepts multiple parameters for specifying where
+to load data from and how to preprocess the data. By default, Wildboar loads
+datasets from the <code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code> repository, which include datasets from UCR
+time series repository. The user can specify a different repository using the
+<code class="docutils literal notranslate"><span class="pre">repository</span></code> argument. For example, we can load the regression task
+<code class="docutils literal notranslate"><span class="pre">FloodModeling1</span></code> from the UEA &amp; UCR Time Series Extrinsic Regression
+Repository, standardizing each time series with zero mean and unit variance
+using the following snippet:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span>
+<span class="s2">&quot;FloodModeling1&quot;</span><span class="p">,</span> <span class="n">repository</span><span class="o">=</span><span class="s2">&quot;wildboar/tsereg&quot;</span><span class="p">,</span> <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;standardize&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="learning-and-predicting">
+<h2>Learning and predicting<a class="headerlink" href="#learning-and-predicting" title="Link to this heading">#</a></h2>
+<p>Estimators in Wildboar implements the same interface as estimators of
+scikit-learn. We can <code class="docutils literal notranslate"><span class="pre">fit</span></code> an estimator to an input dataset and <code class="docutils literal notranslate"><span class="pre">predict</span></code>
+the label of a new sample.</p>
+<p>An example of a temporal estimator is the
+<a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier" title="wildboar.ensemble.ShapeletForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestClassifier</span></code></a> which implements the random shapelet
+forest classifier.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
+<span class="n">clf</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">()</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We fit the classifier (<code class="code highlight python docutils literal highlight-python"><span class="n">clf</span></code>) using the training samples, and use
+the same object to predict the label of a previously unseen sample.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span>  <span class="c1"># outputs array([6.])</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The predict function expects a <code class="docutils literal notranslate"><span class="pre">ndarray</span></code> of shape <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">n_samples</span><span class="p">,</span>
+<span class="n">n_timestep</span><span class="p">)</span></code>, where <code class="docutils literal notranslate"><span class="pre">n_timestep</span></code> is the size of training timestep.</p>
+</div>
+<p>Wildboar also simplifies experimentation over multiple datasets by allowing the
+user to repeatedly load several datasets from a repository.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_datasets</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span> <span class="ow">in</span> <span class="n">load_datasets</span><span class="p">(</span>
+   <span class="s2">&quot;wildboar/ucr&quot;</span><span class="p">,</span>
+   <span class="n">collection</span><span class="o">=</span><span class="s2">&quot;bake-off&quot;</span><span class="p">,</span>
+   <span class="n">merge_train_test</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+   <span class="nb">filter</span><span class="o">=</span><span class="s2">&quot;n_samples&lt;=300&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+   <span class="n">clf</span> <span class="o">=</span> <span class="n">clone</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>  <span class="c1"># from sklearn import clone</span>
+   <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+   <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the example, we load all datasets in the <code class="docutils literal notranslate"><span class="pre">bake-off</span></code> collection from the
+<code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code> repository, filtering datasets with less than 300 samples. For
+each dataset we load, we clone (to reuse the same random seed) and fit the
+estimator. Then we print the dataset name and the predictive performance to the
+screen. You can <span class="xref std std-doc">read more about datasets in the API-documentation</span>.</p>
+</section>
+<section id="transforming-time-series-to-tabular-data">
+<h2>Transforming time series to tabular data<a class="headerlink" href="#transforming-time-series-to-tabular-data" title="Link to this heading">#</a></h2>
+<p>Despite the numerous estimators specialized for temporal data, an even larger
+collection of methods exist for tabular data (e.g., as implemented by
+<a class="reference external" href="https://scikit-learn.org">scikit-learn</a>). For this purpose, Wildboar
+implements several <cite>transformers</cite> that can be used to transform temporal data
+to tabular data. Wildboar estimators follow the same convention as scikit-learn
+and implements a <code class="docutils literal notranslate"><span class="pre">fit</span></code>-method that learns the representation and a
+<code class="docutils literal notranslate"><span class="pre">transform</span></code>-method that outputs a new tabular representation of each input
+sample.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.transform</span> <span class="kn">import</span> <span class="n">RocketTransform</span>
+<span class="n">rocket</span> <span class="o">=</span> <span class="n">RocketTransform</span><span class="p">()</span>
+<span class="n">rocket</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">tabluar_x</span> <span class="o">=</span> <span class="n">rocket</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>One of Wildboars main design goals is to seamlessly interoperate with
+scikit-learn. As such, we can use Wildboar transformers to build
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html" title="(in scikit-learn v1.4)"><span class="xref std std-doc">scikit-learn pipelines</span></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
+
+<span class="n">clf</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+   <span class="n">RocketTransform</span><span class="p">(),</span>
+   <span class="n">LogisticRegression</span><span class="p">(),</span>
+<span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In the above example, we train and evaluate the model on the same data. This
+is bad practice. Instead, we should use a proper hold-out set when
+estimating the pipelines performance.</p>
+</div>
+</section>
+<section id="exploring-model-performance">
+<h2>Exploring model performance<a class="headerlink" href="#exploring-model-performance" title="Link to this heading">#</a></h2>
+<p>Wildboar implements several methods for explaining classifiers, e.g., using
+counterfactual reasoning or input dependencies.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.explain</span> <span class="kn">import</span> <span class="n">IntervalImportance</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">IntervalImportance</span><span class="p">()</span>
+<span class="n">i</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="../api/wildboar/explain/index.html#wildboar.explain.IntervalImportance" title="wildboar.explain.IntervalImportance"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.explain.IntervalImportance</span></code></a>-class identifies temporal
+regions that are responsible for the classifier performance. It does so by
+breaking the dependency between continuous intervals and the label while
+reevaluating the predictive performance of the classifier of sample-wise
+shuffled intervals. In the example, we evaluate the in-sample importance, which
+captures the reliance of the model on a particular interval.</p>
+<img alt="../_images/interval-light.svg" class="only-light align-center" src="../_images/interval-light.svg" /><img alt="../_images/interval-dark.svg" class="only-dark align-center" src="../_images/interval-dark.svg" /><p>The <a class="reference internal" href="../api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.plot" title="wildboar.explain.IntervalImportance.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">explain.IntervalImportance.plot</span></code></a> method can be used to visualize the
+interval importance, or we can return the full importance matrix.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">importance_</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="go">[..., 0.31, 0.30, 0.34, ...]</span>
+</pre></div>
+</div>
+</section>
+<section id="model-persistence">
+<h2>Model persistence<a class="headerlink" href="#model-persistence" title="Link to this heading">#</a></h2>
+<p>All Wildboar models can be persisted to disk using
+<a class="reference external" href="https://docs.python.org/3/library/pickle.html">pickle</a></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="nb">repr</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span> <span class="c1"># clf fitted earlier</span>
+<span class="n">clf_</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">repr</span><span class="p">)</span>
+<span class="n">clf_</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:,</span> <span class="p">:])</span> <span class="c1"># outputs array([6.])</span>
+</pre></div>
+</div>
+<p>Models persisted using an older version of Wildboar is not guaranteed to
+work when using a newer version (or vice versa).</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The pickle module is not secure. Only unpickle data you trust. <a class="reference external" href="https://docs.python.org/3/library/pickle.html">Read more in
+the Python documentation</a></p>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../guide.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">User guide</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="install.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Install wildboar</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Isak Samsten
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Getting started</a><ul>
+<li><a class="reference internal" href="#machine-learning">Machine learning</a></li>
+<li><a class="reference internal" href="#loading-an-example-dataset">Loading an example dataset</a></li>
+<li><a class="reference internal" href="#learning-and-predicting">Learning and predicting</a></li>
+<li><a class="reference internal" href="#transforming-time-series-to-tabular-data">Transforming time series to tabular data</a></li>
+<li><a class="reference internal" href="#exploring-model-performance">Exploring model performance</a></li>
+<li><a class="reference internal" href="#model-persistence">Model persistence</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div>
+<script src="../_static/documentation_options.js?v=4be8c61d"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    </body>
+</html>

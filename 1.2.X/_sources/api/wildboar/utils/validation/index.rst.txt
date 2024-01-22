@@ -1,0 +1,327 @@
+:orphan:
+
+
+***********************************
+:py:mod:`wildboar.utils.validation`
+***********************************
+
+.. py:module:: wildboar.utils.validation
+
+
+Module Contents
+---------------
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   wildboar.utils.validation.check_X_y
+   wildboar.utils.validation.check_array
+   wildboar.utils.validation.check_classification_targets
+   wildboar.utils.validation.check_option
+   wildboar.utils.validation.check_type
+
+
+
+.. py:function:: check_X_y(x, y, *, dtype=float, order='C', copy=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, force_all_finite=True, multi_output=False, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, allow_eos=False, y_numeric=False, y_contiguous=True, estimator=None)
+
+   
+   Check both X and y.
+
+
+   :Parameters:
+
+       **x** : array-like
+           The samples.
+
+       **y** : array-like
+           The labels.
+
+       **dtype** : dtype, optional
+           The data type for `X`.
+
+       **order** : {"C", "F"}, optional
+           The order of data in memory.
+
+       **copy** : bool, optional
+           Force a copy of `X`.
+
+       **ensure_2d** : bool, optional
+           Ensure that the array is 2d, i.e., (n_samples, n_timesteps).
+
+       **ensure_ts_array** : bool, optional
+           Ensure that the array is a valid time series array.
+
+       **allow_3d** : bool, optional
+           Allow `X` to be 3d, i.e., (n_samples, n_dimensions, n_timesteps).
+
+       **allow_nd** : bool, optional
+           Allow `X` to have 2 or more dimensions.
+
+       **force_all_finite** : bool, optional
+           Require every value in `X` to be finite.
+
+       **multi_output** : bool, optional
+           Allow `y` to be a multi output array.
+
+       **ensure_min_samples** : int, optional
+           Require `X` to have at least this many samples.
+
+       **ensure_min_timesteps** : int, optional
+           Require `X` to have at least this many timesteps.
+
+       **ensure_min_dims** : int, optional
+           Require `X` to have at least this many dimensions.
+
+       **allow_eos** : bool, optional
+           Allow `X` to be of variale length.
+
+       **y_numeric** : bool, optional
+           Ensure that `y` is numeric with dtype `float`.
+
+       **y_contiguous** : bool, optional
+           Ensure that `y` is memory contiguous.
+
+       **estimator** : object, optional
+           An estimator object for error reporting.
+
+   :Returns:
+
+       **X** : ndarray
+           The validated array `X`.
+
+       **y** : ndarray
+           The validated array `y`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: check_array(array, *, dtype='numeric', order='C', copy=False, ravel_1d=False, ensure_2d=True, ensure_ts_array=False, allow_3d=False, allow_nd=False, allow_eos=False, force_all_finite=True, ensure_min_samples=1, ensure_min_timesteps=1, ensure_min_dims=1, estimator=None, input_name='')
+
+   
+   Input validation on time-series.
+
+   Delegate array validation to scikit-learn
+   :func:`sklearn.utils.validation.check_array` with wildboar defaults and
+   conventions.
+
+   - we optionally allow end-of-sequence identifiers
+   - by default we convert arrays to c-order
+   - we optionally specifically allow for 3d-arrays
+   - we never allow for sparse arrays
+
+   By default, the input is checked to be a non-empty 2D array in c-order containing
+   only finite values, with at least 1 sample, 1 timestep and 1 dimension. If the dtype
+   of the array is object, attempt converting to float, raising on failure.
+
+   :Parameters:
+
+       **array** : object
+           Input object to check / convert.
+
+       **dtype** : 'numeric', type, list of type or None, optional
+           Data type of result. If None, the dtype of the input is preserved.
+           If "numeric", dtype is preserved unless array.dtype is object.
+           If dtype is a list of types, conversion on the first type is only
+           performed if the dtype of the input is not in the list.
+
+       **order** : {'F', 'C', 'T'} or None, optional
+           Whether an array will be forced to be fortran or c-style.
+           When order is None, then if copy=False, nothing is ensured
+           about the memory layout of the output array; otherwise (copy=True)
+           the memory layout of the returned array is kept as close as possible
+           to the original array.
+
+       **copy** : bool, optional
+           Whether a forced copy will be triggered. If copy=False, a copy might
+           be triggered by a conversion.
+
+       **ravel_1d** : bool, optional
+           Whether to ravel 1d arrays or column vectors, it the array is neither an
+           error is raised.
+
+       **ensure_2d** : bool, optional
+           Whether to raise a value error if array is not 2D.
+
+       **allow_3d** : bool, optional
+           Whether to allow array.ndim == 3.
+
+       **allow_nd** : bool, optional
+           Whether to allow array.ndim > 2.
+
+       **allow_eos** : bool, optional
+           Whether to raise an error on `wildboar.utils.variable_len.eos` in the
+           array.
+
+       **force_all_finite** : bool or 'allow-nan', default=True
+           Whether to raise an error on np.inf, np.nan, pd.NA in array. The
+           possibilities are:
+           
+           - True: Force all values of array to be finite.
+           - False: accepts np.inf, np.nan, pd.NA in array.
+           - 'allow-nan': accepts only np.nan and pd.NA values in array. Values
+             cannot be infinite.
+
+       **ensure_min_samples** : int, optional
+           Make sure that the array has a minimum number of samples in its first
+           axis (rows for a 2D array). Setting to 0 disables this check.
+
+       **ensure_min_timesteps** : int, optional
+           Make sure that the 2D array has some minimum number of timesteps
+           (columns). The default value of 1 rejects empty datasets.
+           This check is only enforced when the input data has effectively 2
+           dimensions or is originally 1D and ``ensure_2d`` is True. Setting to 0
+           disables this check.
+
+       **ensure_min_dims** : int, optional
+           Make sure that the array has a minimum number of dimensions. Setting to 0
+           disables this check.
+
+       **estimator** : str or estimator instance, default=None
+           If passed, include the name of the estimator in warning messages.
+
+       **input_name** : str, default=""
+           The data name used to construct the error message.
+
+   :Returns:
+
+       object
+           The converted and validated array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: check_classification_targets(y)
+
+   
+   Ensure that a classification target is either binary of multiclass.
+
+
+   :Parameters:
+
+       **y** : array-like
+           The target.
+
+
+
+
+
+   :Raises:
+
+       ValueError
+           If the type of target is not binary of multiclass
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: check_option(options, key, name)
+
+   
+   Check that `key` is a valid option.
+
+
+   :Parameters:
+
+       **options** : dict
+           The dictionary of option value pairs.
+
+       **key** : str
+           The option key.
+
+       **name** : str
+           The name of the parameter.
+
+   :Returns:
+
+       option_value
+           The value of `key` in `option`.
+
+
+
+
+   :Raises:
+
+       ValueError
+           If `key` is not a valid option.
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:function:: check_type(x, name, target_type, required=True)
+
+   
+   Check that the type of x is of a target type.
+
+
+   :Parameters:
+
+       **x** : object
+           The object to check.
+
+       **name** : str
+           The name of the parameter.
+
+       **target_type** : type or tuple
+           The required type(s) of x.
+
+       **required** : bool, optional
+           If required=False, None is an allowed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
