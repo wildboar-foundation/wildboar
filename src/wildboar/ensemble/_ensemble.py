@@ -3,6 +3,7 @@
 
 import math
 import numbers
+import warnings
 from abc import ABCMeta, abstractmethod
 from numbers import Integral, Real
 
@@ -71,9 +72,16 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         verbose=0,
         base_estimator="deprecated",
     ):
+        if base_estimator != "deprecated":
+            warnings.warn(
+                "base_estimator is deprecated and will be removed in 1.4",
+                DeprecationWarning,
+            )
+            if estimator is None:
+                estimator = base_estimator
+
         super().__init__(
             estimator=estimator,
-            base_estimator=base_estimator,
             n_estimators=n_estimators,
             max_samples=max_samples,
             max_features=1.0,
@@ -513,7 +521,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         **ShapeletTreeClassifier._parameter_constraints,
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913 # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -670,7 +678,7 @@ class ExtraShapeletTreesClassifier(BaseShapeletForestClassifier):
     }
     _parameter_constraints.pop("n_shapelets")
 
-    def __init__(
+    def __init__(  # noqa: PLR0913 # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -871,7 +879,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
     instead.
     """
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         *,
         estimator,
@@ -1843,7 +1851,7 @@ class RocketForestClassifier(BaseForestClassifier):
         **RocketTreeClassifier._parameter_constraints,
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -1921,7 +1929,7 @@ class IntervalForestClassifier(BaseForestClassifier):
         **IntervalTreeClassifier._parameter_constraints,
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -1990,7 +1998,7 @@ class IntervalForestRegressor(BaseForestRegressor):
         **IntervalTreeRegressor._parameter_constraints,
     }
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         n_estimators=100,
         *,
@@ -2134,7 +2142,7 @@ class ProximityForestClassifier(BaseForestClassifier):
           optional key-value pairs defining the lower and upper bound on the
           values as well as the number of values in the grid. For example, to
           specifiy a grid over the argument 'r' with 10 values in the range 0
-          to 1, we would give the following specification: 
+          to 1, we would give the following specification:
           `dict(min_r=0, max_r=1, num_r=10)`.
 
         Read more about the metrics and their parameters in the
@@ -2184,7 +2192,7 @@ class ProximityForestClassifier(BaseForestClassifier):
         - If `RandomState` instance, `random_state` is the random number generator
         - If `None`, the random number generator is the `RandomState` instance used
             by `np.random`.
-    
+
     References
     ----------
     Lucas, Benjamin, Ahmed Shifaz, Charlotte Pelletier, Lachlan O'Neill, Nayyar Zaidi, \
