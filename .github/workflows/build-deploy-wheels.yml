@@ -3,9 +3,7 @@ name: Build, test and upload to PyPI
 on:
   push:
     branches:
-      - master
-      - 1.0.X
-      - 1.1.X
+      - 1.2.X
 
     tags:
       - v*
