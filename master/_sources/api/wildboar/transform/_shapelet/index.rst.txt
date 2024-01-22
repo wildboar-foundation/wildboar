@@ -16,7 +16,7 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.transform._shapelet.CompetingDilatedShapeletTransform
+   wildboar.transform._shapelet.CastorTransform
    wildboar.transform._shapelet.DilatedShapeletTransform
    wildboar.transform._shapelet.RandomShapeletTransform
    wildboar.transform._shapelet.ShapeletMixin
@@ -24,13 +24,13 @@ Classes
 
 
 
-.. py:class:: CompetingDilatedShapeletTransform(n_groups=64, n_shapelets=8, *, metric='euclidean', metric_params=None, normalize_prob=0.8, shapelet_size=11, lower=0.05, upper=0.1, soft_min=True, soft_max=False, soft_threshold=True, ignore_y=False, random_state=None, n_jobs=None)
+.. py:class:: CastorTransform(n_groups=64, n_shapelets=8, *, metric='euclidean', metric_params=None, normalize_prob=0.8, shapelet_size=11, lower=0.05, upper=0.1, soft_min=True, soft_max=False, soft_threshold=True, ignore_y=False, random_state=None, n_jobs=None)
 
 
 
 
    
-   A dictionary based method using dilated competing shapelets.
+   Competing Dialated Shapelet Transform.
 
 
    :Parameters:
@@ -243,7 +243,11 @@ Classes
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -569,7 +573,11 @@ Classes
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -902,7 +910,11 @@ Classes
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 

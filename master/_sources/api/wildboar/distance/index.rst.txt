@@ -181,7 +181,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: fit_predict(X, y=None)
+   .. py:method:: fit_predict(X, y=None, **kwargs)
 
       
       Perform clustering on `X` and returns cluster labels.
@@ -194,6 +194,11 @@ Functions
 
           **y** : Ignored
               Not used, present for API consistency by convention.
+
+          **\*\*kwargs** : dict
+              Arguments to be passed to ``fit``.
+              
+              .. versionadded:: 1.4
 
       :Returns:
 
@@ -362,7 +367,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -563,7 +572,7 @@ Functions
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: fit_predict(X, y=None)
+   .. py:method:: fit_predict(X, y=None, **kwargs)
 
       
       Perform clustering on `X` and returns cluster labels.
@@ -576,6 +585,11 @@ Functions
 
           **y** : Ignored
               Not used, present for API consistency by convention.
+
+          **\*\*kwargs** : dict
+              Arguments to be passed to ``fit``.
+              
+              .. versionadded:: 1.4
 
       :Returns:
 
@@ -744,7 +758,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -1450,17 +1468,17 @@ Functions
    
    Compute the distance profile.
 
-   The distance profile of shape `(n_samples, n_timestep - yn_timestep + 1)`
-   corresponds to the distance of the subsequence y for every time point
-   in x.
+   The distance profile corresponds to the distance of the subsequences in y
+   for every time point of the samples in x.
 
    :Parameters:
 
-       **y** : array-like of shape (yn_timestep, )
-           The subsequences.
+       **y** : array-like of shape (m_timestep, ) or (n_samples, m_timestep)
+           The subsequences. if `y.ndim` is 1, we will broacast `y` to have the
+           same number of samples as `x`.
 
        **x** : ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)
-           The samples. If `x.ndim` is 1, we will broadcast it to have the same
+           The samples. If `x.ndim` is 1, we will broadcast `x` to have the same
            number of samples as `y`.
 
        **dilation** : int, optional
@@ -1492,9 +1510,11 @@ Functions
 
    :Returns:
 
-       ndarray of shape (n_samples, output_size)
+       ndarray of shape (n_samples, output_size) or (output_size, )
            The distance profile. `output_size` is given by:
-           `x.shape[-1] + 2 * padding - (y.shape[-1] - 1) * dilation + 1) + 1`.
+           `n_timestep + 2 * padding - (n_timestep - 1) * dilation + 1) + 1`.
+           If both `x` and `y` contains a single subsequence and a single sample,
+           the output is squeezed.
 
 
 
@@ -1517,6 +1537,12 @@ Functions
    >>> distance_profile(X[0], X[1:].reshape(-1))
    array([14.00120332, 14.41943788, 14.81597243, ...,  4.75219094,
           5.72681005,  6.70155561])
+
+   >>> distance_profile(
+   ...     X[0, 0:9], X[1:5], metric="dtw", dilation=2, padding="same"
+   ... )[0, :10]
+   array([8.01881424, 7.15083281, 7.48856368, 6.83139294, 6.75595579,
+          6.30073636, 6.65346307, 6.27919601, 6.25666948, 6.0961576 ])
 
 
 

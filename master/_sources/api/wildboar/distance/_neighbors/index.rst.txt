@@ -124,7 +124,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: fit_predict(X, y=None)
+   .. py:method:: fit_predict(X, y=None, **kwargs)
 
       
       Perform clustering on `X` and returns cluster labels.
@@ -137,6 +137,11 @@ Classes
 
           **y** : Ignored
               Not used, present for API consistency by convention.
+
+          **\*\*kwargs** : dict
+              Arguments to be passed to ``fit``.
+              
+              .. versionadded:: 1.4
 
       :Returns:
 
@@ -305,7 +310,11 @@ Classes
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -506,7 +515,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: fit_predict(X, y=None)
+   .. py:method:: fit_predict(X, y=None, **kwargs)
 
       
       Perform clustering on `X` and returns cluster labels.
@@ -519,6 +528,11 @@ Classes
 
           **y** : Ignored
               Not used, present for API consistency by convention.
+
+          **\*\*kwargs** : dict
+              Arguments to be passed to ``fit``.
+              
+              .. versionadded:: 1.4
 
       :Returns:
 
@@ -687,7 +701,11 @@ Classes
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 

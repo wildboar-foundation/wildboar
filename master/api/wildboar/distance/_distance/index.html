@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../../../genindex.html" /><link rel="search" title="Search" href="../../../../search.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>wildboar.distance._distance - Wildboar 1.1.1.dev265 documentation</title>
+        <title>wildboar.distance._distance - Wildboar 1.1.1.dev269 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=11f2bc40" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
@@ -50,7 +50,7 @@
         
         You're reading the documentation for a development version.
         For the latest released version, please have a look at <a
-            href="/1.1.X/index.html">1.1</a>.
+            href="/1.2.X/index.html">1.2</a>.
         
     </aside>
 </div>
@@ -142,7 +142,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev265 documentation</div></a>
+      <a href="../../../../index.html"><div class="brand">Wildboar 1.1.1.dev269 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -268,6 +268,11 @@
       <ul>
         <li class="toctree-l2">
           <span class="reference internal">main</span>
+        </li>
+        <li class="toctree-l2">
+          <a class="reference internal" href="/1.2.X/index.html"
+            >1.2</a
+          >
         </li>
         <li class="toctree-l2">
           <a class="reference internal" href="/1.1.X/index.html"
@@ -471,15 +476,15 @@ implication.</p>
 <dt class="sig sig-object py" id="wildboar.distance._distance.distance_profile">
 <span class="sig-prename descclassname"><span class="pre">wildboar.distance._distance.</span></span><span class="sig-name descname"><span class="pre">distance_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">padding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mass'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/distance/_distance.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.distance._distance.distance_profile" title="Link to this definition">#</a></dt>
 <dd><p>Compute the distance profile.</p>
-<p>The distance profile of shape <cite>(n_samples, n_timestep - yn_timestep + 1)</cite>
-corresponds to the distance of the subsequence y for every time point
-in x.</p>
+<p>The distance profile corresponds to the distance of the subsequences in y
+for every time point of the samples in x.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>y</strong><span class="classifier">array-like of shape (yn_timestep, )</span></dt><dd><p>The subsequences.</p>
+<dt><strong>y</strong><span class="classifier">array-like of shape (m_timestep, ) or (n_samples, m_timestep)</span></dt><dd><p>The subsequences. if <cite>y.ndim</cite> is 1, we will broacast <cite>y</cite> to have the
+same number of samples as <cite>x</cite>.</p>
 </dd>
-<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples. If <cite>x.ndim</cite> is 1, we will broadcast it to have the same
+<dt><strong>x</strong><span class="classifier">ndarray of shape (n_timestep, ), (n_samples, n_timestep)    or (n_samples, n_dims, n_timestep)</span></dt><dd><p>The samples. If <cite>x.ndim</cite> is 1, we will broadcast <cite>x</cite> to have the same
 number of samples as <cite>y</cite>.</p>
 </dd>
 <dt><strong>dilation</strong><span class="classifier">int, optional</span></dt><dd><p>The dilation, i.e., the spacing between points in the subsequences.</p>
@@ -504,8 +509,10 @@ size is the same as the input size.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>ndarray of shape (n_samples, output_size)</dt><dd><p>The distance profile. <cite>output_size</cite> is given by:
-<cite>x.shape[-1] + 2 * padding - (y.shape[-1] - 1) * dilation + 1) + 1</cite>.</p>
+<dt>ndarray of shape (n_samples, output_size) or (output_size, )</dt><dd><p>The distance profile. <cite>output_size</cite> is given by:
+<cite>n_timestep + 2 * padding - (n_timestep - 1) * dilation + 1) + 1</cite>.
+If both <cite>x</cite> and <cite>y</cite> contains a single subsequence and a single sample,
+the output is squeezed.</p>
 </dd>
 </dl>
 </dd>
@@ -522,6 +529,13 @@ implication.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">distance_profile</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
 <span class="go">array([14.00120332, 14.41943788, 14.81597243, ...,  4.75219094,</span>
 <span class="go">       5.72681005,  6.70155561])</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">distance_profile</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">9</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;dtw&quot;</span><span class="p">,</span> <span class="n">dilation</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;same&quot;</span>
+<span class="gp">... </span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<span class="go">array([8.01881424, 7.15083281, 7.48856368, 6.83139294, 6.75595579,</span>
+<span class="go">       6.30073636, 6.65346307, 6.27919601, 6.25666948, 6.0961576 ])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -961,7 +975,7 @@ implication.</p>
     </aside>
   </div>
 </div>
-<script src="../../../../_static/documentation_options.js?v=772e88e7"></script>
+<script src="../../../../_static/documentation_options.js?v=a8cca14f"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/furo.js?v=32e29ea5"></script>

@@ -37,7 +37,7 @@ Classes
 
 .. autoapisummary::
 
-   wildboar.transform.CompetingDilatedShapeletTransform
+   wildboar.transform.CastorTransform
    wildboar.transform.DerivativeTransform
    wildboar.transform.DiffTransform
    wildboar.transform.DilatedShapeletTransform
@@ -65,13 +65,13 @@ Functions
 
 
 
-.. py:class:: CompetingDilatedShapeletTransform(n_groups=64, n_shapelets=8, *, metric='euclidean', metric_params=None, normalize_prob=0.8, shapelet_size=11, lower=0.05, upper=0.1, soft_min=True, soft_max=False, soft_threshold=True, ignore_y=False, random_state=None, n_jobs=None)
+.. py:class:: CastorTransform(n_groups=64, n_shapelets=8, *, metric='euclidean', metric_params=None, normalize_prob=0.8, shapelet_size=11, lower=0.05, upper=0.1, soft_min=True, soft_max=False, soft_threshold=True, ignore_y=False, random_state=None, n_jobs=None)
 
 
 
 
    
-   A dictionary based method using dilated competing shapelets.
+   Competing Dialated Shapelet Transform.
 
 
    :Parameters:
@@ -284,7 +284,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -521,7 +525,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -727,7 +735,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -1022,7 +1034,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -1306,7 +1322,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -1642,7 +1662,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -1982,7 +2006,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -2272,7 +2300,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -2509,7 +2541,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -2772,7 +2808,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -3037,7 +3077,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -3339,7 +3383,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -3689,7 +3737,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 
@@ -3950,7 +4002,11 @@ Functions
               
               - `"default"`: Default output format of a transformer
               - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
               - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
 
       :Returns:
 

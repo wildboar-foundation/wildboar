@@ -558,7 +558,7 @@ Linear methods for both classification and regression.
   :widths: auto
   :class: autosummary
 
-  * - :py:obj:`~wildboar.linear_model.CompetingDilatedShapeletClassifier`
+  * - :py:obj:`~wildboar.linear_model.CastorClassifier`
     - A dictionary based method using dilated competing shapelets.
   * - :py:obj:`~wildboar.linear_model.DilatedShapeletClassifier`
     - A classifier that uses random dilated shapelets.
@@ -699,8 +699,8 @@ Transform raw time series to tabular representations.
   :widths: auto
   :class: autosummary
 
-  * - :py:obj:`~wildboar.transform.CompetingDilatedShapeletTransform`
-    - A dictionary based method using dilated competing shapelets.
+  * - :py:obj:`~wildboar.transform.CastorTransform`
+    - Competing Dialated Shapelet Transform.
   * - :py:obj:`~wildboar.transform.DerivativeTransform`
     - Mixin class for all transformers in scikit-learn.
   * - :py:obj:`~wildboar.transform.DiffTransform`

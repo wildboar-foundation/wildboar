@@ -127,29 +127,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -583,29 +560,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -890,29 +844,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -1107,29 +1038,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -1509,29 +1417,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -1819,29 +1704,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -2225,29 +2087,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -2633,29 +2472,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -3124,29 +2940,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -3455,29 +3248,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -3857,29 +3627,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -4268,29 +4015,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -4362,7 +4086,7 @@ Classes
       ..
           !! processed by numpydoc !!
 
-   .. py:method:: fit_predict(X, y=None)
+   .. py:method:: fit_predict(X, y=None, **kwargs)
 
       
       Perform fit on X and returns labels for X.
@@ -4376,6 +4100,11 @@ Classes
 
           **y** : Ignored
               Not used, present for API consistency by convention.
+
+          **\*\*kwargs** : dict
+              Arguments to be passed to ``fit``.
+              
+              .. versionadded:: 1.4
 
       :Returns:
 
@@ -4520,29 +4249,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -4934,7 +4640,7 @@ Classes
              optional key-value pairs defining the lower and upper bound on the
              values as well as the number of values in the grid. For example, to
              specifiy a grid over the argument 'r' with 10 values in the range 0
-             to 1, we would give the following specification: 
+             to 1, we would give the following specification:
              `dict(min_r=0, max_r=1, num_r=10)`.
            
            Read more about the metrics and their parameters in the
@@ -5022,29 +4728,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -5424,29 +5107,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -5917,29 +5577,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -6343,29 +5980,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -6841,29 +6455,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
@@ -7257,29 +6848,6 @@ Classes
 
    ..
        !! processed by numpydoc !!
-   .. py:property:: base_estimator_
-
-      
-      Estimator used to grow the ensemble.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      ..
-          !! processed by numpydoc !!
-
    .. py:property:: estimators_samples_
 
       
