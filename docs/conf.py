@@ -60,7 +60,6 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_design",
     "sphinx_inline_tabs",
-    "sphinx_simpleversion",
     "sphinx_toggleprompt",
 ]
 
