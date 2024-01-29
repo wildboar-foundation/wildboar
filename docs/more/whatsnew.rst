@@ -17,8 +17,6 @@ Wildboar 1.2 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 
 Version 1.2.0
 =============
 
-**In development**
-
 New and changed models
 ----------------------
 
