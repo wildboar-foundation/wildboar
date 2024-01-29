@@ -67,8 +67,6 @@ Functions
 
    wildboar.distance.argmin_distance
    wildboar.distance.argmin_subsequence_distance
-   wildboar.distance.check_metric
-   wildboar.distance.check_subsequence_metric
    wildboar.distance.distance_profile
    wildboar.distance.matrix_profile
    wildboar.distance.paired_distance
@@ -1460,8 +1458,6 @@ Functions
 
    ..
        !! processed by numpydoc !!
-
-
 
 .. py:function:: distance_profile(y, x, *, dilation=1, padding=0, dim=0, metric='mass', metric_params=None, scale=False, n_jobs=None)
 
