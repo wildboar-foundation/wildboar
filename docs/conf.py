@@ -33,6 +33,8 @@ author = "Isak Samsten"
 
 
 def get_current_branch():
+    import subprocess
+
     return (
         subprocess.run("git branch --show-current", stdout=subprocess.PIPE, shell=True)
         .stdout.decode()
