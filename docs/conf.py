@@ -12,7 +12,6 @@ import pathlib
 import sys
 
 from pkg_resources import get_distribution, parse_version
-from sphinx_simpleversion import get_current_branch
 from sphinx.util.logging import getLogger
 
 sys.path.insert(0, os.path.abspath("_gen_figures"))
@@ -23,6 +22,7 @@ logger = getLogger(__name__)
 current_release = parse_version(get_distribution("wildboar").version)
 release = current_release.public
 version = f"{current_release.major}.{current_release.minor}.{current_release.micro}"
+major_version = f"{current_release.major}.{current_release.minor}"
 
 # -- Project information -----------------------------------------------------
 
@@ -31,6 +31,16 @@ description = "Time series learning with Python"
 copyright = "2023, Isak Samsten"
 author = "Isak Samsten"
 
+
+def get_current_branch():
+    return (
+        subprocess.run("git branch --show-current", stdout=subprocess.PIPE, shell=True)
+        .stdout.decode()
+        .strip()
+    )
+
+
+current_branch_name = get_current_branch()
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -92,20 +102,24 @@ autoapi_options = [
     "inherited-members",
 ]
 
-html_theme = "furo"
+html_theme = "pydata_sphinx_theme"
 html_theme_options = {
-    "light_logo": "logo.png",
-    "dark_logo": "logo.png",
+    "logo": {
+        "text": "Wildboar",
+        "image_light": "logo.png",
+        "image_dark": "logo.png",
+    },
+    "show_version_warning_banner": True,
+    "navbar_start": ["navbar-logo", "version-switcher"],
+    "switcher": {
+        "json_url": "https://wildboar.dev/_versions.json",
+        "version_match": "dev" if current_branch_name == "master" else major_version,
+    },
+    "check_switcher": False,
 }
-html_sidebars = {
-    "**": [
-        "sidebar/scroll-start.html",
-        "brand.html",
-        "sidebar/search.html",
-        "sidebar/navigation.html",
-        "versions.html",
-        "sidebar/scroll-end.html",
-    ],
+
+html_context = {
+    "default_mode": "auto",
 }
 
 html_static_path = ["_static"]
@@ -113,7 +127,6 @@ html_css_files = [
     "css/custom.css",
     "css/pygments-override.css",
 ]
-current_branch_name = get_current_branch()
 
 rst_prolog = """
 .. role:: python(code)
