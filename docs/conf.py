@@ -20,9 +20,8 @@ sys.path.insert(0, os.path.abspath(".") + "/_extensions")
 logger = getLogger(__name__)
 
 current_release = parse_version(get_distribution("wildboar").version)
-release = current_release.public
-version = f"{current_release.major}.{current_release.minor}.{current_release.micro}"
-major_version = f"{current_release.major}.{current_release.minor}"
+version = f"{current_release.major}.{current_release.minor}"
+release = version
 
 # -- Project information -----------------------------------------------------
 
@@ -112,7 +111,7 @@ html_theme_options = {
     "navbar_start": ["navbar-logo", "version-switcher"],
     "switcher": {
         "json_url": "https://wildboar.dev/_versions.json",
-        "version_match": "dev" if current_branch_name == "master" else major_version,
+        "version_match": "dev" if current_branch_name == "master" else version,
     },
     "check_switcher": False,
 }
