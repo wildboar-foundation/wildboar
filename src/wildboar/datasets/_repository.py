@@ -12,7 +12,6 @@ import zipfile
 from abc import ABCMeta, abstractmethod
 
 import numpy as np
-from packaging.version import parse as parse_version
 
 from .. import EOS
 from .. import __version__ as wildboar_version
@@ -23,7 +22,12 @@ except ModuleNotFoundError as e:
     from ..utils import _soft_dependency_error
 
     _soft_dependency_error(e, context="wildboar.datasets")
+try:
+    from packaging.version import parse as parse_version
+except ModuleNotFoundError as e:
+    from ..utils import _soft_dependency_error
 
+    _soft_dependency_error(e, package="packaging", context="wildboar.datasets")
 
 DEFAULT_TAG = "default"
 
