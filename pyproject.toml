@@ -45,6 +45,7 @@ datasets = [
 
 [tool.setuptools_scm]
 write_to = "src/wildboar/version.py"
+version_scheme = "release-branch-semver"
 
 [tool.setuptools.dynamic]
 version = { attr = "wildboar.__version__" }
