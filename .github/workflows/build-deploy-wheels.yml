@@ -8,7 +8,10 @@ on:
       - 1.1.X
 
     tags:
-      - v*
+      - 'v*.*.*'
+      - 'v*.*.*beta[0-9]'
+      - 'v*.*.*alpha[0-9]'
+      - 'v*.*.*beta[0-9]'
 
   pull_request:
     types: [opened, reopened]
