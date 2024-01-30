@@ -3,7 +3,7 @@ name = "wildboar"
 authors = [{ name = "Isak Samsten", email = "isak@samsten.se" }]
 readme = "README.md"
 description = "Time series learning with Python."
-dynamic = ["version", "readme"]
+dynamic = ["version"]
 license = { file = "LICENSE" }
 requires-python = ">=3.8"
 dependencies = [
