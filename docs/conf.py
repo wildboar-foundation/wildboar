@@ -82,8 +82,6 @@ pygments_dark_style = "github-dark-colorblind"
 syntax_highlight = "short"
 add_function_parentheses = False
 
-versions_develop_branch = "master"
-
 autoapi_dirs = ["../src/"]
 autoapi_root = "api"
 autoapi_template_dir = "_templates/autoapi/"
