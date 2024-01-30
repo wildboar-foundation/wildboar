@@ -1,7 +1,7 @@
 [project]
 name = "wildboar"
 authors = [{ name = "Isak Samsten", email = "isak@samsten.se" }]
-# readme = "README.md"
+readme = "README.md"
 description = "Time series learning with Python."
 dynamic = ["version", "readme"]
 license = { file = "LICENSE" }
