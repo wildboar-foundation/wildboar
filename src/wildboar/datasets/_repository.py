@@ -658,8 +658,13 @@ class RepositoryCollection:
     def __init__(self):
         self.pending_repositories = set()
         self.repositories = set()
+        self._initialized = False
 
     def __getitem__(self, key):
+        if not self._initialized:
+            self._initialized = True
+            self.refresh(timeout=3)
+
         repository = next(
             (repository for repository in self.repositories if repository.name == key),
             None,
