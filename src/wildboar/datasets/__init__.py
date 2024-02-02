@@ -846,17 +846,12 @@ _REPOSITORIES = RepositoryCollection()
 
 # Install the default 'wildboar' repository
 def _get_dataset_version():
-    try:
-        from packaging import version
-    except ModuleNotFoundError as e:
-        from ..utils import _soft_dependency_error
-
-        _soft_dependency_error(e, package="packaging")
+    from sklearn.utils.fixes import parse_version
 
     from .. import __version__
 
-    v = version.parse(__version__)
-    if v.is_prerelease:
+    v = parse_version(__version__)
+    if v.dev is None:
         return "master"
     else:
         return "%d.%d" % (v.major, v.minor)
