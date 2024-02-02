@@ -2,10 +2,12 @@
 # License: BSD 3 clause
 """Base classes for all estimators."""
 
+import itertools
 import warnings
 
 import numpy as np
 from sklearn.base import BaseEstimator as SklearnBaseEstimator
+from sklearn.utils.fixes import parse_version
 from sklearn.utils.validation import _check_y, check_is_fitted
 
 from . import __version__
@@ -32,6 +34,34 @@ _DEFAULT_TAGS = {
 
 class BaseEstimator(SklearnBaseEstimator):
     """Base estimator for all Wildboar estimators."""
+
+    _doc_link_module = "wildboar"
+
+    @property
+    def _doc_link_template(self):
+        wildboar_version = parse_version(__version__)
+        if wildboar_version.dev is None:
+            version_url = f"{wildboar_version.major}.{wildboar_version.minor}.X"
+        else:
+            version_url = "master"
+        return (
+            "https://wildboar.dev/%s/api/{module_path}/index.html#{estimator_module}.{estimator_name}"
+            % version_url
+        )
+
+    def _doc_link_url_param_generator(self, other):
+        estimator_name = self.__class__.__name__
+        estimator_module = ".".join(
+            itertools.takewhile(
+                lambda part: not part.startswith("_"),
+                self.__class__.__module__.split("."),
+            )
+        )
+        return {
+            "module_path": estimator_module.replace(".", "/"),
+            "estimator_module": estimator_module,
+            "estimator_name": estimator_name,
+        }
 
     # Same additions as scikit-learn
     def __getstate__(self):
