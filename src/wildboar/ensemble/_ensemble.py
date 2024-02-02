@@ -80,6 +80,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
             if estimator is None:
                 estimator = base_estimator
 
+        self.base_estimator = base_estimator
         super().__init__(
             estimator=estimator,
             n_estimators=n_estimators,
