@@ -115,6 +115,20 @@ html_theme_options = {
         "version_match": "dev" if current_branch_name == "master" else major_version,
     },
     "check_switcher": False,
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/wildboar-foundation/wildboar/",
+            "icon": "fa-brands fa-github",
+            "type": "fontawesome",
+        },
+        {
+            "name": "PyPI",
+            "url": "https://pypi.org/project/wildboar/",
+            "icon": "fa-custom fa-pypi",
+        },
+    ],
+    "navigation_with_keys": False,
 }
 
 html_context = {
@@ -126,6 +140,7 @@ html_css_files = [
     "css/custom.css",
     "css/pygments-override.css",
 ]
+html_js_files = ["js/fa.js"]
 
 rst_prolog = """
 .. role:: python(code)
