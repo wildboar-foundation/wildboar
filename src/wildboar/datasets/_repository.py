@@ -597,9 +597,8 @@ class JSONRepository(Repository):
         )
         if parse_version(self.wildboar_requires) > parse_version(wildboar_version):
             raise ValueError(
-                "The repository requires wildboar >=%s, got %s",
-                self.wildboar_requires,
-                wildboar_version,
+                "The repository requires wildboar >=%s, got %s"
+                % (self.wildboar_requires, wildboar_version),
             )
         self._bundle_url = _validate_url(json["bundle_url"])
         bundles = {}
@@ -728,6 +727,7 @@ class RepositoryCollection:
             for repository in self.pending_repositories:
                 repository.refresh(timeout)
                 if repository.active:
+                    self._check_unique(repository.name)
                     self.repositories.add(repository)
                     self.save_repository(repository, cache_dir=cache_dir)
                 else:
@@ -735,7 +735,8 @@ class RepositoryCollection:
                         repository, cache_dir=cache_dir
                     )
                     if cached_repository:
-                        self.repositories.add(repository)
+                        self._check_unique(cached_repository.name)
+                        self.repositories.add(cached_repository)
 
             self.pending_repositories = set(
                 repository
@@ -753,13 +754,19 @@ class RepositoryCollection:
             repository.refresh(timeout)
 
         if repository.active:
+            self._check_unique(repository.name)
             self.repositories.add(repository)
         else:
             cached_repository = self.load_repository(repository, cache_dir=cache_dir)
             if cached_repository:
+                self._check_unique(cached_repository)
                 self.repositories.add(cached_repository)
             else:
                 self.pending_repositories.add(repository)
+
+    def _check_unique(self, key):
+        if key in {repo.name for repo in self.repositories}:
+            raise ValueError(f"Repository with {key} already exists")
 
 
 class Bundle(metaclass=ABCMeta):
