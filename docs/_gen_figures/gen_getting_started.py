@@ -17,4 +17,4 @@ def gen_interval_explain(path, force=False):
 
     for fig, ax in yield_and_save_plot(path):
         _, mappable = ex.plot(x, y, ax=ax)
-        fig.colorbar(mappable, cax=ax)
+        fig.colorbar(mappable, ax=ax)
