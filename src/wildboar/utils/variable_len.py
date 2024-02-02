@@ -5,16 +5,16 @@
 import numpy as np
 
 
-def _double_to_raw_long_bits(value):
-    return np.array(value, dtype="d").view(dtype="Q")
+def _float_to_raw_int_bits(value):
+    return np.array(value, dtype="f").view(dtype="I")
 
 
-def _long_bit_to_double(bits):
-    return np.array(bits, dtype="Q").view(dtype="d")
+def _int_bits_to_float(bits):
+    return np.array(bits, dtype="I").view(dtype="f")
 
 
-eos = EoS = EOS = _long_bit_to_double(0x7FF0000000000009).item()
-_END_OF_SERIES_MASK = np.array(0x000000000000000F, dtype=np.uint64)
+eos = EoS = EOS = _int_bits_to_float(0x7F800009).item()
+_END_OF_SERIES_MASK = np.array(0x0000000F, dtype=np.uint64)
 
 
 def is_end_of_series(x):
@@ -33,7 +33,7 @@ def is_end_of_series(x):
     """
     return np.logical_and(
         np.isnan(x),
-        np.bitwise_and(_double_to_raw_long_bits(x), _END_OF_SERIES_MASK) == 9,
+        np.bitwise_and(_float_to_raw_int_bits(x), _END_OF_SERIES_MASK) == 9,
     )
 
 
@@ -51,9 +51,6 @@ def is_variable_length(x):
     bool
         True if time series contains EoS.
     """
-    if not np.issubdtype(x.dtype, np.float64):
-        raise ValueError(f"Array must have dtype=float64, got {x.dtype}")
-
     return is_end_of_series(x).any()
 
 
