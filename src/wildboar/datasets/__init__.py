@@ -863,5 +863,3 @@ install_repository(
     % _get_dataset_version(),
     refresh=False,
 )
-
-refresh_repositories(timeout=1)
