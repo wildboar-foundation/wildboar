@@ -51,6 +51,15 @@ Changelog
 
   .. grid-item-card::
 
+     :mod:`wildboar.datasets`
+     ^^^
+
+     - |Fix| Correctly detect duplicate repositories.
+
+     - |Fix| Defer repository refresh to first use.
+
+  .. grid-item-card::
+
      :mod:`wildboar.distance`
      ^^^
 
