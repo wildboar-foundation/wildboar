@@ -8,10 +8,10 @@ This is the API reference manual for `Wildboar <https://wildboar.dev>`__.
   :maxdepth: 3
   :hidden:
 
-  quickstart
+  Install <install>
   guide
+  API <api/wildboar/index>
   examples
-  API Reference <api/wildboar/index>
   more/whatsnew
 
 .. include:: api/index.rst
