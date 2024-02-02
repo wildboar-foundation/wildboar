@@ -862,9 +862,7 @@ def _get_dataset_version():
         return "%d.%d" % (v.major, v.minor)
 
 
-# TODO(1.2): Update the url to datasets.wildboar.dev
 install_repository(
-    "https://isaksamsten.github.io/wildboar-datasets/%s/repo.json"
-    % _get_dataset_version(),
+    "https://datasets.wildboar.dev/%s/repo.json" % _get_dataset_version(),
     refresh=False,
 )
