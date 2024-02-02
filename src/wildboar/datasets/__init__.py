@@ -846,7 +846,12 @@ _REPOSITORIES = RepositoryCollection()
 
 # Install the default 'wildboar' repository
 def _get_dataset_version():
-    from packaging import version
+    try:
+        from packaging import version
+    except ModuleNotFoundError as e:
+        from ..utils import _soft_dependency_error
+
+        _soft_dependency_error(e, package="packaging")
 
     from .. import __version__
 
