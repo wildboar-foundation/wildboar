@@ -87,7 +87,7 @@ jobs:
           fi
 
   build_docs:
-    needs: [build_wheels, build_sdist]
+    needs: [check_tag]
     runs-on: ubuntu-latest
     if: ${{github.event_name == 'push' && (needs.check_tag.outputs.is_release == 'true' || github.ref == 'refs/heads/master') }}
     steps:
@@ -124,7 +124,7 @@ jobs:
           destination_dir: ${{  github.ref_name }}
 
   upload_pypi:
-    needs: [build_wheels, build_sdist]
+    needs: [build_docs]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && ${{ needs.check_tag.outputs.is_release == 'true' }}
     steps:
