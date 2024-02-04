@@ -100,13 +100,16 @@ jobs:
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           VERSION_PATTERN="([0-9]+\\.[0-9]+)\\.X"
           if [[ "$BRANCH_NAME" == "master" ]]; then
+            echo "Documentation should be build for master"
             echo "version=master" >> "$GITHUB_OUTPUT"
             echo "build_docs=true" >> "$GITHUB_OUTPUT"
           elif [[ "$BRANCH_NAME" =~ $VERSION_PATTERN ]]; then
             VERSION="${BASH_REMATCH[1]}"
+            echo "Documentation should be build for $VERSION"
             echo "version=$VERSION" >> "$GITHUB_OUTPUT"
             echo "build_docs=true" >> "$GITHUB_OUTPUT"
           else
+            echo "Documentation should not be build"
             echo "build_docs=false" >> "$GITHUB_OUTPUT"
           fi
 
@@ -157,7 +160,7 @@ jobs:
           name: artifact
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
+      # - uses: pypa/gh-action-pypi-publish@master
+      #   with:
+      #     user: __token__
+      #     password: ${{ secrets.pypi_password }}
