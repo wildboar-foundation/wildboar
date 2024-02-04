@@ -1,0 +1,419 @@
+:orphan:
+
+
+************************************
+:py:mod:`wildboar.transform._rocket`
+************************************
+
+.. py:module:: wildboar.transform._rocket
+
+
+Module Contents
+---------------
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.transform._rocket.RocketMixin
+   wildboar.transform._rocket.RocketTransform
+
+
+
+
+.. py:class:: RocketMixin
+
+
+   
+   Mixin for ROCKET based estimators.
+
+   The class provides an implementation for the `_get_generator` method
+   with support for rocket convolution.
+
+   The implementing class must have the following properties:
+
+   - `n_kernels`
+   - `kernel_size`
+   - `min_size`
+   - `max_size`
+   - `sampling`
+   - `sampling_params`
+   - `bias_prob`
+   - `padding_prob`
+   - `normalize_prob`
+
+   See :class:`transform.RocketTransform` for information about the
+   properties.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+.. py:class:: RocketTransform(n_kernels=1000, *, sampling='normal', sampling_params=None, kernel_size=None, min_size=None, max_size=None, bias_prob=1.0, normalize_prob=1.0, padding_prob=0.5, n_jobs=None, random_state=None)
+
+
+
+
+   
+   Transform a time series using random convolution features.
+
+
+   :Parameters:
+
+       **n_kernels** : int, optional
+           The number of kernels to sample at each node.
+
+       **sampling** : {"normal", "uniform", "shapelet"}, optional
+           The sampling of convolutional filters.
+           
+           - if "normal", sample filter according to a normal distribution with
+             ``mean`` and ``scale``.
+           - if "uniform", sample filter according to a uniform distribution with
+             ``lower`` and ``upper``.
+           - if "shapelet", sample filters as subsequences in the training data.
+
+       **sampling_params** : dict, optional
+           Parameters for the sampling strategy.
+           
+           - if "normal", ``{"mean": float, "scale": float}``, defaults to
+             ``{"mean": 0, "scale": 1}``.
+           - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+             ``{"lower": -1, "upper": 1}``.
+
+       **kernel_size** : array-like, optional
+           The kernel size, by default ``[7, 11, 13]``.
+
+       **min_size** : float, optional
+           The minimum timestep size used for generating kernel sizes, If set,
+           ``kernel_size`` is ignored.
+
+       **max_size** : float, optional
+           The maximum timestep size used for generating kernel sizes, If set,
+           ``kernel_size`` is ignored.
+
+       **bias_prob** : float, optional
+           The probability of using the bias term.
+
+       **normalize_prob** : float, optional
+           The probability of performing normalization.
+
+       **padding_prob** : float, optional
+           The probability of padding with zeros.
+
+       **n_jobs** : int, optional
+           The number of jobs to run in parallel. A value of ``None`` means using
+           a single core and a value of ``-1`` means using all cores. Positive
+           integers mean the exact number of cores.
+
+       **random_state** : int or RandomState, optional
+           Controls the random resampling of the original dataset.
+           
+           - If ``int``, ``random_state`` is the seed used by the random number
+             generator.
+           - If :class:`numpy.random.RandomState` instance, ``random_state`` is
+             the random number generator.
+           - If ``None``, the random number generator is the
+             :class:`numpy.random.RandomState` instance used by
+             :func:`numpy.random`.
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: References
+
+   Dempster, Angus, François Petitjean, and Geoffrey I. Webb.
+       ROCKET: exceptionally fast and accurate time series classification using
+       random convolutional kernels.
+       Data Mining and Knowledge Discovery 34.5 (2020): 1454-1495.
+
+   .. only:: latex
+
+      
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_gun_point
+   >>> from wildboar.transform import RocketTransform
+   >>> X, y = load_gun_point()
+   >>> t = RocketTransform(n_kernels=10, random_state=1)
+   >>> t.fit_transform(X)
+   array([[0.51333333, 5.11526939, 0.47333333, ..., 2.04712544, 0.24      ,
+           0.82912261],
+          [0.52666667, 5.26611524, 0.54      , ..., 1.98047216, 0.24      ,
+           0.81260641],
+          [0.54666667, 4.71210092, 0.35333333, ..., 2.28841158, 0.25333333,
+           0.82203705],
+          ...,
+          [0.54666667, 4.72938203, 0.45333333, ..., 2.53756324, 0.24666667,
+           0.8380654 ],
+          [0.68666667, 3.80533684, 0.26      , ..., 2.41709413, 0.25333333,
+           0.65634235],
+          [0.66      , 3.94724793, 0.32666667, ..., 1.85575661, 0.25333333,
+           0.67630249]])
+
+   :Attributes:
+
+       **embedding_** : Embedding
+           The underlying embedding
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit(x, y=None)
+
+      
+      Fit the transform.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          BaseAttributeTransform
+              This object.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(x, y=None)
+
+      
+      Fit the embedding and return the transform of x.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+          **y** : None, optional
+              For compatibility.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The embedding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(x)
+
+      
+      Transform the dataset.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep) or                (n_samples, n_dimensions, n_timestep)
+              The time series dataset.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_outputs)
+              The transformation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+

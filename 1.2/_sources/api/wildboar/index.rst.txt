@@ -1,0 +1,116 @@
+
+******************
+:py:mod:`wildboar`
+******************
+
+.. py:module:: wildboar
+
+.. autoapi-nested-parse::
+
+   
+   Wildboar - a library for temporal machine learning.
+
+   Wildboar includes numerous temporal machine learning algorithms and seamlessly
+   integrates them with `scikit-learn <https://scikit-learn.org>`__.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
+Subpackages
+===========
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   annotate/index.rst
+   datasets/index.rst
+   distance/index.rst
+   ensemble/index.rst
+   explain/index.rst
+   linear_model/index.rst
+   metrics/index.rst
+   model_selection/index.rst
+   transform/index.rst
+   tree/index.rst
+   utils/index.rst
+
+
+Submodules
+==========
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   base/index.rst
+
+
+Package Contents
+----------------
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   wildboar.iseos
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   wildboar.__version__
+
+
+.. py:function:: iseos(x)
+
+   
+   Boolean indicator if a value is the end-of-sequence value.
+
+
+   :Parameters:
+
+       **x** : array-like
+           The array.
+
+   :Returns:
+
+       ndarray
+           Boolean indicator array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
+
