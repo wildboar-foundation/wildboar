@@ -88,6 +88,15 @@ jobs:
             echo "is_release=false" >> "$GITHUB_OUTPUT"
           fi
 
+  test_check_tag:
+    needs: [check_tag]
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && needs.check_tag.outputs.is_release == 'true' }}
+    steps:
+      - name: Test if it runs
+        id: test_run
+        run: echo "It runs since ${{ needs.check_tag.outputs.is_release }}"
+
   build_docs:
     needs: [check_tag, build_sdist, build_wheels]
     runs-on: ubuntu-latest
@@ -128,14 +137,14 @@ jobs:
   upload_pypi:
     needs: [check_tag, build_wheels, build_sdist, build_docs]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && ${{ needs.check_tag.outputs.is_release == 'true' }}
+    if: ${{ github.event_name == 'push' && needs.check_tag.outputs.is_release == 'true' }}
     steps:
       - uses: actions/download-artifact@v2
         with:
           name: artifact
           path: dist
 
-      - uses: pypa/gh-action-pypi-publish@master
-        with:
-          user: __token__
-          password: ${{ secrets.pypi_password }}
+      # - uses: pypa/gh-action-pypi-publish@master
+      #   with:
+      #     user: __token__
+      #     password: ${{ secrets.pypi_password }}
