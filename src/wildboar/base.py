@@ -41,7 +41,7 @@ class BaseEstimator(SklearnBaseEstimator):
     def _doc_link_template(self):
         wildboar_version = parse_version(__version__)
         if wildboar_version.dev is None:
-            version_url = wildboar_version.public
+            version_url = f"{wildboar_version.major}.{wildboar_version.minor}"
         else:
             version_url = "master"
         return (

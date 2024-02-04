@@ -88,23 +88,30 @@ jobs:
             echo "is_release=false" >> "$GITHUB_OUTPUT"
           fi
 
-  test_check_tag:
-    needs: [check_tag]
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && needs.check_tag.outputs.is_release == 'true' }}
-    steps:
-      - name: Test if it runs
-        id: test_run
-        run: echo "It runs since ${{ needs.check_tag.outputs.is_release }}"
 
   build_docs:
-    needs: [check_tag, build_sdist, build_wheels]
+    needs: [build_sdist, build_wheels]
     runs-on: ubuntu-latest
-    if: ${{github.event_name == 'push' && (needs.check_tag.outputs.is_release == 'true' || github.ref == 'refs/heads/master') }}
+    if: ${{github.event_name == 'push' && ( matches(github.ref, 'refs/heads/[0-9]+\\.[0-9]+\\.X') || github.ref == 'refs/heads/master') }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Set VERSION based on branch name
+        run: |
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          VERSION_PATTERN="([0-9]+\\.[0-9]+)\\.X"
+          if [[ "$BRANCH_NAME" == "master" ]]; then
+            echo "VERSION=master" >> $GITHUB_ENV
+          elif [[ "$BRANCH_NAME" =~ $VERSION_PATTERN ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+            echo "VERSION=$VERSION" >> $GITHUB_ENV
+          fi
+
+      - name: Print documentation version.
+        run: |
+          echo "Using version '$VERSION', that is, ${{ env.VERSION }}"
 
       - uses: actions/setup-python@v4
         name: Install Python
@@ -132,7 +139,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./html
-          destination_dir: ${{  github.ref_name }}
+          destination_dir: ${{  env.VERSION }}
 
   upload_pypi:
     needs: [check_tag, build_wheels, build_sdist, build_docs]
@@ -144,7 +151,7 @@ jobs:
           name: artifact
           path: dist
 
-      # - uses: pypa/gh-action-pypi-publish@master
-      #   with:
-      #     user: __token__
-      #     password: ${{ secrets.pypi_password }}
+      - uses: pypa/gh-action-pypi-publish@master
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
