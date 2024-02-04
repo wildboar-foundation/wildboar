@@ -20,8 +20,8 @@ sys.path.insert(0, os.path.abspath(".") + "/_extensions")
 logger = getLogger(__name__)
 
 current_release = parse_version(get_distribution("wildboar").version)
-version = f"{current_release.major}.{current_release.minor}"
-release = version
+release = current_release.public
+version = f"{current_release.major}.{current_release.minor}.{current_release.micro}"
 
 # -- Project information -----------------------------------------------------
 
@@ -30,18 +30,6 @@ description = "Time series learning with Python"
 copyright = "2023, Isak Samsten"
 author = "Isak Samsten"
 
-
-def get_current_branch():
-    import subprocess
-
-    return (
-        subprocess.run("git branch --show-current", stdout=subprocess.PIPE, shell=True)
-        .stdout.decode()
-        .strip()
-    )
-
-
-current_branch_name = get_current_branch()
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
@@ -111,7 +99,7 @@ html_theme_options = {
     "navbar_start": ["navbar-logo", "version-switcher"],
     "switcher": {
         "json_url": "https://wildboar.dev/_versions.json",
-        "version_match": "dev" if current_branch_name == "master" else version,
+        "version_match": "dev" if current_release.dev is not None else release,
     },
     "check_switcher": False,
     "icon_links": [
@@ -174,7 +162,7 @@ def linkcode_resolve(domain, info):
         filename = info["module"].replace(".", "/") + ".py"
 
     return "https://github.com/wildboar-foundation/wildboar/blob/%s/src/%s" % (
-        current_branch_name,
+        "master" if current_release.dev is not None else "v%s" % version,
         filename,
     )
 
