@@ -1,0 +1,814 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="auto">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>What’s new &#8212; Wildboar 1.2.0b2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "auto";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=8aa3e762" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/pygments-override.css?v=9e853fe2" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=1fb9625b"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/tabs.js?v=3ee01567"></script>
+    <script src="../_static/toggleprompt.js?v=5801b3bb"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'more/whatsnew';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.2.0b2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
+        </script>
+    <script src="../_static/js/fa.js?v=744fd48f"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Convolution transforms" href="../examples/hydra.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="auto">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Wildboar</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/wildboar/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        What’s new
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/wildboar/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        What’s new
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/wildboar-foundation/wildboar/" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/wildboar/" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-custom fa-pypi fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">What’s new</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="what-s-new">
+<h1>What’s new<a class="headerlink" href="#what-s-new" title="Link to this heading">#</a></h1>
+<span class="target" id="whats-new"></span><ul class="simple">
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span>: something that you couldn’t do before.</p></li>
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-info sd-bg-text-info">Efficiency</span>: an existing feature now may not require as much computation or
+memory.</p></li>
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span>: a miscellaneous minor improvement.</p></li>
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span>: something that previously didn’t work as documentated</p></li>
+<li><p><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span>: you will need to change your code to have the same effect in the
+future; or a feature will be removed in the future.</p></li>
+</ul>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">#</a></h2>
+<p>Wildboar 1.2 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 1.2+.</p>
+</section>
+<section id="version-1-2-0">
+<h2>Version 1.2.0<a class="headerlink" href="#version-1-2-0" title="Link to this heading">#</a></h2>
+<section id="new-and-changed-models">
+<h3>New and changed models<a class="headerlink" href="#new-and-changed-models" title="Link to this heading">#</a></h3>
+<p>Wildboar 1.2 introduces several new models.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api/wildboar/transform/index.html#wildboar.transform.HydraTransform" title="wildboar.transform.HydraTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.HydraTransform</span></code></a>: a new convolution based dictionary
+transformation method as described by Dempster et al., (2023).</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/linear_model/index.html#wildboar.linear_model.HydraClassifier" title="wildboar.linear_model.HydraClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.HydraClassifier</span></code></a>: a new convolution based dictionary
+classifier as described by Dempster et al., (2023).</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.KNeighborsClassifier" title="wildboar.distance.KNeighborsClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">distance.KNeighborsClassifier</span></code></a>: the traditional k-neighbors classifier
+using wildboar native distance metrics, including the full suite of optimized
+elastic metrics.</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.KMeans" title="wildboar.distance.KMeans"><code class="xref py py-class docutils literal notranslate"><span class="pre">distance.KMeans</span></code></a>: the traditional k-means clustering algorithm. Compared to
+scikit-learn, this implementation supports <cite>dtw</cite> and <cite>wdtw</cite>.</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.KMedoids" title="wildboar.distance.KMedoids"><code class="xref py py-class docutils literal notranslate"><span class="pre">distance.KMedoids</span></code></a>: the traditional k-medoids clustering algorithm with
+support for all elastic metrics.</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ElasticEnsembleClassifier" title="wildboar.ensemble.ElasticEnsembleClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ElasticEnsembleClassifier</span></code></a>: the elastic ensemble classifier as
+described by Lines and Bagnall (2015).</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/transform/index.html#wildboar.transform.DilatedShapeletTransform" title="wildboar.transform.DilatedShapeletTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.DilatedShapeletTransform</span></code></a>: a new shapelet based transform
+as described by Guillaume et al., (2022).</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/linear_model/index.html#wildboar.linear_model.DilatedShapeletClassifier" title="wildboar.linear_model.DilatedShapeletClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.DilatedShapeletClassifier</span></code></a>: a new shapelet based classifier
+as described by Guillaume et al., (2022).</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/transform/index.html#wildboar.transform.CastorTransform" title="wildboar.transform.CastorTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.CastorTransform</span></code></a>: a new shapelet based transform using
+competing shapelets.</p></li>
+<li><p><a class="reference internal" href="../api/wildboar/linear_model/index.html#wildboar.linear_model.CastorClassifier" title="wildboar.linear_model.CastorClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.CastorClassifier</span></code></a>: a new shapelet based classifier using
+competing shapelets.</p></li>
+</ul>
+</section>
+<section id="changelog">
+<h3>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h3>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../api/wildboar/datasets/index.html#module-wildboar.datasets" title="wildboar.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Correctly detect duplicate repositories.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Defer repository refresh to first use.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../api/wildboar/distance/index.html#module-wildboar.distance" title="wildboar.distance"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.distance</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Improve support for 3darrays in <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.pairwise_distance</span></code></a>
+and <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.paired_distance</span></code></a>. By setting <code class="docutils literal notranslate"><span class="pre">dim='mean'</span></code>, the mean distance
+over all dimensions are computed and by setting <code class="docutils literal notranslate"><span class="pre">dim='full'</span></code> the distance over
+all dimensions are returned. The default value for <code class="docutils literal notranslate"><span class="pre">dim</span></code> will change to “mean”
+in 1.3. For 3darrays, we issue a deprecation warning for the current default value.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Add support for standardizing all subsequence metrics. Prefix
+the name of the metric with <code class="docutils literal notranslate"><span class="pre">&quot;scaled\_&quot;</span></code> to use the standardized metric, e.g.,
+<cite>“scaled_euclidean”</cite> or <cite>“scaled_msm”</cite>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Add support for callable metrics. To support standardizing,
+we introduce new keyword parameter that pairs with the <cite>“metric”</cite> parameter called
+<cite>scale</cite> that, if set to <cite>True</cite> scale all subsequences before applying the metric.
+The effect of setting <cite>scale=True</cite> is the same as passing a scaled metric, e.g.,
+“scaled_euclidean”.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> A new function <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.argmin_distance" title="wildboar.distance.argmin_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.argmin_distance</span></code></a> which takes as
+input two arrays <cite>X</cite> and <cite>Y</cite> and finds, for each sample in <cite>X</cite>, the
+indices of the <cite>k</cite> samples in <cite>Y</cite> with the smallest distance to the i:th sample
+in <cite>X</cite>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> A new function <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.distance_profile" title="wildboar.distance.distance_profile"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.distance_profile</span></code></a> which takes a
+subsequence <cite>Y</cite> and a (collection) of time series <cite>X</cite> and returns the
+distance from <cite>Y</cite> to all subsequences of the same length of the i:th
+sample in <cite>X</cite>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> A new function <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.argmin_subsequence_distance" title="wildboar.distance.argmin_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.argmin_subsequence_distance</span></code></a> which
+takes two paired arrays of subsequences and samples and finds the <cite>k</cite> smallest
+matching positions for each sample/subsequence pair.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Enables support for <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> in <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.pairwise_distance</span></code></a>,
+<a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.paired_distance</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for Amercing Dynamic Time Warping (subsequence) distance.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for LCSS subsequence distance.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for EDR subsequence distance.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for TWE subsequence distance.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for MSM subsequence distance.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for ERP subsequence distance.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Fix a bug in angular distance leading to <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Fix a bug in angular distance subsequence matching where an incorrect
+threshold was set.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Fix the return value of <a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.paired_distance</span></code></a> to
+<cite>(n_dims, n_samples)</cite> when <cite>dim=”full”</cite>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Rename LCSS <code class="docutils literal notranslate"><span class="pre">threshold</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">epsilon</span></code>. We will remove <code class="docutils literal notranslate"><span class="pre">threshold</span></code> in 1.4.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Rename EDR <code class="docutils literal notranslate"><span class="pre">threshold</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">epsilon</span></code>. We will remove <code class="docutils literal notranslate"><span class="pre">threshold</span></code> in 1.4.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Rename <code class="xref py py-class docutils literal notranslate"><span class="pre">_distance.DistanceMeasure</span></code> to <code class="docutils literal notranslate"><span class="pre">Metric</span></code> and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">_distance.SubsequenceDistanceMeasure</span></code> to <code class="docutils literal notranslate"><span class="pre">SubsequenceMetric</span></code>. The change
+only affect code that <code class="docutils literal notranslate"><span class="pre">cimport</span></code> modules.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The default value of <cite>threshold</cite> in
+<a class="reference internal" href="../api/wildboar/distance/index.html#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-func docutils literal notranslate"><span class="pre">distance.subsequence_match</span></code></a> has changed to “auto”. The old value
+“best” has been deprecated and will be removed in 1.3.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../api/wildboar/ensemble/index.html#module-wildboar.ensemble" title="wildboar.ensemble"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.ensemble</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for multiple metrics in <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier" title="wildboar.ensemble.ShapeletForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestClassifier</span></code></a>,
+<a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor" title="wildboar.ensemble.ShapeletForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestRegressor</span></code></a>. All estimators with a <code class="docutils literal notranslate"><span class="pre">metric</span></code> parameter
+and which implements the <code class="docutils literal notranslate"><span class="pre">ShapeletMixin</span></code> is affected by this change.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Rename the constructor parameter <code class="docutils literal notranslate"><span class="pre">base_estimator</span></code> to <code class="docutils literal notranslate"><span class="pre">estimator</span></code> in
+<a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingClassifier" title="wildboar.ensemble.BaggingClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.BaggingClassifier</span></code></a> and <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.BaggingRegressor" title="wildboar.ensemble.BaggingRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.BaggingRegressor</span></code></a>.
+<code class="docutils literal notranslate"><span class="pre">base_estimator</span></code> is deprecated in 1.2 and will be removed in 1.4. Original
+change in scikit-learn.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Change the tuple argument for <code class="docutils literal notranslate"><span class="pre">kernel_size</span></code> to two new parameters <code class="docutils literal notranslate"><span class="pre">min_size</span></code> and <code class="docutils literal notranslate"><span class="pre">max_size</span></code>.
+This change affect <code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketForestClassifier</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketForestRegressor</span></code>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Fix a bug where <code class="docutils literal notranslate"><span class="pre">sampling</span></code> was incorrectly set for <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestClassifier" title="wildboar.ensemble.RocketForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.RocketForestClassifier</span></code></a>
+and <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.RocketForestRegressor" title="wildboar.ensemble.RocketForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.RocketForestRegressor</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Change the default value of <code class="docutils literal notranslate"><span class="pre">n_shapelets</span></code> to “log2” for <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier" title="wildboar.ensemble.ShapeletForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestClassifier</span></code></a>
+and <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor" title="wildboar.ensemble.ShapeletForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestRegressor</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Drop support for <code class="docutils literal notranslate"><span class="pre">criterion=&quot;mse&quot;</span></code> in <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestRegressor" title="wildboar.ensemble.ShapeletForestRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestRegressor</span></code></a>
+and <a class="reference internal" href="../api/wildboar/ensemble/index.html#wildboar.ensemble.ExtraShapeletTreesRegressor" title="wildboar.ensemble.ExtraShapeletTreesRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ExtraShapeletTreesRegressor</span></code></a>.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../api/wildboar/explain/counterfactual/index.html#module-wildboar.explain.counterfactual" title="wildboar.explain.counterfactual"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.explain.counterfactual</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for KNeighborsClassifiers fitted with any metric
+in <cite>explain.counterfactual.KNeighborsCounterfactual</cite>. We allow for using
+different methods for finding the counterfactuals for <cite>n_neighbors &gt; 1</cite>
+by setting <cite>method=’mean’</cite> or <cite>method=’medoid’</cite>. We have also improved
+the way in which cluster centroids are selected, resulting in a more
+robust counterfactuals.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../api/wildboar/linear_model/index.html#module-wildboar.linear_model" title="wildboar.linear_model"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.linear_model</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Undeprecate the <code class="docutils literal notranslate"><span class="pre">normalize</span></code> parameter from <a class="reference internal" href="../api/wildboar/linear_model/index.html#wildboar.linear_model.RocketClassifier" title="wildboar.linear_model.RocketClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketClassifier</span></code></a> and
+<a class="reference internal" href="../api/wildboar/linear_model/index.html#wildboar.linear_model.RocketRegressor" title="wildboar.linear_model.RocketRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">linear_model.RocketRegressor</span></code></a>.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../api/wildboar/transform/index.html#module-wildboar.transform" title="wildboar.transform"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.transform</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for multiple metrics in <a class="reference internal" href="../api/wildboar/transform/index.html#wildboar.transform.RandomShapeletTransform" title="wildboar.transform.RandomShapeletTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.RandomShapeletTransform</span></code></a>
+by passing a list of metric specifications. See the documentation for details.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-secondary sd-bg-text-secondary">Enhancement</span> Rename the parameter value <code class="docutils literal notranslate"><span class="pre">log</span></code> for the parameter <code class="docutils literal notranslate"><span class="pre">n_intervals</span></code>
+in <a class="reference internal" href="../api/wildboar/transform/index.html#wildboar.transform.IntervalTransform" title="wildboar.transform.IntervalTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.IntervalTransform</span></code></a> to <code class="docutils literal notranslate"><span class="pre">log2</span></code>. The old value is deprecated
+and will be removed in 1.4.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Improve the <code class="docutils literal notranslate"><span class="pre">metric</span></code> specification for <a class="reference internal" href="../api/wildboar/transform/index.html#wildboar.transform.PivotTransform" title="wildboar.transform.PivotTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.PivotTransform</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Change the tuple argument for <code class="docutils literal notranslate"><span class="pre">kernel_size</span></code> to two new parameters <code class="docutils literal notranslate"><span class="pre">min_size</span></code> and <code class="docutils literal notranslate"><span class="pre">max_size</span></code>.
+This change affect <a class="reference internal" href="../api/wildboar/transform/index.html#wildboar.transform.RocketTransform" title="wildboar.transform.RocketTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">transform.RocketTransform</span></code></a>.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-header docutils">
+<p class="sd-card-text"><a class="reference internal" href="../api/wildboar/tree/index.html#module-wildboar.tree" title="wildboar.tree"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.tree</span></code></a></p>
+</div>
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-primary sd-bg-text-primary">Feature</span> Add support for multiple metrics in <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier" title="wildboar.tree.ShapeletTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeClassifier</span></code></a>,
+<a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor" title="wildboar.tree.ShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeRegressor</span></code></a>. All estimators with a <code class="docutils literal notranslate"><span class="pre">metric</span></code> parameter
+and which implements the <code class="docutils literal notranslate"><span class="pre">ShapeletMixin</span></code> is affected by this change.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Correctly use MSM distance measure in <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier" title="wildboar.tree.ProximityTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ProximityTreeClassifier</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-warning sd-bg-text-warning">Fix</span> Correctly set <code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code> in <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier" title="wildboar.tree.RocketTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketTreeClassifier</span></code></a> and <code class="xref py py-class docutils literal notranslate"><span class="pre">RocketTreeRegressor</span></code>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Change the tuple argument for <code class="docutils literal notranslate"><span class="pre">kernel_size</span></code> to two new parameters <code class="docutils literal notranslate"><span class="pre">min_size</span></code> and <code class="docutils literal notranslate"><span class="pre">max_size</span></code>.
+This change affect <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.RocketTreeClassifier" title="wildboar.tree.RocketTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketTreeClassifier</span></code></a> and <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.RocketTreeRegressor" title="wildboar.tree.RocketTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.RocketTreeRegressor</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> The <code class="docutils literal notranslate"><span class="pre">metric_factories</span></code> parameter of <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ProximityTreeClassifier" title="wildboar.tree.ProximityTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ProximityTreeClassifier</span></code></a> has
+been renamed to <code class="docutils literal notranslate"><span class="pre">metric</span></code>. We have deprecated <code class="docutils literal notranslate"><span class="pre">metric_factories</span></code> and it will be
+removed in 1.4. We also introduce the <code class="docutils literal notranslate"><span class="pre">metric_params</span></code> argument for single metric uses.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Change the default value of <code class="docutils literal notranslate"><span class="pre">n_shapelets</span></code> to “log2” for <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeClassifier" title="wildboar.tree.ShapeletTreeClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeClassifier</span></code></a>
+and <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor" title="wildboar.tree.ShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeRegressor</span></code></a>.</p></li>
+<li><p class="sd-card-text"><span class="sd-sphinx-override sd-badge sd-bg-danger sd-bg-text-danger">API</span> Drop support for <code class="docutils literal notranslate"><span class="pre">criterion=&quot;mse&quot;</span></code> in <a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ShapeletTreeRegressor" title="wildboar.tree.ShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ShapeletTreeRegressor</span></code></a> and
+<a class="reference internal" href="../api/wildboar/tree/index.html#wildboar.tree.ExtraShapeletTreeRegressor" title="wildboar.tree.ExtraShapeletTreeRegressor"><code class="xref py py-class docutils literal notranslate"><span class="pre">tree.ExtraShapeletTreeRegressor</span></code></a>.</p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="other-improvements">
+<h3>Other improvements<a class="headerlink" href="#other-improvements" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Remove all dependencies on deprecated Numpy APIs.</p></li>
+<li><p>Migrate to the new scikit-learn parameter validation framework.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../examples/hydra.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Convolution transforms</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies">Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#version-1-2-0">Version 1.2.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#new-and-changed-models">New and changed models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changelog">Changelog</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-improvements">Other improvements</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/more/whatsnew.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, Isak Samsten.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

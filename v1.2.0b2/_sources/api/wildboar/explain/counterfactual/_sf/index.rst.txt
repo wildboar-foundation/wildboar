@@ -1,0 +1,302 @@
+:orphan:
+
+
+*********************************************
+:py:mod:`wildboar.explain.counterfactual._sf`
+*********************************************
+
+.. py:module:: wildboar.explain.counterfactual._sf
+
+
+Module Contents
+---------------
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.explain.counterfactual._sf.ShapeletForestCounterfactual
+
+
+
+
+.. py:class:: ShapeletForestCounterfactual(*, cost='euclidean', aggregation='mean', epsilon=1.0, batch_size=0.1, max_paths=1.0, verbose=False, random_state=None)
+
+
+
+
+   
+   Counterfactual explanations for shapelet forest classifiers.
+
+
+   :Parameters:
+
+       **cost** : {"euclidean", "cosine", "manhattan"} or callable, optional
+           The cost function to determine the goodness of counterfactual.
+
+       **aggregation** : callable, optional
+           The aggregation function for the cost of multivariate counterfactuals.
+
+       **epsilon** : float, optional
+           Control the degree of change from the decision threshold.
+
+       **batch_size** : float, optional
+           Batch size when evaluating the cost and predictions of
+           counterfactual candidates. The default setting is to evaluate
+           all counterfactual samples.
+           
+           .. versionchanged :: 1.1
+               The default value changed to 0.1
+
+       **max_paths** : float, optional
+           Sample a fraction of the positive prediction paths.
+           
+           .. versionadded :: 1.1
+               Add support for subsampling prediction paths.
+
+       **verbose** : bool, optional
+           Print information to stdout during execution.
+
+       **random_state** : RandomState or int, optional
+           Pseudo-random number for consistency between different runs.
+
+
+
+
+
+
+
+   .. warning::
+
+       Only shapelet forests fit with the Euclidean distance is supported i.e.,
+       ``metric="euclidean"``
+
+
+   .. rubric:: Notes
+
+   This implementation only supports the reversible algorithm
+   described by Karlsson (2020)
+
+   .. rubric:: References
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2020).
+       Locally and globally explainable time series tweaking.
+       Knowledge and Information Systems, 62(5), 1671-1700.
+
+   Karlsson, I., Rebane, J., Papapetrou, P., & Gionis, A. (2018).
+       Explainable time series tweaking via irreversible and reversible temporal
+       transformations. In 2018 IEEE International Conference on Data Mining (ICDM)
+
+   .. only:: latex
+
+      
+
+
+   :Attributes:
+
+       **paths_** : dict
+           A dictionary of prediction paths per label
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
+
+      
+      Fit and return the explanation.
+
+
+      :Parameters:
+
+          **estimator** : Estimator
+              The estimator to explain.
+
+          **x** : time-series, optional
+              The input time series.
+
+          **y** : array-like of shape (n_samples, ), optional
+              The labels.
+
+          **\*\*kwargs**
+              Optional extra arguments.
+
+      :Returns:
+
+          ndarray
+              The explanation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: plot(x=None, y=None, ax=None)
+
+      
+      Plot the explanation.
+
+
+
+      :Returns:
+
+          **ax** : Axes
+              The axes object
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(x, y)
+
+      
+      Score the counterfactual explainer in terms of closeness of fit.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep)
+              The samples.
+
+          **y** : array-like of shape (n_samples, )
+              The desired counterfactal label.
+
+      :Returns:
+
+          **score** : float
+              The closensess of fit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+

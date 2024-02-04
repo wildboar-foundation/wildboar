@@ -1,0 +1,1437 @@
+:orphan:
+
+
+************************************************
+:py:mod:`wildboar.explain.counterfactual._proto`
+************************************************
+
+.. py:module:: wildboar.explain.counterfactual._proto
+
+
+Module Contents
+---------------
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.explain.counterfactual._proto.DynamicTimeWarpTransform
+   wildboar.explain.counterfactual._proto.EuclideanTransform
+   wildboar.explain.counterfactual._proto.KNearestPrototypeSampler
+   wildboar.explain.counterfactual._proto.KNearestShapeletPrototypeSampler
+   wildboar.explain.counterfactual._proto.MetricTransform
+   wildboar.explain.counterfactual._proto.PredictEvaluator
+   wildboar.explain.counterfactual._proto.ProbabilityEvaluator
+   wildboar.explain.counterfactual._proto.PrototypeCounterfactual
+   wildboar.explain.counterfactual._proto.PrototypeSampler
+   wildboar.explain.counterfactual._proto.ShapeletPrototypeSampler
+   wildboar.explain.counterfactual._proto.TargetEvaluator
+   wildboar.explain.counterfactual._proto.UniformPrototypeSampler
+   wildboar.explain.counterfactual._proto.WeightedDynamicTimeWarpTransform
+
+
+
+
+.. py:class:: DynamicTimeWarpTransform(gamma, r=1.0)
+
+
+
+
+   
+   Transform a sample by moving it closer using the dtw alignment matrix.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the sample o towards p.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              An array, the time series to move
+
+          **p** : ndarray of shape (n_timestep,)
+              An array, the time series to move towards
+
+      :Returns:
+
+          **ndarray** : an array, the result of moving o closer to p
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: EuclideanTransform(gamma)
+
+
+
+
+   
+   Transform a sample by moving it closer in euclidean space.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the sample o towards p.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              An array, the time series to move
+
+          **p** : ndarray of shape (n_timestep,)
+              An array, the time series to move towards
+
+      :Returns:
+
+          **ndarray** : an array, the result of moving o closer to p
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: KNearestPrototypeSampler(x, y, prototype_indicies, metric_transform)
+
+
+
+
+   
+   Sample a prototype among the samples closest to the current counterfactual.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the current counterfactual toward the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **p** : ndarray of shape (n_timestep,)
+              The prototype of the counterfactual label.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: nearest_index(o, random_state)
+
+      
+      Return the index of the closest sample.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample
+
+      :Returns:
+
+          **int** : an index
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample(o, random_state)
+
+      
+      Sample an example.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample_move(o, random_state)
+
+      
+      Sampla a prototype and move the counterfactual towards the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: KNearestShapeletPrototypeSampler(x, y, prototype_indicies, metric_transform, min_shapelet_size=0, max_shapelet_size=1)
+
+
+
+
+   
+   Combines the KNearestPrototypeSample and the ShapeletPrototypeSampler.
+
+   The prototype samples are sampled among the nearest neighbors of the
+   counterfactual.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the current counterfactual toward the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **p** : ndarray of shape (n_timestep,)
+              The prototype of the counterfactual label.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample(o, random_state)
+
+      
+      Sample an example.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample_move(o, random_state)
+
+      
+      Sampla a prototype and move the counterfactual towards the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: MetricTransform(gamma)
+
+
+
+
+   
+   Move a time series towards a prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+      :abstractmethod:
+
+      
+      Move the sample o towards p.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              An array, the time series to move
+
+          **p** : ndarray of shape (n_timestep,)
+              An array, the time series to move towards
+
+      :Returns:
+
+          **ndarray** : an array, the result of moving o closer to p
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: PredictEvaluator(estimator)
+
+
+
+
+   
+   Evaluate if a counterfactual is predicted as y.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: is_counterfactual(x, y)
+
+      
+      Return true if x is a counterfactual of label y.
+
+
+      :Parameters:
+
+          **x** : ndarray of shape (n_timestep,)
+              The counterfactual sample.
+
+          **y** : object
+              The counterfactual label.
+
+      :Returns:
+
+          bool
+              Return true if counterfactual valid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ProbabilityEvaluator(estimator, probability=0.5)
+
+
+
+
+   
+   Evaluate the probability threshold.
+
+
+   :Parameters:
+
+       **estimator** : object
+           The estimator.
+
+       **probability** : float, optional
+           The minimum probability of the predicted label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: is_counterfactual(x, y)
+
+      
+      Return true if x is a counterfactual of label y.
+
+
+      :Parameters:
+
+          **x** : ndarray of shape (n_timestep,)
+              The counterfactual sample.
+
+          **y** : object
+              The counterfactual label.
+
+      :Returns:
+
+          bool
+              Return true if counterfactual valid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: PrototypeCounterfactual(metric='euclidean', *, r=1.0, g=0.05, max_iter=100, step_size=0.1, n_prototypes='auto', target='predict', method='sample', min_shapelet_size=0.0, max_shapelet_size=1.0, random_state=None, verbose=False)
+
+
+
+
+   
+   Model agnostic approach for constructing counterfactual explanations.
+
+
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: References
+
+   Samsten, Isak (2020).
+       Model agnostic time series counterfactuals
+
+   .. only:: latex
+
+      
+
+
+   :Attributes:
+
+       **estimator_** : object
+           The estimator for which counterfactuals are computed
+
+       **classes_** : ndarray
+           The classes
+
+       **partitions_** : dict
+           Dictionary of classes and PrototypeSampler
+
+       **target_** : TargetEvaluator
+           The target evaluator
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
+
+      
+      Fit and return the explanation.
+
+
+      :Parameters:
+
+          **estimator** : Estimator
+              The estimator to explain.
+
+          **x** : time-series, optional
+              The input time series.
+
+          **y** : array-like of shape (n_samples, ), optional
+              The labels.
+
+          **\*\*kwargs**
+              Optional extra arguments.
+
+      :Returns:
+
+          ndarray
+              The explanation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: plot(x=None, y=None, ax=None)
+
+      
+      Plot the explanation.
+
+
+
+      :Returns:
+
+          **ax** : Axes
+              The axes object
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(x, y)
+
+      
+      Score the counterfactual explainer in terms of closeness of fit.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep)
+              The samples.
+
+          **y** : array-like of shape (n_samples, )
+              The desired counterfactal label.
+
+      :Returns:
+
+          **score** : float
+              The closensess of fit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: PrototypeSampler(x, y, prototype_indices, metric_transform)
+
+
+
+
+   
+   Sample and refine counterfactuals.
+
+
+   :Parameters:
+
+       **x** : ndarray of shape (n_samples, n_timestep)
+           The data samples labeled as y.
+
+       **y** : object
+           The label of the samples in x.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the current counterfactual toward the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **p** : ndarray of shape (n_timestep,)
+              The prototype of the counterfactual label.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample(o, random_state)
+      :abstractmethod:
+
+      
+      Sample an example.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample_move(o, random_state)
+
+      
+      Sampla a prototype and move the counterfactual towards the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: ShapeletPrototypeSampler(x, y, prototype_indicies, metric_transform, min_shapelet_size=0, max_shapelet_size=1)
+
+
+
+
+   
+   Sample shapelet prototypes.
+
+
+   :Parameters:
+
+       **x** : ndarray of shape (n_samples, n_timestep)
+           The data samples
+
+       **y** : object
+           The label of the samples in x
+
+       **min_shapelet_size** : float
+           The minimum shapelet size
+
+       **max_shapelet_size** : float
+           The maximum shapelet size
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the best matching shapelet towards the shapelet prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The counterfactual sample
+
+          **p** : ndarray
+              The prototype shapelet
+
+      :Returns:
+
+          **new_counterfactual** : ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample(_o, random_state)
+
+      
+      Sample an example.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample_move(o, random_state)
+
+      
+      Sampla a prototype and move the counterfactual towards the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample_shapelet(p, random_state)
+
+      
+      Sample a shapelet from x.
+
+
+      :Parameters:
+
+          **p** : ndarray of shape (n_timestep,)
+              The prototype sample
+
+      :Returns:
+
+          **shapelet** : ndarray
+              A shapelet
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: TargetEvaluator(estimator)
+
+
+
+
+   
+   Evaluate if a sample is a counterfactual.
+
+
+   :Parameters:
+
+       **estimator** : object
+           The estimator.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: is_counterfactual(x, y)
+
+      
+      Return true if x is a counterfactual of label y.
+
+
+      :Parameters:
+
+          **x** : ndarray of shape (n_timestep,)
+              The counterfactual sample.
+
+          **y** : object
+              The counterfactual label.
+
+      :Returns:
+
+          bool
+              Return true if counterfactual valid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: UniformPrototypeSampler(x, y, prototype_indices, metric_transform)
+
+
+
+
+   
+   Sample a prototype uniformly at random from the initial prototype sample.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the current counterfactual toward the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **p** : ndarray of shape (n_timestep,)
+              The prototype of the counterfactual label.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample(_o, random_state)
+
+      
+      Sample an example.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              A prototype of the counterfactual label.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: sample_move(o, random_state)
+
+      
+      Sampla a prototype and move the counterfactual towards the prototype.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              The current counterfactual sample.
+
+          **random_state** : RandomState
+              The random state.
+
+      :Returns:
+
+          ndarray of shape (n_timestep,)
+              The new counterfactual moved towards the prototype.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+
+.. py:class:: WeightedDynamicTimeWarpTransform(gamma, r=1, g=0.05)
+
+
+
+
+   
+   Transform a sample by moving it closer using the dtw alignment matrix.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: move(o, p)
+
+      
+      Move the sample o towards p.
+
+
+      :Parameters:
+
+          **o** : ndarray of shape (n_timestep,)
+              An array, the time series to move
+
+          **p** : ndarray of shape (n_timestep,)
+              An array, the time series to move towards
+
+      :Returns:
+
+          **ndarray** : an array, the result of moving o closer to p
+              ..
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+

@@ -1,0 +1,267 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "39cd02d4-79b4-41c0-ae7f-a7b698721e3e",
+   "metadata": {},
+   "source": [
+    "# Convolution transforms\n",
+    "\n",
+    "Wildboar implements two convolutional transformation methods `Rocket` and `Hydra`, described by Dempsar et. al. (2020, 2023). Both algorithms employ random convolutional kernels, but in sligtly different manners. In `Rocket`, each kernel is applied to each time series and the maximum activation value and the average number of positive activations are recorded. In `Hydra`, the kernels are partitioned into groups and for each exponential dilation and padding combination each kernel is applied to each time series and the number of times and the number of times each kernel has the highest activation value and the lowest is recorded. Then the features corresponds to the number of times a kernel had the in-group highest activation and the average of the lowest activation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d8d8a2e4-bcdf-481f-8c12-6fb7415819ce",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from sklearn.ensemble import StackingClassifier\n",
+    "from sklearn.linear_model import RidgeClassifierCV\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "from sklearn.pipeline import make_pipeline, make_union\n",
+    "from sklearn.preprocessing import StandardScaler\n",
+    "\n",
+    "from wildboar.datasets import load_dataset\n",
+    "from wildboar.datasets.preprocess import SparseScaler\n",
+    "from wildboar.ensemble import ShapeletForestClassifier\n",
+    "from wildboar.transform import DiffTransform, HydraTransform, RocketTransform"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "34e1e4ef-54b0-49dc-8623-47c413cdbcee",
+   "metadata": {},
+   "source": [
+    "For the purpose of this example, we load the `MoteStrain` dataset for the UCR time series archive and split it into two parts: one for fitting the transformation and one for evaluating the predictive performance."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8c35185f-81cf-494d-9266-2752ac608b99",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X, y = load_dataset(\"MoteStrain\")\n",
+    "X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "d6ec1f2b-f3ea-4896-adcd-f03f4ad7efde",
+   "metadata": {},
+   "source": [
+    "## Hydra transform\n",
+    "In Wildboar, we make heavy use of `scikit-learn` functionalities and can employ these features directly. Here, we create a pipeline where we first transform each time series to the representation imposed by `Hydra` (with the default parameters `n_groups=64` and `n_kernels=8`). The subsequent steps of the pipeline applies a sparse scaling which accounts for the sparsity introduced by the transform (remember, we count the number of times a kernel has the highest activation and in many caseses a single kernel never has) and finally applies a standard Ridge classifier to the output."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3c3e0c6f-5947-4ce0-9e7f-bc7a77441af7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hydra = make_pipeline(\n",
+    "    HydraTransform(random_state=1, n_jobs=-1),\n",
+    "    SparseScaler(),\n",
+    "    RidgeClassifierCV(),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "33c34c1d-160f-457f-9452-bb134de35722",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hydra.fit(X_train, y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9c47dde0-0e6b-4369-b9b2-fbb57badba4a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hydra.score(X_test, y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "cf94dd96-0369-4f7f-a408-8baf69a8103a",
+   "metadata": {},
+   "source": [
+    "## Rocket transform\n",
+    "Similarly, we create a pipeline where we use `Rocket` as the first transformation. Instead of the sparse scaler, we here use the traditional normalization to standardize the resulting transformation."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "73ec6717-9347-49ef-b14c-b3cb61e75d0c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "rocket = make_pipeline(\n",
+    "    RocketTransform(n_kernels=10000, random_state=1, n_jobs=-1),\n",
+    "    StandardScaler(),\n",
+    "    RidgeClassifierCV(),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6bec831d-6c7e-4e4f-b52f-7f1ebdfe77f1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "rocket.fit(X_train, y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9663b475-c2c5-46f4-b9f4-5b8d74c64cf7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "rocket.score(X_test, y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9ab3880f-6263-4d6b-85d7-83ae9cc89263",
+   "metadata": {},
+   "source": [
+    "## Hydra transform with first order differences\n",
+    "\n",
+    "In the paper (Dempsar, 2023), the `Hydra` transformation is not only computed for the original time series but also for the first order difference. To not inflate the resulting feature space, the authors suggest that half the kernels are allocated for the original input and half for the first order differences. Here, we make use of `make_union` from `scikit-learn` which concatenates two (or more) feature representations and the `DiffTransform` from Wildboar which transforms time series the the nth order difference to construct a new feature representation that consists of both the `Hydra` transform for the original time series and for the first order differences."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "bf7e66b7-db44-4c5d-83f8-e5ba2d5130ce",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hydra_diff = make_pipeline(\n",
+    "    make_union(\n",
+    "        HydraTransform(n_groups=32, random_state=1, n_jobs=-1),\n",
+    "        make_pipeline(\n",
+    "            DiffTransform(),\n",
+    "            HydraTransform(n_groups=32, random_state=2, n_jobs=-1),\n",
+    "        ),\n",
+    "    ),\n",
+    "    SparseScaler(),\n",
+    "    RidgeClassifierCV(),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "65cb1269-974d-40b7-9e21-d123d020f4f4",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hydra_diff.fit(X_train, y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cb2efdc8-7306-41c0-8403-c191ecc4363e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "hydra_diff.score(X_test, y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "f3312c6e-ce07-417e-b72d-1577c49bba3b",
+   "metadata": {},
+   "source": [
+    "## Rocket transform with first order differences\n",
+    "\n",
+    "Again, we perform the same transformation but substitute `Hydra` for `Rocket`. Similarly, we allocate half the kernels for the original time series and the other half of the kernels for the first order differences."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8ffa6d11-0c73-4b26-a2d7-f91b596b2517",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "rocket_diff = make_pipeline(\n",
+    "    make_union(\n",
+    "        RocketTransform(n_kernels=5000, random_state=1, n_jobs=-1),\n",
+    "        make_pipeline(\n",
+    "            DiffTransform(),\n",
+    "            RocketTransform(n_kernels=5000, random_state=2, n_jobs=-1),\n",
+    "        ),\n",
+    "    ),\n",
+    "    StandardScaler(),\n",
+    "    RidgeClassifierCV(),\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c2f9e62b-35cb-4cd7-b671-7fab6569b6e0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "rocket_diff.fit(X_train, y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "56cf82c3-8097-49a9-9030-d63d7e467d4a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "rocket_diff.score(X_test, y_test)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "8f4e2066-f2b1-434f-b117-b8ff932b8b6d",
+   "metadata": {},
+   "source": [
+    "For this limited example, we can see that both `Hydra` and `Rocket` perform very well without significant differences in resulting predictive performance for the classifier."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.11.7"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

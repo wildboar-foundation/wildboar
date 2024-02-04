@@ -1,0 +1,94 @@
+:orphan:
+
+
+************************************
+:py:mod:`wildboar.annotate._segment`
+************************************
+
+.. py:module:: wildboar.annotate._segment
+
+
+Module Contents
+---------------
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   wildboar.annotate._segment.segment
+
+
+
+.. py:function:: segment(x=None, *, mpi=None, n_segments=1, window=0.1, exclude=0.2, boundry=1.0, return_arc_curve=False)
+
+   
+   Find change regimes in a time series.
+
+
+   :Parameters:
+
+       **x** : array-like of shape (n_samples, n_timestep) or (n_timestep, ), optional
+           The time series. If x is given, the matrix profile of x is computed.
+
+       **mpi** : array-like of shape (n_samples, profile_size) or (profile_size), optional
+           The matrix profile index. Must be given unless x is given.
+
+       **n_segments** : int, optional
+           The number of segmentations to identify
+
+       **window** : int or float, optional
+           The window size. The window parameter is ignored if mpi is not None.
+           
+           - if float, a fraction of n_timestep
+           - if int, the exact window size
+
+       **exclude** : float, optional
+           The self-join exclusion for the matrix profile. Ignored if `mpi` is given.
+
+       **boundry** : float, optional
+           Ignore the region around each identified segmentation. Expressed as a
+           fraction of `window`.
+
+       **return_arc_curve** : bool, optional
+           Return the arc curve.
+
+   :Returns:
+
+       **segments** : ndarray of shape (n_samples, n_segments), (n_segments) or int
+           The start index of a segment
+
+       **arc_curves** : ndarray of shape (n_samples, profile_size) or (profile_size, )
+           The arc curves
+
+
+
+
+
+
+
+   .. seealso::
+
+       
+       :obj:`wildboar.distance.matrix_profile`
+           compute the matrix profile
+       
+       
+
+   .. rubric:: References
+
+   Gharghabi, Shaghayegh, et al. (2017)
+       Matrix profile VIII: domain agnostic online semantic segmentation at superhuman
+       performance levels. In proceedings of International Conference on Data Mining
+
+   .. only:: latex
+
+      
+
+
+
+
+   ..
+       !! processed by numpydoc !!
+
