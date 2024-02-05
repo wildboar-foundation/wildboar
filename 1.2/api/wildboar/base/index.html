@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.base &#8212; Wildboar 1.2.0b3.dev10 documentation</title>
+    <title>wildboar.base &#8212; Wildboar 1.2.0b3 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=76cb1b4a"></script>
+    <script src="../../../_static/documentation_options.js?v=bbc1e642"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -55,7 +55,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://wildboar.dev/_versions.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.2';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = true;
         </script>
     <script src="../../../_static/js/fa.js?v=744fd48f"></script>
@@ -538,11 +538,11 @@ document.write(`
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.base.BaseEstimator">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">BaseEstimator</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L35-L246"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">BaseEstimator</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L35-L246"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator" title="Link to this definition">#</a></dt>
 <dd><p>Base estimator for all Wildboar estimators.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.base.BaseEstimator.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator.get_metadata_routing" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator.get_metadata_routing" title="Link to this definition">#</a></dt>
 <dd><p>Get metadata routing of this object.</p>
 <p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.4)"><span class="xref std std-ref">User Guide</span></a> on how the routing
 mechanism works.</p>
@@ -559,7 +559,7 @@ routing information.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.base.BaseEstimator.get_params">
-<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator.get_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator.get_params" title="Link to this definition">#</a></dt>
 <dd><p>Get parameters for this estimator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -580,7 +580,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.base.BaseEstimator.set_params">
-<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator.set_params" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.BaseEstimator.set_params" title="Link to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
 (such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
@@ -606,11 +606,11 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.base.CounterfactualMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">CounterfactualMixin</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L332-L355"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.CounterfactualMixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">CounterfactualMixin</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L332-L355"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.CounterfactualMixin" title="Link to this definition">#</a></dt>
 <dd><p>Mixin class for counterfactual explainer.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.base.CounterfactualMixin.score">
-<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L337-L355"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.CounterfactualMixin.score" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L337-L355"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.CounterfactualMixin.score" title="Link to this definition">#</a></dt>
 <dd><p>Score the counterfactual explainer in terms of closeness of fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -634,11 +634,11 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.base.ExplainerMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">ExplainerMixin</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L249-L329"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.ExplainerMixin" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">ExplainerMixin</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L249-L329"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.ExplainerMixin" title="Link to this definition">#</a></dt>
 <dd><p>Mixin class for all explainers in wildboar.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.base.ExplainerMixin.fit_explain">
-<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.ExplainerMixin.fit_explain" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">fit_explain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L295-L314"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.ExplainerMixin.fit_explain" title="Link to this definition">#</a></dt>
 <dd><p>Fit and return the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -664,7 +664,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.base.ExplainerMixin.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L316-L326"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.ExplainerMixin.plot" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L316-L326"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.ExplainerMixin.plot" title="Link to this definition">#</a></dt>
 <dd><p>Plot the explanation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -680,7 +680,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.base.is_counterfactual">
-<span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L358-L375"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.is_counterfactual" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">is_counterfactual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L358-L375"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.is_counterfactual" title="Link to this definition">#</a></dt>
 <dd><p>Check if estimator is a counterfactual explainer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -700,7 +700,7 @@ possible to update each component of a nested object.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.base.is_explainer">
-<span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">is_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/base.py#L378-L391"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.is_explainer" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.base.</span></span><span class="sig-name descname"><span class="pre">is_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">estimator</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/base.py#L378-L391"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.base.is_explainer" title="Link to this definition">#</a></dt>
 <dd><p>Check if estimator is an explainer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
