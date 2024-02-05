@@ -2,12 +2,12 @@
   {
     "name": "1.3 (dev)",
     "version": "dev",
-    "url": "https://wildboar.dev/main"
+    "url": "https://wildboar.dev/master"
   },
   {
     "name": "1.2 (stable)",
     "version": "1.2",
-    "url": "https://wildboar.dev/1.2.X",
+    "url": "https://wildboar.dev/1.2",
     "preferred": true
   },
   {
