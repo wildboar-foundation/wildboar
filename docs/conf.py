@@ -21,8 +21,12 @@ logger = getLogger(__name__)
 
 current_release = parse_version(get_distribution("wildboar").version)
 release = current_release.public
-version = f"{current_release.major}.{current_release.minor}.{current_release.micro}"
-version_match = f"{current_release.major}.{current_release.minor}"
+version = current_release
+
+if version.dev is not None:
+    version_match = "dev"
+else:
+    version_match = f"{current_release.major}.{current_release.minor}"
 
 # -- Project information -----------------------------------------------------
 
@@ -100,7 +104,7 @@ html_theme_options = {
     "navbar_start": ["navbar-logo", "version-switcher"],
     "switcher": {
         "json_url": "https://wildboar.dev/_versions.json",
-        "version_match": "dev" if current_release.dev is not None else version_match,
+        "version_match": version_match,
     },
     "check_switcher": False,
     "icon_links": [
