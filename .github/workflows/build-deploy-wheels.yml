@@ -157,9 +157,9 @@ jobs:
           destination_dir: ${{ needs.docs_version.outputs.version }}
 
   upload_pypi:
-    needs: [check_tag, build_wheels, build_sdist, build_docs]
+    needs: [build_wheels, build_sdist, build_docs]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && needs.check_tag.outputs.is_release == 'true' }}
+    if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v') }}
     steps:
       - uses: actions/download-artifact@v2
         with:
