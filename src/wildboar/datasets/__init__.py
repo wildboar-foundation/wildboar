@@ -57,36 +57,31 @@ __all__ = [
 
 def _split_repo_bundle(repo_bundle_name):
     """
-    Split a repository bundle string of the format {repo}/{bundle}.
+    Split a repository bundle string of the format {repo}/{bundle}[:tag].
 
     Parameters
     ----------
     repo_bundle_name : str
-        {repo}/{bundle} name
+        {repo}/{bundle} name.
 
     Returns
     -------
     repository : str
-        Key of the repository
+        Key of the repository.
     bundle : str
-        Name of the bundle
-    version : str
-        An optional version
+        Name of the bundle.
     tag : str
-        An optional tag
+        An optional tag.
     """
     match = re.match(
-        r"(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::((?:\d+\.)?(?:\d+\.)?(?:\*|\d+)))?(?::([a-zA-Z\-]+))?$",  # noqa: E501
+        r"(?:([a-zA-Z]+)/([a-zA-Z0-9\-]+))?(?::([a-zA-Z\-]+))?$",  # noqa: E501
         repo_bundle_name,
     )
     if match:
         repository_name = match.group(1)
         bundle_name = match.group(2)
-        version = match.group(3)
-        if version:
-            version = re.sub(r"(\d+\.\d+)((?:\.0+)*)$", "\\1", version)
-        tag = match.group(4)
-        return repository_name, bundle_name, version, tag
+        tag = match.group(3)
+        return repository_name, bundle_name, tag
     else:
         raise ValueError("Invalid repository/bundle string '%s'." % repo_bundle_name)
 
@@ -456,7 +451,6 @@ def load_dataset(  # noqa: PLR0912
     (
         repository_name,
         bundle_name,
-        bundle_version,
         bundle_tag,
     ) = _split_repo_bundle(repository)
     cache_dir = cache_dir or _default_cache_dir()
@@ -469,7 +463,6 @@ def load_dataset(  # noqa: PLR0912
     x, y, n_train_samples, extras = repository.load_dataset(
         bundle_name,
         name,
-        version=bundle_version,
         tag=bundle_tag,
         cache_dir=cache_dir,
         force=force,
@@ -589,7 +582,6 @@ def list_datasets(
     (
         repository_name,
         bundle_name,
-        bundle_version,
         bundle_tag,
     ) = _split_repo_bundle(repository)
     cache_dir = cache_dir or _default_cache_dir()
@@ -599,7 +591,6 @@ def list_datasets(
     return repository.list_datasets(
         bundle_name,
         collection=collection,
-        version=bundle_version,
         tag=bundle_tag,
         cache_dir=cache_dir,
         create_cache_dir=create_cache_dir,
@@ -791,7 +782,6 @@ def list_collections(repository):
     (
         repository_name,
         bundle_name,
-        _,
         _,
     ) = _split_repo_bundle(repository)
     repository = get_repository(repository_name)

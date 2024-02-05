@@ -31,15 +31,18 @@ respectively.
 Repository definitions
 **********************
 
-A wildboar repository string is composed of 2 required and two optional
+A wildboar repository string is composed of 2 required and one optional
 components written as:
+
+.. versionchanged:: 1.2
+
+   The ``{version}`` specifier has been removed. The version is determined by the repository.
 
 ::
 
-   {repository}/{bundle}[:{version}][:{tag}]
-   └─────┬────┘ └───┬──┘└─────┬────┘└───┬──┘
-         │          │         │         └── (optional) The tag as defined below.
-         │          │         └── (optional) The version as defined below.
+   {repository}/{bundle}[:{tag}]
+   └─────┬────┘ └───┬──┘└───┬──┘
+         │          │       └── (optional) The tag as defined below.
          │          └── (required) The bundle as listed by list_bundles().
          └── (required) The repository as listed by list_repositories().
 
@@ -55,11 +58,6 @@ Each part of the repository has the following requirements:
    identifier is composed of alphanumeric characters and ``-``, matching the
    regular expression ``[a-zA-Z0-9\-]+``.
 
-``{version}``
-   The bundle version (defaults to the version specified by the repository).
-   The version must match ``{major}[.{minor}][.{revision}]``, where each
-   component matches the regular expression ``\d+``.
-
 ``{tag}``
    The bundle tag (defaults to ``default``). The bundle tag is composed of
    letters and ``-``, matching the regular expression ``[a-zA-Z-]+``.
@@ -67,16 +65,13 @@ Each part of the repository has the following requirements:
 To exemplify, these are valid repository declarations:
 
 ``wildboar/ucr``
-   The ``ucr`` bundle from the ``wildboar`` repository using the latest version
-   and the ``default`` tag.
+   The ``ucr`` bundle from the ``wildboar`` repository using the default tag.
 
-``wildboar/ucr-tiny:1.0``
-   The ``ucr-tiny`` bundle from the ``wildboar`` repository using the version
-   ``1.0`` and ``default`` tag.
+``wildboar/ucr-tiny``
+   The ``ucr-tiny`` bundle from the ``wildboar`` repository using the default tag.
 
-``wildboar/outlier:1.0:hard``
-   The ``outlier`` bundle, with version ``1.0``, from the ``wildboar``
-   repository using the tag ``hard``.
+``wildboar/outlier:hard``
+   The ``outlier`` bundle, from the ``wildboar`` repository using the tag ``hard``.
 
 ***********************
 Installing repositories
@@ -106,7 +101,7 @@ an instance of (or a class implementing the interface of)
 Repositories can be refreshed using :func:`datasets.refresh_repositories()`,
 which accepts a repository name to refresh a specific repository or :python:`None`
 (default) to refresh all repositories. Additionally, we can specify an optional
-refresh timeout (in seconds), and an optional cache location. 
+refresh timeout (in seconds), and an optional cache location.
 
 .. versionchanged:: 1.1
 
@@ -188,9 +183,7 @@ JSON-file:
   - if `y` is not present in arrays :func:`~datasets.load_dataset` return
     :python:`None` for `y`
 
-- The ``bundles/version`` attribute, is the default version of the bundle which is
-  used unless the user specifies an alternative version in the repository
-  string.
+- The ``bundles/version`` attribute, is the version of the bundle.
 
 - The ``bundles/tag`` attribute is the default tag of the bundle which is used
   unless the user specifies an alternative bundle. If not specified, the tag is
