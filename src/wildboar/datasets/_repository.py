@@ -403,14 +403,13 @@ class Repository(metaclass=ABCMeta):
         dataset,
         *,
         cache_dir,
-        version=None,
         tag=None,
         create_cache_dir=True,
         progress=True,
         force=False,
     ):
         bundle = self.get_bundle(bundle)
-        version = version or bundle.version
+        version = bundle.version
         tag = tag or bundle.tag
 
         cache_dir = os.path.join(cache_dir, self.identifier)
@@ -434,14 +433,13 @@ class Repository(metaclass=ABCMeta):
         *,
         cache_dir,
         collection=None,
-        version=None,
         tag=None,
         create_cache_dir=True,
         progress=True,
         force=False,
     ):
         bundle = self.get_bundle(bundle)
-        version = version or bundle.version
+        version = bundle.version
         tag = tag or bundle.tag
 
         cache_dir = os.path.join(cache_dir, self.identifier)
