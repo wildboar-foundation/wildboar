@@ -66,8 +66,10 @@ jobs:
         with:
           path: dist/*.tar.gz
 
+  # Check that a tag is annotated with a Release messages.
   check_tag:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v') }}
     outputs:
         is_release: ${{ steps.is_release.outputs.is_release }}
     steps:
@@ -88,8 +90,10 @@ jobs:
             echo "is_release=false" >> "$GITHUB_OUTPUT"
           fi
 
+  # Check if we should build the documentation for the current branch or tag
   docs_version:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && ( github.ref_name == "master" || startsWith(github.event.ref, 'refs/tags/v') ) }}
     outputs:
       version: ${{ steps.docs_version.outputs.version }}
       build_docs: ${{ steps.docs_version.outputs.build_docs }}
@@ -97,26 +101,28 @@ jobs:
       - name: Extract the branch name
         id: docs_version
         run: |
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          VERSION_PATTERN="([0-9]+\\.[0-9]+)\\.X"
-          if [[ "$BRANCH_NAME" == "master" ]]; then
-            echo "Documentation should be build for master"
+          REF_NAME="${{ github.ref_name }}"
+          VERSION_PATTERN="v([0-9]+\\.[0-9]+)\\.[0-9]+([a|b][0-9]+)?" # Matches major.minor from a version tag
+          # We build documentation for current master
+          if [[ "$REF_NAME" == "master" ]]; then
+            echo "Documentation is built for master"
             echo "version=master" >> "$GITHUB_OUTPUT"
             echo "build_docs=true" >> "$GITHUB_OUTPUT"
-          elif [[ "$BRANCH_NAME" =~ $VERSION_PATTERN ]]; then
+          # And for tagged versions
+          elif [[ "$REF_NAME" =~ $VERSION_PATTERN ]]; then
             VERSION="${BASH_REMATCH[1]}"
-            echo "Documentation should be build for $VERSION"
+            echo "Documentation is built for $VERSION"
             echo "version=$VERSION" >> "$GITHUB_OUTPUT"
             echo "build_docs=true" >> "$GITHUB_OUTPUT"
           else
-            echo "Documentation should not be build"
+            echo "Documentation is not build."
             echo "build_docs=false" >> "$GITHUB_OUTPUT"
           fi
 
   build_docs:
     needs: [docs_version, build_sdist, build_wheels]
     runs-on: ubuntu-latest
-    if: ${{github.event_name == 'push' && needs.docs_version.outputs.build_docs == 'true' }}
+    if: ${{ github.event_name == 'push' && needs.docs_version.outputs.build_docs == 'true' }}
     steps:
       - uses: actions/checkout@v3
         with:
