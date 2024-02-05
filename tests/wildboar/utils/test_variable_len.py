@@ -40,7 +40,7 @@ def test_is_end_of_series(x):
     )
     np.testing.assert_equal(is_end_of_series(x), expected)
     np.testing.assert_equal(is_end_of_series(x.astype(np.float32)), expected)
-    # TODO(1.4): Remove
+    # TODO(1.3): Remove
     expected[1, 2] = True
     np.testing.assert_equal(wildboar.iseos(x), expected)
 

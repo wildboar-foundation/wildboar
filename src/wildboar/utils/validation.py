@@ -317,7 +317,7 @@ def check_X_y(  # noqa: PLR0913, N802
     return x, y
 
 
-def check_array(
+def check_array(  # noqa: PLR0913, PLR0912
     array,
     *,
     dtype="numeric",
@@ -456,7 +456,7 @@ def check_array(
             )
 
     context = " by %s" % estimator_name if estimator is not None else ""
-    if ensure_min_dims > 0 and (array.ndim == 2 or array.ndim == 3):
+    if ensure_min_dims > 0 and (array.ndim == 2 or array.ndim == 3):  # noqa: PLR1714
         if array.ndim == 3:
             n_dims = array.shape[1]
         else:
@@ -469,7 +469,7 @@ def check_array(
                 % (n_dims, array.shape, ensure_min_dims, context)
             )
 
-    if ensure_min_timesteps > 0 and (array.ndim == 2 or array.ndim == 3):
+    if ensure_min_timesteps > 0 and (array.ndim == 2 or array.ndim == 3):  # noqa: PLR1714
         n_timesteps = array.shape[-1]
         if n_timesteps < ensure_min_timesteps:
             # TODO: ignore sklearn tests for this error message and create our own
@@ -498,10 +498,10 @@ def check_array(
 
         if force_all_finite and np.isinf(array).any():
             if allow_eos and not np.isposinf(array).any():
-                # TODO(1.4)
+                # TODO(1.3)
                 warnings.warn(
                     "Using -np.inf as eos has been deprecated in 1.3 and support will "
-                    "be removed in 1.4. ",
+                    "be removed in 1.3. ",
                     DeprecationWarning,
                 )
             else:

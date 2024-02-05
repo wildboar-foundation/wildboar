@@ -21,13 +21,13 @@ __all__ = [
     "eos",
     "EoS",
     "EOS",
-    "iseos",  # TODO(1.4): Remove
+    "iseos",  # TODO(1.3): Remove
 ]
 
 
-# TODO(1.4): Remove
+# TODO(1.3): Remove
 @deprecated(
-    "To be removed in 1.4. Use wildboar.utils.variable_len.is_end_of_series instead."
+    "To be removed in 1.3. Use wildboar.utils.variable_len.is_end_of_series instead."
 )
 def iseos(x):
     """
@@ -45,10 +45,10 @@ def iseos(x):
     """
     isneginf = np.isneginf(x)
     if isneginf.any():
-        # TODO(1.4)
+        # TODO(1.3)
         warnings.warn(
             "Using -np.inf as eos has been deprecated in 1.2 and support will "
-            "be removed in 1.4. Use wildboar.utils.variable_len.is_end_of_series",
+            "be removed in 1.3. Use wildboar.utils.variable_len.is_end_of_series",
             DeprecationWarning,
         )
         return np.logical_or(isneginf, is_end_of_series(x))
