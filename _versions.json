@@ -5,15 +5,15 @@
     "url": "https://wildboar.dev/master"
   },
   {
-    "name": "1.2 (stable)",
+    "name": "1.2 (beta)",
     "version": "1.2",
-    "url": "https://wildboar.dev/1.2",
-    "preferred": true
+    "url": "https://wildboar.dev/1.2"
   },
   {
-    "name": "1.1",
+    "name": "1.1 (stable)",
     "version": "1.1",
-    "url": "https://wildboar.dev/1.1.X"
+    "url": "https://wildboar.dev/1.1.X",
+    "preferred": true
   },
   {
     "name": "1.0",
