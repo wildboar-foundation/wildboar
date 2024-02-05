@@ -851,7 +851,7 @@ def _get_dataset_version():
     from .. import __version__
 
     v = parse_version(__version__)
-    if v.dev is None:
+    if v.dev is not None:
         return "master"
     else:
         return "%d.%d" % (v.major, v.minor)
