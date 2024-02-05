@@ -11,23 +11,25 @@ import pkgutil
 import pathlib
 import sys
 
-from pkg_resources import get_distribution, parse_version
+from importlib import metadata
 from sphinx.util.logging import getLogger
+
+import wildboar
 
 sys.path.insert(0, os.path.abspath("_gen_figures"))
 sys.path.insert(0, os.path.abspath(".") + "/_extensions")
 
 logger = getLogger(__name__)
 
-current_release = parse_version(get_distribution("wildboar").version)
-release = current_release.public
-version = current_release
+release = wildboar.__version__
+version = release
 
-if version.dev is not None:
+if ".dev" in version:
     version_match = "dev"
 else:
-    version_match = f"{current_release.major}.{current_release.minor}"
+    version_match = ".".join(version.split(".")[:2])
 
+logger.info("Building documentation for %s, matching %s", version, version_match)
 # -- Project information -----------------------------------------------------
 
 project = "Wildboar"
@@ -167,7 +169,7 @@ def linkcode_resolve(domain, info):
         filename = info["module"].replace(".", "/") + ".py"
 
     return "https://github.com/wildboar-foundation/wildboar/blob/%s/src/%s" % (
-        "master" if current_release.dev is not None else "v%s" % version,
+        "master" if ".dev" in version else "v%s" % version,
         filename,
     )
 
