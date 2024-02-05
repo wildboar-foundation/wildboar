@@ -93,7 +93,7 @@ jobs:
   # Check if we should build the documentation for the current branch or tag
   docs_version:
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && ( github.ref_name == "master" || startsWith(github.event.ref, 'refs/tags/v') ) }}
+    if: ${{ github.event_name == 'push' && ( github.ref_name == 'master' || startsWith(github.event.ref, 'refs/tags/v') ) }}
     outputs:
       version: ${{ steps.docs_version.outputs.version }}
       build_docs: ${{ steps.docs_version.outputs.build_docs }}
