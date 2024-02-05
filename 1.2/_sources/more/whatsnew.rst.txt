@@ -54,6 +54,10 @@ Changelog
      :mod:`wildboar.datasets`
      ^^^
 
+     - |API| Drop support for specifying a dataset version in ``load_dataset``.
+       Support was dropped to ensure consistency between the repository declaration
+       of arrays and what is available in the downloaded bundle.
+
      - |Fix| Correctly detect duplicate repositories.
 
      - |Fix| Defer repository refresh to first use.

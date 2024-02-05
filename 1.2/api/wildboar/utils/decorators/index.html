@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.utils.decorators &#8212; Wildboar 1.2.0b3 documentation</title>
+    <title>wildboar.utils.decorators &#8212; Wildboar 1.2.0b4 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=bbc1e642"></script>
+    <script src="../../../../_static/documentation_options.js?v=7048768f"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -483,7 +483,7 @@ document.write(`
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.decorators.array_or_scalar">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">array_or_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optional_f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squeeze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/utils/decorators.py#L21-L53"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.array_or_scalar" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">array_or_scalar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optional_f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">squeeze</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b4/src/wildboar/utils/decorators.py#L21-L53"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.array_or_scalar" title="Link to this definition">#</a></dt>
 <dd><p>Decorate a function returning.</p>
 <p>An ndarray to return a single scalar if the array has a single item.</p>
 <dl class="field-list simple">
@@ -506,7 +506,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.decorators.singleton">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/utils/decorators.py#L67-L92"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.singleton" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b4/src/wildboar/utils/decorators.py#L67-L92"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.singleton" title="Link to this definition">#</a></dt>
 <dd><p>Recursivley try to unwrap list return arguments.</p>
 <p>Such that a single element can be returned.</p>
 <dl class="field-list simple">
@@ -527,7 +527,7 @@ document.write(`
 
 <dl class="py function">
 <dt class="sig sig-object py" id="wildboar.utils.decorators.unstable">
-<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">unstable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optional_f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'beta'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b3/src/wildboar/utils/decorators.py#L96-L127"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.unstable" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">wildboar.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">unstable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">optional_f</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stability</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'beta'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/v1.2.0b4/src/wildboar/utils/decorators.py#L96-L127"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.utils.decorators.unstable" title="Link to this definition">#</a></dt>
 <dd><p>Decorate a function as unsatable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

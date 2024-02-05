@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Repositories &#8212; Wildboar 1.2.0b3 documentation</title>
+    <title>Repositories &#8212; Wildboar 1.2.0b4 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=bbc1e642"></script>
+    <script src="../../_static/documentation_options.js?v=7048768f"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -528,12 +528,14 @@ respectively.</p>
 </div>
 <section id="repository-definitions">
 <h2>Repository definitions<a class="headerlink" href="#repository-definitions" title="Link to this heading">#</a></h2>
-<p>A wildboar repository string is composed of 2 required and two optional
+<p>A wildboar repository string is composed of 2 required and one optional
 components written as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{repository}/{bundle}[:{version}][:{tag}]
-└─────┬────┘ └───┬──┘└─────┬────┘└───┬──┘
-      │          │         │         └── (optional) The tag as defined below.
-      │          │         └── (optional) The version as defined below.
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version 1.2: </span>The <code class="docutils literal notranslate"><span class="pre">{version}</span></code> specifier has been removed. The version is determined by the repository.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>{repository}/{bundle}[:{tag}]
+└─────┬────┘ └───┬──┘└───┬──┘
+      │          │       └── (optional) The tag as defined below.
       │          └── (required) The bundle as listed by list_bundles().
       └── (required) The repository as listed by list_repositories().
 </pre></div>
@@ -548,24 +550,17 @@ expression, <cite>w+</cite>.</p>
 identifier is composed of alphanumeric characters and <code class="docutils literal notranslate"><span class="pre">-</span></code>, matching the
 regular expression <code class="docutils literal notranslate"><span class="pre">[a-zA-Z0-9\-]+</span></code>.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">{version}</span></code></dt><dd><p>The bundle version (defaults to the version specified by the repository).
-The version must match <code class="docutils literal notranslate"><span class="pre">{major}[.{minor}][.{revision}]</span></code>, where each
-component matches the regular expression <code class="docutils literal notranslate"><span class="pre">\d+</span></code>.</p>
-</dd>
 <dt><code class="docutils literal notranslate"><span class="pre">{tag}</span></code></dt><dd><p>The bundle tag (defaults to <code class="docutils literal notranslate"><span class="pre">default</span></code>). The bundle tag is composed of
 letters and <code class="docutils literal notranslate"><span class="pre">-</span></code>, matching the regular expression <code class="docutils literal notranslate"><span class="pre">[a-zA-Z-]+</span></code>.</p>
 </dd>
 </dl>
 <p>To exemplify, these are valid repository declarations:</p>
 <dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ucr</span></code> bundle from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the latest version
-and the <code class="docutils literal notranslate"><span class="pre">default</span></code> tag.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ucr</span></code> bundle from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the default tag.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">wildboar/ucr-tiny:1.0</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ucr-tiny</span></code> bundle from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the version
-<code class="docutils literal notranslate"><span class="pre">1.0</span></code> and <code class="docutils literal notranslate"><span class="pre">default</span></code> tag.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">wildboar/ucr-tiny</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">ucr-tiny</span></code> bundle from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the default tag.</p>
 </dd>
-<dt><code class="docutils literal notranslate"><span class="pre">wildboar/outlier:1.0:hard</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">outlier</span></code> bundle, with version <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code>
-repository using the tag <code class="docutils literal notranslate"><span class="pre">hard</span></code>.</p>
+<dt><code class="docutils literal notranslate"><span class="pre">wildboar/outlier:hard</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">outlier</span></code> bundle, from the <code class="docutils literal notranslate"><span class="pre">wildboar</span></code> repository using the tag <code class="docutils literal notranslate"><span class="pre">hard</span></code>.</p>
 </dd>
 </dl>
 </section>
@@ -664,9 +659,7 @@ returned if requested by the user.</p></li>
 <code class="code highlight python docutils literal highlight-python"><span class="kc">None</span></code> for <cite>y</cite></p></li>
 </ul>
 </li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">bundles/version</span></code> attribute, is the default version of the bundle which is
-used unless the user specifies an alternative version in the repository
-string.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">bundles/version</span></code> attribute, is the version of the bundle.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">bundles/tag</span></code> attribute is the default tag of the bundle which is used
 unless the user specifies an alternative bundle. If not specified, the tag is
 <cite>default</cite>.</p></li>
