@@ -88,7 +88,7 @@ select = ["E", "F", "N", "PL", "I" ]
 ignore = ["PLR2004", "N803", "N806", "F841"]
 
 [tool.ruff.per-file-ignores]
-"docs/conf.py" = ["E", "F", "D", "N", "PL", "RUF", "I001"]
+"docs/**/*.py" = ["E", "F", "D", "N", "PL", "RUF", "I001"]
 "tests/**/*.py" = ["E", "F", "D", "N", "PL", "RUF" ]
 
 [tool.ruff.pylint]

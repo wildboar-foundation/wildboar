@@ -26,3 +26,39 @@ table.autosummary a.headerlink {
 .nboutput .prompt {
     display: none;
 }
+
+.wb-drop-shadow {
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
+}
+
+.card-image {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+div.execute-return div.highlight::before {
+  content: "Return";
+  color: var(--pst-color-text-base) !important;
+
+  position: absolute;
+  top: 0px;
+  left: 4px;
+
+  font-size: 0.6em;
+  color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+div.execute-output div.highlight::before {
+  content: "Output";
+  /* font-weight: 900; */
+  color: var(--pst-color-text-base) !important;
+
+  position: absolute;
+  top: 0px;
+  left: 4px;
+
+  font-size: 0.6em;
+  color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}

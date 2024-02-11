@@ -1,5 +1,6 @@
-import sys
 from pathlib import Path
+
+from docutils.parsers.rst.directives.images import Image
 
 
 def light_dark_paths(path: Path):
@@ -9,9 +10,6 @@ def light_dark_paths(path: Path):
     name = file.stem
 
     return path.joinpath(f"{name}-light{ext}"), path.joinpath(f"{name}-dark{ext}")
-
-
-from docutils.parsers.rst.directives.images import Image
 
 
 class LightDarkImage(Image):
@@ -29,6 +27,7 @@ class LightDarkImage(Image):
 
 
 def setup(app):
+    setup.app = app
     app.add_directive("ldimage", LightDarkImage)
     return {
         "version": "0.1",
