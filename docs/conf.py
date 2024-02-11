@@ -45,8 +45,7 @@ author = "Isak Samsten"
 extensions = [
     "autoapi.extension",
     "lightdarkimg",
-    "matplotlib.sphinxext.plot_directive",
-    "nbsphinx",
+    "execute",
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.linkcode",
@@ -141,6 +140,14 @@ rst_prolog = """
    :language: python
    :class: highlight
 """
+
+execute_pre_code = """
+import numpy as np
+from matplotlib import pyplot as plt
+np.set_printoptions(threshold=30)
+"""
+
+execute_light_dark = True
 
 
 # Find the source file given a module
