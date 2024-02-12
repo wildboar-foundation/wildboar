@@ -14,13 +14,14 @@ of shape :python:`(n_samples, n_timestep)` (or :python:`(n_samples, 1,
 n_timestep)`) and a multivarete time series is represented as an array of shape
 :python:`(n_samples, n_dims, n_timestep)`.
 
-Most algorithms in wildboar assumes that the time series are of equal length and
-without missing values. However, some datasets contain both missing values
-and/or have time series or dimensions of unequal length. Wildboar represents the
-`End-of-Sequence` identifier as :obj:`wildboar.eos` and *value is missing* by
-:obj:`numpy.nan`. The ``EoS`` value is a valid IEEE754 ``NaN`` value, and will be
-treated as :python:`True` by :obj:`numpy.isnan`, whereas :func:`wildboar.iseos`
-will treat :obj:`numpy.nan` as :python:`False`.
+Most algorithms in wildboar assumes that the time series are of equal length
+and without missing values. However, some datasets contain both missing values
+and/or have time series or dimensions of unequal length. Wildboar represents
+the `End-of-Sequence` identifier as :obj:`wildboar.eos` and *value is missing*
+by :obj:`numpy.nan`. The ``EoS`` value is a valid IEEE754 ``NaN`` value, and
+will be treated as :python:`True` by :obj:`numpy.isnan`, whereas
+:func:`~wildboar.utils.variable_len.is_end_of_series` will treat
+:obj:`numpy.nan` as :python:`False`.
 
 .. note::
    By having ``EoS`` treated as ``NaN``, we can ignore it and just treat them
@@ -40,7 +41,6 @@ timestep, and:
 
 - :python:`x[0]` has no missing values and is of length ``n_samples``.
 - :python:`x[1]` has no missing values and is of length 4
-  (:python:`np.min(np.nonzero(wb.iseos(x[1]))[-1])`).
 - :python:`x[2]` has a single missing value at index 2.
 
 ***************************

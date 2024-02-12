@@ -57,13 +57,13 @@ In Wildboar, all time series datasets are traditional Numpy-arrays with a
 specified shape, i.e., ``(n_samples, n_dims, n_timesteps)``. To support time
 series of unequal length, we use a specific value to denote end-of-sequence
 (``EOS``). We can get the ``EOS`` value from :const:`wildboar.eos`, and use
-:func:`wildboar.iseos` to check for this value, and get the length of each
-series:
+:func:`wildboar.utils.variable_len.is_end_of_series` to check for this value,
+and get the length of each series:
 
 .. code-block:: python
 
-   import wildboar
-   length = wildboar.iseos(x).argmax(axis=-1)
+   from wildboar.variable_len import is_end_of_series
+   length = is_end_of_series(x).argmax(axis=-1)
 
 For example, we could use the following code to plot the length of each
 dimension of a multivariate time series:
