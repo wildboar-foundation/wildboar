@@ -24,8 +24,9 @@ class _Importance(metaclass=ABCMeta):
 
 
 class _IntervalImportance(_Importance):
-    def __init__(self, window):
+    def __init__(self, window, random_state):
         self.window = window
+        self.random_state = random_state
 
     def fit(self, estimator, x, y):
         y_pred = estimator.predict(x)
@@ -210,7 +211,9 @@ class NativeGuideCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimat
                 )
             self.importance_ = _PassthroughImportance(self.importance)
         elif isinstance(self.importance, str) and self.importance == "interval":
-            self.importance_ = _IntervalImportance(self.window)
+            self.importance_ = _IntervalImportance(
+                self.window, random_state.randint(np.iinfo(np.int32).max)
+            )
         else:
             raise ValueError(
                 "importance must be 'interval' or callable, got %r" % self.importance
