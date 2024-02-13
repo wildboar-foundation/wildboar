@@ -1,3 +1,4 @@
+import abc
 import warnings
 
 import numpy as np
@@ -11,6 +12,82 @@ from ...utils.validation import check_array
 from ._nn import KNeighborsCounterfactual
 from ._proto import PrototypeCounterfactual
 from ._sf import ShapeletForestCounterfactual
+
+
+def make_target_evaluator(estimator, target):
+    if target == "predict":
+        return PredictEvaluator(estimator)
+    else:
+        return ProbabilityEvaluator(estimator, target)
+
+
+class TargetEvaluator(abc.ABC):
+    """
+    Evaluate if a sample is a counterfactual.
+
+    Parameters
+    ----------
+    estimator : object
+        The estimator.
+    """
+
+    def __init__(self, estimator):
+        self.estimator = estimator
+
+    def is_counterfactual(self, x, y):
+        """
+        Return true if x is a counterfactual of label y.
+
+        Parameters
+        ----------
+        x : ndarray of shape (n_timestep,)
+            The counterfactual sample.
+        y : object
+            The counterfactual label.
+
+        Returns
+        -------
+        bool
+            Return true if counterfactual valid.
+        """
+        return self._is_counterfactual(x.reshape(1, -1), y)
+
+    @abc.abstractmethod
+    def _is_counterfactual(self, x, y):
+        pass
+
+
+class PredictEvaluator(TargetEvaluator):
+    """Evaluate if a counterfactual is predicted as y."""
+
+    def _is_counterfactual(self, x, y):
+        return self.estimator.predict(x)[0] == y
+
+
+class ProbabilityEvaluator(TargetEvaluator):
+    """
+    Evaluate the probability threshold.
+
+    Parameters
+    ----------
+    estimator : object
+        The estimator.
+    probability : float, optional
+        The minimum probability of the predicted label.
+    """
+
+    def __init__(self, estimator, probability=0.5):
+        super().__init__(estimator)
+        self.probability = probability
+
+    def _is_counterfactual(self, x, y):
+        if not hasattr(self.estimator, "predict_proba"):
+            raise ValueError("estimator must support predict_proba")
+
+        y_pred = self.estimator.predict_proba(x)
+        y_idx = (self.estimator.classes_ == y).nonzero()[0][0]
+        y_prob = y_pred[0, y_idx]
+        return y_prob > self.probability
 
 
 def _proximity(

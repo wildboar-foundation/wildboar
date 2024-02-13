@@ -9,10 +9,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
 from sklearn.neighbors import KNeighborsClassifier
 from wildboar.base import is_counterfactual
-from wildboar.datasets import load_dataset
+from wildboar.datasets import load_dataset, load_gun_point
 from wildboar.ensemble import ShapeletForestClassifier
 from wildboar.explain.counterfactual import (
     KNeighborsCounterfactual,
+    NativeGuideCounterfactual,
     PrototypeCounterfactual,
     ShapeletForestCounterfactual,
     counterfactuals,
@@ -28,7 +29,12 @@ SKLEARN_VERSION = sklearn.__version__.split(".")
 
 @pytest.mark.parametrize(
     "estimator",
-    [ShapeletForestClassifier(), KNeighborsCounterfactual(), PrototypeCounterfactual()],
+    [
+        ShapeletForestClassifier(),
+        KNeighborsCounterfactual(),
+        PrototypeCounterfactual(),
+        NativeGuideCounterfactual(),
+    ],
 )
 def test_estimator_check_shapelet_forest_counterfactual(estimator):
     check_estimator(estimator, skip_scikit=True)
@@ -40,6 +46,7 @@ def test_estimator_check_shapelet_forest_counterfactual(estimator):
         KNeighborsCounterfactual(),
         PrototypeCounterfactual(),
         ShapeletForestCounterfactual(),
+        NativeGuideCounterfactual(),
     ],
 )
 def test_parameter_constraints(estimator):
@@ -53,6 +60,7 @@ def test_parameter_constraints(estimator):
         ShapeletForestCounterfactual(),
         KNeighborsCounterfactual(),
         PrototypeCounterfactual(),
+        NativeGuideCounterfactual(),
     ],
 )
 def test_is_counterfactual(estimator):
@@ -122,11 +130,30 @@ def test_counterfactuals_prototype():
     assert_almost_equal(actual_score, expected_score)
 
 
+def test_native_guide():
+    X_train, X_test, y_train, y_test = load_gun_point(merge_train_test=False)
+    clf = KNeighborsClassifier(n_neighbors=1)
+    clf.fit(X_train, y_train)
+    nf = NativeGuideCounterfactual(window=10, target=0.51, random_state=1)
+    nf.fit(clf, X_train, y_train)
+    e = nf.explain(X_test[1:3], [1, 1])
+    # fmt:off
+    desired = np.array([
+        [-0.61464441, -0.60395002, -0.58645487, -0.57112598,  1.22982144,
+          1.82246256, -0.61686385, -0.62434989],
+        [-1.44140327, -1.36356986, -1.31225955, -0.9289673 ,  0.91141278,
+          0.95426142,  0.38300061, -0.33342704]]
+    )
+    # fmt: on
+    assert_almost_equal(e[:, [0, 10, 20, 30, 55, 66, 139, 145]], desired)
+
+
 @pytest.mark.parametrize(
     "counterfactual, estimator",
     [
         (ShapeletForestCounterfactual(), ShapeletForestClassifier(n_shapelets=10)),
         (KNeighborsCounterfactual(), KNeighborsClassifier()),
+        (NativeGuideCounterfactual(), KNeighborsClassifier()),
         (PrototypeCounterfactual(), ShapeletForestClassifier()),
     ],
 )

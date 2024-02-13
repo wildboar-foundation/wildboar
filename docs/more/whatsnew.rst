@@ -18,3 +18,21 @@ Version 1.3.0
 =============
 
 **In development**
+
+New and changed models
+----------------------
+
+Wildboar 1.2 introduces several new models.
+
+- :class:`explain.counterfactual.NativeGuideCounterfactual` a baseline
+  counterfactual explainer as proposed by Delaney et al. (2021).
+
+.. grid:: 1
+
+  .. grid-item-card::
+
+     :mod:`wildboar.explain.counterfactual`
+     ^^^
+
+     - |Feature| Native guide counterfactuals.
+
