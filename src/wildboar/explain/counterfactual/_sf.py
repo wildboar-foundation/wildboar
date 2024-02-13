@@ -77,7 +77,7 @@ class PredictionPaths:
         left = tree.left
         right = tree.right
         threshold = tree.threshold
-        shapelet = tree.feature
+        shapelet = tree.attribute
         value = tree.value
 
         def recurse(node_id, path):
@@ -156,12 +156,12 @@ class ShapeletForestCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEsti
         counterfactual candidates. The default setting is to evaluate
         all counterfactual samples.
 
-        .. versionchanged :: 1.1
+        .. versionchanged:: 1.1
             The default value changed to 0.1
     max_paths : float, optional
         Sample a fraction of the positive prediction paths.
 
-        .. versionadded :: 1.1
+        .. versionadded:: 1.1
             Add support for subsampling prediction paths.
     verbose : bool, optional
         Print information to stdout during execution.
