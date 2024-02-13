@@ -73,7 +73,7 @@
 
   Install <install>
   guide
-  API <api/wildboar/index>
+  API <api/index>
   examples
   more/whatsnew
 
