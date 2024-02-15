@@ -52,6 +52,9 @@ __all__ = [
     "load_two_lead_ecg",
     "load_synthetic_control",
     "load_gun_point",
+    "load_ering",
+    "load_articulary_word_recognition",
+    "load_basic_motions",
 ]
 
 
@@ -219,6 +222,120 @@ def load_gun_point(merge_train_test=True):
     return load_dataset(
         "GunPoint",
         repository="wildboar/ucr-tiny",
+        merge_train_test=merge_train_test,
+        progress=False,
+    )
+
+
+def load_ering(merge_train_test=True):
+    """
+    Load the ERing multivariate dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
+
+    See Also
+    --------
+    load_dataset : load a named dataset
+    """
+    return load_dataset(
+        "ERing",
+        repository="wildboar/ucrmts-tiny",
+        merge_train_test=merge_train_test,
+        progress=False,
+    )
+
+
+def load_articulary_word_recognition(merge_train_test=True):
+    """
+    Load the ArticularyWordRecognition multivariate dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
+
+    See Also
+    --------
+    load_dataset : load a named dataset
+    """
+    return load_dataset(
+        "ArticularyWordRecognition",
+        repository="wildboar/ucrmts-tiny",
+        merge_train_test=merge_train_test,
+        progress=False,
+    )
+
+
+def load_basic_motions(merge_train_test=True):
+    """
+    Load the BasicMotions multivariate dataset.
+
+    Parameters
+    ----------
+    merge_train_test : bool, optional
+        Merge the existing training and testing partitions.
+
+    Returns
+    -------
+    x : ndarray, optional
+        The samples if `merge_train_test=False`.
+    y : ndarray, optional
+        The labels, if `merge_train_test=False`.
+    x_train : ndarray, optional
+        The training samples if `merge_train_test=False`.
+    x_test : ndarray, optional
+        The testing samples if `merge_train_test=False`.
+    y_train : ndarray, optional
+        The training labels if `merge_train_test=False`.
+    y_test : ndarray, optional
+        The testing labels if `merge_train_test=False`.
+    extras : dict, optional
+        The optional extras if `return_extras=True`.
+
+    See Also
+    --------
+    load_dataset : load a named dataset
+    """
+    return load_dataset(
+        "BasicMotions",
+        repository="wildboar/ucrmts-tiny",
         merge_train_test=merge_train_test,
         progress=False,
     )
