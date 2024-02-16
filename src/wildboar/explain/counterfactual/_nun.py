@@ -31,9 +31,9 @@ class _IntervalImportance(_Importance):
     def fit(self, estimator, x, y):
         y_pred = estimator.predict(x)
         self.explainer_ = {
-            label: IntervalImportance(n_repeat=1, window=self.window).fit(
-                estimator, x[y_pred == label], y[y_pred == label]
-            )
+            label: IntervalImportance(
+                n_repeat=1, window=self.window, random_state=self.random_state
+            ).fit(estimator, x[y_pred == label], y[y_pred == label])
             for label in estimator.classes_
         }
 
