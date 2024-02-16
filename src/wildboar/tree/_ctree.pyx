@@ -1141,6 +1141,7 @@ cdef class TreeBuilder:
             if self.feature_buffer[end - 1] <= self.feature_buffer[start] + FEATURE_THRESHOLD:
                 continue
 
+            self.criterion.reset()
             self._partition_feature_buffer(
                 start, end, &current_split_point, &current_threshold, &current_impurity
             )

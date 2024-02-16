@@ -11,7 +11,29 @@ What's new
 Dependencies
 ============
 
-Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 1.1+.
+Wildboar 1.1 requires Python 3.8+, numpy 1.17.3+, scipy 1.3.2+ and scikit-learn 1.1-1.3.
+
+Version 1.1.4
+=============
+
+.. grid:: 1
+
+  .. grid-item-card::
+
+     :mod:`wildboar.tree`
+     ^^^
+
+     - |Fix| An undetected bug which has been around since Version 1.1 has been
+       fixed. The bug affects
+       :class:`~wildboar.tree.ShapeletTreeClassifier` and
+       :class:`~wildboar.tree.ShapeletTreeRegressor` and any ensemble using
+       these models. The bug makes it so that the first shapelet is always
+       selected when searching for the best shapelet in a split. In practice
+       this means that any tree fitted with `n_shapelet` larger than 1 is
+       fitted as if `n_shapelet` is set to `1` but with the added computational
+       cost. Any results or models constructed using version <=1.1.3 and >= 1.1.0
+       exhibits the error and the results are most likely worse than expected.
+
 
 Version 1.1.3
 =============
