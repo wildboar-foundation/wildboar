@@ -2,10 +2,7 @@ pytest
 pytest-benchmark
 requests
 networkx
-scikit-learn-extra
-pre-commit
 black==22.10.0
-isort
 cython>=0.29.24
 setuptools_scm[toml]>=3.4
 setuptools>=48.0
