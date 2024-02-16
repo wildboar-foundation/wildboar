@@ -1,7 +1,6 @@
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal
-
 from wildboar.base import is_explainer
 from wildboar.datasets import load_two_lead_ecg
 from wildboar.explain import AmplitudeImportance, IntervalImportance, ShapeletImportance
@@ -46,21 +45,10 @@ def test_interval_importance():
     imp.fit(clf, x_test, y_test)
 
     actual_scores = imp.importances_.mean
-    expected_scores = np.array(
-        [
-            0.0064969,
-            0.0149254,
-            0.01036,
-            0.2363477,
-            0.2361721,
-            0.2186128,
-            0.0612818,
-            0.0273924,
-            0.0231782,
-            0.0061457,
-        ]
-    )
-
+    # fmt: off
+    expected_scores = np.array([0.00438982, 0.01299385, 0.02809482, 0.2500439 , 0.21738367,
+                                0.21071115, 0.00298507, 0.        , 0.        , 0.        ])
+    # fmt: on
     assert_almost_equal(actual_scores, expected_scores)
 
 
@@ -73,7 +61,7 @@ def test_amplitude_importance():
     imp.fit(clf, x_test, y_test)
 
     actual_scores = imp.importances_.mean
-    expected_scores = np.array([0.2712906, 0.191396, 0.1018437, 0.0570676])
+    expected_scores = np.array([0.30640913, 0.20895522, 0.08165057, 0.0])
 
     assert_almost_equal(actual_scores, expected_scores)
 
@@ -87,19 +75,10 @@ def test_shapelet_importance():
     imp.fit(clf, x_test, y_test)
 
     actual_scores = imp.importances_.mean
+    # fmt: off
     expected_scores = np.array(
-        [
-            0.3028973,
-            0.2431958,
-            0.1931519,
-            0.2835821,
-            0.2756804,
-            0.260755,
-            0.2186128,
-            0.2941176,
-            0.1729587,
-            -0.0087796,
-        ]
+        [0.38366989, 0.3046532 , 0.17559263, 0.37928007, 0.26777875,
+         0.34855136, 0.24231782, 0.35381914, 0.13081651, 0.0403863 ]
     )
-
+    # fmt: on
     assert_almost_equal(actual_scores, expected_scores)

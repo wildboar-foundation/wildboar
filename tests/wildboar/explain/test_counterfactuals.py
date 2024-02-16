@@ -72,7 +72,7 @@ def test_is_counterfactual(estimator):
     [
         pytest.param(
             ShapeletForestClassifier(n_shapelets=10, n_estimators=10, random_state=123),
-            np.array([1.0216381495890032, 5.925046545971925]),
+            np.array([1.0901723, 5.69788715]),
         ),
         # Some change in scikit-learn > 1.3 changes the
         # output here.
@@ -126,7 +126,7 @@ def test_counterfactuals_prototype():
         proximity="euclidean",
         random_state=123,
     )
-    expected_score = np.array([2.3592611, 6.2593162])
+    expected_score = np.array([2.10339439, 5.61020192])
     assert_almost_equal(actual_score, expected_score)
 
 
