@@ -16,7 +16,7 @@ def gen_preprocess_minmax_scale(fig, ax):
 
 
 def plot_dim_len(x, fig, ax):
-    eos = iseos(x).argmax(axis=2)
+    eos = is_end_of_series(x).argmax(axis=2)
     cmap = get_cmap(lut=eos.shape[1])
     for dim in range(eos.shape[1]):
         eos[eos[:, dim] == 0] = x.shape[-1]  # if eos == n_timestep
