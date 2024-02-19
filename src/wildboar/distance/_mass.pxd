@@ -15,5 +15,5 @@ cdef void _mass_distance(
     complex *y_buffer,
     complex *x_buffer,
     double *dist,
-) nogil
+) noexcept nogil
 
