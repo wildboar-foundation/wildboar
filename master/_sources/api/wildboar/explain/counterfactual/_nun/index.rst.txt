@@ -1,0 +1,340 @@
+:orphan:
+
+
+**********************************************
+:py:mod:`wildboar.explain.counterfactual._nun`
+**********************************************
+
+.. py:module:: wildboar.explain.counterfactual._nun
+
+
+Module Contents
+---------------
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.explain.counterfactual._nun.NativeGuideCounterfactual
+
+
+
+
+.. py:class:: NativeGuideCounterfactual(*, metric='euclidean', metric_params=None, importance='interval', target='predict', window=2, max_iter=100, random_state=None, n_jobs=None)
+
+
+
+
+   
+   Native guide counterfactual explanations.
+
+   Counterfactual explanations are constructed by replacing parts of the
+   explained sample with the most important region from the closest sample
+   of the desired class.
+
+   :Parameters:
+
+       **metric** : str or callable, optional
+           The distance metric
+           
+           See ``_METRICS.keys()`` for a list of supported metrics.
+
+       **metric_params** : dict, optional
+           Parameters to the metric.
+           
+           Read more about the parameters in the
+           :ref:`User guide <list_of_metrics>`.
+
+       **importance** : {"interval"}, array-like or callable, optional
+           The importance assigned to the time steps.
+           
+           - If "interval", use :class:`~wildboar.explain.IntervalImportance` to
+             assign the importance of the time steps.
+           - If array-like, an array of shape (n_timestep, ).
+           - If callable, a function ``f(x, y)``, where `x` and `y`
+             are the time series and label being explained. The return value is a
+             ndarray of shape (n_timestep, ).
+
+       **target** : {"predict"} or float, optional
+           The target evaluation of counterfactuals:
+           
+           - if 'predict' the counterfactual prediction must return the correct
+             label.
+           - if float, the counterfactual prediction probability must exceed
+             target value.
+
+       **window** : int, optional
+           The `window` parameter. Only used if `importance="interval"`.
+
+       **max_iter** : int, optional
+           The maximum number of iterations.
+
+       **random_state** : RandomState or int, optional
+           Pseudo-random number for consistency between different runs.
+
+       **n_jobs** : int, optional
+           The number of parallel jobs.
+
+
+
+
+
+
+
+
+
+   .. rubric:: Notes
+
+   The current implementation uses the
+   :class:`~wildboar.explain.IntervalImportance` as the default method for
+   assigning importances and selecting the time points where to grow the
+   replacement. Unfortunately this method assigns the same score for each
+   sample, that is, it provides a model level interpretation of the importance
+   of each time step. To exactly replicate the work by Delaney (2021), you
+   have to supply your own importance function. The default recommendation by
+   the original authors is to use GradCAM.
+
+   .. rubric:: References
+
+   Delaney, E., Greene, D., Keane, M.T. (2021)
+       Instance-Based Counterfactual Explanations for Time Series
+       Classification. Case-Based Reasoning Research and Development, vol.
+       12877, pp. 32–47. Springer International Publishing, Cham  Science.
+
+   .. only:: latex
+
+      
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_gun_point
+   >>> from wildboar.distance import KNeighborsClassifier
+   >>> from wildboar.explain.counterfactual import NativeGuideCounterfactual
+   >>> X_train, X_test, y_train, y_test = load_gun_point(merge_train_test=False)
+   >>> clf = KNeighborsClassifier(n_neighbors=1)
+   >>> clf.fit(X_train, y_train)
+   >>> ngc = NativeGuideCounterfactual(window=1, target=0.51)
+   >>> ngc.fit(clf, X_train, y_train)
+   >>> X_test[1:3]
+   array([2., 2.], dtype=float32)
+   >>> cf = nfc.explain(X_test[1:3], [1, 1])  # Desired label is [1, 1]
+   >>> clf.predict(cf)
+   array([1., 1.], dtype=float32)
+
+   :Attributes:
+
+       **target_** : TargetEvaluator
+           The target evaluator.
+
+       **importance_** : Importance
+           The importance.
+
+       **estimator_** : Estimator
+           The estimator.
+
+       **clasess_** : ndarray
+           The classes known to the explainer.
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit_explain(estimator, x=None, y=None, **kwargs)
+
+      
+      Fit and return the explanation.
+
+
+      :Parameters:
+
+          **estimator** : Estimator
+              The estimator to explain.
+
+          **x** : time-series, optional
+              The input time series.
+
+          **y** : array-like of shape (n_samples, ), optional
+              The labels.
+
+          **\*\*kwargs**
+              Optional extra arguments.
+
+      :Returns:
+
+          ndarray
+              The explanation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: plot(x=None, y=None, ax=None)
+
+      
+      Plot the explanation.
+
+
+
+      :Returns:
+
+          **ax** : Axes
+              The axes object
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: score(x, y)
+
+      
+      Score the counterfactual explainer in terms of closeness of fit.
+
+
+      :Parameters:
+
+          **x** : array-like of shape (n_samples, n_timestep)
+              The samples.
+
+          **y** : array-like of shape (n_samples, )
+              The desired counterfactal label.
+
+      :Returns:
+
+          **score** : float
+              The closensess of fit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+

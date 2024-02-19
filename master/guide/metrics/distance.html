@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Distance &#8212; Wildboar 1.4.0.dev25+g7c07adeec documentation</title>
+    <title>Distance &#8212; Wildboar 1.3.0.dev2+gcf51c24e7 documentation</title>
   
   
   
@@ -29,6 +29,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -40,7 +41,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=e640e894"></script>
+    <script src="../../_static/documentation_options.js?v=584ce810"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -194,6 +195,13 @@ document.write(`
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../examples.html">
                         Examples
                       </a>
@@ -326,6 +334,13 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../../guide.html">
                         User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API
                       </a>
                     </li>
                 
@@ -529,7 +544,7 @@ between the time series from both <cite>X</cite> and <cite>Y</cite>.</p>
 <span class="go">      [1.64445581, 6.38965963, 4.79102936]])</span>
 </pre></div>
 </div>
-<p>By default, the <code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code> function computes the Euclidean
+<p>By default, the <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a> function computes the Euclidean
 distance. We can change the metric by specifying the <cite>metric</cite> parameter
 <a class="reference external" href="list_of_subsequence_metrics">as one of the supported metrics</a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;edr&quot;</span><span class="p">)</span>
@@ -547,7 +562,7 @@ distance. We can change the metric by specifying the <cite>metric</cite> paramet
 </pre></div>
 </div>
 <p>We support a multitude of input configurations and the return value of
-<code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code> depends on the input shape(s) of <cite>X</cite> (with
+<a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a> depends on the input shape(s) of <cite>X</cite> (with
 <cite>x_samples</cite>) and <cite>Y</cite> (with <cite>y_samples</cite>) (and the <cite>dim</cite> parameter):</p>
 <dl>
 <dt><em>A single 1d-array `X`</em></dt><dd><p>Returns the scalar $0$.</p>
@@ -605,7 +620,7 @@ multivariate support</a>.</p>
 <h2>Paired distance<a class="headerlink" href="#paired-distance" title="Link to this heading">#</a></h2>
 <p>Sometimes we do not need to compute the distance between every sample, but
 instead the distance between _pairs_ of samples. For this purpose, we use the
-<code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code>, which accepts two arrays <cite>X</cite> and <cite>Y</cite> with shapes
+<a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a>, which accepts two arrays <cite>X</cite> and <cite>Y</cite> with shapes
 <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">x_samples</span><span class="p">,</span> <span class="n">x_timestep</span><span class="p">)</span></code> and <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">y_samples</span><span class="p">,</span> <span class="n">y_timesteps</span><span class="p">)</span></code> with
 <code class="code highlight python docutils literal highlight-python"><span class="n">x_timestep</span> <span class="o">==</span> <span class="n">y_timestep</span></code> for non-elastic metrics and <cite>X</cite> and <cite>Y</cite> that can be
 broadcast to a uniform shape.</p>
@@ -616,13 +631,13 @@ broadcast to a uniform shape.</p>
 <span class="go">array([4.85497117, 5.96086309, 6.18777928])</span>
 </pre></div>
 </div>
-<p>Similar to <code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code>, we support the parameters <cite>metric</cite> and
+<p>Similar to <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a>, we support the parameters <cite>metric</cite> and
 <cite>metric_params</cite> accepting the same input:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;wdtw&quot;</span><span class="p">,</span> <span class="n">metric_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">})</span>
 <span class="go">array([0.50816474, 0.3299048 , 0.55193242])</span>
 </pre></div>
 </div>
-<p><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code> also supports a multitude of input configurations and
+<p><a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a> also supports a multitude of input configurations and
 the output depends on that configuration:</p>
 <dl>
 <dt><em>A 1d-array `X` and a 1d-array `Y`</em></dt><dd><p>Returns a scalar with the distance of <cite>X</cite> to <cite>Y</cite>.</p>
@@ -638,7 +653,7 @@ the output depends on that configuration:</p>
 </section>
 <section id="multivariate-support">
 <span id="id1"></span><h2>Multivariate support<a class="headerlink" href="#multivariate-support" title="Link to this heading">#</a></h2>
-<p>As described, both <code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code> support
+<p>As described, both <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a> and <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a> support
 multivariate time series by computing the <em>“interdimensional” distance</em> between
 time series and (by default) reporting the <em>mean</em> (<cite>dim=”mean”</cite>). Optionally, we
 can return the full distance matrix by setting <code class="code highlight python docutils literal highlight-python"><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span></code>:</p>
@@ -664,7 +679,7 @@ between all dimensions. The returned array has the shape <code class="code highl
 <span class="go">      [3.60786006, 7.24823344]])</span>
 </pre></div>
 </div>
-<p>Note that the <code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code> returns an array of shape
+<p>Note that the <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a> returns an array of shape
 <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">n_dims</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span></code>.</p>
 <p>If we are interested in the distance between a single dimension we can either
 slice the input data or slice the full distance matrix:</p>
@@ -695,9 +710,9 @@ distance between unwanted dimensions.</p>
 <p>Wildboar can also identify the (minimum) <em>subsequence</em> distance, i.e.,
 <span class="math notranslate nohighlight">\(\min\limits_{t'\in t}(s, t')\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is a query and :math`t`
 is a time series, with <span class="math notranslate nohighlight">\(|s| \le |t|\)</span>. Wildboar support both
-<code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code>
+<a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a> and <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a>
 which works similar to their non-subsequence counterparts, but also
-<code class="xref py py-func docutils literal notranslate"><span class="pre">subsequence_match</span></code> to identify subsequences with a distance within a
+<a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.subsequence_match" title="wildboar.distance.subsequence_match"><code class="xref py py-func docutils literal notranslate"><span class="pre">subsequence_match</span></code></a> to identify subsequences with a distance within a
 user specified _threshold_. Since Numpy does not support <em>jagged</em>-arrays, both
 the paired and pairwise subsequence functions accept subsequences as <code class="docutils literal notranslate"><span class="pre">list</span></code>
 containing 1d-numpy arrays and 2d-numpy arrays with subsequences with the same
@@ -751,7 +766,7 @@ distance of each subsequence to each sample.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code> only supports
+<p><a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a> only supports
 univariate subsequences. As such, the <cite>dim</cite> parameter only accepts a <cite>int</cite>
 denoting the dimension in which to compute the subsequence distance. We can use
 the following code to compute the distance between the subsequence and each

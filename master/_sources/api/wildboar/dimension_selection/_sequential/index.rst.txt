@@ -1,0 +1,404 @@
+:orphan:
+
+
+**************************************************
+:py:mod:`wildboar.dimension_selection._sequential`
+**************************************************
+
+.. py:module:: wildboar.dimension_selection._sequential
+
+
+Module Contents
+---------------
+
+Classes
+-------
+
+.. autoapisummary::
+
+   wildboar.dimension_selection._sequential.SequentialDimensionSelector
+
+
+
+
+.. py:class:: SequentialDimensionSelector(estimator, *, n_dims='auto', cv=5, scoring=None, direction='forward', tol=None)
+
+
+
+
+   
+   Sequentially select a subset of dimensions.
+
+   Sequentially select a set of dimensions by adding (forward)
+   or removing (backward) dimensions to greedily form a subset.
+   At each iteration, the algorithm chooses the best dimension
+   to add or remove based on the cross validation score.
+
+   :Parameters:
+
+       **estimator** : estimator
+           An unfitted estimator.
+
+       **n_dims** : {"auto"} or int, optional
+           The number of dimensions to select.
+           
+           If `"auto"`, the behavior depends on `tol`:
+           
+           - if `tol` is not `None`, dimensions are selected as long as the
+             increase in performance is larger than `tol`.
+           - otherwise, we select half of the dimensions.
+           
+           If integer, `n_dims` is the number of dimensions to select.
+
+       **cv** : int, cross-validation generator or an iterable, optional
+           The cross-validation splitting strategy.
+
+       **scoring** : str or callable, optional
+           A str (see: :ref:`sklearn:scoring_parameter`) or callable to evaluate
+           the predictions on the test set.
+
+       **direction** : {"forward", "backward"}, optional
+           Backward of forward selection.
+
+       **tol** : float, optional
+           The tolerance. If the score is not increased by `tol` between two
+           iterations, return.
+           
+           If `direction="backward"`, `tol` can be negative to reduce the number
+           of dimensions.
+
+
+
+
+
+
+
+
+
+
+
+   .. rubric:: Examples
+
+   >>> from wildboar.datasets import load_ering
+   >>> from wildboar.dimension_selection import SequentialDimensionSelector
+   >>> from wildboar.distance import KNeighborsClassifier
+   >>> X, y = load_ering()
+   >>> clf = KNeighborsClassifier()
+   >>> sds = SequentialDimensionSelector(clf, n_dims=2)
+   >>> sds.fit(X, y)
+   SequentialDimensionSelector(estimator=KNeighborsClassifier(), n_dims=2)
+   >>> sds.get_dimensions()
+   array([ True, False, False,  True])
+   >>> sds.transform(X).shape
+   (300, 2, 65)
+
+
+
+   ..
+       !! processed by numpydoc !!
+   .. py:method:: fit(X, y)
+
+      
+      Learn the dimensions to select.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timestep)
+              The training samples.
+
+          **y** : array-like of shape (n_samples, )
+              The training labels.
+
+      :Returns:
+
+          object
+              The instance itself.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: fit_transform(X, y=None, **fit_params)
+
+      
+      Fit to data, then transform it.
+
+      Fits transformer to `X` and `y` with optional parameters `fit_params`
+      and returns a transformed version of `X`.
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_features)
+              Input samples.
+
+          **y** :  array-like of shape (n_samples,) or (n_samples, n_outputs),                 default=None
+              Target values (None for unsupervised transformations).
+
+          **\*\*fit_params** : dict
+              Additional fit parameters.
+
+      :Returns:
+
+          **X_new** : ndarray array of shape (n_samples, n_features_new)
+              Transformed array.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_dimensions(indices=False)
+
+      
+      Get a boolean mask with the selected dimensions.
+
+
+      :Parameters:
+
+          **indices** : bool, optional
+              If True, return the indices instead of a boolean mask.
+
+      :Returns:
+
+          ndarray of shape (n_selected_dims, )
+              An index that selects the retained dimensions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_metadata_routing()
+
+      
+      Get metadata routing of this object.
+
+      Please check :ref:`User Guide <metadata_routing>` on how the routing
+      mechanism works.
+
+
+      :Returns:
+
+          **routing** : MetadataRequest
+              A :class:`~sklearn.utils.metadata_routing.MetadataRequest` encapsulating
+              routing information.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: get_params(deep=True)
+
+      
+      Get parameters for this estimator.
+
+
+      :Parameters:
+
+          **deep** : bool, default=True
+              If True, will return the parameters for this estimator and
+              contained subobjects that are estimators.
+
+      :Returns:
+
+          **params** : dict
+              Parameter names mapped to their values.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: inverse_transform(X)
+
+      
+      Reverse the transformation.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_selected_dims, n_timestep)
+              The samples.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_dims, n_timestep)
+              The samples with zeros inserted where dimensions
+              would have been removed by :meth:`transform`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_output(*, transform=None)
+
+      
+      Set output container.
+
+      See :ref:`sphx_glr_auto_examples_miscellaneous_plot_set_output.py`
+      for an example on how to use the API.
+
+      :Parameters:
+
+          **transform** : {"default", "pandas"}, default=None
+              Configure output of `transform` and `fit_transform`.
+              
+              - `"default"`: Default output format of a transformer
+              - `"pandas"`: DataFrame output
+              - `"polars"`: Polars output
+              - `None`: Transform configuration is unchanged
+              
+              .. versionadded:: 1.4
+                  `"polars"` option was added.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: set_params(**params)
+
+      
+      Set the parameters of this estimator.
+
+      The method works on simple estimators as well as on nested objects
+      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+      parameters of the form ``<component>__<parameter>`` so that it's
+      possible to update each component of a nested object.
+
+      :Parameters:
+
+          **\*\*params** : dict
+              Estimator parameters.
+
+      :Returns:
+
+          **self** : estimator instance
+              Estimator instance.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+   .. py:method:: transform(X)
+
+      
+      Reduce X to the selected dimensions.
+
+
+      :Parameters:
+
+          **X** : array-like of shape (n_samples, n_dims, n_timestep)
+              The samples.
+
+      :Returns:
+
+          ndarray of shape (n_samples, n_selected_dims, n_timestep)
+              The samples with only the selected dimensions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+      ..
+          !! processed by numpydoc !!
+
+

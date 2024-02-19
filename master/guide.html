@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>User Guide &#8212; Wildboar 1.4.0.dev25+g7c07adeec documentation</title>
+    <title>User Guide &#8212; Wildboar 1.3.0.dev2+gcf51c24e7 documentation</title>
   
   
   
@@ -29,6 +29,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -40,7 +41,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="_static/documentation_options.js?v=e640e894"></script>
+    <script src="_static/documentation_options.js?v=584ce810"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -193,6 +194,13 @@ document.write(`
                 
 
                     <li class="nav-item">
+                      <a class="nav-link nav-internal" href="api/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="examples.html">
                         Examples
                       </a>
@@ -325,6 +333,13 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="#">
                         User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="api/index.html">
+                        API
                       </a>
                     </li>
                 
@@ -548,12 +563,12 @@ or multivariate (<em>3d</em>) time series is:</p>
 </div>
 <p>In the example, we use <code class="docutils literal notranslate"><span class="pre">load_two_lead_ecg</span></code> and <code class="docutils literal notranslate"><span class="pre">load_synthetic_control</span></code> to
 load the datasets. A more general approach is to use the
-<code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code>-function from the same modules.</p>
+<a class="reference internal" href="api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a>-function from the same modules.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;synthetic_control&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code> accepts multiple parameters for specifying where
+<p><a class="reference internal" href="api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_dataset</span></code></a> accepts multiple parameters for specifying where
 to load data from and how to preprocess the data. By default, Wildboar loads
 datasets from the <code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code> repository, which include datasets from UCR
 time series repository. The user can specify a different repository using the
@@ -573,7 +588,7 @@ using the following snippet:</p>
 scikit-learn. We can <code class="docutils literal notranslate"><span class="pre">fit</span></code> an estimator to an input dataset and <code class="docutils literal notranslate"><span class="pre">predict</span></code>
 the label of a new sample.</p>
 <p>An example of a temporal estimator is the
-<code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestClassifier</span></code> which implements the random shapelet
+<a class="reference internal" href="api/wildboar/ensemble/index.html#wildboar.ensemble.ShapeletForestClassifier" title="wildboar.ensemble.ShapeletForestClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">ensemble.ShapeletForestClassifier</span></code></a> which implements the random shapelet
 forest classifier.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.ensemble</span> <span class="kn">import</span> <span class="n">ShapeletForestClassifier</span>
 <span class="n">clf</span> <span class="o">=</span> <span class="n">ShapeletForestClassifier</span><span class="p">()</span>
@@ -609,7 +624,7 @@ user to repeatedly load several datasets from a repository.</p>
 <code class="docutils literal notranslate"><span class="pre">wildboar/ucr</span></code> repository, filtering datasets with less than 300 samples. For
 each dataset we load, we clone (to reuse the same random seed) and fit the
 estimator. Then we print the dataset name and the predictive performance to the
-screen. You can <span class="xref std std-doc">read more about datasets in the API-documentation</span>.</p>
+screen. You can <a class="reference internal" href="api/wildboar/datasets/index.html"><span class="doc">read more about datasets in the API-documentation</span></a>.</p>
 </section>
 <section id="transforming-time-series-to-tabular-data">
 <h2>Transforming time series to tabular data<a class="headerlink" href="#transforming-time-series-to-tabular-data" title="Link to this heading">#</a></h2>
@@ -658,13 +673,13 @@ counterfactual reasoning or input dependencies.</p>
 <span class="n">i</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.explain.IntervalImportance</span></code>-class identifies temporal
+<p>The <a class="reference internal" href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance" title="wildboar.explain.IntervalImportance"><code class="xref py py-class docutils literal notranslate"><span class="pre">wildboar.explain.IntervalImportance</span></code></a>-class identifies temporal
 regions that are responsible for the classifier performance. It does so by
 breaking the dependency between continuous intervals and the label while
 reevaluating the predictive performance of the classifier of sample-wise
 shuffled intervals. In the example, we evaluate the in-sample importance, which
 captures the reliance of the model on a particular interval.</p>
-<img alt="_images/interval-light.svg" class="only-light align-center" src="_images/interval-light.svg" /><img alt="_images/interval-dark.svg" class="only-dark align-center" src="_images/interval-dark.svg" /><p>The <code class="xref py py-meth docutils literal notranslate"><span class="pre">explain.IntervalImportance.plot</span></code> method can be used to visualize the
+<img alt="_images/interval-light.svg" class="only-light align-center" src="_images/interval-light.svg" /><img alt="_images/interval-dark.svg" class="only-dark align-center" src="_images/interval-dark.svg" /><p>The <a class="reference internal" href="api/wildboar/explain/index.html#wildboar.explain.IntervalImportance.plot" title="wildboar.explain.IntervalImportance.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">explain.IntervalImportance.plot</span></code></a> method can be used to visualize the
 interval importance, or we can return the full importance matrix.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">i</span><span class="o">.</span><span class="n">importance_</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 <span class="go">[..., 0.31, 0.30, 0.34, ...]</span>

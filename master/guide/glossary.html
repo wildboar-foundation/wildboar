@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Glossary &#8212; Wildboar 1.4.0.dev25+g7c07adeec documentation</title>
+    <title>Glossary &#8212; Wildboar 1.3.0.dev2+gcf51c24e7 documentation</title>
   
   
   
@@ -29,6 +29,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=11f2bc40" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -40,7 +41,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=e640e894"></script>
+    <script src="../_static/documentation_options.js?v=584ce810"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -58,7 +59,7 @@
     <script src="../_static/js/fa.js?v=744fd48f"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="next" title="wildboar" href="../api/index.html" />
     <link rel="prev" title="Outlier detection benchmarks" href="unsupervised/outlier/generation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -188,6 +189,13 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../guide.html">
                         User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/index.html">
+                        API
                       </a>
                     </li>
                 
@@ -325,6 +333,13 @@ document.write(`
                     <li class="nav-item current active">
                       <a class="nav-link nav-internal" href="../guide.html">
                         User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/index.html">
+                        API
                       </a>
                     </li>
                 
@@ -513,7 +528,7 @@ length shorter than that.</p>
 represented by <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.utils.variable_len.EoS</span></code>. Any value with an
 index larger than the first <code class="docutils literal notranslate"><span class="pre">EoS</span></code> is assumed not to be part of the series.
 <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.isnan.html#numpy.isnan" title="(in NumPy v1.26)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.isnan</span></code></a> returns <code class="docutils literal notranslate"><span class="pre">True</span></code> for <code class="docutils literal notranslate"><span class="pre">EoS</span></code>. To check for exactly
-<code class="docutils literal notranslate"><span class="pre">EoS</span></code>, use <code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.utils.variable_len.is_end_of_series</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">EoS</span></code>, use <a class="reference internal" href="../api/wildboar/utils/variable_len/index.html#wildboar.utils.variable_len.is_end_of_series" title="wildboar.utils.variable_len.is_end_of_series"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wildboar.utils.variable_len.is_end_of_series</span></code></a>.</p>
 </dd>
 <dt>timestep (or <code class="docutils literal notranslate"><span class="pre">n_timestep</span></code>)</dt><dd><p>The length of the time series given by <code class="docutils literal notranslate"><span class="pre">arr.shape[-1]</span></code>.</p>
 </dd>
@@ -544,11 +559,11 @@ given by <code class="docutils literal notranslate"><span class="pre">arr.shape[
       </div>
     </a>
     <a class="right-next"
-       href="../examples.html"
+       href="../api/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Examples</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar</span></code></p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
