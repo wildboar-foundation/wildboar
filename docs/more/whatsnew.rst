@@ -27,6 +27,21 @@ Wildboar 1.2 introduces several new models.
 - :class:`explain.counterfactual.NativeGuideCounterfactual` a baseline
   counterfactual explainer as proposed by Delaney et al. (2021).
 
+- Adds a new module :mod:`wildboar.dimension_selection` to sample a subset of
+  the most important dimensions when considering mult-variate time series. The
+  new module contains four new selector algorithms:
+
+  - :class:`~wildboar.dimension_selection.DistanceVarianceThreshold`: remove
+    dimensions where the pairwise distances has a variance below the threshold.
+  - :class:`~wildboar.dimension_selection.SequentialDimensionSelector`: remove
+    dimensions sequentially by adding (or removing) dimensions greedily.
+  - :class:`~wildboar.dimension_selection.SelectDimensionPercentile`: only retain
+    the specified fraction of dimensions with the highest score.
+  - :class:`~wildboar.dimension_selection.SelectDimensionTopK`: only retain
+    the specified top `k` dimensions with the highest score.
+  - :class:`~wildboar.dimension_selection.SelectDimensionPercentile`: only retain
+    the dimensions with a `p-value` below the specified alpha level.
+
 .. grid:: 1
 
   .. grid-item-card::

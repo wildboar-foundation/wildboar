@@ -43,7 +43,7 @@ author = "Isak Samsten"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "autoapi.extension",
+    # "autoapi.extension",
     "lightdarkimg",
     "execute",
     "numpydoc",

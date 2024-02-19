@@ -4,6 +4,7 @@
 import numbers
 
 import numpy as np
+from sklearn.utils._param_validation import StrOptions
 from sklearn.utils.multiclass import type_of_target
 from sklearn.utils.validation import (
     _check_estimator_name,
@@ -14,6 +15,28 @@ from sklearn.utils.validation import (
 from sklearn.utils.validation import check_array as sklearn_check_array
 
 from .variable_len import is_end_of_series, is_variable_length
+
+
+class MetricOptions(StrOptions):
+    def __init__(self, add=None, *, remove=None, deprecated=None):
+        from ..distance._distance import _METRICS
+
+        remove = set(remove) if remove is not None else set()
+        add = set(add) if add is not None else set()
+
+        super().__init__(add | (_METRICS.keys() - remove), deprecated=deprecated)
+
+
+class SubsequenceMetricOptions(StrOptions):
+    def __init__(self, add=None, *, remove=None, deprecated=None):
+        from ..distance._distance import _SUBSEQUENCE_METRICS
+
+        remove = set(remove) if remove is not None else set()
+        add = set(add) if add is not None else set()
+
+        super().__init__(
+            add | (_SUBSEQUENCE_METRICS.keys() - remove), deprecated=deprecated
+        )
 
 
 def check_classification_targets(y):
