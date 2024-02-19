@@ -1,7 +1,5 @@
 # Authors: Isak Samsten
 # License: BSD 3 clause
-
-
 from sklearn.utils._param_validation import StrOptions
 
 from ..transform._interval import IntervalMixin
@@ -66,6 +64,9 @@ class BaseFeatureTreeRegressor(FeatureTreeMixin, BaseTreeRegressor):
             min_sample_split=self.min_samples_split,
             min_sample_leaf=self.min_samples_leaf,
             min_impurity_decrease=self.min_impurity_decrease,
+            impurity_equality_tolerance=self.impurity_equality_tolerance
+            if self.impurity_equality_tolerance is not None
+            else -1,  # Disable maximizing gap
         )
 
 
@@ -97,6 +98,9 @@ class BaseFeatureTreeClassifier(FeatureTreeMixin, BaseTreeClassifier):
             min_sample_split=self.min_samples_split,
             min_sample_leaf=self.min_samples_leaf,
             min_impurity_decrease=self.min_impurity_decrease,
+            impurity_equality_tolerance=self.impurity_equality_tolerance
+            if self.impurity_equality_tolerance is not None
+            else -1,  # Disable maximizing gap
         )
 
 
@@ -130,6 +134,14 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger
         than or equal to this value.
+    impurity_equality_tolerance : float, optional
+        Tolerance for considering two impurities as equal. If the impurity decrease
+        is the same, we consider the split that maximizes the gap between the sum
+        of distances.
+
+        - If None, we never consider the separation gap.
+
+        .. versionadded:: 1.3
     n_shapelets : int, optional
         The number of shapelets to sample at each node.
     min_shapelet_size : float, optional
@@ -208,6 +220,7 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         n_shapelets="log2",
         min_shapelet_size=0,
         max_shapelet_size=1,
@@ -222,6 +235,7 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
+            impurity_equality_tolerance=impurity_equality_tolerance,
         )
         self.random_state = random_state
         self.n_shapelets = n_shapelets
@@ -285,6 +299,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
 
     _parameter_constraints: dict = {**ShapeletTreeRegressor._parameter_constraints}
     _parameter_constraints.pop("alpha")
+    _parameter_constraints.pop("impurity_equality_tolerance")
 
     def __init__(
         self,
@@ -330,6 +345,7 @@ class ExtraShapeletTreeRegressor(ShapeletTreeRegressor):
             min_sample_split=self.min_samples_split,
             min_sample_leaf=self.min_samples_leaf,
             min_impurity_decrease=self.min_impurity_decrease,
+            impurity_equality_tolerance=-1,  # disable
         )
 
 
@@ -351,11 +367,17 @@ class ShapeletTreeClassifier(
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
         The minimum number of samples in a leaf.
-    criterion : {"entropy", "gini"}, optional
-        The criterion used to evaluate the utility of a split.
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger than or
         equal to this value.
+    impurity_equality_tolerance : float, optional
+        Tolerance for considering two impurities as equal. If the impurity decrease
+        is the same, we consider the split that maximizes the gap between the sum
+        of distances.
+
+        - If None, we never consider the separation gap.
+
+        .. versionadded:: 1.3
     min_shapelet_size : float, optional
         The minimum length of a sampled shapelet expressed as a fraction, computed
         as ``min(ceil(X.shape[-1] * min_shapelet_size), 2)``.
@@ -369,20 +391,17 @@ class ShapeletTreeClassifier(
         .. math:`w = 1 - e^{-|alpha| * depth})`
 
         - if :math:`alpha < 0`, the number of sampled shapelets decrease from
-            ``n_shapelets`` towards 1 with increased depth.
-
-            .. math:`n_shapelets * (1 - w)`
-        - if :math:`alpha > 0`, the number of sampled shapelets increase from ``1``
-            towards ``n_shapelets`` with increased depth.
-
-            .. math:`n_shapelets * w`
-        - if ``None``, the number of sampled shapelets are the same independeth of
-            depth.
-
+          ``n_shapelets`` towards 1 with increased depth.
+        - if :math:`alpha > 0`, the number of sampled shapelets increase from
+          ``1`` towards ``n_shapelets`` with increased depth.
+        - if ``None``, the number of sampled shapelets are the same independeth
+          of depth.
     metric : {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
         Distance metric used to identify the best shapelet.
     metric_params : dict, optional
-        Parameters for the distance measure
+        Parameters for the distance measure.
+    criterion : {"entropy", "gini"}, optional
+        The criterion used to evaluate the utility of a split.
     class_weight : dict or "balanced", optional
         Weights associated with the labels
 
@@ -426,6 +445,7 @@ class ShapeletTreeClassifier(
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         alpha=None,
@@ -440,6 +460,7 @@ class ShapeletTreeClassifier(
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
+            impurity_equality_tolerance=impurity_equality_tolerance,
         )
         self.random_state = random_state
         self.n_shapelets = n_shapelets
@@ -507,6 +528,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
 
     _parameter_constraints: dict = {**ShapeletTreeClassifier._parameter_constraints}
     _parameter_constraints.pop("alpha")
+    _parameter_constraints.pop("impurity_equality_tolerance")
 
     def __init__(
         self,
@@ -554,6 +576,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
             min_sample_split=self.min_samples_split,
             min_sample_leaf=self.min_samples_leaf,
             min_impurity_decrease=self.min_impurity_decrease,
+            impurity_equality_tolerance=-1,  # disable
         )
 
 
@@ -972,7 +995,48 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
 
 
 class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
-    """A tree classifier that uses pivot time series.
+    """
+    A tree classifier that uses pivot time series.
+
+    Parameters
+    ----------
+    n_pivot : str or int, optional
+        The number of pivot time series to sample at each node.
+    metrics : str, optional
+        The metrics to sample from. Currently, we only support "all".
+    max_depth : int, optional
+        The maximum depth of the tree. If `None` the tree is expanded until all
+        leaves are pure or until all leaves contain less than `min_samples_split`
+        samples.
+    min_samples_split : int, optional
+        The minimum number of samples to split an internal node.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        A split will be introduced only if the impurity decrease is larger than or
+        equal to this value.
+    impurity_equality_tolerance : float, optional
+        Tolerance for considering two impurities as equal. If the impurity decrease
+        is the same, we consider the split that maximizes the gap between the sum
+        of distances.
+
+        - If None, we never consider the separation gap.
+
+        .. versionadded:: 1.3
+    criterion : {"entropy", "gini"}, optional
+        The criterion used to evaluate the utility of a split.
+    class_weight : dict or "balanced", optional
+        Weights associated with the labels.
+
+        - if dict, weights on the form {label: weight}.
+        - if "balanced" each class weight inversely proportional to the class
+            frequency.
+        - if None, each class has equal weight.
+    random_state : int or RandomState
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
 
     Attributes
     ----------
@@ -996,49 +1060,17 @@ class PivotTreeClassifier(PivotMixin, BaseFeatureTreeClassifier):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         criterion="entropy",
         class_weight=None,
         random_state=None,
     ):
-        """Construct a new pivot tree classifier.
-
-        Parameters
-        ----------
-        n_pivot : str or int, optional
-            The number of pivot time series to sample at each node.
-        metrics : str, optional
-            The metrics to sample from. Currently, we only support "all".
-        max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all
-            leaves are pure or until all leaves contain less than `min_samples_split`
-            samples.
-        min_samples_split : int, optional
-            The minimum number of samples to split an internal node.
-        min_samples_leaf : int, optional
-            The minimum number of samples in a leaf.
-        min_impurity_decrease : float, optional
-            A split will be introduced only if the impurity decrease is larger than or
-            equal to this value.
-        criterion : {"entropy", "gini"}, optional
-            The criterion used to evaluate the utility of a split.
-        class_weight : dict or "balanced", optional
-            Weights associated with the labels.
-
-            - if dict, weights on the form {label: weight}.
-            - if "balanced" each class weight inversely proportional to the class
-              frequency.
-            - if None, each class has equal weight.
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator
-            - If `RandomState` instance, `random_state` is the random number generator
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
         super().__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
+            impurity_equality_tolerance=impurity_equality_tolerance,
         )
         self.n_pivot = n_pivot
         self.metrics = metrics

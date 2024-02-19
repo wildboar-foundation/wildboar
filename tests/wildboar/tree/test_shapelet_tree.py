@@ -29,7 +29,7 @@ from wildboar.utils.estimator_checks import check_estimator
 )
 def test_check_estimator(clf):
     assert_exhaustive_parameter_checks(clf)
-    assert_parameter_checks(clf, skip=["alpha"])
+    assert_parameter_checks(clf, skip=["alpha", "impurity_equality_tolerance"])
     check_estimator(clf)
 
 
@@ -364,8 +364,34 @@ def test_extra_tree_regressor():
     assert (f.predict(x) == y.astype(float)).sum() == 182
 
 
+def test_impurity_equality_tolerance():
+    X_train, X_test, y_train, y_test = load_gun_point(merge_train_test=False)
+    f = ShapeletTreeClassifier(impurity_equality_tolerance=0.1, random_state=1)
+    f.fit(X_train, y_train)
+    actual_apply = f.apply(X_test)
+    # fmt:off
+    expected_apply = np.array([
+        3,  6,  6,  3,  6,  6,  6,  6,  2,  9,  9,  3,  6,  3,  3,  3,  6,
+       10,  6,  6,  3,  6,  6,  9,  3,  6,  3,  3,  2,  3,  6,  6,  6,  6,
+        6,  3,  3,  3,  3,  3,  6,  6,  3,  3,  6,  6,  6,  3, 10,  3,  6,
+        6,  3,  6,  6,  3,  6,  6,  3,  6,  3,  6,  3,  3,  3,  3,  3,  3,
+        6,  6,  6,  6,  2,  6,  6,  6,  6,  6,  6,  6,  6,  3,  6,  9, 10,
+        6,  3,  3,  6,  6,  6,  6,  3,  6, 10,  9,  6,  6,  3,  3,  6,  3,
+        3,  2,  6,  3,  6,  6,  9,  6,  6,  9,  3,  6,  3,  3,  6,  3,  6,
+        6,  3,  6,  6,  6,  6,  6,  3,  3,  6,  6,  6,  6,  3,  6,  6,  6,
+        3,  3,  3,  3,  6,  6,  9,  6,  9,  6,  3,  3,  6,  6]
+    )
+    # fmt:on
+    assert_array_equal(actual_apply, expected_apply)
+
+
 @pytest.mark.parametrize(
-    "clf", [ShapeletTreeClassifier(), ExtraShapeletTreeRegressor()]
+    "clf",
+    [
+        ShapeletTreeClassifier(),
+        ExtraShapeletTreeClassifier(),
+        ShapeletTreeClassifier(impurity_equality_tolerance=0.0),
+    ],
 )
 @pytest.mark.parametrize("metric", ["euclidean"])
 def test_shapelet_tree_benchmark(benchmark, clf, metric):

@@ -314,6 +314,7 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         criterion="entropy",
         bootstrap=True,
         warm_start=False,
@@ -335,6 +336,7 @@ class BaseForestClassifier(ForestMixin, BaggingClassifier, metaclass=ABCMeta):
         self.criterion = criterion
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
+        self.impurity_equality_tolerance = impurity_equality_tolerance
         self.class_weight = class_weight
         self.estimator_params = estimator_params
 
@@ -372,6 +374,7 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         n_shapelets="log2",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
@@ -391,6 +394,7 @@ class BaseShapeletForestClassifier(BaseForestClassifier, metaclass=ABCMeta):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
+            impurity_equality_tolerance=impurity_equality_tolerance,
             criterion=criterion,
             class_weight=class_weight,
             n_estimators=n_estimators,
@@ -430,6 +434,14 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger
         than or equal to this value.
+    impurity_equality_tolerance : float, optional
+        Tolerance for considering two impurities as equal. If the impurity decrease
+        is the same, we consider the split that maximizes the gap between the sum
+        of distances.
+
+        - If None, we never consider the separation gap.
+
+        .. versionadded:: 1.3
     min_shapelet_size : float, optional
         The minimum length of a shapelets expressed as a fraction of
         *n_timestep*.
@@ -438,9 +450,8 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         *n_timestep*.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node
-        according to the current depth, i.e.:
+        according to the current depth, i.e.
 
-        ::
             w = 1 - exp(-abs(alpha) * depth)
 
         - if `alpha < 0`, the number of sampled shapelets decrease from
@@ -531,6 +542,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         alpha=None,
@@ -552,6 +564,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
                 "min_samples_split",
                 "min_samples_leaf",
                 "min_impurity_decrease",
+                "impurity_equality_tolerance",
                 "min_shapelet_size",
                 "max_shapelet_size",
                 "alpha",
@@ -565,6 +578,7 @@ class ShapeletForestClassifier(BaseShapeletForestClassifier):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
+            impurity_equality_tolerance=impurity_equality_tolerance,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -833,6 +847,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         criterion="squared_error",
         bootstrap=True,
         warm_start=False,
@@ -854,6 +869,7 @@ class BaseForestRegressor(ForestMixin, BaggingRegressor, metaclass=ABCMeta):
         self.criterion = criterion
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
+        self.impurity_equality_tolerance = impurity_equality_tolerance
 
     def _fit(
         self,
@@ -891,6 +907,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         n_shapelets="log2",
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
@@ -909,6 +926,7 @@ class BaseShapeletForestRegressor(BaseForestRegressor):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
+            impurity_equality_tolerance=impurity_equality_tolerance,
             criterion=criterion,
             n_estimators=n_estimators,
             bootstrap=bootstrap,
@@ -948,6 +966,14 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
     min_impurity_decrease : float, optional
         A split will be introduced only if the impurity decrease is larger
         than or equal to this value.
+    impurity_equality_tolerance : float, optional
+        Tolerance for considering two impurities as equal. If the impurity decrease
+        is the same, we consider the split that maximizes the gap between the sum
+        of distances.
+
+        - If None, we never consider the separation gap.
+
+        .. versionadded:: 1.3
     min_shapelet_size : float, optional
         The minimum length of a shapelets expressed as a fraction of
         *n_timestep*.
@@ -956,7 +982,8 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         *n_timestep*.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node
-        according to the current depth, i.e.:::
+        according to the current depth, i.e.
+
             w = 1 - exp(-abs(alpha) * depth)
 
         - if `alpha < 0`, the number of sampled shapelets decrease from
@@ -1041,6 +1068,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         min_shapelet_size=0.0,
         max_shapelet_size=1.0,
         alpha=None,
@@ -1061,6 +1089,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
                 "min_samples_split",
                 "min_samples_leaf",
                 "min_impurity_decrease",
+                "impurity_equality_tolerance",
                 "min_shapelet_size",
                 "max_shapelet_size",
                 "alpha",
@@ -1074,6 +1103,7 @@ class ShapeletForestRegressor(BaseShapeletForestRegressor):
             min_samples_split=min_samples_split,
             min_samples_leaf=min_samples_leaf,
             min_impurity_decrease=min_impurity_decrease,
+            impurity_equality_tolerance=impurity_equality_tolerance,
             min_shapelet_size=min_shapelet_size,
             max_shapelet_size=max_shapelet_size,
             metric=metric,
@@ -1786,6 +1816,7 @@ class RocketForestRegressor(BaseForestRegressor):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
         sampling="normal",
         sampling_params=None,
         kernel_size=None,
@@ -1845,7 +1876,86 @@ class RocketForestRegressor(BaseForestRegressor):
 
 
 class RocketForestClassifier(BaseForestClassifier):
-    """An ensemble of rocket tree classifiers."""
+    """
+    An ensemble of rocket tree classifiers.
+
+    Parameters
+    ----------
+    n_estimators : int, optional
+        The number of estimators.
+    n_kernels : int, optional
+        The number of shapelets to sample at each node.
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
+    max_depth : int, optional
+        The maximum depth of the tree. If `None` the tree is
+        expanded until all leaves are pure or until all leaves contain less
+        than `min_samples_split` samples.
+    min_samples_split : int, optional
+        The minimum number of samples to split an internal node.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        A split will be introduced only if the impurity decrease is larger
+        than or equal to this value.
+    sampling : {"normal", "uniform", "shapelet"}, optional
+        The sampling of convolutional filters.
+
+        - if "normal", sample filter according to a normal distribution with
+            ``mean`` and ``scale``.
+        - if "uniform", sample filter according to a uniform distribution with
+            ``lower`` and ``upper``.
+        - if "shapelet", sample filters as subsequences in the training data.
+    sampling_params : dict, optional
+        The parameters for the sampling.
+
+        - if "normal", ``{"mean": float, "scale": float}``, defaults to
+            ``{"mean": 0, "scale": 1}``.
+        - if "uniform", ``{"lower": float, "upper": float}``, defaults to
+            ``{"lower": -1, "upper": 1}``.
+    kernel_size : array-like, optional
+        The kernel size, by default ``[7, 11, 13]``.
+    min_size : float, optional
+        The minimum length of a shapelets expressed as a fraction of
+        *n_timestep*.
+    max_size : float, optional
+        The maximum length of a shapelets expressed as a fraction of
+        *n_timestep*.
+    bias_prob : float, optional
+        The probability of using a bias term.
+    normalize_prob : float, optional
+        The probability of performing normalization.
+    padding_prob : float, optional
+        The probability of padding with zeros.
+    criterion : {"entropy", "gini"}, optional
+        The criterion used to evaluate the utility of a split.
+    bootstrap : bool, optional
+        If the samples are drawn with replacement.
+    warm_start : bool, optional
+        When set to `True`, reuse the solution of the previous call to
+        fit and add more estimators to the ensemble, otherwise, just fit a
+        whole new ensemble.
+    class_weight : dict or "balanced", optional
+        Weights associated with the labels
+
+        - if `dict`, weights on the form `{label: weight}`.
+        - if "balanced" each class weight inversely proportional to
+          the class frequency.
+        - if :class:`None`, each class has equal weight.
+    n_jobs : int, optional
+        The number of processor cores used for fitting the ensemble.
+    random_state : int or RandomState, optional
+        Controls the random resampling of the original dataset.
+
+        - If `int`, `random_state` is the seed used by the
+          random number generator
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
+    """
 
     _parameter_constraints: dict = {
         **ForestMixin._parameter_constraints,

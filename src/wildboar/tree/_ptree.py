@@ -73,7 +73,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
           optional key-value pairs defining the lower and upper bound on the
           values as well as the number of values in the grid. For example, to
           specifiy a grid over the argument 'r' with 10 values in the range 0
-          to 1, we would give the following specification: 
+          to 1, we would give the following specification:
           `dict(min_r=0, max_r=1, num_r=10)`.
 
         Read more about the metrics and their parameters in the
@@ -166,6 +166,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             None,
         ],
     }
+    _parameter_constraints.pop("impurity_equality_tolerance")
 
     def __init__(
         self,

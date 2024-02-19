@@ -28,6 +28,7 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         "min_samples_split": [Interval(Integral, 2, None, closed="left")],
         "min_samples_leaf": [Interval(Integral, 1, None, closed="left")],
         "min_impurity_decrease": [Interval(Real, 0.0, None, closed="left")],
+        "impurity_equality_tolerance": [None, Interval(Real, 0.0, None, closed="left")],
     }
 
     def __init__(
@@ -37,11 +38,13 @@ class BaseTree(BaseEstimator, metaclass=ABCMeta):
         min_samples_split=2,
         min_samples_leaf=1,
         min_impurity_decrease=0.0,
+        impurity_equality_tolerance=None,
     ):
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
         self.min_samples_leaf = min_samples_leaf
         self.min_impurity_decrease = min_impurity_decrease
+        self.impurity_equality_tolerance = impurity_equality_tolerance
 
     def _validate_not_check_input(self, x, reset=True):
         x = self._validate_force_n_dims(x)

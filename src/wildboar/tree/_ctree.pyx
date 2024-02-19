@@ -20,7 +20,7 @@ from ..distance._cdistance cimport Metric
 
 from ..transform._attr_gen cimport Attribute, AttributeGenerator
 from ..utils cimport TSArray
-from ..utils._misc cimport List, argsort, safe_realloc
+from ..utils._misc cimport List, argsort, safe_realloc, isclose
 from ..utils._rand cimport RAND_R_MAX, rand_int, rand_uniform
 
 
@@ -813,6 +813,7 @@ cdef class TreeBuilder:
     cdef Py_ssize_t min_sample_split
     cdef Py_ssize_t min_sample_leaf
     cdef double min_impurity_decrease
+    cdef double impurity_equality_tolerance
 
     # the id (in Tree) of the current node
     cdef Py_ssize_t current_node_id
@@ -853,11 +854,13 @@ cdef class TreeBuilder:
         Py_ssize_t min_sample_split=2,
         Py_ssize_t min_sample_leaf=1,
         double min_impurity_decrease=0.0,
+        double impurity_equality_tolerance=0.0,
     ):
         self.max_depth = max_depth
         self.min_sample_split = min_sample_split
         self.min_sample_leaf = min_sample_leaf
         self.min_impurity_decrease = min_impurity_decrease
+        self.impurity_equality_tolerance = impurity_equality_tolerance
         self.random_seed = random_state.randint(0, RAND_R_MAX)
 
         self.X = X
@@ -1056,12 +1059,15 @@ cdef class TreeBuilder:
         cdef Py_ssize_t current_split_point
         cdef double current_threshold
         cdef double current_impurity
+        cdef double current_gap
         cdef double best_impurity
+        cdef double best_gap
         cdef Attribute current_attribute
 
         n_samples = end - start
 
         best_impurity = -INFINITY
+        best_gap = -INFINITY
 
         current_attribute.attribute = NULL
         current_impurity = -INFINITY
@@ -1093,14 +1099,24 @@ cdef class TreeBuilder:
             argsort(self.attribute_buffer + start, self.samples + start, n_samples)
 
             # All attribute values are constant
-            if self.attribute_buffer[end - 1] <= self.attribute_buffer[start] + ATTRIBUTE_THRESHOLD:
+            if (
+                self.attribute_buffer[end - 1]
+                <= self.attribute_buffer[start] + ATTRIBUTE_THRESHOLD
+            ):
                 continue
 
             self.criterion.reset()
             self._partition_attribute_buffer(
-                start, end, &current_split_point, &current_threshold, &current_impurity
+                start,
+                end,
+                &current_split_point,
+                &current_threshold,
+                &current_impurity,
+                &current_gap,
             )
-            if current_impurity > best_impurity:
+            if current_impurity > best_impurity or (
+                isclose(current_impurity, best_impurity, self.impurity_equality_tolerance) and current_gap > best_gap
+            ):
                 # store the order of samples in `sample_buffer`
                 memcpy(
                     self.samples_buffer,
@@ -1108,6 +1124,7 @@ cdef class TreeBuilder:
                     sizeof(Py_ssize_t) * n_samples,
                 )
                 best_impurity = current_impurity
+                best_gap = current_gap
 
                 best.split_point = current_split_point
                 best.threshold = current_threshold
@@ -1143,13 +1160,19 @@ cdef class TreeBuilder:
         Py_ssize_t *best_split_point,
         double *best_threshold,
         double *best_impurity,
+        double *best_gap,
     ) noexcept nogil:
         cdef Py_ssize_t i  # real index of samples (in `range(start, end)`)
         cdef Py_ssize_t j  # sample index (in `samples`)
         cdef Py_ssize_t pos
         cdef Py_ssize_t new_pos
-        cdef double impurity
+        cdef double impurity, gap
+        cdef double right_gap = 0, left_gap = 0
 
+        for i in range(start, end):
+            right_gap += self.attribute_buffer[i]
+
+        best_gap[0] = -INFINITY
         best_impurity[0] = -INFINITY
         best_threshold[0] = NAN
         best_split_point[0] = 0
@@ -1168,12 +1191,26 @@ cdef class TreeBuilder:
             if i < end:
                 new_pos = i
                 self.criterion.update(pos, new_pos)
+                for j in range(pos, new_pos):
+                    left_gap += self.attribute_buffer[j]
+                    right_gap -= self.attribute_buffer[j]
+
                 pos = new_pos
                 impurity = self.criterion.proxy_impurity()
-                if impurity > best_impurity[0]:
+                gap = (
+                    left_gap / self.criterion.weighted_n_right -
+                    right_gap / self.criterion.weighted_n_left
+                )
+
+                if impurity > best_impurity[0] or (
+                    isclose(impurity, best_impurity[0], self.impurity_equality_tolerance)
+                    and gap > best_gap[0]
+                ):
                     best_impurity[0] = impurity
+                    best_gap[0] = gap
                     best_threshold[0] = (
-                        self.attribute_buffer[i - 1] / 2.0 + self.attribute_buffer[i] / 2.0
+                        self.attribute_buffer[i - 1] / 2.0
+                        + self.attribute_buffer[i] / 2.0
                     )
                     best_split_point[0] = pos
 
@@ -1193,6 +1230,7 @@ cdef class ExtraTreeBuilder(TreeBuilder):
         Py_ssize_t *split_point,
         double *threshold,
         double *impurity,
+        double *gap,
     ) noexcept nogil:
         cdef double min_attribute = self.attribute_buffer[start + 1]
         cdef double max_attribute = self.attribute_buffer[end - 1]

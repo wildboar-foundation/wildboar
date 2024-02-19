@@ -9,7 +9,7 @@
 
 import numpy as np
 
-from libc.math cimport M_PI, cos, log, log2, sin, sqrt, INFINITY
+from libc.math cimport M_PI, cos, log, log2, sin, sqrt, INFINITY, fabs
 from libc.stdlib cimport realloc, malloc, free
 from libc.string cimport memset
 
@@ -269,3 +269,7 @@ cdef object to_ndarray_double(double *arr, Py_ssize_t n):
 
 def _test_ts_array(TSArray arr):
     return arr[0, 0, 0]
+
+
+cdef bint isclose(double a, double b, double tol) noexcept nogil:
+    return fabs(a - b) <= tol

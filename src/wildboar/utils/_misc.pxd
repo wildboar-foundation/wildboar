@@ -50,3 +50,5 @@ cdef int safe_realloc(void** ptr, Py_ssize_t new_size) except -1 nogil
 cdef object to_ndarray_int(Py_ssize_t *arr, Py_ssize_t n)
 
 cdef object to_ndarray_double(double *arr, Py_ssize_t n)
+
+cdef bint isclose(double a, double b, double tol) noexcept nogil

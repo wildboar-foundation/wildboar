@@ -36,3 +36,15 @@ Wildboar 1.2 introduces several new models.
 
      - |Feature| Native guide counterfactuals.
 
+  .. grid-item-card::
+
+     :mod:`wildboar.tree`
+     ^^^
+
+     - |Feature| Add a new hyper-parameter `impurity_equality_tolerance` which
+       controls how we treat impurities as equal. If the impurity of two
+       shapelets are the same we consider the separation gap. By default the
+       distance separation gap is disabled
+       (``impurity_equality_tolerance=None``) but it can be enabled by setting
+       a (small) non negative float.
+
