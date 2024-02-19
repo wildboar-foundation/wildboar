@@ -22,23 +22,23 @@ It is currently maintained by Isak Samsten
 
 ## Features
 
-| **Data**                                                        | **Classification**             | **Regression**                | **Explainability**             | **Metric** | **Unsupervised**             | **Outlier**               |
-| --------------------------------------------------------------- | ------------------------------ | ----------------------------- | ------------------------------ | ---------- | ---------------------------- | ------------------------- |
-| [Repositories](https://wildboar.dev/master/guide/datasets.html) | `ShapeletForestClassifier`     | `ShapeletForestRegressor`     | `ShapeletForestCounterfactual` | UCR-suite  | `ShapeletForestTransform`    | `IsolationShapeletForest` |
-| Classification (`wildboar/ucr`)                                 | `ExtraShapeletTreesClassifier` | `ExtraShapeletTreesRegressor` | `KNearestCounterfactual`       | MASS       | `RandomShapeletEmbedding`    |                           |
-| Regression (`wildboar/tsereg`)                                  | `RocketTreeClassifier`         | `RocketRegressor`             | `PrototypeCounterfactual`      | DTW        | `RocketTransform`            |                           |
-| Outlier detection (`wildboar/outlier:easy`)                     | `RocketClassifier`             | `RandomShapeletRegressor`     | `IntervalImportance`           | DDTW       | `IntervalTransform`          |                           |
-|                                                                 | `RandomShapeletClassifier`     | `RocketTreeRegressor`         | `ShapeletImportance`           | WDTW       | `FeatureTransform`           |                           |
-|                                                                 | `RocketForestClassifier`       | `RocketForestRegressor`       | `NativeGuideCounterfactual`    | MSM        | `MatrixProfileTransform`     |                           |
-|                                                                 | `IntervalTreeClassifier`       | `IntervalTreeRegressor`       |                                | TWE        | Segmentation                 |                           |
-|                                                                 | `IntervalForestClassifier`     | `IntervalForestRegressor`     |                                | LCSS       | Motif discovery              |                           |
-|                                                                 | `ProximityTreeClassifier`      |                               |                                | ERP        | `SAX`                        |                           |
-|                                                                 | `ProximityForestClassifier`    |                               |                                | EDR        | `PAA`                        |                           |
-|                                                                 | `HydraClassifier`              |                               |                                | ADTW       | `MatrixProfileTransform`     |                           |
-|                                                                 | `KNeighborsClassifier`         |                               |                                |            | `HydraTransform`             |                           |
-|                                                                 | `ElasticEnsembleClassifier`    |                               |                                |            | `KMeans` with (W)DTW support |                           |
-|                                                                 | `DilatedShapeletClassifier`    |                               |                                |            | `KMedoids`                   |                           |
-|                                                                 |                                |                               |                                |            | `DilatedShapeletTransform`   |                           |
+| **Data**                                                        | **Classification**             | **Regression**                | **Explainability**             | **Metric** | **Unsupervised**             | **Dimension selection**       | **Outlier**               |
+| --------------------------------------------------------------- | ------------------------------ | ----------------------------- | ------------------------------ | ---------- | ---------------------------- | ----------------------------- | ------------------------- |
+| [Repositories](https://wildboar.dev/master/guide/datasets.html) | `ShapeletForestClassifier`     | `ShapeletForestRegressor`     | `ShapeletForestCounterfactual` | UCR-suite  | `ShapeletForestTransform`    | `DimensionVarianceThreshold`  | `IsolationShapeletForest` |
+| Classification (`wildboar/ucr`)                                 | `ExtraShapeletTreesClassifier` | `ExtraShapeletTreesRegressor` | `KNearestCounterfactual`       | MASS       | `RandomShapeletEmbedding`    | `SelectDimensionPercentile`   |                           |
+| Regression (`wildboar/tsereg`)                                  | `RocketTreeClassifier`         | `RocketRegressor`             | `PrototypeCounterfactual`      | DTW        | `RocketTransform`            | `SelectDimensionTopK`         |                           |
+| Outlier detection (`wildboar/outlier:easy`)                     | `RocketClassifier`             | `RandomShapeletRegressor`     | `IntervalImportance`           | DDTW       | `IntervalTransform`          | `SelectDimensionSignificance` |                           |
+|                                                                 | `RandomShapeletClassifier`     | `RocketTreeRegressor`         | `ShapeletImportance`           | WDTW       | `FeatureTransform`           |                               |                           |
+|                                                                 | `RocketForestClassifier`       | `RocketForestRegressor`       |                                | MSM        | `MatrixProfileTransform`     |                               |                           |
+|                                                                 | `IntervalTreeClassifier`       | `IntervalTreeRegressor`       |                                | TWE        | Segmentation                 |                               |                           |
+|                                                                 | `IntervalForestClassifier`     | `IntervalForestRegressor`     |                                | LCSS       | Motif discovery              |                               |                           |
+|                                                                 | `ProximityTreeClassifier`      |                               |                                | ERP        | `SAX`                        |                               |                           |
+|                                                                 | `ProximityForestClassifier`    |                               |                                | EDR        | `PAA`                        |                               |                           |
+|                                                                 | `HydraClassifier`              |                               |                                | ADTW       | `MatrixProfileTransform`     |                               |                           |
+|                                                                 | `KNeighborsClassifier`         |                               |                                |            | `HydraTransform`             |                               |                           |
+|                                                                 | `ElasticEnsembleClassifier`    |                               |                                |            | `KMeans` with (W)DTW support |                               |                           |
+|                                                                 | `DilatedShapeletClassifier`    |                               |                                |            | `KMedoids`                   |                               |                           |
+|                                                                 |                                |                               |                                |            | `DilatedShapeletTransform`   |                               |                           |
 
 See the [documentation](https://wildboar.dev/master/) for examples.
 
@@ -50,7 +50,7 @@ See the [documentation](https://wildboar.dev/master/) for examples.
 
     pip install wildboar
 
-Universal binaries are compiled for Python 3.8, 3.9, 3.10 and 3.11 running on
+Universal binaries are compiled for Python 3.9, 3.10, 3.11 and 3.12 running on
 GNU/Linux, Windows and macOS.
 
 ### Compilation
