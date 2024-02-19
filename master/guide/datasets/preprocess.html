@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pre-processing &#8212; Wildboar 1.4.0.dev8+g80d68eb31 documentation</title>
+    <title>Pre-processing &#8212; Wildboar 1.4.0.dev22+g5e0cf27bb documentation</title>
   
   
   
@@ -29,7 +29,6 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=11f2bc40" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
@@ -41,7 +40,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=a9ab77d6"></script>
+    <script src="../../_static/documentation_options.js?v=ac5b82c5"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -194,13 +193,6 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../api/wildboar/index.html">
-                        API
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../examples.html">
                         Examples
                       </a>
@@ -338,13 +330,6 @@ document.write(`
                 
 
                     <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../api/wildboar/index.html">
-                        API
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../examples.html">
                         Examples
                       </a>
@@ -430,6 +415,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="../metrics/elastic.html">Elastic metrics</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../dimension_selection.html">Dimension selection</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../supervised.html">Supervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../supervised/trees.html">Tree-based estimators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../supervised/ensemble.html">Ensemble estimators</a></li>
@@ -513,20 +499,20 @@ common operations that are performed along the time dimension (i.e., along the
 last dimension of the time series array). Currently, Wildboar supports the
 following operations:</p>
 <dl class="simple">
-<dt><a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.standardize" title="wildboar.datasets.preprocess.standardize"><code class="xref py py-func docutils literal notranslate"><span class="pre">standardize</span></code></a></dt><dd><p>Standardize each time step to have zero mean and unit variance.</p>
+<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">standardize</span></code></dt><dd><p>Standardize each time step to have zero mean and unit variance.</p>
 </dd>
-<dt><a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.minmax_scale" title="wildboar.datasets.preprocess.minmax_scale"><code class="xref py py-func docutils literal notranslate"><span class="pre">minmax_scale</span></code></a></dt><dd><p>Normalize each time step in a predefined range, by default between 0 and 1.</p>
+<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">minmax_scale</span></code></dt><dd><p>Normalize each time step in a predefined range, by default between 0 and 1.</p>
 </dd>
-<dt><a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.maxabs_scale" title="wildboar.datasets.preprocess.maxabs_scale"><code class="xref py py-func docutils literal notranslate"><span class="pre">maxabs_scale</span></code></a></dt><dd><p>Scale each time step by the maximum absolute value,</p>
+<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">maxabs_scale</span></code></dt><dd><p>Scale each time step by the maximum absolute value,</p>
 </dd>
-<dt><a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.truncate" title="wildboar.datasets.preprocess.truncate"><code class="xref py py-func docutils literal notranslate"><span class="pre">truncate</span></code></a></dt><dd><p>Truncate each time series to have uniform length, i.e., to the length of the
+<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">truncate</span></code></dt><dd><p>Truncate each time series to have uniform length, i.e., to the length of the
 shortest time series.</p>
 </dd>
 </dl>
 <p>In contrast to <a class="reference external" href="https://scikit-learn.org/stable/modules/preprocessing.html" title="(in scikit-learn v1.4)"><span class="xref std std-doc">feature-wise preprocessing</span></a>, the preprocessing operations in the
-<a class="reference internal" href="../../api/wildboar/datasets/index.html#module-wildboar.datasets" title="wildboar.datasets"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code></a>-module operate sample-wise and are state-less, i.e., we can
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">wildboar.datasets</span></code>-module operate sample-wise and are state-less, i.e., we can
 reuse them for both the training and testing parts of our data. To simplify the
-application of preprocessing, the <a class="reference internal" href="../../api/wildboar/datasets/index.html#wildboar.datasets.load_dataset" title="wildboar.datasets.load_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">wildboar.datasets.load_dataset</span></code></a> function
+application of preprocessing, the <code class="xref py py-func docutils literal notranslate"><span class="pre">wildboar.datasets.load_dataset</span></code> function
 accepts a <code class="code highlight python docutils literal highlight-python"><span class="n">preprocess</span></code> parameter:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 <span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">preprocess</span>
@@ -542,15 +528,15 @@ snippet could be rewritten as:</p>
 </div>
 <img alt="../../_images/minmax_scale-light.svg" class="only-light align-center" src="../../_images/minmax_scale-light.svg" /><img alt="../../_images/minmax_scale-dark.svg" class="only-dark align-center" src="../../_images/minmax_scale-dark.svg" /><p>A crude way of dealing with time series of unequal length is to truncate longer
 time series to the length of the shortest time series. In Wildboar, we can use
-<a class="reference internal" href="../../api/wildboar/datasets/preprocess/index.html#wildboar.datasets.preprocess.truncate" title="wildboar.datasets.preprocess.truncate"><code class="xref py py-func docutils literal notranslate"><span class="pre">truncate</span></code></a> to accomplish this.</p>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">truncate</span></code> to accomplish this.</p>
 <p>In Wildboar, all time series datasets are traditional Numpy-arrays with a
 specified shape, i.e., <code class="docutils literal notranslate"><span class="pre">(n_samples,</span> <span class="pre">n_dims,</span> <span class="pre">n_timesteps)</span></code>. To support time
 series of unequal length, we use a specific value to denote end-of-sequence
 (<code class="docutils literal notranslate"><span class="pre">EOS</span></code>). We can get the <code class="docutils literal notranslate"><span class="pre">EOS</span></code> value from <code class="xref py py-const docutils literal notranslate"><span class="pre">wildboar.eos</span></code>, and use
-<a class="reference internal" href="../../api/wildboar/index.html#wildboar.iseos" title="wildboar.iseos"><code class="xref py py-func docutils literal notranslate"><span class="pre">wildboar.iseos</span></code></a> to check for this value, and get the length of each
-series:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">wildboar</span>
-<span class="n">length</span> <span class="o">=</span> <span class="n">wildboar</span><span class="o">.</span><span class="n">iseos</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">wildboar.utils.variable_len.is_end_of_series</span></code> to check for this value,
+and get the length of each series:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.variable_len</span> <span class="kn">import</span> <span class="n">is_end_of_series</span>
+<span class="n">length</span> <span class="o">=</span> <span class="n">is_end_of_series</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For example, we could use the following code to plot the length of each

@@ -260,6 +260,7 @@ work when using a newer version (or vice versa).
    guide/datasets
    guide/annotate
    guide/metrics
+   guide/dimension_selection
    guide/supervised
    guide/unsupervised
    guide/glossary
