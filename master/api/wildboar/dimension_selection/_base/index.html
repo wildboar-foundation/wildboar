@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>wildboar.dimension_selection._base &#8212; Wildboar 1.3.0.dev2+gcf51c24e7 documentation</title>
+    <title>wildboar.dimension_selection._base &#8212; Wildboar 1.3.0.dev3+g6cefc7acd documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../../_static/documentation_options.js?v=584ce810"></script>
+    <script src="../../../../_static/documentation_options.js?v=baa42c5c"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -469,44 +469,17 @@ document.write(`
 <table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#wildboar.dimension_selection._base.BaseDistanceSelector" title="wildboar.dimension_selection._base.BaseDistanceSelector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BaseDistanceSelector</span></code></a></p></td>
-<td><p>Mixin class for all transformers in scikit-learn.</p></td>
+<td><p>Mixin for dimension selector.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#wildboar.dimension_selection._base.DimensionSelectorMixin" title="wildboar.dimension_selection._base.DimensionSelectorMixin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DimensionSelectorMixin</span></code></a></p></td>
-<td><p>Mixin class for all transformers in scikit-learn.</p></td>
+<td><p>Mixin for dimension selector.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.BaseDistanceSelector">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection._base.</span></span><span class="sig-name descname"><span class="pre">BaseDistanceSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L88-L137"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.BaseDistanceSelector" title="Link to this definition">#</a></dt>
-<dd><p>Mixin class for all transformers in scikit-learn.</p>
-<p>This mixin defines the following functionality:</p>
-<ul class="simple">
-<li><p>a <cite>fit_transform</cite> method that delegates to <cite>fit</cite> and <cite>transform</cite>;</p></li>
-<li><p>a <cite>set_output</cite> method to output <cite>X</cite> as a specific container type.</p></li>
-</ul>
-<p>If <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-get_feature_names_out" title="(in scikit-learn v1.4)"><span class="xref std std-term">get_feature_names_out</span></a> is defined, then <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code> will
-automatically wrap <cite>transform</cite> and <cite>fit_transform</cite> to follow the <cite>set_output</cite>
-API. See the <a class="reference external" href="https://scikit-learn.org/stable/developers/develop.html#developer-api-set-output" title="(in scikit-learn v1.4)"><span>Developer API for set_output</span></a> for details.</p>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">OneToOneFeatureMixin</span></code> and
-<code class="xref py py-class docutils literal notranslate"><span class="pre">ClassNamePrefixFeaturesOutMixin</span></code> are helpful mixins for
-defining <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-get_feature_names_out" title="(in scikit-learn v1.4)"><span class="xref std std-term">get_feature_names_out</span></a>.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyTransformer</span><span class="p">(</span><span class="n">TransformerMixin</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">param</span> <span class="o">=</span> <span class="n">param</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">fill_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">MyTransformer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">array([1, 1, 1])</span>
-</pre></div>
-</div>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection._base.</span></span><span class="sig-name descname"><span class="pre">BaseDistanceSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'euclidean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L94-L180"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.BaseDistanceSelector" title="Link to this definition">#</a></dt>
+<dd><p>Mixin for dimension selector.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.BaseDistanceSelector.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.BaseDistanceSelector.fit" title="Link to this definition">#</a></dt>
@@ -557,7 +530,7 @@ and returns a transformed version of <cite>X</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.BaseDistanceSelector.get_dimensions">
-<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L13-L29"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.BaseDistanceSelector.get_dimensions" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L19-L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.BaseDistanceSelector.get_dimensions" title="Link to this definition">#</a></dt>
 <dd><p>Get a boolean mask with the selected dimensions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -615,7 +588,7 @@ contained subobjects that are estimators.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.BaseDistanceSelector.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L59-L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.BaseDistanceSelector.inverse_transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L65-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.BaseDistanceSelector.inverse_transform" title="Link to this definition">#</a></dt>
 <dd><p>Reverse the transformation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -713,35 +686,8 @@ possible to update each component of a nested object.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.DimensionSelectorMixin">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection._base.</span></span><span class="sig-name descname"><span class="pre">DimensionSelectorMixin</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L12-L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.DimensionSelectorMixin" title="Link to this definition">#</a></dt>
-<dd><p>Mixin class for all transformers in scikit-learn.</p>
-<p>This mixin defines the following functionality:</p>
-<ul class="simple">
-<li><p>a <cite>fit_transform</cite> method that delegates to <cite>fit</cite> and <cite>transform</cite>;</p></li>
-<li><p>a <cite>set_output</cite> method to output <cite>X</cite> as a specific container type.</p></li>
-</ul>
-<p>If <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-get_feature_names_out" title="(in scikit-learn v1.4)"><span class="xref std std-term">get_feature_names_out</span></a> is defined, then <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseEstimator</span></code> will
-automatically wrap <cite>transform</cite> and <cite>fit_transform</cite> to follow the <cite>set_output</cite>
-API. See the <a class="reference external" href="https://scikit-learn.org/stable/developers/develop.html#developer-api-set-output" title="(in scikit-learn v1.4)"><span>Developer API for set_output</span></a> for details.</p>
-<p><code class="xref py py-class docutils literal notranslate"><span class="pre">OneToOneFeatureMixin</span></code> and
-<code class="xref py py-class docutils literal notranslate"><span class="pre">ClassNamePrefixFeaturesOutMixin</span></code> are helpful mixins for
-defining <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-get_feature_names_out" title="(in scikit-learn v1.4)"><span class="xref std std-term">get_feature_names_out</span></a>.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="kn">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">MyTransformer</span><span class="p">(</span><span class="n">TransformerMixin</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">param</span> <span class="o">=</span> <span class="n">param</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">):</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="n">fill_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">param</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span> <span class="o">=</span> <span class="n">MyTransformer</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">transformer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="go">array([1, 1, 1])</span>
-</pre></div>
-</div>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wildboar.dimension_selection._base.</span></span><span class="sig-name descname"><span class="pre">DimensionSelectorMixin</span></span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L14-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.DimensionSelectorMixin" title="Link to this definition">#</a></dt>
+<dd><p>Mixin for dimension selector.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.DimensionSelectorMixin.fit_transform">
 <span class="sig-name descname"><span class="pre">fit_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.DimensionSelectorMixin.fit_transform" title="Link to this definition">#</a></dt>
@@ -770,7 +716,7 @@ and returns a transformed version of <cite>X</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.DimensionSelectorMixin.get_dimensions">
-<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L13-L29"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.DimensionSelectorMixin.get_dimensions" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L19-L35"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.DimensionSelectorMixin.get_dimensions" title="Link to this definition">#</a></dt>
 <dd><p>Get a boolean mask with the selected dimensions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -790,7 +736,7 @@ and returns a transformed version of <cite>X</cite>.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="wildboar.dimension_selection._base.DimensionSelectorMixin.inverse_transform">
-<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L59-L85"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.DimensionSelectorMixin.inverse_transform" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">inverse_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/wildboar-foundation/wildboar/blob/master/src/wildboar/dimension_selection/_base.py#L65-L91"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wildboar.dimension_selection._base.DimensionSelectorMixin.inverse_transform" title="Link to this definition">#</a></dt>
 <dd><p>Reverse the transformation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

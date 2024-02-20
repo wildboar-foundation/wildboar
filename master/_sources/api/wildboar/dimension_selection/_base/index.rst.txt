@@ -22,26 +22,13 @@ Classes
 
 
 
-.. py:class:: BaseDistanceSelector(*, metric='euclidean', metric_params=None, n_jobs=None)
+.. py:class:: BaseDistanceSelector(*, sample=None, metric='euclidean', metric_params=None, n_jobs=None, random_state=None)
 
 
 
 
    
-   Mixin class for all transformers in scikit-learn.
-
-   This mixin defines the following functionality:
-
-   - a `fit_transform` method that delegates to `fit` and `transform`;
-   - a `set_output` method to output `X` as a specific container type.
-
-   If :term:`get_feature_names_out` is defined, then :class:`BaseEstimator` will
-   automatically wrap `transform` and `fit_transform` to follow the `set_output`
-   API. See the :ref:`developer_api_set_output` for details.
-
-   :class:`OneToOneFeatureMixin` and
-   :class:`ClassNamePrefixFeaturesOutMixin` are helpful mixins for
-   defining :term:`get_feature_names_out`.
+   Mixin for dimension selector.
 
 
 
@@ -54,21 +41,7 @@ Classes
 
 
 
-   .. rubric:: Examples
 
-   >>> import numpy as np
-   >>> from sklearn.base import BaseEstimator, TransformerMixin
-   >>> class MyTransformer(TransformerMixin, BaseEstimator):
-   ...     def __init__(self, *, param=1):
-   ...         self.param = param
-   ...     def fit(self, X, y=None):
-   ...         return self
-   ...     def transform(self, X):
-   ...         return np.full(shape=len(X), fill_value=self.param)
-   >>> transformer = MyTransformer()
-   >>> X = [[1, 2], [2, 3], [3, 4]]
-   >>> transformer.fit_transform(X)
-   array([1, 1, 1])
 
 
 
@@ -386,20 +359,7 @@ Classes
 
 
    
-   Mixin class for all transformers in scikit-learn.
-
-   This mixin defines the following functionality:
-
-   - a `fit_transform` method that delegates to `fit` and `transform`;
-   - a `set_output` method to output `X` as a specific container type.
-
-   If :term:`get_feature_names_out` is defined, then :class:`BaseEstimator` will
-   automatically wrap `transform` and `fit_transform` to follow the `set_output`
-   API. See the :ref:`developer_api_set_output` for details.
-
-   :class:`OneToOneFeatureMixin` and
-   :class:`ClassNamePrefixFeaturesOutMixin` are helpful mixins for
-   defining :term:`get_feature_names_out`.
+   Mixin for dimension selector.
 
 
 
@@ -412,21 +372,7 @@ Classes
 
 
 
-   .. rubric:: Examples
 
-   >>> import numpy as np
-   >>> from sklearn.base import BaseEstimator, TransformerMixin
-   >>> class MyTransformer(TransformerMixin, BaseEstimator):
-   ...     def __init__(self, *, param=1):
-   ...         self.param = param
-   ...     def fit(self, X, y=None):
-   ...         return self
-   ...     def transform(self, X):
-   ...         return np.full(shape=len(X), fill_value=self.param)
-   >>> transformer = MyTransformer()
-   >>> X = [[1, 2], [2, 3], [3, 4]]
-   >>> transformer.fit_transform(X)
-   array([1, 1, 1])
 
 
 
