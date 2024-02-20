@@ -21,6 +21,12 @@ class DistanceVarianceThreshold(BaseDistanceSelector):
     ----------
     threshold : float, optional
         The variance threshold.
+    sample : int or float, optional
+        Draw a sample of time series for the pairwise distance calculation.
+
+        - If None, use all samples.
+        - If float, use the specified fraction of samples.
+        - If int, use the specified number of samples.
     metric : str, optional
         The distance metric.
     metric_params : dict, optional
@@ -28,6 +34,16 @@ class DistanceVarianceThreshold(BaseDistanceSelector):
 
         Read more about the metrics and their parameters in the
         :ref:`User guide <list_of_metrics>`.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
     n_jobs : int, optional
         The number of parallel jobs.
 
@@ -50,9 +66,22 @@ class DistanceVarianceThreshold(BaseDistanceSelector):
     }
 
     def __init__(
-        self, threshold=0, *, metric="euclidean", metric_params=None, n_jobs=None
+        self,
+        threshold=0,
+        *,
+        sample=None,
+        metric="euclidean",
+        metric_params=None,
+        random_state=None,
+        n_jobs=None,
     ):
-        super().__init__(metric=metric, metric_params=metric_params, n_jobs=n_jobs)
+        super().__init__(
+            sample=sample,
+            metric=metric,
+            metric_params=metric_params,
+            n_jobs=n_jobs,
+            random_state=random_state,
+        )
         self.threshold = threshold
 
     def _fit(self, dist, y=None):

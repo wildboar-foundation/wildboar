@@ -13,7 +13,9 @@ class _UnivariateDistanceSelector(BaseDistanceSelector):
         "score_func": [callable],
     }
 
-    def __init__(self, score_func, *, metric, metric_params, n_jobs):
+    def __init__(
+        self, score_func, *, sample, metric, metric_params, n_jobs, random_state
+    ):
         super().__init__(metric=metric, metric_params=metric_params, n_jobs=n_jobs)
         self.score_func = score_func
 
@@ -50,6 +52,12 @@ class SelectDimensionPercentile(_UnivariateDistanceSelector):
     score_func : callable, optional
         Function taking two arrays X and y and returning scores and optionally
         p-values. The default is :func:`~sklearn.feature_selection.f_classif`.
+    sample : int or float, optional
+        Draw a sample of time series for the pairwise distance calculation.
+
+        - If None, use all samples.
+        - If float, use the specified fraction of samples.
+        - If int, use the specified number of samples.
     percentile : float, optional
         Percent of dimensions to retain.
     metric : str, optional
@@ -59,6 +67,26 @@ class SelectDimensionPercentile(_UnivariateDistanceSelector):
 
         Read more about the metrics and their parameters in the
         :ref:`User guide <list_of_metrics>`.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
     n_jobs : int, optional
         The number of parallel jobs.
 
@@ -76,7 +104,6 @@ class SelectDimensionPercentile(_UnivariateDistanceSelector):
     """
 
     _parameter_constraints = {
-        **BaseDistanceSelector._parameter_constraints,
         **_UnivariateDistanceSelector._parameter_constraints,
         "percentile": [Interval(numbers.Real, 0, 100, closed="both")],
     }
@@ -85,13 +112,20 @@ class SelectDimensionPercentile(_UnivariateDistanceSelector):
         self,
         score_func=f_classif,
         *,
+        sample=None,
         percentile=10,
         metric="euclidean",
         metric_params=None,
         n_jobs=None,
+        random_state=None,
     ):
         super().__init__(
-            score_func, metric=metric, metric_params=metric_params, n_jobs=n_jobs
+            score_func,
+            sample=sample,
+            metric=metric,
+            metric_params=metric_params,
+            n_jobs=n_jobs,
+            random_state=random_state,
         )
         self.percentile = percentile
 
@@ -125,6 +159,12 @@ class SelectDimensionTopK(_UnivariateDistanceSelector):
     score_func : callable, optional
         Function taking two arrays X and y and returning scores and optionally
         p-values. The default is :func:`~sklearn.feature_selection.f_classif`.
+    sample : int or float, optional
+        Draw a sample of time series for the pairwise distance calculation.
+
+        - If None, use all samples.
+        - If float, use the specified fraction of samples.
+        - If int, use the specified number of samples.
     k : int, optional
         The number of top dimensions to select.
     metric : str, optional
@@ -134,6 +174,16 @@ class SelectDimensionTopK(_UnivariateDistanceSelector):
 
         Read more about the metrics and their parameters in the
         :ref:`User guide <list_of_metrics>`.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
     n_jobs : int, optional
         The number of parallel jobs.
 
@@ -152,7 +202,6 @@ class SelectDimensionTopK(_UnivariateDistanceSelector):
     """
 
     _parameter_constraints = {
-        **BaseDistanceSelector._parameter_constraints,
         **_UnivariateDistanceSelector._parameter_constraints,
         "k": [Interval(numbers.Integral, 1, None, closed="left")],
     }
@@ -161,13 +210,20 @@ class SelectDimensionTopK(_UnivariateDistanceSelector):
         self,
         score_func=f_classif,
         *,
+        sample=None,
         k=None,
         metric="euclidean",
         metric_params=None,
+        random_state=None,
         n_jobs=None,
     ):
         super().__init__(
-            score_func, metric=metric, metric_params=metric_params, n_jobs=n_jobs
+            score_func,
+            sample=sample,
+            metric=metric,
+            metric_params=metric_params,
+            n_jobs=n_jobs,
+            random_state=random_state,
         )
         self.k = k
 
@@ -194,6 +250,12 @@ class SelectDimensionSignificance(_UnivariateDistanceSelector):
     score_func : callable, optional
         Function taking two arrays X and y and returning scores and optionally
         p-values. The default is :func:`~sklearn.feature_selection.f_classif`.
+    sample : int or float, optional
+        Draw a sample of time series for the pairwise distance calculation.
+
+        - If None, use all samples.
+        - If float, use the specified fraction of samples.
+        - If int, use the specified number of samples.
     alpha : int, optional
         Percent of dimensions to retain.
     method : {"fpr", "fdr", "fwe"}, optional
@@ -209,6 +271,16 @@ class SelectDimensionSignificance(_UnivariateDistanceSelector):
 
         Read more about the metrics and their parameters in the
         :ref:`User guide <list_of_metrics>`.
+    random_state : int or RandomState, optional
+        Controls the random sampling of kernels.
+
+        - If `int`, `random_state` is the seed used by the random number
+          generator.
+        - If :class:`numpy.random.RandomState` instance, `random_state` is
+          the random number generator.
+        - If `None`, the random number generator is the
+          :class:`numpy.random.RandomState` instance used by
+          :func:`numpy.random`.
     n_jobs : int, optional
         The number of parallel jobs.
 
@@ -237,14 +309,21 @@ class SelectDimensionSignificance(_UnivariateDistanceSelector):
         self,
         score_func=f_classif,
         *,
+        sample=None,
         alpha=0.05,
         method="fpr",
         metric="euclidean",
         metric_params=None,
+        random_state=None,
         n_jobs=None,
     ):
         super().__init__(
-            score_func, metric=metric, metric_params=metric_params, n_jobs=n_jobs
+            score_func,
+            sample=sample,
+            metric=metric,
+            metric_params=metric_params,
+            n_jobs=n_jobs,
+            random_state=random_state,
         )
         self.alpha = alpha
         self.method = method
