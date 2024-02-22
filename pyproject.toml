@@ -29,7 +29,7 @@ keywords = [
 
 [project.urls]
 Homepage = "https://wildboar.dev"
-Documentation = "https://docs.wildboar.dev"
+Documentation = "https://wildboar.dev"
 Repository = "https://github.com/wildboar-foundation/wildboar"
 "Bug Tracker" = "https://github.com/wildboar-foundation/wildboar/issues"
 
