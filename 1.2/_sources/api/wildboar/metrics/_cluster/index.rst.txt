@@ -57,7 +57,7 @@ Functions
 
    .. rubric:: Notes
 
-   This is a convenient wrapper around :ref:`sklearn.metric.silhouette_samples`
+   This is a convenient wrapper around :ref:`sklearn.metrics.silhouette_samples`
    using Wildboar native metrics.
 
 
@@ -111,7 +111,7 @@ Functions
 
    .. rubric:: Notes
 
-   This is a convenient wrapper around :ref:`sklearn.metric.silhouette_score`
+   This is a convenient wrapper around :ref:`sklearn.metrics.silhouette_score`
    using Wildboar native metrics.
 
 

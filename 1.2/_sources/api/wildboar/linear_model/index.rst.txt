@@ -80,8 +80,8 @@ Classes
            The probability of standardizing a shapelet with zero mean and unit
            standard deviation.
 
-       **shapelet_size** : int or array-like, optional
-           The length of the dilated shapelet. If list, use multiple shapelet sizes.
+       **shapelet_size** : int, optional
+           The length of the dilated shapelet.
 
        **lower** : float, optional
            The lower percentile to draw distance thresholds above.
@@ -92,12 +92,21 @@ Classes
        **order** : int or array-like, optional
            The order of difference.
            
-           - If int, half the groups with corresponding shapelets will be
-             convolved with the `order` discrete difference along the time
-             dimension.
-           - If array-like, include `n_groups` dialated shapelet groups
-             for each discrete difference of order `order[i]` in the final
-             transform.
+           If int, half the groups with corresponding shapelets will be convolved
+           with the `order` discrete difference along the time dimension.
+
+       **soft_min** : bool, optional
+           If `True`, use the sum of minimal distances. Otherwise, use the count
+           of minimal distances.
+
+       **soft_max** : bool, optional
+           If `True`, use the sum of maximal distances. Otherwise, use the count
+           of maximal distances.
+
+       **soft_threshold** : bool, optional
+           If `True`, count the time steps below the threshold for all shapelets.
+           Otherwise, count the time steps below the threshold for the shapelet
+           with the minimal distance.
 
        **alphas** : array-like of shape (n_alphas,), optional
            Array of alpha values to try.
