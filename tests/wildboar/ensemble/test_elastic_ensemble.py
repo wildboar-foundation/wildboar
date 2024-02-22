@@ -17,7 +17,7 @@ def test_elastic_ensemble_classifier_fit():
     )
     clf.fit(X_train, y_train)
     proba = clf.predict_proba(X[30:40])
-    np.testing.assert_almost_equal(clf.scores_, [0.9, 1.0])
+    np.testing.assert_almost_equal([score[1] for score in clf.scores_], [0.9, 1.0])
     np.testing.assert_equal(
         proba.argmax(axis=1),
         [0, 1, 1, 0, 1, 0, 1, 1, 1, 1],
