@@ -20,11 +20,27 @@
 
          Efficient, simple and familiar temporal machine learning in Python.
 
-         .. button-ref:: install
-            :ref-type: doc
-            :outline:
-            :color: white
-            :class: sd-px-4 sd-fs-5
+         .. grid::
+            :gutter: 0
+            :margin: 0
+
+            .. grid-item::
+               :columns: 6
+
+               .. button-ref:: install
+                  :ref-type: doc
+                  :outline:
+                  :color: light
+                  :class: sd-px-4 sd-fs-5
+
+            .. grid-item::
+               :columns: 6
+
+               .. button-ref:: more/whatsnew
+                  :ref-type: doc
+                  :outline:
+                  :color: light
+                  :class: sd-px-4 sd-fs-5
 
 
 .. grid:: 1 1 3 3
