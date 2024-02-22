@@ -88,6 +88,10 @@ Classes
    >>> clf.score(X_test, y_test)
    0.9866666666666667
 
+   :Attributes:
+
+       **scores** : tuple
+           A tuple of metric name and cross-validation score.
 
 
    ..

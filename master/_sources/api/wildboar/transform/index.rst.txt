@@ -106,6 +106,19 @@ Functions
        **upper** : float, optional
            The upper percentile to draw distance thresholds below.
 
+       **soft_min** : bool, optional
+           If `True`, use the sum of minimal distances. Otherwise, use the count
+           of minimal distances.
+
+       **soft_max** : bool, optional
+           If `True`, use the sum of maximal distances. Otherwise, use the count
+           of maximal distances.
+
+       **soft_threshold** : bool, optional
+           If `True`, count the time steps below the threshold for all shapelets.
+           Otherwise, count the time steps below the threshold for the shapelet
+           with the minimal distance.
+
        **ignore_y** : bool, optional
            Ignore `y` and use the same sample which a shapelet is sampled from to
            estimate the distance threshold.
