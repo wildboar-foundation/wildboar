@@ -61,6 +61,59 @@ Wildboar distinguishes between subsequence and non-subsequence metrics:
     distance computations between time series of unequal length, without
     computing the minimum distance between equal-length subsequences.
 
+.. _metric_specification:
+
+********************
+Metric specification
+********************
+
+In Wildboar, some estimators accepts multiple parameterized metrics. For
+instance :class:`~wildboar.ensemble.ProximityForestClassifier` and the
+:class:`~wildboar.ensemble.EleasticEnsemble`.
+
+A metric specification is a Python ``dict`` with the metric name as key and
+another dictionary with the parameters. The parameter dictionary must contain
+the keys `min_<parameter_name>` and `max_<parameter_name>` and can optionally
+contain the key `num_<parameter_name>`.
+
+For example, to generate a metric specification with DTW and the `r` parameter
+in the range `0.01` to `0.1`, we can specify it as follows:
+
+.. code-block:: python
+
+   metric = {"dtw": {"min_r": 0.01, "max_r": 0.1}}
+
+This will generate a metric configuration with 10 DTW calculations with `r` set
+in the range from `0.01` to `0.1` (inclusive).
+
+We can also specify multiple metrics:
+
+.. code-block:: python
+
+   metric = {
+      "dtw": {"min_r": 0.01, "max_r": 0.1},
+      "euclidean": None,
+      "msm": {"min_c": 1, "max_c": 100},
+   }
+
+Note that we can also specify metrics for which there exists only one
+instantiation. In the above example, ``euclidean`` does not have any parameters
+so we set its value to ``None``.
+
+.. execute::
+   :show-return:
+
+   from wildboar.tree import ProximityTreeClassifier
+
+   clf = ProximityTreeClassifier(
+      metric = {
+         "dtw": {"min_r": 0.01, "max_r": 0.1},
+         "euclidean": None,
+         "msm": {"min_c": 1, "max_c": 100},
+      }
+   )
+   clf
+
 *******************
 Subsequence metrics
 *******************
