@@ -12,12 +12,12 @@ class DiffTransform(TransformerMixin, BaseEstimator):
         self.order = order
 
     def fit(self, X, y=None):
-        self._validate_data(X)
+        self._validate_data(X, allow_3d=True)
         self.order_ = self.order
         return self
 
     def transform(self, X):
-        self._validate_data(X, reset=False)
+        self._validate_data(X, allow_3d=True, reset=False)
         check_is_fitted(self)
         return np.diff(X, n=self.order_, axis=-1)
 
@@ -28,7 +28,7 @@ class DerivativeTransform(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, X):
-        X = self._validate_data(X, reset=False)
+        X = self._validate_data(X, allow_3d=True, reset=False)
         X_t = derivative_transform(_check_ts_array(X))
 
         if X.ndim == 2:
