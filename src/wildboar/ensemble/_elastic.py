@@ -84,6 +84,11 @@ class ElasticEnsembleClassifier(ClassifierMixin, BaseEstimator):
     n_jobs : int, optional
         The number of paralell jobs.
 
+    Attributes
+    ----------
+    scores : tuple
+        A tuple of metric name and cross-validation score.
+
     References
     ----------
     Jason Lines and Anthony Bagnall,
@@ -170,9 +175,9 @@ class ElasticEnsembleClassifier(ClassifierMixin, BaseEstimator):
                 cv=LeaveOneOut(),
                 n_jobs=self.n_jobs,
             ).fit(x, y)
-            estimator = gridcv.best_estimator_.set_params(n_jobs=-1).fit(x, y)
+            estimator = gridcv.best_estimator_.set_params(n_jobs=self.n_jobs).fit(x, y)
             self.estimators_.append(estimator)
-            self.scores_.append(gridcv.best_score_)
+            self.scores_.append((metric, gridcv.best_score_))
 
         return self
 
@@ -194,7 +199,9 @@ class ElasticEnsembleClassifier(ClassifierMixin, BaseEstimator):
         x = self._validate_data(x, allow_3d=True, reset=False)
         proba = np.zeros((x.shape[0], len(self.estimators_), len(self.classes_)))
         score_sum = 0
-        for i, (score, estimator) in enumerate(zip(self.scores_, self.estimators_)):
+        for i, ((_, score), estimator) in enumerate(
+            zip(self.scores_, self.estimators_)
+        ):
             proba[:, i] = estimator.predict_proba(x) * score
             score_sum += score
         return proba.sum(axis=1) / score_sum
