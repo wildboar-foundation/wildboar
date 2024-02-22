@@ -152,6 +152,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
         "metric": [
             StrOptions(_METRIC_NAMES, deprecated={"default"}),
             list,
+            dict,
         ],
         "metric_params": [None, dict],
         "metric_factories": [  # TODO(1.4)
