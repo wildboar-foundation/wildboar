@@ -99,6 +99,11 @@ class IntervalMixin:
         else:
             n_intervals = math.ceil(self.n_intervals * self.n_timesteps_in_)
 
+        if self.intervals != "random" and n_intervals > self.n_timesteps_in_:
+            raise ValueError(
+                "The number of intervals must be fewer than or equal "
+                "to the number of timesteps."
+            )
         if self.intervals == "fixed":
             return IntervalAttributeGenerator(n_intervals, summarizer)
         elif self.intervals == "sample":
@@ -169,7 +174,7 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
         deviation and slope.
     n_jobs : int, optional
         The number of cores to use on multi-core.
-    random_state : int or RandomState
+    random_state : int or RandomState, optional
         - If `int`, `random_state` is the seed used by the random number generator
         - If `RandomState` instance, `random_state` is the random number generator
         - If `None`, the random number generator is the `RandomState` instance used
@@ -177,7 +182,7 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
 
     Notes
     -----
-    Paralellization dependes on releasing the global interpreter lock (GIL). As
+    Parallelization depends on releasing the global interpreter lock (GIL). As
     such, custom functions as summarizers reduces the performance. Wildboar
     implements summarizers for taking the mean ("mean"), variance ("variance")
     and slope ("slope") as well as their combination ("mean_var_slope") and the
