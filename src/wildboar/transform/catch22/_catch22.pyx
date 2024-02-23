@@ -92,7 +92,7 @@ cdef double f1ecac(const double *ac, Py_ssize_t n) noexcept nogil:
 cdef double first_min(double *ac, Py_ssize_t n) noexcept nogil:
     if n <= 2:
         return 0.0
-    
+
     cdef Py_ssize_t i
     for i in range(1, n - 1):
         if ac[i] < ac[i - 1] and ac[i] < ac[i + 1]:
@@ -134,7 +134,7 @@ cdef double local_mean_std(const double *x, Py_ssize_t n, Py_ssize_t lag) noexce
 cdef double hrv_classic_pnn(const double *x, Py_ssize_t n, double pnn) noexcept nogil:
     if n <= 1:
         return 0.0
-    
+
     cdef Py_ssize_t i
     cdef double value = 0
 
@@ -192,7 +192,7 @@ cdef double local_mean_tauresrat(
         double lag_sum
         Py_ssize_t lag_out, x_out
         double *lag_ac
-    
+
     lag_ac = <double*> malloc(sizeof(double) * n - lag)
     for i in range(n - lag):
         lag_sum = 0

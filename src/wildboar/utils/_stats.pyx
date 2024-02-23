@@ -214,6 +214,9 @@ cdef void _auto_correlation(
         out[i] = (fft[i] / first).real
 
 cdef void auto_correlation(const double *x, Py_ssize_t n, double *out) noexcept nogil:
+    if n == 1:
+        out[0] = x[0]
+
     cdef Py_ssize_t fft_length = n * 2 - 1
     cdef complex *fft = <complex *> malloc(sizeof(complex) * fft_length)
     _auto_correlation(x, n, out, fft)
@@ -235,6 +238,9 @@ cdef int welch(
     double *Pxx,
     double *f,
 ) noexcept nogil:
+    if size < 2:
+        return 0
+
     cdef double dt = 1.0 / Fs
     cdef double df = 1.0 / next_power_of_2(windowWidth) / dt
     cdef double m = mean(x, size)
