@@ -774,21 +774,32 @@ cdef class CallableMetric(Metric):
         const double *y,
         Py_ssize_t y_len
     ) noexcept nogil:
+        with gil:
+            return self._gil_distance(x, x_len, y, y_len)
+
+    cdef double _gil_distance(
+        self,
+        const double *x,
+        Py_ssize_t x_len,
+        const double *y,
+        Py_ssize_t y_len,
+    ):
         cdef np.npy_intp x_shape[1]
         cdef np.npy_intp y_shape[1]
         x_shape[0] = <np.npy_intp> x_len
         y_shape[0] = <np.npy_intp> y_len
-        with gil:
-            try:
-                return float(
-                    self.func(
-                        np.PyArray_SimpleNewFromData(1, x_shape, np.NPY_DOUBLE, x),
-                        np.PyArray_SimpleNewFromData(1, y_shape, np.NPY_DOUBLE, y),
-                    )
-                )
-            except:  # noqa: E722
-                return NAN
-
+        cdef np.ndarray[double, ndim=1, mode='c'] x_array = np.PyArray_SimpleNewFromData(
+            1, x_shape, np.NPY_DOUBLE, <void *>x
+        )
+        np.PyArray_CLEARFLAGS(x_array, np.NPY_ARRAY_WRITEABLE)
+        cdef np.ndarray[double, ndim=1, mode='c'] y_array = np.PyArray_SimpleNewFromData(
+            1, y_shape, np.NPY_DOUBLE, <void *>y
+        )
+        np.PyArray_CLEARFLAGS(y_array, np.NPY_ARRAY_WRITEABLE)
+        try:
+            return self.func(x_array, y_array)
+        except:  # noqa: E722
+            return NAN
 
 cdef Py_ssize_t dilated_distance_profile(
     Py_ssize_t stride,

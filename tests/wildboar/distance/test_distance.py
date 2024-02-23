@@ -1597,3 +1597,10 @@ def test_dilated_distance_profile():
         3.60614958, 3.96010856]])
     # fmt: on
     assert_almost_equal(dp, expected)
+
+
+def test_callable_equal(pairwise_data):
+    assert_almost_equal(
+        pairwise_distance(pairwise_data, metric="euclidean"),
+        pairwise_distance(pairwise_data, metric=_test_metric),
+    )
