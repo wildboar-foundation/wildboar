@@ -75,7 +75,7 @@ class BaseBagging(BaseEstimator, SklearnBaseBagging, metaclass=ABCMeta):
         if base_estimator != "deprecated":
             warnings.warn(
                 "base_estimator is deprecated and will be removed in 1.4",
-                DeprecationWarning,
+                FutureWarning,
             )
             if estimator is None:
                 estimator = base_estimator
