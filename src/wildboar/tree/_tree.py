@@ -124,9 +124,9 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
     Parameters
     ----------
     max_depth : int, optional
-        The maximum depth of the tree. If ``None`` the tree is
+        The maximum depth of the tree. If `None` the tree is
         expanded until all leaves are pure or until all leaves contain less
-        than ``min_samples_split`` samples.
+        than `min_samples_split` samples.
     min_samples_split : int, optional
         The minimum number of samples to split an internal node.
     min_samples_leaf : int, optional
@@ -157,24 +157,24 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         ::
             w = 1 - exp(-abs(alpha) * depth)
 
-        - if ``alpha < 0``, the number of sampled shapelets decrease from
-            ``n_shapelets`` towards 1 with increased depth.
-        - if ``alpha > 0``, the number of sampled shapelets increase from ``1``
-            towards ``n_shapelets`` with increased depth.
-        - if ``None``, the number of sampled shapelets are the same
+        - if `alpha < 0`, the number of sampled shapelets decrease from
+            `n_shapelets` towards 1 with increased depth.
+        - if `alpha > 0`, the number of sampled shapelets increase from `1`
+            towards `n_shapelets` with increased depth.
+        - if `None`, the number of sampled shapelets are the same
             independeth of depth.
     metric : str or list, optional
-        - If ``str``, the distance metric used to identify the best
+        - If `str`, the distance metric used to identify the best
             shapelet.
-        - If ``list``, multiple metrics specified as a list of
+        - If `list`, multiple metrics specified as a list of
             tuples, where the first element of the tuple is a metric name and
             the second element a dictionary with a parameter grid
             specification. A parameter grid specification is a dict with two
             mandatory and one optional key-value pairs defining the lower and
             upper bound on the values and number of values in the grid. For
-            example, to specifiy a grid over the argument ``r`` with 10
+            example, to specifiy a grid over the argument `r` with 10
             values in the range 0 to 1, we would give the following
-            specification: ``dict(min_r=0, max_r=1, num_r=10)``.
+            specification: `dict(min_r=0, max_r=1, num_r=10)`.
 
             Read more about metric specifications in the `User guide
             <metric_specification>`__
@@ -192,11 +192,11 @@ class ShapeletTreeRegressor(DynamicTreeMixin, ShapeletMixin, BaseFeatureTreeRegr
         .. deprecated:: 1.1
             Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
     random_state : int or RandomState
-        - If ``int``, ``random_state`` is the seed used by the
+        - If `int`, `random_state` is the seed used by the
             random number generator
-        - If :class:`numpy.random.RandomState` instance, ``random_state``
+        - If :class:`numpy.random.RandomState` instance, `random_state`
             is the random number generator
-        - If ``None``, the random number generator is the
+        - If `None`, the random number generator is the
             :class:`numpy.random.RandomState` instance used by
             :func:`numpy.random`.
 
@@ -380,10 +380,10 @@ class ShapeletTreeClassifier(
         .. versionadded:: 1.3
     min_shapelet_size : float, optional
         The minimum length of a sampled shapelet expressed as a fraction, computed
-        as ``min(ceil(X.shape[-1] * min_shapelet_size), 2)``.
+        as `min(ceil(X.shape[-1] * min_shapelet_size), 2)`.
     max_shapelet_size : float, optional
         The maximum length of a sampled shapelet, expressed as a fraction, computed
-        as ``ceil(X.shape[-1] * max_shapelet_size)``.
+        as `ceil(X.shape[-1] * max_shapelet_size)`.
     alpha : float, optional
         Dynamically decrease the number of sampled shapelets at each node according
         to the current depth.
@@ -391,10 +391,10 @@ class ShapeletTreeClassifier(
         .. math:`w = 1 - e^{-|alpha| * depth})`
 
         - if :math:`alpha < 0`, the number of sampled shapelets decrease from
-          ``n_shapelets`` towards 1 with increased depth.
+          `n_shapelets` towards 1 with increased depth.
         - if :math:`alpha > 0`, the number of sampled shapelets increase from
-          ``1`` towards ``n_shapelets`` with increased depth.
-        - if ``None``, the number of sampled shapelets are the same independeth
+          `1` towards `n_shapelets` with increased depth.
+        - if `None`, the number of sampled shapelets are the same independeth
           of depth.
     metric : {"euclidean", "scaled_euclidean", "dtw", "scaled_dtw"}, optional
         Distance metric used to identify the best shapelet.
@@ -478,7 +478,7 @@ class ExtraShapeletTreeClassifier(ShapeletTreeClassifier):
     An extra shapelet tree classifier.
 
     Extra shapelet trees are constructed by sampling a distance threshold
-    uniformly in the range ``[min(dist), max(dist)]``.
+    uniformly in the range `[min(dist), max(dist)]`.
 
     Parameters
     ----------
@@ -633,13 +633,13 @@ class RocketTreeRegressor(RocketMixin, BaseFeatureTreeRegressor):
         criterion : {"entropy", "gini"}, optional
             The criterion used to evaluate the utility of a split.
         kernel_size : array-like, optional
-            The kernel size, by default ``[7, 11, 13]``.
+            The kernel size, by default `[7, 11, 13]`.
         min_size : float, optional
             The minimum timestep fraction to generate kernel sizes. If set,
-            ``kernel_size`` cannot be set.
+            `kernel_size` cannot be set.
         max_size : float, optional
             The maximum timestep fractio to generate kernel sizes, If set,
-            ``kernel_size`` cannot be set.
+            `kernel_size` cannot be set.
         bias_prob : float, optional
             The probability of using a bias term.
         normalize_prob : float, optional
@@ -728,25 +728,25 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
             The sampling of convolutional filters.
 
             - if "normal", sample filter according to a normal distribution with
-              ``mean`` and ``scale``.
+              `mean` and `scale`.
             - if "uniform", sample filter according to a uniform distribution with
-              ``lower`` and ``upper``.
+              `lower` and `upper`.
             - if "shapelet", sample filters as subsequences in the training data.
         sampling_params : dict, optional
             The parameters for the sampling.
 
-            - if "normal", ``{"mean": float, "scale": float}``, defaults to
-               ``{"mean": 0, "scale": 1}``.
-            - if "uniform", ``{"lower": float, "upper": float}``, defaults to
-               ``{"lower": -1, "upper": 1}``.
+            - if "normal", `{"mean": float, "scale": float}`, defaults to
+               `{"mean": 0, "scale": 1}`.
+            - if "uniform", `{"lower": float, "upper": float}`, defaults to
+               `{"lower": -1, "upper": 1}`.
         kernel_size : array-like, optional
-            The kernel size, by default ``[7, 11, 13]``.
+            The kernel size, by default `[7, 11, 13]`.
         min_size : float, optional
             The minimum timestep fraction to generate kernel sizes. If set,
-            ``kernel_size`` cannot be set.
+            `kernel_size` cannot be set.
         max_size : float, optional
             The maximum timestep fractio to generate kernel sizes, If set,
-            ``kernel_size`` cannot be set.
+            `kernel_size` cannot be set.
         bias_prob : float, optional
             The probability of using a bias term.
         normalize_prob : float, optional
@@ -925,18 +925,19 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
         summarizer="mean_var_slope",
         random_state=None,
     ):
-        """Construct a new interval tree regressor.
+        """
+        Construct a new interval tree regressor.
 
         Parameters
         ----------
         n_intervals : {"log", "sqrt"}, int or float, optional
             The number of intervals to partition the time series into.
 
-            - if "log", the number of intervals is ``log2(n_timestep)``.
-            - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-            - if int, the number of intervals is ``n_intervals``.
-            - if float, the number of intervals is ``n_intervals * n_timestep``, with
-              ``0 < n_intervals < 1``.
+            - if "log", the number of intervals is `log2(n_timestep)`.
+            - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
+            - if int, the number of intervals is `n_intervals`.
+            - if float, the number of intervals is `n_intervals * n_timestep`, with
+              `0 < n_intervals < 1`.
         max_depth : int, optional
             The maximum depth of the tree. If `None` the tree is expanded until all
             leaves are pure or until all leaves contain less than `min_samples_split`
@@ -955,16 +956,16 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
                 Criterion "mse" was deprecated in v1.1 and removed in version 1.2.
         intervals : {"fixed", "sample", "random"}, optional
             - if "fixed", `n_intervals` non-overlapping intervals.
-            - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
+            - if "sample", `n_intervals * sample_size` non-overlapping intervals.
             - if "random", `n_intervals` possibly overlapping intervals of randomly
-              sampled in ``[min_size * n_timestep, max_size * n_timestep]``
+              sampled in `[min_size * n_timestep, max_size * n_timestep]`.
         sample_size : float, optional
             The fraction of intervals to sample at each node. Ignored unless
-            ``intervals="sample"``.
+            `intervals="sample"`.
         min_size : float, optional
-            The minmum interval size. Ignored unless ``intervals="random"``.
+            The minimum interval size. Ignored unless `intervals="random"`.
         max_size : float, optional
-            The maximum interval size. Ignored unless ``intervals="random"``.
+            The maximum interval size. Ignored unless `intervals="random"`.
         summarizer : list or str, optional
             The summarization of each interval.
 
