@@ -165,7 +165,6 @@ cdef class Catch22Summarizer(Summarizer):
     cdef double summarize(
         self, Py_ssize_t i, const double *x, Py_ssize_t length
     ) noexcept nogil:
-        cdef Py_ssize_t welch_length = -1
         cdef int n_welch = -1
 
         if i == 15 or i == 20:
