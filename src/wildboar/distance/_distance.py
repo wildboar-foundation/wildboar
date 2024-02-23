@@ -914,7 +914,7 @@ def paired_distance(  # noqa: PLR0912
             warnings.warn(
                 "The default value for dim will change to 'mean' from 0 in 1.3. "
                 "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
-                DeprecationWarning,
+                FutureWarning,
             )
         dim = 0
 
@@ -1012,7 +1012,7 @@ def pairwise_distance(  # noqa: PLR0912, PLR0915
                 warnings.warn(
                     "The default value for dim will change to 'mean' from 0 in 1.3. "
                     "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
-                    DeprecationWarning,
+                    FutureWarning,
                 )
             dim = 0
 
@@ -1063,7 +1063,7 @@ def pairwise_distance(  # noqa: PLR0912, PLR0915
                 warnings.warn(
                     "The default value for dim will change to 'mean' from 0 in 1.3. "
                     "Explicitly set dim=0 to keep the current behaviour for 3d-arrays.",
-                    DeprecationWarning,
+                    FutureWarning,
                 )
             dim = 0
 

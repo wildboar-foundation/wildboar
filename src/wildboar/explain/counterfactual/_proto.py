@@ -604,7 +604,7 @@ class PrototypeCounterfactual(CounterfactualMixin, ExplainerMixin, BaseEstimator
                 warnings.warn(
                     f"The parameter value 'auto' for target of {type(self).__name__} "
                     "has been renamed to 'predict' in 1.2 and will be removed in 1.4.",
-                    DeprecationWarning,
+                    FutureWarning,
                 )
             self.target_ = PredictEvaluator(self.estimator_)
         else:

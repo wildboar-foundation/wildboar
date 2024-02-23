@@ -597,7 +597,7 @@ cdef class Tree:
         import warnings
         warnings.warn(
             "`feature` has been renamed to `attribute` in 1.2 and will be removed in 1.4",
-            DeprecationWarning,
+            FutureWarning,
         )
         return self.attribute
 

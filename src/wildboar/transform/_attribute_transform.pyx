@@ -168,7 +168,7 @@ cdef class AttributeEmbedding:
         import warnings
         warnings.warn(
             "`n_features` has been renamed to `n_attributes` in 1.2 and will be removed in 1.4",
-            DeprecationWarning
+            FutureWarning
         )
         return self.n_attributes
 
@@ -181,7 +181,7 @@ cdef class AttributeEmbedding:
         import warnings
         warnings.warn(
             "`n_features` has been renamed to `n_attributes` in 1.2 and will be removed in 1.4",
-            DeprecationWarning
+            FutureWarning
         )
         return self.attributes
 

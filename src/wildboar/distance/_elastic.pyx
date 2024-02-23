@@ -3442,7 +3442,7 @@ cdef class LcssMetric(Metric):
             warnings.warn(
                 "The parameter threshold has been renamed to epsilon in 1.2 "
                 "and will be removed in 1.4.",
-                DeprecationWarning
+                FutureWarning
             )
             epsilon = threshold
 
@@ -3684,7 +3684,7 @@ cdef class EdrMetric(Metric):
             warnings.warn(
                 "The parameter threshold has been renamed to epsilon in 1.2 "
                 "and will be removed in 1.4.",
-                DeprecationWarning
+                FutureWarning
             )
             epsilon = threshold
 

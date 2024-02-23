@@ -208,7 +208,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
             warnings.warn(
                 "The parameter metric_factories has been renamed to metric "
                 "in 1.2 and will be removed in 1.4",
-                DeprecationWarning,
+                FutureWarning,
             )
             if isinstance(self.metric_factories, dict):
                 metric = list(self.metric_factories.items())
@@ -222,7 +222,7 @@ class ProximityTreeClassifier(BaseTreeClassifier):
                 warnings.warn(
                     "The default value for 'metric' has changed to 'auto' in 1.2 and "
                     "'default' will be removed in 1.4.",
-                    DeprecationWarning,
+                    FutureWarning,
                 )
 
             std_x = np.std(x)
