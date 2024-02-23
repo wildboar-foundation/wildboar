@@ -9,7 +9,6 @@
  */
 
 #include <math.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -303,7 +302,7 @@ void _sb_coarsegrain(const double *x, int length, const int num_groups, int *lab
 double transition_matrix_ac_sumdiagcov(const double *x, double *ac, int length,
                                        int n_groups) {
     if (_is_constant(x, length)) {
-        return NAN;
+        return 0.0;
     }
 
     n_groups = 3;  // TODO: generalize
@@ -906,7 +905,7 @@ double embed2_dist_tau_d_expfit_meandiff(double *x, double *ac, int length) {
                         (x[i + tau] - x[i + tau + 1]) * (x[i + tau] - x[i + tau + 1]));
         if (isnan(x_lag[i])) {
             free(x_lag);
-            return NAN;
+            return 0.0;
         }
     }
 
