@@ -63,3 +63,11 @@ Wildboar 1.2 introduces several new models.
        (``impurity_equality_tolerance=None``) but it can be enabled by setting
        a (small) non negative float.
 
+
+  .. grid-item-card::
+
+     :mod:`wildboar.transform`
+     ^^^
+
+     - |API| Deprecate the "sample" argument for `intervals` in interval-based
+       transformations. To sub-sample intervals, set `sample_size` to a float.

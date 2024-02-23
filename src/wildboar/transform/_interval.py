@@ -57,7 +57,7 @@ class IntervalMixin:
             StrOptions({"sqrt", "log2"}),
         ],
         "intervals": [
-            StrOptions({"fixed", "sample", "random"}),
+            StrOptions({"fixed", "sample", "random"}, deprecated={"fixed"}),
         ],
         "min_size": [
             Interval(numbers.Real, 0, 1, closed="both"),
@@ -67,7 +67,7 @@ class IntervalMixin:
             Interval(numbers.Real, 0, 1, closed="both"),
             None,
         ],
-        "sample_size": [Interval(numbers.Real, 0, 1, closed="both")],
+        "sample_size": [None, Interval(numbers.Real, 0, 1, closed="both")],
         "summarizer": [StrOptions(_SUMMARIZER.keys()), list],
     }
 
@@ -90,7 +90,7 @@ class IntervalMixin:
                 warnings.warn(
                     "The value 'log' for `n_intervals` has been renamed to 'log2' "
                     "and will be removed in 1.4",
-                    DeprecationWarning,
+                    FutureWarning,
                 )
 
             n_intervals = math.ceil(math.log2(self.n_timesteps_in_))
@@ -104,12 +104,25 @@ class IntervalMixin:
                 "The number of intervals must be fewer than or equal "
                 "to the number of timesteps."
             )
-        if self.intervals == "fixed":
-            return IntervalAttributeGenerator(n_intervals, summarizer)
-        elif self.intervals == "sample":
-            return RandomFixedIntervalAttributeGenerator(
-                n_intervals, summarizer, math.floor(self.sample_size * n_intervals)
+
+        # TODO(1.4)
+        if self.intervals == "sample":
+            warnings.warn(
+                "The value 'sample' for intervals has been deprecated "
+                "and will be removed in 1.4",
+                FutureWarning,
             )
+            intervals = "fixed"
+        else:
+            intervals = self.intervals
+
+        if intervals == "fixed":
+            if self.sample_size is None or self.sample_size == 1.0:
+                return IntervalAttributeGenerator(n_intervals, summarizer)
+            else:
+                return RandomFixedIntervalAttributeGenerator(
+                    n_intervals, summarizer, math.floor(self.sample_size * n_intervals)
+                )
         else:  # "random"
             min_size = self.min_size if self.min_size is not None else 0
             max_size = self.max_size if self.max_size is not None else 1
@@ -223,7 +236,7 @@ class IntervalTransform(IntervalMixin, BaseAttributeTransform):
         n_intervals="sqrt",
         *,
         intervals="fixed",
-        sample_size=0.5,
+        sample_size=None,
         min_size=0.0,
         max_size=1.0,
         summarizer="mean_var_slope",

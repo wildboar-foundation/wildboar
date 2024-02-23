@@ -2033,7 +2033,85 @@ class RocketForestClassifier(BaseForestClassifier):
 
 
 class IntervalForestClassifier(BaseForestClassifier):
-    """An ensemble of interval tree classifiers."""
+    """
+    An ensemble of interval tree classifiers.
+
+    Parameters
+    ----------
+    n_estimators : int, optional
+        The number of estimators.
+    n_intervals : str, int or float, optional
+        The number of intervals to use for the transform.
+
+        - if "log2", the number of intervals is `log2(n_timestep)`.
+        - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
+        - if int, the number of intervals is `n_intervals`.
+        - if float, the number of intervals is `n_intervals * n_timestep`, with
+          `0 < n_intervals < 1`.
+
+        .. deprecated:: 1.2
+            The option "log" has been renamed to "log2".
+    intervals : str, optional
+        The method for selecting intervals.
+
+        - if "fixed", `n_intervals` non-overlapping intervals.
+        - if "random", `n_intervals` possibly overlapping intervals of randomly
+          sampled in `[min_size * n_timestep, max_size * n_timestep]`.
+
+        .. deprecated:: 1.3
+            The option "sample" has been deprecated. Use "fixed" with
+            `sample_size`.
+    summarizer : str or list, optional
+        The method to summarize each interval.
+
+        - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+        - if list, the summarizer is a list of functions `f(x) -> float`, where
+          `x` is a numpy array.
+
+        The default summarizer summarizes each interval as its mean, standard
+        deviation and slope.
+    sample_size : float, optional
+        The sub-sample fixed intervals.
+    min_size : float, optional
+        The minimum interval size if `intervals="random"`.
+    max_size : float, optional
+        The maximum interval size if `intervals="random"`.
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
+    max_depth : int, optional
+        The maximum tree depth.
+    min_samples_split : int, optional
+        The minimum number of samples to consider a split.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        The minimum impurity decrease to build a sub-tree.
+    criterion : {"entropy", "gini"}, optional
+        The impurity criterion.
+    bootstrap : bool, optional
+        If the samples are drawn with replacement.
+    warm_start : bool, optional
+        When set to `True`, reuse the solution of the previous call
+        to fit and add more estimators to the ensemble, otherwise, just fit
+        a whole new ensemble.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
+        Positive integers mean the exact number of cores.
+    class_weight : dict or "balanced", optional
+        Weights associated with the labels.
+
+        - if dict, weights on the form {label: weight}.
+        - if "balanced" each class weight inversely proportional to the class
+            frequency.
+        - if None, each class has equal weight.
+    random_state : int or RandomState, optional
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+          by `np.random`.
+    """
 
     _parameter_constraints: dict = {
         **ForestMixin._parameter_constraints,
@@ -2045,8 +2123,8 @@ class IntervalForestClassifier(BaseForestClassifier):
         n_estimators=100,
         *,
         n_intervals="sqrt",
-        intervals="fixed",
-        summarizer="mean_var_std",
+        intervals="random",
+        summarizer="mean_var_slope",
         sample_size=0.5,
         min_size=0.0,
         max_size=1.0,
@@ -2102,7 +2180,75 @@ class IntervalForestClassifier(BaseForestClassifier):
 
 
 class IntervalForestRegressor(BaseForestRegressor):
-    """An ensemble of interval tree regressors."""
+    """
+    An ensemble of interval tree regressors.
+
+    Parameters
+    ----------
+    n_estimators : int, optional
+        The number of estimators.
+    n_intervals : str, int or float, optional
+        The number of intervals to use for the transform.
+
+        - if "log2", the number of intervals is `log2(n_timestep)`.
+        - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
+        - if int, the number of intervals is `n_intervals`.
+        - if float, the number of intervals is `n_intervals * n_timestep`, with
+          `0 < n_intervals < 1`.
+
+        .. deprecated:: 1.2
+            The option "log" has been renamed to "log2".
+    intervals : str, optional
+        The method for selecting intervals.
+
+        - if "fixed", `n_intervals` non-overlapping intervals.
+        - if "sample", `n_intervals * sample_size` non-overlapping intervals.
+        - if "random", `n_intervals` possibly overlapping intervals of randomly
+          sampled in `[min_size * n_timestep, max_size * n_timestep]`.
+    summarizer : str or list, optional
+        The method to summarize each interval.
+
+        - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+        - if list, the summarizer is a list of functions `f(x) -> float`, where
+          `x` is a numpy array.
+
+        The default summarizer summarizes each interval as its mean, variance
+        and slope.
+    sample_size : float, optional
+        The sample size of fixed intervals if `intervals="sample"`.
+    min_size : float, optional
+        The minimum interval size if `intervals="random"`.
+    max_size : float, optional
+        The maximum interval size if `intervals="random"`.
+    oob_score : bool, optional
+        Use out-of-bag samples to estimate generalization performance. Requires
+        `bootstrap=True`.
+    max_depth : int, optional
+        The maximum tree depth.
+    min_samples_split : int, optional
+        The minimum number of samples to consider a split.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        The minimum impurity decrease to build a sub-tree.
+    criterion : {"entropy", "gini"}, optional
+        The impurity criterion.
+    bootstrap : bool, optional
+        If the samples are drawn with replacement.
+    warm_start : bool, optional
+        When set to `True`, reuse the solution of the previous call
+        to fit and add more estimators to the ensemble, otherwise, just fit
+        a whole new ensemble.
+    n_jobs : int, optional
+        The number of jobs to run in parallel. A value of `None` means
+        using a single core and a value of `-1` means using all cores.
+        Positive integers mean the exact number of cores.
+    random_state : int or RandomState, optional
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+          by `np.random`.
+    """
 
     _parameter_constraints: dict = {
         **ForestMixin._parameter_constraints,
@@ -2115,7 +2261,7 @@ class IntervalForestRegressor(BaseForestRegressor):
         *,
         n_intervals="sqrt",
         intervals="fixed",
-        summarizer="auto",
+        summarizer="mean_var_slope",
         sample_size=0.5,
         min_size=0.0,
         max_size=1.0,

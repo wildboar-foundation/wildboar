@@ -787,7 +787,64 @@ class RocketTreeClassifier(RocketMixin, BaseFeatureTreeClassifier):
 
 
 class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
-    """An interval based tree classifier.
+    """
+    An interval based tree classifier.
+
+    Parameters
+    ----------
+    n_intervals : {"log", "sqrt"}, int or float, optional
+        The number of intervals to partition the time series into.
+
+        - if "log", the number of intervals is `log2(n_timestep)`.
+        - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
+        - if int, the number of intervals is `n_intervals`.
+        - if float, the number of intervals is `n_intervals * n_timestep`, with
+            `0 < n_intervals < 1`.
+    max_depth : int, optional
+        The maximum depth of the tree. If `None` the tree is expanded until all
+        leaves are pure or until all leaves contain less than `min_samples_split`
+        samples.
+    min_samples_split : int, optional
+        The minimum number of samples to split an internal node.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        A split will be introduced only if the impurity decrease is larger than or
+        equal to this value.
+    criterion : {"entropy", "gini"}, optional
+        The criterion used to evaluate the utility of a split.
+    intervals : {"fixed", "sample", "random"}, optional
+        - if "fixed", `n_intervals` non-overlapping intervals.
+        - if "sample", `n_intervals * sample_size` non-overlapping intervals.
+        - if "random", `n_intervals` possibly overlapping intervals of randomly
+            sampled in `[min_size * n_timestep, max_size * n_timestep]`.
+    sample_size : float, optional
+        The fraction of intervals to sample at each node. Ignored unless
+        `intervals="sample"`.
+    min_size : float, optional
+        The minmum interval size. Ignored unless `intervals="random"`.
+    max_size : float, optional
+        The maximum interval size. Ignored unless `intervals="random"`.
+    summarizer : str or list, optional
+        The method to summarize each interval.
+
+        - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+        - if list, the summarizer is a list of functions `f(x) -> float`, where
+          `x` is a numpy array.
+
+        The default summarizer summarizes each interval as its mean, variance
+        and slope.
+    class_weight : dict or "balanced", optional
+        Weights associated with the labels
+        - if dict, weights on the form {label: weight}
+        - if "balanced" each class weight inversely proportional to the class
+            frequency
+        - if None, each class has equal weight.
+    random_state : int or RandomState, optional
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
 
     Attributes
     ----------
@@ -812,70 +869,13 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
         min_impurity_decrease=0.0,
         criterion="entropy",
         intervals="fixed",
-        sample_size=0.5,
+        sample_size=None,
         min_size=0.0,
         max_size=1.0,
         summarizer="mean_var_slope",
         class_weight=None,
         random_state=None,
     ):
-        """Construct a new interval tree classifier.
-
-        Parameters
-        ----------
-        n_intervals : {"log", "sqrt"}, int or float, optional
-            The number of intervals to partition the time series into.
-
-            - if "log", the number of intervals is ``log2(n_timestep)``.
-            - if "sqrt", the number of intervals is ``sqrt(n_timestep)``.
-            - if int, the number of intervals is ``n_intervals``.
-            - if float, the number of intervals is ``n_intervals * n_timestep``, with
-              ``0 < n_intervals < 1``.
-        max_depth : int, optional
-            The maximum depth of the tree. If `None` the tree is expanded until all
-            leaves are pure or until all leaves contain less than `min_samples_split`
-            samples.
-        min_samples_split : int, optional
-            The minimum number of samples to split an internal node.
-        min_samples_leaf : int, optional
-            The minimum number of samples in a leaf.
-        min_impurity_decrease : float, optional
-            A split will be introduced only if the impurity decrease is larger than or
-            equal to this value.
-        criterion : {"entropy", "gini"}, optional
-            The criterion used to evaluate the utility of a split.
-        intervals : {"fixed", "sample", "random"}, optional
-
-            - if "fixed", `n_intervals` non-overlapping intervals.
-            - if "sample", ``n_intervals * sample_size`` non-overlapping intervals.
-            - if "random", `n_intervals` possibly overlapping intervals of randomly
-              sampled in ``[min_size * n_timestep, max_size * n_timestep]``
-        sample_size : float, optional
-            The fraction of intervals to sample at each node. Ignored unless
-            ``intervals="sample"``.
-        min_size : float, optional
-            The minmum interval size. Ignored unless ``intervals="random"``.
-        max_size : float, optional
-            The maximum interval size. Ignored unless ``intervals="random"``.
-        summarizer : list or str, optional
-            The summarization of each interval.
-
-            - if list, a list of callables accepting a numpy array returing a float.
-            - if str, a predified summarized. See
-              :mod:`wildboar.transform._interval._INTERVALS.keys()` for all supported
-              summarizers.
-        class_weight : dict or "balanced", optional
-            Weights associated with the labels
-            - if dict, weights on the form {label: weight}
-            - if "balanced" each class weight inversely proportional to the class
-              frequency
-            - if None, each class has equal weight
-        random_state : int or RandomState
-            - If `int`, `random_state` is the seed used by the random number generator
-            - If `RandomState` instance, `random_state` is the random number generator
-            - If `None`, the random number generator is the `RandomState` instance used
-              by `np.random`.
-        """
         super().__init__(
             max_depth=max_depth,
             min_samples_split=min_samples_split,
@@ -894,7 +894,58 @@ class IntervalTreeClassifier(IntervalMixin, BaseFeatureTreeClassifier):
 
 
 class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
-    """An interval based tree regressor.
+    """
+    An interval based tree regressor.
+
+    Parameters
+    ----------
+    n_intervals : {"log", "sqrt"}, int or float, optional
+        The number of intervals to partition the time series into.
+
+        - if "log", the number of intervals is `log2(n_timestep)`.
+        - if "sqrt", the number of intervals is `sqrt(n_timestep)`.
+        - if int, the number of intervals is `n_intervals`.
+        - if float, the number of intervals is `n_intervals * n_timestep`, with
+            `0 < n_intervals < 1`.
+    max_depth : int, optional
+        The maximum depth of the tree. If `None` the tree is expanded until all
+        leaves are pure or until all leaves contain less than `min_samples_split`
+        samples.
+    min_samples_split : int, optional
+        The minimum number of samples to split an internal node.
+    min_samples_leaf : int, optional
+        The minimum number of samples in a leaf.
+    min_impurity_decrease : float, optional
+        A split will be introduced only if the impurity decrease is larger than or
+        equal to this value.
+    criterion : {"entropy", "gini"}, optional
+        The criterion used to evaluate the utility of a split.
+    intervals : {"fixed", "sample", "random"}, optional
+        - if "fixed", `n_intervals` non-overlapping intervals.
+        - if "sample", `n_intervals * sample_size` non-overlapping intervals.
+        - if "random", `n_intervals` possibly overlapping intervals of randomly
+            sampled in `[min_size * n_timestep, max_size * n_timestep]`.
+    sample_size : float, optional
+        The fraction of intervals to sample at each node. Ignored unless
+        `intervals="sample"`.
+    min_size : float, optional
+        The minmum interval size. Ignored unless `intervals="random"`.
+    max_size : float, optional
+        The maximum interval size. Ignored unless `intervals="random"`.
+    summarizer : str or list, optional
+        The method to summarize each interval.
+
+        - if str, the summarizer is determined by `_SUMMARIZERS.keys()`.
+        - if list, the summarizer is a list of functions `f(x) -> float`, where
+          `x` is a numpy array.
+
+        The default summarizer summarizes each interval as its mean, variance
+        and slope.
+    random_state : int or RandomState, optional
+        - If `int`, `random_state` is the seed used by the random number generator
+        - If `RandomState` instance, `random_state` is the random number generator
+        - If `None`, the random number generator is the `RandomState` instance used
+            by `np.random`.
 
     Attributes
     ----------
@@ -919,7 +970,7 @@ class IntervalTreeRegressor(IntervalMixin, BaseFeatureTreeRegressor):
         min_impurity_decrease=0.0,
         criterion="squared_error",
         intervals="fixed",
-        sample_size=0.5,
+        sample_size=None,
         min_size=0.0,
         max_size=1.0,
         summarizer="mean_var_slope",
