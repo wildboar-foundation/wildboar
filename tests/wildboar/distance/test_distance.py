@@ -19,8 +19,6 @@ from wildboar.distance._distance import _METRICS, _SUBSEQUENCE_METRICS
 
 
 def _test_metric(a, b):
-    import numpy as np
-
     return np.linalg.norm(a - b)
 
 
