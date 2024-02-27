@@ -5,24 +5,6 @@
 Datasets
 ########
 
-
-.. note::
-  The :mod:`datasets` module requires the package
-  `requests <https://pypi.org/projects/requests>`_. We can install it using
-  ``pip`` or ``conda``:
-
-  .. tab:: pip
-
-    .. code-block:: shell
-
-      pip install requests
-
-  .. tab:: conda
-
-    .. code-block:: shell
-
-      conda install requests
-
 Wildboar is distributed with an advanced system for handling dataset
 repositories. A dataset repository can be used to load benchmark datasets or to
 distribute or store datasets.
@@ -90,7 +72,7 @@ to {python}`True`, and changing the `dtype` of the returned time series:
    # ... re-download dataset
 
 .. note::
-     
+
    To reduce the download size, the datasets downloaded from the
    ``wildboar``-repository are 32-bit floating point values. However,
    :func:`~datasets.load_dataset` converts the values to 64-bit when
@@ -120,7 +102,7 @@ Loading multiple datasets also support setting the ``merge_train_test`` to
 :python:`False`:
 
 .. code-block:: python
-   
+
    >>> for name, (x_train, x_test, y_train, y_test) in load_datasets("wildboar/ucr-tiny"):
    ...     print(name, x_train.shape)
    ...
@@ -147,7 +129,7 @@ samples, timesteps, labels and dataset names. We specify filters with the
 
 The attribute name is one of (the self-explanatory) attributes:
 
-``n_samples`` (:python:`int`) 
+``n_samples`` (:python:`int`)
    The number of samples.
 
 ``n_timesteps`` (:python:`int`)

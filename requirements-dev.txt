@@ -1,6 +1,5 @@
 pytest
 pytest-benchmark
-requests
 networkx
 pre-commit
 flake8==6.0.0
