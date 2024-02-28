@@ -45,6 +45,9 @@ cdef class Summarizer:
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return -1
 
+    def value_name(self, Py_ssize_t i):
+        return "?"
+
 
 cdef class MeanSummarizer(Summarizer):
     cdef double summarize(
@@ -54,6 +57,9 @@ cdef class MeanSummarizer(Summarizer):
 
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 1
+
+    def value_name(self, Py_ssize_t i):
+        return "mean"
 
 
 cdef class VarianceSummarizer(Summarizer):
@@ -65,6 +71,9 @@ cdef class VarianceSummarizer(Summarizer):
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 1
 
+    def value_name(self, Py_ssize_t i):
+        return "var"
+
 
 cdef class SlopeSummarizer(Summarizer):
     cdef double summarize(
@@ -74,6 +83,9 @@ cdef class SlopeSummarizer(Summarizer):
 
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 1
+
+    def value_name(self, Py_ssize_t i):
+        return "slope"
 
 
 cdef class MeanVarianceSlopeSummarizer(Summarizer):
@@ -91,6 +103,16 @@ cdef class MeanVarianceSlopeSummarizer(Summarizer):
 
     cdef Py_ssize_t n_outputs(self) noexcept nogil:
         return 3
+
+    def value_name(self, Py_ssize_t i):
+        if i == 0:
+            return "mean"
+        elif i == 1:
+            return "var"
+        elif i == 2:
+            return "slope"
+        else:
+            return "?"
 
 
 cdef class Catch22Summarizer(Summarizer):
@@ -289,7 +311,7 @@ cdef inline Py_ssize_t _imin(Py_ssize_t a, Py_ssize_t b) noexcept nogil:
 
 cdef class IntervalAttributeGenerator(AttributeGenerator):
     cdef Py_ssize_t n_intervals
-    cdef Summarizer summarizer
+    cdef readonly Summarizer summarizer
 
     def __cinit__(self, Py_ssize_t n_intervals, Summarizer summarizer, *args, **kwargs):
         self.n_intervals = n_intervals
