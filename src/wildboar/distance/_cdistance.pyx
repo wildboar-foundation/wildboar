@@ -246,7 +246,7 @@ cdef class SubsequenceMetric:
         v.data = <double*> malloc(v.length * sizeof(double))
         v.extra = NULL
         if v.data == NULL:
-            return -1
+            raise MemoryError()
 
         cdef Py_ssize_t i
         for i in range(v.length):
