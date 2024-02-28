@@ -349,7 +349,7 @@ Classes
    ..
        !! processed by numpydoc !!
 
-.. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=0.5, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', n_jobs=None, random_state=None)
+.. py:class:: IntervalTransform(n_intervals='sqrt', *, intervals='fixed', sample_size=None, min_size=0.0, max_size=1.0, summarizer='mean_var_slope', n_jobs=None, random_state=None)
 
 
 
@@ -402,7 +402,7 @@ Classes
        **n_jobs** : int, optional
            The number of cores to use on multi-core.
 
-       **random_state** : int or RandomState
+       **random_state** : int or RandomState, optional
            - If `int`, `random_state` is the seed used by the random number generator
            - If `RandomState` instance, `random_state` is the random number generator
            - If `None`, the random number generator is the `RandomState` instance used
@@ -418,7 +418,7 @@ Classes
 
    .. rubric:: Notes
 
-   Paralellization dependes on releasing the global interpreter lock (GIL). As
+   Parallelization depends on releasing the global interpreter lock (GIL). As
    such, custom functions as summarizers reduces the performance. Wildboar
    implements summarizers for taking the mean ("mean"), variance ("variance")
    and slope ("slope") as well as their combination ("mean_var_slope") and the
