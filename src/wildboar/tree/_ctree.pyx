@@ -37,7 +37,7 @@ cdef struct SplitPoint:
 
 
 cdef class TreeAttributeGenerator:
-    cdef AttributeGenerator generator
+    cdef readonly AttributeGenerator generator
 
     def __init__(self, AttributeGenerator generator):
         self.generator = generator
@@ -520,6 +520,10 @@ cdef class Tree:
         self._n_node_samples = <Py_ssize_t*> malloc(self._capacity * sizeof(Py_ssize_t))
         self._n_weighted_node_samples = <double*> malloc(self._capacity * sizeof(double))
 
+    @property
+    def generator(self):
+        return self.generator.generator
+
     def __dealloc__(self):
         cdef Py_ssize_t i
         if self._attributes != NULL:
@@ -576,6 +580,10 @@ cdef class Tree:
         for i in range(self._n_labels * self._node_count):
             arr[i] = self._values[i]
         return arr.reshape(self._node_count, self._n_labels)
+
+    @property
+    def n_outputs(self):
+        return 1
 
     @property
     def attribute(self):

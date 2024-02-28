@@ -127,7 +127,7 @@ cdef class BatchFitTransform(Batch):
 
 cdef class AttributeEmbedding:
 
-    cdef AttributeGenerator generator
+    cdef readonly AttributeGenerator generator
     cdef Attribute** _attributes
     cdef Py_ssize_t _n_attributes
 
