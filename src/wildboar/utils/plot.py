@@ -5,8 +5,6 @@ import numpy as np
 from sklearn.tree._reingold_tilford import Tree, buchheim
 from sklearn.utils import Bunch, column_or_1d, resample
 
-from ..transform._interval import IntervalMixin
-from ..transform._shapelet import ShapeletMixin
 from ..utils.validation import check_array
 
 try:
@@ -37,6 +35,9 @@ def plot_tree(
     show_classes=True,
     node_labeler=None,
 ):
+    from ..transform._interval import IntervalMixin
+    from ..transform._shapelet import ShapeletMixin
+
     def _add_attributes(tree, attributes):
         setattr(tree, "_attr", attributes)
 
