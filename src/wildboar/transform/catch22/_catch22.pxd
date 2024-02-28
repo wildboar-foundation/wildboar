@@ -42,7 +42,7 @@ cdef double periodicity_wang_th0_01(const double *x, int length) noexcept nogil
 
 cdef double embed2_dist_tau_d_expfit_meandiff(const double *x, double *ac, int length) noexcept nogil
 
-cdef double auto_mutual_info_stats_gaussian_fmmi(const double *x, int length, int tau) nogil 
+cdef double auto_mutual_info_stats_gaussian_fmmi(const double *x, int length, int tau) noexcept nogil
 
 cdef double outlier_include_np_mdrmd(const double *x, int length, int sign, double inc) noexcept nogil
 

@@ -20,39 +20,39 @@ cdef extern from "catch22.h":
 
     cdef double histogram_mode(
         const double *x, int length, int *hist_counts, double *bin_edges, int n_bins
-    ) nogil
+    ) noexcept nogil
 
     cdef double histogram_ami_even(
         const double *x, int length, int tau, int n_bins
-    ) nogil
+    ) noexcept nogil
 
     cdef double transition_matrix_ac_sumdiagcov(
         const double *x, double *ac, int length, int n_groups
-    ) nogil
+    ) noexcept nogil
 
-    cdef double periodicity_wang_th0_01(const double *x, int length) nogil
+    cdef double periodicity_wang_th0_01(const double *x, int length) noexcept nogil
 
     cdef double embed2_dist_tau_d_expfit_meandiff(
         const double *x, double *ac, int length
-    ) nogil
+    ) noexcept nogil
 
     cdef double auto_mutual_info_stats_gaussian_fmmi(
         const double *x, int length, int tau
-    ) nogil
+    ) noexcept nogil
 
     cdef double outlier_include_np_mdrmd(
         const double *x, int length, int sign, double inc
-    ) nogil
+    ) noexcept nogil
 
     cdef double summaries_welch_rect(
         const double *x, int length, int what, double *S, double *f, int n_welch
-    ) nogil
+    ) noexcept nogil
 
-    cdef double motif_three_quantile_hh(const double *x, int length) nogil
+    cdef double motif_three_quantile_hh(const double *x, int length) noexcept nogil
 
     cdef double fluct_anal_2_50_1_logi_prop_r1(
         const double *y, int length, int lag, int how
-    ) nogil
+    ) noexcept nogil
 
 
 cdef double transition_matrix_3ac_sumdiagcov(
