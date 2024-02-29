@@ -3,6 +3,7 @@
 
 """Tree-based estimators for classification and regression."""
 
+from ._plot import plot_tree
 from ._ptree import ProximityTreeClassifier
 from ._tree import (
     ExtraShapeletTreeClassifier,
@@ -27,4 +28,5 @@ __all__ = [
     "IntervalTreeRegressor",
     "PivotTreeClassifier",
     "ProximityTreeClassifier",
+    "plot_tree",
 ]

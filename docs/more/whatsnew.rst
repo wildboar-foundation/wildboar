@@ -63,7 +63,7 @@ Wildboar 1.2 introduces several new models.
        (``impurity_equality_tolerance=None``) but it can be enabled by setting
        a (small) non negative float.
      - |Feature| Add support for plotting decision trees using the
-       :func:`~wildboar.utils.plot.plot_tree` function.
+       :func:`~wildboar.tree.plot_tree` function.
 
 
   .. grid-item-card::
