@@ -31,6 +31,7 @@ class ShapeletMixin:
         "metric": [
             StrOptions(_SUBSEQUENCE_METRICS.keys()),
             list,
+            dict,
         ],
         "metric_params": [dict, None],
         "min_shapelet_size": [
