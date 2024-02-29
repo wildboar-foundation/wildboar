@@ -61,7 +61,7 @@ def silhouette_score(
 
     Notes
     -----
-    This is a convenient wrapper around :ref:`sklearn.metrics.silhouette_score`
+    This is a convenient wrapper around :func:`sklearn.metrics.silhouette_score`
     using Wildboar native metrics.
     """
     if sample_size is not None:
@@ -111,7 +111,7 @@ def silhouette_samples(x, labels, *, metric="euclidean", metric_params=None):
 
     Notes
     -----
-    This is a convenient wrapper around :ref:`sklearn.metrics.silhouette_samples`
+    This is a convenient wrapper around :func:`sklearn.metrics.silhouette_samples`
     using Wildboar native metrics.
     """
     return sklearn_silhouette_samples(
