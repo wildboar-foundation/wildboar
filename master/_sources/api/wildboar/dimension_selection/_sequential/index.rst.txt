@@ -8,8 +8,6 @@
 .. py:module:: wildboar.dimension_selection._sequential
 
 
-Module Contents
----------------
 
 Classes
 -------

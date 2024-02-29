@@ -16,8 +16,6 @@
        !! processed by numpydoc !!
 
 
-Module Contents
----------------
 
 
 Functions
@@ -450,7 +448,7 @@ Functions
 .. py:function:: jeong_weight(n, g=0.05)
 
    
-   Weighting described by Jeong et. al. (2011)[R4bf7d056babf-1]_.
+   Weighting described by Jeong et. al. (2011).
 
    Uses `g` as the penalty control.
 
@@ -481,13 +479,13 @@ Functions
 
    .. rubric:: References
 
-   .. [R4bf7d056babf-1] Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+   Jeong, Y., Jeong, M., Omitaomu, O. (2021)
        Weighted dynamic time warping for time series classification.
        Pattern Recognition 44, 2231-2240
 
    .. only:: latex
 
-      [R4bf7d056babf-1]_
+      
 
 
 
@@ -559,7 +557,7 @@ Functions
            The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
 
        **g** : float, optional
-           Weighting described by Jeong et. al. (2011)[Raec1aca773ed-1]_ using `g` as penalty
+           Weighting described by Jeong et al. (2011) using `g` as penalty
            control.
            
            ::
@@ -584,13 +582,13 @@ Functions
 
    .. rubric:: References
 
-   .. [Raec1aca773ed-1] Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+   Jeong, Y., Jeong, M., Omitaomu, O. (2021)
        Weighted dynamic time warping for time series classification.
        Pattern Recognition 44, 2231-2240
 
    .. only:: latex
 
-      [Raec1aca773ed-1]_
+      
 
 
 

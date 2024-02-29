@@ -8,8 +8,6 @@
 .. py:module:: wildboar.transform._shapelet
 
 
-Module Contents
----------------
 
 Classes
 -------

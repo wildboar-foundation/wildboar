@@ -8,8 +8,6 @@
 .. py:module:: wildboar.utils._parallel
 
 
-Module Contents
----------------
 
 
 Functions

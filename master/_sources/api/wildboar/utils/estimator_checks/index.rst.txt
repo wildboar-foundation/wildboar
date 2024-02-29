@@ -8,8 +8,6 @@
 .. py:module:: wildboar.utils.estimator_checks
 
 
-Module Contents
----------------
 
 
 Functions

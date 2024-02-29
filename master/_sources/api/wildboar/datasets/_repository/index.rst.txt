@@ -8,8 +8,6 @@
 .. py:module:: wildboar.datasets._repository
 
 
-Module Contents
----------------
 
 Classes
 -------

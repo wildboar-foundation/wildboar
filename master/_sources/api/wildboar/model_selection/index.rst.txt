@@ -29,8 +29,6 @@
        !! processed by numpydoc !!
 
 
-Package Contents
-----------------
 
 Classes
 -------

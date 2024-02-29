@@ -8,8 +8,6 @@
 .. py:module:: wildboar.tree._tree
 
 
-Module Contents
----------------
 
 Classes
 -------

@@ -31,38 +31,5 @@
        !! processed by numpydoc !!
 
 
-Subpackages
-===========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   annotate/index.rst
-   datasets/index.rst
-   dimension_selection/index.rst
-   distance/index.rst
-   ensemble/index.rst
-   explain/index.rst
-   linear_model/index.rst
-   metrics/index.rst
-   model_selection/index.rst
-   transform/index.rst
-   tree/index.rst
-   utils/index.rst
-
-
-Submodules
-==========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   base/index.rst
-
-
-Package Contents
-----------------
 
 

@@ -8,8 +8,6 @@
 .. py:module:: wildboar.dimension_selection._distance
 
 
-Module Contents
----------------
 
 Classes
 -------

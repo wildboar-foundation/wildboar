@@ -8,8 +8,6 @@
 .. py:module:: wildboar.utils.decorators
 
 
-Module Contents
----------------
 
 
 Functions

@@ -8,8 +8,6 @@
 .. py:module:: wildboar.transform._hydra
 
 
-Module Contents
----------------
 
 Classes
 -------

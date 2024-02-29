@@ -8,8 +8,6 @@
 .. py:module:: wildboar.linear_model._shapelet
 
 
-Module Contents
----------------
 
 Classes
 -------

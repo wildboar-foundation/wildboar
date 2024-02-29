@@ -182,6 +182,96 @@ This smaller configuration has an accuracy of:
 
    clf.score(X_test, y_test)
 
+***************
+Interval Forest
+***************
+
+The interval forest was first introduced by Deng et al. [#deng]_ and is
+implemented in the class :class:`~wildboar.ensemble.IntervalForestClassifier`
+It constructs a forest of interval-based decision trees where each node is
+constructed using a value aggregate over a (possibly overlapping) interval. In
+the default formulation a node uses either the `mean`, `variance` or `slope` of
+the interval. But it is possible to consider other aggregation functions (in
+Wildboar we call the functions summarization functions).
+
+.. execute::
+   :context: reset
+   :show-return:
+
+   from wildboar.datasets import load_gun_point
+   from wildboar.ensemble import IntervalForestClassifier
+
+   X_train, X_test, y_train, y_test = load_gun_point(merge_train_test=False)
+   clf = IntervalForestClassifier(min_size=0.1, max_size=0.3, random_state=1)
+   clf.fit(X_train, y_train)
+
+The interval forest uses the default summarization functions mentioned above
+and `sqrt(n_timestep)` intervals. By default, we randomly select random
+intervals that are possibly overlapping. The accuracy is:
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf.score(X_test, y_test)
+
+We can also use non-overlapping intervals by setting the `intervals` parameter
+to `"fixed"`. We can sample a smaller set of intervals by setting the
+`sample_size` parameter to a float.
+
+.. warning::
+
+   ``intervals="sample"`` was deprecated in version 1.3 and will be removed in
+   version 1.4. The equivalent functionality can be achieved by setting
+   ``intervals="fixed"`` and specifying `sample_size` as a float.
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.datasets import load_gun_point
+   from wildboar.ensemble import IntervalForestClassifier
+
+   X_train, X_test, y_train, y_test = load_gun_point(merge_train_test=False)
+   clf = IntervalForestClassifier(
+      intervals="fixed", n_intervals=30, sample_size=0.2, random_state=1
+   )
+   clf.fit(X_train, y_train)
+
+At each node in each tree, we sample 20% of the intervals. The accuracy is:
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf.score(X_test, y_test)
+
+We can also change the summarizer. By setting the `summarizer` parameter to
+``"catch22"`` we can sample from the full set of Catch22 [#lubba]_ features.
+
+.. execute::
+   :context:
+   :show-return:
+
+   X_train, X_test, y_train, y_test = load_gun_point(merge_train_test=False)
+   clf = IntervalForestClassifier(
+      summarizer="catch22",
+      intervals="random",
+      n_intervals=30,
+      random_state=1,
+   )
+   clf.fit(X_train, y_train)
+
+Here, we sample 30 possibly overlapping intervals at each node and randomly
+selects one of the catch22 features to split the node. The accuracy for this
+configuration is:
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf.score(X_test, y_test)
+
 **********
 References
 **********
@@ -194,3 +284,12 @@ References
 .. [#lines] Jason Lines and Anthony Bagnall, Time Series Classification with
    Ensembles of Elastic Distance Measures, Data Mining and Knowledge Discovery,
    29(3), 2015.
+
+.. [#lubba] Lubba, C.H., Sethi, S.S., Knaute, P., Schultz, S.R., Fulcher, B.D.
+   and Jones, N.S., 2019. catch22: CAnonical Time-series CHaracteristics:
+   Selected through highly comparative time-series analysis. Data Mining and
+   Knowledge Discovery, 33(6), pp.1821-1852.
+
+.. [#deng] Deng, H., Runger, G., Tuv, E. and Vladimir, M., 2013. A time
+   series forest for classification and feature extraction. Information
+   Sciences, 239, pp.142-153.

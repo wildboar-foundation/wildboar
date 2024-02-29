@@ -29,18 +29,6 @@
        !! processed by numpydoc !!
 
 
-Submodules
-==========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   variable_len/index.rst
-
-
-Package Contents
-----------------
 
 
 Functions

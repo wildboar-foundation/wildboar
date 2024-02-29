@@ -8,8 +8,6 @@
 .. py:module:: wildboar.ensemble._ensemble
 
 
-Module Contents
----------------
 
 Classes
 -------

@@ -8,8 +8,6 @@
 .. py:module:: wildboar.transform._base
 
 
-Module Contents
----------------
 
 Classes
 -------

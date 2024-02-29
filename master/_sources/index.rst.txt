@@ -81,7 +81,7 @@
 
       The reference guide contains detailed descriptions of the Wildboar API.
       The reference describe what methods, classes and which parameters can be
-      used.
+      used. :execute:`1+1`
 
 .. toctree::
   :maxdepth: 3
@@ -89,7 +89,7 @@
 
   Install <install>
   guide
-  API <api/index>
+  api/index
   examples
   more/whatsnew
 

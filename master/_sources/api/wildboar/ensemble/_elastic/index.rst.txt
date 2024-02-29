@@ -8,8 +8,6 @@
 .. py:module:: wildboar.ensemble._elastic
 
 
-Module Contents
----------------
 
 Classes
 -------

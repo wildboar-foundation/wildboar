@@ -13,8 +13,6 @@
        !! processed by numpydoc !!
 
 
-Module Contents
----------------
 
 
 Functions

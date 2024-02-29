@@ -29,18 +29,6 @@
        !! processed by numpydoc !!
 
 
-Subpackages
-===========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-   counterfactual/index.rst
-
-
-Package Contents
-----------------
 
 Classes
 -------

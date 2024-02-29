@@ -8,8 +8,6 @@
 .. py:module:: wildboar.datasets._filter
 
 
-Module Contents
----------------
 
 
 Functions

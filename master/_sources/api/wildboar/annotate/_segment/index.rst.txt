@@ -8,8 +8,6 @@
 .. py:module:: wildboar.annotate._segment
 
 
-Module Contents
----------------
 
 
 Functions

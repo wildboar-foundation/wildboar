@@ -35,18 +35,6 @@
        !! processed by numpydoc !!
 
 
-Submodules
-==========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   dtw/index.rst
-
-
-Package Contents
-----------------
 
 Classes
 -------

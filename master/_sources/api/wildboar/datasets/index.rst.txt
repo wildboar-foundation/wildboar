@@ -37,19 +37,6 @@
        !! processed by numpydoc !!
 
 
-Submodules
-==========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   outlier/index.rst
-   preprocess/index.rst
-
-
-Package Contents
-----------------
 
 Classes
 -------

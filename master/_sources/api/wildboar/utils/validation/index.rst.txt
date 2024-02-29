@@ -8,8 +8,6 @@
 .. py:module:: wildboar.utils.validation
 
 
-Module Contents
----------------
 
 Classes
 -------

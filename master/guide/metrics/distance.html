@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Distance &#8212; Wildboar 1.3.0.dev28+g1589220bd documentation</title>
+    <title>Distance &#8212; Wildboar 1.3.0.dev34+g3c898f2a2 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=3963de79"></script>
+    <script src="../../_static/documentation_options.js?v=b30e7106"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -196,14 +196,7 @@ document.write(`
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../api/index.html">
-                        API
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../examples.html">
-                        Examples
+                        API Reference
                       </a>
                     </li>
                 
@@ -340,14 +333,7 @@ document.write(`
 
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../api/index.html">
-                        API
-                      </a>
-                    </li>
-                
-
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../examples.html">
-                        Examples
+                        API Reference
                       </a>
                     </li>
                 
@@ -426,8 +412,6 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="../annotate.html">Annotate</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../metrics.html">Metrics</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Distance</a></li>
-
-
 <li class="toctree-l2"><a class="reference internal" href="elastic.html">Elastic metrics</a></li>
 </ul>
 </li>
@@ -436,6 +420,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="../supervised/trees.html">Tree-based estimators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../supervised/ensemble.html">Ensemble estimators</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../supervised/transform.html">Transform-based estimators</a></li>
+
+
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../unsupervised.html">Unsupervised learning</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -443,6 +429,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="../unsupervised/outlier/generation.html">Outlier detection benchmarks</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../unsupervised/transform.html">Time series transform</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
@@ -507,22 +494,31 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="distance">
-<h1>Distance<a class="headerlink" href="#distance" title="Link to this heading">#</a></h1>
+<span id="id1"></span><h1>Distance<a class="headerlink" href="#distance" title="Link to this heading">#</a></h1>
 <section id="pairwise-distance">
 <h2>Pairwise distance<a class="headerlink" href="#pairwise-distance" title="Link to this heading">#</a></h2>
 <p>A typical workflow involves computing the distance between pairs of time series.
-In Wildboar, we accomplish this using the {func}`pairwise_distance`-function
+In Wildboar, we accomplish this using the <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a>-function
 which computes the distance between each time series in <cite>X</cite> and optionally <cite>Y</cite>.
-For example, we can compute the _Euclidean <a class="reference internal" href="#distance">distance</a> (default if <cite>metric=None</cite>)
-between each pair from time series of a single array as:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_distance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
-<span class="go">array([[0.        , 3.51158857, 5.11514381],</span>
-<span class="go">      [3.51158857, 0.        , 2.35905618],</span>
-<span class="go">      [5.11514381, 2.35905618, 0.        ]])</span>
+For example, we can compute the _Euclidean <a class="reference internal" href="#distance">distance</a> (default) between each
+pair from time series of a single array as:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.datasets</span> <span class="kn">import</span> <span class="n">load_two_lead_ecg</span>
+<span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_distance</span>
+
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_two_lead_ecg</span><span class="p">()</span>
+<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span>        <span class="p">,</span> <span class="mf">3.51158857</span><span class="p">,</span> <span class="mf">5.11514381</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">3.51158857</span><span class="p">,</span> <span class="mf">0.</span>        <span class="p">,</span> <span class="mf">2.35905618</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">5.11514381</span><span class="p">,</span> <span class="mf">2.35905618</span><span class="p">,</span> <span class="mf">0.</span>        <span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -538,28 +534,52 @@ the same object. However, it will not detect if <cite>(X == Y).all()</cite> (e.g
 </div>
 <p>If we pass a second array, then the returned matrix is the pairwise distance
 between the time series from both <cite>X</cite> and <cite>Y</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
-<span class="go">array([[4.85497117, 5.96086309, 6.18777928],</span>
-<span class="go">      [2.00606825, 5.23060212, 4.27419835],</span>
-<span class="go">      [1.64445581, 6.38965963, 4.79102936]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">4.85497117</span><span class="p">,</span> <span class="mf">5.96086309</span><span class="p">,</span> <span class="mf">6.18777928</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.00606825</span><span class="p">,</span> <span class="mf">5.23060212</span><span class="p">,</span> <span class="mf">4.27419835</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.64445581</span><span class="p">,</span> <span class="mf">6.38965963</span><span class="p">,</span> <span class="mf">4.79102936</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>By default, the <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a> function computes the Euclidean
 distance. We can change the metric by specifying the <cite>metric</cite> parameter
 <a class="reference external" href="list_of_subsequence_metrics">as one of the supported metrics</a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;edr&quot;</span><span class="p">)</span>
-<span class="go">array([[0.59756098, 0.47560976, 0.64634146],</span>
-<span class="go">      [0.08536585, 0.03658537, 0.13414634],</span>
-<span class="go">      [0.09756098, 0.25609756, 0.12195122]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;edr&quot;</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">0.59756098</span><span class="p">,</span> <span class="mf">0.47560976</span><span class="p">,</span> <span class="mf">0.64634146</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.08536585</span><span class="p">,</span> <span class="mf">0.03658537</span><span class="p">,</span> <span class="mf">0.13414634</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">0.09756098</span><span class="p">,</span> <span class="mf">0.25609756</span><span class="p">,</span> <span class="mf">0.12195122</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>We can also specify optional extra parameters to the metric using the
 <cite>metric_params</cite>-parameter:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;twe&quot;</span><span class="p">,</span> <span class="n">metric_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;stiffness&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">})</span>
-<span class="go">array([[76.20881199, 73.62554784, 88.5536877 ],</span>
-<span class="go">      [27.49142159, 60.56024904, 50.24551102],</span>
-<span class="go">      [20.45513015, 81.60658533, 54.06099416]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;twe&quot;</span><span class="p">,</span> <span class="n">metric_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;stiffness&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">})</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">76.20881199</span><span class="p">,</span> <span class="mf">73.62554784</span><span class="p">,</span> <span class="mf">88.5536877</span> <span class="p">],</span>
+       <span class="p">[</span><span class="mf">27.49142159</span><span class="p">,</span> <span class="mf">60.56024904</span><span class="p">,</span> <span class="mf">50.24551102</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">20.45513015</span><span class="p">,</span> <span class="mf">81.60658533</span><span class="p">,</span> <span class="mf">54.06099416</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>We support a multitude of input configurations and the return value of
 <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a> depends on the input shape(s) of <cite>X</cite> (with
@@ -569,73 +589,157 @@ distance. We can change the metric by specifying the <cite>metric</cite> paramet
 </dd>
 <dt><em>A single 2d-array `X`</em></dt><dd><p>Returns a 2d-array with the distance between each sample in <cite>X</cite> of shape
 <cite>(x_samples, x_samples)</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
-<span class="go">array([[0.        , 3.51158857],</span>
-<span class="go">      [3.51158857, 0.        ]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">0.</span>        <span class="p">,</span> <span class="mf">3.51158857</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">3.51158857</span><span class="p">,</span> <span class="mf">0.</span>        <span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </dd>
 <dt><em>A 1d-array `X` and a 1d-array `Y`</em></dt><dd><p>Returns a scalar with the distance of <cite>X</cite> to <cite>Y</cite></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-<span class="go">5.11514381</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">5.115143810620726</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </dd>
 <dt><em>A 1d-array `X` and a 2d-array `Y`</em></dt><dd><p>Returns a 1d-array of the distance between <cite>X</cite> and each sample in <cite>Y</cite> of shape
 <cite>(y_samples, )</cite>. If <cite>Y</cite> is a 1d-array and <cite>X</cite> is a 2d-array, a 1d-array, of
 shape <cite>(x_samples, )</cite>, with the distance between <cite>Y</cite> and each sample in <cite>X</cite> is
 returned.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
-<span class="go">array([5.11514381, 4.85497117, 5.96086309])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">5.11514381</span><span class="p">,</span> <span class="mf">4.85497117</span><span class="p">,</span> <span class="mf">5.96086309</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </dd>
 <dt><em>A 2d-array `X` and a 2d-array `Y`</em></dt><dd><p>Returns a 2d-array with the distance between each sample in <cite>X</cite> and each
 sample in <cite>Y</cite> of shape <cite>(x_samples, y_samples)</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
-<span class="go">array([[5.11514381, 4.85497117],</span>
-<span class="go">      [2.35905618, 2.00606825]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">5.11514381</span><span class="p">,</span> <span class="mf">4.85497117</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.35905618</span><span class="p">,</span> <span class="mf">2.00606825</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </dd>
 <dt><em>A 3d-array `X` and a 3d-array `Y`</em></dt><dd><p>Returns a 2d-array with the distance between each sample in <cite>X</cite> and each
 sample in <cite>Y</cite> of shape <cite>(x_samples, y_samples)</cite>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="go">array([[5.48683192, 6.60301954],</span>
-<span class="go">      [4.34083722, 6.35954558]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">3.86658733</span><span class="p">,</span> <span class="mf">3.75622584</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">5.29468998</span><span class="p">,</span> <span class="mf">6.06939656</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 <p>If we set the parameter <code class="code highlight python docutils literal highlight-python"><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span></code> we return a 3d-array of shape
 <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">n_dims</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">,</span> <span class="n">n_timestep</span><span class="p">)</span></code>. <a class="reference external" href="multivariate_support">Read more about
 multivariate support</a>.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[[</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.60301954</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">4.34083722</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">]],</span>
+
+       <span class="p">[[</span><span class="mf">2.50507001</span><span class="p">,</span> <span class="mf">0.90920635</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">5.27646127</span><span class="p">,</span> <span class="mf">4.60041068</span><span class="p">]],</span>
+
+       <span class="p">[[</span><span class="mf">3.60786006</span><span class="p">,</span> <span class="mf">3.75645164</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">6.26677146</span><span class="p">,</span> <span class="mf">7.24823344</span><span class="p">]]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </dd>
 </dl>
-</section>
 <section id="paired-distance">
-<h2>Paired distance<a class="headerlink" href="#paired-distance" title="Link to this heading">#</a></h2>
+<h3>Paired distance<a class="headerlink" href="#paired-distance" title="Link to this heading">#</a></h3>
 <p>Sometimes we do not need to compute the distance between every sample, but
 instead the distance between _pairs_ of samples. For this purpose, we use the
 <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a>, which accepts two arrays <cite>X</cite> and <cite>Y</cite> with shapes
 <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">x_samples</span><span class="p">,</span> <span class="n">x_timestep</span><span class="p">)</span></code> and <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">y_samples</span><span class="p">,</span> <span class="n">y_timesteps</span><span class="p">)</span></code> with
 <code class="code highlight python docutils literal highlight-python"><span class="n">x_timestep</span> <span class="o">==</span> <span class="n">y_timestep</span></code> for non-elastic metrics and <cite>X</cite> and <cite>Y</cite> that can be
 broadcast to a uniform shape.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">paired_distance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
-<span class="go">array([4.85497117, 5.23060212, 4.79102936])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span> <span class="c1"># Broadcasting</span>
-<span class="go">array([4.85497117, 5.96086309, 6.18777928])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">paired_distance</span>
+
+<span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">4.85497117</span><span class="p">,</span> <span class="mf">5.23060212</span><span class="p">,</span> <span class="mf">4.79102936</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>  <span class="c1"># Broadcasting</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">4.85497117</span><span class="p">,</span> <span class="mf">5.96086309</span><span class="p">,</span> <span class="mf">6.18777928</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>Similar to <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a>, we support the parameters <cite>metric</cite> and
 <cite>metric_params</cite> accepting the same input:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;wdtw&quot;</span><span class="p">,</span> <span class="n">metric_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">})</span>
-<span class="go">array([0.50816474, 0.3299048 , 0.55193242])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">paired_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">6</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;wdtw&quot;</span><span class="p">,</span> <span class="n">metric_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">})</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">0.50816474</span><span class="p">,</span> <span class="mf">0.3299048</span> <span class="p">,</span> <span class="mf">0.55193242</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p><a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a> also supports a multitude of input configurations and
 the output depends on that configuration:</p>
@@ -643,72 +747,207 @@ the output depends on that configuration:</p>
 <dt><em>A 1d-array `X` and a 1d-array `Y`</em></dt><dd><p>Returns a scalar with the distance of <cite>X</cite> to <cite>Y</cite>.</p>
 </dd>
 <dt><em>Two arrays that can be broadcast to the same shape</em></dt><dd><p>Returns a 1d-array of shape <cite>(n_samples, )</cite>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If we set the parameter <cite>dim=”full”</cite> we return a 2d-array of shape
-<code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">n_dims</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span></code>. Refer to <a class="reference external" href="multivariate_support">more about multivariate support</a> for additional details.</p>
+<p>If 3d-arrays, and the parameter <cite>dim</cite> is set to <cite>“full”</cite>, we return a
+2d-array of shape <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">n_dims</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span></code>. Refer to <a class="reference external" href="multivariate_support">more about
+multivariate support</a> for additional details.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.50507001</span><span class="p">,</span> <span class="mf">4.60041068</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">3.60786006</span><span class="p">,</span> <span class="mf">7.24823344</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </dd>
 </dl>
 </section>
+</section>
+<section id="minimum-distance">
+<h2>Minimum distance<a class="headerlink" href="#minimum-distance" title="Link to this heading">#</a></h2>
+<p>Another common task is to, given a query time series <span class="math notranslate nohighlight">\(q\)</span> and a set of
+time series <span class="math notranslate nohighlight">\(\mathcal{T}\)</span> find the (<cite>k</cite>) time series in the set that has
+the minimal distance to <span class="math notranslate nohighlight">\(q\)</span>. A naive solution is to calculate the
+distance between the query and every time series, selecting the <cite>k</cite> time series
+with the lowest distance:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">4</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Or if we want to return the <cite>k</cite> closest, we can use <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.argpartition.html#numpy.argpartition" title="(in NumPy v1.26)"><code class="xref py py-func docutils literal notranslate"><span class="pre">argpartition</span></code></a>
+(here <code class="docutils literal notranslate"><span class="pre">k=4</span></code>):</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">argpartition</span>
+
+<span class="n">argpartition</span><span class="p">(</span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">300</span><span class="p">]),</span> <span class="mi">4</span><span class="p">)[:,</span> <span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span>  <span class="mi">6</span><span class="p">,</span> <span class="mi">276</span><span class="p">,</span> <span class="mi">254</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">244</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span> <span class="mi">282</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">101</span><span class="p">,</span> <span class="mi">277</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">217</span><span class="p">],</span>
+       <span class="o">...</span><span class="p">,</span>
+       <span class="p">[</span><span class="mi">204</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">274</span><span class="p">,</span> <span class="mi">109</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">213</span><span class="p">,</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">208</span><span class="p">,</span> <span class="mi">193</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">246</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span>  <span class="mi">43</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Wildboar implements this pattern in the <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.argmin_distance" title="wildboar.distance.argmin_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">argmin_distance</span></code></a> function. The
+function uses early abandoning to avoid computing the full distance for time
+series that would never be among the closest.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">argmin_distance</span>
+
+<span class="n">argmin_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">11</span><span class="p">:</span><span class="mi">300</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mi">120</span><span class="p">,</span> <span class="mi">254</span><span class="p">,</span> <span class="mi">276</span><span class="p">,</span>   <span class="mi">6</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">282</span><span class="p">,</span>  <span class="mi">50</span><span class="p">,</span> <span class="mi">244</span><span class="p">,</span>  <span class="mi">85</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">217</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">277</span><span class="p">,</span> <span class="mi">101</span><span class="p">],</span>
+       <span class="o">...</span><span class="p">,</span>
+       <span class="p">[</span><span class="mi">109</span><span class="p">,</span> <span class="mi">274</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">204</span><span class="p">],</span>
+       <span class="p">[</span><span class="mi">193</span><span class="p">,</span> <span class="mi">213</span><span class="p">,</span> <span class="mi">146</span><span class="p">,</span> <span class="mi">208</span><span class="p">],</span>
+       <span class="p">[</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">246</span><span class="p">,</span> <span class="mi">111</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>The output of both calls are equivalent but the latter is roughly three times
+faster for most metrics.</p>
 <section id="multivariate-support">
-<span id="id1"></span><h2>Multivariate support<a class="headerlink" href="#multivariate-support" title="Link to this heading">#</a></h2>
+<span id="id2"></span><h3>Multivariate support<a class="headerlink" href="#multivariate-support" title="Link to this heading">#</a></h3>
 <p>As described, both <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a> and <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_distance" title="wildboar.distance.pairwise_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_distance</span></code></a> support
 multivariate time series by computing the <em>“interdimensional” distance</em> between
 time series and (by default) reporting the <em>mean</em> (<cite>dim=”mean”</cite>). Optionally, we
 can return the full distance matrix by setting <code class="code highlight python docutils literal highlight-python"><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
-<span class="go">array([[[5.48683192, 6.60301954],</span>
-<span class="go">        [4.34083722, 6.35954558]],</span>
-
-<span class="go">      [[2.50507001, 0.90920635],</span>
-<span class="go">        [5.27646127, 4.60041068]],</span>
-
-<span class="go">      [[3.60786006, 3.75645164],</span>
-<span class="go">        [6.26677146, 7.24823344]]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[[</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.60301954</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">4.34083722</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">]],</span>
+
+       <span class="p">[[</span><span class="mf">2.50507001</span><span class="p">,</span> <span class="mf">0.90920635</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">5.27646127</span><span class="p">,</span> <span class="mf">4.60041068</span><span class="p">]],</span>
+
+       <span class="p">[[</span><span class="mf">3.60786006</span><span class="p">,</span> <span class="mf">3.75645164</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">6.26677146</span><span class="p">,</span> <span class="mf">7.24823344</span><span class="p">]]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>By setting <code class="code highlight python docutils literal highlight-python"><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span></code>, Wildboar returns the full array of distances
 between all dimensions. The returned array has the shape <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">n_dims</span><span class="p">,</span>
 <span class="n">x_samples</span><span class="p">,</span> <span class="n">y_samples</span><span class="p">)</span></code>. Similarly, we can compute the paired distance:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
-<span class="go">array([[5.48683192, 6.35954558],</span>
-<span class="go">      [2.50507001, 4.60041068],</span>
-<span class="go">      [3.60786006, 7.24823344]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.50507001</span><span class="p">,</span> <span class="mf">4.60041068</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">3.60786006</span><span class="p">,</span> <span class="mf">7.24823344</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>Note that the <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a> returns an array of shape
 <code class="code highlight python docutils literal highlight-python"><span class="p">(</span><span class="n">n_dims</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span></code>.</p>
 <p>If we are interested in the distance between a single dimension we can either
-slice the input data or slice the full distance matrix:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">array([[5.48683192, 6.60301954],</span>
-<span class="go">      [4.34083722, 6.35954558]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go">array([5.48683192, 6.35954558])</span>
+slice the input data:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">d</span> <span class="o">=</span> <span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+<span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.60301954</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">4.34083722</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>or slice the full distance matrix:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;full&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>If we are <strong>only</strong> interested in a single dimension, we can set the <cite>dim</cite>
 parameter to the dimension we are want:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="go">array([[5.48683192, 6.60301954],</span>
-<span class="go">      [4.34083722, 6.35954558]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="go">array([5.48683192, 6.35954558])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.60301954</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">4.34083722</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>and for <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_distance" title="wildboar.distance.paired_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_distance</span></code></a>:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">paired_distance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">5.48683192</span><span class="p">,</span> <span class="mf">6.35954558</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>By setting <code class="code highlight python docutils literal highlight-python"><span class="n">dim</span></code> to the desired dimension, we avoid computing the
 distance between unwanted dimensions.</p>
 </section>
 </section>
 <section id="subsequence-search">
-<h1>Subsequence search<a class="headerlink" href="#subsequence-search" title="Link to this heading">#</a></h1>
+<h2>Subsequence search<a class="headerlink" href="#subsequence-search" title="Link to this heading">#</a></h2>
 <p>Wildboar can also identify the (minimum) <em>subsequence</em> distance, i.e.,
-<span class="math notranslate nohighlight">\(\min\limits_{t'\in t}(s, t')\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is a query and :math`t`
+<span class="math notranslate nohighlight">\(\min\limits_{t'\in t}(s, t')\)</span>, where <span class="math notranslate nohighlight">\(s\)</span> is a query and <span class="math notranslate nohighlight">\(t\)</span>
 is a time series, with <span class="math notranslate nohighlight">\(|s| \le |t|\)</span>. Wildboar support both
 <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.pairwise_subsequence_distance" title="wildboar.distance.pairwise_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">pairwise_subsequence_distance</span></code></a> and <a class="reference internal" href="../../api/wildboar/distance/index.html#wildboar.distance.paired_subsequence_distance" title="wildboar.distance.paired_subsequence_distance"><code class="xref py py-func docutils literal notranslate"><span class="pre">paired_subsequence_distance</span></code></a>
 which works similar to their non-subsequence counterparts, but also
@@ -718,36 +957,60 @@ the paired and pairwise subsequence functions accept subsequences as <code class
 containing 1d-numpy arrays and 2d-numpy arrays with subsequences with the same
 timestep.</p>
 <section id="pairwise-subsequence-distance">
-<h2>Pairwise subsequence distance<a class="headerlink" href="#pairwise-subsequence-distance" title="Link to this heading">#</a></h2>
+<h3>Pairwise subsequence distance<a class="headerlink" href="#pairwise-subsequence-distance" title="Link to this heading">#</a></h3>
 <p>Pairwise subsequence distance requires two inputs, the subsequences <cite>Y</cite>
 (argument 1) and the time series <cite>X</cite> (argument 2):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_subsequence_distance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;TwoLeadECG&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
-<span class="go">array([1.66371456, 2.11914265, 1.13076667, 1.99043671, 1.73408875,</span>
-<span class="go">       1.84227457])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">wildboar.distance</span> <span class="kn">import</span> <span class="n">pairwise_subsequence_distance</span>
+
+<span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>We can also pass multiple subsequences with the same number of timesteps as a
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([</span><span class="mf">1.66371456</span><span class="p">,</span> <span class="mf">2.11914265</span><span class="p">,</span> <span class="mf">1.13076667</span><span class="p">,</span> <span class="mf">1.99043671</span><span class="p">,</span> <span class="mf">1.73408875</span><span class="p">,</span>
+       <span class="mf">1.84227457</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>We can also pass multiple subsequences with the same number of time steps as a
 2d-numpy array:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
-<span class="go">array([[1.66371456, 1.2028058 ],</span>
-<span class="go">       [2.11914265, 0.85972633],</span>
-<span class="go">       [1.13076667, 0.85367621],</span>
-<span class="go">       [1.99043671, 0.86957415],</span>
-<span class="go">       [1.73408875, 0.64041732],</span>
-<span class="go">       [1.84227457, 1.33156061]])</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>or with different number of timesteps as a Python list:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_subsequence_distance</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
-<span class="go">array([[1.66371456, 0.56698045],</span>
-<span class="go">       [2.11914265, 0.99489626],</span>
-<span class="go">       [1.13076667, 0.6790517 ],</span>
-<span class="go">       [1.99043671, 0.16754772],</span>
-<span class="go">       [1.73408875, 0.10973127],</span>
-<span class="go">       [1.84227457, 0.50583639]])</span>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">1.66371456</span><span class="p">,</span> <span class="mf">1.2028058</span> <span class="p">,</span> <span class="mf">1.17725071</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.11914265</span><span class="p">,</span> <span class="mf">0.85972633</span><span class="p">,</span> <span class="mf">0.81245725</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.13076667</span><span class="p">,</span> <span class="mf">0.85367621</span><span class="p">,</span> <span class="mf">1.59786396</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.99043671</span><span class="p">,</span> <span class="mf">0.86957415</span><span class="p">,</span> <span class="mf">1.65083422</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.73408875</span><span class="p">,</span> <span class="mf">0.64041732</span><span class="p">,</span> <span class="mf">1.38897019</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.84227457</span><span class="p">,</span> <span class="mf">1.33156061</span><span class="p">,</span> <span class="mf">1.06460666</span><span class="p">]])</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>or with different number of time steps as a Python list:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_subsequence_distance</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">1.66371456</span><span class="p">,</span> <span class="mf">0.56698045</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.11914265</span><span class="p">,</span> <span class="mf">0.99489626</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.13076667</span><span class="p">,</span> <span class="mf">0.6790517</span> <span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.99043671</span><span class="p">,</span> <span class="mf">0.16754772</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.73408875</span><span class="p">,</span> <span class="mf">0.10973127</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.84227457</span><span class="p">,</span> <span class="mf">0.50583639</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 <p>Since we support multiple input configurations, the return value depends on the
 inputs:</p>
@@ -771,36 +1034,55 @@ univariate subsequences. As such, the <cite>dim</cite> parameter only accepts a 
 denoting the dimension in which to compute the subsequence distance. We can use
 the following code to compute the distance between the subsequence and each
 dimension of every sample, with consistent output.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">pairwise_sd_full</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-<span class="gp">... </span>   <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
-<span class="gp">... </span>       <span class="p">[</span><span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span>
-<span class="gp">... </span>       <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="p">)</span>
-<span class="gp">...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_sd_full</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
-<span class="go">array([[2.21688671, 1.13076667, 1.84227457],</span>
-<span class="go">       [1.66371456, 1.99043671, 1.83210644],</span>
-<span class="go">       [2.11914265, 1.73408875, 1.50884094]])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pairwise_sd_full</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span><span class="mi">20</span><span class="p">]],</span> <span class="n">x</span><span class="p">)</span>
-<span class="go">array([[[2.21688671, 0.18507116],</span>
-<span class="go">        [1.13076667, 0.11177626],</span>
-<span class="go">        [1.84227457, 0.15611733]],</span>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">pairwise_sd_full</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">pairwise_subsequence_distance</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])],</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
 
-<span class="go">       [[1.66371456, 0.21780536],</span>
-<span class="go">        [1.99043671, 0.13350353],</span>
-<span class="go">        [1.83210644, 0.09710811]],</span>
 
-<span class="go">       [[2.11914265, 0.75114125],</span>
-<span class="go">        [1.73408875, 0.13489775],</span>
-<span class="go">        [1.50884094, 0.09806374]]])</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">14</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pairwise_sd_full</span><span class="p">(</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[</span><span class="mf">2.21688671</span><span class="p">,</span> <span class="mf">1.13076667</span><span class="p">,</span> <span class="mf">1.84227457</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">1.66371456</span><span class="p">,</span> <span class="mf">1.99043671</span><span class="p">,</span> <span class="mf">1.83210644</span><span class="p">],</span>
+       <span class="p">[</span><span class="mf">2.11914265</span><span class="p">,</span> <span class="mf">1.73408875</span><span class="p">,</span> <span class="mf">1.50884094</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_sd_full</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">],</span> <span class="n">X</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">:</span><span class="mi">20</span><span class="p">]],</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">array</span><span class="p">([[[</span><span class="mf">2.21688671</span><span class="p">,</span> <span class="mf">0.18507116</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.13076667</span><span class="p">,</span> <span class="mf">0.11177626</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.84227457</span><span class="p">,</span> <span class="mf">0.15611733</span><span class="p">]],</span>
+
+       <span class="p">[[</span><span class="mf">1.66371456</span><span class="p">,</span> <span class="mf">0.21780536</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.99043671</span><span class="p">,</span> <span class="mf">0.13350353</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.83210644</span><span class="p">,</span> <span class="mf">0.09710811</span><span class="p">]],</span>
+
+       <span class="p">[[</span><span class="mf">2.11914265</span><span class="p">,</span> <span class="mf">0.75114125</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.73408875</span><span class="p">,</span> <span class="mf">0.13489775</span><span class="p">],</span>
+        <span class="p">[</span><span class="mf">1.50884094</span><span class="p">,</span> <span class="mf">0.09806374</span><span class="p">]]])</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <p>We can request the <em>best matching index</em>, i.e., the index where the minimum
 distance between the subsequence and the time series is identified, by setting
 <cite>return_index</cite> to <cite>True</cite>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">pairwise_subsequence_distance</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">]],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">],</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">pairwise_subsequence_distance</span><span class="p">([</span><span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">30</span><span class="p">:</span><span class="mi">60</span><span class="p">]],</span> <span class="n">X</span><span class="p">[</span><span class="mi">6</span><span class="p">:</span><span class="mi">12</span><span class="p">],</span><span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dist</span>
 <span class="go">array([1.66371456, 2.11914265, 1.13076667, 1.99043671, 1.73408875,</span>
 <span class="go">       1.84227457])</span>
@@ -813,16 +1095,16 @@ at index <cite>28</cite> for both the first, third and last sample.</p>
 </section>
 </section>
 <section id="benchmark">
-<h1>Benchmark<a class="headerlink" href="#benchmark" title="Link to this heading">#</a></h1>
-<p>As part of the Wildboar test suite, we continuously investigate the performance
-of the estimators and, in particular since they are an integrate part of many
-tasks, the metrics. All Wildboar metrics, including subsequence and elastic
-metrics, are implemented in Cython for minimum CPU and memory utilization.
-Inspecting the relative performance of the different metrics and their
-theoretical time and space-complexity, we can see that the elastic metrics are
-typically two to three orders of magnitudes slower than the non-elastic metrics.</p>
+<h2>Benchmark<a class="headerlink" href="#benchmark" title="Link to this heading">#</a></h2>
+<p>As a component of the Wildboar test suite, we systematically evaluate the performance
+of the estimators and, notably, the metrics, which are a crucial element of numerous
+tasks. All Wildboar metrics, encompassing subsequence and elastic
+metrics, are implemented in Cython to optimize CPU and memory efficiency.
+Upon examining the relative performance of the various metrics and their
+theoretical time and space complexity, it is evident that the elastic metrics are
+generally two to three orders of magnitude less efficient than the non-elastic metrics.</p>
 <section id="metrics">
-<h2>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">#</a></h2>
+<h3>Metrics<a class="headerlink" href="#metrics" title="Link to this heading">#</a></h3>
 <table class="table">
 <colgroup>
 <col style="width: 40.0%" />
@@ -954,7 +1236,7 @@ typically two to three orders of magnitudes slower than the non-elastic metrics.
 <td><p>0.00035</p></td>
 <td><p>0.00022</p></td>
 </tr>
-<tr class="row-even"><td><p><cite>msm</cite></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">msm</span></code></p></td>
 <td><p><span class="math notranslate nohighlight">\(O(n^2)\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(O(n)\)</span></p></td>
 <td><p>0.00019</p></td>
@@ -965,7 +1247,7 @@ typically two to three orders of magnitudes slower than the non-elastic metrics.
 </table>
 </section>
 <section id="subsequence-metrics">
-<h2>Subsequence metrics<a class="headerlink" href="#subsequence-metrics" title="Link to this heading">#</a></h2>
+<h3>Subsequence metrics<a class="headerlink" href="#subsequence-metrics" title="Link to this heading">#</a></h3>
 <table class="table">
 <colgroup>
 <col style="width: 40.0%" />
@@ -1055,7 +1337,7 @@ typically two to three orders of magnitudes slower than the non-elastic metrics.
 <td><p>0.00413</p></td>
 <td><p>0.00226</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scaled_dtw</span></code> <a class="footnote-reference brackets" href="#lb" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scaled_dtw</span></code> <a class="footnote-reference brackets" href="#lb" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
 <td><p><span class="math notranslate nohighlight">\(O(m\times n^2)\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(O(\text{max}(m; n))\)</span></p></td>
 <td><p>0.00146</p></td>
@@ -1122,7 +1404,7 @@ typically two to three orders of magnitudes slower than the non-elastic metrics.
 </table>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="lb" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">1</a><span class="fn-bracket">]</span></span>
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">1</a><span class="fn-bracket">]</span></span>
 <p>Uses lower-bounding as described by Rakthanmanon, T., Campana, B.,
 Mueen, A., Batista, G., Westover, B., Zhu, Q., Zakaria, J. and Keogh, E.,
 2012, August. Searching and mining trillions of time series subsequences
@@ -1131,6 +1413,63 @@ international conference on Knowledge discovery and data mining (pp.
 262-270). <a class="reference external" href="https://www.cs.ucr.edu/~eamonn/UCRsuite.html">See the UCR-suite for more details.</a></p>
 </aside>
 </aside>
+</section>
+</section>
+<section id="parallelization">
+<h2>Parallelization<a class="headerlink" href="#parallelization" title="Link to this heading">#</a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Wildboar employs parallelization to distribute the computation across
+multiple samples concurrently. Consequently, performance improvements may
+not be observed for a small number of extremely short time series. In
+certain cases, the additional time required to create threads may actually
+result in increased overall computation time.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>These measurements are from a Github CI build server and may not accurately
+reflect the actual performance gains.</p>
+</div>
+<p>All functions discussed thus far support parallelization. Parallelization can be enabled by
+setting the <cite>n_jobs</cite> parameter to a positive integer corresponding to the number of cores to
+utilize, or to <code class="docutils literal notranslate"><span class="pre">-1</span></code> to employ all available cores.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;dtw&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.0637831860000233</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>Or we can specify an exact integer of the number of cores:</p>
+<div class="sd-container-fluid sd-sphinx-override sd-m-0 sd-p-0 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-1 sd-row-cols-md-1 sd-row-cols-lg-1 docutils">
+<div class="sd-col sd-d-flex-column sd-col-12 sd-col-xs-12 sd-col-sm-12 sd-col-md-12 sd-col-lg-12 docutils">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<span class="n">pairwise_distance</span><span class="p">(</span><span class="n">X</span><span class="p">[:</span><span class="mi">100</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;dtw&quot;</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+</pre></div>
+</div>
+<div class="sd-mt-0 execute-return highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mf">0.1298554990000298</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>On my laptop, which is a MacBook equipped with an M2 processor, the computation
+of pairwise distances using the parameter <cite>n_jobs=-1</cite> takes approximately 40
+milliseconds, while performing the same computation with <cite>n_jobs=1</cite> takes
+approximately 160 milliseconds.</p>
 </section>
 </section>
 
@@ -1180,23 +1519,25 @@ international conference on Knowledge discovery and data mining (pp.
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Distance</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pairwise-distance">Pairwise distance</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#paired-distance">Paired distance</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-support">Multivariate support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pairwise-distance">Pairwise distance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#paired-distance">Paired distance</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#subsequence-search">Subsequence search</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pairwise-subsequence-distance">Pairwise subsequence distance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimum-distance">Minimum distance</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multivariate-support">Multivariate support</a></li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark">Benchmark</a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#metrics">Metrics</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subsequence-metrics">Subsequence metrics</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subsequence-search">Subsequence search</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pairwise-subsequence-distance">Pairwise subsequence distance</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#benchmark">Benchmark</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#metrics">Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#subsequence-metrics">Subsequence metrics</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parallelization">Parallelization</a></li>
+</ul>
   </nav></div>
 
   <div class="sidebar-secondary-item">
