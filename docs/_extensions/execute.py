@@ -23,6 +23,7 @@ from matplotlib import _pylab_helpers, cbook
 from matplotlib.backend_bases import FigureManagerBase
 from matplotlib.colors import ListedColormap
 from sphinx.errors import ExtensionError
+from docutils.nodes import Text
 
 _WBCOLORMAP = ListedColormap(
     [
@@ -425,6 +426,24 @@ class ExecuteDirective(Directive):
                 self.state_machine.document.settings.env.config.execute_light_dark
             )
 
+            def format_code(src):
+                return textwrap.indent(src, "    ") if src is not None else None
+
+            if self.state_machine.document.settings.env.config.execute_black:
+                try:
+                    import black
+
+                    def format_code(src):
+                        return (
+                            textwrap.indent(
+                                black.format_str(src, mode=black.Mode()), "    "
+                            )
+                            if src is not None
+                            else None
+                        )
+                except:
+                    pass
+
             if light_dark:
                 light, is_doctest, build_dir_link, source_file_name, errors_light = run(
                     arguments=self.arguments,
@@ -477,7 +496,7 @@ class ExecuteDirective(Directive):
                         default_fmt="png",
                         images=list(zip(light_images, dark_images)),
                         build_dir=build_dir_link,
-                        source_code=source_code,
+                        source_code=format_code(source_code),
                         src_name=src_name,
                         carousel=self.options.get("carousel", 2),
                         card_width=self.options.get("card-width", "auto"),
@@ -531,7 +550,7 @@ class ExecuteDirective(Directive):
                         default_fmt="png",
                         images=list(zip(light_images, light_images)),
                         build_dir=build_dir_link,
-                        source_code=source_code,
+                        source_code=format_code(source_code),
                         src_name=src_name,
                         carousel=self.options.get("carousel", 2),
                         card_width=self.options.get("card-width", "auto"),
@@ -557,6 +576,8 @@ class ExecuteDirective(Directive):
 
 
 def _copy_css_file(app, exc):
+    global plot_context
+    plot_context = dict()
     if exc is None and app.builder.format == "html":
         src = cbook._get_data_path("plot_directive/plot_directive.css")
         dst = app.outdir / Path("_static")
@@ -1267,7 +1288,8 @@ def run(
             if is_doctest:
                 lines = code_piece.splitlines()
             else:
-                lines = textwrap.indent(code_piece, "    ").splitlines()
+                # lines = textwrap.indent(code_piece, "    ").splitlines()
+                lines = code_piece.splitlines()
 
             source_code = "\n".join(lines)
         else:
@@ -1286,11 +1308,22 @@ def run(
     return all_images, is_doctest, build_dir_link, source_file_name, errors
 
 
+def execute_role(name, rawtext, text, lineno, inliner, options={}, content=[]):
+    ns, return_value, out = _run_code(
+        text.replace("\n", " "), None, ns=plot_context, function_name=None
+    )
+    if return_value is None:
+        return [], []
+    else:
+        return [Text(str(return_value))], []
+
+
 def setup(app):
     setup.app = app
     setup.config = app.config
     setup.confdir = app.confdir
     app.add_directive("execute", ExecuteDirective)
+    app.add_role("execute", execute_role)
     app.add_config_value("execute_light_dark", True, True)
     app.add_config_value("execute_pre_code", None, True)
     app.add_config_value("execute_include_source", True, True)
@@ -1304,6 +1337,7 @@ def setup(app):
     app.add_config_value("execute_template", None, True)
     app.add_config_value("execute_srcset", [], True)
     app.add_config_value("execute_context", "close-figs", True)
+    app.add_config_value("execute_black", True, True)
     app.connect("doctree-read", mark_plot_labels)
     app.connect("build-finished", _copy_css_file)
     return {

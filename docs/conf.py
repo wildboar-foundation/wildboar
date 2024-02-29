@@ -148,6 +148,7 @@ np.set_printoptions(threshold=30)
 """
 
 execute_light_dark = True
+execute_black = True
 
 
 # Find the source file given a module
