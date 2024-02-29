@@ -1,6 +1,10 @@
 #####################
-Convolution transform
+Time series transform
 #####################
+
+***********************
+Convolutional transform
+***********************
 
 Wildboar implements two convolutional transformation methods `Rocket`
 [#rocket]_ and `Hydra` [#hydra]_, described by Dempsar et al. Both algorithms
@@ -45,9 +49,9 @@ transformation and one for evaluating the predictive performance.
    plot_time_domain(X_train, y_train, cmap=None)
 
 
-********************
-Hydra transformation
-********************
+Hydra transform
+===============
+
 
 In Wildboar, we extensively utilize the functionalities of ``scikit-learn`` and
 can directly employ these features. We construct a pipeline wherein we
@@ -128,9 +132,9 @@ in the data.
       The first two components explain {(100 * evr[0]):.2f} and {(100 * evr[1]):.2f} percent of the variance.
    """)
 
-****************
+
 Rocket transform
-****************
+================
 
 The Rocket transformation employs a large, randomly generated set of `kernels`
 to enable the transformation process. By default, the parameter ``n_kernels``
@@ -162,7 +166,6 @@ In contrast to Hydra whose transformation size depends on the number of time
 steps in the input, the Rocket transformation has a fixed size only dependent
 on the number of kernels. As such, the resulting transformation consists of
 :math:`10000` features.
-
 
 We can use principal component analysis (:class:`~sklearn.decomposition.PCA`)
 to identify the combination of attributes that account for most of the variance

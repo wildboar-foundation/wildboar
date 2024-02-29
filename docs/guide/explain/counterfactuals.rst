@@ -1,3 +1,5 @@
+.. _counterfactual_explanations:
+
 ###########################
 Counterfactual explanations
 ###########################
@@ -10,6 +12,8 @@ at specific time points, in order to flip the model's decision from one class
 to another. These explanations can help users understand model behavior and
 decision-making by highlighting critical points in time and the nature of the
 data that would need to be different for a different result.
+
+.. _nn_cf:
 
 *********************************
 Nearest neighbour counterfactuals
@@ -177,6 +181,8 @@ alongside the Euclidean average time series of the desired class.
    plot_counterfactual(15, X_test, y_test, y_pred)
    plt.figure()
    plot_counterfactual(36, X_test, y_test, y_pred)
+
+.. _sf_cf:
 
 *******************************
 Shapelet forest counterfactuals

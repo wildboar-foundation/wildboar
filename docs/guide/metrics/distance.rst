@@ -1,29 +1,31 @@
 .. currentmodule:: wildboar.distance
 
-********
-Distance
-********
+.. _distance:
 
+########
+Distance
+########
+
+*****************
 Pairwise distance
-=================
+*****************
 
 A typical workflow involves computing the distance between pairs of time series.
-In Wildboar, we accomplish this using the {func}`pairwise_distance`-function
+In Wildboar, we accomplish this using the :func:`pairwise_distance`-function
 which computes the distance between each time series in `X` and optionally `Y`.
-For example, we can compute the _Euclidean distance_ (default if `metric=None`)
-between each pair from time series of a single array as:
+For example, we can compute the _Euclidean distance_ (default) between each
+pair from time series of a single array as:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> from wildboar.datasets import load_two_lead_ecg
-  >>> from wildboar.distance import pairwise_distance
-  >>> X, y = load_two_lead_ecg()
-  >>> pairwise_distance(X[:3])
-  array([[0.        , 3.51158857, 5.11514381],
-        [3.51158857, 0.        , 2.35905618],
-        [5.11514381, 2.35905618, 0.        ]])
+   from wildboar.datasets import load_two_lead_ecg
+   from wildboar.distance import pairwise_distance
+   X, y = load_two_lead_ecg()
+   pairwise_distance(X[:3])
 
-.. note:: 
+.. note::
 
   When computing the distance between time series in a single array, one can
   note that the upper and lower triangles of the distance matrix are mirror
@@ -38,33 +40,32 @@ between each pair from time series of a single array as:
 If we pass a second array, then the returned matrix is the pairwise distance
 between the time series from both `X` and `Y`.
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> pairwise_distance(X[:3], X[3:6])
-  array([[4.85497117, 5.96086309, 6.18777928],
-        [2.00606825, 5.23060212, 4.27419835],
-        [1.64445581, 6.38965963, 4.79102936]])
+   pairwise_distance(X[:3], X[3:6])
 
 By default, the :func:`pairwise_distance` function computes the Euclidean
 distance. We can change the metric by specifying the `metric` parameter
 `as one of the supported metrics <list_of_subsequence_metrics>`_:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> pairwise_distance(X[:3], X[3:6], metric="edr")
-  array([[0.59756098, 0.47560976, 0.64634146],
-        [0.08536585, 0.03658537, 0.13414634],
-        [0.09756098, 0.25609756, 0.12195122]])
+   pairwise_distance(X[:3], X[3:6], metric="edr")
 
 We can also specify optional extra parameters to the metric using the
 `metric_params`-parameter:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> pairwise_distance(X[:3], X[3:6], metric="twe", metric_params={"stiffness": 0.3})
-  array([[76.20881199, 73.62554784, 88.5536877 ],
-        [27.49142159, 60.56024904, 50.24551102],
-        [20.45513015, 81.60658533, 54.06099416]])
+   pairwise_distance(
+      X[:3], X[3:6], metric="twe", metric_params={"stiffness": 0.3}
+   )
 
 We support a multitude of input configurations and the return value of
 :func:`pairwise_distance` depends on the input shape(s) of `X` (with
@@ -77,20 +78,21 @@ We support a multitude of input configurations and the return value of
   Returns a 2d-array with the distance between each sample in `X` of shape
   `(x_samples, x_samples)`.
 
-  .. code-block:: python
+  .. execute::
+     :context:
+     :show-return:
 
-    >>> pairwise_distance(X[0:2])
-    array([[0.        , 3.51158857],
-          [3.51158857, 0.        ]])
+     pairwise_distance(X[0:2])
 
 *A 1d-array `X` and a 1d-array `Y`*
   Returns a scalar with the distance of `X` to `Y`
 
 
-  .. code-block:: python
-  
-    >>> pairwise_distance(X[0], X[2])
-    5.11514381
+  .. execute::
+     :context:
+     :show-return:
+
+     pairwise_distance(X[0], X[2])
 
 *A 1d-array `X` and a 2d-array `Y`*
   Returns a 1d-array of the distance between `X` and each sample in `Y` of shape
@@ -98,36 +100,46 @@ We support a multitude of input configurations and the return value of
   shape `(x_samples, )`, with the distance between `Y` and each sample in `X` is
   returned.
 
-  .. code-block:: python
+  .. execute::
+     :context:
+     :show-return:
 
-    >>> pairwise_distance(X[0], X[2:5])
-    array([5.11514381, 4.85497117, 5.96086309])
+     pairwise_distance(X[0], X[2:5])
 
 *A 2d-array `X` and a 2d-array `Y`*
   Returns a 2d-array with the distance between each sample in `X` and each
   sample in `Y` of shape `(x_samples, y_samples)`.
 
-  .. code-block:: python
-  
-    >>> pairwise_distance(X[0:2], X[2:4])
-    array([[5.11514381, 4.85497117],
-          [2.35905618, 2.00606825]])
+  .. execute::
+     :context:
+     :show-return:
+
+     pairwise_distance(X[0:2], X[2:4])
 
 *A 3d-array `X` and a 3d-array `Y`*
   Returns a 2d-array with the distance between each sample in `X` and each
   sample in `Y` of shape `(x_samples, y_samples)`.
 
-  .. code-block:: python
+  .. execute::
+     :context:
+     :show-return:
 
-    >>> x = X[0:6].reshape(2, 3, -1)
-    >>> y = X[6:12].reshape(2, 3, -1)
-    >>> pairwise_distance(x, y)
-    array([[5.48683192, 6.60301954],
-          [4.34083722, 6.35954558]])
-  .. note:: 
-    If we set the parameter :python:`dim="full"` we return a 3d-array of shape
-    :python:`(n_dims, n_samples, n_timestep)`. `Read more about
-    multivariate support <multivariate_support>`_.
+     x = X[0:6].reshape(2, 3, -1)
+     y = X[6:12].reshape(2, 3, -1)
+     pairwise_distance(x, y, dim="mean")
+
+  If we set the parameter :python:`dim="full"` we return a 3d-array of shape
+  :python:`(n_dims, n_samples, n_timestep)`. `Read more about
+  multivariate support <multivariate_support>`_.
+
+  .. execute::
+     :context:
+     :show-return:
+
+     x = X[0:6].reshape(2, 3, -1)
+     y = X[6:12].reshape(2, 3, -1)
+     pairwise_distance(x, y, dim="full")
+
 
 Paired distance
 ===============
@@ -139,21 +151,27 @@ instead the distance between _pairs_ of samples. For this purpose, we use the
 :python:`x_timestep == y_timestep` for non-elastic metrics and `X` and `Y` that can be
 broadcast to a uniform shape.
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> from wildboar.distance import paired_distance
-  >>> paired_distance(X[0:3], X[3:6])
-  array([4.85497117, 5.23060212, 4.79102936])
-  >>> paired_distance(X[0], X[3:6]) # Broadcasting
-  array([4.85497117, 5.96086309, 6.18777928])
+   from wildboar.distance import paired_distance
+   paired_distance(X[0:3], X[3:6])
+
+.. execute::
+   :context:
+   :show-return:
+
+   paired_distance(X[0], X[3:6]) # Broadcasting
 
 Similar to :func:`pairwise_distance`, we support the parameters `metric` and
 `metric_params` accepting the same input:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> paired_distance(X[0], X[3:6], metric="wdtw", metric_params={"g": 0.1})
-  array([0.50816474, 0.3299048 , 0.55193242])
+   paired_distance(X[0], X[3:6], metric="wdtw", metric_params={"g": 0.1})
 
 :func:`paired_distance` also supports a multitude of input configurations and
 the output depends on that configuration:
@@ -164,10 +182,59 @@ the output depends on that configuration:
 *Two arrays that can be broadcast to the same shape*
   Returns a 1d-array of shape `(n_samples, )`.
 
-  .. note:: 
-    If we set the parameter `dim="full"` we return a 2d-array of shape
-    :python:`(n_dims, n_samples)`. Refer to `more about multivariate support
-    <multivariate_support>`_ for additional details.
+  If 3d-arrays, and the parameter `dim` is set to `"full"`, we return a
+  2d-array of shape :python:`(n_dims, n_samples)`. Refer to `more about
+  multivariate support <multivariate_support>`_ for additional details.
+
+  .. execute::
+     :context:
+     :show-return:
+
+     x = X[0:6].reshape(2, 3, -1)
+     y = X[6:12].reshape(2, 3, -1)
+     paired_distance(x, y, dim="full")
+
+****************
+Minimum distance
+****************
+
+Another common task is to, given a query time series :math:`q` and a set of
+time series :math:`\mathcal{T}` find the (`k`) time series in the set that has
+the minimal distance to :math:`q`. A naive solution is to calculate the
+distance between the query and every time series, selecting the `k` time series
+with the lowest distance:
+
+.. execute::
+   :context:
+   :show-return:
+
+   pairwise_distance(X[0], X[6:12]).argmin()
+
+Or if we want to return the `k` closest, we can use :func:`~numpy.argpartition`
+(here ``k=4``):
+
+.. execute::
+   :context:
+   :show-return:
+
+   from numpy import argpartition
+
+   argpartition(pairwise_distance(X[0:10], X[11:300]), 4)[:, :4]
+
+Wildboar implements this pattern in the :func:`argmin_distance` function. The
+function uses early abandoning to avoid computing the full distance for time
+series that would never be among the closest.
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.distance import argmin_distance
+
+   argmin_distance(X[0:10], X[11:300], k=4)
+
+The output of both calls are equivalent but the latter is roughly three times
+faster for most metrics.
 
 .. _multivariate_support:
 
@@ -179,57 +246,62 @@ multivariate time series by computing the *"interdimensional" distance* between
 time series and (by default) reporting the *mean* (`dim="mean"`). Optionally, we
 can return the full distance matrix by setting :python:`dim="full"`:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> x = X[0:6].reshape(2, 3, -1)
-  >>> y = X[6:12].reshape(2, 3, -1)
-  >>> pairwise_distance(x, y, dim="full")
-  array([[[5.48683192, 6.60301954],
-          [4.34083722, 6.35954558]],
-
-        [[2.50507001, 0.90920635],
-          [5.27646127, 4.60041068]],
-
-        [[3.60786006, 3.75645164],
-          [6.26677146, 7.24823344]]])
+   x = X[0:6].reshape(2, 3, -1)
+   y = X[6:12].reshape(2, 3, -1)
+   pairwise_distance(x, y, dim="full")
 
 By setting :python:`dim="full"`, Wildboar returns the full array of distances
 between all dimensions. The returned array has the shape :python:`(n_dims,
 x_samples, y_samples)`. Similarly, we can compute the paired distance:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> paired_distance(x, y, dim="full")
-  array([[5.48683192, 6.35954558],
-        [2.50507001, 4.60041068],
-        [3.60786006, 7.24823344]])
+   paired_distance(x, y, dim="full")
 
 Note that the :func:`paired_distance` returns an array of shape
 :python:`(n_dims, n_samples)`.
 
 If we are interested in the distance between a single dimension we can either
-slice the input data or slice the full distance matrix:
+slice the input data:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> d = pairwise_distance(x, y, dim="full")
-  >>> d[0]
-  array([[5.48683192, 6.60301954],
-        [4.34083722, 6.35954558]])
-  >>> p = paired_distance(x, y, dim="full")
-  >>> p[0]
-  array([5.48683192, 6.35954558])
+   d = pairwise_distance(x, y, dim="full")
+   d[0]
+
+or slice the full distance matrix:
+
+.. execute::
+   :context:
+   :show-return:
+
+   p = paired_distance(x, y, dim="full")
+   p[0]
 
 If we are **only** interested in a single dimension, we can set the `dim`
 parameter to the dimension we are want:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> pairwise_distance(x, y, dim=0)
-  array([[5.48683192, 6.60301954],
-        [4.34083722, 6.35954558]]
-  >>> paired_distance(x, y, dim=0)
-  array([5.48683192, 6.35954558])
+   pairwise_distance(x, y, dim=0)
+
+and for :func:`paired_distance`:
+
+.. execute::
+   :context:
+   :show-return:
+
+   paired_distance(x, y, dim=0)
 
 By setting :python:`dim` to the desired dimension, we avoid computing the
 distance between unwanted dimensions.
@@ -238,9 +310,8 @@ distance between unwanted dimensions.
 Subsequence search
 ******************
 
-
 Wildboar can also identify the (minimum) *subsequence* distance, i.e.,
-:math:`\min\limits_{t'\in t}(s, t')`, where :math:`s` is a query and :math`t`
+:math:`\min\limits_{t'\in t}(s, t')`, where :math:`s` is a query and :math:`t`
 is a time series, with :math:`|s| \le |t|`. Wildboar support both
 :func:`pairwise_subsequence_distance` and :func:`paired_subsequence_distance`
 which works similar to their non-subsequence counterparts, but also
@@ -256,39 +327,31 @@ Pairwise subsequence distance
 Pairwise subsequence distance requires two inputs, the subsequences `Y`
 (argument 1) and the time series `X` (argument 2):
 
-.. code-block:: python
-   
-   >>> from wildboar.distance import pairwise_subsequence_distance
-   >>> X, y = load_dataset("TwoLeadECG")
-   >>> pairwise_subsequence_distance(X[0, 30:60], X[6:12])
-   array([1.66371456, 2.11914265, 1.13076667, 1.99043671, 1.73408875,
-          1.84227457])
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.distance import pairwise_subsequence_distance
+
+   pairwise_subsequence_distance(X[0, 30:60], X[6:12])
 
 
-We can also pass multiple subsequences with the same number of timesteps as a
+We can also pass multiple subsequences with the same number of time steps as a
 2d-numpy array:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> pairwise_subsequence_distance(X[0:3, 30:60], X[6:12])
-  array([[1.66371456, 1.2028058 ],
-         [2.11914265, 0.85972633],
-         [1.13076667, 0.85367621],
-         [1.99043671, 0.86957415],
-         [1.73408875, 0.64041732],
-         [1.84227457, 1.33156061]])
+   pairwise_subsequence_distance(X[0:3, 30:60], X[6:12])
 
-or with different number of timesteps as a Python list:
+or with different number of time steps as a Python list:
 
-.. code-block:: python
+.. execute::
+   :context:
+   :show-return:
 
-  >>> pairwise_subsequence_distance([X[0, 30:60], X[1, 0:10]], X[6:12])
-  array([[1.66371456, 0.56698045],
-         [2.11914265, 0.99489626],
-         [1.13076667, 0.6790517 ],
-         [1.99043671, 0.16754772],
-         [1.73408875, 0.10973127],
-         [1.84227457, 0.50583639]])
+   pairwise_subsequence_distance([X[0, 30:60], X[1, 0:10]], X[6:12])
 
 Since we support multiple input configurations, the return value depends on the
 inputs:
@@ -308,7 +371,7 @@ inputs:
   Returns a 2d-array of shape `(n_subsequences, n_samples)` with the minimum
   distance of each subsequence to each sample.
 
-.. note:: 
+.. note::
 
   :func:`pairwise_subsequence_distance` only supports
   univariate subsequences. As such, the `dim` parameter only accepts a `int`
@@ -316,31 +379,24 @@ inputs:
   the following code to compute the distance between the subsequence and each
   dimension of every sample, with consistent output.
 
-  .. code-block:: python
+  .. execute::
+     :context:
+     :show-return:
 
-    >>> def pairwise_sd_full(y, x):
-    ...    return np.stack(
-    ...        [pairwise_subsequence_distance(y, x, dim=dim) for dim in range(x.shape[1])],
-    ...        axis=0,
-    ...    )
-    ...
-    >>> x = X[5:14].reshape(3, 3, -1)
-    >>> pairwise_sd_full(X[0, 30:60], x)
-    array([[2.21688671, 1.13076667, 1.84227457],
-           [1.66371456, 1.99043671, 1.83210644],
-           [2.11914265, 1.73408875, 1.50884094]])
-    >>> pairwise_sd_full([X[0, 30:60], X[1, 10:20]], x)
-    array([[[2.21688671, 0.18507116],
-            [1.13076667, 0.11177626],
-            [1.84227457, 0.15611733]],
+     def pairwise_sd_full(y, x):
+         return np.stack(
+             [pairwise_subsequence_distance(y, x, dim=dim) for dim in range(x.shape[1])],
+             axis=0,
+         )
 
-           [[1.66371456, 0.21780536],
-            [1.99043671, 0.13350353],
-            [1.83210644, 0.09710811]],
-  
-           [[2.11914265, 0.75114125],
-            [1.73408875, 0.13489775],
-            [1.50884094, 0.09806374]]])
+     x = X[5:14].reshape(3, 3, -1)
+     pairwise_sd_full(X[0, 30:60], x)
+
+  .. execute::
+     :context:
+     :show-return:
+
+     pairwise_sd_full([X[0,30:60], X[1, 10:20]], x)
 
 We can request the *best matching index*, i.e., the index where the minimum
 distance between the subsequence and the time series is identified, by setting
@@ -348,7 +404,7 @@ distance between the subsequence and the time series is identified, by setting
 
 .. code-block:: python
 
-  >>> dist, idx = pairwise_subsequence_distance([X[0, 30:60]], X[6:12], return_index=True)
+  >>> dist, idx = pairwise_subsequence_distance([X[0,30:60]], X[6:12],return_index=True)
   >>> dist
   array([1.66371456, 2.11914265, 1.13076667, 1.99043671, 1.73408875,
          1.84227457])
@@ -362,18 +418,18 @@ at index `28` for both the first, third and last sample.
 Benchmark
 *********
 
-As part of the Wildboar test suite, we continuously investigate the performance
-of the estimators and, in particular since they are an integrate part of many
-tasks, the metrics. All Wildboar metrics, including subsequence and elastic
-metrics, are implemented in Cython for minimum CPU and memory utilization.
-Inspecting the relative performance of the different metrics and their
-theoretical time and space-complexity, we can see that the elastic metrics are
-typically two to three orders of magnitudes slower than the non-elastic metrics.
+As a component of the Wildboar test suite, we systematically evaluate the performance
+of the estimators and, notably, the metrics, which are a crucial element of numerous
+tasks. All Wildboar metrics, encompassing subsequence and elastic
+metrics, are implemented in Cython to optimize CPU and memory efficiency.
+Upon examining the relative performance of the various metrics and their
+theoretical time and space complexity, it is evident that the elastic metrics are
+generally two to three orders of magnitude less efficient than the non-elastic metrics.
 
 Metrics
 =======
 
-.. csv-table:: 
+.. csv-table::
   :file: ./metrics-benchmark.csv
   :header-rows: 1
   :widths: 40 12 12 12 12 12
@@ -381,7 +437,7 @@ Metrics
 Subsequence metrics
 ===================
 
-.. csv-table:: 
+.. csv-table::
   :file: ./subsequence_metric_benchmark.csv
   :header-rows: 1
   :widths: 40 12 12 12 12 12
@@ -394,3 +450,50 @@ Subsequence metrics
    international conference on Knowledge discovery and data mining (pp.
    262-270). `See the UCR-suite for more details.
    <https://www.cs.ucr.edu/~eamonn/UCRsuite.html>`_
+
+***************
+Parallelization
+***************
+
+.. note::
+
+   Wildboar employs parallelization to distribute the computation across
+   multiple samples concurrently. Consequently, performance improvements may
+   not be observed for a small number of extremely short time series. In
+   certain cases, the additional time required to create threads may actually
+   result in increased overall computation time.
+
+.. warning::
+
+   These measurements are from a Github CI build server and may not accurately
+   reflect the actual performance gains.
+
+All functions discussed thus far support parallelization. Parallelization can be enabled by
+setting the `n_jobs` parameter to a positive integer corresponding to the number of cores to
+utilize, or to ``-1`` to employ all available cores.
+
+.. execute::
+   :context:
+   :show-return:
+
+   import time
+   start = time.perf_counter()
+   pairwise_distance(X[:100], metric="dtw", n_jobs=-1)
+   time.perf_counter() - start
+
+Or we can specify an exact integer of the number of cores:
+
+.. execute::
+   :context:
+   :show-return:
+
+   import time
+   start = time.perf_counter()
+   pairwise_distance(X[:100], metric="dtw", n_jobs=1)
+   time.perf_counter() - start
+
+On my laptop, which is a MacBook equipped with an M2 processor, the computation
+of pairwise distances using the parameter `n_jobs=-1` takes approximately 40
+milliseconds, while performing the same computation with `n_jobs=1` takes
+approximately 160 milliseconds.
+

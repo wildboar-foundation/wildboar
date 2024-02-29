@@ -16,40 +16,6 @@
 
 {% endif %}
 
-{% block subpackages %}
-{% set visible_subpackages = obj.subpackages|selectattr("display")|list %}
-{% if visible_subpackages %}
-Subpackages
-===========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 3
-
-{% for subpackage in visible_subpackages %}
-   {{ subpackage.short_name }}/index.rst
-{% endfor %}
-
-
-{% endif %}
-{% endblock %}
-{% block submodules %}
-{% set visible_submodules = obj.submodules|selectattr("display")|list %}
-{% if visible_submodules %}
-Submodules
-==========
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-{% for submodule in visible_submodules %}
-   {{ submodule.short_name }}/index.rst
-{% endfor %}
-
-
-{% endif %}
-{% endblock %}
 {% block content %}
 {% if obj.all is not none %}
 {% set visible_children = obj.children|selectattr("short_name", "in", obj.all)|list %}
@@ -59,8 +25,6 @@ Submodules
 {% set visible_children = obj.children|selectattr("display")|rejectattr("imported")|list %}
 {% endif %}
 {% if visible_children %}
-{{ obj.type|title }} Contents
-{{ "-" * obj.type|length }}---------
 
 {% set visible_classes = visible_children|selectattr("type", "equalto", "class")|list %}
 {% set visible_functions = visible_children|selectattr("type", "equalto", "function")|list %}
