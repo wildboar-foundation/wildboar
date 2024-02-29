@@ -301,7 +301,7 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
     r : float, optional
         The warping window in [0, 1] as a fraction of `max(x_timestep, y_timestep)`.
     g : float, optional
-        Weighting described by Jeong et. al. (2011)[1]_ using `g` as penalty
+        Weighting described by Jeong et al. (2011) using `g` as penalty
         control.
 
         ::
@@ -317,7 +317,7 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
 
     References
     ----------
-    .. [1] Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
         Weighted dynamic time warping for time series classification.
         Pattern Recognition 44, 2231-2240
     """
@@ -327,7 +327,7 @@ def wdtw_alignment(x, y, *, r=1.0, g=0.5, out=None):
 
 def jeong_weight(n, g=0.05):
     """
-    Weighting described by Jeong et. al. (2011)[1]_.
+    Weighting described by Jeong et. al. (2011).
 
     Uses `g` as the penalty control.
 
@@ -349,7 +349,7 @@ def jeong_weight(n, g=0.05):
 
     References
     ----------
-    .. [1] Jeong, Y., Jeong, M., Omitaomu, O. (2021)
+    Jeong, Y., Jeong, M., Omitaomu, O. (2021)
         Weighted dynamic time warping for time series classification.
         Pattern Recognition 44, 2231-2240
     """
