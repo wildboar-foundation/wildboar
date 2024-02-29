@@ -1,223 +1,224 @@
 .. currentmodule:: wildboar
 
-
+##########################
 Transform-based estimators
-==========================
-
+##########################
 Time series transformations are designed to convert time series data into
 traditional column-based feature matrices suitable for input into subsequent
-classifiers or regressors. Notable feature representations encompass Rocket and
+classifiers or regressors. Notable feature representations are Rocket and
 Hydra, which employ convolutional kernels; shapelet-based transformations, which
 utilize shapelet distances; and interval-based transformations, which calculate
-feature values for overlapping or non-overlapping intervals.
+feature values for overlapping or non-overlapping intervals. Typically these
+transformations are used with a linear estimator such as
+:class:`~sklearn.linear_models.RidgeClassifierCV`.
 
-************************
-Interval-based transform
-************************
+Through this section we will use the `TwoLeadECG` dataset.
+
+.. execute::
+   :context: reset
+
+   from wildboar.datasets import load_two_lead_ecg
+   X_train, X_test, y_train, y_test = load_two_lead_ecg(merge_train_test=False)
 
 ************************
 Shapelet-based transform
 ************************
+Shapelet-based transformation uses shapelets, i.e., discriminatory subsequence,
+and a distance metric to construct a feature representation.
+
+Random shapelet transform
+=========================
+The simplest and often effective approach is to sample a large number of
+shapelets and include all without filtering in the transformation. This
+approach is implementer in
+:class:`~wildboar.linear_model.RandomShapeletClassifier`.
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.linear_model import RandomShapeletClassifier
+
+   clf = RandomShapeletClassifier(random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+We can change the ``metric`` (by default the `metric` is set to the Euclidean
+distance):
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf = RandomShapeletClassifier(metric="scaled_manhattan", random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+
+We can also specify multiple metrics, see :ref:`metric specification guide
+<metric_specification` for more information on how to format the metrics. We
+can also limit the size of shapelets.
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf = RandomShapeletClassifier(
+      metric={"scaled_manhattan": None, "manhattan": None},
+      max_shapelet_size=0.2,
+      random_state=1,
+   )
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+In the example, each time series `i` is transformed into a new representation
+consisting of `n` rows and `n_shapelets` features. Here, the `i`-th time series
+is characterized by the minimum distance to each shapelet in the set `0, ...,
+n_shapelets`. By default, each feature is normalized to have a mean of zero and
+a standard deviation of one. However, this normalization can be disabled by
+setting the parameter ``normalize=False``.
+
+Dilated shapelet transform
+==========================
+
+A more recent approach, described by Guillaume et al. 2021 [#dst]_, constructs
+a feature representation that incorporates not only the minimal distance but
+also the occurrence counts of shapelets and the index of the minimal distance.
+Consequently, each shapelet is characterized by a triad of features rather than
+a singular feature. Furthermore, the Dilated Shapelet Transform (DST) expands
+shapelets by inserting empty values, thereby increasing the "receptive field"
+of the shapelets. This method is implemented within Wildboar as
+:class:`~wildboar.linear_model.DilatedShapeletClassifier`
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.linear_model import DilatedShapeletClassifier
+
+   clf = DilatedShapeletClassifier(random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+The DST classifier supports only a single `metric`; however, multiple
+parameters are available for tuning. Specifically, the size of the shapelets
+can be adjusted. By default, shapelets of length `7`, `9`, and `11` are
+utilized. This can be modified using the parameters ``shapelet_size``,
+``min_shapelet_size``, and ``max_shapelet_size``. For instance:
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf = DilatedShapeletClassifier(shapelet_size=[7, 11], random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+If the parameters ``min_shapelet_size`` or ``max_shapelet_size`` are specified,
+all odd sizes ranging from ``n_timesteps * min_shapelet_size`` to ``n_timesteps
+* max_shapelet_size`` will be utilized.
+
+The likelihood of z-normalizing the shapelets can be adjusted by modifying the
+``normalize_prob`` parameter. It defaults to `0.8`, indicating that 80 percent
+of the shapelets undergo normalization.
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf = DilatedShapeletClassifier(normalize_prob=0.1, random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+We can also determine the occurrence threshold, that is, the threshold for
+ascertaining the occurrence counts, by modifying the ``lower`` and ``upper``
+parameters. These parameters delineate the bounds within which the occurrence
+threshold is sampled. By default, it is sampled from the 5 to 10 percent
+smallest distances.
+
+.. execute::
+   :context:
+   :show-return:
+
+   clf = DilatedShapeletClassifier(lower=0.1, upper=0.3, random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+
+Castor classifier
+=================
+
+Castor (Competing diAlated Shapelet TransfORm) [#samsten]_ is a transformation
+technique for time series data. Analogous to Hydra, Castor enables shapelets to
+compete, and akin to DST, it utilizes the occurrence of shapelets. Castor is
+characterized by two principal parameters: the number of groups (``n_groups``)
+and the number of shapelets (``n_shapelets``). These parameters collectively
+define the dimensions of the transformed feature space. By convention, we
+employ `64` groups, each comprising `8` shapelets.
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.linear_model import CastorClassifier
+
+   clf = CastorClassifier(random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
+
+Castor has several tunable parameters, with ``n_group`` and ``n_shapelets``
+being the most influential in determining classification accuracy. Generally,
+increasing the values of ``n_groups`` and ``n_shapelets`` enhances accuracy, as
+these parameters adjust the level of competition among features. For instance,
+a configuration with ``n_groups=1`` and ``n_shapelets=1024`` results in maximal
+competition, leading to a feature representation that closely resembles a
+pattern dictionary. Conversely, setting ``n_groups=1024`` and ``n_shapelets=1``
+eliminates competition, yielding a transformation akin to a traditional
+shapelet-based transform, such as the Dilated Shapelet Transform (DST).
+A recommended approach for parameter tuning is to incrementally double the
+values of both ``n_group`` and ``n_shapelets`` in successive iterations.
+
+.. execute::
+   :context:
+   :show-return:
+
+   from wildboar.linear_model import CastorClassifier
+
+   clf = CastorClassifier(n_groups=128, n_shapelets=16, random_state=1)
+   clf.fit(X_train, y_train)
+   clf.score(X_test, y_test)
 
 ***************************
 Convolution-based transform
 ***************************
 
-Wildboar implements two convolutional transformation methods `Rocket`
-[#rocket]_ and `Hydra` [#hydra]_, described by Dempsar et al. Both algorithms
-employ random convolutional kernels, but in sligtly different manners. In
-`Rocket`, each kernel is applied to each time series and the maximum activation
-value and the average number of positive activations are recorded. In `Hydra`,
-the kernels are partitioned into groups and for each exponential dilation and
-padding combination each kernel is applied to each time series and the number
-of times and the number of times each kernel has the highest activation value
-and the lowest is recorded. Then the features corresponds to the number of
-times a kernel had the in-group highest activation and the average of the
-lowest activation.
+Rocket
+======
 
-For the purpose of this example, we load the `MoteStrain` dataset for the UCR
-time series archive and split it into two parts: one for fitting the
-transformation and one for evaluating the predictive performance.
+Hydra
+=====
 
-.. execute::
-   :context:
+**********
+References
+**********
 
-   from wildboar.datasets import load_dataset
-   from sklearn.model_selection import train_test_split
+.. [#wistuba] Wistuba, M., Grabocka, J. and Schmidt-Thieme, L., 2015.
+   Ultra-fast shapelets for time series classification. arXiv preprint
+   arXiv:1503.05018.
 
-   X, y = load_dataset("MoteStrain")
-   X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=1)
+.. [#rocket] Dempster, A., Petitjean, F. and Webb, G.I., 2020. ROCKET:
+   exceptionally fast and accurate time series classification using random
+   convolutional kernels. Data Mining and Knowledge Discovery, 34(5),
+   pp.1454-1495.
 
-.. execute::
-   :context:
-   :include-source: no
-   :show-output:
-   :card-width: 75%
+.. [#hydra] Dempster, A., Schmidt, D.F. and Webb, G.I., 2023. Hydra: Competing
+   convolutional kernels for fast and accurate time series classification. Data
+   Mining and Knowledge Discovery, pp.1-27.
 
-   from wildboar.utils.plot import plot_time_domain
-   n_samples, n_timestep = X_train.shape
-   y_labels, counts = np.unique(y_train, return_counts=True)
+.. [#dst] Guillaume, A., Vrain, C. and Elloumi, W., 2022, June. Random dilated
+   shapelet transform: A new approach for time series shapelets. In
+   International Conference on Pattern Recognition and Artificial Intelligence
+   (pp. 653-664). Cham: Springer International Publishing.
 
-   print(f"""
-   The dataset contains {n_samples} samples with {n_timestep} time steps each.
-   Of the samples, {counts[0]} is labeled as {y_labels[0]} and {counts[1]} labeled
-   as {y_labels[1]}. Here, we plot the time series.
-   """)
-   plot_time_domain(X_train, y_train, cmap=None)
-
-
-Hydra transform
-===============
-
-
-In Wildboar, we extensively utilize the functionalities of ``scikit-learn`` and
-can directly employ these features. We construct a pipeline wherein we
-initially transform each time series into the representation dictated by
-`Hydra` (utilizing the default parameters ``n_groups=64`` and ``n_kernels=8``).
-The subsequent stages of the pipeline include the application of a sparse
-scaler, which compensates for the sparsity induced by the transformation (it is
-important to note that we count the frequency of occurrences where a kernel
-exhibits the highest activation, and in numerous instances, a single kernel may
-never achieve this), and ultimately, the pipeline employs a standard Ridge
-classifier on the transformed data.
-
-.. execute::
-   :context:
-   :show-return:
-
-   from wildboar.datasets.preprocess import SparseScaler
-   from wildboar.transform import HydraTransform
-
-   from sklearn.pipeline import make_pipeline
-
-   hydra = make_pipeline(HydraTransform(random_state=1), SparseScaler())
-   hydra.fit(X_train, y_train)
-
-We can inspect the resulting transformation by using the ``transform`` function.
-
-.. execute::
-   :context:
-   :show-return:
-
-   X_test_transform = hydra.transform(X_test)
-   X_test_transform[0]
-
-.. execute::
-   :context:
-   :include-source: no
-   :show-output:
-
-   _, n_features = X_test_transform.shape
-   print(f"""
-   The transformed array contains {n_features} features.
-   """)
-
-We can use principal component analysis (:class:`~sklearn.decomposition.PCA`)
-to identify the combination of attributes that account for most of the variance
-in the data.
-
-.. execute::
-   :context:
-   :include-source: no
-   :show-source-link:
-   :link-text: Download plot source
-
-   import matplotlib.pylab as plt
-   from sklearn.decomposition import PCA
-
-   pca = PCA(n_components=2)
-   X_test_pca = pca.fit_transform(X_test_transform)
-
-   for label in  [1, 2]:
-      plt.scatter(
-         X_test_pca[y_test == label, 0],
-         X_test_pca[y_test == label, 1],
-         label=f"Label {label}",
-      )
-
-   plt.xlabel("Component 0")
-   plt.ylabel("Component 1")
-   plt.legend()
-
-.. execute::
-   :context:
-   :include-source: no
-   :show-output:
-
-   evr = pca.explained_variance_ratio_
-   print(f"""
-      The first two components explain {(100 * evr[0]):.2f} and {(100 * evr[1]):.2f} percent of the variance.
-   """)
-
-
-Rocket transform
-================
-
-The Rocket transformation employs a large, randomly generated set of `kernels`
-to enable the transformation process. By default, the parameter ``n_kernels``
-is assigned the value of :math:`10000` kernels. Furthermore, we utilize the
-pipelines offered by ``scikit-learn`` to normalize the feature representation,
-ensuring a mean of zero and a standard deviation of one.
-
-.. execute::
-   :context:
-   :show-return:
-
-   from sklearn.preprocessing import StandardScaler
-
-   from wildboar.transform import RocketTransform
-
-   rocket = make_pipeline(RocketTransform(), StandardScaler())
-   rocket.fit(X_test, y_test)
-
-We can inspect the resulting transformation.
-
-.. execute::
-   :context:
-   :show-return:
-
-   X_test_transform = rocket.transform(X_test)
-   X_test_transform[0]
-
-In contrast to Hydra whose transformation size depends on the number of time
-steps in the input, the Rocket transformation has a fixed size only dependent
-on the number of kernels. As such, the resulting transformation consists of
-:math:`10000` features.
-
-We can use principal component analysis (:class:`~sklearn.decomposition.PCA`)
-to identify the combination of attributes that account for most of the variance
-in the data.
-
-.. execute::
-   :context:
-   :include-source: no
-   :show-source-link:
-   :link-text: Download plot source
-
-   pca = PCA(n_components=2)
-   X_test_pca = pca.fit_transform(X_test_transform)
-
-   for label in  [1, 2]:
-      plt.scatter(
-         X_test_pca[y_test == label, 0],
-         X_test_pca[y_test == label, 1],
-         label=f"Label {label}",
-      )
-
-   plt.xlabel("Component 0")
-   plt.ylabel("Component 1")
-   plt.legend()
-
-.. execute::
-   :context:
-   :include-source: no
-   :show-output:
-
-   evr = pca.explained_variance_ratio_
-   print(f"""
-      The first two components explain {(100 * evr[0]):.2f} and {(100 * evr[1]):.2f} percent of the variance.
-   """)
-
-.. [#rocket] Rocket
-
-.. [#hydra] Hydra
+.. [#samsten] Samsten, I. and Lee, Z., 2024. Castor: Competing dilated shapelet
+   transform. Forthcoming
