@@ -43,6 +43,7 @@ Wildboar 1.2 introduces several new models.
     the dimensions with a `p-value` below the specified alpha level.
 
 .. grid:: 1
+  :gutter: 2
 
   .. grid-item-card::
 
