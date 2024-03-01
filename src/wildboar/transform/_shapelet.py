@@ -20,7 +20,7 @@ from ._cshapelet import (
 
 
 class ShapeletMixin:
-    """Mixin for shapelet based estiomators."""
+    """Mixin for shapelet based estimators."""
 
     _parameter_constraints: dict = {
         "n_shapelets": [
