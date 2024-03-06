@@ -4,12 +4,17 @@ import math
 import warnings
 
 import numpy as np
+from sklearn.utils.deprecation import deprecated
 
 from ..distance import matrix_profile
 from ..utils.decorators import array_or_scalar
 from ..utils.validation import check_array
 
 
+@deprecated(
+    "segment has been deprecated in 1.3 and will be removed in 1.4. "
+    "Use wildboar.segment.FlossSegmenter instead."
+)
 @array_or_scalar()
 def segment(
     x=None,
