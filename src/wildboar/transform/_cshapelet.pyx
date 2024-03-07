@@ -40,16 +40,10 @@ from ._attr_gen cimport Attribute, AttributeGenerator
 
 
 cdef class ShapeletAttributeGenerator(AttributeGenerator):
-
-    cdef Py_ssize_t min_shapelet_size
-    cdef Py_ssize_t max_shapelet_size
-
     cdef readonly SubsequenceMetric metric
 
-    def __init__(self, metric, min_shapelet_size, max_shapelet_size):
+    def __init__(self, metric):
         self.metric = metric
-        self.min_shapelet_size = min_shapelet_size
-        self.max_shapelet_size = max_shapelet_size
 
     cdef int reset(self, TSArray X) noexcept nogil:
         self.metric.reset(X)
@@ -141,12 +135,16 @@ cdef class ShapeletAttributeGenerator(AttributeGenerator):
 cdef class RandomShapeletAttributeGenerator(ShapeletAttributeGenerator):
 
     cdef Py_ssize_t n_shapelets
+    cdef Py_ssize_t min_shapelet_size
+    cdef Py_ssize_t max_shapelet_size
 
     def __init__(
         self, metric, min_shapelet_size, max_shapelet_size, n_shapelets
     ):
-        super().__init__(metric, min_shapelet_size, max_shapelet_size)
+        super().__init__(metric)
         self.n_shapelets = n_shapelets
+        self.min_shapelet_size = min_shapelet_size
+        self.max_shapelet_size = max_shapelet_size
 
     cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
         return self.n_shapelets
