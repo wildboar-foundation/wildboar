@@ -1,7 +1,87 @@
 import numpy as np
+import pytest
 from numpy.testing import assert_almost_equal
 from wildboar.datasets import load_two_lead_ecg
-from wildboar.distance import paired_matrix_profile
+from wildboar.distance import matrix_profile, paired_matrix_profile
+
+
+def test_matrix_profile_default_ab():
+    X, y = load_two_lead_ecg()
+
+    # fmt: off
+    expected = np.array([
+        1.85485806, 2.04189217, 1.61152093, 1.28918337, 0.98731895,
+        0.46298452, 0.46638957, 0.51716696, 0.71634711, 1.0086685 ,
+        1.10196784, 1.47277975, 1.45762962, 1.39051391, 1.0684843 ,
+        1.62441385, 2.15281337, 2.48942292, 2.51522466, 2.93799562,
+        2.95334953, 2.99803479, 1.00047421, 0.43120971, 0.20120383,
+        0.17891638, 0.12638857, 0.27006209, 0.29535878, 0.37603976,
+        0.46448522, 0.56602588, 0.73233533, 0.40796422, 0.36939184,
+        0.38276647, 0.33680521, 0.3023735 , 0.31008989, 0.28842092,
+        0.30879536, 0.29252327, 0.38215995, 0.43954901, 0.45906786,
+        0.76542499, 0.92098012, 1.36781938, 2.19019324, 2.14038496,
+        2.30960855, 1.56977195, 1.85056003, 1.69325664, 0.98877909,
+        1.31914597, 1.04111243, 0.6298452 , 0.43746438, 0.44377348,
+        0.62282996, 0.81044968, 1.09542537, 1.14500467, 1.06902017,
+        0.84919297, 0.63848026, 0.3756267 , 0.32832869, 0.30666126,
+        0.33401063, 0.3372576 , 0.31398372
+    ])
+    # fmt: on
+    actual = matrix_profile(X[:1], X[11:22], window=10, kind="default").reshape(-1)
+    assert_almost_equal(actual, expected)
+
+
+def test_matrix_profile_default_selfjoin():
+    X, y = load_two_lead_ecg()
+    # fmt: off
+    expected = np.array([
+        2.42477162, 2.08407106, 1.38593105, 1.29374158, 1.07510489,
+        1.02428987, 1.15866652, 1.35047213, 1.05808208, 1.23983833,
+        1.47354517, 1.85352675, 1.77887733, 1.34422992, 1.40683131,
+        2.04807781, 2.83507829, 2.75803457, 2.61303871, 3.17154618,
+        2.97413038, 3.13755075, 2.4181928 , 1.89970873, 1.38442237,
+        1.14108156, 1.11300403, 1.17359459, 1.05808208, 1.24771165,
+        1.57299771, 2.69288062, 1.53470498, 0.80872572, 0.49022059,
+        0.49006835, 0.45953059, 0.47482871, 0.49006835, 0.45953059,
+        0.46153323, 0.49022059, 0.48257057, 0.93706568, 1.20230842,
+        1.64446842, 1.82488272, 1.91767155, 2.65747712, 2.86538035,
+        2.26232935, 2.25917289, 1.72739556, 1.85524652, 1.65788763,
+        1.43241249, 1.37372259, 1.19391124, 0.49853151, 0.48257057,
+        0.75029095, 0.98572672, 1.68331258, 2.51789033, 2.08407106,
+        1.30993171, 1.25322512, 0.9572344 , 0.73664667, 0.73170902,
+        0.91902714, 0.73170902, 0.79090289
+    ])
+    # fmt: on
+    actual = matrix_profile(X[:1], window=10, kind="default").reshape(-1)
+    assert_almost_equal(actual, expected)
+
+
+@pytest.mark.parametrize("window", [5, 10])
+@pytest.mark.parametrize("n_jobs", [2, -1])
+def test_matrix_profile_n_jobs(window, n_jobs):
+    X, y = load_two_lead_ecg()
+    # self-join
+    assert_almost_equal(
+        matrix_profile(X[:10], window=window, n_jobs=n_jobs),
+        matrix_profile(X[:10], window=window, n_jobs=None),
+    )
+    # ab-join
+    assert_almost_equal(
+        matrix_profile(X[:10], X[20:30], window=window, n_jobs=n_jobs),
+        matrix_profile(X[:10], X[20:30], window=window, n_jobs=None),
+    )
+
+
+def test_matrix_profile_equal_ab_join():
+    X, y = load_two_lead_ecg()
+
+    # TODO(1.4) Remove test
+    # We test that the old behavior corresponds the inverse of the new, i.e.,
+    #  - (NEW) every subsequence in X is annotated with the closest match in Y;
+    #  - (OLD) every subsequence in Y is annotated with the closest match in X.
+    mp1 = paired_matrix_profile(X[:10], X[10:20])
+    mp2 = matrix_profile(X[10:20], X[:10])
+    assert_almost_equal(mp1, mp2)
 
 
 def test_matrix_profile_self_join_performance(benchmark):
@@ -16,7 +96,7 @@ def test_matrix_profile_ab_join_performance(benchmark):
 
 def test_matrix_profile_self_join():
     X, y = load_two_lead_ecg()
-    mp = paired_matrix_profile(X[:10].reshape(-1))
+    mp = matrix_profile(X[:10].reshape(-1))
 
     desired = np.array(
         [
@@ -37,7 +117,7 @@ def test_matrix_profile_self_join():
 
 def test_matrix_profile_self_join_n_samples():
     X, y = load_two_lead_ecg()
-    mp = paired_matrix_profile(X[:10])
+    mp = matrix_profile(X[:10])
     desired = np.array(
         [
             [

@@ -57,12 +57,18 @@ Wildboar 1.2 introduces several new models.
      :mod:`wildboar.distance`
      ^^^
 
-     - |API| Rename `matrix_profile` to `paired_matrix_profile`. This is a
-       breaking change without deprecation. Any use of `matrix_profile` will
-       raise a warning in 1.3.
+     - |API| Rename `matrix_profile` to `paired_matrix_profile` and issue a
+       deprecation warning in `matrix_profile`. The new function reverses
+       the meaning of X and Y, i.e., annotate every subsequence in X with the
+       closest match in Y (instead of the reverse).
 
      - |Feature| A new function :func:`~wildboar.distance.matrix_profile` for
        computing the matrix profile for every subsequence in all time series.
+       By default it will raise a deprecation warning and delegate to
+       `paired_matrix_profile` (until 1.4), after which the `kind="default"` will
+       be the default value. To keep the current behaviour set `kind="paired"`
+       and swap the order of `X` and `Y` or use
+       :func:`~wildboar.distance.paired_matrix_profile`.
 
   .. grid-item-card::
 
