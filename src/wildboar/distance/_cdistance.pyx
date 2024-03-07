@@ -1438,9 +1438,6 @@ cdef class _ScaledArgminSubsequenceDistance:
     cdef Metric metric
     cdef Py_ssize_t dim
 
-    cdef double *s_buffer
-    cdef double *t_buffer
-
     def __cinit__(
         self,
         TSArray s,
@@ -1458,12 +1455,6 @@ cdef class _ScaledArgminSubsequenceDistance:
         self.metric = metric
         self.distances = distances
         self.indices = indices
-        self.s_buffer = <double*> malloc(sizeof(double) * s.shape[2])
-        self.t_buffer = <double*> malloc(sizeof(double) * s.shape[2])
-
-    def __dealloc__(self):
-        free(self.s_buffer)
-        free(self.t_buffer)
 
     @property
     def n_work(self):
@@ -1482,6 +1473,9 @@ cdef class _ScaledArgminSubsequenceDistance:
 
         cdef double mean, std
         cdef IncStats stats
+        cdef double *s_buffer = <double*> malloc(sizeof(double) * self.s.shape[2])
+        cdef double *t_buffer = <double*> malloc(sizeof(double) * self.s.shape[2])
+
         with nogil:
             metric.reset(self.t, self.s)
             for i in range(offset, offset + batch_size):
@@ -1496,10 +1490,10 @@ cdef class _ScaledArgminSubsequenceDistance:
                     std = 1.0
 
                 for n in range(s_len - 1):
-                    self.s_buffer[n] = (self.s[i, self.dim, n] - mean) / std
+                    s_buffer[n] = (self.s[i, self.dim, n] - mean) / std
                     inc_stats_add(&stats, 1.0, self.t[i, self.dim, n])
 
-                self.s_buffer[s_len - 1] = (
+                s_buffer[s_len - 1] = (
                     self.s[i, self.dim, s_len - 1] - mean
                 ) / std
 
@@ -1516,16 +1510,16 @@ cdef class _ScaledArgminSubsequenceDistance:
 
                     mean = stats.mean
                     for n in range(s_len):
-                        self.t_buffer[n] = (self.t[i, self.dim, j + n] - mean) / std
+                        t_buffer[n] = (self.t[i, self.dim, j + n] - mean) / std
 
                     # remove the first value from the mean/std
                     inc_stats_remove(&stats, 1.0, self.t[i, self.dim, j])
 
                     if (
                         metric._eadistance(
-                            self.s_buffer,
+                            s_buffer,
                             s_len,
-                            self.t_buffer,
+                            t_buffer,
                             s_len,
                             &distance)
                     ):
@@ -1713,13 +1707,12 @@ cdef class _DilatedDistanceProfile:
     cdef TSArray S
     cdef TSArray X
     cdef Py_ssize_t dim
+    cdef Py_ssize_t shapelet_size
     cdef Metric metric
     cdef Py_ssize_t dilation
     cdef Py_ssize_t padding
     cdef bint scaled,
     cdef double[:, :] out
-    cdef double *x_buffer
-    cdef double *s_buffer
 
     def __cinit__(
         self,
@@ -1736,17 +1729,12 @@ cdef class _DilatedDistanceProfile:
         self.S = S
         self.X = X
         self.dim = dim
+        self.shapelet_size = shapelet_size
         self.metric = metric
         self.dilation = dilation
         self.padding = padding
         self.scaled = scaled
         self.out = out
-        self.x_buffer = <double*> malloc(sizeof(double) * shapelet_size)
-        self.s_buffer = <double*> malloc(sizeof(double) * shapelet_size)
-
-    def __dealloc__(self):
-        free(self.x_buffer)
-        free(self.s_buffer)
 
     @property
     def n_work(self):
@@ -1756,6 +1744,8 @@ cdef class _DilatedDistanceProfile:
         cdef Metric metric = deepcopy(self.metric)
         cdef Py_ssize_t i
 
+        cdef double *x_buffer = <double*> malloc(sizeof(double) * self.shapelet_size)
+        cdef double *s_buffer = <double*> malloc(sizeof(double) * self.shapelet_size)
         with nogil:
             metric.reset(self.X, self.X)
             if self.scaled:
@@ -1769,8 +1759,8 @@ cdef class _DilatedDistanceProfile:
                         &self.X[i, self.dim, 0],
                         self.X.shape[2],
                         metric,
-                        self.x_buffer,
-                        self.s_buffer,
+                        x_buffer,
+                        s_buffer,
                         INFINITY,
                         &self.out[i, 0],
                     )
@@ -1785,11 +1775,14 @@ cdef class _DilatedDistanceProfile:
                         &self.X[i, self.dim, 0],
                         self.X.shape[2],
                         metric,
-                        self.x_buffer,
-                        self.s_buffer,
+                        x_buffer,
+                        s_buffer,
                         INFINITY,
                         &self.out[i, 0],
                     )
+
+        free(x_buffer)
+        free(s_buffer)
 
 
 def _dilated_distance_profile(

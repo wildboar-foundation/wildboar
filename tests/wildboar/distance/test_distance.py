@@ -1531,7 +1531,8 @@ def test_argmin_equals_pairwise_distance_argpartition(metric, k):
     "metric", ((_SUBSEQUENCE_METRICS.keys() - {"mass"}) | {_test_metric})
 )
 @pytest.mark.parametrize("k", [1, 3, 7])
-def test_argmin_subsequence_distance(metric, k):
+@pytest.mark.parametrize("n_jobs", [1, 2])
+def test_argmin_subsequence_distance(metric, k, n_jobs):
     X, y = load_two_lead_ecg()
     S = np.lib.stride_tricks.sliding_window_view(X[0], window_shape=10)
     X = np.broadcast_to(X[0], shape=(S.shape[0], X.shape[1]))
@@ -1550,6 +1551,7 @@ def test_argmin_subsequence_distance(metric, k):
         metric=metric,
         metric_params=metric_params,
         k=k,
+        n_jobs=n_jobs,
         return_distance=True,
     )
 
@@ -1561,10 +1563,11 @@ def test_argmin_subsequence_distance(metric, k):
         assert_almost_equal(np.sort(dp_dist[dp_ind]), np.sort(argmin_dist[i]))
 
 
-def test_dilated_distance_profile():
+@pytest.mark.parametrize("n_jobs", [1, 2, 3])
+def test_dilated_distance_profile(n_jobs):
     X, y = load_two_lead_ecg()
     dp = distance_profile(
-        X[0:2, 9:21], X[2:4], dilation=3, padding=4, metric="euclidean"
+        X[0:2, 9:21], X[2:4], dilation=3, padding=4, metric="euclidean", n_jobs=n_jobs
     )
     # fmt: off
     expected = np.array([[
