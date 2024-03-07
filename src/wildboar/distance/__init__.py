@@ -26,7 +26,7 @@ from ._distance import (
     subsequence_match,
 )
 from ._manifold import MDS
-from ._matrix_profile import matrix_profile
+from ._matrix_profile import matrix_profile, paired_matrix_profile
 from ._neighbors import KMeans, KMedoids, KNeighborsClassifier
 
 __all__ = [
@@ -40,6 +40,7 @@ __all__ = [
     "pairwise_distance",
     "paired_distance",
     "matrix_profile",
+    "paired_matrix_profile",
     "KNeighborsClassifier",
     "KMeans",
     "KMedoids",

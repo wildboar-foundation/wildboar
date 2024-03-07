@@ -7,7 +7,7 @@ import numpy as np
 from sklearn.utils import check_scalar
 
 from ..distance._distance import _THRESHOLD, subsequence_match
-from ..distance._matrix_profile import matrix_profile
+from ..distance._matrix_profile import paired_matrix_profile
 from ..utils.decorators import singleton
 from ..utils.validation import check_array, check_option, check_type
 
@@ -76,7 +76,9 @@ def motifs(  # noqa: PLR0912, PLR0915
         if window == "auto":
             window = 0.1
 
-        mp = matrix_profile(x, window=window, exclude=exclude, return_index=False)
+        mp = paired_matrix_profile(
+            x, window=window, exclude=exclude, return_index=False
+        )
         mp = np.atleast_2d(mp)
     elif isinstance(mp, np.ndarray) and np.issubdtype(mp.dtype, np.double):
         w = x.shape[-1] - mp.shape[-1] + 1

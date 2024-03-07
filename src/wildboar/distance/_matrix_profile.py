@@ -1,5 +1,6 @@
 import math
 import numbers
+import warnings
 
 import numpy as np
 from sklearn.utils.validation import check_scalar
@@ -9,7 +10,7 @@ from . import _cmatrix_profile
 from ._distance import _format_return
 
 
-def matrix_profile(  # noqa: PLR0912
+def paired_matrix_profile(  # noqa: PLR0912
     x,
     y=None,
     *,
@@ -147,3 +148,88 @@ def matrix_profile(  # noqa: PLR0912
         return _format_return(mp, 2, x.ndim), _format_return(mpi, 2, x.ndim)
     else:
         return _format_return(mp, 2, x.ndim)
+
+
+def matrix_profile(X, Y=None, window=5, exclude=None, return_index=False, n_jobs=None):
+    """
+    Compute the matrix profile of every subsequence in X.
+
+    If Y is given compute the metrix profile of every subsequence in X finding
+    the minimum distance in any time series in Y; othervise finding the minimum
+    distance in any time series in X. The former corresponds to a self-join and
+    the latter to an AB join.
+
+    The output approximately corresponds to that of
+    :func:`~wildboar.distance.matrix_profile` where `X.flatten()` but without
+    computing the distance where two time series overlap. The outputs exactly
+    correspond when ``X.shape[0] == 1``.
+
+    Parameters
+    ----------
+    X : array-like of shape (x_samples, x_timestep)
+        The time series for which the matrix profile is computed.
+    Y : array-like of shape (y_samples, y_timestep), optional
+        The time series used to annotate `X`. If None, `X` is used to annotate.
+    window : int or float, optional
+        The window size.
+
+        - If float, the window size is a fraction of `x_timestep`.
+        - If int, the window size is exact.
+    exclude : int or float, optional
+        The exclusion zone.
+
+        - If float, the exclusion zone is a fraction of `window`.
+        - If int, the exclusion zone is exact.
+        - If None, the exclusion zone is determined automatically. If Y is None,
+          (self-join) the value is `0.2`, otherwise (AB-join) the value is
+          `0.0`.
+    return_index : bool, optional
+        Return the matrix profile index.
+    n_jobs : int, optional
+        The number of parallel jobs.
+
+    Returns
+    -------
+    mp : ndarray of shape (x_samples, profile_size)
+        The matrix profile.
+    (mpi_sample, mpi_start) : ndarray of shape (x_samples, profile_size), optional
+        The matrix profile index sample and start positions. Returned if
+        `return_index=True`.
+    """
+    # TODO(1.4)
+    warnings.warn(
+        "matrix_profile has changed name to paired_matrix_profile in 1.3. "
+        "matrix_profile now computes the matrix profile for every subsequence in "
+        "all time series in X. This warning will be removed in 1.4.",
+        FutureWarning,
+    )
+    if Y is None:
+        Y = X
+
+    if X is Y:
+        X = check_array(X, ensure_ts_array=True)
+        Y = X
+        if exclude is None:
+            exclude = 0.2
+    else:
+        X = check_array(X, ensure_ts_array=True)
+        Y = check_array(Y, ensure_ts_array=True)
+        if exclude is None:
+            exclude = 0.0
+
+    if not isinstance(window, numbers.Integral):
+        window = math.ceil(window * Y.shape[-1])
+
+    if not (0 < window <= min(X.shape[-1], Y.shape[-1])):
+        raise ValueError("window must be 0 < window <= min(x_timestep, y_timestep)")
+
+    if not isinstance(exclude, numbers.Integral):
+        exclude = math.ceil(window * exclude)
+
+    mp, mpi = _cmatrix_profile._flat_matrix_profile_join(
+        X, Y, window, 0, exclude, n_jobs
+    )
+    if return_index:
+        return mp, (mpi[:, :, 0], mpi[:, :, 1])
+    else:
+        return mp

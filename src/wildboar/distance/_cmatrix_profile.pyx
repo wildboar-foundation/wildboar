@@ -14,6 +14,7 @@ from libc.stdlib cimport free, malloc
 
 from ..utils cimport TSArray
 from ..utils._rand cimport RAND_R_MAX
+from ..utils._parallel import run_in_parallel
 from ..utils._stats cimport (
     IncStats,
     cumulative_mean_std,
@@ -159,4 +160,142 @@ def _paired_matrix_profile(
     free(dist_buffer)
     free(x_buffer)
     free(y_buffer)
+    return mp.base, mpi.base
+
+
+cdef class _FlatMatrixProfile:
+
+    # safe write assigned i:s
+    cdef double[:, :] mp
+    cdef Py_ssize_t[:, :, :] mpi
+
+    # already allocated
+    cdef double[:, :] meanT
+    cdef double[:, :] stdT
+
+    # readonly
+    cdef TSArray Q, T
+
+    cdef Py_ssize_t window, dim, exclude
+
+    def __cinit__(
+        self,
+        TSArray Q,
+        TSArray T,
+        double[:, :] meanT,
+        double[:, :] stdT,
+        Py_ssize_t window,
+        Py_ssize_t dim,
+        Py_ssize_t exclude,
+        double[:, :] mp,
+        Py_ssize_t[:, :, :] mpi,
+    ):
+        self.Q = Q
+        self.T = T
+        self.window = window
+        self.dim = dim
+        self.exclude = exclude
+        self.mp = mp
+        self.mpi = mpi
+        self.meanT = meanT
+        self.stdT = stdT
+
+
+    @property
+    def n_work(self):
+        return self.Q.shape[0]
+
+    def __call__(self, Py_ssize_t job_id, Py_ssize_t offset, Py_ssize_t batch_size):
+        cdef Py_ssize_t i, j, k, l
+        cdef IncStats stats
+        cdef bint allow
+        cdef Py_ssize_t profile_length = self.Q.shape[2] - self.window + 1
+
+        # Only allocate window?
+        cdef complex *Tbuf = <complex*> malloc(sizeof(complex) * self.T.shape[2])
+        cdef complex *Qbuf = <complex*> malloc(sizeof(complex) * self.T.shape[2])
+
+        # Only allocate T.shape[2] - window + 1?
+        cdef double *dist_buffer = <double*> malloc(sizeof(double) * self.T.shape[2])
+
+        with nogil:
+            for i in range(offset, offset + batch_size):
+                for j in range(profile_length):
+                    self.mp[i, j] = INFINITY
+
+                inc_stats_init(&stats)
+                for j in range(self.window - 1):
+                    inc_stats_add(&stats, 1.0, self.Q[i, self.dim, j])
+
+                for j in range(profile_length):
+                    inc_stats_add(&stats, 1.0, self.Q[i, self.dim, j + self.window - 1])
+                    for k in range(self.T.shape[0]):
+                        _mass_distance(
+                            &self.T[k, self.dim, 0],
+                            self.T.shape[2],
+                            &self.Q[i, self.dim, j],
+                            self.window,
+                            stats.mean,
+                            sqrt(inc_stats_variance(&stats)),
+                            &self.meanT[k, 0],
+                            &self.stdT[k, 0],
+                            Tbuf,
+                            Qbuf,
+                            dist_buffer,
+                        )
+
+                        for l in range(self.T.shape[2] - self.window + 1):
+                            allow = l <= j - self.exclude or l >= j + self.exclude
+
+                            if dist_buffer[l] < self.mp[i, j] and allow:
+                                self.mp[i, j] = dist_buffer[l]
+                                self.mpi[i, j, 0] = k
+                                self.mpi[i, j, 1] = l
+
+                    inc_stats_remove(&stats, 1.0, self.Q[i, self.dim, j])
+        free(Tbuf)
+        free(Qbuf)
+        free(dist_buffer)
+
+
+def _flat_matrix_profile_join(
+    TSArray Q,  # The needles
+    TSArray T,  # The haystack
+    Py_ssize_t window,
+    Py_ssize_t dim,
+    Py_ssize_t exclude,
+    n_jobs,
+):
+    cdef Py_ssize_t profile_length = Q.shape[2] - window + 1
+    cdef double[:, :] meanT = np.empty((T.shape[0], T.shape[2]), dtype=float)
+    cdef double[:, :] stdT = np.empty((T.shape[0], T.shape[2]), dtype=float)
+    cdef double[:,:] mp = np.empty((Q.shape[0] , profile_length), dtype=np.double)
+    cdef Py_ssize_t[:,:,:] mpi = np.empty((Q.shape[0] , profile_length, 2), dtype=np.intp)
+
+    cdef Py_ssize_t i
+    for i in range(T.shape[0]):
+        cumulative_mean_std(
+            &T[i, dim, 0],
+            T.shape[2],
+            window,
+            &meanT[i, 0],
+            &stdT[i, 0],
+        )
+
+    run_in_parallel(
+        _FlatMatrixProfile(
+                Q,
+                T,
+                meanT,
+                stdT,
+                window,
+                dim,
+                exclude,
+                mp,
+                mpi,
+        ),
+        n_jobs=n_jobs,
+        require="sharedmem"
+    )
+
     return mp.base, mpi.base

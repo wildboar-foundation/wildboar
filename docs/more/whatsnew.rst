@@ -54,6 +54,18 @@ Wildboar 1.2 introduces several new models.
 
   .. grid-item-card::
 
+     :mod:`wildboar.distance`
+     ^^^
+
+     - |API| Rename `matrix_profile` to `paired_matrix_profile`. This is a
+       breaking change without deprecation. Any use of `matrix_profile` will
+       raise a warning in 1.3.
+
+     - |Feature| A new function :func:`~wildboar.distance.matrix_profile` for
+       computing the matrix profile for every subsequence in all time series.
+
+  .. grid-item-card::
+
      :mod:`wildboar.tree`
      ^^^
 

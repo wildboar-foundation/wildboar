@@ -6,7 +6,7 @@ import warnings
 import numpy as np
 from sklearn.utils.deprecation import deprecated
 
-from ..distance import matrix_profile
+from ..distance import paired_matrix_profile
 from ..utils.decorators import array_or_scalar
 from ..utils.validation import check_array
 
@@ -79,7 +79,9 @@ def segment(
             raise ValueError("Both x and mpi cannot be given")
 
         x = check_array(np.atleast_2d(x), allow_3d=False)
-        _, mpi = matrix_profile(x, window=window, exclude=exclude, return_index=True)
+        _, mpi = paired_matrix_profile(
+            x, window=window, exclude=exclude, return_index=True
+        )
         mpi = np.atleast_2d(mpi)
     else:
         mpi = check_array(np.atleast_2d(mpi))

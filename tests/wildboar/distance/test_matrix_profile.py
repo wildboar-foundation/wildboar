@@ -1,23 +1,22 @@
 import numpy as np
 from numpy.testing import assert_almost_equal
-
 from wildboar.datasets import load_two_lead_ecg
-from wildboar.distance import matrix_profile
+from wildboar.distance import paired_matrix_profile
 
 
 def test_matrix_profile_self_join_performance(benchmark):
     X, y = load_two_lead_ecg()
-    benchmark(matrix_profile, x=X[:10].reshape(-1))
+    benchmark(paired_matrix_profile, x=X[:10].reshape(-1))
 
 
 def test_matrix_profile_ab_join_performance(benchmark):
     X, y = load_two_lead_ecg()
-    benchmark(matrix_profile, x=X[:10].reshape(-1), y=X[10:20].reshape(-1))
+    benchmark(paired_matrix_profile, x=X[:10].reshape(-1), y=X[10:20].reshape(-1))
 
 
 def test_matrix_profile_self_join():
     X, y = load_two_lead_ecg()
-    mp = matrix_profile(X[:10].reshape(-1))
+    mp = paired_matrix_profile(X[:10].reshape(-1))
 
     desired = np.array(
         [
@@ -38,7 +37,7 @@ def test_matrix_profile_self_join():
 
 def test_matrix_profile_self_join_n_samples():
     X, y = load_two_lead_ecg()
-    mp = matrix_profile(X[:10])
+    mp = paired_matrix_profile(X[:10])
     desired = np.array(
         [
             [
@@ -166,6 +165,6 @@ def test_matrix_profile_self_join_n_samples():
 
     assert_almost_equal(mp[:, :10], desired)
 
-    mp1 = matrix_profile(X[:100:2, :40:2])
-    mp2 = matrix_profile(X[:100, :40:2])[::2]
+    mp1 = paired_matrix_profile(X[:100:2, :40:2])
+    mp2 = paired_matrix_profile(X[:100, :40:2])[::2]
     assert_almost_equal(mp1, mp2)
