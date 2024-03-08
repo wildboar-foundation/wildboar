@@ -48,8 +48,10 @@ cdef class TreeAttributeGenerator:
     cdef int reset(self, TSArray X) noexcept nogil:
         return self.generator.reset(X)
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X, Py_ssize_t depth) noexcept nogil:
-        return self.generator.get_n_attributess(X)
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples, Py_ssize_t depth
+    ) noexcept nogil:
+        return self.generator.get_n_attributes(samples, n_samples)
 
     cdef Py_ssize_t next_attribute(
         self,
@@ -136,8 +138,10 @@ cdef class DynamicTreeAttributeGenerator(TreeAttributeGenerator):
     def __reduce__(self):
         return self.__class__, (self.generator, self.alpha)
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X, Py_ssize_t depth) noexcept nogil:
-        cdef Py_ssize_t n_attributes = self.generator.get_n_attributess(X)
+    cdef Py_ssize_t get_n_attributess(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples, Py_ssize_t depth
+    ) noexcept nogil:
+        cdef Py_ssize_t n_attributes = self.generator.get_n_attributes(samples, n_samples)
         cdef double weight = 1.0 - exp(-fabs(self.alpha) * depth)
         if self.alpha < 0:
             weight = 1 - weight
@@ -1087,7 +1091,9 @@ cdef class TreeBuilder:
         best.split_point = 0
         best.attribute.attribute = NULL
 
-        for i in range(self.generator.get_n_attributess(self.X, depth)):
+        for i in range(
+            self.generator.get_n_attributes(self.samples + start, n_samples, depth)
+        ):
             self.generator.next_attribute(
                 i,
                 self.X,

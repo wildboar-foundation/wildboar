@@ -17,13 +17,22 @@ from ..utils cimport TSArray
 cdef class AttributeGenerator:
 
     cdef int reset(self, TSArray X) noexcept nogil:
-        return 0
+        self.n_dims = X.shape[1]
+        self.n_timestep = X.shape[2]
+        return self._reset(X)
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef int _reset(self, TSArray X) noexcept nogil:
         return -1
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_attributess(X)
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return -1
+
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.get_n_attributes(samples, n_samples)
 
     cdef Py_ssize_t next_attribute(
         self,

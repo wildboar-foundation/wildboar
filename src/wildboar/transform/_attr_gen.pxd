@@ -14,15 +14,24 @@ cdef struct Attribute:
 
 
 cdef class AttributeGenerator:
+    cdef Py_ssize_t n_dims
+    cdef Py_ssize_t n_timestep
 
-    # Reset the (allocated) attributes of the
+    # Reset the (allocated) attributes of the generator
+    # by default delegates to _reset and sets n_dims and n_timestep
     cdef int reset(self, TSArray X) noexcept nogil
 
-    # Safe to call without calling reset first
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil
+    cdef int _reset(self, TSArray X) noexcept nogil
 
     # Safe to call without calling reset first
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil
+
+    # Safe to call without calling reset first
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil
 
     # Requires `reset`
     cdef Py_ssize_t next_attribute(

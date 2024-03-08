@@ -123,21 +123,25 @@ cdef class HydraAttributeGenerator(AttributeGenerator):
             self.n_groups, self.n_kernels, self.kernel_size, self.kernel_sampler
         )
 
-    cdef int reset(self, TSArray X) noexcept nogil:
+    cdef int _reset(self, TSArray X) noexcept nogil:
         self._free()
         self.conv_values = <double*> malloc(sizeof(double) * X.shape[2] * self.n_kernels)
         self.max_values = <double*> malloc(sizeof(double) * self.n_kernels)
         self.min_values = <double*> malloc(sizeof(double) * self.n_kernels)
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
         return self.n_groups
 
     # Each timeseries is represented by:
     #   n_groups * n_kernels * max_exponent * 2 (soft_max, hard_min)
     # attributes.
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.kernel_size)
-        return self.get_n_attributess(X) * max_exponent * self.n_kernels * 2 * 1
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        cdef Py_ssize_t max_exponent = _max_exponent(self.n_timestep, self.kernel_size)
+        return self.get_n_attributes(samples, n_samples) * max_exponent * self.n_kernels * 2 * 1
 
     cdef Py_ssize_t next_attribute(
         self,

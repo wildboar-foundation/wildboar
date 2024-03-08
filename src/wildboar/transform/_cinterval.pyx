@@ -320,15 +320,19 @@ cdef class IntervalAttributeGenerator(AttributeGenerator):
     def __reduce__(self):
         return self.__class__, (self.n_intervals, self.summarizer)
 
-    cdef int reset(self, TSArray X) noexcept nogil:
+    cdef int _reset(self, TSArray X) noexcept nogil:
         self.summarizer.reset(X)
         return 0
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
-        return X.shape[1] * self.n_intervals
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.n_dims * self.n_intervals
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_attributess(X) * self.summarizer.n_outputs()
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.get_n_attributes(samples, n_samples) * self.summarizer.n_outputs()
 
     cdef Py_ssize_t next_attribute(
             self,
@@ -468,8 +472,10 @@ cdef class RandomFixedIntervalAttributeGenerator(IntervalAttributeGenerator):
         for i in range(n_intervals):
             self.random_attribute_id[i] = i
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
-        return X.shape[1] * self.n_random_interval
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.n_dims * self.n_random_interval
 
     cdef Py_ssize_t next_attribute(
             self,
@@ -527,7 +533,9 @@ cdef class RandomIntervalAttributeGenerator(IntervalAttributeGenerator):
             self.max_length,
         )
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
         return self.n_intervals
 
     cdef Py_ssize_t next_attribute(

@@ -203,17 +203,18 @@ def fit(AttributeGenerator generator, TSArray X, object random_state):
     cdef Attribute transient
     cdef Attribute *persistent
     cdef Py_ssize_t *samples = <Py_ssize_t*> malloc(sizeof(Py_ssize_t) * X.shape[0])
+    for i in range(X.shape[0]):
+        samples[i] = i
+
     generator.reset(X)
     cdef AttributeEmbedding embedding = AttributeEmbedding(
-        generator, generator.get_n_attributess(X),
+        generator, generator.get_n_attributes(samples, X.shape[0]),
     )
     cdef uint32_t seed = random_state.randint(0, RAND_R_MAX)
 
     with nogil:
-        for i in range(X.shape[0]):
-            samples[i] = i
 
-        for i in range(generator.get_n_attributess(X)):
+        for i in range(generator.get_n_attributes(samples, X.shape[0])):
             persistent = <Attribute*> malloc(sizeof(Attribute))
             generator.next_attribute(
                 i,
@@ -234,8 +235,10 @@ def fit(AttributeGenerator generator, TSArray X, object random_state):
 
 def transform(AttributeEmbedding embedding, TSArray X, n_jobs=None):
     cdef AttributeGenerator generator = embedding.generator
-    cdef Py_ssize_t n_outputs = generator.get_n_outputs(X)
-    cdef Py_ssize_t n_attributes = generator.get_n_attributess(X)
+    cdef Py_ssize_t[:] samples = np.arange(X.shape[0], dtype=np.intp)
+    generator.reset(X)
+    cdef Py_ssize_t n_outputs = generator.get_n_outputs(&samples[0], samples.shape[0])
+    cdef Py_ssize_t n_attributes = generator.get_n_attributes(&samples[0], samples.shape[0])
     cdef double[:, :] out = np.empty((X.shape[0], n_outputs))
 
     n_jobs, generators, attribute_offsets, batch_sizes = _partition_attributes(
@@ -255,8 +258,11 @@ def transform(AttributeEmbedding embedding, TSArray X, n_jobs=None):
 
 
 def fit_transform(AttributeGenerator generator, TSArray X, random_state, n_jobs=None):
-    cdef Py_ssize_t n_outputs = generator.get_n_outputs(X)
-    cdef Py_ssize_t n_attributes = generator.get_n_attributess(X)
+    cdef Py_ssize_t[:] samples = np.arange(X.shape[0], dtype=np.intp)
+
+    generator.reset(X)
+    cdef Py_ssize_t n_outputs = generator.get_n_outputs(&samples[0], samples.shape[0])
+    cdef Py_ssize_t n_attributes = generator.get_n_attributes(&samples[0], samples.shape[0])
     cdef AttributeEmbedding embedding = AttributeEmbedding(generator, n_attributes)
     cdef double[:, :] out = np.empty((X.shape[0], n_outputs))
 

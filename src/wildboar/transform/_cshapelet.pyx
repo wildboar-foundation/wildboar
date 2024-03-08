@@ -45,7 +45,7 @@ cdef class ShapeletAttributeGenerator(AttributeGenerator):
     def __init__(self, metric):
         self.metric = metric
 
-    cdef int reset(self, TSArray X) noexcept nogil:
+    cdef int _reset(self, TSArray X) noexcept nogil:
         self.metric.reset(X)
         return 1
 
@@ -146,7 +146,9 @@ cdef class RandomShapeletAttributeGenerator(ShapeletAttributeGenerator):
         self.min_shapelet_size = min_shapelet_size
         self.max_shapelet_size = max_shapelet_size
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
         return self.n_shapelets
 
     cdef Py_ssize_t next_attribute(
@@ -228,7 +230,7 @@ cdef class MultiMetricShapeletAttributeGenerator(AttributeGenerator):
         if self.weighted:
             vose_rand_free(&self.vr)
 
-    cdef int reset(self, TSArray X) noexcept nogil:
+    cdef int _reset(self, TSArray X) noexcept nogil:
         cdef Py_ssize_t metric
         for metric in range(self.metrics.size):
             self.metrics.reset(metric, X)
@@ -349,7 +351,9 @@ cdef class RandomMultiMetricShapeletAttributeGenerator(
             np.asarray(self.weights)
         )
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
         return self.n_shapelets
 
     cdef Py_ssize_t next_attribute(
@@ -497,7 +501,7 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
             free(self.arg_buffer)
             self.arg_buffer = NULL
 
-    cdef int reset(self, TSArray X) noexcept nogil:
+    cdef int _reset(self, TSArray X) noexcept nogil:
         self._free()
         self.x_buffer = <double*> malloc(sizeof(double) * X.shape[2] + 1)
         self.k_buffer = <double*> malloc(sizeof(double) * X.shape[2] + 1)
@@ -507,11 +511,15 @@ cdef class DilatedShapeletAttributeGenerator(AttributeGenerator):
 
         return 1
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
         return self.n_shapelets
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_attributess(X) * 3  # min, argmin, SO(S, X)
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.get_n_attributes(samples, n_samples) * 3  # min, argmin, SO(S, X)
 
     cdef Py_ssize_t next_attribute(
         self,
@@ -1058,7 +1066,7 @@ cdef class CastorAttributeGenerator(AttributeGenerator):
             free(self.rnd_value)
             self.rnd_value = NULL
 
-    cdef int reset(self, TSArray X) noexcept nogil:
+    cdef int _reset(self, TSArray X) noexcept nogil:
         self._free()
         self.dist_buffer = <double*> malloc(
             sizeof(double) * X.shape[2] * self.n_shapelets
@@ -1076,14 +1084,18 @@ cdef class CastorAttributeGenerator(AttributeGenerator):
         self.summarizer.reset(X.shape[2], self.n_shapelets)
         return 0
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
         return self.n_groups
 
     # n_shapelets * max_exponent * n_shapelets * 3 features per time series.
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        cdef Py_ssize_t max_exponent = _max_exponent(X.shape[2], self.shapelet_size)
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        cdef Py_ssize_t max_exponent = _max_exponent(self.n_timestep, self.shapelet_size)
         return (
-            self.get_n_attributess(X) * max_exponent * self.n_shapelets * self.summarizer.get_n_features()
+            self.get_n_attributes(samples, n_samples) * max_exponent * self.n_shapelets * self.summarizer.get_n_features()
         )
 
     cdef Py_ssize_t _get_distance_profile(

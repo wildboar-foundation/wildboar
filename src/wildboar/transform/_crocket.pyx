@@ -173,11 +173,15 @@ cdef class RocketAttributeGenerator(AttributeGenerator):
     def __dealloc__(self):
         free(self.kernel_size)
 
-    cdef Py_ssize_t get_n_attributess(self, TSArray X) noexcept nogil:
+    cdef Py_ssize_t get_n_attributes(
+        self, Py_ssize_t* samples, Py_ssize_t n_samples
+    ) noexcept nogil:
         return self.n_kernels
 
-    cdef Py_ssize_t get_n_outputs(self, TSArray X) noexcept nogil:
-        return self.get_n_attributess(X) * 2
+    cdef Py_ssize_t get_n_outputs(
+        self, Py_ssize_t *samples, Py_ssize_t n_samples
+    ) noexcept nogil:
+        return self.get_n_attributes(samples, n_samples) * 2
 
     cdef Py_ssize_t next_attribute(
         self,
