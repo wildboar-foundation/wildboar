@@ -20,8 +20,10 @@ import numpy as np
 from joblib import Parallel, delayed, effective_n_jobs
 
 
-def clone_embedding(AttributeGenerator generator, attributes):
-    cdef AttributeEmbedding embedding = AttributeEmbedding(generator, len(attributes))
+def clone_embedding(AttributeGenerator generator, attributes, n_outputs):
+    cdef AttributeEmbedding embedding = AttributeEmbedding(
+        generator, len(attributes), n_outputs
+    )
     cdef Py_ssize_t i
     cdef Attribute *attribute
     for i in range(len(attributes)):
@@ -129,16 +131,23 @@ cdef class AttributeEmbedding:
 
     cdef readonly AttributeGenerator generator
     cdef Attribute** _attributes
-    cdef Py_ssize_t _n_attributes
+    cdef readonly Py_ssize_t n_attributes
+    cdef readonly Py_ssize_t n_outputs
 
-    def __cinit__(self, AttributeGenerator generator, Py_ssize_t n_attributes):
+    def __cinit__(
+        self,
+        AttributeGenerator generator,
+        Py_ssize_t n_attributes,
+        Py_ssize_t n_outputs,
+    ):
         self.generator = generator
         self._attributes = <Attribute**> malloc(sizeof(Attribute*) * n_attributes)
-        self._n_attributes = n_attributes
+        self.n_attributes = n_attributes
+        self.n_outputs = n_outputs
 
     def __dealloc__(self):
         cdef Py_ssize_t i
-        for i in range(self._n_attributes):
+        for i in range(self.n_attributes):
             self.generator.free_persistent(self._attributes[i])
             free(self._attributes[i])
         free(self._attributes)
@@ -147,6 +156,7 @@ cdef class AttributeEmbedding:
         return clone_embedding, (
             self.generator,
             self.attributes,
+            self.n_outputs,
         )
 
     cdef Py_ssize_t set_attribute(self, Py_ssize_t i, Attribute *attribute) noexcept nogil:
@@ -173,10 +183,6 @@ cdef class AttributeEmbedding:
         return self.n_attributes
 
     @property
-    def n_attributes(self):
-        return self._n_attributes
-
-    @property
     def features(self):
         import warnings
         warnings.warn(
@@ -189,11 +195,11 @@ cdef class AttributeEmbedding:
     def attributes(self):
         return [
             self.generator.persistent_to_object(self._attributes[i])
-            for i in range(self._n_attributes)
+            for i in range(self.n_attributes)
         ]
 
     def __getitem__(self, item):
-        if not isinstance(item, int) or 0 > item > self._n_attributes:
+        if not isinstance(item, int) or 0 > item > self.n_attributes:
             raise ValueError()
         return self.generator.persistent_to_object(self._attributes[item])
 
@@ -208,7 +214,9 @@ def fit(AttributeGenerator generator, TSArray X, object random_state):
 
     generator.reset(X)
     cdef AttributeEmbedding embedding = AttributeEmbedding(
-        generator, generator.get_n_attributes(samples, X.shape[0]),
+        generator,
+        generator.get_n_attributes(samples, X.shape[0]),
+        generator.get_n_outputs(samples, X.shape[0]),
     )
     cdef uint32_t seed = random_state.randint(0, RAND_R_MAX)
 
@@ -237,12 +245,10 @@ def transform(AttributeEmbedding embedding, TSArray X, n_jobs=None):
     cdef AttributeGenerator generator = embedding.generator
     cdef Py_ssize_t[:] samples = np.arange(X.shape[0], dtype=np.intp)
     generator.reset(X)
-    cdef Py_ssize_t n_outputs = generator.get_n_outputs(&samples[0], samples.shape[0])
-    cdef Py_ssize_t n_attributes = generator.get_n_attributes(&samples[0], samples.shape[0])
-    cdef double[:, :] out = np.empty((X.shape[0], n_outputs))
+    cdef double[:, :] out = np.empty((X.shape[0], embedding.n_outputs))
 
     n_jobs, generators, attribute_offsets, batch_sizes = _partition_attributes(
-        n_jobs, n_attributes, generator
+        n_jobs, embedding.n_attributes, generator
     )
     cdef BatchTransform transform = BatchTransform(generators, embedding)
     transform.init(X, out)
@@ -263,7 +269,7 @@ def fit_transform(AttributeGenerator generator, TSArray X, random_state, n_jobs=
     generator.reset(X)
     cdef Py_ssize_t n_outputs = generator.get_n_outputs(&samples[0], samples.shape[0])
     cdef Py_ssize_t n_attributes = generator.get_n_attributes(&samples[0], samples.shape[0])
-    cdef AttributeEmbedding embedding = AttributeEmbedding(generator, n_attributes)
+    cdef AttributeEmbedding embedding = AttributeEmbedding(generator, n_attributes, n_outputs)
     cdef double[:, :] out = np.empty((X.shape[0], n_outputs))
 
     n_jobs, generators, attribute_offsets, batch_sizes = _partition_attributes(
