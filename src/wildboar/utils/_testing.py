@@ -36,9 +36,8 @@ def assert_exhaustive_parameter_checks(estimator: BaseEstimator):
         Ok.
     """
     assert hasattr(estimator.__class__, "_parameter_constraints")
-    assert (
-        estimator.get_params(deep=False).keys()
-        == estimator.__class__._parameter_constraints.keys()
+    assert set(estimator.get_params(deep=False).keys()) == set(
+        estimator.__class__._parameter_constraints.keys()
     )
 
 
