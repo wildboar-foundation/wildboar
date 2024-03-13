@@ -86,12 +86,12 @@ def test_matrix_profile_equal_ab_join():
 
 def test_matrix_profile_self_join_performance(benchmark):
     X, y = load_two_lead_ecg()
-    benchmark(paired_matrix_profile, x=X[:10].reshape(-1))
+    benchmark(paired_matrix_profile, X=X[:10].reshape(-1))
 
 
 def test_matrix_profile_ab_join_performance(benchmark):
     X, y = load_two_lead_ecg()
-    benchmark(paired_matrix_profile, x=X[:10].reshape(-1), y=X[10:20].reshape(-1))
+    benchmark(paired_matrix_profile, X=X[:10].reshape(-1), Y=X[10:20].reshape(-1))
 
 
 def test_matrix_profile_self_join():
